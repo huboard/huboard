@@ -1,0 +1,10 @@
+<li>
+
+  <a href="<%= url %>"> 
+      <em class="created-by">created by: <img src="http://www.gravatar.com/avatar/<%= creator.gravatar_id %>?s=18" /></em>
+      <strong><%= title %></strong>  
+  </a>
+  <div>
+      <span style="width:<%= (closed_issues / (closed_issues + open_issues)) * 100 %>%"><%= (closed_issues / (closed_issues + open_issues)) * 100 %></span>
+  </div>
+</li>

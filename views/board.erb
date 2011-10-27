@@ -1,0 +1,29 @@
+
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Skipping Stones</title>
+        <link rel="stylesheet" href="/styles/main.css" type="text/css" media="screen" charset="utf-8">
+        <!-- This is a special version of jQuery with RequireJS built-in -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/scripts/underscore.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/scripts/backbone.js" type="text/javascript" charset="utf-8"></script>
+        <script src="scripts/require.js"></script>
+        <script type="text/javascript" charset="utf-8">
+          require({
+                    baseUrl: 'scripts',
+                  }
+                  ,['modules/board/main'],
+                  function(main){
+                     main.init({message:'hello'});
+                  });
+</script>
+    </head>
+    <body>
+      <div class="container">
+        <div id="stage">
+        </div>
+      </div>
+    </body>
+  </html>

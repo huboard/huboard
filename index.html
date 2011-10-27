@@ -1,0 +1,32 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>jQuery+RequireJS Sample Page</title>
+        <!-- This is a special version of jQuery with RequireJS built-in -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/scripts/underscore.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/scripts/backbone.js" type="text/javascript" charset="utf-8"></script>
+        <script src="scripts/require.js"></script>
+        <script type="text/javascript" charset="utf-8">
+          require({
+                    baseUrl: 'scripts',
+                //    paths:{
+                //        jquery : "https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min"
+                //    },
+                //    priority:['jquery','underscore','backbone']
+                  }
+                  ,['modules/workqueue/main'],
+                  function(main){
+                     main.init({message:'hello'});
+                  });
+</script>
+    </head>
+    <body>
+      <div class="container">
+        <div id="workqueue">
+          <ul class="wip"></ul>
+        </div>
+      </div>
+    </body>
+  </html>
