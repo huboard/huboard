@@ -9,7 +9,7 @@ module Dashboard
       issues = Github.get_issues(user_name, repo)
 
       issues_by_label = issues.group_by { |issue| issue["current_state"]["name"] }
-      
+
       all_labels = Github.labels(user_name, repo)
 
       all_labels = all_labels.map do |label|
@@ -24,13 +24,22 @@ module Dashboard
 
     end
 
-    def self.responds_to_message(payload)
-
-      payload["commits"].each do |commit|
-        r = /[Pp]ush (gh|GH)-(?<issue_number>\d+)/
-        yield commit, r.match(commit["message"]) if r.match(commit["message"])
-      end
+    def self.register(command, &block)
+       @@sub ||= {}
+       @@sub[command] = block
     end
+
+    def self.deliver(payload)
+      consumers = @@sub
+      r = /^(?<command>[A-Z]+) GH-(?<issue>[0-9]+)/
+        payload["commits"].each do |c|
+          match = r.match c["message"]
+          next if r.match match.nil?
+          next unless consumers.has_key? match[:command]
+          consumers[match[:command]].call payload, match[:issue] 
+        end
+    end
+
 
   end
 
@@ -75,8 +84,8 @@ module Dashboard
     def self.current_state(issue)
 
       r = /(?<id>\d+) *- *(?<name>.+)/
-        
-      issue["labels"].find {|x| r.match(x["name"])}  || {"name" => "none"}
+
+        issue["labels"].find {|x| r.match(x["name"])}  || {"name" => "none"}
 
     end
 

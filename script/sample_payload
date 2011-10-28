@@ -29,7 +29,7 @@
       },
       {
         "removed"   => [],
-        "message"   => "clean up heads test. closes gh-2",
+        "message"   => "clean up heads test. push gh-2",
         "added"     => [],
         "timestamp" => "2007-10-10T00:18:20-07:00",
         "modified"  => ["test/test_grit.rb"],
