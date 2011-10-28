@@ -3,12 +3,42 @@ require 'crack'
 
 module Dashboard
 
+  class Pebble
+
+    def self.board(user_name = "DovetailSoftware", repo = "blue")
+      issues = Github.get_issues(user_name, repo)
+
+      issues_by_label = issues.group_by { |issue| issue["current_state"]["name"] }
+      
+      all_labels = Github.labels(user_name, repo)
+
+      all_labels = all_labels.map do |label|
+        x = issues_by_label[label[:name]]
+        label[:issues] = x || []
+        label
+      end
+
+      {
+        labels: all_labels
+      }
+
+    end
+
+    def self.responds_to_message(payload)
+
+      payload["commits"].each do |commit|
+        r = /[Pp]ush (gh|GH)-(?<issue_number>\d+)/
+        yield commit, r.match(commit["message"]) if r.match(commit["message"])
+      end
+    end
+
+  end
+
+
   class Github 
     include HTTParty
     format :json
     base_uri "https://api.github.com/repos" 
-
-
 
     def self.milestones(user_name = "DovetailSoftware", repo = "blue")
       response = get_issues(user_name, repo)
@@ -35,8 +65,7 @@ module Dashboard
 
     def self.get_issues(user_name = "DovetailSoftware", repo = "blue")
       puts "retrieving issues"
-      body = get("/#{user_name}/#{repo}/issues?milestone=*&direction=asc").body
-      issues = Crack::JSON.parse(body)
+      issues = get("/#{user_name}/#{repo}/issues?milestone=*&direction=asc")
       issues.each do |issue|
         issue["current_state"] = current_state(issue) 
       end
@@ -46,34 +75,14 @@ module Dashboard
     def self.current_state(issue)
 
       r = /(?<id>\d+) *- *(?<name>.+)/
-        issue["labels"].find {|x| r.match(x["name"])}  || {"name" => "none"}
+        
+      issue["labels"].find {|x| r.match(x["name"])}  || {"name" => "none"}
 
     end
 
-    def self.board(user_name = "DovetailSoftware", repo = "blue")
-      issues = get_issues(user_name, repo)
-
-      issues_by_label = issues.group_by { |issue| issue["current_state"]["name"] }
-      
-      all_labels = labels(user_name, repo)
-
-      all_labels = all_labels.map do |label|
-        x = issues_by_label[label[:name]]
-        label[:issues] = x || []
-        label
-      end
-
-      {
-        labels: all_labels
-      }
-
-    end
 
     def self.labels(user_name = "DovetailSoftware", repo = "blue")
-      puts  "/#{user_name}/#{repo}/labels"
-      body = get("/#{user_name}/#{repo}/labels").body
-      response = Crack::JSON.parse(body)
-      puts response
+      response = get("/#{user_name}/#{repo}/labels")
 
       labels = []
 

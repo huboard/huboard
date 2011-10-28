@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+
+#$LOAD_PATH.unshift *Dir["#{File.dirname(__FILE__)}/../vendor/**/lib"]
+
+require 'rubygems'
+require "json"
+
+unless ARGV[0]
+  puts "Usage: ./script/deliver_payload [label]"
+  exit 1
+end
+
+payload_file = File.new("#{File.dirname(__FILE__)}/sample_payload")
+hash = eval(payload_file.read)
+
+data_json = JSON.generate(hash["data"])
+payload_json = JSON.generate(hash["payload"])
+
+exec "curl --data-binary 'data=#{data_json}&payload=#{payload_json}' http://localhost:9393/label/refer/#{ARGV[0]}/token"
