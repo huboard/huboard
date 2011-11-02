@@ -1,16 +1,19 @@
 require 'httparty'
-require 'crack'
 
 module Dashboard
 
   class Pebble
+    attr_accessor :github
 
-    def self.board(user_name = "DovetailSoftware", repo = "blue")
-      issues = Github.get_issues(user_name, repo)
+    def initialize(github)
+      @github = github
+    end
 
+    def board(user_name = "DovetailSoftware", repo = "blue")
+      issues = github.get_issues(user_name, repo)
       issues_by_label = issues.group_by { |issue| issue["current_state"]["name"] }
 
-      all_labels = Github.labels(user_name, repo)
+      all_labels = github.labels(user_name, repo)
 
       all_labels = all_labels.map do |label|
         x = issues_by_label[label[:name]]
@@ -21,7 +24,6 @@ module Dashboard
       {
         labels: all_labels
       }
-
     end
 
     def self.register(command, &block)
@@ -39,17 +41,18 @@ module Dashboard
           consumers[match[:command]].call payload, match[:issue] 
         end
     end
-
-
   end
-
 
   class Github 
     include HTTParty
     format :json
     base_uri "https://api.github.com/repos" 
 
-    def self.milestones(user_name = "DovetailSoftware", repo = "blue")
+    def initialize(oauth_token=nil)
+      @oauth_token = oauth_token
+    end
+
+    def milestones(user_name = "DovetailSoftware", repo = "blue")
       response = get_issues(user_name, repo)
 
       reply = response.group_by { |issue| issue["milestone"] }.map do |milestone, issues|
@@ -72,16 +75,16 @@ module Dashboard
       reply.sort {|a,b| a[:due_on] <=> b[:due_on]}
     end              
 
-    def self.get_issues(user_name = "DovetailSoftware", repo = "blue")
+    def get_issues(user_name = "DovetailSoftware", repo = "blue")
       puts "retrieving issues"
-      issues = get("/#{user_name}/#{repo}/issues?milestone=*&direction=asc")
+      issues = self.class.get("/#{user_name}/#{repo}/issues?milestone=*&direction=asc", options)
       issues.each do |issue|
         issue["current_state"] = current_state(issue) 
       end
       issues
     end
 
-    def self.current_state(issue)
+    def current_state(issue)
 
       r = /(?<id>\d+) *- *(?<name>.+)/
 
@@ -90,8 +93,8 @@ module Dashboard
     end
 
 
-    def self.labels(user_name = "DovetailSoftware", repo = "blue")
-      response = get("/#{user_name}/#{repo}/labels")
+    def labels(user_name = "DovetailSoftware", repo = "blue")
+      response = self.class.get("/#{user_name}/#{repo}/labels", options)
 
       labels = []
 
@@ -106,5 +109,11 @@ module Dashboard
       labels.sort {|a,b| a[:id] <=> b[:id]}
     end
 
+
+    private
+
+      def options
+        @options ||= @oauth_token.nil? ? {} : { :headers => {"Authorization" => "token #{@oauth_token}"}}
+      end
   end
 end
