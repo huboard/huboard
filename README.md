@@ -9,6 +9,12 @@ Configure your app for pow:
     cd ~/.pow
     ln -s /path/to/inch-pebbles
 
+Sinatra doesn't automatically reload changes to your app, so tell Pow to restart on every request:
+
+    cd /path/to/inch-pebbles
+    mkdir tmp
+    touch tmp/always_restart.txt
+
 ### Configure RVM
 
     cp .rvmrc.sample .rvmrc
