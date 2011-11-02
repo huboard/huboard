@@ -1,0 +1,2 @@
+set :github_client_id, '12341234'
+set :github_secret, '1234123412341234'
