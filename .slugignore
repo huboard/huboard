@@ -2,3 +2,4 @@
 spec
 .evergreen
 .rvmrc.sample
+script/
