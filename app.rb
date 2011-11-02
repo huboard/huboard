@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'omniauth'
 require './lib/github'
+require './lib/pebble'
 
 PUBLIC_URLS = ['/', '/logout', '/auth/github', '/auth/github/callback']
 
