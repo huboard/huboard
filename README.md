@@ -11,11 +11,11 @@ Configure your app for pow:
 
 ### Configure RVM
 
-    cp .rvmrc.sample .rvmrc::
+    cp .rvmrc.sample .rvmrc
 
-Edit rvmrc to specify your ruby version/gemset
+Edit `.rvmrc` to specify your ruby version/gemset
 
-Recommend MRI 1.9.2, to match the bamboo stack on heroku http://devcenter.heroku.com/articles/stack
+Recommend MRI 1.9.2, to match the [bamboo stack on heroku](http://devcenter.heroku.com/articles/stack)
 
 ### Install dependencies
 
@@ -27,15 +27,15 @@ Recommend MRI 1.9.2, to match the bamboo stack on heroku http://devcenter.heroku
 Go to https://github.com/account/applications and register your
 application to get the application keys needed for OAuth.
 
-- URL: http://inch-pebbles.dev
-- Callback: http://inch-pebbles.dev/auth/github/callback
+- URL: `http://inch-pebbles.dev`
+- Callback: `http://inch-pebbles.dev/auth/github/callback`
 
-Configure your app keys:
+### Configure your app
 
     cp .settings.sample .settings
 
-Edit .settings to set the Client ID and Client Secret provided by
-Github when you registered the application
+Edit `.settings` to set the Client ID and Client Secret provided by
+Github when you registered the application.
 
 ### Try the app
 
