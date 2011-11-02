@@ -47,14 +47,18 @@ helpers do
   def pebble
     @pebble ||= Dashboard::Pebble.new(github)
   end
+
+  def json(obj)
+    JSON.pretty_generate(obj)
+  end
 end
 
 get '/:user/:repo/milestones' do
-  return github.milestones(params[:user],params[:repo]).to_json
+  return json github.milestones(params[:user],params[:repo])
 end
 
 get '/:user/:repo/board' do 
-  return pebble.board(params[:user], params[:repo]).to_json
+  return json pebble.board(params[:user], params[:repo])
 end
 
 post '/webhook' do 
