@@ -29,6 +29,13 @@
         <div id="workqueue">
           <ul class="wip"></ul>
         </div>
+      <div>
+        <ul class="repos">
+        <% @repos.each do |repo| %>
+          <li class="repo"><a href="<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/board" %>"> <%= repo["name"] %></a> </li>
+        <% end %>
+        </ul>
+      </div>
       </div>
     </body>
   </html>

@@ -3,7 +3,7 @@ require 'omniauth'
 require 'stint'
 
 
-PUBLIC_URLS = ['/', '/logout', '/auth/github', '/auth/github/callback']
+PUBLIC_URLS = [ '/logout', '/auth/github', '/auth/github/callback']
 
 load '.settings' if File.exists? '.settings'
 if ENV['GITHUB_CLIENT_ID']
@@ -68,11 +68,9 @@ post '/webhook' do
   end
 end
 
-get '/board' do 
-  erb :board
-end
-
 get '/' do 
+  @user_name = current_user
+  @repos = github.get_repos(current_user)
   erb :index
 end
 

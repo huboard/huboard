@@ -5,13 +5,17 @@ module Stint
   class Github
     include HTTParty
     format :json
-    base_uri "https://api.github.com/repos"
+    base_uri "https://api.github.com"
 
     def initialize(oauth_token=nil)
       @oauth_token = oauth_token
     end
 
-    def milestones(user_name = "DovetailSoftware", repo = "blue")
+    def get_repos(user_name) 
+      self.class.get("/#{user_name || "user"}/repos", options)
+    end
+
+    def milestones(user_name, repo)
       response = get_issues(user_name, repo)
       reply = response.group_by { |issue| issue["milestone"] }.map do |milestone, issues|
         next if milestone.nil?
@@ -32,9 +36,9 @@ module Stint
       reply.sort {|a,b| a[:due_on] <=> b[:due_on]}
     end
 
-    def get_issues(user_name = "DovetailSoftware", repo = "blue")
+    def get_issues(user_name, repo)
       puts "retrieving issues"
-      issues = self.class.get("/#{user_name}/#{repo}/issues?milestone=*&direction=asc", options)
+      issues = self.class.get("/repos/#{user_name}/#{repo}/issues?milestone=*&direction=asc", options)
       issues.each do |issue|
         issue["current_state"] = current_state(issue)
       end
@@ -47,8 +51,8 @@ module Stint
     end
 
 
-    def labels(user_name = "DovetailSoftware", repo = "blue")
-      response = self.class.get("/#{user_name}/#{repo}/labels", options)
+    def labels(user_name, repo)
+      response = self.class.get("/repos/#{user_name}/#{repo}/labels", options)
       labels = []
       response.each do |label|
         r = /(?<id>\d+) *- *(?<name>.+)/

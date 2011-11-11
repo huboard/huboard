@@ -1,4 +1,5 @@
 .settings
+Gemfile.lock
 .rvmrc
 tmp/
 .DS_Store

@@ -7,7 +7,7 @@ module Stint
       @github = github
     end
 
-    def board(user_name = "DovetailSoftware", repo = "blue")
+    def board(user_name, repo)
       issues = github.get_issues(user_name, repo)
       issues_by_label = issues.group_by { |issue| issue["current_state"]["name"] }
       all_labels = github.labels(user_name, repo)
