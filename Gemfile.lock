@@ -1,3 +1,8 @@
+PATH
+  remote: ./stint/stint
+  specs:
+    stint (0.0.1)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -43,3 +48,4 @@ DEPENDENCIES
   omniauth (~> 1.0.0.rc2)
   omniauth-github (~> 1.0.0.rc2)
   sinatra
+  stint!

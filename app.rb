@@ -1,7 +1,7 @@
 require 'sinatra'
 require 'omniauth'
-require './lib/github'
-require './lib/pebble'
+require 'stint'
+
 
 PUBLIC_URLS = ['/', '/logout', '/auth/github', '/auth/github/callback']
 
@@ -41,11 +41,11 @@ helpers do
   end
 
   def github
-    @github ||= Dashboard::Github.new(user_token)
+    @github ||= Stint::Github.new(user_token)
   end
 
   def pebble
-    @pebble ||= Dashboard::Pebble.new(github)
+    @pebble ||= Stint::Pebble.new(github)
   end
 
   def json(obj)
@@ -63,7 +63,7 @@ end
 
 post '/webhook' do 
   puts "webhook"
-  Dashboard::Pebble.responds_to_message(Crack::JSON.parse(params[:payload])) do |commit, hash|
+  Stint::Pebble.responds_to_message(Crack::JSON.parse(params[:payload])) do |commit, hash|
     puts commit
   end
 end
