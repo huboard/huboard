@@ -11,9 +11,28 @@ module Stint
       @oauth_token = oauth_token
     end
 
-    def get_repos(user_name) 
-      self.class.get("/#{user_name || "user"}/repos", options)
+    def repos(org)
+     return self.class.get("/orgs/#{org}/repos", options) unless org.nil?
+
+      self.class.get("/user/repos", options)
     end
+
+    def all_repos
+       the_repos = []
+       orgs.each do |org|
+         the_repos.concat(repos(org["login"]))
+       end
+       the_repos
+    end
+
+    def orgs
+      self.class.get("/user/orgs",options)
+    end
+
+    def user 
+      self.class.get("/user",options)
+    end
+
 
     def milestones(user_name, repo)
       response = get_issues(user_name, repo)

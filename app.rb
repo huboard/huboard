@@ -15,7 +15,7 @@ enable :sessions
 
 use OmniAuth::Builder do
   provider :github,   settings.github_client_id, settings.github_secret do |o|
-    o.authorize_params = {:scope => 'repo'}
+    o.authorize_params = {:scope => 'repo,user'}
   end
 end
 
@@ -29,7 +29,7 @@ helpers do
   end
 
   def current_user
-    session['user_login']
+    session['user_login'] ||= github.user
   end
 
   def logged_in?
@@ -68,9 +68,19 @@ post '/webhook' do
   end
 end
 
+get '/user' do
+  json github.user
+end
+get '/authorizations' do
+  json github.authorizations
+end
+get '/all_repos' do
+  json github.all_repos
+end
+
 get '/' do 
   @user_name = current_user
-  @repos = github.get_repos(current_user)
+  @repos = github.all_repos
   erb :index
 end
 
@@ -79,8 +89,7 @@ end
 get '/auth/github/callback' do
   omniauth = request.env['omniauth.auth']
   session["user_token"] = omniauth['credentials']['token']
-  session["user_login"] = omniauth['info']['login']
-  redirect '/board'
+  redirect '/'
 end
 
 get '/auth/failure' do
@@ -90,6 +99,7 @@ end
 
 get '/logout' do
   session["user_token"] = nil
+  session["user_login"] = nil
   redirect '/'
 end
 
