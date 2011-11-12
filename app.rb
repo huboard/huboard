@@ -102,7 +102,7 @@ helpers do
   end
 
   def github
-    @github ||= Stint::Github.new(user_token)
+    @github ||= Stint::Github.new({ :headers => {"Authorization" => "token #{user_token}"}})
   end
 
   def pebble

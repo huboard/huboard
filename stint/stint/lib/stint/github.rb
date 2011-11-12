@@ -7,8 +7,8 @@ module Stint
     format :json
     base_uri "https://api.github.com"
 
-    def initialize(oauth_token=nil)
-      @oauth_token = oauth_token
+    def initialize(oauth_hash=nil)
+      @oauth_hash = oauth_hash 
     end
 
     def repos(org = nil)
@@ -80,7 +80,7 @@ module Stint
     private
 
       def options
-        @options ||= @oauth_token.nil? ? {} : { :headers => {"Authorization" => "token #{@oauth_token}"}}
+        @options ||= @oauth_hash || {}  
       end
   end
 
