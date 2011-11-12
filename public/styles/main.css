@@ -3,9 +3,32 @@
 html {height:100%;}
 body {
   min-height:100%;
-
   background-color: #FAF0d9;
-  
+}
+
+ul.repos, ul.repos li {
+  list-style: none;
+}
+ul.repos li {
+  margin: 0 0 2px 0;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid #ccc;
+}
+ul.repos li a {
+ float:right;
+ padding-top: 30px;
+ position:relative;
+ margin: 0 3px;
+}
+ul.repos li a span {
+ color: gray;
+}
+ul.repos li a strong {
+  font-size:2em;
+  position:absolute;
+  top:3px;
+  left:10%;
 }
 
 ul.milestones {

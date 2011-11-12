@@ -1,11 +1,11 @@
 <h1>Welcome! <%= @user.login %> </h1>
 <div>
-  <ul class="repos">
+  <ul class="repos drop-shadow lifted">
     <% @repos.each do |repo| %>
       <li class="repo">
       <a href="<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/milestones" %>"><span>milestones</span></a> 
-      <a href="<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/board" %>"><span>open issues</span><strong><%=repo["open_issues"]%></strong></a> 
-      <%= repo["name"] %>
+      <a class="board" href="<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/board" %>"><span>open issues</span><strong><%=repo["open_issues"]%></strong></a> 
+      <span><%= repo["name"] %></span>
       </li>
     <% end %>
   </ul>
