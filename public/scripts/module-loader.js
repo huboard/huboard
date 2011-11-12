@@ -4,11 +4,11 @@ jQuery(function($){
     module = $this.data("module");
 
     require({
-      baseUrl: 'scripts',
+      baseUrl: '/scripts',
     }
     ,[module],
     function(module){
-      module.init($this.data("module-parameters"));
+      module.init($this.data("parameters"));
     });
 
 

@@ -22,7 +22,7 @@ module Stint
     end
 
     def all_repos
-       the_repos = []
+       the_repos = github.repos
        github.orgs.each do |org|
          the_repos.concat(github.repos(org["login"]))
        end

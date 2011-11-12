@@ -1,9 +1,9 @@
 define(["../collections/milestones","text!../templates/milestone.tmpl"],function(milestones, template){
      return Backbone.View.extend({
           el : $('<ul>').addClass('milestones lifted drop-shadow').appendTo('#workqueue'),
-          initialize: function(){
+          initialize: function(params){
              milestones.bind("ondatareceived", this.onfetch, this);
-             milestones.fetch("rauhryan","skipping_stones_repo");
+             milestones.fetch(params.user,params.repo);
           },
           onfetch: function(data){
             var self = this;

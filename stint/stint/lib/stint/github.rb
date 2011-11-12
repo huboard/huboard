@@ -11,7 +11,7 @@ module Stint
       @oauth_token = oauth_token
     end
 
-    def repos(org)
+    def repos(org = nil)
      return self.class.get("/orgs/#{org}/repos", options) unless org.nil?
 
       self.class.get("/user/repos", options)
