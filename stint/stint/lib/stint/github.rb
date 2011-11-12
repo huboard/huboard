@@ -17,13 +17,6 @@ module Stint
       self.class.get("/user/repos", options)
     end
 
-    def all_repos
-       the_repos = []
-       orgs.each do |org|
-         the_repos.concat(repos(org["login"]))
-       end
-       the_repos
-    end
 
     def orgs
       self.class.get("/user/orgs",options)

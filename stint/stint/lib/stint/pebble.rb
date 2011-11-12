@@ -21,6 +21,14 @@ module Stint
       }
     end
 
+    def all_repos
+       the_repos = []
+       github.orgs.each do |org|
+         the_repos.concat(github.repos(org["login"]))
+       end
+       the_repos
+    end
+
     def self.register(command, &block)
        @@sub ||= {}
        @@sub[command] = block
