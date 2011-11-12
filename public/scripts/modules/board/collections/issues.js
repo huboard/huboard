@@ -4,7 +4,7 @@ define(function () {
       fetch : function (user,repo){
          var self = this;
          $.ajax({
-              url: "/" + user + "/" + repo + "/board",
+              url: "/api/" + user + "/" + repo + "/board",
               dataType: "json",
               success: function (data){
                  self.trigger("ondatareceived", data);

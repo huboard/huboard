@@ -22,6 +22,10 @@ get '/:user/:repo/milestones' do
    @parameters = params
    erb :milestones
 end
+get '/:user/:repo/board' do 
+   @parameters = params
+   erb :board
+end
 
 post '/webhook' do 
   puts "webhook"
@@ -37,7 +41,7 @@ get '/authorizations' do
   json github.authorizations
 end
 get '/all_repos' do
-  json github.all_repos
+  json pebble.all_repos
 end
 
 

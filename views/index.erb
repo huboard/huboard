@@ -2,7 +2,11 @@
 <div>
   <ul class="repos">
     <% @repos.each do |repo| %>
-      <li class="repo"><a href="<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/milestones" %>"> <%= repo["name"] %></a> </li>
+      <li class="repo">
+      <a href="<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/milestones" %>"><span>milestones</span></a> 
+      <a href="<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/board" %>"><span>open issues</span><strong><%=repo["open_issues"]%></strong></a> 
+      <%= repo["name"] %>
+      </li>
     <% end %>
   </ul>
 </div>

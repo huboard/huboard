@@ -4,7 +4,7 @@ define(["../collections/issues","text!../templates/board.tmpl"], function (issue
         el : $('#stage'),
         initialize: function (params) {
            issues.bind("ondatareceived", this.onfetch, this);
-           issues.fetch("rauhryan", "skipping_stones_repo");
+           issues.fetch(params.user, params.repo);
         },
         onfetch: function(data) {
            $("#stage").html(_.template(template, data));
