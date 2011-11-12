@@ -13,7 +13,6 @@ get '/api/:user/:repo/board' do
 end
 
 get '/' do 
-  @user = OpenStruct.new current_user
   @repos = pebble.all_repos
   erb :index
 end
@@ -82,6 +81,7 @@ end
 
 before do
   protected! unless PUBLIC_URLS.include? request.path_info
+  @user = OpenStruct.new current_user
 end
 
 helpers do

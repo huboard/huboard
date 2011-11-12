@@ -1,9 +1,11 @@
-@import url('bootstrap-1.0.0.min.css');
 
 html {height:100%;}
 body {
   min-height:100%;
   background-color: #FAF0d9;
+}
+#main-stage  { 
+  margin-top: 50px;
 }
 
 ul.repos, ul.repos li {
@@ -14,6 +16,9 @@ ul.repos li {
   position: relative;
   overflow: hidden;
   border-bottom: 1px solid #ccc;
+}
+ul.repos li:last-child {
+  border:0;
 }
 ul.repos li a {
  float:right;
