@@ -1,18 +1,4 @@
 <table>
   <tr>
-    <% for ( var i = 0; i < labels.length; i++ ) { %>
-    <td>
-        <h2><a href="#<%=  labels[i].text%>"><%=labels[i].text%></a></h2>
-        
-        <ul>
-          <% for (var j = 0; j < labels[i].issues.length; j++) { %>
-               <li><%= labels[i].issues[j].title %></li>
-          <% } %>
-        </ul>
-
-
-    </td>
-    <% } %>
   </tr>
-
 </table>
