@@ -31,9 +31,8 @@ module Stint
       self.class.post("/repos/#{user_name}/#{repo}/hooks", post_data)
     end
 
-
     def milestones(user_name, repo)
-      response = get_issues(user_name, repo)
+      response = self.class.get("/repos/#{user_name}/#{repo}/issues?milestone=*&direction=asc", options)
       reply = response.group_by { |issue| issue["milestone"] }.map do |milestone, issues|
         next if milestone.nil?
         {
@@ -54,36 +53,14 @@ module Stint
     end
 
     def get_issues(user_name, repo)
-      puts "retrieving issues"
-      issues = self.class.get("/repos/#{user_name}/#{repo}/issues?milestone=*&direction=asc", options)
-      issues.each do |issue|
-        issue["current_state"] = current_state(issue)
-      end
-      issues
+      self.class.get("/repos/#{user_name}/#{repo}/issues?direction=asc", options)
     end
-
-    def current_state(issue)
-      r = /(?<id>\d+) *- *(?<name>.+)/
-      issue["labels"].find {|x| r.match(x["name"])}  || {"name" => "none"}
-    end
-
 
     def labels(user_name, repo)
-      response = self.class.get("/repos/#{user_name}/#{repo}/labels", options)
-      labels = []
-      response.each do |label|
-        r = /(?<id>\d+) *- *(?<name>.+)/
-        puts label
-        hash = r.match (label["name"])
-        labels << { name: label["name"], index: hash[:id], text: hash[:name], color: label["color"]} unless hash.nil?
-      end
-
-      labels.sort {|a,b| a[:id] <=> b[:id]}
+      self.class.get("/repos/#{user_name}/#{repo}/labels", options)
     end
 
-
     private
-
       def options
         @options ||= @oauth_hash || {}  
       end

@@ -7,9 +7,9 @@ module Stint
     end
 
     def board(user_name, repo)
-      issues = github.get_issues(user_name, repo)
+      issues = get_issues(user_name, repo)
       issues_by_label = issues.group_by { |issue| issue["current_state"]["name"] }
-      all_labels = github.labels(user_name, repo)
+      all_labels = labels(user_name, repo)
       all_labels = all_labels.map do |label|
         x = issues_by_label[label[:name]]
         label[:issues] = x || []
@@ -18,6 +18,32 @@ module Stint
       {
         labels: all_labels
       }
+    end
+
+    def get_issues(user_name, repo)
+      issues = github.get_issues user_name, repo
+      issues.each do |issue|
+        issue["current_state"] = current_state(issue)
+      end
+      issues
+    end
+
+    def current_state(issue)
+      r = /(?<id>\d+) *- *(?<name>.+)/
+      issue["labels"].find {|x| r.match(x["name"])}  || {"name" => "0 - None"}
+    end
+
+    def labels(user_name, repo) 
+      response = github.labels(user_name, repo)
+      labels = []
+      response.each do |label|
+        r = /(?<id>\d+) *- *(?<name>.+)/
+        puts label
+        hash = r.match (label["name"])
+        labels << { name: label["name"], index: hash[:id], text: hash[:name], color: label["color"]} unless hash.nil?
+      end
+
+      labels.sort_by { |l| l[:index].to_i }
     end
 
     def create_hook(user_name, repo, token)
