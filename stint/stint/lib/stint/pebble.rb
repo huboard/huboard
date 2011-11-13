@@ -1,5 +1,4 @@
 module Stint
-
   class Pebble
     attr_accessor :github
 
@@ -57,5 +56,4 @@ module Stint
         end
     end
   end
-
 end
