@@ -10,7 +10,7 @@ define(["../collections/issues","text!../templates/board.tmpl", "./columnView"],
            $("#stage").html(_.template(template, data));
            _.each(data.labels, function (label){
                var column = new columnView({column: label});
-               $('table tr:first','#stage').append(column.render());
+               $('table tr:first','#stage').append(column.el);
            });
         }
    });

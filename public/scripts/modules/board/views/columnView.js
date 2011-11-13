@@ -3,14 +3,20 @@ define(["text!../templates/column.tmpl","./cardView"],function(template, CardVie
   var Column = Backbone.View.extend({
     initialize : function(params) {
       this.column = params.column;
+      this.render();
     },
     render: function(){
-      var column = $(_.template(template, this.column)),
-      card = new CardView({issues : this.column.issues});
+      var column = $(_.template(template, this.column));
 
-      column.append(card.render());
+      _.each(this.column.issues, function(issue){
+        var card = new CardView({issue : issue});
+        column.append(card.el);
+        card.delegateEvents();
+      });
 
-      return column;
+      this.el = column;
+
+      return this;
     }
   });
   return Column;
