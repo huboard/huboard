@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Inch pebbles</title>
+    <!-- This is a special version of jQuery with RequireJS built-in -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/scripts/underscore.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/scripts/backbone.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/scripts/require.js"></script>
+    <script src="/scripts/module-loader.js"></script>
+    <link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css">
+    <link rel="stylesheet" href="/styles/main.css" type="text/css" media="screen" charset="utf-8">
+  </head>
+  <body>
+    <div class="topbar-wrapper" style="z-index: 5;">
+    <div class="topbar" data-dropdown="dropdown">
+      <div class="topbar-inner">
+        <div class="container">
+          <h3><a href="/">Inch Pebbles</a></h3>
+          <ul class="nav">
+          </ul>
+          <ul class="nav secondary-nav">
+            <li class="dropdown">
+            <a href="#" class="dropdown-toggle"><%= @user.login %></a>
+              <ul class="dropdown-menu">
+                <li><a href="/logout">Logout</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div><!-- /topbar-inner -->
+    </div><!-- /topbar -->
+  </div>
+    <div class="container-fluid" id="main-stage">
+      <div class="sidebar">
+        <%= yield_content :sidebar %>
+      </div>
+      <div class="content">
+        <%= yield %>              
+      </div>
+    </div>
+  </body>
+</html>

@@ -23,14 +23,16 @@ get '/:user/:repo/milestones' do
 end
 get '/:user/:repo/board' do 
    @parameters = params
-   erb :board
+   erb :board, :layout => :layout_fluid
+end
+get '/:user/:repo/hook' do 
+   json(pebble.create_hook( params[:user], params[:repo], "#{base_url}?token=#{user_token}"))
 end
 
 post '/webhook' do 
   puts "webhook"
-  Stint::Pebble.responds_to_message(Crack::JSON.parse(params[:payload])) do |commit, hash|
-    puts commit
-  end
+  hub = Stint::Github.new({ :headers => {"Authorization" => "token #{params[:token]}"}})
+  json hub.repos
 end
 
 get '/user' do
@@ -42,7 +44,10 @@ end
 get '/all_repos' do
   json pebble.all_repos
 end
-
+get '/hook' do 
+  token = user_token
+  json({ :token => token})
+end
 
 # omniauth integration
 
@@ -63,7 +68,7 @@ get '/logout' do
   redirect '/'
 end
 
-PUBLIC_URLS = [ '/logout', '/auth/github', '/auth/github/callback']
+PUBLIC_URLS = ['/webhook', '/logout', '/auth/github', '/auth/github/callback']
 
 load '.settings' if File.exists? '.settings'
 if ENV['GITHUB_CLIENT_ID']
@@ -90,7 +95,7 @@ helpers do
   end
 
   def current_user
-    session['user_login'] ||= github.user
+    @user ||= github.user
   end
 
   def logged_in?
@@ -111,5 +116,8 @@ helpers do
 
   def json(obj)
     JSON.pretty_generate(obj)
+  end
+   def base_url
+    @base_url ||= "#{request.env['rack.url_scheme']}://#{request.env['HTTP_HOST']}"
   end
 end

@@ -21,6 +21,18 @@ module Stint
       }
     end
 
+    def create_hook(user_name, repo, token)
+      params = {
+        name:"web",
+        config: {
+            url: token
+          },
+        events: ["issue_comment"],
+         active: true
+        }
+      github.create_hook user_name, repo, params
+    end
+
     def all_repos
        the_repos = github.repos
        github.orgs.each do |org|

@@ -17,13 +17,18 @@ module Stint
       self.class.get("/user/repos", options)
     end
 
-
     def orgs
       self.class.get("/user/orgs",options)
     end
 
     def user 
       self.class.get("/user",options)
+    end
+
+    def create_hook(user_name, repo, params) 
+      post_data = {body:params.to_json, header:{"Content-Type"=> "application/json"}}
+      post_data.merge!(options)
+      self.class.post("/repos/#{user_name}/#{repo}/hooks", post_data)
     end
 
 

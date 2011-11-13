@@ -29,11 +29,19 @@ ul.repos li a {
 ul.repos li a span {
  color: gray;
 }
+ul.repos li > span {
+
+  font-size:1.4em;
+}
 ul.repos li a strong {
   font-size:2em;
   position:absolute;
   top:3px;
   left:10%;
+}
+ul.repos li a.btn {
+ padding-top: 7px;
+ margin-top:7px;
 }
 
 ul.milestones {
