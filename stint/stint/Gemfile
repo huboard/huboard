@@ -5,3 +5,4 @@ gemspec
 rcov
 rake
 rspec
+httparty
