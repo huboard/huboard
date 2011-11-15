@@ -56,6 +56,16 @@ module Stint
       self.class.get("/repos/#{user_name}/#{repo}/issues?direction=asc", options)
     end
 
+    def issue_by_id(user_name, repo, id)
+      self.class.get("/repos/#{user_name}/#{repo}/issues/#{id}", options)
+    end
+
+    def update_issue(user_name, repo, issue)
+      post_data = {body:issue.to_json, header:{"Content-Type"=> "application/json"}}
+      post_data.merge!(options)
+      self.class.post("/repos/#{user_name}/#{repo}/issues/#{issue["number"]}",post_data)
+    end
+
     def labels(user_name, repo)
       self.class.get("/repos/#{user_name}/#{repo}/labels", options)
     end

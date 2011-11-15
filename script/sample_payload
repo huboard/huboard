@@ -11,9 +11,9 @@
     "before" => "4c8124ffcf4039d292442eeccabdeca5af5c5017",
 
     "repository" => {
-      "name"  => "gitk-demo",
-      "url"   => "http://github.com/joshuaflanagan/gitk-demo",
-      "owner" => { "name" => "joshuaflanagan", "email" => "joshuaflanagan@gmail.com" }
+      "name"  => "skipping_stones_repo",
+      "url"   => "http://github.com/rauhryan/skipping_stones_repo",
+      "owner" => { "name" => "rauhryan", "email" => "rauh.ryan@gmail.com" }
     },
 
     "commits" => [

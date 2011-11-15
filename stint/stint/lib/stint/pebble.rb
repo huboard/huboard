@@ -30,7 +30,7 @@ module Stint
 
     def current_state(issue)
       r = /(?<id>\d+) *- *(?<name>.+)/
-      issue["labels"].find {|x| r.match(x["name"])}  || {"name" => "0 - None"}
+      issue["labels"].sort_by {|l| l["name"]}.reverse.find {|x| r.match(x["name"])}  || {"name" => "0 - None"}
     end
 
     def labels(user_name, repo) 
@@ -56,6 +56,28 @@ module Stint
          active: true
         }
       github.create_hook user_name, repo, params
+    end
+
+    def push_card(user_name, repo, commit)
+      r = /(?<command>\w+) [gG][hH]-+(?<issue>\d+)/
+        match = r.match(commit["message"])
+      return "no match" unless match
+      return "no match" unless /push/i.match( match[:command])  
+
+      issue = github.issue_by_id user_name, repo, match[:issue]
+
+      #return issue
+      state = current_state(issue)
+
+      sr = /(?<id>\d+) *- *(?<name>.+)/.match(state["name"])
+      next_state = sr.nil? ? 0 : (sr[:id].to_i + 1)
+
+      labels = github.labels user_name, repo
+
+      issue["labels"] << labels.find { |l| /#{next_state}\s*- *.+/.match(l["name"]) }
+      issue["labels"] = issue["labels"].delete_if { |l| l["name"] == state["name"] }
+
+      github.update_issue user_name, repo, {"number" => issue["number"],"labels" => issue["labels"]}
     end
 
     def all_repos

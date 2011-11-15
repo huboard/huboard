@@ -31,8 +31,18 @@ end
 
 post '/webhook' do 
   puts "webhook"
-  hub = Stint::Github.new({ :headers => {"Authorization" => "token #{params[:token]}"}})
-  json hub.repos
+  hub = Stint::Pebble.new(Stint::Github.new({ :headers => {"Authorization" => "token #{params[:token]}"}}))
+  
+  payload = JSON.parse(params[:payload])
+
+  response = []
+  repository = payload["repository"]
+  commits = payload["commits"]
+  commits.reverse.each do |c|
+    
+    response << hub.push_card(  repository["owner"]["name"], repository["name"], c)
+  end 
+  json response
 end
 
 get '/user' do
