@@ -31,7 +31,7 @@ module Stint
 
     def reorder_milestone(user_name, repo, number, index)
       years = 10 + index.to_i
-      time = Time.now + (years*52*24*60*60)
+      time = Time.now + (years*52*7*24*60*60)
 
       post_data = { due_on: time.utc.iso8601, number:number }
       github.update_milestone user_name, repo, post_data
