@@ -44,12 +44,12 @@ module Stint
           number: milestone["number"],
           open_issues: milestone["open_issues"],
           closed_issues: milestone["closed_issues"],
-          due_on: milestone[:due_on] || "",
+          due_on: milestone["due_on"] || "",
           #users: issues.group_by {|x| x["user"]}.map{ |name,users|  {login: name["login"], gravatar_id: name["gravatar_id"]} },
           issues: issues 
         }
       end
-      reply.sort_by {|m| m[:due_on]}.reverse
+      reply.sort_by {|m| m[:due_on]}
     end
 
     def get_issues(user_name, repo)
