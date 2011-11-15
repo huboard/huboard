@@ -66,6 +66,13 @@ module Stint
       self.class.post("/repos/#{user_name}/#{repo}/issues/#{issue["number"]}",post_data)
     end
 
+    def close_issue(user_name, repo, issue)
+      post_data = {body:{state:"closed"}.to_json, header:{"Content-Type"=> "application/json"}}
+      post_data.merge!(options)
+      self.class.post("/repos/#{user_name}/#{repo}/issues/#{issue["number"]}",post_data)
+
+    end
+
     def labels(user_name, repo)
       self.class.get("/repos/#{user_name}/#{repo}/labels", options)
     end

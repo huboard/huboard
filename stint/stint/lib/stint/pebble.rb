@@ -74,7 +74,12 @@ module Stint
 
       labels = github.labels user_name, repo
 
-      issue["labels"] << labels.find { |l| /#{next_state}\s*- *.+/.match(l["name"]) }
+      next_label = labels.find { |l| /#{next_state}\s*- *.+/.match(l["name"]) }
+
+      return github.close_issue(user_name, repo, issue) if next_label.nil?
+
+      issue["labels"] << next_label
+
       issue["labels"] = issue["labels"].delete_if { |l| l["name"] == state["name"] }
 
       github.update_issue user_name, repo, {"number" => issue["number"],"labels" => issue["labels"]}
