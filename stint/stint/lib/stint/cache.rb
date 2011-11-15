@@ -1,11 +1,11 @@
-module stint
+module Stint
 
   module Cache
     @the_wrapped_methods = []
     @alias = {}
     @cache = {}
 
-    def cache(method_name)
+    def self.cache(method_name)
       @the_wrapped_methods << method_name
     end
 
@@ -20,7 +20,7 @@ module stint
       #cache check
       key = args.join #how?
       if @cache[key].nil?
-        result = @alias[method](args)
+        result = @alias[method]
         cache[key] = result
       end if
       result
