@@ -1,8 +1,8 @@
 require "rspec"
-require "stint/stint/lib/stint"
+require "lib/stint"
 
 class Bob
-  include Cache
+  include Stint::Cache
 
   cache :bob
 
