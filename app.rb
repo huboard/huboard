@@ -3,6 +3,7 @@ require 'sinatra/content_for'
 require 'omniauth'
 require 'stint'
 
+
 # json api
 get '/api/:user/:repo/milestones' do
   return json github.milestones(params[:user],params[:repo])
@@ -10,6 +11,11 @@ end
 
 get '/api/:user/:repo/board' do 
   return json pebble.board(params[:user], params[:repo])
+end
+
+post '/api/:user/:repo/reordermilestone' do 
+  milestone = params["milestone"]
+  json pebble.reorder_milestone params[:user], params[:repo], milestone["number"], params[:index]
 end
 
 get '/' do 

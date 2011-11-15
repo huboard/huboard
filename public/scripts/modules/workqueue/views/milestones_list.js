@@ -1,15 +1,30 @@
-define(["../collections/milestones","text!../templates/milestone.tmpl"],function(milestones, template){
+define(["./milestoneView","../collections/milestones"],function(milestoneView,milestones){
+
      return Backbone.View.extend({
           el : $('<ul>').addClass('milestones lifted drop-shadow').appendTo('#workqueue'),
           initialize: function(params){
              milestones.bind("ondatareceived", this.onfetch, this);
              milestones.fetch(params.user,params.repo);
+             this.user = params.user;
+             this.repo = params.repo;
+             $(this.el).sortable({
+               stop: $.proxy(this.onStop,this)
+             });
           },
           onfetch: function(data){
             var self = this;
             _.each(data, function(milestone){
-                 $(self.el).append(_.template(template,milestone));
+                  console.log(milestone);
+                 var view = new milestoneView({user: self.user, repo: self.repo,milestone:milestone});
+                 $(self.el).append(view.render().el);
+                 view.delegateEvents();
             });
+          },
+          onStop : function(ev,ui){
+            console.log("onstop");
+            $("li",this.el).each(function(index,element){
+               $(element).trigger("drop",index);
+            })
           }
      });
 });

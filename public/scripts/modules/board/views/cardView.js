@@ -5,11 +5,10 @@ define(["text!../templates/card.tmpl"],function(template){
        this.issue = params.issue;
      },
      events: {
-      "click h3" : "clicked"
+      "click" : "clicked"
      },
      render: function(){
        $(this.el).html( _.template(template, this.issue));
-       this.delegateEvents();
        return this;
      },
      clicked : function(){

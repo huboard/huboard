@@ -1,3 +1,4 @@
+require 'time'
 module Stint
   class Pebble
     attr_accessor :github
@@ -26,6 +27,14 @@ module Stint
         issue["current_state"] = current_state(issue)
       end
       issues
+    end
+
+    def reorder_milestone(user_name, repo, number, index)
+      years = 10 + index.to_i
+      time = Time.now + (years*52*24*60*60)
+
+      post_data = { due_on: time.utc.iso8601, number:number }
+      github.update_milestone user_name, repo, post_data
     end
 
     def current_state(issue)

@@ -49,7 +49,7 @@ module Stint
           issues: issues 
         }
       end
-      reply.sort {|a,b| a[:due_on] <=> b[:due_on]}
+      reply.sort_by {|m| m[:due_on]}.reverse
     end
 
     def get_issues(user_name, repo)
@@ -64,6 +64,11 @@ module Stint
       post_data = {body:issue.to_json, header:{"Content-Type"=> "application/json"}}
       post_data.merge!(options)
       self.class.post("/repos/#{user_name}/#{repo}/issues/#{issue["number"]}",post_data)
+    end
+    def update_milestone(user_name, repo, milestone)
+       post_data = {body: milestone.to_json, header:{"Content-Type"=> "application/json"}}
+      post_data.merge!(options)
+      self.class.post("/repos/#{user_name}/#{repo}/milestones/#{milestone[:number]}",post_data)
     end
 
     def close_issue(user_name, repo, issue)
