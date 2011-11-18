@@ -2,7 +2,8 @@ require 'sinatra'
 require 'sinatra/content_for'
 require 'omniauth'
 require 'stint'
-
+require 'encryptor'
+require 'base64'
 
 # json api
 get '/api/:user/:repo/milestones' do
@@ -90,6 +91,7 @@ load '.settings' if File.exists? '.settings'
 if ENV['GITHUB_CLIENT_ID']
   set :github_client_id, ENV['GITHUB_CLIENT_ID']
   set :github_secret, ENV['GITHUB_SECRET']
+  set :secret_key, ENV['SECRET_KEY']
 end
 
 enable :sessions
@@ -107,7 +109,13 @@ end
 
 helpers do
   def user_token
-    session['user_token']
+    encrypted = Encryptor.encrypt session['user_token'], :key => settings.secret_key
+    Base64.strict_encode64 encrypted
+  end
+
+  def decrypt_token(token)
+    decoded = Base64.strict_decode64 token
+    Encryptor.decrypt decoded, :key => settings.secret_key
   end
 
   def current_user
