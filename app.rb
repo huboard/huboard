@@ -108,9 +108,13 @@ before do
 end
 
 helpers do
-  def user_token
+  def encrypted_token
     encrypted = Encryptor.encrypt session['user_token'], :key => settings.secret_key
     Base64.strict_encode64 encrypted
+  end
+
+  def user_token
+     session['user_token']
   end
 
   def decrypt_token(token)
