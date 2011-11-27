@@ -38,7 +38,8 @@ end
 
 post '/webhook' do 
   puts "webhook"
-  hub = Stint::Pebble.new(Stint::Github.new({ :headers => {"Authorization" => "token #{params[:token]}"}}))
+  token =  decrypt_token( params[:token] )
+  hub = Stint::Pebble.new(Stint::Github.new({ :headers => {"Authorization" => "token #{token}"}}))
   
   payload = JSON.parse(params[:payload])
 
