@@ -111,7 +111,7 @@ end
 helpers do
   def encrypted_token
     encrypted = Encryptor.encrypt session['user_token'], :key => settings.secret_key
-    Base64.strict_encode64 encrypted
+    Base64.urlsafe_encode64 encrypted
   end
 
   def user_token
@@ -119,7 +119,7 @@ helpers do
   end
 
   def decrypt_token(token)
-    decoded = Base64.strict_decode64 token
+    decoded = Base64.urlsafe_decode64 token
     Encryptor.decrypt decoded, :key => settings.secret_key
   end
 
