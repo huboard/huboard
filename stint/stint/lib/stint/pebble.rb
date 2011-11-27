@@ -61,7 +61,7 @@ module Stint
         config: {
             url: token
           },
-        events: ["issue_comment"],
+        events: ["push"],
          active: true
         }
       github.create_hook user_name, repo, params

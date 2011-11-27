@@ -33,7 +33,7 @@ get '/:user/:repo/board' do
    erb :board, :layout => :layout_fluid
 end
 get '/:user/:repo/hook' do 
-   json(pebble.create_hook( params[:user], params[:repo], "#{base_url}?token=#{user_token}"))
+   json(pebble.create_hook( params[:user], params[:repo], "#{base_url}/webhook?token=#{encrypted_token}"))
 end
 
 post '/webhook' do 
