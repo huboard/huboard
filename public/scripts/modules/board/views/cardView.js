@@ -7,8 +7,9 @@ define(["text!../templates/card.tmpl"],function(template){
      events: {
       "click" : "clicked"
      },
+     tagName:"li",
      render: function(){
-       $(this.el).html( _.template(template, this.issue));
+       $(this.el).html( _.template(template, this.issue)).addClass("drop-shadow");
        return this;
      },
      clicked : function(){

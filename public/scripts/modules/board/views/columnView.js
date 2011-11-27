@@ -9,7 +9,7 @@ define(["text!../templates/column.tmpl","./cardView"],function(template, CardVie
 
       _.each(this.column.issues, function(issue){
         var card = new CardView({issue : issue});
-        column.append(card.render().el);
+        $("ul",column).append(card.render().el);
       });
 
       this.el = column;

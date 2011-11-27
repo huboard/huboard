@@ -155,10 +155,9 @@ ul.milestones li div span {
 
 table {width:100%;}
 table td {
-   width:20%;
    vertical-align: top;
  }
- table h2 {
+ table h3 {
    text-align: center;
  }
 
@@ -170,7 +169,4 @@ table td {
    list-style: none;
    padding: 20px;
    margin: 10px 0;
-   background:white;
-   box-shadow: 1px 4px 8px #ccc; 0px 0px 40px rgba(0,0,0,0.1) inset;
-    
  }
