@@ -1,2 +1,13 @@
 <div data-module="modules/workqueue/main" data-parameters='<%= @parameters.to_json %>' id="workqueue">
 </div>
+
+<% content_for :navigation do %>
+
+  <li class="active">
+  <a href="/<%=@parameters[:user]%>/<%=@parameters[:repo]%>/milestones">Milestones</a>
+  </li>
+  <li>
+  <a href="/<%=@parameters[:user]%>/<%=@parameters[:repo]%>/board">Tasks</a>
+  </li>
+
+<% end %>

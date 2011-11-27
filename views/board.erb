@@ -1,2 +1,12 @@
 <div id="stage" data-module="modules/board/main" data-parameters='<%= @parameters.to_json %>'>
 </div>
+<% content_for :navigation do %>
+
+  <li>
+  <a href="/<%=@parameters[:user]%>/<%=@parameters[:repo]%>/milestones">Milestones</a>
+  </li>
+  <li class="active">
+  <a href="/<%=@parameters[:user]%>/<%=@parameters[:repo]%>/board">Tasks</a>
+  </li>
+
+<% end %>
