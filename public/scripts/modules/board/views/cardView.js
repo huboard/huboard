@@ -5,18 +5,17 @@ define(["text!../templates/card.tmpl"],function(template){
        this.issue = params.issue;
      },
      events: {
-      "click" : "clicked"
+      "moved" : "moved"
      },
      tagName:"li",
      render: function(){
        $(this.el).html( _.template(template, this.issue)).addClass("drop-shadow");
        return this;
      },
-     clicked : function(){
+     moved: function(ev,index){
 
-       console.log("clicked");
+       console.log("moved to column", index);
      }
-
   });
 
 });

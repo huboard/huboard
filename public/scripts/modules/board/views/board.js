@@ -24,16 +24,19 @@ define(["../collections/issues","text!../templates/board.tmpl", "./columnView"],
            
            $("tr",noneBoard).append(new columnView({column: noneColumn}).render().el);
 
+           var width = (100 / rest.length);
+
            _.each(rest, function (label){
                var column = new columnView({column: label});
-               $("tr",board).append(column.render().el);
+               var markup = $(column.render().el).css({width:width + "%"});
+               $("tr",board).append(markup);
            });
 
            $("#stage").html(board);
            $(".sidebar","#main-stage").append(noneBoard);
 
            var tallest = calculateTallest();
-           $("ul","#main-stage").height(tallest);
+           $("ul","#main-stage").css("min-height",tallest);
         }
    });
 });

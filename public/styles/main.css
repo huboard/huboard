@@ -169,4 +169,8 @@ table td {
    list-style: none;
    padding: 20px;
    margin: 10px 0;
+   cursor:move;
+ }
+ .ui-sortable-placeholder {
+   background:#ccc;
  }
