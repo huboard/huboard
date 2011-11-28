@@ -19,6 +19,10 @@ post '/api/:user/:repo/reordermilestone' do
   json pebble.reorder_milestone params[:user], params[:repo], milestone["number"], params[:index]
 end
 
+post '/api/:user/:repo/movecard' do 
+  json ({message:"moved it!"})
+end
+
 get '/' do 
   @repos = pebble.all_repos
   erb :index

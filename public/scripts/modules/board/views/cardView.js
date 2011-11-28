@@ -1,20 +1,21 @@
-define(["text!../templates/card.tmpl"],function(template){
+define(["text!../templates/card.tmpl","../models/card"],function(template,card){
 
   return Backbone.View.extend({
      initialize: function ( params ) {
-       this.issue = params.issue;
+       this.issue = new card({model:params.issue, user:params.user,repo: params.repo});
+       _.bind(this,'moved',this.moved);
+       console.log(this.issue);
      },
      events: {
       "moved" : "moved"
      },
      tagName:"li",
      render: function(){
-       $(this.el).html( _.template(template, this.issue)).addClass("drop-shadow");
+       $(this.el).html( _.template(template, this.issue.attributes)).addClass("drop-shadow");
        return this;
      },
      moved: function(ev,index){
-
-       console.log("moved to column", index);
+       this.issue.save({index: index});
      }
   });
 

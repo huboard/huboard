@@ -15,19 +15,22 @@ define(["../collections/issues","text!../templates/board.tmpl", "./columnView"],
         initialize: function (params) {
            issues.bind("ondatareceived", this.onfetch, this);
            issues.fetch(params.user, params.repo);
+           this.user = params.user;
+           this.repo = params.repo;
         },
         onfetch: function(data) {
-           var board = $(_.template(template, data));
-           var noneBoard = board.clone();
-           var noneColumn = _.first(data.labels);
-           var rest = _.rest(data.labels)
+           var board = $(_.template(template, data)),
+               noneBoard = board.clone(),
+               noneColumn = _.first(data.labels),
+               rest = _.rest(data.labels),
+               self = this;
            
-           $("tr",noneBoard).append(new columnView({column: noneColumn}).render().el);
+           $("tr",noneBoard).append(new columnView({column: noneColumn, user:this.user,repo:this.repo}).render().el);
 
            var width = (100 / rest.length);
 
            _.each(rest, function (label){
-               var column = new columnView({column: label});
+               var column = new columnView({column: label, user:self.user,repo:self.repo});
                var markup = $(column.render().el).css({width:width + "%"});
                $("tr",board).append(markup);
            });
