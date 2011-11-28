@@ -20,7 +20,7 @@ post '/api/:user/:repo/reordermilestone' do
 end
 
 post '/api/:user/:repo/movecard' do 
-  json ({message:"moved it!"})
+  json pebble.move_card params[:user], params[:repo], params[:issue], params[:index]
 end
 
 get '/' do 

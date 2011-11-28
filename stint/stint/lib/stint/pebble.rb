@@ -94,6 +94,23 @@ module Stint
       github.update_issue user_name, repo, {"number" => issue["number"],"labels" => issue["labels"]}
     end
 
+    def move_card(user_name, repo, the_issue, index)
+      labels = github.labels user_name, repo
+
+      new_state = labels.find { |l| /#{index}\s*- *.+/.match(l["name"]) }
+
+      issue = github.issue_by_id user_name, repo, the_issue["number"]
+
+      state = current_state(issue)
+
+      issue["labels"] << new_state unless new_state.nil?
+
+      issue["labels"] = issue["labels"].delete_if { |l| l["name"] == state["name"] }
+
+      github.update_issue user_name, repo, {"number" => issue["number"], "labels" => issue["labels"]}
+
+    end
+
     def all_repos
        the_repos = github.repos
        github.orgs.each do |org|
