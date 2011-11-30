@@ -1,2 +1,13 @@
-<a href="<%= html_url %>" target="_blank" title="View issue on github.com"><%= number %></a> - <%= title %>
+<a href="<%= html_url %>" target="_blank" title="View issue on github.com"><%= number %></a>
+<div class="title">
+<%= title %>
+</div>
+<% if(assignee) { %>
+ <img src="http://www.gravatar.com/avatar/<%= assignee.gravatar_id %>?s=24" />
+<% } %>
 
+<% if(milestone) { %>
+<div>
+      Milestone: <%= milestone.title %>
+</div>
+<% } %>

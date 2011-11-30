@@ -165,12 +165,34 @@ table td {
     margin:0;
     padding: 0;
  }
- table li {
+ table li.drop-shadow {
    list-style: none;
-   padding: 20px;
+   padding: 30px 5px 10px 5px;
    margin: 10px 0;
    cursor:move;
+   position:relative;
+ }
+ table li .title {
+   border-top: 1px solid #ccc;
+   padding: 5px 0;
+
+ }
+ table li img {
+
+   position: absolute;
+   top:3px;
+   right: 3px;
+   
+ }
+ table li a {
+   position: absolute;
+   top:6px;
+   left: 3px;
+   font-size:2em;
  }
  .ui-sortable-placeholder {
    background:#ccc;
+   list-style: none;
+   padding: 80px 5px 10px 5px;
+   margin: 10px 0;
  }
