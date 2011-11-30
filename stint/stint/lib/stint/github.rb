@@ -53,7 +53,7 @@ module Stint
     end
 
     def get_issues(user_name, repo)
-      self.class.get("/repos/#{user_name}/#{repo}/issues?direction=asc", options)
+      self.class.get("/repos/#{user_name}/#{repo}/issues?direction=asc&per_page=100", options)
     end
 
     def issue_by_id(user_name, repo, id)
