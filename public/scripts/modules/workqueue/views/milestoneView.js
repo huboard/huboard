@@ -4,6 +4,7 @@ define(["text!../templates/milestone.tmpl","../models/milestone"],function(templ
   return Backbone.View.extend({
      initialize : function (params){
        console.log(milestone)
+       params.milestone.html_url = params.milestone.url.replace(/.*\/repos\/(\w+)\/(\w+)\/.*/, 'https://github.com/$1/$2/issues?milestone=' + params.milestone.number + '&state=open');
        this.milestone = new milestone({model:params.milestone, user: params.user, repo: params.repo});
        _.bind(this, 'reorder', this.reorder);
      },
