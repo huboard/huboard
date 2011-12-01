@@ -97,6 +97,7 @@ ul.milestones li div span {
   background: rgba(0, 0, 0, 0.3);
   padding: 7px;
   text-indent: 9999em;
+  border-radius: 4px 0 0 4px;
 }
 .drop-shadow {
   position:relative;
@@ -175,20 +176,27 @@ table td {
  table li .title {
    border-top: 1px solid #ccc;
    padding: 5px 0;
-
+   color: #444;
+ }
+ table li .milestone {
+   color: #999;
+   font-size:11px;
  }
  table li img {
-
    position: absolute;
    top:3px;
    right: 3px;
-   
+   border-radius: 2px;
  }
  table li a {
    position: absolute;
    top:6px;
    left: 3px;
    font-size:2em;
+ }
+ table li a small {
+   color: #999;
+   padding-right:2px;
  }
  .ui-sortable-placeholder {
    background:#ccc;
