@@ -200,7 +200,7 @@ table td {
    color: #999;
    padding-right:2px;
  }
- .ui-sortable-placeholder {
+ table .ui-sortable-placeholder {
    background:#ccc;
    list-style: none;
    padding: 80px 5px 10px 5px;
