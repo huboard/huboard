@@ -55,7 +55,18 @@ module Stint
       labels.sort_by { |l| l[:index].to_i }
     end
 
+
+    def hook_exists(user_name, repo, token)
+        hooks = github.hooks user_name, repo
+
+        return !hooks.find{ |x| x["config"]["url"] == token }.nil?
+    end
+
+
     def create_hook(user_name, repo, token)
+
+      return { message: "hook already exists", success: false  } if hook_exists user_name, repo, token
+
       params = {
         name:"web",
         config: {
@@ -64,7 +75,7 @@ module Stint
         events: ["push"],
          active: true
         }
-      github.create_hook user_name, repo, params
+      github.create_hook( user_name, repo, params).merge( { success: true, message: "hook created successfully"})
     end
 
     def push_card(user_name, repo, commit)
