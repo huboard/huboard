@@ -11,3 +11,15 @@
   </li>
 
 <% end %>
+<% content_for :sub_navigation do %>
+
+  <li class="dropdown">
+  <a href="#" class="dropdown-toggle icon-settings">Settings</a>
+  <ul class="dropdown-menu">
+    <li>
+    <a href="/<%=@parameters[:user]%>/<%=@parameters[:repo]%>/hook">Create Hook</a>
+    </li>
+  </ul>
+  </li>
+
+<% end %>

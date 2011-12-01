@@ -26,6 +26,7 @@
             <% yield_content :navigation %>
           </ul>
           <ul class="nav secondary-nav">
+            <% yield_content :sub_navigation %>
             <li class="dropdown">
             <a href="#" class="dropdown-toggle"><%= @user.login %></a>
               <ul class="dropdown-menu">

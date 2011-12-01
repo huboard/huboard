@@ -2,7 +2,6 @@
   <ul class="repos drop-shadow ">
     <% @repos.each do |repo| %>
       <li class="repo">
-      <a href="<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/hook" %>" class="btn primary">Create Hook</a> 
       <a href="<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/milestones" %>"><span>milestones</span></a> 
       <a class="board" href="<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/board" %>"><span>open issues</span><strong><%=repo["open_issues"]%></strong></a> 
       <span><%= repo["name"] %></span>

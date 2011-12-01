@@ -4,6 +4,7 @@ body {
   min-height:100%;
   background-color: #FAF0d9;
 }
+
 #main-stage  { 
   margin-top: 50px;
 }
@@ -98,6 +99,7 @@ ul.milestones li div span {
   padding: 7px;
   text-indent: 9999em;
   border-radius: 4px 0 0 4px;
+  -moz-border-radius: 4px 0 0 4px;
 }
 .drop-shadow {
   position:relative;
