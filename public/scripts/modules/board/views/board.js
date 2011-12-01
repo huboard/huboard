@@ -40,6 +40,7 @@ define(["../collections/issues","text!../templates/board.tmpl", "./columnView"],
 
            var tallest = calculateTallest();
            $("ul","#main-stage").css("min-height",tallest);
+           $('[rel~="twipsy"]').twipsy({live:true});
         }
    });
 });

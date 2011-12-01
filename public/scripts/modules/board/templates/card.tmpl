@@ -1,13 +1,13 @@
-<a href="<%= html_url %>" target="_blank" title="View issue on github.com"><%= number %></a>
+<a href="<%= html_url %>" target="_blank" title="View issue on github.com"><small>#</small><%= number %></a>
 <div class="title">
 <%= title %>
 </div>
 <% if(assignee) { %>
- <img src="http://www.gravatar.com/avatar/<%= assignee.gravatar_id %>?s=24" />
+ <img data-placement="right" rel="twipsy" title="Assigned to <%= assignee.login %>" src="http://www.gravatar.com/avatar/<%= assignee.gravatar_id %>?s=24" />
 <% } %>
 
 <% if(milestone) { %>
-<div>
+<div class="milestone">
       Milestone: <%= milestone.title %>
 </div>
 <% } %>

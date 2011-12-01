@@ -6,6 +6,7 @@ define(["./views/board"],function (board) {
 
       app.board = new board(params);
 
+
     }
    }
 });
