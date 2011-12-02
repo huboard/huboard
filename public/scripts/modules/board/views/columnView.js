@@ -21,7 +21,9 @@ define(["text!../templates/column.tmpl","./cardView"],function(template, CardVie
          connectWith: ".sortable",
          placeholder: "ui-sortable-placeholder",
          receive: $.proxy(this.onReceive,this),
-         remove: $.proxy(this.onRemove, this)
+         remove: $.proxy(this.onRemove, this),
+         over: $.proxy(this.onOver, this),
+         out: $.proxy(this.onOut, this)
       });
 
       return this;
@@ -31,6 +33,12 @@ define(["text!../templates/column.tmpl","./cardView"],function(template, CardVie
     },
     onRemove: function(ev, ui){
        // don't know if need yet
+    },
+    onOver: function(ev, ui){
+       $("ul",this.el).addClass("ui-sortable-hover");
+    },
+    onOut: function (ev, ui){
+       $("ul",this.el).removeClass("ui-sortable-hover");
     }
   });
   return Column;

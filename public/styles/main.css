@@ -1,9 +1,10 @@
-
+@import url('../font/iconic.css');
 html {height:100%;}
 body {
   min-height:100%;
   background-color: #FAF0d9;
 }
+.hide {display:none;}
 
 #main-stage  { 
   margin-top: 50px;
@@ -101,6 +102,7 @@ ul.milestones li div span {
   border-radius: 4px 0 0 4px;
   -moz-border-radius: 4px 0 0 4px;
 }
+
 .drop-shadow {
   position:relative;
   padding:1em; 
@@ -110,6 +112,8 @@ ul.milestones li div span {
   box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
 }
 
+.underneath:before,
+.underneath:after,
 .drop-shadow:before,
 .drop-shadow:after {
   content:"";
@@ -117,10 +121,15 @@ ul.milestones li div span {
   z-index:-2;
 }
 
-.drop-shadow p {
-  font-size:16px;
-  font-weight:bold;
+.underneath {
+  position:relative;
+  padding:1em; 
+  background:#fff;
+  -webkit-box-shadow:-1px 1px 1px rgba(0, 0, 0, 0.3), -2px 0 4px rgba(0, 0, 0, 0.1) inset;
+  -moz-box-shadow:-1px 1px 1px rgba(0, 0, 0, 0.3), -2px 0 4px rgba(0, 0, 0, 0.1) inset;
+  box-shadow:-1px 1px 1px rgba(0, 0, 0, 0.3), -2px 0 4px rgba(0, 0, 0, 0.1) inset;
 }
+
 /* Lifted corners */
 
 .lifted {
@@ -180,9 +189,10 @@ table td {
    padding: 5px 0;
    color: #444;
  }
- table li .milestone {
+ table li .milestone a {
    color: #999;
    font-size:11px;
+   cursor:pointer;
  }
  table li img {
    position: absolute;
@@ -190,7 +200,7 @@ table td {
    right: 3px;
    border-radius: 2px;
  }
- table li a {
+ table li a.number {
    position: absolute;
    top:6px;
    left: 3px;
@@ -206,3 +216,59 @@ table td {
    padding: 80px 5px 10px 5px;
    margin: 10px 0;
  }
+ table .ui-sortable-hover {
+   background:#efefef;
+ }
+
+ #drawer {
+  position:absolute;
+  width:252px;
+  top:0;
+  left:270px;
+ }
+
+ .toggle-drawer {
+   position:absolute;
+   z-index:5;
+   margin: 5px;
+   padding: 5px;
+   font-size: 19px;
+ }
+ .toggle-drawer:hover {
+   text-decoration: none;
+ }
+ .toggle-drawer span {
+   position:relative;
+ }
+
+ .filters {
+   list-style: none;
+   margin:0;
+   padding:0;
+ }
+
+ .filters li {
+   margin: 10px 0;
+   background: #fff;
+   border-radius: 4px;
+ }
+ .filters li.drop-shadow {
+   padding:0;
+ }
+ .filters li.state-active, .state-active a, .state-active a:hover {
+  background: #0069D6;
+  color:white;
+  text-decoration:none;
+ }
+
+ .filters li a {
+   padding: 10px;
+   display:block;
+   font-weight: bold;
+ }
+
+ .filters li a strong { 
+  float:right;
+  margin-right: 10px;
+ }
+

@@ -1,4 +1,4 @@
-<a href="<%= html_url %>" target="_blank" title="View issue on github.com"><small>#</small><%= number %></a>
+<a class="number" href="<%= html_url %>" target="_blank" title="View issue on github.com"><small>#</small><%= number %></a>
 <div class="title">
 <%= title %>
 </div>
@@ -8,6 +8,8 @@
 
 <% if(milestone) { %>
 <div class="milestone">
-      Milestone: <%= milestone.title %>
+      <a href="#">
+        Milestone: <%= milestone.title %>
+      </a>
 </div>
 <% } %>

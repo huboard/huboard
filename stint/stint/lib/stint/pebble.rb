@@ -17,7 +17,8 @@ module Stint
         label
       end
       {
-        labels: all_labels
+        labels: all_labels,
+        milestones: github.milestones(user_name, repo)
       }
     end
 

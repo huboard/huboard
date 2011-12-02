@@ -1,13 +1,14 @@
-define(["text!../templates/card.tmpl","../models/card"],function(template,card){
+define(["text!../templates/card.tmpl","../models/card", "../events/postal"],function(template,card, postal){
 
   return Backbone.View.extend({
      initialize: function ( params ) {
        this.issue = new card({model:params.issue, user:params.user,repo: params.repo});
        _.bind(this,'moved',this.moved);
-       console.log(this.issue);
+       postal.subscribe("Filter.*", $.proxy(this.filter, this));
      },
      events: {
-      "moved" : "moved"
+      "moved" : "moved",
+      "click .milestone": "publishFilter"
      },
      tagName:"li",
      render: function(){
@@ -16,6 +17,16 @@ define(["text!../templates/card.tmpl","../models/card"],function(template,card){
      },
      moved: function(ev,index){
        this.issue.save({index: index});
+     },
+     publishFilter: function() {
+       var self = this;
+       postal.publish("Filter.Milestone", 
+                      function (issue) { 
+                        return issue.milestone ? issue.milestone.number === self.issue.attributes.milestone.number : false;
+                      });
+     },
+     filter: function (shouldFilter) {
+       $(this.el).toggle(shouldFilter(this.issue.attributes));
      }
   });
 

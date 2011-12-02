@@ -1,4 +1,4 @@
-define(["../collections/issues","text!../templates/board.tmpl", "./columnView"], function (issues, template, columnView) {
+define(["../collections/issues","text!../templates/board.tmpl", "./columnView","./sidebarView"], function (issues, template, columnView, sidebarView) {
 
   var calculateTallest = function (){
 
@@ -10,8 +10,23 @@ define(["../collections/issues","text!../templates/board.tmpl", "./columnView"],
     return tallest;
   };
 
+  var animateDrawer = function (direction) {
+
+    switch(direction) {
+      case "open":
+        $("#drawer").animate({left: '10px'}, 300);
+        break;
+      case "close":
+        $("#drawer").animate({left: '270px'}, 300);
+    }
+  };
+
+
    return Backbone.View.extend( {
         el : $('#stage'),
+        events: {
+          "click .toggle-drawer" : "toggleDrawer"
+        },
         initialize: function (params) {
            issues.bind("ondatareceived", this.onfetch, this);
            issues.fetch(params.user, params.repo);
@@ -23,6 +38,7 @@ define(["../collections/issues","text!../templates/board.tmpl", "./columnView"],
                noneBoard = board.clone(),
                noneColumn = _.first(data.labels),
                rest = _.rest(data.labels),
+               sidebar = new sidebarView(data),
                self = this;
            
            $("tr",noneBoard).append(new columnView({column: noneColumn, user:this.user,repo:this.repo}).render().el);
@@ -35,12 +51,21 @@ define(["../collections/issues","text!../templates/board.tmpl", "./columnView"],
                $("tr",board).append(markup);
            });
 
-           $("#stage").html(board);
-           $(".sidebar","#main-stage").append(noneBoard);
+           $("#stage").append(board).find(".toggle-drawer").show();
+           $("#drawer","#main-stage").append(noneBoard.removeClass("drop-shadow lifted").addClass("underneath"));
 
            var tallest = calculateTallest();
            $("ul","#main-stage").css("min-height",tallest);
            $('[rel~="twipsy"]').twipsy({live:true});
+           $(".sidebar").append(sidebar.render().el);
+        },
+        toggleDrawer : function () {
+
+          var open = $(".toggle-drawer")
+            .toggleClass("arrow-left")
+            .hasClass("arrow-left");
+
+          open ? animateDrawer("close") : animateDrawer("open");
         }
    });
 });
