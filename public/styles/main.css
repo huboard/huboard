@@ -259,6 +259,7 @@ table td {
   background: #0069D6;
   color:white;
   text-decoration:none;
+   border-radius: 4px;
  }
 
  .filters li a {
