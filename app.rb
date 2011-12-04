@@ -4,115 +4,127 @@ require 'stint'
 require 'encryptor'
 require 'base64'
 
-# json api
-get '/api/:user/:repo/milestones' do
-  return json github.milestones(params[:user],params[:repo])
-end
+module Huboard
+  class App < Sinatra::Base
 
-get '/api/:user/:repo/board' do 
-  return json pebble.board(params[:user], params[:repo])
-end
-
-post '/api/:user/:repo/reordermilestone' do 
-  milestone = params["milestone"]
-  json pebble.reorder_milestone params[:user], params[:repo], milestone["number"], params[:index]
-end
-
-post '/api/:user/:repo/movecard' do 
-  json pebble.move_card params[:user], params[:repo], params[:issue], params[:index]
-end
-
-get '/' do 
-  @repos = pebble.all_repos
-  erb :index
-end
-
-get '/:user/:repo/milestones' do 
-   @parameters = params
-   erb :milestones
-end
-get '/:user/:repo/board' do 
-   @parameters = params
-   erb :board, :layout => :layout_fluid
-end
-get '/:user/:repo/hook' do 
-   json(pebble.create_hook( params[:user], params[:repo], "#{base_url}/webhook?token=#{encrypted_token}"))
-end
-
-post '/webhook' do 
-  puts "webhook"
-  token =  decrypt_token( params[:token] )
-  hub = Stint::Pebble.new(Stint::Github.new({ :headers => {"Authorization" => "token #{token}"}}))
-  
-  payload = JSON.parse(params[:payload])
-
-  response = []
-  repository = payload["repository"]
-  commits = payload["commits"]
-  commits.reverse.each do |c|
-    
-    response << hub.push_card(  repository["owner"]["name"], repository["name"], c)
-  end 
-  json response
-end
+    enable :sessions
 
 
+    token_file =  File.new("#{File.dirname(__FILE__)}/.settings")
+    eval(token_file.read) if File.exists? '.settings'
+    if ENV['GITHUB_CLIENT_ID']
+      set :secret_key, ENV['SECRET_KEY']
+      set :github_options, {
+        :secret    => ENV['GITHUB_SECRET'],
+        :client_id => ENV['GITHUB_CLIENT_ID'],
+      }
+    end
 
-load '.settings' if File.exists? '.settings'
-if ENV['GITHUB_CLIENT_ID']
-  set :github_client_id, ENV['GITHUB_CLIENT_ID']
-  set :github_secret, ENV['GITHUB_SECRET']
-  set :secret_key, ENV['SECRET_KEY']
-end
-
-enable :sessions
+    register Sinatra::Auth::Github
 
 
-before do
-  protected! unless PUBLIC_URLS.include? request.path_info
-  @user = OpenStruct.new current_user
-end
+    # json api
+    get '/api/:user/:repo/milestones' do
+      return json github.milestones(params[:user],params[:repo])
+    end
 
-helpers do
-  def encrypted_token
-    encrypted = Encryptor.encrypt session['user_token'], :key => settings.secret_key
-    Base64.urlsafe_encode64 encrypted
-  end
+    get '/api/:user/:repo/board' do 
+      return json pebble.board(params[:user], params[:repo])
+    end
 
-  def user_token
-     session['user_token']
-  end
+    post '/api/:user/:repo/reordermilestone' do 
+      milestone = params["milestone"]
+      json pebble.reorder_milestone params[:user], params[:repo], milestone["number"], params[:index]
+    end
 
-  def decrypt_token(token)
-    decoded = Base64.urlsafe_decode64 token
-    Encryptor.decrypt decoded, :key => settings.secret_key
-  end
+    post '/api/:user/:repo/movecard' do 
+      json pebble.move_card params[:user], params[:repo], params[:issue], params[:index]
+    end
 
-  def current_user
-    @user ||= github.user
-  end
+    get '/' do 
+      authenticate!
+      @repos = pebble.all_repos
+      erb :index
+    end
 
-  def logged_in?
-    !!user_token
-  end
+    get '/:user/:repo/milestones' do 
+      @parameters = params
+      erb :milestones
+    end
+    get '/:user/:repo/board' do 
+      @parameters = params
+      erb :board, :layout => :layout_fluid
+    end
+    get '/:user/:repo/hook' do 
+      json(pebble.create_hook( params[:user], params[:repo], "#{base_url}/webhook?token=#{encrypted_token}"))
+    end
 
-  def protected!
-    redirect '/auth/github' unless logged_in?
-  end
+    post '/webhook' do 
+      puts "webhook"
+      token =  decrypt_token( params[:token] )
+      hub = Stint::Pebble.new(Stint::Github.new({ :headers => {"Authorization" => "token #{token}"}}))
 
-  def github
-    @github ||= Stint::Github.new({ :headers => {"Authorization" => "token #{user_token}"}})
-  end
+      payload = JSON.parse(params[:payload])
 
-  def pebble
-    @pebble ||= Stint::Pebble.new(github)
-  end
+      response = []
+      repository = payload["repository"]
+      commits = payload["commits"]
+      commits.reverse.each do |c|
 
-  def json(obj)
-    JSON.pretty_generate(obj)
-  end
+        response << hub.push_card(  repository["owner"]["name"], repository["name"], c)
+      end 
+      json response
+    end
 
-   def base_url
-    @base_url ||= "#{request.env['rack.url_scheme']}://#{request.env['HTTP_HOST']}"
+    before do
+      current_user
+    end
+
+
+    helpers Sinatra::ContentFor
+
+    helpers do
+      def encrypted_token
+        encrypted = Encryptor.encrypt user_token, :key => settings.secret_key
+        Base64.urlsafe_encode64 encrypted
+      end
+
+      def user_token
+        github_user.token
+      end
+
+      def decrypt_token(token)
+        decoded = Base64.urlsafe_decode64 token
+        Encryptor.decrypt decoded, :key => settings.secret_key
+      end
+
+      def current_user
+        @user ||= warden.user
+      end
+
+      def logged_in?
+        !!user_token
+      end
+
+      def protected!
+        redirect '/auth/github' unless logged_in?
+      end
+
+      def github
+        @github ||= Stint::Github.new({ :headers => {"Authorization" => "token #{user_token}"}})
+      end
+
+      def pebble
+        @pebble ||= Stint::Pebble.new(github)
+      end
+
+      def json(obj)
+        JSON.pretty_generate(obj)
+      end
+
+      def base_url
+        @base_url ||= "#{request.env['rack.url_scheme']}://#{request.env['HTTP_HOST']}"
+      end
+    end
   end
 end
