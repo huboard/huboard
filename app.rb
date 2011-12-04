@@ -57,19 +57,6 @@ post '/webhook' do
   json response
 end
 
-get '/user' do
-  json github.user
-end
-get '/authorizations' do
-  json github.authorizations
-end
-get '/all_repos' do
-  json pebble.all_repos
-end
-get '/hook' do 
-  token = user_token
-  json({ :token => token})
-end
 
 # omniauth integration
 
