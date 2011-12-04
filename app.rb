@@ -14,6 +14,7 @@ module Huboard
     eval(token_file.read) if File.exists? '.settings'
     if ENV['GITHUB_CLIENT_ID']
       set :secret_key, ENV['SECRET_KEY']
+      set :team_id, ENV["TEAM_ID"]
       set :github_options, {
         :secret    => ENV['GITHUB_SECRET'],
         :client_id => ENV['GITHUB_CLIENT_ID'],
@@ -42,7 +43,6 @@ module Huboard
     end
 
     get '/' do 
-      authenticate!
       @repos = pebble.all_repos
       erb :index
     end
@@ -78,6 +78,7 @@ module Huboard
 
     before do
       current_user
+      github_team_authenticate! team_id
     end
 
 
@@ -125,19 +126,12 @@ module Huboard
       def base_url
         @base_url ||= "#{request.env['rack.url_scheme']}://#{request.env['HTTP_HOST']}"
       end
+
+      def team_id
+        settings.team_id
+      end
+
     end
   end
 end
 
-module Sinatra
-  module Auth
-    module Github
-      module Helpers
-        def authenticate!(*args)
-          #puts warden.env.methods.sort
-          warden.authenticate!(*args)
-        end
-      end
-    end
-  end
-end
