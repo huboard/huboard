@@ -1,6 +1,5 @@
 require 'sinatra'
 require 'sinatra/content_for'
-require 'omniauth'
 require 'stint'
 require 'encryptor'
 require 'base64'
@@ -58,26 +57,6 @@ post '/webhook' do
 end
 
 
-# omniauth integration
-
-get '/auth/github/callback' do
-  omniauth = request.env['omniauth.auth']
-  session["user_token"] = omniauth['credentials']['token']
-  redirect '/'
-end
-
-get '/auth/failure' do
-  content_type 'text/plain'
-  "Failed to authenticate: #{params[:message]}"
-end
-
-get '/logout' do
-  session["user_token"] = nil
-  session["user_login"] = nil
-  redirect '/'
-end
-
-PUBLIC_URLS = ['/webhook', '/logout', '/auth/github', '/auth/github/callback']
 
 load '.settings' if File.exists? '.settings'
 if ENV['GITHUB_CLIENT_ID']
@@ -88,11 +67,6 @@ end
 
 enable :sessions
 
-use OmniAuth::Builder do
-  provider :github,   settings.github_client_id, settings.github_secret do |o|
-    o.authorize_params = {:scope => 'repo,user'}
-  end
-end
 
 before do
   protected! unless PUBLIC_URLS.include? request.path_info
@@ -137,6 +111,7 @@ helpers do
   def json(obj)
     JSON.pretty_generate(obj)
   end
+
    def base_url
     @base_url ||= "#{request.env['rack.url_scheme']}://#{request.env['HTTP_HOST']}"
   end
