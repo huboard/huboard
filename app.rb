@@ -128,3 +128,16 @@ module Huboard
     end
   end
 end
+
+module Sinatra
+  module Auth
+    module Github
+      module Helpers
+        def authenticate!(*args)
+          #puts warden.env.methods.sort
+          warden.authenticate!(*args)
+        end
+      end
+    end
+  end
+end
