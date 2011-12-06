@@ -8,10 +8,11 @@ module Huboard
   class App < Sinatra::Base
 
     enable :sessions
-
-
-    token_file =  File.new("#{File.dirname(__FILE__)}/.settings")
-    eval(token_file.read) if File.exists? '.settings'
+                      
+    if File.exists? '.settings'
+      token_file =  File.new("#{File.dirname(__FILE__)}/.settings")
+      eval(token_file.read) 
+    end
     if ENV['GITHUB_CLIENT_ID']
       set :secret_key, ENV['SECRET_KEY']
       set :team_id, ENV["TEAM_ID"]
