@@ -11,6 +11,11 @@ module Stint
       @oauth_hash = oauth_hash 
     end
 
+    def add_to_team(team_id, user)
+      post_data = {body:{login:user.login}.to_json, header:{"Content-Type"=> "application/json"}}.merge(options)
+      self.class.put("/teams/#{team_id}/members/#{user.login}",post_data)
+    end
+
     def repos(org = nil)
      return self.class.get("/orgs/#{org}/repos", options) unless org.nil?
 
@@ -31,7 +36,7 @@ module Stint
     end
 
     def create_hook(user_name, repo, params) 
-      post_data = {body:params.to_json, header:{"Content-Type"=> "application/json"}}
+      post_data = {body:params.to_json, header: {"Content-Type"=> "application/json"}}
       post_data.merge!(options)
       self.class.post("/repos/#{user_name}/#{repo}/hooks", post_data)
     end

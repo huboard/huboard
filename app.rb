@@ -16,6 +16,8 @@ module Huboard
     if ENV['GITHUB_CLIENT_ID']
       set :secret_key, ENV['SECRET_KEY']
       set :team_id, ENV["TEAM_ID"]
+      set :user_name, ENV["USER_NAME"]
+      set :password, ENV["PASSWORD"]
       set :github_options, {
         :secret    => ENV['GITHUB_SECRET'],
         :client_id => ENV['GITHUB_CLIENT_ID'],
@@ -78,6 +80,8 @@ module Huboard
     end
 
     before do
+      authenticate!
+      Stint::Github.new(:basic_auth => {:username => settings.user_name, :password => settings.password}).add_to_team(settings.team_id, current_user) unless github_team_access? settings.team_id
       current_user
       github_team_authenticate! team_id
     end
