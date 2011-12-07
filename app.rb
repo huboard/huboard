@@ -21,6 +21,7 @@ module Huboard
       set :github_options, {
         :secret    => ENV['GITHUB_SECRET'],
         :client_id => ENV['GITHUB_CLIENT_ID'],
+        :scopes => "user,repo"
       }
     end
 
