@@ -14,14 +14,13 @@ define(["./milestoneView","../collections/milestones"],function(milestoneView,mi
           onfetch: function(data){
             var self = this;
             _.each(data, function(milestone){
-                  console.log(milestone);
                  var view = new milestoneView({user: self.user, repo: self.repo,milestone:milestone});
                  $(self.el).append(view.render().el);
                  view.delegateEvents();
             });
+            $("[rel~='twipsy']").twipsy({live:true})
           },
           onStop : function(ev,ui){
-            console.log("onstop");
             $("li",this.el).each(function(index,element){
                $(element).trigger("drop",index);
             })

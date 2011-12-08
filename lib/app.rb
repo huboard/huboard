@@ -7,12 +7,18 @@ require 'base64'
 module Huboard
   class App < Sinatra::Base
 
+    register Sinatra::Auth::Github
+
     enable :sessions
-                      
-    if File.exists? '.settings'
-      token_file =  File.new("#{File.dirname(__FILE__)}/.settings")
+    set :views, settings.root + "/../views"
+                                 
+    puts "settings.root #{settings.root}"
+    if File.exists? "#{File.dirname(__FILE__)}/../.settings"
+      puts "settings file"
+      token_file =  File.new("#{File.dirname(__FILE__)}/../.settings")
       eval(token_file.read) 
     end
+
     if ENV['GITHUB_CLIENT_ID']
       set :secret_key, ENV['SECRET_KEY']
       set :team_id, ENV["TEAM_ID"]
@@ -25,7 +31,6 @@ module Huboard
       }
     end
 
-    register Sinatra::Auth::Github
 
 
     # json api

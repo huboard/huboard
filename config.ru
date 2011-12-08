@@ -5,7 +5,7 @@ require 'sinatra_auth_github'
 
 Bundler.require
 
-require './app.rb'
+require './lib/app.rb'
 
 use Rack::NoWWW
 use Rack::Static, :urls => [ "/font","/images", "/scripts","/styles"], :root => "public"
