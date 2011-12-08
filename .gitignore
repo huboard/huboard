@@ -1,4 +1,5 @@
 .settings
+coverage/
 Gemfile.lock
 .rvmrc
 tmp/

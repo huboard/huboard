@@ -1,0 +1,19 @@
+require "rspec"
+require "lib/stint"
+
+class Bob
+  include Stint::Cache
+
+  cache :bob
+
+  def bob(a,b)
+  end
+end
+
+describe 'cache' do
+  it 'should cache methods' do
+  end
+
+  it 'should leave other methods alone' do
+  end
+end
