@@ -53,11 +53,11 @@ define(["../collections/issues","text!../templates/board.tmpl", "./columnView","
 
            $("#stage").append(board).find(".toggle-drawer").show();
            $("#drawer","#main-stage").append(noneBoard.removeClass("drop-shadow lifted").addClass("underneath"));
+           $(".sidebar-wrapper").append(sidebar.render().el).show();
 
            var tallest = calculateTallest();
            $("ul","#main-stage").css("min-height",tallest);
            $('[rel~="twipsy"]').twipsy({live:true});
-           $(".sidebar").append(sidebar.render().el);
         },
         toggleDrawer : function () {
 
