@@ -42,7 +42,7 @@ module Stint
     end
 
     def milestones(user_name, repo)
-      response = self.class.get("/repos/#{user_name}/#{repo}/issues?milestone=*&direction=asc", options)
+      response = self.class.get("/repos/#{user_name}/#{repo}/issues?milestone=*&direction=asc&per_page=100", options)
       reply = response.group_by { |issue| issue["milestone"] }.map do |milestone, issues|
         next if milestone.nil?
         {
