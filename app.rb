@@ -23,6 +23,7 @@ module Huboard
         :client_id => ENV['GITHUB_CLIENT_ID'],
         :scopes => "user,repo"
       }
+      set :session_secret, ENV["SESSION_SECRET"]
     end
 
     register Sinatra::Auth::Github
