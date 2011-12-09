@@ -4,7 +4,7 @@
       <li class="repo">
       <a href="<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/milestones" %>"><span>milestones</span></a> 
       <a class="board" href="<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/board" %>"><span>open issues</span><strong><%=repo["open_issues"]%></strong></a> 
-      <span><%= repo["name"] %></span>
+      <span><%= repo["owner"]["login"] %> / <%= repo["name"] %></span>
       </li>
     <% end %>
   </ul>

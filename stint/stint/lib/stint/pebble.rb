@@ -128,7 +128,7 @@ module Stint
        github.orgs.each do |org|
          the_repos.concat(github.repos(org["login"]))
        end
-       the_repos
+       the_repos.sort_by{|r| r["pushed_at"] || "1111111111111111"}.reverse
     end
 
     def self.register(command, &block)
