@@ -257,6 +257,17 @@ table td {
    background: #fff;
    border-radius: 4px;
  }
+ .filters li.clear-filters, .filters li.clear-filters a {
+   background: none;
+   color:#666;
+ }
+ .filters li.clear-filters {
+   border-radius: 0;
+   border-bottom: 1px solid #333;
+ }
+ .filters li.clear-filters a:hover {
+   color:#666;
+ }
  .filters li.drop-shadow {
    padding:0;
  }
