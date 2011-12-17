@@ -3,13 +3,15 @@ require 'sinatra/content_for'
 require 'stint'
 require 'encryptor'
 require 'base64'
+require_relative "helpers"
 
 module Huboard
   class App < Sinatra::Base
+   register Sinatra::Auth::Github
 
-    register Sinatra::Auth::Github
 
     enable :sessions
+
     set :views, settings.root + "/../views"
                                  
     puts "settings.root #{settings.root}"
@@ -32,26 +34,6 @@ module Huboard
       set :session_secret, ENV["SESSION_SECRET"]
     end
 
-
-
-    # json api
-    get '/api/:user/:repo/milestones' do
-      return json github.milestones(params[:user],params[:repo])
-    end
-
-    get '/api/:user/:repo/board' do 
-      return json pebble.board(params[:user], params[:repo])
-    end
-
-    post '/api/:user/:repo/reordermilestone' do 
-      milestone = params["milestone"]
-      json pebble.reorder_milestone params[:user], params[:repo], milestone["number"], params[:index]
-    end
-
-    post '/api/:user/:repo/movecard' do 
-      json pebble.move_card params[:user], params[:repo], params[:issue], params[:index]
-    end
-
     get '/' do 
       @repos = pebble.all_repos
       erb :index
@@ -65,6 +47,7 @@ module Huboard
       @parameters = params
       erb :board, :layout => :layout_fluid
     end
+    
     get '/:user/:repo/hook' do 
       json(pebble.create_hook( params[:user], params[:repo], "#{base_url}/webhook?token=#{encrypted_token}"))
     end
@@ -93,57 +76,9 @@ module Huboard
       github_team_authenticate! team_id
     end
 
-
     helpers Sinatra::ContentFor
+    helpers Huboard::Helpers
 
-    helpers do
-      def encrypted_token
-        encrypted = Encryptor.encrypt user_token, :key => settings.secret_key
-        Base64.urlsafe_encode64 encrypted
-      end
-
-      def user_token
-        github_user.token
-      end
-
-      def decrypt_token(token)
-        decoded = Base64.urlsafe_decode64 token
-        Encryptor.decrypt decoded, :key => settings.secret_key
-      end
-
-      def current_user
-        @user ||= warden.user
-      end
-
-      def logged_in?
-        !!user_token
-      end
-
-      def protected!
-        redirect '/auth/github' unless logged_in?
-      end
-
-      def github
-        @github ||= Stint::Github.new({ :headers => {"Authorization" => "token #{user_token}"}})
-      end
-
-      def pebble
-        @pebble ||= Stint::Pebble.new(github)
-      end
-
-      def json(obj)
-        JSON.pretty_generate(obj)
-      end
-
-      def base_url
-        @base_url ||= "#{request.env['rack.url_scheme']}://#{request.env['HTTP_HOST']}"
-      end
-
-      def team_id
-        settings.team_id
-      end
-
-    end
   end
 end
 

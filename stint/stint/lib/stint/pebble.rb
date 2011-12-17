@@ -5,17 +5,25 @@ module Stint
 
     def initialize(github)
       @github = github
+      @column_pattern = /(?<id>\d+) *- *(?<name>.+)/
+      @priority_pattern = /(?<name>.+) - (?<id>\d+)/
     end
+
+
 
     def board(user_name, repo)
       issues = get_issues(user_name, repo)
       issues_by_label = issues.group_by { |issue| issue["current_state"]["name"] }
       all_labels = labels(user_name, repo)
-      all_labels = all_labels.map do |label|
+      all_labels = all_labels.each_with_index do |label, index|
         x = issues_by_label[label[:name]]
         label[:issues] = x || []
         label
       end
+
+      all_labels[0][:issues] = (issues_by_label["__nil__"] || []).concat(all_labels[0][:issues])
+
+
       {
         labels: all_labels,
         milestones: github.milestones(user_name, repo)
@@ -39,15 +47,28 @@ module Stint
     end
 
     def current_state(issue)
-      r = /(?<id>\d+) *- *(?<name>.+)/
-      issue["labels"].sort_by {|l| l["name"]}.reverse.find {|x| r.match(x["name"])}  || {"name" => "0 - None"}
+      r = @column_pattern
+      issue["labels"].sort_by {|l| l["name"]}.reverse.find {|x| r.match(x["name"])}  || {"name" => "__nil__"}
+    end
+
+    def priorities(user_name, repo) 
+      response = github.labels(user_name, repo)
+      labels = []
+      response.each do |label|
+        r = @priority_pattern
+        puts label
+        hash = r.match (label["name"])
+        labels << { name: label["name"], index: hash[:id], text: hash[:name], color: label["color"]} unless hash.nil?
+      end
+
+      labels.sort_by { |l| l[:index].to_i }
     end
 
     def labels(user_name, repo) 
       response = github.labels(user_name, repo)
       labels = []
       response.each do |label|
-        r = /(?<id>\d+) *- *(?<name>.+)/
+        r = @column_pattern
         puts label
         hash = r.match (label["name"])
         labels << { name: label["name"], index: hash[:id], text: hash[:name], color: label["color"]} unless hash.nil?
@@ -90,7 +111,7 @@ module Stint
       #return issue
       state = current_state(issue)
 
-      sr = /(?<id>\d+) *- *(?<name>.+)/.match(state["name"])
+      sr = @column_pattern
       next_state = sr.nil? ? 0 : (sr[:id].to_i + 1)
 
       labels = github.labels user_name, repo
