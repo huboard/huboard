@@ -20,8 +20,8 @@ module Stint
         label[:issues] = x || []
         label
       end
-
-      all_labels[0][:issues] = (issues_by_label["__nil__"] || []).concat(all_labels[0][:issues])
+      
+      all_labels[0][:issues] = (issues_by_label["__nil__"] || []).concat(all_labels[0][:issues]).sort_by {|x| x["number"].to_i} unless all_labels.empty?
 
 
       {
