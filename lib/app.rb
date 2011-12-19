@@ -7,13 +7,14 @@ require_relative "helpers"
 
 module Huboard
   class App < Sinatra::Base
-   register Sinatra::Auth::Github
+    register Sinatra::Auth::Github
+    register Huboard::Common
 
 
     enable :sessions
 
     set :views, settings.root + "/../views"
-                                 
+
     puts "settings.root #{settings.root}"
     if File.exists? "#{File.dirname(__FILE__)}/../.settings"
       puts "settings file"
@@ -47,7 +48,7 @@ module Huboard
       @parameters = params
       erb :board, :layout => :layout_fluid
     end
-    
+
     get '/:user/:repo/hook' do 
       json(pebble.create_hook( params[:user], params[:repo], "#{base_url}/webhook?token=#{encrypted_token}"))
     end
@@ -77,7 +78,6 @@ module Huboard
     end
 
     helpers Sinatra::ContentFor
-    helpers Huboard::Helpers
 
   end
 end

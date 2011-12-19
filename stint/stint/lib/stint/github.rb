@@ -41,6 +41,14 @@ module Stint
       self.class.post("/repos/#{user_name}/#{repo}/hooks", post_data)
     end
 
+    def create_label(user_name, repo, params)
+
+      post_data = {body:params.to_json, header: {"Content-Type"=> "application/json"}}
+      post_data.merge!(options)
+      self.class.post("/repos/#{user_name}/#{repo}/labels", post_data)
+
+    end
+
     def milestones(user_name, repo)
       response = self.class.get("/repos/#{user_name}/#{repo}/issues?milestone=*&direction=asc&per_page=100", options)
       reply = response.group_by { |issue| issue["milestone"] }.map do |milestone, issues|

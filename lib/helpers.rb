@@ -1,6 +1,7 @@
 module Huboard
-  module Helpers
+  module Common
 
+    module Helpers
       def encrypted_token
         encrypted = Encryptor.encrypt user_token, :key => settings.secret_key
         Base64.urlsafe_encode64 encrypted
@@ -46,8 +47,11 @@ module Huboard
       def team_id
         settings.team_id
       end
+    end
+
+    def self.registered(app)
+      app.helpers Huboard::Common::Helpers
+    end
 
   end
-
-  helpers Helpers
 end

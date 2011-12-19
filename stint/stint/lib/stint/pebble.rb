@@ -17,7 +17,7 @@ module Stint
       all_labels = labels(user_name, repo)
       all_labels = all_labels.each_with_index do |label, index|
         x = issues_by_label[label[:name]]
-        label[:issues] = x || []
+        label[:issues] = (x || []).sort_by{|issue| issue["number"].to_i}
         label
       end
       
@@ -73,6 +73,14 @@ module Stint
         hash = r.match (label["name"])
         labels << { name: label["name"], index: hash[:id], text: hash[:name], color: label["color"]} unless hash.nil?
       end
+      
+      #create labels if empty
+      if labels.empty?
+        github.create_label user_name, repo, :name => "0 - Backlog", :color => "CCCCCC"
+        github.create_label user_name, repo, :name => "0 - Working", :color => "CCCCCC"
+        github.create_label user_name, repo, :name => "0 - Done", :color => "CCCCCC"
+        return self.labels user_name, repo
+      end
 
       labels.sort_by { |l| l[:index].to_i }
     end
@@ -102,9 +110,9 @@ module Stint
 
     def push_card(user_name, repo, commit)
       r = /(?<command>\w+) [gG][hH]-+(?<issue>\d+)/
-        match = r.match(commit["message"])
+      match = r.match(commit["message"])
       return "no match" unless match
-      return "no match" unless /push/i.match( match[:command])  
+      return "no match" unless /push|pushes|moves?/i.match( match[:command])  
 
       issue = github.issue_by_id user_name, repo, match[:issue]
 

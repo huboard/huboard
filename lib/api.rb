@@ -3,7 +3,7 @@ require_relative "helpers"
 module Huboard
   class API < Sinatra::Base
     register Sinatra::Auth::Github
-    helpers Huboard::Helpers
+    register Huboard::Common
 
     enable :sessions
     puts "settings.root #{settings.root}"
