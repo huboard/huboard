@@ -23,6 +23,10 @@ Example:
 
 The number represents the index of the column and the will be the column header
 
+How to move cards with git commits
+---------------------------
+* * *
+
 To move a card with a commit message add "push GH-#" anywhere in your commit message
 
 Other supported key words
