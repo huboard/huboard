@@ -1,8 +1,7 @@
-require "rspec"
-require "lib/stint"
+require File.dirname(__FILE__) + '/spec_helper'
 
 class Bob
-  include Stint::Cache
+  extend Stint::Cache
 
   cache :bob
 
@@ -10,7 +9,7 @@ class Bob
   end
 end
 
-describe 'cache' do
+describe "something cool" do
   it 'should cache methods' do
   end
 
