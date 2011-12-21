@@ -51,6 +51,8 @@ module Huboard
 
     def self.registered(app)
       app.helpers Huboard::Common::Helpers
+      app.enable :sessions
+      app.set :views, settings.root + "/views"
     end
 
   end

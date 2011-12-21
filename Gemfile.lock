@@ -59,4 +59,5 @@ DEPENDENCIES
   sinatra-content-for
   sinatra_auth_github
   stint!
+  warden-github
   watchr

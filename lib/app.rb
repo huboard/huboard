@@ -10,11 +10,6 @@ module Huboard
     register Sinatra::Auth::Github
     register Huboard::Common
 
-
-    enable :sessions
-
-    set :views, settings.root + "/../views"
-
     puts "settings.root #{settings.root}"
     if File.exists? "#{File.dirname(__FILE__)}/../.settings"
       puts "settings file"
