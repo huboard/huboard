@@ -24,6 +24,9 @@ module Huboard
       }
       set :session_secret, ENV["SESSION_SECRET"]
     end
+    before do
+      authenticate!
+    end
 
     # json api
     get '/:user/:repo/milestones' do

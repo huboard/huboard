@@ -3,14 +3,6 @@ module Stint
   class Pebble
     attr_accessor :github
 
-    def initialize(github)
-      @github = github
-      @column_pattern = /(?<id>\d+) *- *(?<name>.+)/
-      @priority_pattern = /(?<name>.+) - (?<id>\d+)/
-    end
-
-
-
     def board(user_name, repo)
       issues = get_issues(user_name, repo)
       issues_by_label = issues.group_by { |issue| issue["current_state"]["name"] }
@@ -22,7 +14,6 @@ module Stint
       end
       
       all_labels[0][:issues] = (issues_by_label["__nil__"] || []).concat(all_labels[0][:issues]).sort_by {|x| x["number"].to_i} unless all_labels.empty?
-
 
       {
         labels: all_labels,
@@ -77,8 +68,9 @@ module Stint
       #create labels if empty
       if labels.empty?
         github.create_label user_name, repo, :name => "0 - Backlog", :color => "CCCCCC"
-        github.create_label user_name, repo, :name => "0 - Working", :color => "CCCCCC"
-        github.create_label user_name, repo, :name => "0 - Done", :color => "CCCCCC"
+        github.create_label user_name, repo, :name => "1 - Ready", :color => "CCCCCC"
+        github.create_label user_name, repo, :name => "2 - Working", :color => "CCCCCC"
+        github.create_label user_name, repo, :name => "3 - Done", :color => "CCCCCC"
         return self.labels user_name, repo
       end
 
@@ -174,6 +166,12 @@ module Stint
           next unless consumers.has_key? match[:command]
           consumers[match[:command]].call payload, match[:issue] 
         end
+    end
+
+    def initialize(github)
+      @github = github
+      @column_pattern = /(?<id>\d+) *- *(?<name>.+)/
+      @priority_pattern = /(?<name>.+) - (?<id>\d+)/
     end
   end
 end
