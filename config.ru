@@ -16,6 +16,5 @@ map "/api" do
 
 end
 map "/" do 
-
     run Huboard::App
 end

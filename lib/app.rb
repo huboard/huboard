@@ -1,3 +1,4 @@
+require 'rdiscount'
 require 'sinatra'
 require 'sinatra/content_for'
 require 'stint'
@@ -30,9 +31,37 @@ module Huboard
       set :session_secret, ENV["SESSION_SECRET"]
     end
 
+    PUBLIC_URLS = ['/', '/logout']
+    before do
+      protected! unless PUBLIC_URLS.include? request.path_info
+    end
+
+    helpers do
+      def protected! 
+        authenticate!
+        #HAX! TODO remove
+        Stint::Github.new(:basic_auth => {:username => settings.user_name, :password => settings.password}).add_to_team(settings.team_id, current_user) unless github_team_access? settings.team_id
+        current_user
+        github_team_authenticate! team_id
+      end
+    end
+
     get '/' do 
+      return erb :home unless authenticated?
+      protected!
       @repos = pebble.all_repos
       erb :index
+    end
+
+    get '/login' do
+      protected!
+      redirect '/'
+    end
+
+
+    get '/logout' do
+      logout!
+      redirect '/'
     end
 
     get '/:user/:repo/milestones' do 
@@ -65,12 +94,6 @@ module Huboard
       json response
     end
 
-    before do
-      authenticate!
-      Stint::Github.new(:basic_auth => {:username => settings.user_name, :password => settings.password}).add_to_team(settings.team_id, current_user) unless github_team_access? settings.team_id
-      current_user
-      github_team_authenticate! team_id
-    end
 
     helpers Sinatra::ContentFor
 

@@ -29,12 +29,14 @@
           </ul>
           <ul class="nav secondary-nav">
             <% yield_content :sub_navigation %>
+            <% if !@user.nil?  %>
             <li class="dropdown">
             <a href="#" class="dropdown-toggle"><%= @user.login %></a>
               <ul class="dropdown-menu">
                 <li><a href="/logout">Logout</a></li>
               </ul>
             </li>
+          <% end %>
           </ul>
         </div>
       </div><!-- /topbar-inner -->
