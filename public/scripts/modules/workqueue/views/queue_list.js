@@ -1,4 +1,4 @@
-define(['text!../templates/queue.tmpl'],function(queueTemplate){
+define(['text!../templates/queue.html'],function(queueTemplate){
      return Backbone.View.extend({
           el: $('#workqueue'),
           initialize:function(){

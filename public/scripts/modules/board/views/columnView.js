@@ -1,4 +1,4 @@
-define(["text!../templates/column.tmpl","./cardView"],function(template, CardView){
+define(["text!../templates/column.html","./cardView"],function(template, CardView){
 
   var Column = Backbone.View.extend({
     initialize : function(params) {

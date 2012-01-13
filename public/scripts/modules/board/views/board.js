@@ -1,4 +1,4 @@
-define(["../collections/issues","text!../templates/board.tmpl", "./columnView","./sidebarView"], function (issues, template, columnView, sidebarView) {
+define(["../collections/issues","text!../templates/board.html", "./columnView","./sidebarView"], function (issues, template, columnView, sidebarView) {
 
   var calculateTallest = function (){
 

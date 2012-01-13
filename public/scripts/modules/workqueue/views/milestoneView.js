@@ -1,4 +1,4 @@
-define(["text!../templates/milestone.tmpl","../models/milestone"],function(template, milestone){
+define(["text!../templates/milestone.html","../models/milestone"],function(template, milestone){
 
 
   return Backbone.View.extend({
