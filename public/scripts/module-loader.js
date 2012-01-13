@@ -4,7 +4,7 @@ jQuery(function($){
     module = $this.data("module");
 
     require({
-      baseUrl: '/scripts',
+      baseUrl: '/scripts'
     }
     ,[module],
     function(module){
