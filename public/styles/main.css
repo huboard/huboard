@@ -145,12 +145,12 @@ ul.milestones li div span {
   height:20px;
   max-width:300px;
   -webkit-box-shadow:0 15px 10px rgba(0, 0, 0, 0.7);   
-  -moz-box-shadow:0 15px 10px rgba(0, 0, 0, 0.7);
-  box-shadow:0 15px 10px rgba(0, 0, 0, 0.7);
+ /* -moz-box-shadow:0 15px 10px rgba(0, 0, 0, 0.7);
+  box-shadow:0 15px 10px rgba(0, 0, 0, 0.7);        */
   -webkit-transform:rotate(-3deg);    
-  -moz-transform:rotate(-3deg);   
+  /*-moz-transform:rotate(-3deg);   
   -ms-transform:rotate(-3deg);   
-  -o-transform:rotate(-3deg);
+  -o-transform:rotate(-3deg);    */
   transform:rotate(-3deg);
 }
 
