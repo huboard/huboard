@@ -24,6 +24,7 @@ module Huboard
       }
       set :session_secret, ENV["SESSION_SECRET"]
     end
+
     before do
       authenticate!
     end
@@ -44,6 +45,10 @@ module Huboard
 
     post '/:user/:repo/movecard' do 
       json pebble.move_card params[:user], params[:repo], params[:issue], params[:index]
+    end
+
+    get "/token" do
+      return "User Token: #{user_token}"
     end
 
 

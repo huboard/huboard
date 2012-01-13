@@ -1,6 +1,5 @@
 source 'http://rubygems.org'
 gem 'encryptor'
-gem "ghee", :git => "git://github.com/rauhryan/ghee.git"
 gem 'httparty'
 gem 'rack-no-www'
 gem 'rdiscount'
