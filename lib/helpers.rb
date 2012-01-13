@@ -37,6 +37,7 @@ module Huboard
       end
 
       def json(obj)
+        content_type :json
         JSON.pretty_generate(obj)
       end
 
