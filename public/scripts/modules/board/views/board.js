@@ -34,6 +34,11 @@ define(["../collections/issues","text!../templates/board.tmpl", "./columnView","
            this.repo = params.repo;
         },
         onfetch: function(data) {
+          if (!data.labels.length) {
+             $(".instructions").show();
+             return;
+          }
+
            var board = $(_.template(template, data)),
                noneBoard = board.clone(),
                noneColumn = _.first(data.labels),
