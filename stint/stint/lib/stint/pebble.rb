@@ -67,21 +67,26 @@ module Stint
       
       #create labels if empty
       if labels.empty?
-        github.create_label user_name, repo, :name => "0 - Backlog", :color => "CCCCCC"
-        github.create_label user_name, repo, :name => "1 - Ready", :color => "CCCCCC"
-        github.create_label user_name, repo, :name => "2 - Working", :color => "CCCCCC"
-        github.create_label user_name, repo, :name => "3 - Done", :color => "CCCCCC"
-        return self.labels user_name, repo
+        # create_default_labels
       end
 
       labels.sort_by { |l| l[:index].to_i }
     end
 
+    def create_default_labels
+
+      github.create_label user_name, repo, :name => "0 - Backlog", :color => "CCCCCC"
+      github.create_label user_name, repo, :name => "1 - Ready", :color => "CCCCCC"
+      github.create_label user_name, repo, :name => "2 - Working", :color => "CCCCCC"
+      github.create_label user_name, repo, :name => "3 - Done", :color => "CCCCCC"
+      return self.labels user_name, repo
+    end
+
 
     def hook_exists(user_name, repo, token)
-        hooks = github.hooks user_name, repo
+      hooks = github.hooks user_name, repo
 
-        return !hooks.find{ |x| x["config"]["url"] == token }.nil?
+      return !hooks.find{ |x| x["config"]["url"] == token }.nil?
     end
 
 
@@ -92,17 +97,17 @@ module Stint
       params = {
         name:"web",
         config: {
-            url: token
-          },
+        url: token
+      },
         events: ["push"],
-         active: true
-        }
+        active: true
+      }
       github.create_hook( user_name, repo, params).merge( { success: true, message: "hook created successfully"})
     end
 
     def push_card(user_name, repo, commit)
       r = /(?<command>\w+) [gG][hH]-+(?<issue>\d+)/
-      match = r.match(commit["message"])
+        match = r.match(commit["message"])
       return "no match" unless match
       return "no match" unless /push|pushes|moves?/i.match( match[:command])  
 
@@ -118,7 +123,7 @@ module Stint
 
       next_label = labels.find { |l| /#{next_state}\s*- *.+/.match(l["name"]) }
 
-      return github.close_issue(user_name, repo, issue) if next_label.nil?
+        return github.close_issue(user_name, repo, issue) if next_label.nil?
 
       issue["labels"] << next_label
 
@@ -132,7 +137,7 @@ module Stint
 
       new_state = labels.find { |l| /#{index}\s*- *.+/.match(l["name"]) }
 
-      issue = github.issue_by_id user_name, repo, the_issue["number"]
+        issue = github.issue_by_id user_name, repo, the_issue["number"]
 
       state = current_state(issue)
 
@@ -145,33 +150,33 @@ module Stint
     end
 
     def all_repos
-       the_repos = github.repos
-       github.orgs.each do |org|
-         the_repos.concat(github.repos(org["login"]))
-       end
-       the_repos.sort_by{|r| r["pushed_at"] || "1111111111111111"}.reverse
+      the_repos = github.repos
+      github.orgs.each do |org|
+        the_repos.concat(github.repos(org["login"]))
+      end
+      the_repos.sort_by{|r| r["pushed_at"] || "1111111111111111"}.reverse
     end
 
     def self.register(command, &block)
-       @@sub ||= {}
-       @@sub[command] = block
+      @@sub ||= {}
+      @@sub[command] = block
     end
 
     def self.deliver(payload)
       consumers = @@sub
       r = /^(?<command>[A-Z]+) GH-(?<issue>[0-9]+)/
         payload["commits"].each do |c|
-          match = r.match c["message"]
-          next if r.match match.nil?
-          next unless consumers.has_key? match[:command]
-          consumers[match[:command]].call payload, match[:issue] 
+        match = r.match c["message"]
+        next if r.match match.nil?
+        next unless consumers.has_key? match[:command]
+        consumers[match[:command]].call payload, match[:issue] 
         end
     end
 
     def initialize(github)
       @github = github
       @column_pattern = /(?<id>\d+) *- *(?<name>.+)/
-      @priority_pattern = /(?<name>.+) - (?<id>\d+)/
+        @priority_pattern = /(?<name>.+) - (?<id>\d+)/
     end
   end
 end
