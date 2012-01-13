@@ -1,4 +1,5 @@
 jQuery(function($){
+  $.ajaxSetup({cache:false});
   $("[data-module]").each(function(){
     var $this = $(this),
     module = $this.data("module");
