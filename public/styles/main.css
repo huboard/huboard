@@ -28,6 +28,9 @@ ul.repos li a {
  position:relative;
  margin: 0 3px;
 }
+ul.repos li > span a {
+  float:none;
+}
 ul.repos li a span {
  color: gray;
 }
