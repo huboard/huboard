@@ -57,7 +57,7 @@ module Huboard
 
     def self.registered(app)
       app.helpers Huboard::Common::Helpers
-      app.enable :sessions
+      app.use Rack::Session::Cookie, :key => 'rack.session', :path => '/'
       app.set :views, settings.root + "/views"
     end
 
