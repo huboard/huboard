@@ -36,6 +36,7 @@ module Stint
       gh.user
     end
 
+    # just need to add hook support to ghee
     def hooks(user_name, repo)
         self.class.get("/repos/#{user_name}/#{repo}/hooks", options)
     end
@@ -47,11 +48,7 @@ module Stint
     end
 
     def create_label(user_name, repo, params)
-
-      post_data = {body:params.to_json, header: {"Content-Type"=> "application/json"}}
-      post_data.merge!(options)
-      self.class.post("/repos/#{user_name}/#{repo}/labels", post_data)
-
+      gh.repos(user_name, repo).labels.create(params)
     end
 
     def milestones(user_name, repo)
