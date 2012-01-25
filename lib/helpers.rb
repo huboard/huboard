@@ -1,3 +1,4 @@
+require 'ghee'
 module Huboard
   module Common
 
@@ -29,11 +30,15 @@ module Huboard
       end
 
       def github
-        @github ||= Stint::Github.new({ :headers => {"Authorization" => "token #{user_token}"}})
+        @github ||= Stint::Github.new({ :headers => {"Authorization" => "token #{user_token}"}},gh)
       end
 
       def pebble
         @pebble ||= Stint::Pebble.new(github)
+      end
+
+      def gh
+        @gh ||= Ghee.new(:access_token => user_token)
       end
 
       def json(obj)

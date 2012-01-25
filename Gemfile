@@ -7,6 +7,7 @@ gem 'sinatra'
 gem 'sinatra_auth_github'
 gem 'sinatra-content-for'
 gem 'stint', :path => "./stint/stint"
+gem 'ghee', :git => "git://github.com/rauhryan/ghee.git", :branch => "pagination"
 
 group :development do
   gem 'watchr'

@@ -1,4 +1,5 @@
 require 'httparty'
+require 'ghee'
 
 module Stint
 
@@ -7,8 +8,13 @@ module Stint
     format :json
     base_uri "https://api.github.com"
 
-    def initialize(oauth_hash=nil)
+    def initialize(oauth_hash=nil, gh)
       @oauth_hash = oauth_hash 
+      @gh = gh
+    end
+
+    def gh
+      @gh
     end
 
     def add_to_team(team_id, user)
@@ -17,22 +23,21 @@ module Stint
     end
 
     def repos(org = nil)
-     return self.class.get("/orgs/#{org}/repos", options) unless org.nil?
+     return gh.orgs(org).repos unless org.nil?
 
-      self.class.get("/user/repos", options)
+      gh.user.repos.all
     end
 
     def orgs
-      self.class.get("/user/orgs",options)
+      gh.user.orgs
     end
 
     def user 
-      self.class.get("/user",options)
+      gh.user
     end
 
     def hooks(user_name, repo)
         self.class.get("/repos/#{user_name}/#{repo}/hooks", options)
-    
     end
 
     def create_hook(user_name, repo, params) 
@@ -50,7 +55,7 @@ module Stint
     end
 
     def milestones(user_name, repo)
-      response = self.class.get("/repos/#{user_name}/#{repo}/issues?milestone=*&direction=asc&per_page=100", options)
+      response = gh.repos(user_name,repo).issues(:milestone => "*").all.to_a
       reply = response.group_by { |issue| issue["milestone"] }.map do |milestone, issues|
         next if milestone.nil?
         {
@@ -71,33 +76,27 @@ module Stint
     end
 
     def get_issues(user_name, repo)
-      self.class.get("/repos/#{user_name}/#{repo}/issues?direction=asc&per_page=100", options)
+      gh.repos(user_name, repo).issues(:direction => "asc").all
     end
 
     def issue_by_id(user_name, repo, id)
-      self.class.get("/repos/#{user_name}/#{repo}/issues/#{id}", options)
+      gh.repos(user_name, repo).issues(id)
     end
 
     def update_issue(user_name, repo, issue)
-      post_data = {body:issue.to_json, header:{"Content-Type"=> "application/json"}}
-      post_data.merge!(options)
-      self.class.post("/repos/#{user_name}/#{repo}/issues/#{issue["number"]}",post_data)
+      gh.repos(user_name, repo).issues(issue["number"]).patch(issue)
     end
+    
     def update_milestone(user_name, repo, milestone)
-       post_data = {body: milestone.to_json, header:{"Content-Type"=> "application/json"}}
-      post_data.merge!(options)
-      self.class.post("/repos/#{user_name}/#{repo}/milestones/#{milestone[:number]}",post_data)
+      gh.repos(user_name, repo).milestones(milestone["number"]).patch(milestone)
     end
 
     def close_issue(user_name, repo, issue)
-      post_data = {body:{state:"closed"}.to_json, header:{"Content-Type"=> "application/json"}}
-      post_data.merge!(options)
-      self.class.post("/repos/#{user_name}/#{repo}/issues/#{issue["number"]}",post_data)
-
+      gh.repos(user_name, repo).issues(issue["number"]).close
     end
 
     def labels(user_name, repo)
-      self.class.get("/repos/#{user_name}/#{repo}/labels", options)
+      gh.repos(user_name, repo).labels
     end
 
     private
