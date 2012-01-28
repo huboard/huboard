@@ -173,6 +173,9 @@ module Stint
 
       JSON.load match[1]
     end
+    def close_card(user_name, repo, the_issue)
+      github.close_issue(user_name, repo, the_issue)
+    end
 
     def all_repos
       the_repos = github.repos

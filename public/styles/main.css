@@ -209,6 +209,13 @@ table td {
    left: 3px;
    font-size:2em;
  }
+
+table li a.close {
+   position: absolute;
+   top:4px;
+   right: 4px;
+ }
+
  table li a small {
    color: #999;
    padding-right:2px;

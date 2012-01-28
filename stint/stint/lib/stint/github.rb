@@ -73,6 +73,7 @@ module Stint
 
     def close_issue(user_name, repo, issue)
       gh.repos(user_name, repo).issues(issue["number"]).close
+      {}
     end
 
     def labels(user_name, repo)
