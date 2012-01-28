@@ -70,7 +70,7 @@ module Stint
         }
       end
       
-      reply.first.nil? ? [] : reply.sort_by {|m| m[:due_on]}
+      reply.delete_if{|x| x.nil? }.sort_by {|m| m[:due_on]}
     end
 
     def get_issues(user_name, repo)
