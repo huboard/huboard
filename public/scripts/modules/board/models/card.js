@@ -22,7 +22,7 @@ define(function(){
       }, function (response) {
         console.log("closed issue", data.index);
       });
-    },
+    }
   });
 
   return card;
