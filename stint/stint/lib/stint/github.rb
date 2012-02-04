@@ -86,7 +86,7 @@ module Stint
     end
     
     def update_milestone(user_name, repo, milestone)
-      gh.repos(user_name, repo).milestones(milestone["number"]).patch(milestone)
+      gh.repos(user_name, repo).milestones(milestone[:number]).patch(milestone)
     end
 
     def close_issue(user_name, repo, issue)
