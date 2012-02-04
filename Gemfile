@@ -1,6 +1,5 @@
 source 'http://rubygems.org'
 gem 'encryptor'
-gem 'httparty'
 gem 'rack-no-www'
 gem 'rdiscount'
 gem 'sinatra'

@@ -40,7 +40,8 @@ module Huboard
       def protected! 
         authenticate!
         #HAX! TODO remove
-        Stint::Github.new({:basic_auth => {:username => settings.user_name, :password => settings.password}},gh).add_to_team(settings.team_id, current_user) unless github_team_access? settings.team_id
+        ghee = Ghee.new({ :basic_auth => {:user_name => settings.user_name, :password => settings.password}})
+        Stint::Github.new(ghee).add_to_team(settings.team_id, current_user.login) unless github_team_access? settings.team_id
         current_user
         github_team_authenticate! team_id
       end
@@ -80,7 +81,7 @@ module Huboard
     post '/webhook' do 
       puts "webhook"
       token =  decrypt_token( params[:token] )
-      hub = Stint::Pebble.new(Stint::Github.new({ :headers => {"Authorization" => "token #{token}"}},gh))
+      hub = Stint::Pebble.new(Stint::Github.new(gh))
 
       payload = JSON.parse(params[:payload])
 

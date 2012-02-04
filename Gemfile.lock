@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/rauhryan/ghee.git
-  revision: 9f397ca97481c3bd8dbb53e4d09ac885abecb587
+  revision: cd019c1b47c400dbca4e28c2ac9a41e7aa03bd50
   branch: pagination
   specs:
     ghee (0.1.0)
@@ -23,15 +23,11 @@ GEM
       addressable (~> 2.2)
       multipart-post (~> 1.1)
       rack (~> 1.1)
-    faraday_middleware (0.8.1)
+    faraday_middleware (0.8.4)
       faraday (>= 0.7.4, < 0.9)
-    httparty (0.8.1)
-      multi_json
-      multi_xml
     json (1.6.5)
     mime-types (1.17.2)
     multi_json (1.0.4)
-    multi_xml (0.4.1)
     multipart-post (1.1.4)
     oauth2 (0.5.2)
       faraday (~> 0.7)
@@ -70,7 +66,6 @@ PLATFORMS
 DEPENDENCIES
   encryptor
   ghee!
-  httparty
   rack-no-www
   rdiscount
   sinatra

@@ -1,15 +1,10 @@
-require 'httparty'
 require 'ghee'
 
 module Stint
 
   class Github
-    include HTTParty
-    format :json
-    base_uri "https://api.github.com"
 
-    def initialize(oauth_hash=nil, gh)
-      @oauth_hash = oauth_hash 
+    def initialize(gh)
       @gh = gh
     end
 
@@ -18,13 +13,11 @@ module Stint
     end
 
     def add_to_team(team_id, user)
-      post_data = {body:{login:user.login}.to_json, header:{"Content-Type"=> "application/json"}}.merge(options)
-      self.class.put("/teams/#{team_id}/members/#{user.login}",post_data)
+      gh.orgs.teams(team_id).members.add(user)
     end
 
     def repos(org = nil)
-     return gh.orgs(org).repos unless org.nil?
-
+      return gh.orgs(org).repos unless org.nil?
       gh.user.repos.all
     end
 
@@ -38,13 +31,11 @@ module Stint
 
     # just need to add hook support to ghee
     def hooks(user_name, repo)
-        self.class.get("/repos/#{user_name}/#{repo}/hooks", options)
+      gh.repos(user_name,repo).hooks
     end
 
     def create_hook(user_name, repo, params) 
-      post_data = {body:params.to_json, header: {"Content-Type"=> "application/json"}}
-      post_data.merge!(options)
-      self.class.post("/repos/#{user_name}/#{repo}/hooks", post_data)
+      gh.repos(user_name,repo).hooks.create params
     end
 
     def create_label(user_name, repo, params)
@@ -69,7 +60,7 @@ module Stint
           issues: issues 
         }
       end
-      
+
       reply.delete_if{|x| x.nil? }.sort_by {|m| m[:due_on]}
     end
 
@@ -84,7 +75,7 @@ module Stint
     def update_issue(user_name, repo, issue)
       gh.repos(user_name, repo).issues(issue["number"]).patch(issue)
     end
-    
+
     def update_milestone(user_name, repo, milestone)
       gh.repos(user_name, repo).milestones(milestone[:number]).patch(milestone)
     end
@@ -97,10 +88,5 @@ module Stint
       gh.repos(user_name, repo).labels
     end
 
-    private
-      def options
-        @options ||= @oauth_hash || {}  
-      end
   end
-
 end

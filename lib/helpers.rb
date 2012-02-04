@@ -30,7 +30,7 @@ module Huboard
       end
 
       def github
-        @github ||= Stint::Github.new({ :headers => {"Authorization" => "token #{user_token}"}},gh)
+        @github ||= Stint::Github.new(gh)
       end
 
       def pebble
