@@ -1,7 +1,5 @@
 require 'ghee'
-
 module Stint
-
   class Github
 
     def initialize(gh)
@@ -46,19 +44,8 @@ module Stint
       response = gh.repos(user_name,repo).issues(:milestone => "*").all.to_a
       reply = response.group_by { |issue| issue["milestone"] }.map do |milestone, issues|
         next if milestone.nil?
-        {
-          title: milestone["title"], 
-          creator: milestone["creator"],
-          url: milestone["url"],
-          description: milestone["description"],
-          state: milestone["state"],
-          number: milestone["number"],
-          open_issues: milestone["open_issues"],
-          closed_issues: milestone["closed_issues"],
-          due_on: milestone["due_on"] || "",
-          users: issues.group_by {|x| x["user"]}.map{ |name,users| name },
-          issues: issues 
-        }
+        milestone.merge :users => issues.group_by {|x| x["user"]}.map{ |name,users| name },
+          :issues => issues
       end
 
       reply.delete_if{|x| x.nil? }.sort_by {|m| m[:due_on]}
