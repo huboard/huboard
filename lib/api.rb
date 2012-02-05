@@ -51,6 +51,5 @@ module Huboard
       return "User Token: #{user_token}"
     end
 
-
   end
 end

@@ -95,7 +95,6 @@ module Huboard
       json response
     end
 
-
     helpers Sinatra::ContentFor
 
   end
