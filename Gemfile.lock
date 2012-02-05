@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/rauhryan/ghee.git
-  revision: cd019c1b47c400dbca4e28c2ac9a41e7aa03bd50
+  revision: 76cec8eafbe9fffcc18c0d327468249345035291
   branch: pagination
   specs:
     ghee (0.1.0)
