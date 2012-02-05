@@ -31,7 +31,7 @@ module Huboard
 
     # json api
     get '/:user/:repo/milestones' do
-      return json github.milestones(params[:user],params[:repo])
+      return json pebble.milestones(params[:user],params[:repo])
     end
 
     get '/:user/:repo/board' do 
