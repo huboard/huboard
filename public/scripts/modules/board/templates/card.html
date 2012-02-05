@@ -1,6 +1,6 @@
-<a class="number" href="<%= html_url %>" target="_blank" title="View issue on github.com"><small>#</small><%= number %></a>
+<a class="number" href="<%= html_url %>" target="_blank" title="View issue on github.com"><small>#</small><%= number %> <%= pull_request.html_url ? "Pull request" : ""%></a>
 <div class="title">
-<%= title %>
+  <%= title %>
 </div>
 <% if(assignee) { %>
  <img data-placement="right" rel="twipsy" title="Assigned to <%= assignee.login %>" src="http://www.gravatar.com/avatar/<%= assignee.gravatar_id %>?s=24" />
