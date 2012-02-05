@@ -8,7 +8,8 @@ define(["text!../templates/card.html","../models/card", "../events/postal"],func
      },
      events: {
       "moved" : "moved",
-      "click .milestone": "publishFilter"
+      "click .milestone": "publishFilter",
+      "click .close": "closed"
      },
      tagName:"li",
      render: function(){
@@ -17,6 +18,10 @@ define(["text!../templates/card.html","../models/card", "../events/postal"],func
      },
      moved: function(ev,index){
        this.issue.save({index: index});
+     },
+     closed: function(ev, index){
+       this.issue.close({index: index});
+       this.remove();
      },
      publishFilter: function() {
        var self = this;

@@ -148,6 +148,10 @@ module Stint
 
     end
 
+    def close_card(user_name, repo, the_issue)
+      github.close_issue(user_name, repo, the_issue)
+    end
+
     def all_repos
       the_repos = github.repos
       github.orgs.each do |org|

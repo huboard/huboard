@@ -14,6 +14,14 @@ define(function(){
       }, function (response) {
         console.log("moved to column", data.index);
       });
+    },
+    close: function(data) {
+      $.post("/api/" + this.user + "/" + this.repo + "/close",{
+        index: data.index,
+        issue: this.attributes
+      }, function (response) {
+        console.log("closed issue", data.index);
+      });
     }
   });
 
