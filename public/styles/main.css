@@ -217,7 +217,7 @@ table li a.close {
    font-size:30px;
    padding:10px;
    color:red;
-   opacity:0.1;
+   opacity:0.0;
 }
 table li:hover a.close {
   opacity:0.3;
