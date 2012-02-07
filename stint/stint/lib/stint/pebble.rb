@@ -29,10 +29,15 @@ module Stint
     end
 
     def reorder_milestone(user_name, repo, number, index)
-      years = 10 + index.to_i
-      time = Time.now + (years*52*7*24*60*60)
+      post_data = {:number => number}
+      milestone = github.milestone user_name, repo, number
+      _data = milestone_data milestone
+      if _data.empty?
+        post_data["description"] = milestone["description"].concat "\r\n@huboard:#{JSON.dump({:order => index.to_f})}" 
+      else
+        post_data["description"] = milestone["description"].gsub /@huboard:.*/, "@huboard:#{JSON.dump(_data.merge({"order" => index.to_f}))}"
+      end
 
-      post_data = { due_on: time.utc.iso8601, number:number }
       github.update_milestone user_name, repo, post_data
     end
 
@@ -155,8 +160,18 @@ module Stint
         m["pull_requests"] = m[:issues].select {|i| !i["pull_request"]["html_url"].nil?}
         m[:issues] = m[:issues].delete_if {|i| !i["pull_request"]["html_url"].nil?}
         m["open_issues"] = m[:issues].size
+        m["_data"] = milestone_data m
         m
       }
+      milestones.sort_by { |m| m["_data"]["order"] || m["number"].to_f}
+    end
+
+    def milestone_data(milestone)
+      r = /@huboard:(.*)/
+      match = r.match milestone["description"]
+      return {} if match.nil?
+
+      JSON.load match[1]
     end
 
     def all_repos

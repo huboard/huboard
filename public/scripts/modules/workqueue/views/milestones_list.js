@@ -1,29 +1,61 @@
 define(["./milestoneView","../collections/milestones"],function(milestoneView,milestones){
 
-     return Backbone.View.extend({
-          el : $('<ul>').addClass('milestones lifted drop-shadow').appendTo('#workqueue'),
-          initialize: function(params){
-             milestones.bind("ondatareceived", this.onfetch, this);
-             milestones.fetch(params.user,params.repo);
-             this.user = params.user;
-             this.repo = params.repo;
-             $(this.el).sortable({
-               stop: $.proxy(this.onStop,this)
-             });
-          },
-          onfetch: function(data){
-            var self = this;
-            _.each(data, function(milestone){
-                 var view = new milestoneView({user: self.user, repo: self.repo,milestone:milestone});
-                 $(self.el).append(view.render().el);
-                 view.delegateEvents();
-            });
-            $("[rel~='twipsy']").twipsy({live:true})
-          },
-          onStop : function(ev,ui){
-            $("li",this.el).each(function(index,element){
-               $(element).trigger("drop",index);
-            })
-          }
-     });
+  return Backbone.View.extend({
+    el : $('<ul>').addClass('milestones lifted drop-shadow').appendTo('#workqueue'),
+    initialize: function(params){
+      milestones.bind("ondatareceived", this.onfetch, this);
+      milestones.fetch(params.user,params.repo);
+      this.user = params.user;
+      this.repo = params.repo;
+      $(this.el).sortable({
+        update: $.proxy(this.onStop,this)
+      });
+    },
+    onfetch: function(data){
+      var self = this;
+      _.each(data, function(milestone){
+        var view = new milestoneView({user: self.user, repo: self.repo,milestone:milestone});
+        $(self.el).append(view.render().el);
+        view.delegateEvents();
+      });
+      $("[rel~='twipsy']").twipsy({live:true})
+    },
+    onStop : function(ev,ui){
+      var elements = $("li", this.el),
+      index = elements.index(ui.item),
+      first = index == 0,
+      last = index == elements.size() - 1,
+      currentElement = $(ui.item),
+      currentData = currentElement.data("milestone"),
+      beforeElement = elements.get(index ? index - 1 : index),
+      beforeIndex = elements.index(beforeElement),
+      beforeData = $(beforeElement).data("milestone"),
+      afterElement = elements.get(elements.size() - 1 > index ? index + 1 : index),
+      afterIndex = elements.index(afterElement),
+      afterData = $(afterElement).data("milestone"),
+      current = currentData._data.order || currentData.number,
+      before = beforeData._data.order || beforeData.number,
+      after = afterData._data.order || afterData.number;
+
+      if(first) {
+        // dragged it to the top
+        currentData._data.order = (after/2);
+        currentElement
+        .trigger("drop", currentData._data.order)  
+        .data("milestone", currentData);  
+      } else if (last) {
+        // dragged to the bottom
+        currentData._data.order = (before + 1)/2;
+        currentElement
+        .trigger("drop", currentData._data.order)  
+        .data("milestone", currentData);  
+      }  else {
+        currentData._data.order = ((after + before)/2);
+        currentElement
+        .trigger("drop", currentData._data.order)  
+        .data("milestone", currentData);  
+      }
+
+    }
+  });
 });

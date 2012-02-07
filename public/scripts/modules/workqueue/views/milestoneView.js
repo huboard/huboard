@@ -13,7 +13,7 @@ define(["text!../templates/milestone.html","../models/milestone"],function(templ
        "click" : "reorder"
      },
      render: function () {
-       $(this.el).html(_.template(template, this.milestone.attributes));
+       $(this.el).html(_.template(template, this.milestone.attributes)).data("milestone",this.milestone.attributes);
        this.delegateEvents();
        return this;
      },

@@ -51,6 +51,10 @@ module Stint
       reply.delete_if{|x| x.nil? }.sort_by {|m| m[:due_on]}
     end
 
+    def milestone(user_name, repo, number)
+      gh.repos(user_name, repo).milestones number
+    end
+
     def get_issues(user_name, repo)
       gh.repos(user_name, repo).issues(:direction => "asc").all
     end
