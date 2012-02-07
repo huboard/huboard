@@ -1,4 +1,5 @@
 require 'time'
+require 'json'
 module Stint
   class Pebble
     attr_accessor :github
@@ -12,11 +13,11 @@ module Stint
         label[:issues] = (x || []).sort_by{|issue| issue["number"].to_i}
         label
       end
-      
+
       all_labels[0][:issues] = (issues_by_label["__nil__"] || []).concat(all_labels[0][:issues]).sort_by {|x| x["number"].to_i} unless all_labels.empty?
       {
         labels: all_labels,
-        milestones: github.milestones(user_name, repo)
+        milestones: milestones(user_name, repo)
       }
     end
 
@@ -68,7 +69,7 @@ module Stint
         hash = r.match (label["name"])
         labels << { name: label["name"], index: hash[:id], text: hash[:name], color: label["color"]} unless hash.nil?
       end
-      
+
       #create labels if empty
       if labels.empty?
         # create_default_labels
@@ -168,26 +169,16 @@ module Stint
 
     def milestone_data(milestone)
       r = /@huboard:(.*)/
-      match = r.match milestone["description"]
-      return {} if match.nil?
+        match = r.match milestone["description"]
+      return { } if match.nil?
 
-      JSON.load match[1]
+      JSON.load(match[1])
     end
 
     def close_card(user_name, repo, the_issue)
       github.close_issue(user_name, repo, the_issue)
-	end
-    
-    def milestones(user_name, repo)
-      milestones = github.milestones user_name, repo
-      milestones = milestones.map { |m|
-
-        m["pull_requests"] = m[:issues].select {|i| !i["pull_request"]["html_url"].nil?}
-        m[:issues] = m[:issues].delete_if {|i| !i["pull_request"]["html_url"].nil?}
-        m["open_issues"] = m[:issues].size
-        m
-      }
     end
+
 
     def all_repos
       the_repos = github.repos
