@@ -173,9 +173,11 @@ module Stint
 
       JSON.load match[1]
     end
+
     def close_card(user_name, repo, the_issue)
       github.close_issue(user_name, repo, the_issue)
 	end
+    
     def milestones(user_name, repo)
       milestones = github.milestones user_name, repo
       milestones = milestones.map { |m|

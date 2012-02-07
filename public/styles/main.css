@@ -212,9 +212,20 @@ table td {
 
 table li a.close {
    position: absolute;
-   top:4px;
-   right: 4px;
- }
+   top:-18px;
+   right: -28px;
+   font-size:30px;
+   padding:10px;
+   color:red;
+   opacity:0.1;
+}
+table li:hover a.close {
+  opacity:0.3;
+}
+table li a.close:hover {
+  opacity:0.5;
+   color:red;
+}
 
  table li a small {
    color: #999;
