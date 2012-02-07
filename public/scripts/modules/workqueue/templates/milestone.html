@@ -1,8 +1,9 @@
            
   <a href="<%= html_url %>" target="_blank" title="View milestone on github.com"> 
       <em class="created-by"><% for (var i = 0; i < users.length||i===7;i++){%> <img data-placement="above" rel="twipsy" title="<%= users[i].login %>" src="http://www.gravatar.com/avatar/<%= users[i].gravatar_id %>?s=18" /> <% } %></em>
-      <strong>#<%=number %> <%= title %></strong>  
+      <strong><%= title %></strong>  
   </a>
   <div>
       <span style="width:<%= (closed_issues / (closed_issues + open_issues)) * 100 %>%"><%= (closed_issues / (closed_issues + open_issues)) * 100 %></span>
   </div>
+
