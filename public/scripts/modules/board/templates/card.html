@@ -1,5 +1,5 @@
 <a href="#"  title="Close issue" class="close iconic x-alt"><span></span></a>
-<a class="number" href="<%= html_url %>" target="_blank" title="View issue on github.com"><small>#</small><%= number %> <%= pull_request.html_url ? "Pull request" : ""%></a>
+<a class="number" href="<%= html_url %>" target="_blank" title="View issue on github.com"><small>#</small><%= number %></a>
 <div class="title">
   <%= title %>
 </div>
@@ -13,4 +13,5 @@
         Milestone: <%= milestone.title %>
       </a>
 </div>
+<% if (pull_request.html_url) { %><span class="label notice">Pull request</span> <%}%>
 <% } %>
