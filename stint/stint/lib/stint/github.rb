@@ -41,7 +41,7 @@ module Stint
     end
 
     def milestones(user_name, repo)
-      response = gh.repos(user_name,repo).issues(:milestone => "*").all.to_a
+      response = get_issues user_name, repo
       reply = response.group_by { |issue| issue["milestone"] }.map do |milestone, issues|
         next if milestone.nil?
         milestone.merge :users => issues.group_by {|x| x["user"]}.map{ |name,users| name },
@@ -56,7 +56,7 @@ module Stint
     end
 
     def get_issues(user_name, repo)
-      gh.repos(user_name, repo).issues(:direction => "asc").all
+      @issues ||= gh.repos(user_name, repo).issues(:direction => "asc").all
     end
 
     def issue_by_id(user_name, repo, id)
