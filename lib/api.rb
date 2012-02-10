@@ -38,6 +38,11 @@ module Huboard
       return json pebble.board(params[:user], params[:repo])
     end
 
+    post '/:user/:repo/reorderissue' do 
+      milestone = params["issue"]
+      json pebble.reorder_issue params[:user], params[:repo], milestone["number"], params[:index]
+    end
+
     post '/:user/:repo/reordermilestone' do 
       milestone = params["milestone"]
       json pebble.reorder_milestone params[:user], params[:repo], milestone["number"], params[:index]

@@ -10,11 +10,12 @@ module Stint
       all_labels = labels(user_name, repo)
       all_labels = all_labels.each_with_index do |label, index|
         x = issues_by_label[label[:name]]
-        label[:issues] = (x || []).sort_by{|issue| issue["number"].to_i}
+        label[:issues] = (x || []).sort_by { |i| i["_data"]["order"] || i["number"].to_f}
         label
       end
 
-      all_labels[0][:issues] = (issues_by_label["__nil__"] || []).concat(all_labels[0][:issues]).sort_by {|x| x["number"].to_i} unless all_labels.empty?
+      all_labels[0][:issues] = (issues_by_label["__nil__"] || []).concat(all_labels[0][:issues]).sort_by { |i| i["_data"]["order"] || i["number"].to_f} unless all_labels.empty?
+
       {
         labels: all_labels,
         milestones: milestones(user_name, repo)
@@ -25,8 +26,23 @@ module Stint
       issues = github.get_issues user_name, repo
       issues.each do |issue|
         issue["current_state"] = current_state(issue)
+        issue["_data"] = embedded_data issue["body"]
       end
-      issues
+      issues.sort_by { |i| i["_data"]["order"] || i["number"].to_f}
+    end
+
+    def reorder_issue(user_name, repo, number, index)
+
+      post_data = {"number" => number}
+      issue = github.issue_by_id user_name, repo, number
+      _data = embedded_data issue["body"]
+      if _data.empty?
+        post_data["body"] = issue["body"].concat "\r\n@huboard:#{JSON.dump({:order => index.to_f})}" 
+      else
+        post_data["body"] = issue["body"].gsub /@huboard:.*/, "@huboard:#{JSON.dump(_data.merge({"order" => index.to_f}))}"
+      end
+
+      github.update_issue user_name, repo, post_data
     end
 
     def reorder_milestone(user_name, repo, number, index)
@@ -161,15 +177,15 @@ module Stint
         m["pull_requests"] = m[:issues].select {|i| !i["pull_request"]["html_url"].nil?}
         m[:issues] = m[:issues].delete_if {|i| !i["pull_request"]["html_url"].nil?}
         m["open_issues"] = m[:issues].size
-        m["_data"] = milestone_data m
+        m["_data"] = embedded_data m["description"]
         m
       }
       milestones.sort_by { |m| m["_data"]["order"] || m["number"].to_f}
     end
 
-    def milestone_data(milestone)
+    def embedded_data(body)
       r = /@huboard:(.*)/
-        match = r.match milestone["description"]
+        match = r.match body
       return { } if match.nil?
 
       JSON.load(match[1])

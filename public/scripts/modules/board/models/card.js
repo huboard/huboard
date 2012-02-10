@@ -22,6 +22,15 @@ define(function(){
       }, function (response) {
         console.log("closed issue", data.index);
       });
+    },
+    reorder: function(data) {
+      $.post("/api/" + this.user + "/" + this.repo + "/reorderissue",{
+        index: data.order,
+        issue: this.attributes
+      }, function (response) {
+        console.log("reordered issue", data.order);
+      });
+
     }
   });
 
