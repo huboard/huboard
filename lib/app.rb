@@ -38,7 +38,8 @@ module Huboard
 
     helpers do
       def protected! 
-        authenticate!
+        return current_user if authenticated?
+        authenticate! 
         #HAX! TODO remove
         ghee = Ghee.new({ :basic_auth => {:user_name => settings.user_name, :password => settings.password}})
         Stint::Github.new(ghee).add_to_team(settings.team_id, current_user.login) unless github_team_access? settings.team_id

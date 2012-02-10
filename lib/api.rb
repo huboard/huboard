@@ -26,7 +26,7 @@ module Huboard
     end
 
     before do
-      authenticate!
+      authenticate! unless authenticated?
     end
 
     # json api

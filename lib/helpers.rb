@@ -25,10 +25,6 @@ module Huboard
         !!user_token
       end
 
-      def protected!
-        redirect '/auth/github' unless logged_in?
-      end
-
       def github
         @github ||= Stint::Github.new(gh)
       end
