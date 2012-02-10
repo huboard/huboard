@@ -39,7 +39,7 @@ define(["./milestoneView","../collections/milestones"],function(milestoneView,mi
 
       if(first) {
         // dragged it to the top
-        currentData._data.order = (after/2);
+        currentData._data.order = (after || 1)/2;
         currentElement
         .trigger("drop", currentData._data.order)  
         .data("milestone", currentData);  
@@ -50,7 +50,7 @@ define(["./milestoneView","../collections/milestones"],function(milestoneView,mi
         .trigger("drop", currentData._data.order)  
         .data("milestone", currentData);  
       }  else {
-        currentData._data.order = ((after + before)/2);
+        currentData._data.order = (((after + before) || 1)/2);
         currentElement
         .trigger("drop", currentData._data.order)  
         .data("milestone", currentData);  
