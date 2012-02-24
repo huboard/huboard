@@ -1,9 +1,8 @@
 GIT
-  remote: git://github.com/rauhryan/ghee.git
-  revision: 76cec8eafbe9fffcc18c0d327468249345035291
-  branch: pagination
+  remote: git://github.com/jonmagic/ghee.git
+  revision: cbc05219ea3fa4ce922df3b1c92cabb93312663c
   specs:
-    ghee (0.1.0)
+    ghee (0.7.0)
       faraday
       faraday_middleware
       multi_json

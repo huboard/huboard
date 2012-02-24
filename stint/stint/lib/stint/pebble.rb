@@ -48,7 +48,7 @@ module Stint
     def reorder_milestone(user_name, repo, number, index)
       post_data = {:number => number}
       milestone = github.milestone user_name, repo, number
-      _data = milestone_data milestone
+      _data = embedded_data milestone["description"]
       if _data.empty?
         post_data["description"] = milestone["description"].concat "\r\n@huboard:#{JSON.dump({:order => index.to_f})}" 
       else
