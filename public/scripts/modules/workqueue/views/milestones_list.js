@@ -22,11 +22,11 @@ define(["./milestoneView","../collections/milestones"],function(milestoneView,mi
     },
     onStop : function(ev,ui){
       var elements = $("li", this.el),
-      index = elements.index(ui.item),
+      index = elements.index(ui.item);
 
       if(index === -1) { return; }
 
-      first = index === 0,
+      var first = index === 0,
       last = index === elements.size() - 1,
       currentElement = $(ui.item),
       currentData = currentElement.data("milestone"),
