@@ -20,16 +20,13 @@ module Huboard
 
     if ENV['GITHUB_CLIENT_ID']
       set :secret_key, ENV['SECRET_KEY']
-      set :team_id, ENV["TEAM_ID"]
-      set :user_name, ENV["USER_NAME"]
-      set :password, ENV["PASSWORD"]
       set :github_options, {
         :secret    => ENV['GITHUB_SECRET'],
         :client_id => ENV['GITHUB_CLIENT_ID'],
-        :scopes => "user,repo"
       }
       set :session_secret, ENV["SESSION_SECRET"]
     end
+    settings.github_options[:scopes] = "user,repo"
 
     PUBLIC_URLS = ['/', '/logout']
     before do
@@ -40,11 +37,7 @@ module Huboard
       def protected! 
         return current_user if authenticated?
         authenticate! 
-        #HAX! TODO remove
-        ghee = Ghee.new({ :basic_auth => {:user_name => settings.user_name, :password => settings.password}})
-        Stint::Github.new(ghee).add_to_team(settings.team_id, current_user.login) unless github_team_access? settings.team_id
         current_user
-        github_team_authenticate! team_id
       end
     end
 

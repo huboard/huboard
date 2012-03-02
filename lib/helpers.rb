@@ -46,9 +46,6 @@ module Huboard
         @base_url ||= "#{request.env['rack.url_scheme']}://#{request.env['HTTP_HOST']}"
       end
 
-      def team_id
-        settings.team_id
-      end
     end
 
     def self.registered(app)
