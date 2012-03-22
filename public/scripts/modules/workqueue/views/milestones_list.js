@@ -44,7 +44,7 @@ define(["./milestoneView","../collections/milestones"],function(milestoneView,mi
 
       if(first) {
         // dragged it to the top
-        currentData._data.order = (after || 1)/2;
+        currentData._data.order = ((after || 1)-1) > 0 ? ((after || 1) -1) : ((after || 1)/2);
         currentElement
         .trigger("drop", currentData._data.order)  
         .data("milestone", currentData);  
