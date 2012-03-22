@@ -40,26 +40,23 @@ define(["./milestoneView","../collections/milestones"],function(milestoneView,mi
       before = beforeData._data.order || beforeData.number,
       after = afterData._data.order || afterData.number;
 
+      // its the only one in the list
       if(first && last) {return;}
 
       if(first) {
         // dragged it to the top
-        currentData._data.order = ((after || 1)-1) > 0 ? ((after || 1) -1) : ((after || 1)/2);
-        currentElement
-        .trigger("drop", currentData._data.order)  
-        .data("milestone", currentData);  
+        var t = after || 1;
+        currentData._data.order = (t - 1) > 0 ? (t - 1) : (t / 2);
       } else if (last) {
         // dragged to the bottom
         currentData._data.order = (before + 1);
-        currentElement
-        .trigger("drop", currentData._data.order)  
-        .data("milestone", currentData);  
       }  else {
         currentData._data.order = (((after + before) || 1)/2);
-        currentElement
+      }
+
+      currentElement
         .trigger("drop", currentData._data.order)  
         .data("milestone", currentData);  
-      }
 
     }
   });
