@@ -9,8 +9,7 @@ define(["text!../templates/milestone.html","../models/milestone"],function(templ
      },
      tagName: "li",
      events: {
-       "drop": "reorder",
-       "click" : "reorder"
+       "drop": "reorder"
      },
      render: function () {
        $(this.el).html(_.template(template, this.milestone.attributes)).data("milestone",this.milestone.attributes);

@@ -8,7 +8,7 @@ define(["./milestoneView","../collections/milestones"],function(milestoneView,mi
       this.user = params.user;
       this.repo = params.repo;
       $(this.el).sortable({
-        update: $.proxy(this.onStop,this)
+        change: $.proxy(this.onStop,this)
       });
     },
     onfetch: function(data){

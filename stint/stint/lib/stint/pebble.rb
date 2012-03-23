@@ -52,7 +52,7 @@ module Stint
       if _data.empty?
         post_data["description"] = milestone["description"].concat "\r\n@huboard:#{JSON.dump({:order => index.to_f})}" 
       else
-        post_data["description"] = milestone["description"].gsub /@huboard:.*/, "@huboard:#{JSON.dump(_data.merge({"order" => index.to_f}))}"
+        post_data["description"] = milestone["description"].gsub /@huboard:.*/, "@huboard:#{JSON.dump(_data.merge({"order" => index.to_f, "updated" => Time.now.iso8601}))}"
       end
 
       github.update_milestone user_name, repo, post_data
