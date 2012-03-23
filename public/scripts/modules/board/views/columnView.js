@@ -24,7 +24,7 @@ define(["text!../templates/column.html","./cardView"],function(template, CardVie
          receive: $.proxy(this.onReceive,this),
          remove: $.proxy(this.onRemove, this),
          over: $.proxy(this.onOver, this),
-         change: $.proxy(this.onStop, this),
+         update: $.proxy(this.onStop, this),
          out: $.proxy(this.onOut, this)
       });
 
