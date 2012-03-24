@@ -39,22 +39,5 @@ Other supported key words
 
 > moves GH-#
 
-* ~~Make sure you create a hook for the Repository on the home page. Only click the button once (known defect)~~
-* Currently you can only move one card per commit message (will fix soon)
 
-
-Bugs
---------------------------
-* * *
-
-* ~~creates multiple post-receive hooks, only click once. You can manually delete the hook from the admin panel on github~~
-* Milestones reordering takes a few seconds and I don't have a loading screen on there yet so give it a few seconds
-
-
-Notes
---------------------------
-* * *
-
-* Milestones reordering will change the due date of your milestone. (currently the only way to order then)
-* commit message that "push GH-#" past the last column close the issue
 

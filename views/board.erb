@@ -4,7 +4,10 @@
   <a href="#toggle-drawer" class="hide iconic arrow-right arrow-left toggle-drawer"><span></span></a>
 </div>
   <div class="instructions hide drop-shadow lifted">
-    <%= markdown(:home) %>
+    <h2> We noticed you haven't setup your repository </h2>
+    <form action="/api/<%=@parameters[:user]%>/<%=@parameters[:repo]%>/createboard" method="post">
+      <input class="btn primary" type="submit" value="Do it for me!"/>
+    </form>
   </div>
 <% content_for :navigation do %>
 
