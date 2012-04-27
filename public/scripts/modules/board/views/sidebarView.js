@@ -4,10 +4,12 @@ define(["../events/postal"], function (postal) {
     tagName: "ul",
     className: "filters",
     initialize: function (params) {
-      this.milestones = params.milestones;
+      this.milestones = params.data.milestones;
+      this.login = params.params.login;
     },
     render: function () {
       var $this = $(this.el),
+          login = this.login,
           clear = $("<li class='hide clear-filters'><a href='#'>Clear active filters</a></li>");
 
       clear.click(function(ev){
@@ -18,6 +20,19 @@ define(["../events/postal"], function (postal) {
 
 
       clear.appendTo($this);
+
+      var userfilter = $("<li class='drop-shadow'><a href='#'>Assigned to me</a></li>")
+      .click(function(ev){
+          postal.publish("Filter.Milestone", function (issue) { return issue.assignee ? issue.assignee.login === login : false; });
+      });
+      userfilter
+      .appendTo($this)
+
+      postal.subscribe("Filter.Milestone", function (equal) {
+          var active = equal({assignee:{login:login}},false);
+          active ? userfilter.addClass("state-active") : userfilter.removeClass("state-active");
+          if (active) {clear.show();}
+      });
 
       _.each(this.milestones, function (milestone) {
         var filter = $(_.template("<li class='drop-shadow'><a href='#'><strong><%= open_issues %></strong><%= title %></a></li>", milestone))
@@ -31,6 +46,7 @@ define(["../events/postal"], function (postal) {
           if (active) {clear.show();}
         });
       });
+
       return this;
     }
   });

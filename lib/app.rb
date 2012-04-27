@@ -71,7 +71,7 @@ module Huboard
       erb :milestones
     end
     get '/:user/:repo/board' do 
-      @parameters = params
+      @parameters = params.merge({login:current_user.login})
       erb :board, :layout => :layout_fluid
     end
 

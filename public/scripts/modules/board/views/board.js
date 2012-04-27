@@ -1,4 +1,5 @@
-define(["../collections/issues","text!../templates/board.html", "./columnView","./sidebarView"], function (issues, template, columnView, sidebarView) {
+define(["../collections/issues","text!../templates/board.html", "./columnView","./sidebarView"], 
+       function (issues, template, columnView, sidebarView) {
 
   var calculateTallest = function (){
 
@@ -32,6 +33,7 @@ define(["../collections/issues","text!../templates/board.html", "./columnView","
            issues.fetch(params.user, params.repo);
            this.user = params.user;
            this.repo = params.repo;
+           this.params = params;
         },
         onfetch: function(data) {
           if (!data.labels.length) {
@@ -43,7 +45,7 @@ define(["../collections/issues","text!../templates/board.html", "./columnView","
                noneBoard = board.clone(),
                noneColumn = _.first(data.labels),
                rest = _.rest(data.labels),
-               sidebar = new sidebarView(data),
+               sidebar = new sidebarView({data:data,params:this.params}),
                self = this;
            
            $("tr",noneBoard).append(new columnView({column: noneColumn, user:this.user,repo:this.repo}).render().el);
@@ -58,13 +60,17 @@ define(["../collections/issues","text!../templates/board.html", "./columnView","
 
            $("#stage").append(board).find(".toggle-drawer").show();
            $("#drawer","#main-stage").append(noneBoard.removeClass("drop-shadow lifted").addClass("underneath"));
+
+           //$(".sidebar-wrapper").append(userFilter.render().el).show();
            $(".sidebar-wrapper").append(sidebar.render().el).show();
 
            var tallest = calculateTallest();
            $("ul","#main-stage").css("min-height",tallest);
            $('[rel~="twipsy"]').twipsy({live:true});
         },
-        toggleDrawer : function () {
+        toggleDrawer : function (ev) {
+
+          ev.preventDefault();
 
           var open = $(".toggle-drawer")
             .toggleClass("arrow-left")
