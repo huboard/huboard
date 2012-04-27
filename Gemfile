@@ -4,7 +4,7 @@ gem 'rack-no-www'
 gem 'rdiscount'
 gem 'sinatra'
 gem 'sinatra_auth_github'
-gem 'sinatra-content-for'
+gem 'sinatra-content-for', "~> 0.1.0"
 gem 'stint', :path => "./stint/stint"
 gem 'ghee'
 
