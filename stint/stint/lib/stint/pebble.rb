@@ -86,21 +86,14 @@ module Stint
         labels << { name: label["name"], index: hash[:id], text: hash[:name], color: label["color"]} unless hash.nil?
       end
 
-      #create labels if empty
-      if labels.empty?
-        # create_default_labels
-      end
-
       labels.sort_by { |l| l[:index].to_i }
     end
 
-    def create_default_labels
-
+    def create_board(user_name, repo)
       github.create_label user_name, repo, :name => "0 - Backlog", :color => "CCCCCC"
       github.create_label user_name, repo, :name => "1 - Ready", :color => "CCCCCC"
       github.create_label user_name, repo, :name => "2 - Working", :color => "CCCCCC"
       github.create_label user_name, repo, :name => "3 - Done", :color => "CCCCCC"
-      return self.labels user_name, repo
     end
 
 

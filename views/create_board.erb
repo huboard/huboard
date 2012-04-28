@@ -1,0 +1,14 @@
+  <div class="instructions drop-shadow lifted">
+    <h2> We noticed you haven't setup your repository </h2>
+    <p> Huboard can get you started with a default set up </p>
+    <ol>
+      <li> Backlog </li>
+      <li> Ready </li>
+      <li> Working </li>
+      <li> Done </li>
+    </ol>
+    <form action="/<%=@parameters[:user]%>/<%=@parameters[:repo]%>/board/create" method="post">
+      <input class="btn primary" type="submit" value="Do it for me!"/>
+    </form>
+  </div>
+

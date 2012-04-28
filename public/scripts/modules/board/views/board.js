@@ -37,7 +37,7 @@ define(["../collections/issues","text!../templates/board.html", "./columnView","
         },
         onfetch: function(data) {
           if (!data.labels.length) {
-             $(".instructions").show();
+             window.location.href = "/" + this.user + "/"+ this.repo + "/board/create";
              return;
           }
 

@@ -312,3 +312,13 @@ table li a.close:hover {
    right:10px;
  }
 
+
+.instructions {
+   text-align: center;
+}
+.instructions ol {
+   width: 30px;
+   text-align:left;
+   margin-left: auto;
+   margin-right: auto;
+}

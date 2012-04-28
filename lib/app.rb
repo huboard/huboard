@@ -70,10 +70,23 @@ module Huboard
       @parameters = params
       erb :milestones
     end
-    get '/:user/:repo/board' do 
-      @parameters = params.merge({login:current_user.login})
+
+    get '/:user/:repo/board/create' do
+      @parameters = params
+      erb :create_board
+    end
+
+    post '/:user/:repo/board/create/?' do
+      @parameters = params
+      pebble.create_board(params[:user],params[:repo])
+      redirect "/#{params[:user]}/#{params[:repo]}/board"
+    end
+
+    get '/:user/:repo/board/?' do 
+      @parameters = params.merge({:login => current_user.login})
       erb :board, :layout => :layout_fluid
     end
+
 
     get '/:user/:repo/hook' do 
       json(pebble.create_hook( params[:user], params[:repo], "#{base_url}/webhook?token=#{encrypted_token}"))

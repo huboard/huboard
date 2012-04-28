@@ -52,7 +52,7 @@ module Huboard
       json pebble.move_card params[:user], params[:repo], params[:issue], params[:index]
     end
 
-    post '/:user/:repo/close' do
+    post '/:user/:repo/close' do                                                               
       json pebble.close_card params[:user], params[:repo], params[:issue]
     end
 
