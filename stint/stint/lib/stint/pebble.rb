@@ -230,7 +230,7 @@ module Stint
       @github = github
       @column_pattern = /(?<id>\d+) *- *(?<name>.+)/
       @priority_pattern = /(?<name>.+) - (?<id>\d+)/
-      @link_pattern = /Link <= (?<user_name>.*)\/(?<repo>.*)/
+      @link_pattern = /Link <=> (?<user_name>.*)\/(?<repo>.*)/
     end
   end
 end
