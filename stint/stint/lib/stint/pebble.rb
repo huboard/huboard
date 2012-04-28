@@ -4,7 +4,7 @@ module Stint
   class Pebble
     attr_accessor :github
 
-    def board(user_name, repo)
+    def build_board(user_name, repo)
       issues = get_issues(user_name, repo)
       issues_by_label = issues.group_by { |issue| issue["current_state"]["name"] }
       all_labels = labels(user_name, repo)
@@ -22,11 +22,37 @@ module Stint
       }
     end
 
+    def board(user_name, repo)
+        board = build_board(user_name, repo)
+
+        labels = github.labels(user_name,repo)
+        labels
+          .select{ |l| @link_pattern.match l["name"] }
+          .each do |l|
+              match = @link_pattern.match l["name"]
+              user, repo = match[:user_name], match[:repo]
+              linked_board = build_board user, repo
+              board[:labels].each_with_index do |label, index|
+
+                linked_issues = linked_board[:labels][index][:issues].map do |i| 
+                  i["repo"][:color] = l["color"]
+                  i
+                end
+
+                label[:issues] = label[:issues].concat(linked_issues).sort_by { |i| i["_data"]["order"] || i["number"].to_f}
+              end
+              board[:milestones].concat(linked_board[:milestones]).sort_by { |m| m["_data"]["order"] || m["number"].to_f} 
+
+          end
+        return board
+    end
+
     def get_issues(user_name, repo)
       issues = github.get_issues user_name, repo
       issues.each do |issue|
         issue["current_state"] = current_state(issue)
         issue["_data"] = embedded_data issue["body"]
+        issue["repo"] = {owner: {login:user_name},name: repo}
       end
       issues.sort_by { |i| i["_data"]["order"] || i["number"].to_f}
     end
@@ -63,25 +89,12 @@ module Stint
       issue["labels"].sort_by {|l| l["name"]}.reverse.find {|x| r.match(x["name"])}  || {"name" => "__nil__"}
     end
 
-    def priorities(user_name, repo) 
-      response = github.labels(user_name, repo)
-      labels = []
-      response.each do |label|
-        r = @priority_pattern
-        puts label
-        hash = r.match (label["name"])
-        labels << { name: label["name"], index: hash[:id], text: hash[:name], color: label["color"]} unless hash.nil?
-      end
-
-      labels.sort_by { |l| l[:index].to_i }
-    end
 
     def labels(user_name, repo) 
       response = github.labels(user_name, repo)
       labels = []
       response.each do |label|
         r = @column_pattern
-        puts label
         hash = r.match (label["name"])
         labels << { name: label["name"], index: hash[:id], text: hash[:name], color: label["color"]} unless hash.nil?
       end
@@ -216,7 +229,8 @@ module Stint
     def initialize(github)
       @github = github
       @column_pattern = /(?<id>\d+) *- *(?<name>.+)/
-        @priority_pattern = /(?<name>.+) - (?<id>\d+)/
+      @priority_pattern = /(?<name>.+) - (?<id>\d+)/
+      @link_pattern = /Link <= (?<user_name>.*)\/(?<repo>.*)/
     end
   end
 end

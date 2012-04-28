@@ -8,7 +8,7 @@ define(function(){
 
   _.extend(card.prototype, {
     save : function (data) {
-      $.post("/api/" + this.user + "/" + this.repo + "/movecard",{
+      $.post("/api/" + this.attributes.repo.owner.login + "/" + this.attributes.repo.name + "/movecard",{
         index: data.index,
         issue: this.attributes
       }, function (response) {
@@ -16,7 +16,7 @@ define(function(){
       });
     },
     close: function(data) {
-      $.post("/api/" + this.user + "/" + this.repo + "/close",{
+      $.post("/api/" + this.attributes.repo.owner.login + "/" + this.attributes.repo.name + "/close",{
         index: data.index,
         issue: this.attributes
       }, function (response) {
@@ -24,7 +24,7 @@ define(function(){
       });
     },
     reorder: function(data) {
-      $.post("/api/" + this.user + "/" + this.repo + "/reorderissue",{
+      $.post("/api/" + this.attributes.repo.owner.login + "/" + this.attributes.repo.name + "/reorderissue",{
         index: data.order,
         issue: this.attributes
       }, function (response) {
