@@ -38,6 +38,22 @@ Other supported key words
 * ~~Make sure you create a hook for the Repository on the home page. Only click the button once (known defect)~~
 * Currently you can only move one card per commit message (will fix soon)
 
+How to link repositories together
+--------------------------
+* * *
+
+Add labels to your repository with the following pattern
+
+>  Link <=> username/repo
+
+Example:
+
+> Link <=> rauhryan/ghee
+
+For help distiguishing cards add a custom color to label and huboard
+will add a border to issues belonging to the linked board
+
+![linked board](http://f.cl.ly/items/13453x43053r2G0d3x0v/Screen%20Shot%202012-04-28%20at%2010.48.17%20AM.png)
 
 Bugs
 --------------------------
