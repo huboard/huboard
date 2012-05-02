@@ -31,18 +31,23 @@ module Stint
           .each do |l|
               match = @link_pattern.match l["name"]
               user, repo = match[:user_name], match[:repo]
-              linked_board = build_board user, repo
-              next if linked_board[:labels].size != board[:labels].size
-              board[:labels].each_with_index do |label, index|
+              begin
+                linked_board = build_board user, repo
+                next if linked_board[:labels].size != board[:labels].size
+                board[:labels].each_with_index do |label, index|
 
-                linked_issues = linked_board[:labels][index][:issues].map do |i| 
-                  i["repo"][:color] = l["color"]
-                  i
-                end
+                  linked_issues = linked_board[:labels][index][:issues].map do |i|
+                    i["repo"][:color] = l["color"]
+                    i
+                  end
 
-                label[:issues] = label[:issues].concat(linked_issues).sort_by { |i| i["_data"]["order"] || i["number"].to_f}
+                  label[:issues] = label[:issues].concat(linked_issues).sort_by { |i| i["_data"]["order"] || i["number"].to_f}
+                end 
+                board[:milestones].concat(linked_board[:milestones]).sort_by { |m| m["_data"]["order"] || m["number"].to_f}
+
+              rescue
+                puts "Warning: Unable to link board: #{user}, #{repo}"
               end
-              board[:milestones].concat(linked_board[:milestones]).sort_by { |m| m["_data"]["order"] || m["number"].to_f} 
 
           end
         return board
