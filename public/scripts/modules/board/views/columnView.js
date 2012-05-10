@@ -28,6 +28,19 @@ define(["text!../templates/column.html","./cardView"],function(template, CardVie
          out: $.proxy(this.onOut, this)
       });
 
+      var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(this.column.color);
+      var rgb = result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+      } : null;
+
+      var rgbacolor    = "rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + ",0.05)";
+      $("ul",this.el)
+      .css({
+        "background-color": rgbacolor,
+      });
+
       return this;
     },
     onReceive: function(ev, ui){
