@@ -117,6 +117,84 @@ Github when you registered the application.
 
 Open your browser to http://huboard.dev/board
 
+
+## Deploy to Heroku
+
+[Sign up](https://api.heroku.com/signup) on [Heroku](http://www.heroku.com/) if you don't have an account, and install the heroku gem:
+
+```
+[sudo] gem install heroku
+```
+
+### 1. Create the Heroku App
+
+##### Clone Huboard:
+
+```
+git clone https://github.com/rauhryan/huboard.git
+cd huboard
+```
+
+##### Bundle:
+
+```
+bundle install
+```
+
+##### Create the app:
+
+```
+heroku app:create ---stack cedar
+```
+
+or, if you'd prefer to name your app yourself:
+
+```
+heroku app:create <your-app-name> --stack cedar
+```
+
+
+### 2. Register app for Github OAuth
+
+Go to https://github.com/account/applications and register your
+application to get the application keys needed for OAuth.
+
+- URL: `http://<your-app-name>.herokuapp.com`
+- Callback: `http://<your-app-name>.herokuapp.com/auth/github/callback`
+
+
+### 3. Configure a Github Team
+
+Create a Github team that will be used by Huboard, or use an existing one. 
+
+Make note of the team ID. You can see it in the URL when editing the team.
+
+*If you get bounced by [SecuroCat](http://octodex.github.com/bouncer/), you should first check your team ID.*
+
+
+### 4. Configure Heroku Environment
+
+Now you'll need to setup some environment variables on Heroku. 
+
+Customize your values and run the following from your project root:
+
+```
+heroku config:add \
+  GITHUB_CLIENT_ID='<your-github-oauth-client>' \
+  GITHUB_SECRET='<your-github-oauth-secret>' \
+  SECRET_KEY='<your-random-secret-key>' \
+  SESSION_SECRET='<your-complex-session-secret>' \
+  TEAM_ID='<your-github-team-id>'
+```
+
+### 5. Deploy
+
+```
+git push heroku master
+```
+
+-------
+
 The MIT License (MIT)
 Copyright (c) 2012 Ryan Rauh
 
