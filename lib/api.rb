@@ -14,16 +14,13 @@ module Huboard
 
     if ENV['GITHUB_CLIENT_ID']
       set :secret_key, ENV['SECRET_KEY']
-      set :team_id, ENV["TEAM_ID"]
-      set :user_name, ENV["USER_NAME"]
-      set :password, ENV["PASSWORD"]
       set :github_options, {
         :secret    => ENV['GITHUB_SECRET'],
         :client_id => ENV['GITHUB_CLIENT_ID'],
-        :scopes => "user,repo"
       }
       set :session_secret, ENV["SESSION_SECRET"]
     end
+   settings.github_options[:scopes] = "user,repo"
 
     before do
       authenticate! unless authenticated?
