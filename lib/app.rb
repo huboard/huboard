@@ -78,7 +78,7 @@ module Huboard
 
     post '/:user/:repo/board/create/?' do
       @parameters = params
-      pebble.create_board(params[:user],params[:repo])
+      pebble.create_board(params[:user],params[:repo],"#{base_url}/webhook?token=#{encrypted_token}")
       redirect "/#{params[:user]}/#{params[:repo]}/board"
     end
 
