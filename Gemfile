@@ -10,4 +10,5 @@ gem 'ghee'
 
 group :development do
   gem 'watchr'
+  gem 'shotgun'
 end
