@@ -1,15 +1,22 @@
-define(["./milestoneView","../collections/milestones"],function(milestoneView,milestones){
+define(["./milestoneView"],function(milestoneView,milestones){
 
   return Backbone.View.extend({
-    el : $('<ul>').addClass('milestones lifted drop-shadow').appendTo('#workqueue'),
+    tagName: "ul",
     initialize: function(params){
-      milestones.bind("ondatareceived", this.onfetch, this);
-      milestones.fetch(params.user,params.repo);
       this.user = params.user;
       this.repo = params.repo;
-      $(this.el).sortable({
-        update: $.proxy(this.onStop,this)
-      });
+    },
+    render: function() {
+
+      $(this.el)
+        .addClass("milestones drop-shadow sortable")
+        .sortable({
+          update: $.proxy(this.onStop,this),
+          connectWith: ".sortable",
+           placeholder: "ui-sortable-placeholder"
+        });
+
+      return this;
     },
     onfetch: function(data){
       var self = this;

@@ -1,11 +1,11 @@
-define(["./views/milestones_list"],
-       function(milestones){
+define(["./views/workflowView"],
+       function(workflow){
          var app = {
          }; 
 
          return {
            init : function(params) {
-             app.milestones = new milestones(params);
+             app.workflow = new workflow(this,params);
            }
          }
        });

@@ -9,7 +9,7 @@ jQuery(function($){
     }
     ,[module],
     function(module){
-      module.init($this.data("parameters"));
+      module.init.call($this,($this.data("parameters")));
     });
 
 
