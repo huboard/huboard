@@ -5,18 +5,35 @@ define(["./milestoneView"],function(milestoneView,milestones){
     initialize: function(params){
       this.user = params.user;
       this.repo = params.repo;
+      this.status = params.status;
     },
     render: function() {
 
       $(this.el)
         .addClass("milestones drop-shadow sortable")
         .sortable({
-          update: $.proxy(this.onStop,this),
+         receive: $.proxy(this.onReceive,this),
+         remove: $.proxy(this.onRemove, this),
+         over: $.proxy(this.onOver, this),
+         update: $.proxy(this.onStop, this),
+         out: $.proxy(this.onOut, this),
           connectWith: ".sortable",
            placeholder: "ui-sortable-placeholder"
         });
 
       return this;
+    },
+    onReceive: function(ev, ui){
+      $(ui.item).trigger("moved",this.status);
+    },
+    onRemove: function(ev, ui){
+       // don't know if need yet
+    },
+    onOver: function(ev, ui){
+       $(this.el).addClass("ui-sortable-hover");
+    },
+    onOut: function (ev, ui){
+       $(this.el).removeClass("ui-sortable-hover");
     },
     onfetch: function(data){
       var self = this;

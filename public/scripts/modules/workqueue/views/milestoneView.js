@@ -6,15 +6,20 @@ define(["text!../templates/milestone.html","../models/milestone"],function(templ
        params.milestone.html_url = params.milestone.url.replace(/.*\/repos\/(.*)\/milestones.*/, 'https://github.com/$1/issues?milestone=' + params.milestone.number + '&state=open');
        this.milestone = new milestone({model:params.milestone, user: params.user, repo: params.repo});
        _.bind(this, 'reorder', this.reorder);
+       _.bind(this, 'moved', this.moved);
      },
      tagName: "li",
      events: {
-       "drop": "reorder"
+       "drop": "reorder",
+       "moved" : "moved"
      },
      render: function () {
        $(this.el).html(_.template(template, this.milestone.attributes)).data("milestone",this.milestone.attributes);
        this.delegateEvents();
        return this;
+     },
+     moved: function(ev, status){
+
      },
      reorder: function(ev,index) {
        this.milestone.save({order: index});
