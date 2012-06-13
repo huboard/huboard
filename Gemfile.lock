@@ -33,6 +33,8 @@ GEM
     rdiscount (1.6.8)
     rest-client (1.6.7)
       mime-types (>= 1.16)
+    shotgun (0.9)
+      rack (>= 1.0)
     sinatra (1.3.2)
       rack (~> 1.3, >= 1.3.6)
       rack-protection (~> 1.2)
@@ -62,6 +64,7 @@ DEPENDENCIES
   ghee
   rack-no-www
   rdiscount
+  shotgun
   sinatra
   sinatra-content-for (~> 0.1.0)
   sinatra_auth_github
