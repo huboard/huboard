@@ -1,7 +1,8 @@
 define(["./milestoneView"],function(milestoneView,milestones){
 
   return Backbone.View.extend({
-    tagName: "ul",
+    tagName: "div",
+    className:"drop-shadow",
     initialize: function(params){
       this.user = params.user;
       this.repo = params.repo;
@@ -9,17 +10,19 @@ define(["./milestoneView"],function(milestoneView,milestones){
     },
     render: function() {
 
-      $(this.el)
-        .addClass("milestones drop-shadow sortable")
+      $("<ul>")
+        .addClass("milestones sortable")
         .sortable({
          receive: $.proxy(this.onReceive,this),
+         stop: $.proxy(this.fullStop,this),
+         start: $.proxy(this.onStart,this),
          remove: $.proxy(this.onRemove, this),
          over: $.proxy(this.onOver, this),
          update: $.proxy(this.onStop, this),
          out: $.proxy(this.onOut, this),
           connectWith: ".sortable",
            placeholder: "ui-sortable-placeholder"
-        });
+        }).appendTo(this.el);
 
       return this;
     },
@@ -29,19 +32,25 @@ define(["./milestoneView"],function(milestoneView,milestones){
        // don't know if need yet
     },
     onOver: function(ev, ui){
-       $(this.el).addClass("ui-sortable-hover");
+       $("ul",this.el).addClass("ui-sortable-hover");
     },
     onOut: function (ev, ui){
-       $(this.el).removeClass("ui-sortable-hover");
+       $("ul",this.el).removeClass("ui-sortable-hover");
     },
     onfetch: function(data){
       var self = this;
       _.each(data, function(milestone){
         var view = new milestoneView({user: self.user, repo: self.repo,milestone:milestone});
-        $(self.el).append(view.render().el);
+        $("ul",self.el).append(view.render().el);
         view.delegateEvents();
       });
       $("[rel~='twipsy']").twipsy({live:true})
+    },
+    fullStop: function(ev, ui) {
+     $(ui.item).removeClass("ui-state-dragging");
+    },
+    onStart: function(ev, ui) {
+     $(ui.item).addClass("ui-state-dragging");
     },
     onStop : function(ev,ui){
       console.log("onStop");

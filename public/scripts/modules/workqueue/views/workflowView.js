@@ -8,10 +8,8 @@ define(["./milestones_list","../collections/milestones"],function(listView, coll
       this.onfetch = function (data) {
 
         $(element)
-          .append("<h3>Work In Progress")
-          .append(wip.render().el)
-          .append("<h3>Backlog")
-          .append(queue.render().el);
+          .append($(wip.render().el).prepend("<h3>Work In Progress"))
+          .append($(queue.render().el).prepend("<h3>Backlog"))
 
         var grouped = _.groupBy(data, function (milestone){
           return milestone._data.status || "backlog";
