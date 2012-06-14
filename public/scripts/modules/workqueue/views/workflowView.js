@@ -2,8 +2,8 @@ define(["./milestones_list","../collections/milestones"],function(listView, coll
 
 
   return function (element, params) {
-      var queue = new listView(params);
-      var wip = new listView(params);
+      var queue = new listView(_.extend({status:"backlog"},params));
+      var wip = new listView(_.extend({status:"wip"},params));
 
       this.onfetch = function (data) {
 

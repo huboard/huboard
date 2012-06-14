@@ -45,7 +45,7 @@ module Huboard
 
     post '/:user/:repo/reordermilestone' do 
       milestone = params["milestone"]
-      json pebble.reorder_milestone params[:user], params[:repo], milestone["number"], params[:index]
+      json pebble.reorder_milestone params[:user], params[:repo], milestone["number"], params[:index], params[:status]
     end
 
     post '/:user/:repo/movecard' do 

@@ -77,14 +77,14 @@ module Stint
       github.update_issue user_name, repo, post_data
     end
 
-    def reorder_milestone(user_name, repo, number, index)
+    def reorder_milestone(user_name, repo, number, index, status)
       post_data = {:number => number}
       milestone = github.milestone user_name, repo, number
       _data = embedded_data milestone["description"]
       if _data.empty?
-        post_data["description"] = milestone["description"].concat "\r\n@huboard:#{JSON.dump({:order => index.to_f})}" 
+        post_data["description"] = milestone["description"].concat "\r\n<!--\r\n@huboard:#{JSON.dump({"status" => status,"order" => index.to_f})}\r\n-->\r\n" 
       else
-        post_data["description"] = milestone["description"].gsub /@huboard:.*/, "@huboard:#{JSON.dump(_data.merge({"order" => index.to_f, "updated" => Time.now.iso8601}))}"
+        post_data["description"] = milestone["description"].gsub /@huboard:.*/, "@huboard:#{JSON.dump(_data.merge({"order" => index.to_f, "status" => status}))}"
       end
 
       github.update_milestone user_name, repo, post_data

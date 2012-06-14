@@ -24,7 +24,6 @@ define(["./milestoneView"],function(milestoneView,milestones){
       return this;
     },
     onReceive: function(ev, ui){
-      $(ui.item).trigger("moved",this.status);
     },
     onRemove: function(ev, ui){
        // don't know if need yet
@@ -45,6 +44,7 @@ define(["./milestoneView"],function(milestoneView,milestones){
       $("[rel~='twipsy']").twipsy({live:true})
     },
     onStop : function(ev,ui){
+      console.log("onStop");
       var elements = $("li", this.el),
       index = elements.index(ui.item);
 
@@ -65,9 +65,10 @@ define(["./milestoneView"],function(milestoneView,milestones){
       after = afterData._data.order || afterData.number;
 
       // its the only one in the list
-      if(first && last) {return;}
-
-      if(first) {
+      if(first && last) {
+        currentData._data.order = current;
+      }
+      else if(first) {
         // dragged it to the top
         var t = after || 1;
         currentData._data.order = (t - 1) > 0 ? (t - 1) : (t / 2);
@@ -79,7 +80,7 @@ define(["./milestoneView"],function(milestoneView,milestones){
       }
 
       currentElement
-        .trigger("drop", currentData._data.order)  
+        .trigger("drop", {order:currentData._data.order,status:this.status})  
         .data("milestone", currentData);  
 
     }

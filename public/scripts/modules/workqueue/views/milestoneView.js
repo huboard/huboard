@@ -10,19 +10,15 @@ define(["text!../templates/milestone.html","../models/milestone"],function(templ
      },
      tagName: "li",
      events: {
-       "drop": "reorder",
-       "moved" : "moved"
+       "drop": "reorder"
      },
      render: function () {
        $(this.el).html(_.template(template, this.milestone.attributes)).data("milestone",this.milestone.attributes);
        this.delegateEvents();
        return this;
      },
-     moved: function(ev, status){
-
-     },
-     reorder: function(ev,index) {
-       this.milestone.save({order: index});
+     reorder: function(ev,data) {
+       this.milestone.save(data);
      }
   });
 
