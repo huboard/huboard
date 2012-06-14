@@ -33,8 +33,12 @@ define(["../events/postal"], function (postal) {
           active ? userfilter.addClass("state-active") : userfilter.removeClass("state-active");
           if (active) {clear.show();}
       });
+      var grouped = _.groupBy(this.milestones, function (milestone) {
+         return milestone._data.status || "backlog";
+      }); 
 
-      _.each(this.milestones, function (milestone) {
+      var combined = (grouped.wip || []).concat(grouped.backlog || []);
+      _.each(combined, function (milestone) {
         var filter = $(_.template("<li class='drop-shadow'><a href='#'><strong><%= open_issues %></strong><%= title %></a></li>", milestone))
         .click(function(){
           postal.publish("Filter.Milestone", function (issue) { return issue.milestone ? issue.milestone.number === milestone.number : false; });
