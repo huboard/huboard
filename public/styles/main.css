@@ -74,9 +74,10 @@ ul.milestones {
 }
 
 ul.milestones li {
-  margin: 0 0 2px 0;
+  margin: 0 0 4px 0;
   position:relative;
   cursor:move;
+  padding-left:10px;
 }
 ul.milestones li a {
    display:block;
