@@ -69,7 +69,7 @@ module Stint
       issue = github.issue_by_id user_name, repo, number
       _data = embedded_data issue["body"]
       if _data.empty?
-        post_data["body"] = issue["body"].concat "\r\n<!--\r\n@huboard:#{JSON.dump({:order => index.to_f})}\r\n-->\r\n" 
+        post_data["body"] = issue["body"].concat "\r\n<!---\r\n@huboard:#{JSON.dump({:order => index.to_f})}\r\n-->\r\n" 
       else
         post_data["body"] = issue["body"].gsub /@huboard:.*/, "@huboard:#{JSON.dump(_data.merge({"order" => index.to_f}))}"
       end
@@ -82,7 +82,7 @@ module Stint
       milestone = github.milestone user_name, repo, number
       _data = embedded_data milestone["description"]
       if _data.empty?
-        post_data["description"] = milestone["description"].concat "\r\n<!--\r\n@huboard:#{JSON.dump({"status" => status,"order" => index.to_f})}\r\n-->\r\n" 
+        post_data["description"] = milestone["description"].concat "\r\n<!---\r\n@huboard:#{JSON.dump({"status" => status,"order" => index.to_f})}\r\n-->\r\n" 
       else
         post_data["description"] = milestone["description"].gsub /@huboard:.*/, "@huboard:#{JSON.dump(_data.merge({"order" => index.to_f, "status" => status}))}"
       end
