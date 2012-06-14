@@ -69,7 +69,7 @@ module Stint
       issue = github.issue_by_id user_name, repo, number
       _data = embedded_data issue["body"]
       if _data.empty?
-        post_data["body"] = issue["body"].concat "\r\n@huboard:#{JSON.dump({:order => index.to_f})}" 
+        post_data["body"] = issue["body"].concat "\r\n<!--\r\n@huboard:#{JSON.dump({:order => index.to_f})}\r\n-->\r\n" 
       else
         post_data["body"] = issue["body"].gsub /@huboard:.*/, "@huboard:#{JSON.dump(_data.merge({"order" => index.to_f}))}"
       end
@@ -201,7 +201,11 @@ module Stint
         match = r.match body
       return { } if match.nil?
 
-      JSON.load(match[1])
+      begin
+        JSON.load(match[1])
+      rescue
+        return {}
+      end
     end
 
     def close_card(user_name, repo, the_issue)
