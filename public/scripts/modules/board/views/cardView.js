@@ -42,6 +42,7 @@ define(["text!../templates/card.html","../models/card", "../events/postal"],func
       this.issue.save({index: index});
     },
     closed: function(ev, index){
+      ev.preventDefault();
       this.issue.close({index: index});
       this.remove();
     },
