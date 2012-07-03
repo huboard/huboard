@@ -5,25 +5,7 @@ module Huboard
     register Sinatra::Auth::Github
     register Huboard::Common
 
-    puts "settings.root #{settings.root}"
-    if File.exists? "#{File.dirname(__FILE__)}/../.settings"
-      puts "settings file"
-      token_file =  File.new("#{File.dirname(__FILE__)}/../.settings")
-      eval(token_file.read) 
-    end
-
-    if ENV['GITHUB_CLIENT_ID']
-      set :secret_key, ENV['SECRET_KEY']
-      set :team_id, ENV["TEAM_ID"]
-      set :user_name, ENV["USER_NAME"]
-      set :password, ENV["PASSWORD"]
-      set :github_options, {
-        :secret    => ENV['GITHUB_SECRET'],
-        :client_id => ENV['GITHUB_CLIENT_ID'],
-        :scopes => "user,repo"
-      }
-      set :session_secret, ENV["SESSION_SECRET"]
-    end
+    extend Huboard::Common::Settings
 
     before do
       authenticate! unless authenticated?

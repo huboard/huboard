@@ -1,3 +1,5 @@
+
+# TODO: read this from a yaml
 set :secret_key, 'iam a secret key'
 set :team_id, "1235125"
 set :github_options, {
