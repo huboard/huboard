@@ -63,6 +63,15 @@ module Huboard
         @gh ||= Ghee.new(:access_token => user_token)
       end
 
+      def socket_backend
+        return settings.socket_backend if settings.respond_to? :socket_backend
+      end
+
+      def publish(channel,event,payload)
+        return if socket_backend.nil?
+        conn = Faraday.post "#{socket_backend}/hook", {channel:channel, payload:{payload:payload,event:event}}
+      end
+
       def json(obj)
         content_type :json
         JSON.pretty_generate(obj)
