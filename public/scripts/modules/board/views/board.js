@@ -1,5 +1,5 @@
 define(["../collections/issues","text!../templates/board.html", "./columnView","./sidebarView"], 
-       function (issues, template, columnView, sidebarView) {
+       function (issues, template, columnView, sidebarView, postal) {
 
   var calculateTallest = function (){
 

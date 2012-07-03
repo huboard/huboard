@@ -65,7 +65,7 @@ module Huboard
     end
 
     get '/:user/:repo/board/?' do 
-      @parameters = params.merge({:login => current_user.login})
+      @parameters = params.merge({:login => current_user.login, :socket_backend => socket_backend})
       erb :board, :layout => :layout_fluid
     end
 
