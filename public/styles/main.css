@@ -204,7 +204,7 @@ table td {
  table li.drop-shadow {
    list-style: none;
    padding: 30px 5px 10px 5px;
-   margin: 10px 0;
+   margin: 0 0 10px 0;
    cursor:move;
    position:relative;
  }
@@ -251,6 +251,9 @@ table li a.close:hover {
  table li a small {
    color: #999;
    padding-right:2px;
+ }
+ table .ui-sortable {
+   padding: 10px 0 0 0;
  }
  table .ui-sortable-placeholder {
    background:#ccc;
