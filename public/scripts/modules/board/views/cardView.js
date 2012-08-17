@@ -6,6 +6,7 @@ define(["text!../templates/card.html","../models/card", "../events/postal"],func
       _.bind(this,'moved',this.moved);
       _.bind(this,'drop',this.drop);
       postal.subscribe("Filter.*", $.proxy(this.filter, this));
+      postal.socket(params.user + "/" + params.repo,"Moved." + params.issue.number, $.proxy(this.onSocket,this));
     },
     events: {
       "moved" : "moved",
@@ -14,6 +15,9 @@ define(["text!../templates/card.html","../models/card", "../events/postal"],func
       "drop" : "drop"
     },
     tagName:"li",
+    onSocket: function(data){
+      postal.publish("Moved.Socket." + data.index,{card: this});
+    },
     render: function(){
 
 

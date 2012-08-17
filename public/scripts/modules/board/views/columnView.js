@@ -7,12 +7,15 @@ define(["text!../templates/column.html","./cardView","../events/postal"],functio
       this.user = params.user;
       this.latched = false;
 
-      postal.socket(params.user + "/" + params.repo,"Moved." + params.column.index, $.proxy(this.onSocket,this));
+      postal.subscribe("Moved.Socket." + params.column.index, $.proxy(this.onSocket,this));
     },
     onSocket : function(data){
-        var self = this;
-        var card = new CardView({issue : data, user: self.user, repo: self.repo});
-        $("ul",this.el).append(card.render().el);
+      var elements = $("li", this.el),
+      index = elements.index(data.card.el);
+
+      if(index !== -1) { return; }
+
+      $("ul",this.el).append(data.card.el);
 
     },
     render: function(){

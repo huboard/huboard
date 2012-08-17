@@ -22,6 +22,9 @@ module Huboard
                 :scopes => "user,repo"
               }
               set :session_secret, ENV["SESSION_SECRET"]
+              set :socket_backend, ENV["SOCKET_BACKEND"]
+              set :socket_secret, ENV["SOCKET_SECRET"]
+
             else
               raise "Configuration information not found: you need to provide a .settings file or ENV variables"
             end
@@ -70,7 +73,7 @@ module Huboard
 
       def publish(channel,event,payload)
         return if socket_backend.nil?
-        conn = Faraday.post "#{socket_backend}/hook", {channel:channel, payload:{payload:payload,event:event}}
+        conn = Faraday.post "#{socket_backend}/hook", {channel:channel, payload:{payload:payload,event:event},secret:settings.socket_secret}
       end
 
       def json(obj)

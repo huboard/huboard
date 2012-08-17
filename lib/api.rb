@@ -31,7 +31,7 @@ module Huboard
     end
 
     post '/:user/:repo/movecard' do 
-      publish "#{params[:user]}/#{params[:repo]}", "Moved.#{params[:index]}", params[:issue]
+      publish "#{params[:user]}/#{params[:repo]}", "Moved.#{params[:issue][:number]}", { issue:params[:issue], index: params[:index]}
       json pebble.move_card params[:user], params[:repo], params[:issue], params[:index]
     end
 
