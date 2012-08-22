@@ -19,7 +19,8 @@ define(["../events/postal"],function(postal){
     close: function(data) {
       $.post("/api/" + this.attributes.repo.owner.login + "/" + this.attributes.repo.name + "/close",{
         index: data.index,
-        issue: this.attributes
+        issue: this.attributes,
+        correlationId: postal.correlationId
       }, function (response) {
         console.log("closed issue", data.index);
       });
@@ -27,7 +28,8 @@ define(["../events/postal"],function(postal){
     reorder: function(data) {
       $.post("/api/" + this.attributes.repo.owner.login + "/" + this.attributes.repo.name + "/reorderissue",{
         index: data.order,
-        issue: this.attributes
+        issue: this.attributes,
+        correlationId: postal.correlationId
       }, function (response) {
         console.log("reordered issue", data.order);
       });

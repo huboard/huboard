@@ -36,6 +36,7 @@ module Huboard
     end
 
     post '/:user/:repo/close' do                                                               
+      publish "#{params[:user]}/#{params[:repo]}", "Closed.#{params[:issue][:number]}", { issue:params[:issue]}
       json pebble.close_card params[:user], params[:repo], params[:issue]
     end
 
