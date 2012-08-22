@@ -120,9 +120,34 @@ module Stint
     def hook_exists(user_name, repo, token)
       hooks = github.hooks user_name, repo
 
-      return !hooks.find{ |x| x["config"]["url"] == token }.nil?
+      uri = URI.parse(token)
+
+      hook_url = uri.to_s.gsub(uri.query,"")
+
+      return fix_hooks(user_name, repo, hooks.find_all{ |x| x["config"]["url"].start_with? hook_url}) 
     end
 
+    def fix_hooks(user_name, repo, hooks)
+
+      return false if hooks.empty?
+
+      if hooks.size > 1
+        hooks.each { |h| delete_hook user_name, repo, h }
+        return false
+      end
+
+      return true if hooks.size == 1 and hooks[0]["events"].include? "issues"
+
+      if hooks.size == 1 and !hooks[0]["events"].include? "issues"
+         delete_hook user_name, repo, hooks[0] 
+         return false
+      end
+
+    end
+
+    def delete_hook(user_name, repo, hook)
+      github.delete_hook(user_name, repo, hook["id"])
+    end
 
     def create_hook(user_name, repo, token)
 
@@ -133,7 +158,7 @@ module Stint
         config: {
         url: token
       },
-        events: ["push"],
+        events: ["issues"],
         active: true
       }
       github.create_hook( user_name, repo, params).merge( { success: true, message: "hook created successfully"})

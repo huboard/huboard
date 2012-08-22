@@ -80,15 +80,18 @@ module Huboard
       hub = Stint::Pebble.new(Stint::Github.new(gh))
 
       payload = JSON.parse(params[:payload])
+      issue = payload["issue"]
 
-      response = []
-      repository = payload["repository"]
-      commits = payload["commits"]
-      commits.reverse.each do |c|
+      #blank embedded data
+      issue["_data"] = {} unless issue.nil?
 
-        response << hub.push_card(  repository["owner"]["name"], repository["name"], c)
-      end 
-      json response
+      case payload["action"]
+        when "opened" then publish issue["repository"]["full_name"], "Opened.Issue", issue
+        when "closed" then publish issue["repository"]["full_name"], "Closed.#{issue["number"]}", issue
+        # reopened is a bit more complex
+      end
+
+      json({"hooked" => "successful"})
     end
 
     helpers Sinatra::ContentFor

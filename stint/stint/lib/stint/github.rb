@@ -38,6 +38,10 @@ module Stint
       gh.repos(user_name,repo).hooks.create params
     end
 
+    def delete_hook(user_name, repo, id)
+      gh.repos(user_name,repo).hooks(id).destroy
+    end
+
     def create_label(user_name, repo, params)
       gh.repos(user_name, repo).labels.create(params)
     end
