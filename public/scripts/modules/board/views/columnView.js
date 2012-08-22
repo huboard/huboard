@@ -1,5 +1,4 @@
 define(["text!../templates/column.html","./cardView","../events/postal"],function(template, CardView, postal){
-  console.log(postal.correlationId);
 
   var Column = Backbone.View.extend({
     initialize : function(params) {
@@ -9,6 +8,11 @@ define(["text!../templates/column.html","./cardView","../events/postal"],functio
       this.latched = false;
 
       postal.subscribe("Moved.Socket." + params.column.index, $.proxy(this.onSocket,this));
+      postal.socket(params.user + "/" + params.repo, "Opened." + params.column.index, $.proxy(this.onOpened,this))
+    },
+    onOpened: function(issue){
+      var card = new CardView({model: issue, user: this.user, repo: this.repo});
+      $("ul",this.el).append(card.render().el);
     },
     onSocket : function(data){
       var elements = $("li", this.el),

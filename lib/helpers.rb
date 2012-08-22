@@ -63,8 +63,8 @@ module Huboard
         @pebble ||= Stint::Pebble.new(github)
       end
 
-      def gh
-        @gh ||= Ghee.new(:access_token => user_token)
+      def gh(token = nil)
+        @gh ||= Ghee.new(:access_token => token || user_token)
       end
 
       def socket_backend

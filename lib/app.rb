@@ -75,18 +75,28 @@ module Huboard
     end
 
     post '/webhook' do 
-      puts "webhook"
+
       token =  decrypt_token( params[:token] )
-      hub = Stint::Pebble.new(Stint::Github.new(gh))
+      ghee = gh(token)
+      hub = Stint::Pebble.new(Stint::Github.new(ghee))
 
       payload = JSON.parse(params[:payload])
       issue = payload["issue"]
+
+      if issue.nil?
+        user = payload["repository"]["owner"]["login"]
+        repo = payload["repository"]["name"]
+        hooks = ghee.repos(user, repo).hooks
+        hub.fix_hooks user, repo, hooks
+        puts "fixed hooks"
+        return json({:message => "fixed hooks"})
+      end
 
       #blank embedded data
       issue["_data"] = {} unless issue.nil?
 
       case payload["action"]
-        when "opened" then publish issue["repository"]["full_name"], "Opened.Issue", issue
+        when "opened" then publish issue["repository"]["full_name"], "Opened.0", issue
         when "closed" then publish issue["repository"]["full_name"], "Closed.#{issue["number"]}", issue
         # reopened is a bit more complex
       end
