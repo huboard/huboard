@@ -1,4 +1,4 @@
-define(function(){
+define(["../events/postal"],function(postal){
 
   var card = function(params) {
    this.attributes = params.model;
@@ -10,7 +10,8 @@ define(function(){
     save : function (data) {
       $.post("/api/" + this.attributes.repo.owner.login + "/" + this.attributes.repo.name + "/movecard",{
         index: data.index,
-        issue: this.attributes
+        issue: this.attributes,
+        correlationId: postal.correlationId
       }, function (response) {
         console.log("moved to column", data.index);
       });

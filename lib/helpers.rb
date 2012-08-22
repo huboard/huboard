@@ -73,7 +73,7 @@ module Huboard
 
       def publish(channel,event,payload)
         return if socket_backend.nil?
-        conn = Faraday.post "#{socket_backend}/hook", {channel:channel, payload:{payload:payload,event:event},secret:settings.socket_secret}
+        conn = Faraday.post "#{socket_backend}/hook", {channel:channel, payload:{ payload:payload, event:event, correlationId: params[:correlationId] || "herpderp"},secret:settings.socket_secret,}
       end
 
       def json(obj)

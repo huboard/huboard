@@ -1,8 +1,10 @@
 define(["socket"],function(socket){
-  var sockets = {};
+  var sockets = {},
+      correlationId = _.uniqueId("postal_");
 
 
   return {
+     correlationId: correlationId,
      subscribe: function(channel, callback) {
          postal.channel(channel).subscribe(callback);
      },
@@ -22,7 +24,7 @@ define(["socket"],function(socket){
          } else {
            sockets[channel] = channel;
            socket.on(channel, function (message) {
-             postal.channel(message.event).publish(message.payload);
+             message.correlationId !== correlationId && postal.channel(message.event).publish(message.payload);
            });
          }
                   

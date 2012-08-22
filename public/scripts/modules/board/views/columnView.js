@@ -1,4 +1,5 @@
 define(["text!../templates/column.html","./cardView","../events/postal"],function(template, CardView, postal){
+  console.log(postal.correlationId);
 
   var Column = Backbone.View.extend({
     initialize : function(params) {
