@@ -4,49 +4,72 @@
   "data" => {
 	  "subscribers" => "" #CSV list
   },
-
-  "payload" => {
-    "after"  => "a47fd41f3aa4610ea527dcc1669dfdb9c15c5425",
-    "ref"    => "refs/heads/master",
-    "before" => "4c8124ffcf4039d292442eeccabdeca5af5c5017",
-
-    "repository" => {
-      "name"  => "skipping_stones_repo",
-      "url"   => "http://github.com/rauhryan/skipping_stones_repo",
-      "owner" => { "name" => "rauhryan", "email" => "rauh.ryan@gmail.com" }
+  "payload" => { "action" => "opened",
+  "issue" => { "assignee" => nil,
+      "body" => "",
+      "closed_at" => nil,
+      "comments" => 0,
+      "created_at" => "2012-08-23T00:04:02Z",
+      "html_url" => "https://github.com/rauhryan/huboard/issues/79",
+      "id" => 6394371,
+      "labels" => [  ],
+      "milestone" => nil,
+      "number" => 79,
+      "pull_request" => { "diff_url" => nil,
+          "html_url" => nil,
+          "patch_url" => nil
+        },
+      "state" => "open",
+      "title" => "test issue 2",
+      "updated_at" => "2012-08-23T00:04:02Z",
+      "url" => "https://api.github.com/repos/rauhryan/huboard/issues/79",
+      "user" => { "avatar_url" => "https://secure.gravatar.com/avatar/29283ede6c447fdc62f0ceac42df33ea?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png",
+          "gravatar_id" => "29283ede6c447fdc62f0ceac42df33ea",
+          "id" => 68954,
+          "login" => "rauhryan",
+          "url" => "https://api.github.com/users/rauhryan"
+        }
     },
-
-    "commits" => [
-      {
-        "removed"   => [],
-        "message"   => "stub git call for Grit#heads test",
-        "added"     => [],
-        "timestamp" => "2007-10-10T00:11:02-07:00",
-        "modified"  => ["lib/grit/grit.rb", "test/helper.rb", "test/test_grit.rb"],
-        "url"       => "http://github.com/mojombo/grit/commit/06f63b43050935962f84fe54473a7c5de7977325",
-        "author"    => { "name" => "Tom Preston-Werner", "email" => "tom@mojombo.com" },
-        "id"        => "06f63b43050935962f84fe54473a7c5de7977325"
-      },
-      {
-        "removed"   => [],
-        "message"   => "clean up heads test. push gh-2",
-        "added"     => [],
-        "timestamp" => "2007-10-10T00:18:20-07:00",
-        "modified"  => ["test/test_grit.rb"],
-        "url"       => "http://github.com/mojombo/grit/commit/5057e76a11abd02e83b7d3d3171c4b68d9c88480",
-        "author"    => { "name" => "Tom Preston-Werner", "email" => "tom@mojombo.com" },
-        "id"        => "5057e76a11abd02e83b7d3d3171c4b68d9c88480"
-      },
-      {
-        "removed"   => [],
-        "message"   => "add more comments throughout. addresses GH-4",
-        "added"     => [],
-        "timestamp" => "2007-10-10T00:50:39-07:00",
-        "modified"  => ["lib/grit.rb", "lib/grit/commit.rb", "lib/grit/grit.rb"],
-        "url"       => "http://github.com/mojombo/grit/commit/a47fd41f3aa4610ea527dcc1669dfdb9c15c5425",
-        "author"    => { "name" => "Tom Preston-Werner", "email" => "tom@mojombo.com" },
-        "id"        => "a47fd41f3aa4610ea527dcc1669dfdb9c15c5425"
-      }
-    ]
-  }
+  "repository" => { "clone_url" => "https://github.com/rauhryan/huboard.git",
+      "created_at" => "2011-10-27T16:18:39Z",
+      "description" => "Kanban board for github issues",
+      "fork" => false,
+      "forks" => 34,
+      "forks_count" => 34,
+      "full_name" => "rauhryan/huboard",
+      "git_url" => "git://github.com/rauhryan/huboard.git",
+      "has_downloads" => true,
+      "has_issues" => true,
+      "has_wiki" => true,
+      "homepage" => "http://huboard.com",
+      "html_url" => "https://github.com/rauhryan/huboard",
+      "id" => 2659467,
+      "language" => "JavaScript",
+      "mirror_url" => nil,
+      "name" => "huboard",
+      "open_issues" => 30,
+      "open_issues_count" => 30,
+      "owner" => { "avatar_url" => "https://secure.gravatar.com/avatar/29283ede6c447fdc62f0ceac42df33ea?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png",
+          "gravatar_id" => "29283ede6c447fdc62f0ceac42df33ea",
+          "id" => 68954,
+          "login" => "rauhryan",
+          "url" => "https://api.github.com/users/rauhryan"
+        },
+      "private" => false,
+      "pushed_at" => "2012-08-22T23:29:42Z",
+      "size" => 156,
+      "ssh_url" => "git@github.com:rauhryan/huboard.git",
+      "svn_url" => "https://github.com/rauhryan/huboard",
+      "updated_at" => "2012-08-22T23:29:43Z",
+      "url" => "https://api.github.com/repos/rauhryan/huboard",
+      "watchers" => 165,
+      "watchers_count" => 165
+    },
+  "sender" => { "avatar_url" => "https://secure.gravatar.com/avatar/29283ede6c447fdc62f0ceac42df33ea?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png",
+      "gravatar_id" => "29283ede6c447fdc62f0ceac42df33ea",
+      "id" => 68954,
+      "login" => "rauhryan",
+      "url" => "https://api.github.com/users/rauhryan"
+    }
+}
 }

@@ -11,7 +11,7 @@ define(["text!../templates/column.html","./cardView","../events/postal"],functio
       postal.socket(params.user + "/" + params.repo, "Opened." + params.column.index, $.proxy(this.onOpened,this))
     },
     onOpened: function(issue){
-      var card = new CardView({model: issue, user: this.user, repo: this.repo});
+      var card = new CardView({issue: issue, user: this.user, repo: this.repo});
       $("ul",this.el).append(card.render().el);
     },
     onSocket : function(data){

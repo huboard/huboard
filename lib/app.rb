@@ -13,7 +13,7 @@ module Huboard
 
     extend Huboard::Common::Settings
 
-    PUBLIC_URLS = ['/', '/logout']
+    PUBLIC_URLS = ['/', '/logout','/webhook']
     before do
       protected! unless PUBLIC_URLS.include? request.path_info
     end
@@ -94,10 +94,11 @@ module Huboard
 
       #blank embedded data
       issue["_data"] = {} unless issue.nil?
+      issue["repo"] = payload["repository"]
 
       case payload["action"]
-        when "opened" then publish issue["repository"]["full_name"], "Opened.0", issue
-        when "closed" then publish issue["repository"]["full_name"], "Closed.#{issue["number"]}", issue
+        when "opened" then publish payload["repository"]["full_name"], "Opened.0", issue
+        when "closed" then publish payload["repository"]["full_name"], "Closed.#{issue["number"]}", issue
         # reopened is a bit more complex
       end
 

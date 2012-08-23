@@ -41,7 +41,7 @@ module Huboard
     end
 
     get "/token" do
-      return "User Token: #{user_token}"
+      return "User Token: #{encrypted_token}"
     end
 
   end

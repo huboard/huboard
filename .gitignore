@@ -1,4 +1,5 @@
 .settings
+.token
 .rvmrc
 tmp/
 .DS_Store
