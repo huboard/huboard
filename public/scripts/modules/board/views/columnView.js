@@ -13,6 +13,7 @@ define(["text!../templates/column.html","./cardView","../events/postal"],functio
     onOpened: function(issue){
       var card = new CardView({issue: issue, user: this.user, repo: this.repo});
       $("ul",this.el).append(card.render().el);
+      postal.publish("Opened.Issue",issue)
     },
     onSocket : function(data){
       var elements = $("li", this.el),

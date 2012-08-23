@@ -1,4 +1,4 @@
-define(["../collections/issues","text!../templates/board.html", "./columnView","./sidebarView"], 
+define(["../collections/issues","text!../templates/board.html", "./columnView","./sidebarView","../events/postal"], 
        function (issues, template, columnView, sidebarView, postal) {
 
   var calculateTallest = function (){
@@ -34,6 +34,14 @@ define(["../collections/issues","text!../templates/board.html", "./columnView","
            this.user = params.user;
            this.repo = params.repo;
            this.params = params;
+           postal.subscribe("Opened.Issue", $.proxy(this.onOpened,this))
+           postal.subscribe("Closed.Issue", $.proxy(this.onClosed,this))
+        },
+        onOpened: function() {
+          this.resizeColumns();
+        },
+        onClosed: function() {
+          this.resizeColumns();
         },
         onfetch: function(data) {
           if (!data.labels.length) {
@@ -64,9 +72,12 @@ define(["../collections/issues","text!../templates/board.html", "./columnView","
            //$(".sidebar-wrapper").append(userFilter.render().el).show();
            $(".sidebar-wrapper").append(sidebar.render().el).show();
 
+           $('[rel~="twipsy"]').twipsy({live:true});
+           this.resizeColumns();
+        },
+        resizeColumns : function () {
            var tallest = calculateTallest();
            $("ul","#main-stage").css("min-height",tallest);
-           $('[rel~="twipsy"]').twipsy({live:true});
         },
         toggleDrawer : function (ev) {
 

@@ -21,6 +21,7 @@ define(["text!../templates/card.html","../models/card", "../events/postal"],func
     },
     onClosed: function(){
       this.remove();
+      postal.publish("Closed.Issue",{card: this});
     },
     render: function(){
 
@@ -53,6 +54,7 @@ define(["text!../templates/card.html","../models/card", "../events/postal"],func
       ev.preventDefault();
       this.issue.close({index: index});
       this.remove();
+      postal.publish("Closed.Issue",{card: this});
     },
     publishFilter: function() {
       var self = this;
