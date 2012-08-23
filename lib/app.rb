@@ -87,6 +87,8 @@ module Huboard
         user = payload["repository"]["owner"]["login"]
         repo = payload["repository"]["name"]
         hooks = ghee.repos(user, repo).hooks
+                                        .reject {|x| x["name"] != "web" }
+                                        .find_all {|x| ["config"]["url"].start_with? base_url}
         hub.fix_hooks user, repo, hooks
         puts "fixed hooks"
         return json({:message => "fixed hooks"})

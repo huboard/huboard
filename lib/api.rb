@@ -40,6 +40,10 @@ module Huboard
       json pebble.close_card params[:user], params[:repo], params[:issue]
     end
 
+    get '/:user/:repo/hooks' do
+      json :hooks => gh.repos(params[:user],params[:repo]).hooks
+    end
+
     get "/token" do
       return "User Token: #{encrypted_token}"
     end

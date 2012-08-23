@@ -124,7 +124,7 @@ module Stint
 
       hook_url = uri.to_s.gsub(uri.query,"")
 
-      return fix_hooks(user_name, repo, hooks.find_all{ |x| x["config"]["url"].start_with? hook_url}) 
+      return fix_hooks(user_name, repo, hooks.reject{ |x| x["name"] != "web" }.find_all{ |x| x["config"]["url"].start_with? hook_url}) 
     end
 
     def fix_hooks(user_name, repo, hooks)
