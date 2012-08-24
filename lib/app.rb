@@ -31,7 +31,7 @@ module Huboard
     end
 
     get '/' do 
-      return erb :home unless authenticated?
+      return erb :home, :layout => :marketing unless authenticated?
       protected!
       @repos = pebble.all_repos
       erb :index
