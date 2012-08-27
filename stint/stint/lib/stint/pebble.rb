@@ -5,6 +5,7 @@ require 'yaml'
 module Stint
   class Pebble
     attr_accessor :github
+    attr_accessor :ghee
 
     def build_board(user_name, repo)
       issues = get_issues(user_name, repo)
@@ -52,7 +53,8 @@ module Stint
     def board(user_name, repo)
         board = build_board(user_name, repo)
 
-        labels = github.labels(user_name,repo)
+        labels = @labels["#{user_name}:#{repo}"] ||= gh.repos(user_name, repo).labels
+
         labels
           .select{ |l| @link_pattern.match l["name"] }
           .each do |l|
@@ -81,7 +83,7 @@ module Stint
     end
 
     def get_issues(user_name, repo)
-      issues = github.get_issues user_name, repo
+      issues = @issues["#{user_name}:#{repo}"] ||= gh.repos(user_name, repo).issues(:direction => "asc").all
       issues.each do |issue|
         issue["current_state"] = current_state(issue)
         issue["_data"] = embedded_data issue["body"]
@@ -93,7 +95,7 @@ module Stint
     def reorder_issue(user_name, repo, number, index)
 
       post_data = {"number" => number}
-      issue = github.issue_by_id user_name, repo, number
+      issue = gh.repos(user_name, repo).issues(number)
       _data = embedded_data issue["body"]
       if _data.empty?
         post_data["body"] = issue["body"].concat "\r\n<!---\r\n@huboard:#{JSON.dump({:order => index.to_f})}\r\n-->\r\n" 
@@ -101,12 +103,13 @@ module Stint
         post_data["body"] = issue["body"].gsub /@huboard:.*/, "@huboard:#{JSON.dump(_data.merge({"order" => index.to_f}))}"
       end
 
-      github.update_issue user_name, repo, post_data
+      gh.repos(user_name, repo).issues(post_data["number"]).patch(post_data) #post_data == issue
     end
 
     def reorder_milestone(user_name, repo, number, index, status)
       post_data = {:number => number}
-      milestone = github.milestone user_name, repo, number
+
+      milestone = gh.repos(user_name, repo).milestones(number)
       _data = embedded_data milestone["description"]
       if _data.empty?
         post_data["description"] = milestone["description"].concat "\r\n<!---\r\n@huboard:#{JSON.dump({"status" => status,"order" => index.to_f})}\r\n-->\r\n" 
@@ -114,7 +117,7 @@ module Stint
         post_data["description"] = milestone["description"].gsub /@huboard:.*/, "@huboard:#{JSON.dump(_data.merge({"order" => index.to_f, "status" => status}))}"
       end
 
-      github.update_milestone user_name, repo, post_data
+      gh.repos(user_name, repo).milestones(post_data[:number]).patch(post_data)
     end
 
     def current_state(issue)
@@ -123,8 +126,8 @@ module Stint
     end
 
 
-    def labels(user_name, repo) 
-      response = github.labels(user_name, repo)
+    def labels(user_name, repo)
+      response = @labels["#{user_name}:#{repo}"] ||= gh.repos(user_name, repo).labels 
       labels = []
       response.each do |label|
         r = @column_pattern
@@ -136,16 +139,19 @@ module Stint
     end
 
     def create_board(user_name, repo, hook)
-      github.create_label user_name, repo, :name => "0 - Backlog", :color => "CCCCCC"
-      github.create_label user_name, repo, :name => "1 - Ready", :color => "CCCCCC"
-      github.create_label user_name, repo, :name => "2 - Working", :color => "CCCCCC"
-      github.create_label user_name, repo, :name => "3 - Done", :color => "CCCCCC"
+      _create_label(user_name, repo, "0 - Backlog")
+      _create_label(user_name, repo, "1 - Ready")
+      _create_label(user_name, repo, "2 - Working")
+      _create_label(user_name, repo, "3 - Done")
       create_hook user_name, repo, hook
     end
 
+    def _create_label(user_naem, repo, name)
+      gh.repos(user_name, repo).labels.create(:name => name, :color => "CCCCCC")
+    end
 
     def hook_exists(user_name, repo, token)
-      hooks = github.hooks user_name, repo
+      hooks = gh.repos(user_name, repo).hooks
 
       uri = URI.parse(token)
 
@@ -173,7 +179,7 @@ module Stint
     end
 
     def delete_hook(user_name, repo, hook)
-      github.delete_hook(user_name, repo, hook["id"])
+      gh.repos(user_name, repo).hooks(hook["id"]).destroy
     end
 
     def create_hook(user_name, repo, token)
@@ -188,7 +194,8 @@ module Stint
         events: ["issues"],
         active: true
       }
-      github.create_hook( user_name, repo, params).merge( { success: true, message: "hook created successfully"})
+
+      gh.repos(user_name, repo).hooks.create(params.merge( { success: true, message: "hook created successfully"}))
     end
 
     def push_card(user_name, repo, commit)
@@ -197,7 +204,7 @@ module Stint
       return "no match" unless match
       return "no match" unless /push|pushes|moves?/i.match( match[:command])  
 
-      issue = github.issue_by_id user_name, repo, match[:issue]
+      issue = gh.repos(user_name, repo).issues(match[:issue])
 
       #return issue
       state = current_state(issue)
@@ -205,7 +212,7 @@ module Stint
       sr = @column_pattern
       next_state = sr.nil? ? 0 : (sr[:id].to_i + 1)
 
-      labels = github.labels user_name, repo
+      labels = @labels["#{user_name}:#{repo}"] ||= gh.repos(user_name, repo).labels
 
       next_label = labels.find { |l| /#{next_state}\s*- *.+/.match(l["name"]) }
 
@@ -215,15 +222,15 @@ module Stint
 
       issue["labels"] = issue["labels"].delete_if { |l| l["name"] == state["name"] }
 
-      github.update_issue user_name, repo, {"number" => issue["number"],"labels" => issue["labels"]}
+      gh.repos(user_name, repo).issues(issue["number"]).patch({"number" => issue["number"],"labels" => issue["labels"]})
     end
 
     def move_card(user_name, repo, the_issue, index)
-      labels = github.labels user_name, repo
+      labels = @labels["#{user_name}:#{repo}"] ||= gh.repos(user_name, repo).labels
 
       new_state = labels.find { |l| /#{index}\s*- *.+/.match(l["name"]) }
 
-        issue = github.issue_by_id user_name, repo, the_issue["number"]
+      issue = gh.repos(user_name, repo).issues(the_issue["number"])
 
       state = current_state(issue)
 
@@ -231,8 +238,7 @@ module Stint
 
       issue["labels"] = issue["labels"].delete_if { |l| l["name"] == state["name"] }
 
-      github.update_issue user_name, repo, {"number" => issue["number"], "labels" => issue["labels"]}
-
+      gh.repos(user_name, repo).issues(issue["number"]).patch({"number" => issue["number"], "labels" => issue["labels"]})
     end
 
     def milestones(user_name, repo)
@@ -266,9 +272,9 @@ module Stint
 
 
     def all_repos
-      the_repos = github.repos
-      github.orgs.each do |org|
-        the_repos.concat(github.repos(org["login"]))
+      the_repos = gh.user.repos.all
+      gh.user.orgs.each do |org|
+        the_repos.concat(gh.orgs(org["login"]).repos)
       end
       the_repos.sort_by{|r| r["pushed_at"] || "1111111111111111"}.reverse
     end
@@ -279,7 +285,7 @@ module Stint
     end
 
     def self.deliver(payload)
-      consumers = @@sub
+      consumers = @@sub 
       r = /^(?<command>[A-Z]+) GH-(?<issue>[0-9]+)/
         payload["commits"].each do |c|
         match = r.match c["message"]
@@ -289,11 +295,14 @@ module Stint
         end
     end
 
-    def initialize(github)
+    def initialize(github, ghee)
       @github = github
+      @ghee = ghee
       @column_pattern = /(?<id>\d+) *- *(?<name>.+)/
       @priority_pattern = /(?<name>.+) - (?<id>\d+)/
       @link_pattern = /Link <=> (?<user_name>.*)\/(?<repo>.*)/
+
+      @labels = {}
     end
   end
 end

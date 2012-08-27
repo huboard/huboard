@@ -60,7 +60,7 @@ module Huboard
       end
 
       def pebble
-        @pebble ||= Stint::Pebble.new(github)
+        @pebble ||= Stint::Pebble.new(github, gh)
       end
 
       def gh(token = nil)
