@@ -9,18 +9,22 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="/scripts/bootstrap/bootstrap.min.js"></script>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/marketing.css">
   </head>
   <body>
     <div class="navbar navbar-static-top">
       <div class="navbar-inner">
         <div class="container">
           <a class="brand" href="/">huboard</a>
+          <ul class="nav pull-right">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#blog">Blog</a></li>
+            <li><a href="#about">About Us</a></li>
+          </ul>
         </div>
       </div>
     </div>
-    <div class="container" id="main-stage">
       <%= yield %>
-    </div>
 
   </body>
   <script type="text/javascript">
