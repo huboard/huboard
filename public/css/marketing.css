@@ -5,7 +5,7 @@
 	   url("../fonts/proximanova-regular-webfont.woff") format('woff'),
 	   url("../fonts/proximanova-regular-webfont.ttf") format('truetype');
 }
-
+  
 body {
   font-family: "ProximaNovaRegular", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
@@ -20,6 +20,11 @@ body {
   font-weight: bold;
 
   font-family: "ProximaNovaRegular", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+.navbar .brand:hover {
+  color: rgba(255,255,255,0.3);
+  text-shadow: -1px -1px rgba(0,0,0,0.7);
+
 }
 
 .navbar .nav > li > a {
@@ -37,11 +42,35 @@ body {
 .preamble {
   background-color: #353535;
   color: #676767;
-  padding: 60px 0px;
+  color: rgba(255,255,255,0.3);
+  text-shadow: -1px -1px rgba(0,0,0,0.4);
+  padding-top: 60px;
+  margin-bottom: 100px;
 }
 
 .preamble h1 {
   color: #f8f8f8;
+  color: rgba(248,248,248,0.9);
+  text-shadow: -1px -1px rgba(0,0,0,0.1);
+}
+
+.preamble .btn {
+
+  margin: 0 auto;
+  width: 200px;
+  display:block;
+  padding: 20px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.preamble .sign-up {
+  margin-top: 130px;
+}
+
+.features {
+
+  text-align: center;
 }
 
 
