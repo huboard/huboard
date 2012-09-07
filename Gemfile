@@ -13,4 +13,6 @@ group :development do
   gem 'watchr'
   gem 'shotgun'
   gem 'foreman'
+  gem 'sass'
+  gem 'bourbon'
 end
