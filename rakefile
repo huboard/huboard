@@ -1,0 +1,14 @@
+require 'sass'
+require 'bourbon'
+
+desc "rebuild css files"
+task :css do 
+  Dir.glob("**/s{a,c}ss") { |d| Sass.load_paths << d }
+
+  Dir.glob("**/s{a,c}ss") do |d|
+    Dir.glob("#{d}/**/*.s[ac]ss").reject {|x| File.basename(x).start_with?"_"}.each do |sass|
+      cssfile = "#{d}/../#{File.basename(sass,".*")}.min.css"
+      Sass.compile_file sass, cssfile, {style: :compressed }
+    end
+  end
+end
