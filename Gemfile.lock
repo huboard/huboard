@@ -7,6 +7,8 @@ GEM
   remote: http://rubygems.org/
   specs:
     addressable (2.3.2)
+    bourbon (2.1.1)
+      sass (>= 3.1)
     daemons (1.1.9)
     encryptor (1.1.3)
     eventmachine (1.0.0)
@@ -42,6 +44,7 @@ GEM
     rdiscount (1.6.8)
     rest-client (1.6.7)
       mime-types (>= 1.16)
+    sass (3.2.1)
     shotgun (0.9)
       rack (>= 1.0)
     sinatra (1.3.3)
@@ -75,11 +78,13 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bourbon
   encryptor
   foreman
   ghee
   rack-no-www
   rdiscount
+  sass
   shotgun
   sinatra
   sinatra-content-for (~> 0.1.0)
