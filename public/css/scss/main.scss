@@ -11,6 +11,18 @@ body {
   margin-top: 50px;
 }
 
+.container-fluid {
+  position:relative;
+  > .sidebar {
+     width: 230px;
+     position: absolute;
+     left: 10px;
+  }
+  > .content {
+     margin-left: 240px;
+  }
+}
+
 ul.repos, ul.repos li {
   list-style: none;
 }

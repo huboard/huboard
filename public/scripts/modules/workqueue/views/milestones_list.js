@@ -44,7 +44,7 @@ define(["./milestoneView"],function(milestoneView,milestones){
         $("ul",self.el).append(view.render().el);
         view.delegateEvents();
       });
-      $("[rel~='twipsy']").twipsy({live:true})
+      $("[rel~='twipsy']").tooltip({live:true})
     },
     fullStop: function(ev, ui) {
      $(ui.item).removeClass("ui-state-dragging");

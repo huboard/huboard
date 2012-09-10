@@ -72,7 +72,7 @@ define(["../collections/issues","text!../templates/board.html", "./columnView","
            //$(".sidebar-wrapper").append(userFilter.render().el).show();
            $(".sidebar-wrapper").append(sidebar.render().el).show();
 
-           $('[rel~="twipsy"]').twipsy({live:true});
+           $('[rel~="twipsy"]').tooltip({live:true});
            this.resizeColumns();
         },
         resizeColumns : function () {
