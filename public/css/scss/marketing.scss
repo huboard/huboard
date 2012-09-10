@@ -1,4 +1,7 @@
 @import "bourbon/bourbon";
+@import "buttons";
+@import "scroll";
+@import "topbar";
 
 @font-face {
   font-family: 'ProximaNovaRegular';
@@ -7,40 +10,13 @@
   url("../font/proximanova-regular-webfont.woff") format('woff'),
   url("../font/proximanova-regular-webfont.ttf") format('truetype');
 }
-
-body {
-  font-family: "ProximaNovaRegular", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, "Lucida Grande", sans-serif;
-}
-
-.navbar .brand {
-
-  padding: 20px;
-
-  color: rgba(255,255,255,0.3);
-  text-shadow: -1px -1px rgba(0,0,0,0.4);
-
-  font-family: "ProximaNovaRegular", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, "Lucida Grande", sans-serif;
-  font-weight: bold;
-  font-size: 40px;
-
-  &:hover {
-    color: rgba(255,255,255,0.3);
-    text-shadow: -1px -1px rgba(0,0,0,0.7);
-  }
-
-}
-
-.navbar .nav > li > a {
-  font-family: "ProximaNovaRegular", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, "Lucida Grande", sans-serif;
-  padding: 20px;
-}
-
 .navbar .navbar-inner {
   padding-top: 10px;
   padding-bottom: 20px;
   background: #f8f8f8;
   box-shadow: none;
 }
+
 
 .preamble {
   background-color: #353535;
@@ -54,7 +30,8 @@ body {
     color: rgba(248,248,248,0.9);
     text-shadow: -1px -1px rgba(0,0,0,0.1);
   }
-  .btn {
+  .hb-button {
+
 
     margin: 0 auto;
     width: 200px;
@@ -62,6 +39,7 @@ body {
     padding: 20px;
     font-size: 24px;
     font-weight: bold;
+    
   }
   .sign-up {
     margin-top: 80px;

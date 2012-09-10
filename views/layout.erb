@@ -2,23 +2,22 @@
 <html>
   <head>
     <title><% yield_content :title %>Huboard</title>
-    <link rel="shortcut icon" type="image/png" href="/images/favicon.png" />
+    <link rel="shortcut icon" type="image/png" href="/img/favicon.png" />
 
     <!-- This is a special version of jQuery with RequireJS built-in -->
     <script src="/scripts/firebugx.js" type="text/javascript" charset="utf-8"></script>
     <script src="/scripts/require.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="/scripts/underscore.js" type="text/javascript" charset="utf-8"></script>
     <script src="/scripts/backbone.js" type="text/javascript" charset="utf-8"></script>
     <script src="/scripts/postal.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="/scripts/module-loader.js"></script>
 
-    <script src="/scripts/bootstrap/bootstrap-dropdown.js"></script>
-    <script src="/scripts/bootstrap/bootstrap-twipsy.js"></script>
+    <script src="/scripts/bootstrap/bootstrap.min.js"></script>
     
-    <link rel="stylesheet" href="/styles/bootstrap.min.css">
-    <link rel="stylesheet" href="/styles/main.css" type="text/css" media="screen" charset="utf-8">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/main.min.css" type="text/css" media="screen" charset="utf-8">
         <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -35,29 +34,25 @@
 </script>
   </head>
   <body>
-    <div class="topbar-wrapper" style="z-index: 5;">
-    <div class="topbar" data-dropdown="dropdown">
-      <div class="topbar-inner">
-        <div class="container-fluid">
-          <h3><a href="/">Huboard</a></h3>
-          <ul class="nav">
-            <% yield_content :navigation %>
-          </ul>
-          <ul class="nav secondary-nav">
-            <% yield_content :sub_navigation %>
-            <% if !@user.nil?  %>
-            <li class="dropdown">
-            <a href="#" class="dropdown-toggle"><%= @user.login %></a>
+    <div class="navbar navbar-static-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">huboard</a>
+            <ul class="nav">
+              <% yield_content :navigation %>
+            </ul>
+            <ul class="nav pull-right">
+              <% yield_content :sub_navigation %>
+              <li class="dropdown">
+              <a href="#" class="dropdown-toggle"><%= @user.login %></a>
               <ul class="dropdown-menu">
                 <li><a href="/logout">Logout</a></li>
               </ul>
-            </li>
-          <% end %>
-          </ul>
+              </li>
+            </ul>
         </div>
-      </div><!-- /topbar-inner -->
-    </div><!-- /topbar -->
-  </div>
+      </div>
+    </div>
     <div class="container" id="main-stage">
       <%= yield %>
     </div>

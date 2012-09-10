@@ -1,0 +1,10 @@
+@import "bourbon/bourbon";
+
+.hb-button {
+  @include button;
+  text-align: center;
+  &:hover {
+     color:#FFF;
+     text-decoration: none;
+  }
+}

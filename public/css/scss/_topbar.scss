@@ -1,0 +1,29 @@
+
+body {
+  font-family: "ProximaNovaRegular", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+
+.navbar .brand {
+
+  padding: 20px;
+
+  color: rgba(255,255,255,0.3);
+  text-shadow: -1px -1px rgba(0,0,0,0.4);
+
+  font-family: "ProximaNovaRegular", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: bold;
+  font-size: 40px;
+
+  &:hover {
+    color: rgba(255,255,255,0.3);
+    text-shadow: -1px -1px rgba(0,0,0,0.7);
+  }
+
+}
+
+.navbar .nav > li > a {
+  font-family: "ProximaNovaRegular", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  padding: 20px;
+}
+
+

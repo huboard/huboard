@@ -1,0 +1,21 @@
+@mixin scroll {
+
+  &::-webkit-scrollbar {
+
+    height:16px;
+    width:16px;
+  }
+  &::-webkit-scrollbar-thumb {
+
+    background-color: rgba(0,0,0,0.3);
+  }
+  &::-webkit-scrollbar-corner {
+    background-color: transparent;
+  }
+  &::-webkit-scrollbar-button {
+    height:0px;
+    width:0px;
+    display:none;
+  }
+
+}
