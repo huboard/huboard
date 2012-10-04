@@ -94,7 +94,7 @@ Open your browser to http://huboard.dev/board
 
 # Please use the latest stable tag if you are hosting your own instance of huboard.
 
-![huboard.com](http://huboard.com) is fully operational and free. If you feel the need to host your own instance
+[huboard.com](http://huboard.com) is fully operational and free. If you feel the need to host your own instance
 please use the latest stable tag. The master branch doesn't always reflect the deployed version on huboard.com and
 very difficult to support and troubleshoot if you run into any issues.
 
