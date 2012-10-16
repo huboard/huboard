@@ -1,5 +1,7 @@
 require 'time'
 require 'json'
+require 'yaml'
+
 module Stint
   class Pebble
     attr_accessor :github
@@ -14,12 +16,37 @@ module Stint
         label
       end
 
-      all_labels[0][:issues] = (issues_by_label["__nil__"] || []).concat(all_labels[0][:issues]).sort_by { |i| i["_data"]["order"] || i["number"].to_f} unless all_labels.empty?
+      if settings(user_name, repo)[:show_all]
+        all_labels[0][:issues] = (issues_by_label["__nil__"] || []).concat(all_labels[0][:issues]).sort_by { |i| i["_data"]["order"] || i["number"].to_f} unless all_labels.empty?
+      end
 
       {
         labels: all_labels,
         milestones: milestones(user_name, repo)
       }
+    end
+
+    def settings(user_name, repo)
+      defaults = {
+        :show_all => true
+      }
+
+      labels = github.labels user_name, repo
+
+      r = /@huboard:(.*)/
+      settings = labels
+                  .select{|l| r.match l["name"]}
+                  .map do |l|
+                    match = r.match l["name"]
+                    begin
+                      YAML.load(match[1])
+                    rescue
+                      return {}
+                    end
+                  end.reduce(:merge)
+
+      defaults.merge(settings || {})
+
     end
 
     def board(user_name, repo)
