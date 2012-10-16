@@ -23,6 +23,30 @@ Example:
 
 The number represents the index of the column and the will be the column header
 
+How to configure huboard
+-------------------------
+* * * 
+
+Huboard now provides the ability to override some global default
+settings with labels
+
+```
+    defaults = {
+       :show_all => true #=> show all open issues, including issues with
+no labels
+    }
+
+
+```
+
+To override add labels to your repository with the following patterm
+
+>    @huboard: <yaml>
+
+Example:
+
+>    @huboard: :show_all: false
+
 
 How to link repositories together
 --------------------------
