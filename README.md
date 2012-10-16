@@ -32,8 +32,7 @@ settings with labels
 
 ```
     defaults = {
-       :show_all => true #=> show all open issues, including issues with
-no labels
+       :show_all => true #=> show all open issues, including issues with no labels
     }
 
 
@@ -41,7 +40,7 @@ no labels
 
 To override add labels to your repository with the following patterm
 
->    @huboard: <yaml>
+>    @huboard: `yaml`
 
 Example:
 
