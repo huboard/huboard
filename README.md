@@ -46,6 +46,8 @@ Example:
 
 >    @huboard: :show_all: false
 
+See issue [#89](https://github.com/rauhryan/huboard/issues/89)
+
 
 How to link repositories together
 --------------------------
