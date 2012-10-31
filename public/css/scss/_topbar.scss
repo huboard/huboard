@@ -3,9 +3,15 @@ body {
   font-family: "ProximaNovaRegular", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
 
+.navbar .navbar-inner {
+  background: #f8f8f8;
+  box-shadow: none;
+}
 .navbar .brand {
 
-  padding: 20px;
+  line-height: 90px;
+  padding-top: 0;
+  padding-bottom: 0;
 
   color: rgba(255,255,255,0.3);
   text-shadow: -1px -1px rgba(0,0,0,0.4);
@@ -23,7 +29,10 @@ body {
 
 .navbar .nav > li > a {
   font-family: "ProximaNovaRegular", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, "Lucida Grande", sans-serif;
-  padding: 20px;
+  font-size: 18px;
+  line-height: 90px;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 

@@ -67,7 +67,7 @@ define(["../collections/issues","text!../templates/board.html", "./columnView","
            });
 
            $("#stage").append(board).find(".toggle-drawer").show();
-           $("#drawer","#main-stage").append(noneBoard.removeClass("drop-shadow lifted").addClass("underneath"));
+           $("#drawer","#main-stage").append(noneBoard);
 
            //$(".sidebar-wrapper").append(userFilter.render().el).show();
            $(".sidebar-wrapper").append(sidebar.render().el).show();

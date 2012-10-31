@@ -1,14 +1,13 @@
 @import url('../font/iconic.css');
 @import "topbar";
-html {height:100%;}
-body {
-  min-height:100%;
-  background-color: #FAF0d9;
-}
+@import "repos";
+@import "milestones";
+
 .hide {display:none;}
 
 #main-stage  { 
   margin-top: 50px;
+  margin-bottom: 50px;
 }
 
 .container-fluid {
@@ -23,188 +22,21 @@ body {
   }
 }
 
-ul.repos, ul.repos li {
-  list-style: none;
-}
-ul.repos li {
-  margin: 0 0 2px 0;
-  position: relative;
-  overflow: hidden;
-  border-bottom: 1px solid #ccc;
-}
-ul.repos li:last-child {
-  border:0;
-}
-ul.repos li a {
- float:right;
- padding-top: 30px;
- position:relative;
- margin: 0 3px;
-}
-ul.repos li > span a {
-  float:none;
-}
-ul.repos li a span {
- color: gray;
-}
-ul.repos li > span {
-  font-size:1.4em;
-}
-ul.repos li a strong {
-  font-size:2em;
-  position:absolute;
-  top:3px;
-  left:10%;
-}
-ul.repos li a.btn {
- padding-top: 7px;
- margin-top:7px;
-}
-
-#workqueue > div {
-
-  margin: 20px 0;
-}
- ul.milestones .ui-sortable-placeholder {
-   background:rgba(0,0,0,0.1);
-   list-style: none;
-   padding: 20px 5px 15px 5px;
-   margin: 10px 0;
-   border-radius: 4px;
- }
-
- li.ui-state-dragging {
-   border-radius: 4px;
-   background:rgba(0,104,215,0.25);
- }
-
-ul.milestones {
-   list-style: none;
-   counter-reset: milestone;
-   margin:0;
-   padding: 10px 2px;
-   padding-top: 0px;
-}
-
-ul.milestones li {
-  margin: 0 0 4px 0;
-  position:relative;
-  cursor:move;
-  padding-left:10px;
-}
-ul.milestones li a {
-   display:block;
-   padding: 7px;
-   margin-left:20px;
-}
-ul.milestones li:before {
-  content: counter(milestone);
-  counter-increment: milestone;
-  background: #CCC;
-  border-radius: 20px;
-  height: 20px;
-  width: 20px;
-  margin: 0px;
-  text-align: center;
-  vertical-align: middle;
-  position: absolute;
-  top: 7px;
-  box-shadow: 0px 1px 2px #333;
-  color: #333;
-  cursor: move;
-}
-ul.milestones li a:first-letter {
-  text-transform:capitalize;
-}
-ul.milestones li a em {
-  float:right;
-  font-style: normal;
-  font-weight: normal;
-}
-
-ul.milestones li div {
-  position:absolute;
-  top:0;
-  left:30%;
-  width:50%;
-  background:#ccc;
-  border-radius:4px;
-}
-
-ul.milestones li div span {
-  display: block;
-  background: rgba(0, 0, 0, 0.3);
-  padding: 7px 0;
-  text-indent: 9999em;
-  border-radius: 4px 0 0 4px;
-  -moz-border-radius: 4px 0 0 4px;
-}
 
 .drop-shadow {
   position:relative;
   padding:1em; 
   background:#fff;
-  -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
-  -moz-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
-  box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
-}
-
-.underneath:before,
-.underneath:after,
-.drop-shadow:before,
-.drop-shadow:after {
-  content:"";
-  position:absolute; 
-  z-index:-2;
-}
-
-.underneath {
-  position:relative;
-  padding:1em; 
-  background:#fff;
-  -webkit-box-shadow:-1px 1px 1px rgba(0, 0, 0, 0.3), -2px 0 4px rgba(0, 0, 0, 0.1) inset;
-  -moz-box-shadow:-1px 1px 1px rgba(0, 0, 0, 0.3), -2px 0 4px rgba(0, 0, 0, 0.1) inset;
-  box-shadow:-1px 1px 1px rgba(0, 0, 0, 0.3), -2px 0 4px rgba(0, 0, 0, 0.1) inset;
-}
-
-/* Lifted corners */
-
-.lifted {
-  -moz-border-radius:4px; 
-  border-radius:4px;
-}
-
-.lifted:before,
-.lifted:after { 
-  bottom:15px;
-  left:10px;
-  width:50%;
-  height:20px;
-  max-width:300px;
-  -webkit-box-shadow:0 15px 10px rgba(0, 0, 0, 0.7);   
- /* -moz-box-shadow:0 15px 10px rgba(0, 0, 0, 0.7);
-  box-shadow:0 15px 10px rgba(0, 0, 0, 0.7);        */
-  -webkit-transform:rotate(-3deg);    
-  /*-moz-transform:rotate(-3deg);   
-  -ms-transform:rotate(-3deg);   
-  -o-transform:rotate(-3deg);    */
-  transform:rotate(-3deg);
-}
-
-.lifted:after {
-  right:10px; 
-  left:auto;
-  -webkit-transform:rotate(3deg);   
-  -moz-transform:rotate(3deg);  
-  -ms-transform:rotate(3deg);  
-  -o-transform:rotate(3deg);
-  transform:rotate(3deg);
+  -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 4px rgba(0, 0, 0, 0.1) inset;
+  -moz-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 4px rgba(0, 0, 0, 0.1) inset;
+  box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 4px rgba(0, 0, 0, 0.1) inset;
 }
 
 
 table {width:100%;}
 table td {
    vertical-align: top;
+   padding: 0px 5px;
  }
  table h3 {
    text-align: center;
