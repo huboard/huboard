@@ -1,0 +1,17 @@
+body, html {
+  height: 100%;
+
+}
+#wrapper {
+   height: auto !important;
+   height: 100%;
+   min-height: 100%;
+
+   margin-bottom: -400px;
+}
+
+
+
+#footer, #footer-pusher {
+   min-height: 400px;
+}

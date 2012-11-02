@@ -2,6 +2,7 @@
 @import "buttons";
 @import "scroll";
 @import "topbar";
+@import "footer";
 
 @font-face {
   font-family: 'ProximaNovaRegular';
@@ -9,6 +10,14 @@
   src: local('ProximaNovaRegular'),
   url("../font/proximanova-regular-webfont.woff") format('woff'),
   url("../font/proximanova-regular-webfont.ttf") format('truetype');
+}
+
+@font-face {
+  font-family: 'ProximaNovaBold';
+  src: url("../font/proximanova-bold-webfont.eot");
+  src: local('ProximaNovaBold'),
+  url("../font/proxima_nova_bold-webfont.woff") format('woff'),
+  url("../font/proxima_nova_bold-webfont.ttf") format('truetype');
 }
 
 
@@ -23,6 +32,9 @@
     color: #f8f8f8;
     color: rgba(248,248,248,0.9);
     text-shadow: -1px -1px rgba(0,0,0,0.1);
+  }
+  h1, h2 {
+    font-family: "ProximaNovaBold", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, "Lucida Grande", sans-serif;
   }
   .hb-button {
 
@@ -41,12 +53,17 @@
 }
 
 .features {
+  h3 {
+    font-family: "ProximaNovaBold", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  }
 
-  text-align: center;
   padding-bottom: 100px;
 }
 
 .testimonials {
+  h3 {
+    font-family: "ProximaNovaBold", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  }
 
   padding-top: 100px;
   background-color: #f5f5f5;
