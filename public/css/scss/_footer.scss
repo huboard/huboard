@@ -1,3 +1,4 @@
+$footer-height: 60px;
 body, html {
   height: 100%;
 
@@ -7,11 +8,18 @@ body, html {
    height: 100%;
    min-height: 100%;
 
-   margin-bottom: -400px;
+   margin-bottom: -$footer-height;
 }
 
 
 
 #footer, #footer-pusher {
-   min-height: 400px;
+   min-height: $footer-height;
+}
+#footer {
+
+  background-color: #353535;
+  color: #676767;
+  color: rgba(255,255,255,0.3);
+  text-shadow: -1px -1px rgba(0,0,0,0.4);
 }
