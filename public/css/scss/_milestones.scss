@@ -1,6 +1,5 @@
 #workqueue > div {
-
-  margin: 20px 0;
+  margin:0 0 40px 0;
 }
  ul.milestones .ui-sortable-placeholder {
    background:rgba(0,0,0,0.1);
@@ -72,7 +71,7 @@ ul.milestones li div span {
   display: block;
   background: rgba(0, 0, 0, 0.3);
   padding: 7px 0;
-  text-indent: 9999em;
+  text-indent: -9999em;
   border-radius: 4px 0 0 4px;
   -moz-border-radius: 4px 0 0 4px;
 }

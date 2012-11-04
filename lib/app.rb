@@ -30,13 +30,6 @@ module Huboard
       end
     end
 
-    get '/' do 
-      return erb :home, :layout => :marketing unless authenticated?
-      protected!
-      @repos = pebble.all_repos
-      erb :index
-    end
-
     get '/login' do
       protected!
       redirect '/'
@@ -47,8 +40,19 @@ module Huboard
       logout!
       redirect '/'
     end
-    get '/:user/?' do 
 
+    get '/' do 
+      return erb :home, :layout => :marketing unless authenticated?
+      protected!
+      @repos = pebble.all_repos
+      erb :index
+    end
+
+    get '/:user/?' do 
+      protected!
+      @repos = pebble.all_repos.select {|r| r["owner"]["login"] == params[:user]}
+      @filtered = params[:user]
+      erb :index
     end
 
     get '/:user/:repo/milestones' do 

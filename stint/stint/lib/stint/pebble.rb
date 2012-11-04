@@ -264,6 +264,10 @@ module Stint
       github.close_issue(user_name, repo, the_issue)
     end
 
+    def repos(user_name = nil)
+      repos = github.repos user_name
+      repos.sort_by{|r| r["pushed_at"] || "1111111111111111"}.reverse 
+    end
 
     def all_repos
       the_repos = github.repos

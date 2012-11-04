@@ -1,10 +1,18 @@
 <div>
+  <ul class="breadcrumb">
+    <% if (@filtered.nil?) %>
+      <li class="active">Repos</li>
+    <% else %>
+      <li><a href="/">Repos</a> <span class="divider">/</span></li>
+      <li class="active"><%= @filtered %></li>
+    <% end %>
+</ul>
   <ul class="repos drop-shadow ">
     <% @repos.each do |repo| %>
       <li class="repo">
       <a href="<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/milestones" %>"><span>milestones</span></a> 
       <a class="board" href="<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/board" %>"><span>open issues</span><strong><%=repo["open_issues"]%></strong></a> 
-      <span><a target="_blank" href='<%= "https://github.com/#{repo["owner"]["login"]}" %>'><%= repo["owner"]["login"] %></a> / <a target="_blank" href='<%= "https://github.com/#{repo["owner"]["login"]}/#{repo["name"]}" %>'><%= repo["name"] %></a></span>
+      <span><a href='<%= "/#{repo["owner"]["login"]}" %>'><%= repo["owner"]["login"] %></a> / <a target="_blank" href='<%= "https://github.com/#{repo["owner"]["login"]}/#{repo["name"]}" %>'><%= repo["name"] %></a></span>
       </li>
     <% end %>
   </ul>
