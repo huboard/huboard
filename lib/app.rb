@@ -47,6 +47,9 @@ module Huboard
       logout!
       redirect '/'
     end
+    get '/:user/?' do 
+
+    end
 
     get '/:user/:repo/milestones' do 
       @parameters = params
