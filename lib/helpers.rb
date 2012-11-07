@@ -63,6 +63,10 @@ module Huboard
         @pebble ||= Stint::Pebble.new(github)
       end
 
+      def h(input = "")
+        ERB::Util.html_escape input
+      end
+
       def gh(token = nil)
         @gh ||= Ghee.new(:access_token => token || user_token)
       end

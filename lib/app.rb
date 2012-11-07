@@ -18,6 +18,11 @@ module Huboard
       protected! unless PUBLIC_URLS.include? request.path_info
     end
 
+    before do
+      params[:user] = h params[:user] || ""
+      params[:repo] = h params[:repo] || ""
+    end
+
     helpers do
       def protected! 
         return current_user if authenticated?
