@@ -277,22 +277,6 @@ module Stint
       the_repos.sort_by{|r| r["pushed_at"] || "1111111111111111"}.reverse
     end
 
-    def self.register(command, &block)
-      @@sub ||= {}
-      @@sub[command] = block
-    end
-
-    def self.deliver(payload)
-      consumers = @@sub
-      r = /^(?<command>[A-Z]+) GH-(?<issue>[0-9]+)/
-        payload["commits"].each do |c|
-        match = r.match c["message"]
-        next if r.match match.nil?
-        next unless consumers.has_key? match[:command]
-        consumers[match[:command]].call payload, match[:issue] 
-        end
-    end
-
     def initialize(github)
       @github = github
       @column_pattern = /(?<id>\d+) *- *(?<name>.+)/

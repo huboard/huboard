@@ -7,9 +7,9 @@
       <li> Working </li>
       <li> Done </li>
     </ol>
-    <form action="/<%=@parameters[:user]%>/<%=@parameters[:repo]%>/board/create" method="post">
+    <form action="/<%= h @parameters[:user]%>/<%= h @parameters[:repo]%>/board/create" method="post">
       <input class="btn primary" type="submit" value="Do it for me!"/>
-      <a href="https://github.com/<%= @parameters[:user] %>/<%= @parameters[:repo]%>/issues" target="_blank" >No thanks, take me to github</a>
+      <a href="https://github.com/<%= h @parameters[:user] %>/<%= h @parameters[:repo]%>/issues" target="_blank" >No thanks, take me to github</a>
     </form>
   </div>
 

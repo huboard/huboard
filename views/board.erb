@@ -5,10 +5,10 @@
 <% content_for :navigation do %>
 
   <li>
-  <a href="/<%=@parameters[:user]%>/<%=@parameters[:repo]%>/milestones">Milestones</a>
+  <a href="/<%= h @parameters[:user]%>/<%= h @parameters[:repo]%>/milestones">Milestones</a>
   </li>
   <li class="active">
-  <a href="/<%=@parameters[:user]%>/<%=@parameters[:repo]%>/board">Tasks</a>
+  <a href="/<%= h @parameters[:user]%>/<%= h @parameters[:repo]%>/board">Tasks</a>
   </li>
 
 <% end %>
@@ -18,4 +18,4 @@
   <div class="sidebar-wrapper drop-shadow lifted hide" > </div>
 <% end %>
 
-<% content_for :title do %><%=@parameters[:repo]%> :: <% end %>
+<% content_for :title do %><%= h @parameters[:repo]%> :: <% end %>

@@ -22,6 +22,9 @@ define(["socket"],function(socket){
        postal.channel(channel).publish(payload);
      },
      socket: function (channel, event, callback) {
+         if(!socket) {
+          return;
+         }
          var theChannel =  postal.channel(channel);
 
         postal.channel(event).subscribe(callback);

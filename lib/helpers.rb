@@ -31,6 +31,21 @@ module Huboard
         RUBY
       end
     end
+    class SimpleCache
+      def read(key)
+        if cached = self[key]
+          Marshal.load(cached)
+        end
+      end
+
+      def write(key, data)
+        self[key] = Marshal.dump(data)
+      end
+
+      def fetch(key)
+        read(key) || yield.tap { |data| write(key, data) }
+      end
+    end
 
     module Helpers
       def encrypted_token
@@ -55,8 +70,12 @@ module Huboard
         !!user_token
       end
 
+      def cache
+         @cache ||= SimpleCache.new
+      end
+
       def github
-        @github ||= Stint::Github.new(gh)
+        @github ||= Stint::Github.new(gh) { |conn| conn.use FaradayMiddleware::Caching, cache }
       end
 
       def pebble

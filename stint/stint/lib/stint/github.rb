@@ -4,8 +4,6 @@ module Stint
 
     def initialize(gh)
       @gh = gh
-      @issues = {}
-      @labels = {}
     end
 
     def gh
@@ -62,7 +60,7 @@ module Stint
     end
 
     def get_issues(user_name, repo)
-      @issues["#{user_name}:#{repo}"] ||= gh.repos(user_name, repo).issues(:direction => "asc").all
+      gh.repos(user_name, repo).issues(:direction => "asc").all
     end
 
     def issue_by_id(user_name, repo, id)
@@ -83,7 +81,7 @@ module Stint
     end
 
     def labels(user_name, repo)
-      @labels["#{user_name}:#{repo}"] ||= gh.repos(user_name, repo).labels
+      gh.repos(user_name, repo).labels
     end
 
   end

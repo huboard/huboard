@@ -13,6 +13,12 @@
         });
 
       </script>
+    <% else %>
+      <script>
+        define("socket",function() {
+          return null;
+        });
+      </script>
     <% end %>
     <script src="/scripts/firebugx.js" type="text/javascript" charset="utf-8"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
@@ -39,7 +45,7 @@
             <ul class="nav pull-right">
               <% yield_content :sub_navigation %>
               <li class="dropdown">
-              <a href="#" class="dropdown-toggle"><%= @user.login %></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= h @user.login %><b class='caret'></b></a>
               <ul class="dropdown-menu">
                 <li><a href="/logout">Logout</a></li>
               </ul>
