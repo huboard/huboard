@@ -1,11 +1,13 @@
-define(["../events/postal"], function (postal) {
+define(["../events/postal","./filterView"], function (postal, filterView) {
 
   return Backbone.View.extend( { 
     tagName: "ul",
     className: "filters",
     initialize: function (params) {
+      console.log("sidebar",params);
       this.milestones = params.data.milestones;
       this.login = params.params.login;
+      this.labels = params.data.other_labels;
     },
     render: function () {
       var $this = $(this.el),
@@ -50,7 +52,10 @@ define(["../events/postal"], function (postal) {
           if (active) {clear.show();}
         });
       });
-
+      var labels = _.map(this.labels, function(label) {
+          return new filterView({color: label.color, name: label.name, condition: function (issue) { return _.any(issue.labels, function(l){ return l.name === label.name;})}}).render().el;
+      });
+      $this.append(labels);
       return this;
     }
   });

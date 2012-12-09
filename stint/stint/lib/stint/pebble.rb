@@ -22,7 +22,8 @@ module Stint
 
       {
         labels: all_labels,
-        milestones: milestones(user_name, repo)
+        milestones: milestones(user_name, repo),
+        other_labels: github.labels(user_name, repo).reject { |l| @huboard_patterns.any?{|p| p.match(l["name"]) } }
       }
     end
 
@@ -33,7 +34,7 @@ module Stint
 
       labels = github.labels user_name, repo
 
-      r = /@huboard:(.*)/
+      r = @settings_pattern
       settings = labels
                   .select{|l| r.match l["name"]}
                   .map do |l|
@@ -71,6 +72,7 @@ module Stint
                   label[:issues] = label[:issues].concat(linked_issues).sort_by { |i| i["_data"]["order"] || i["number"].to_f}
                 end 
                 board[:milestones].concat(linked_board[:milestones]).sort_by { |m| m["_data"]["order"] || m["number"].to_f}
+                board[:other_labels].concat(linked_board[:other_labels])
 
               rescue
                 puts "Warning: Unable to link board: #{user}, #{repo}"
@@ -86,6 +88,7 @@ module Stint
         issue["current_state"] = current_state(issue)
         issue["_data"] = embedded_data issue["body"]
         issue["repo"] = {owner: {login:user_name},name: repo}
+        issue["other_labels"] = issue["labels"].reject {|l| @huboard_patterns.any? {|p| p.match(l["name"])}}
       end
       issues.sort_by { |i| i["_data"]["order"] || i["number"].to_f}
     end
@@ -280,8 +283,9 @@ module Stint
     def initialize(github)
       @github = github
       @column_pattern = /(?<id>\d+) *- *(?<name>.+)/
-      @priority_pattern = /(?<name>.+) - (?<id>\d+)/
       @link_pattern = /Link <=> (?<user_name>.*)\/(?<repo>.*)/
+      @settings_pattern = /@huboard:(.*)/
+      @huboard_patterns = [@column_pattern, @link_pattern, @settings_pattern]
     end
   end
 end

@@ -6,8 +6,11 @@ define(["text!../templates/card.html","../models/card", "../events/postal"],func
       _.bind(this,'moved',this.moved);
       _.bind(this,'drop',this.drop);
       postal.subscribe("Filter.*", $.proxy(this.filter, this));
+      postal.subscribe("XFilter", $.proxy(this.xfilter, this));
       postal.socket(params.user + "/" + params.repo,"Moved." + params.issue.number, $.proxy(this.onMoved,this));
       postal.socket(params.user + "/" + params.repo,"Closed." + params.issue.number, $.proxy(this.onClosed,this));
+
+      this.filtersHash = {};
     },
     events: {
       "moved" : "moved",
@@ -65,6 +68,28 @@ define(["text!../templates/card.html","../models/card", "../events/postal"],func
     },
     filter: function (shouldFilter) {
       $(this.el).toggle(shouldFilter(this.issue.attributes));
+    },
+    xfilter: function(message){
+      var self = this;
+
+      console.log("filter", message);
+
+      this.filtersHash[message.id] = message;
+      var filters = [];
+      for(var key in this.filtersHash) {
+          filters.push(this.filtersHash[key]);
+      }
+      var fade = _.filter(filters,function(f){ return f.state === 1;});
+      var hide = _.filter(filters,function(f){ return f.state === 2;});
+      if(_.any(hide,function(f){ return !f.condition(self.issue.attributes); })){
+         $(self.el).fadeOut(250);
+         return;
+      }
+      if(_.any(fade,function(f){ return !f.condition(self.issue.attributes); })){
+         $(self.el).animate({opacity: 0.5},250);
+         return;
+      }
+      $(this.el).css({opacity:1}).fadeIn(250);
     },
     drop: function(ev,order){
       this.issue.reorder({order:order});
