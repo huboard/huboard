@@ -23,6 +23,7 @@ define(["../events/postal","./filterView"], function (postal, filterView) {
 
       clear.appendTo($this);
 
+      /*
       var userfilter = $("<li class='drop-shadow'><a href='#'>Assigned to me</a></li>")
       .click(function(ev){
           postal.publish("Filter.Milestone", function (issue) { return issue.assignee ? issue.assignee.login === login : false; });
@@ -35,6 +36,11 @@ define(["../events/postal","./filterView"], function (postal, filterView) {
           active ? userfilter.addClass("state-active") : userfilter.removeClass("state-active");
           if (active) {clear.show();}
       });
+      */
+      var userFilter = new filterView({color: "#0069D6", name:"Assigned to me" , condition:function(issue) { return issue.assignee && issue.assignee.login === login; } }).render();
+      $(userFilter.el).appendTo($this);
+
+
       var grouped = _.groupBy(this.milestones, function (milestone) {
          return milestone._data.status || "backlog";
       }); 
@@ -53,7 +59,7 @@ define(["../events/postal","./filterView"], function (postal, filterView) {
         });
       });
       var labels = _.map(this.labels, function(label) {
-          return new filterView({color: label.color, name: label.name, condition: function (issue) { return _.any(issue.labels, function(l){ return l.name === label.name;})}}).render().el;
+          return new filterView({color: "#" + label.color, name: label.name, condition: function (issue) { return _.any(issue.labels, function(l){ return l.name === label.name;})}}).render().el;
       });
       $this.append(labels);
       return this;

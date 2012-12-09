@@ -82,14 +82,14 @@ define(["text!../templates/card.html","../models/card", "../events/postal"],func
       var fade = _.filter(filters,function(f){ return f.state === 1;});
       var hide = _.filter(filters,function(f){ return f.state === 2;});
       if(_.any(hide,function(f){ return !f.condition(self.issue.attributes); })){
-         $(self.el).fadeOut(250);
+         $(self.el).hide();
          return;
       }
       if(_.any(fade,function(f){ return !f.condition(self.issue.attributes); })){
-         $(self.el).animate({opacity: 0.5},250);
+         $(self.el).css({display:"block",opacity: 0.3});
          return;
       }
-      $(this.el).css({opacity:1}).fadeIn(250);
+      $(self.el).css({display:"block",opacity: 1});
     },
     drop: function(ev,order){
       this.issue.reorder({order:order});
