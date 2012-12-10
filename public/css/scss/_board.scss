@@ -2,8 +2,19 @@ table {width:100%;}
 table td {
    vertical-align: top;
    padding: 0px 5px;
+   &:first-child {
+     padding-left: 0;
+   }
+   &:last-child {
+     padding-right: 0;
+   }
  }
  table h3 {
+   line-height: 20px;
+   margin: 10px 0;
+   padding: 1em;
+
+   font-size: 100%;
    text-align: center;
  }
 
