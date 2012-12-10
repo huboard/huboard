@@ -1,4 +1,5 @@
 @import url('../font/iconic.css');
+@import "bourbon/bourbon";
 @import "colors";
 @import "repos";
 @import "milestones";
@@ -21,10 +22,11 @@
   > .sidebar {
      width: 230px;
      position: absolute;
-     left: 10px;
+     border-right: 1px solid #ccc;
+     @include box-sizing(border-box);
   }
   > .content {
-     margin-left: 240px;
+     margin-left: 250px;
   }
 }
 

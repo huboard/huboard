@@ -15,7 +15,7 @@ define(["../collections/issues","text!../templates/board.html", "./columnView","
 
     switch(direction) {
       case "open":
-        $("#drawer").animate({left: '10px'}, 300);
+        $("#drawer").animate({left: '20px'}, 300);
         break;
       case "close":
         $("#drawer").animate({left: '270px'}, 300);

@@ -63,6 +63,6 @@
 
 .gutter {
   background-color: #f5f5f5;
-  @include box-shadow(inset 0px 0px 2px $borderColor);
+  @include prefixer(box-shadow, inset 0px 0px 2px $borderColor);
 }
 
