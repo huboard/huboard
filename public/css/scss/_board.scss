@@ -24,13 +24,13 @@ table td {
  }
  table li.drop-shadow {
    list-style: none;
-   padding: 30px 5px 10px 5px;
+   padding: 5px 5px 30px 5px;
    margin: 10px 0;
    cursor:move;
    position:relative;
  }
  table li .title {
-   border-top: 1px solid $borderColor;
+   border-bottom: 1px solid $borderColor;
    padding: 5px 0;
    color: $darkGrey;
  }
@@ -41,23 +41,22 @@ table td {
  }
  table li img {
    position: absolute;
-   top:3px;
-   right: 3px;
+   bottom:3px;
+   left: 3px;
    border-radius: 2px;
  }
  table li a.number {
    position: absolute;
-   top:6px;
-   left: 3px;
+   bottom:6px;
+   right: 3px;
    font-size:2em;
  }
 
 table li a.close {
    position: absolute;
-   top:-18px;
-   right: -28px;
+   top: 12px;
+   right: 3px;
    font-size:30px;
-   padding:10px;
    color:$red;
    opacity:0.0;
 }
