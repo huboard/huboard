@@ -15,7 +15,8 @@ define(["../events/postal"], function(postal) {
             this.states = [0,1,2,0];
        },
        events: {
-          "click" : "clicked"
+          "click" : "clicked",
+          "clear" : "clear"
        },
        render: function() {
          $(this.el).html("<a href='#'>"+ this.name + "</a>");

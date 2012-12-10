@@ -23,20 +23,6 @@ define(["../events/postal","./filterView"], function (postal, filterView) {
 
       clear.appendTo($this);
 
-      /*
-      var userfilter = $("<li class='drop-shadow'><a href='#'>Assigned to me</a></li>")
-      .click(function(ev){
-          postal.publish("Filter.Milestone", function (issue) { return issue.assignee ? issue.assignee.login === login : false; });
-      });
-      userfilter
-      .appendTo($this)
-
-      postal.subscribe("Filter.Milestone", function (equal) {
-          var active = equal({assignee:{login:login}},false);
-          active ? userfilter.addClass("state-active") : userfilter.removeClass("state-active");
-          if (active) {clear.show();}
-      });
-      */
       var userFilter = new filterView({color: "#0069D6", name:"Assigned to me" , condition:function(issue) { return issue.assignee && issue.assignee.login === login; } }).render();
       $(userFilter.el).appendTo($this);
 
@@ -46,18 +32,11 @@ define(["../events/postal","./filterView"], function (postal, filterView) {
       }); 
 
       var combined = (grouped.wip || []).concat(grouped.backlog || []);
-      _.each(combined, function (milestone) {
-        var filter = $(_.template("<li class='drop-shadow'><a href='#'><strong><%= open_issues %></strong><%= title %></a></li>", milestone))
-        .click(function(){
-          postal.publish("Filter.Milestone", function (issue) { return issue.milestone ? issue.milestone.number === milestone.number : false; });
-        })
-        .appendTo($this);
-        postal.subscribe("Filter.Milestone", function (equal) {
-          var active = equal({milestone:milestone},false);
-          active ? filter.addClass("state-active") : filter.removeClass("state-active");
-          if (active) {clear.show();}
-        });
+      var milestoneViews = _.map(combined, function (milestone) {
+        return new filterView({color: "#0069D6", name: milestone.title, count: milestone.open_issues,
+                              condition: function (issue) { return issue.milestone && issue.milestone.title === milestone.title;}}).render().el;
       });
+      $this.append(milestoneViews);
       var labels = _.map(this.labels, function(label) {
           return new filterView({color: "#" + label.color, name: label.name, condition: function (issue) { return _.any(issue.labels, function(l){ return l.name === label.name;})}}).render().el;
       });
