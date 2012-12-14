@@ -151,5 +151,32 @@ table li a.close:hover {
    right:10px;
  }
 
+ .filter a.active {
+   background-color: #0069D6;
+   color: #fff;
+ }
+ .filter a.dim {
+   background-color: rgba(0,105,214,0.6);
+   color: #fff;
+
+ }
+ 
+ .filter {
+   .iconic {
+     position: absolute;
+     top: 17px;
+     right: 5px;
+     font-size: 30px;
+     display:none;
+     opacity: 0.8;
+     &:hover {
+      opacity: 1;
+
+     }
+   }
+   &:hover .iconic {
+     display:inline;
+   }
+ }
 
 

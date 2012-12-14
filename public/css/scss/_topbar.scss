@@ -3,9 +3,19 @@ body {
   font-family: "ProximaNovaRegular", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
 
-.navbar .navbar-inner {
-  background: #f8f8f8;
-  box-shadow: none;
+.navbar {
+  &.navbar-fixed-top, &.navbar-static-top {
+    .navbar-inner {
+      @include box-shadow(none);
+    }
+  }
+  .navbar-inner {
+    @include linear-gradient(#F9F9F9, #F3F3F3);
+    border-bottom: 1px solid #e5e5e5;
+    .nav a {
+     -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(#000), to(rgba(0,0,0,0.75)));
+    }
+  }
 }
 .navbar .brand {
 
@@ -34,5 +44,6 @@ body {
   padding-top: 0;
   padding-bottom: 0;
 }
-
-
+.navbar .nav a {
+  -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(#000), to(rgba(0,0,0,0.75)));
+}

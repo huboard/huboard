@@ -6,6 +6,40 @@
 @import "board";
 @import "footer";
 
+.navbar {
+  &.navbar-fixed-top, &.navbar-static-top {
+    .navbar-inner {
+      @include box-shadow(none);
+    }
+  }
+  .navbar-inner {
+    @include linear-gradient(#F9F9F9, #F3F3F3);
+    border-bottom: 1px solid #e5e5e5;
+    .nav a {
+     -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(#000), to(rgba(0,0,0,0.75)));
+    }
+  }
+  .nav {
+    > li {
+      > a {
+        &:hover {
+          border-top: 3px solid #DD4B39;
+          padding-top: 7px;
+        }
+      }
+      &.active, &.dropdown.open {
+        > a, > a:hover, > .dropdown-toggle, > .dropdown-toggle:hover  {
+            border-top: 3px solid #2590D6;
+            padding-top: 7px;
+            background:none;
+            @include box-shadow(none);
+        }
+      }
+
+    }
+  }
+}
+
 .hide {display:none;}
 
 .breadcrumb {

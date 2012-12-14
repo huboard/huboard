@@ -17,9 +17,6 @@ body, html {
    min-height: $footer-height;
 }
 #footer {
-
-  background-color: #353535;
-  color: #676767;
-  color: rgba(255,255,255,0.3);
-  text-shadow: -1px -1px rgba(0,0,0,0.4);
+    @include linear-gradient(#F3F3F3, #F9F9F9);
+    border-top: 1px solid #e5e5e5;
 }
