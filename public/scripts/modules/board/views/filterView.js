@@ -8,6 +8,7 @@ define(["../events/postal"], function(postal) {
        tagName: "li",
        className: "filter",
        initialize: function(params) {
+            this.params = params;
             this.condition = params.condition;
             this.color = $.Color(params.color);
             this.name = params.name;
@@ -19,7 +20,7 @@ define(["../events/postal"], function(postal) {
           "clear" : "clear"
        },
        render: function() {
-         $(this.el).html("<a href='#'>"+ this.name + "</a>");
+         $(this.el).html("<a href='#'>"+ this.name + "<span class='iconic x-alt'></span></a>").addClass("-x" + this.params.color.substring(1) );
          this.textColor = $(this.el).find("a").css("color");
          return this;
        },

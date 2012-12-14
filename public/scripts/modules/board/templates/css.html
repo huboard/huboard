@@ -1,0 +1,23 @@
+<% _(other_labels).each(function(l) {
+%>
+
+  .label.-x<%= l.color %> {
+    background-color: #<%= l.color %>;
+    background-color: <%= $.Color("#" + l.color).toString() %>;
+  }
+
+  .filter.-x<%= l.color %> {
+    background-color: #<%= l.color %>;
+    background-color: <%= $.Color("#" + l.color).toString() %>;
+  }
+  .filter.-x<%= l.color %> a:hover, .filter.-x<%= l.color %>.active a{
+    background-color: #<%= l.color %>;
+    background-color: <%= $.Color("#" + l.color).toString() %>;
+    color: <%= $.Color("#" + l.color).contrastColor() %>;
+  }
+  .filter.-x<%= l.color %>.dim {
+    background-color: <%= $.Color($.Color("#" + l.color).alpha(0.4)).toString() %>;
+  }
+
+
+<%});%>
