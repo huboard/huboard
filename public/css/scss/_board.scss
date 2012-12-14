@@ -1,4 +1,6 @@
+@import "arrow";
 table {width:100%;}
+
 table td {
    vertical-align: top;
    padding: 0px 5px;
@@ -11,11 +13,11 @@ table td {
  }
  table h3 {
    line-height: 20px;
-   margin: 10px 0;
-   padding: 1em;
+   margin-bottom: 10px;
+   padding: 10px;
 
    font-size: 100%;
-   text-align: center;
+   @extend .arrow;
  }
 
  table ul {
@@ -50,7 +52,8 @@ table td {
  }
  table li a.number {
    position: absolute;
-   bottom:6px;
+   vertical-align: bottom;
+   bottom:3px;
    right: 3px;
    font-size:2em;
  }

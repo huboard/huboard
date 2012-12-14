@@ -1,39 +1,37 @@
 
 
-h3 {
+.arrow {
   margin-right: 20px;
-position: relative;
-box-sizing: border-box;
-border: 1px solid #CCC;
-background: #EEE;
-margin-top: 0;
-text-align: center;
+  position: relative;
+  box-sizing: border-box;
+  border: 1px solid #e5e5e5;
+  background: #f3f3f3;
+  margin-top: 0;
+  color: #555;
+  &:before, &:after {
+    left: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-radius: 2px;
+  }                        
+  &:after {
+    border-left-color: #f3f3f3;
+    border-width: 21px;
+    top: 50%;
+    margin-top: -21px;
+  }
+
+  &:before {
+    border-left-color: #e5e5e5;
+    border-width: 22px;
+    top: 50%;
+    margin-top: -22px;
+  }
+
 }
 
-h3:before, h3:after {
- left: 100%;
-border: solid transparent;
-content: " ";
-height: 0;
-width: 0;
-position: absolute;
-pointer-events: none;
-border-radius: 2px;
-}                        
-
-h3:after {
- border-color: rgba(136, 183, 213, 0);
-border-left-color: #EEE;
-border-width: 21px;
-top: 50%;
-margin-top: -21px;
-}
-
-h3:before {
- border-color: rgba(194, 225, 245, 0);
-border-left-color: #D9D9D9;
-border-width: 22px;
-top: 50%;
-margin-top: -22px;
-}
 
