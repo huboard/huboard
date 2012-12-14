@@ -22,12 +22,15 @@ table td {
     margin:0;
     padding: 0;
  }
- table li.drop-shadow {
+ table li {
    list-style: none;
    padding: 5px 5px 30px 5px;
    margin: 10px 0;
    cursor:move;
    position:relative;
+   background-color: #fff;
+   border: 1px solid #e5e5e5;
+   border-bottom-color: darken(#e5e5e5, 5%); 
  }
  table li .title {
    border-bottom: 1px solid $borderColor;
@@ -131,7 +134,6 @@ table li a.close:hover {
    position:relative;
    padding: 10px;
    display:block;
-   font-weight: bold;
    padding-right:25px;
    text-decoration: none;
    border-radius: 4px;

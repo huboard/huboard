@@ -30,7 +30,6 @@ define(["text!../templates/card.html","../models/card", "../events/postal"],func
 
 
       $(this.el).html( _.template(template, this.issue.attributes))
-      .addClass("drop-shadow")
       .data("issue",this.issue.attributes);
       if(this.issue.attributes.repo.color){
         var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(this.issue.attributes.repo.color);
