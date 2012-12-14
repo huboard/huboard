@@ -2,185 +2,214 @@
 table {width:100%;}
 
 table td {
-   vertical-align: top;
-   padding: 0px 5px;
-   &:first-child {
-     padding-left: 0;
-   }
-   &:last-child {
-     padding-right: 0;
-   }
- }
- table h3 {
-   line-height: 20px;
-   margin-bottom: 10px;
-   padding: 10px;
+  vertical-align: top;
+  padding: 0px 5px;
+  &:first-child {
+    padding-left: 0;
+  }
+  &:last-child {
+    padding-right: 0;
+  }
+}
+table h3 {
+  line-height: 20px;
+  margin-bottom: 10px;
+  padding: 10px;
 
-   font-size: 100%;
-   @extend .arrow;
- }
+  font-size: 100%;
+  @extend .arrow;
+}
 
- table ul {
-    margin:0;
-    padding: 0;
- }
- table li {
-   list-style: none;
-   padding: 5px 5px 30px 5px;
-   margin: 10px 0;
-   cursor:move;
-   position:relative;
-   background-color: #fff;
-   border: 1px solid #e5e5e5;
-   border-bottom-color: darken(#e5e5e5, 5%); 
- }
- table li .title {
-   border-bottom: 1px solid $borderColor;
-   padding: 5px 0;
-   color: $darkGrey;
- }
- table li .milestone a {
-   color: $lightGrey;
-   font-size:11px;
-   cursor:pointer;
- }
- table li img {
-   position: absolute;
-   bottom:3px;
-   left: 3px;
-   border-radius: 2px;
- }
- table li a.number {
-   position: absolute;
-   vertical-align: bottom;
-   bottom:3px;
-   right: 3px;
-   font-size:2em;
- }
+table ul {
+  margin:0;
+  padding: 0;
+}
+table li {
+  list-style: none;
+  padding: 5px 5px 30px 5px;
+  margin: 10px 0;
+  cursor:move;
+  position:relative;
+  background-color: #fff;
+  border: 1px solid #e5e5e5;
+  border-bottom-color: darken(#e5e5e5, 5%); 
+  .card-labels {
+    position: absolute;
+    bottom: -3px;
+    .card-label-wrapper {
+      float:left;
+      margin-right: 5px;
+      .card-label.active.small {
+        height: 4px;
+        width: 40px;
+        z-index: 10;
+          display:block;
+      }
+      .card-label.active {
+        position: relative;
+        top: 22px;
+
+        display: none;
+        padding: 3px 10px;
+      }
+    }
+      &:hover {
+        .card-label.active.small {
+          display: none;
+        }
+        .card-label.active {
+          display:block;
+        }
+      }
+  }
+}
+table li .title {
+  border-bottom: 1px solid $borderColor;
+  padding: 5px 0;
+  color: $darkGrey;
+}
+table li .milestone a {
+  color: $lightGrey;
+  font-size:11px;
+  cursor:pointer;
+}
+table li img {
+  position: absolute;
+  bottom:3px;
+  left: 3px;
+  border-radius: 2px;
+}
+table li a.number {
+  position: absolute;
+  vertical-align: bottom;
+  bottom:3px;
+  right: 3px;
+  font-size:2em;
+}
 
 table li a.close {
-   position: absolute;
-   top: 12px;
-   right: 3px;
-   font-size:30px;
-   color:$red;
-   opacity:0.0;
+  position: absolute;
+  top: 12px;
+  right: 3px;
+  font-size:30px;
+  color:$red;
+  opacity:0.0;
 }
 table li:hover a.close {
   opacity:0.3;
 }
 table li a.close:hover {
   opacity:0.5;
-   color:$red;
+  color:$red;
 }
 
- table li a small {
-   color: $lightGrey;
-   padding-right:2px;
- }
- table .ui-sortable-placeholder {
-   background:$borderColor;
-   list-style: none;
-   padding: 80px 5px 10px 5px;
-   margin: 10px 0;
- }
- table .ui-sortable-hover {
-   background:#efefef;
- }
+table li a small {
+  color: $lightGrey;
+  padding-right:2px;
+}
+table .ui-sortable-placeholder {
+  background:$borderColor;
+  list-style: none;
+  padding: 80px 5px 10px 5px;
+  margin: 10px 0;
+}
+table .ui-sortable-hover {
+  background:#efefef;
+}
 
- #drawer {
+#drawer {
   position:absolute;
   width:252px;
   top:0;
   left:270px;
- }
+}
 
- .toggle-drawer {
-   position:absolute;
-   z-index:5;
-   margin: 5px;
-   padding: 5px;
-   font-size: 19px;
- }
- .toggle-drawer:hover {
-   text-decoration: none;
- }
- .toggle-drawer span {
-   position:relative;
- }
+.toggle-drawer {
+  position:absolute;
+  z-index:5;
+  margin: 5px;
+  padding: 5px;
+  font-size: 19px;
+}
+.toggle-drawer:hover {
+  text-decoration: none;
+}
+.toggle-drawer span {
+  position:relative;
+}
 
 
- .filters {
-   list-style: none;
-   margin:0;
-   padding:0 20px 0 0;
- }
+.filters {
+  list-style: none;
+  margin:0;
+  padding:0 20px 0 0;
+}
 
- .filters li {
-   margin-bottom: 10px;
-   background: #fff;
-   border-radius: 4px;
- }
- .filters li.clear-filters, .filters li.clear-filters a {
-   background: none;
-   color:$grey;
- }
- .filters li.clear-filters {
-   border-radius: 0;
-   border-bottom: 1px solid $darkGrey;
- }
- .filters li.clear-filters a:hover {
-   color:$grey;
- }
+.filters li {
+  margin-bottom: 10px;
+  background: #fff;
+  border-radius: 4px;
+}
+.filters li.clear-filters, .filters li.clear-filters a {
+  background: none;
+  color:$grey;
+}
+.filters li.clear-filters {
+  border-radius: 0;
+  border-bottom: 1px solid $darkGrey;
+}
+.filters li.clear-filters a:hover {
+  color:$grey;
+}
 
- .filters li a {
-   position:relative;
-   padding: 10px;
-   display:block;
-   padding-right:25px;
-   text-decoration: none;
-   border-radius: 4px;
-   color:#777;
- }
+.filters li a {
+  position:relative;
+  padding: 10px;
+  display:block;
+  padding-right:25px;
+  text-decoration: none;
+  border-radius: 4px;
+  color:#777;
+}
 
- .filters li a strong { 
-   position: absolute;
-   top:12px;
-   right:10px;
- }
+.filters li a strong { 
+  position: absolute;
+  top:12px;
+  right:10px;
+}
 
- .filter a.active, .filter a.active:hover {
-   background-color: #0069D6;
-   color: #fff;
- }
- .filter a.dim, .filter a.dim:hover {
-   background-color: rgba(0,105,214,0.6);
-   color: #fff;
+.filter a.active, .filter a.active:hover {
+  background-color: #0069D6;
+  color: #fff;
+}
+.filter a.dim, .filter a.dim:hover {
+  background-color: rgba(0,105,214,0.6);
+  color: #fff;
 
- }
- 
- .filter {
-   .iconic {
-     position: absolute;
-     top: 13px;
-     right: 3px;
-     font-size: 30px;
-     display:none;
-     opacity: 0.8;
-     &:hover {
+}
+
+.filter {
+  .iconic {
+    position: absolute;
+    top: 13px;
+    right: 3px;
+    font-size: 30px;
+    display:none;
+    opacity: 0.8;
+    &:hover {
       opacity: 1;
 
-     }
-   }
-   a:hover {
-      background-color:#efefef;
-   }
+    }
+  }
+  a:hover {
+    background-color:#efefef;
+  }
 
-   .dim:hover, .active:hover { 
-     .iconic {
-       display:inline;
-     }
-   }
- }
+  .dim:hover, .active:hover { 
+    .iconic {
+      display:inline;
+    }
+  }
+}
 
 
