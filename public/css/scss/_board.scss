@@ -39,13 +39,15 @@ table li {
     .card-label-wrapper {
       float:left;
       margin-right: 5px;
+      .card-label {
+        z-index: 10;
+      }
       .card-label.active.small {
         height: 4px;
         width: 40px;
-        z-index: 10;
-          display:block;
+        display:block;
       }
-      .card-label.active {
+      .card-label.active.large {
         position: relative;
         top: 22px;
 
@@ -57,7 +59,7 @@ table li {
         .card-label.active.small {
           display: none;
         }
-        .card-label.active {
+        .card-label.active.large {
           display:block;
         }
       }
