@@ -2,24 +2,24 @@
 _(["filter","label"]).each(function(name){
   _(other_labels).each(function(l) {
 %>
-  .<%= name %>.-x<%= l.color %>.active {
+  .<%= name %>.-x<%= l.color %>.active, .<%= name %>.-x<%= l.color %>.active:hover  {
     background-color: #<%= l.color %>;
     background-color: <%= $.Color("#" + l.color).toString() %>;
     color: <%= $.Color("#" + l.color).contrastColor() %>;
   }
 
-  .<%= name %>.-x<%= l.color %> .active {
+  .<%= name %>.-x<%= l.color %> .active, .<%= name %>.-x<%= l.color %> .active:hover  {
     background-color: #<%= l.color %>;
     background-color: <%= $.Color("#" + l.color).toString() %>;
     color: <%= $.Color("#" + l.color).contrastColor() %>;
   }
   
-  .<%= name %>.-x<%= l.color %>.dim {
+  .<%= name %>.-x<%= l.color %>.dim, .<%= name %>.-x<%= l.color %>.dim:hover  {
     background-color: <%= $.Color($.Color("#" + l.color).alpha(0.6)).toString() %>;
     color: <%= $.Color("#" + l.color).contrastColor() %>;
   }
 
-  .<%= name %>.-x<%= l.color %> .dim {
+  .<%= name %>.-x<%= l.color %> .dim ,  .<%= name %>.-x<%= l.color %> .dim:hover {
     background-color: <%= $.Color($.Color("#" + l.color).alpha(0.6)).toString() %>;
     color: <%= $.Color("#" + l.color).contrastColor() %>;
   }

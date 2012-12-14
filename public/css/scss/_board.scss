@@ -111,8 +111,7 @@ table li a.close:hover {
  }
 
  .filters li {
-   position:relative;
-   margin: 10px 0;
+   margin-bottom: 10px;
    background: #fff;
    border-radius: 4px;
  }
@@ -127,14 +126,9 @@ table li a.close:hover {
  .filters li.clear-filters a:hover {
    color:$grey;
  }
- .filters li.state-active, .state-active a, .state-active a:hover {
-  background: #0069D6;
-  color:white;
-  text-decoration:none;
-   border-radius: 4px;
- }
 
  .filters li a {
+   position:relative;
    padding: 10px;
    display:block;
    font-weight: bold;
@@ -142,7 +136,6 @@ table li a.close:hover {
    text-decoration: none;
    border-radius: 4px;
    color:#777;
-   @extend .drop-shadow;
  }
 
  .filters li a strong { 
@@ -151,11 +144,11 @@ table li a.close:hover {
    right:10px;
  }
 
- .filter a.active {
+ .filter a.active, .filter a.active:hover {
    background-color: #0069D6;
    color: #fff;
  }
- .filter a.dim {
+ .filter a.dim, .filter a.dim:hover {
    background-color: rgba(0,105,214,0.6);
    color: #fff;
 
@@ -164,8 +157,8 @@ table li a.close:hover {
  .filter {
    .iconic {
      position: absolute;
-     top: 17px;
-     right: 5px;
+     top: 13px;
+     right: 3px;
      font-size: 30px;
      display:none;
      opacity: 0.8;
@@ -174,8 +167,14 @@ table li a.close:hover {
 
      }
    }
-   &:hover .iconic {
-     display:inline;
+   a:hover {
+      background-color:#efefef;
+   }
+
+   .dim:hover, .active:hover { 
+     .iconic {
+       display:inline;
+     }
    }
  }
 
