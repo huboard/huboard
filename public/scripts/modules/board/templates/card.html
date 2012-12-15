@@ -1,7 +1,9 @@
 <a href="#"  title="Close issue" class="close iconic x-alt"><span></span></a>
-<a class="number" href="<%= html_url %>" target="_blank" title="View issue on github.com"><small>#</small><%= number %></a>
-<div class="title">
-  <%= title %>
+<div class="card-header">
+  <div class="title">
+    <%= title %>
+  </div>
+  <a class="number" href="<%= html_url %>" target="_blank" title="View issue on github.com"><small>#</small><%= number %></a>
 </div>
 <% if(assignee) { %>
  <img data-placement="right" rel="twipsy" title="Assigned to <%= assignee.login %>" src="https://secure.gravatar.com/avatar/<%= assignee.gravatar_id %>?s=24" />
@@ -13,8 +15,8 @@
         Milestone: <%= milestone.title %>
       </a>
 </div>
-<% if (pull_request.html_url) { %><span class="label notice">Pull request</span> <%}%>
 <% } %>
+<% if (pull_request.html_url) { %><span class="label label-info">Pull request</span> <%}%>
 <div class="card-labels">
 <% _(other_labels).each(function(l) { %>
 <div class="card-label-wrapper"> 

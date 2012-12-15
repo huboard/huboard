@@ -32,7 +32,7 @@ table td {
     padding-right: 0;
   }
 }
-table h3 {
+.column h3 {
   line-height: 20px;
   margin-bottom: 10px;
   padding: 10px;
@@ -41,11 +41,11 @@ table h3 {
   @extend .arrow;
 }
 
-table ul {
+.column ul {
   margin:0;
   padding: 0;
 }
-table li {
+.column li {
   list-style: none;
   padding: 5px 5px 30px 5px;
   margin: 10px 0;
@@ -86,23 +86,35 @@ table li {
       }
   }
 }
-table li .title {
-  border-bottom: 1px solid $borderColor;
-  padding: 5px 0;
-  color: $darkGrey;
+
+.column li {
+  .card-header {
+    border-bottom: 1px solid $borderColor;
+    padding: 5px 0;
+    color: $darkGrey;
+  }
+  .title {
+    max-width: 80%;
+    overflow:hidden;
+    white-space: nowrap;
+    text-overflow: ellipse;
+  }
 }
-table li .milestone a {
+
+.column li .title {
+}
+.column li .milestone a {
   color: $lightGrey;
   font-size:11px;
   cursor:pointer;
 }
-table li img {
+.column li img {
   position: absolute;
   bottom:5px;
   left: 5px;
   border-radius: 2px;
 }
-table li a.number {
+.column li a.number {
   position: absolute;
   vertical-align: bottom;
   bottom:5px;
@@ -110,7 +122,7 @@ table li a.number {
   font-size:2em;
 }
 
-table li a.close {
+.column li a.close {
   position: absolute;
   top: 12px;
   right: 3px;
@@ -118,25 +130,25 @@ table li a.close {
   color:$red;
   opacity:0.0;
 }
-table li:hover a.close {
+.column li:hover a.close {
   opacity:0.3;
 }
-table li a.close:hover {
+.column li a.close:hover {
   opacity:0.5;
   color:$red;
 }
 
-table li a small {
+.column li a small {
   color: $lightGrey;
   padding-right:2px;
 }
-table .ui-sortable-placeholder {
+.column .ui-sortable-placeholder {
   background:$borderColor;
   list-style: none;
   padding: 80px 5px 10px 5px;
   margin: 10px 0;
 }
-table .ui-sortable-hover {
+.column .ui-sortable-hover {
   background:#efefef;
 }
 
