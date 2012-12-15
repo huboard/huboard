@@ -1,4 +1,25 @@
 @import "arrow";
+.header {
+  font-size: 24px;
+
+   .author{
+     color: #08C;
+     font-weight: normal;
+   }
+   .repo {
+     color: #08C;
+   }
+   input {
+     border: 0;
+     outline: 0;
+     background: #fff;
+     vertical-align: baseline;
+     line-height: 40px;
+     margin: 0;
+     padding:0;
+     font-size: 24px;
+   }
+}
 table {width:100%;}
 
 table td {
@@ -77,15 +98,15 @@ table li .milestone a {
 }
 table li img {
   position: absolute;
-  bottom:3px;
-  left: 3px;
+  bottom:5px;
+  left: 5px;
   border-radius: 2px;
 }
 table li a.number {
   position: absolute;
   vertical-align: bottom;
-  bottom:3px;
-  right: 3px;
+  bottom:5px;
+  right: 5px;
   font-size:2em;
 }
 

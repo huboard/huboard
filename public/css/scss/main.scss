@@ -47,7 +47,6 @@
 }
 
 #main-stage  { 
-  margin-top: 50px;
   margin-bottom: 50px;
 }
 
@@ -61,6 +60,7 @@
   }
   > .content {
      margin-left: 250px;
+     position: relative;
   }
 }
 
