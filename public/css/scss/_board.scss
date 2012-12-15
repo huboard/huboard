@@ -20,18 +20,20 @@
      font-size: 24px;
    }
 }
-table {width:100%;}
 
-table td {
+.column {
+  float: left;
   vertical-align: top;
-  padding: 0px 5px;
+  padding: 0px 10px;
   &:first-child {
     padding-left: 0;
   }
   &:last-child {
     padding-right: 0;
   }
+  @include box-sizing(border-box);
 }
+
 .column h3 {
   line-height: 20px;
   margin-bottom: 10px;

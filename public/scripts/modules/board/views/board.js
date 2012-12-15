@@ -57,14 +57,14 @@ define(["../collections/issues","text!../templates/board.html", "./columnView","
                searchView = new headerView(),
                self = this;
            
-           $("tr",noneBoard).append(new columnView({column: noneColumn, user:this.user,repo:this.repo}).render().el);
+           $(noneBoard).append(new columnView({column: noneColumn, user:this.user,repo:this.repo}).render().el);
 
            var width = (100 / rest.length);
 
            _.each(rest, function (label){
                var column = new columnView({column: label, user:self.user,repo:self.repo});
                var markup = $(column.render().el).css({width:width + "%"});
-               $("tr",board).append(markup);
+               $(board).append(markup);
            });
 
            $("#stage").append(board).find(".toggle-drawer").show();
