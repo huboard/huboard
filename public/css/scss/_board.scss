@@ -1,4 +1,8 @@
 @import "arrow";
+.container-fluid {
+   padding-right: 25px;
+   padding-left: 25px;
+}
 .header {
   font-size: 24px;
 
@@ -18,6 +22,57 @@
      margin: 0;
      padding:0;
      font-size: 24px;
+   }
+}
+
+.toggle-drawer {
+  position:absolute;
+  z-index:5;
+  margin: 0px;
+  padding: 10px;
+  line-height: 20px;
+  background: #fff;
+  width:40px;
+  text-align: center;
+  @include box-sizing(border-box);
+  @include prefixer(border-radius, 20px);
+  border: 1px solid #ccc;
+
+  &.arrow-right {
+    right: -35px;
+    background-color: #0069D6;
+    background-color: rgba(0,105,214,0.6);
+    border-color: #0069D6;
+    border-color: rgba(0,105,214,0.6);
+    color: #fff;
+    &:hover {
+      right: -40px;
+      color: #fff;
+    }
+  }
+
+  &.arrow-left {
+    right: -25px;
+  }
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+#drawer {
+    position:absolute;
+    width:252px;
+    top:0;
+    left:-540px;
+
+   .board {
+     background: #fff;
+     border-right: 1px solid #ccc;
+   }
+   .column {
+     float: none;
+     padding: 0 20px;
+     @include box-sizing(border-box);
    }
 }
 
@@ -96,15 +151,13 @@
     color: $darkGrey;
   }
   .title {
-    max-width: 80%;
+    padding-right: 30px;
     overflow:hidden;
     white-space: nowrap;
-    text-overflow: ellipse;
+    text-overflow: ellipsis;
   }
 }
 
-.column li .title {
-}
 .column li .milestone a {
   color: $lightGrey;
   font-size:11px;
@@ -154,26 +207,6 @@
   background:#efefef;
 }
 
-#drawer {
-  position:absolute;
-  width:252px;
-  top:0;
-  left:270px;
-}
-
-.toggle-drawer {
-  position:absolute;
-  z-index:5;
-  margin: 5px;
-  padding: 5px;
-  font-size: 19px;
-}
-.toggle-drawer:hover {
-  text-decoration: none;
-}
-.toggle-drawer span {
-  position:relative;
-}
 
 
 .filters {
@@ -220,6 +253,7 @@
   color: #fff;
 }
 .filter a.dim, .filter a.dim:hover {
+  background-color: #0069D6;
   background-color: rgba(0,105,214,0.6);
   color: #fff;
 

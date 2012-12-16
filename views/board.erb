@@ -1,6 +1,7 @@
-  <div id="drawer" > </div>
 <div id="stage" data-module="modules/board/main" data-parameters='<%= @parameters.to_json %>'>
-  <a href="#toggle-drawer" class="hide iconic arrow-right arrow-left toggle-drawer"><span></span></a>
+<div id="drawer" > 
+  <a href="#toggle-drawer" class="hide iconic arrow-right  toggle-drawer"><span></span></a>
+</div>
 </div>
 <% content_for :navigation do %>
 
@@ -18,7 +19,7 @@
     <span class="author"><%= h @parameters[:user] %></span>
     /
     <span class="repo"><%= h @parameters[:repo] %></span>
-    <input/>
+    <input placeholder="search..."/>
   </h1>
 
 <% end %>

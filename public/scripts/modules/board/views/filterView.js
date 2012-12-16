@@ -24,6 +24,7 @@ define(["../events/postal"], function(postal) {
          return this;
        },
        clicked : function(ev) {
+         ev.preventDefault();
          switch(this.state = this.states[this.state + 1]) {
            case 0:
              this.clear();
@@ -44,6 +45,7 @@ define(["../events/postal"], function(postal) {
          postal.publish("XFilter", { id: this.cid, condition: this.condition, state:this.state});
        },
        clearAndPublish: function(ev) {
+         ev.preventDefault();
          this.state = 0;
          this.publish();
          this.clear();

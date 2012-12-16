@@ -15,10 +15,18 @@ define(["../collections/issues","text!../templates/board.html", "./columnView","
 
     switch(direction) {
       case "open":
-        $("#drawer").animate({left: '20px'}, 300);
+        $("#drawer")
+          .find(".toggle-drawer").removeClass("arrow-right").addClass("arrow-left")
+          .end()
+          .animate({left: '+=270px'}, 300);
         break;
       case "close":
-        $("#drawer").animate({left: '270px'}, 300);
+        $("#drawer")
+          .animate({left: '-=270px'}, 300, function(){
+             $(this)
+              .find(".toggle-drawer").removeClass("arrow-left").addClass("arrow-right")
+              .end();
+          });
     }
   };
 
@@ -67,8 +75,10 @@ define(["../collections/issues","text!../templates/board.html", "./columnView","
                $(board).append(markup);
            });
 
-           $("#stage").append(board).find(".toggle-drawer").show();
-           $("#drawer","#main-stage").append(noneBoard);
+           $("#stage").append(board);
+
+           $("#drawer","#main-stage")
+              .append(noneBoard).find(".toggle-drawer").show();
 
            //$(".sidebar-wrapper").append(userFilter.render().el).show();
            $(".sidebar-wrapper").append(sidebar.render().el).show();
@@ -85,7 +95,6 @@ define(["../collections/issues","text!../templates/board.html", "./columnView","
           ev.preventDefault();
 
           var open = $(".toggle-drawer")
-            .toggleClass("arrow-left")
             .hasClass("arrow-left");
 
           open ? animateDrawer("close") : animateDrawer("open");
