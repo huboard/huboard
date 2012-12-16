@@ -19,4 +19,12 @@ body, html {
 #footer {
     @include linear-gradient(#F3F3F3, #F9F9F9);
     border-top: 1px solid #e5e5e5;
+    h2 {
+     -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(#000), to(rgba(0,0,0,0.75)));
+
+      color: #999;
+      color: rgba(255,255,255,0.3);
+      text-shadow: -1px -1px rgba(0,0,0,0.4);
+
+    }
 }
