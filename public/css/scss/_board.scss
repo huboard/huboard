@@ -3,48 +3,32 @@
    padding-right: 25px;
    padding-left: 25px;
 }
-.header {
-  font-size: 24px;
-
-   .author{
-     color: #08C;
-     font-weight: normal;
-   }
-   .repo {
-     color: #08C;
-   }
-   input {
-     border: 0;
-     outline: 0;
-     background: #fff;
-     vertical-align: baseline;
-     line-height: 40px;
-     margin: 0;
-     padding:0;
-     font-size: 24px;
-   }
-}
 
 .toggle-drawer {
   position:absolute;
   z-index:5;
+
   margin: 0px;
   padding: 10px;
-  line-height: 20px;
-  background: #fff;
-  width:40px;
-  text-align: center;
-  @include box-sizing(border-box);
-  @include prefixer(border-radius, 20px);
   border: 1px solid #ccc;
+  @include prefixer(border-radius, 20px);
+  @include box-sizing(border-box);
+  width:40px;
+  line-height: 20px;
+
+  background: #fff;
+  background: rgba(255,255,255,0.8);
+  text-align: center;
 
   &.arrow-right {
     right: -35px;
+
     background-color: #0069D6;
     background-color: rgba(0,105,214,0.6);
     border-color: #0069D6;
     border-color: rgba(0,105,214,0.6);
     color: #fff;
+
     &:hover {
       right: -40px;
       color: #fff;
@@ -142,9 +126,7 @@
         }
       }
   }
-}
 
-.column li {
   .card-header {
     border-bottom: 1px solid $borderColor;
     padding: 5px 0;
@@ -155,27 +137,26 @@
     overflow:hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-  }
+  }         
+  .milestone a {
+    color: $lightGrey;
+    font-size:11px;
+    cursor:pointer;
+  }         
+  img {
+    position: absolute;
+    bottom:5px;
+    left: 5px;
+  }          
+  .number {
+    position: absolute;
+    vertical-align: bottom;
+    bottom:5px;
+    right: 5px;
+    font-size:2em;
+  }               
 }
 
-.column li .milestone a {
-  color: $lightGrey;
-  font-size:11px;
-  cursor:pointer;
-}
-.column li img {
-  position: absolute;
-  bottom:5px;
-  left: 5px;
-  border-radius: 2px;
-}
-.column li a.number {
-  position: absolute;
-  vertical-align: bottom;
-  bottom:5px;
-  right: 5px;
-  font-size:2em;
-}
 
 .column li a.close {
   position: absolute;

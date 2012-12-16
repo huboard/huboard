@@ -1,12 +1,16 @@
-<div>
-  <ul class="breadcrumb">
+<% content_for :header do %>
+  <h1 class="header">
     <% if (@filtered.nil?) %>
-      <li class="active">Repos</li>
+      <span class="author">Repos</span>
+      /
     <% else %>
-      <li><a href="/">Repos</a> <span class="divider">/</span></li>
-      <li class="active"><%= @filtered %></li>
+      <span class="author"><%= @filtered %></span>
+      /
     <% end %>
-</ul>
+  </h1>
+
+<% end %>
+<div>
   <ul class="repos drop-shadow ">
     <% @repos.each do |repo| %>
       <li class="repo">

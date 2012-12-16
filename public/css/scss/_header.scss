@@ -1,0 +1,22 @@
+.header {
+  font-size: 24px;
+
+   .author{
+     color: #08C;
+     font-weight: normal;
+   }
+   .repo {
+     color: #08C;
+   }
+   input {
+     border: 0;
+     outline: 0;
+     background: #fff;
+     vertical-align: baseline;
+     line-height: 40px;
+     margin: 0;
+     padding:0;
+     font-size: 24px;
+   }
+}
+

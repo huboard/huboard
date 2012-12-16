@@ -3,6 +3,15 @@
 
 <% content_for :title do %><%=@parameters[:repo]%> :: <% end %>
 
+<% content_for :header do %>
+  <h1 class="header">
+    <span class="author"><%= h @parameters[:user] %></span>
+    /
+    <span class="repo"><%= h @parameters[:repo] %></span>
+  </h1>
+
+<% end %>
+
 <% content_for :navigation do %>
 
   <li class="active">
