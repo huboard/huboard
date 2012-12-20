@@ -27,10 +27,14 @@ define(["../events/postal","./filterView"], function (postal, filterView) {
         return new filterView({color: "#0069D6", name: milestone.title, count: milestone.open_issues,
                               condition: function (issue) { return issue.milestone && issue.milestone.title.toLocaleLowerCase() === milestone.title.toLocaleLowerCase();}}).render().el;
       });
+
+      $this.append("<h5>Milestones</h5>");
       $this.append(milestoneViews);
+
       var labels = _.map(this.labels, function(label) {
           return new filterView({color: "#" + label.color, name: label.name, condition: function (issue) { return _.any(issue.labels, function(l){ return l.name.toLocaleLowerCase() === label.name.toLocaleLowerCase();})}}).render().el;
-      });                                                                                                                                                                                                             r
+      });                                                                                                                                                                                                             
+      $this.append("<h5>Labels</h5>");
       $this.append(labels);
       return this;
     }
