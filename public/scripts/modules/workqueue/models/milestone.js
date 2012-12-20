@@ -19,7 +19,7 @@ define(function(){
         status: data.status,
         milestone: this.attributes
       },function (response){
-         console.log(response);
+        // console.log(response);
       });
     }
   });

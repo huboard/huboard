@@ -3,7 +3,6 @@ define(["./views/board"],function (board) {
    return {
 
     init: function (params) {
-      console.log("params",params)
       app.board = new board(params);
 
 

@@ -53,7 +53,6 @@ define(["./milestoneView"],function(milestoneView,milestones){
      $(ui.item).addClass("ui-state-dragging");
     },
     onStop : function(ev,ui){
-      console.log("onStop");
       var elements = $("li", this.el),
       index = elements.index(ui.item);
 

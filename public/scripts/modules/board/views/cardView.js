@@ -73,8 +73,6 @@ define(["text!../templates/card.html","../models/card", "../events/postal"],func
     simpleFilter: function(message){
       var self = this;
 
-      console.log("filter", message);
-
       this.filtersHash.simple[message.id] = message;
 
       this.transition();

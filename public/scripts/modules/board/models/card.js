@@ -13,7 +13,7 @@ define(["../events/postal"],function(postal){
         issue: this.attributes,
         correlationId: postal.correlationId
       }, function (response) {
-        console.log("moved to column", data.index);
+        //console.log("moved to column", data.index);
       });
     },
     close: function(data) {
@@ -22,7 +22,7 @@ define(["../events/postal"],function(postal){
         issue: this.attributes,
         correlationId: postal.correlationId
       }, function (response) {
-        console.log("closed issue", data.index);
+        //console.log("closed issue", data.index);
       });
     },
     reorder: function(data) {
@@ -31,7 +31,7 @@ define(["../events/postal"],function(postal){
         issue: this.attributes,
         correlationId: postal.correlationId
       }, function (response) {
-        console.log("reordered issue", data.order);
+        //console.log("reordered issue", data.order);
       });
 
     }
