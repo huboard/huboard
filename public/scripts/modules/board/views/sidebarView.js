@@ -30,6 +30,18 @@ define(["../events/postal","./filterView"], function (postal, filterView) {
 
       $this.append("<h5>Milestones</h5>");
       $this.append(milestoneViews);
+      $(milestoneViews).click(function(ev) {
+         ev.preventDefault();
+         var $this = $(this),
+             $clicked = $this.data("filter");
+         var othersActive = _(milestoneViews).filter(function(v) {
+           var data = $(v).data("filter");
+               return $clicked.cid !== data.cid && data.state !== 0;        
+         });
+         _(othersActive).each(function(v) {
+           $(v).trigger("clear");
+         });
+      });
 
       var labels = _.map(this.labels, function(label) {
           return new filterView({color: "#" + label.color, name: label.name, condition: function (issue) { return _.any(issue.labels, function(l){ return l.name.toLocaleLowerCase() === label.name.toLocaleLowerCase();})}}).render().el;

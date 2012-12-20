@@ -17,11 +17,13 @@ define(["../events/postal"], function(postal) {
        },
        events: {
           "click" : "clicked",
-          "clear" : "clear",
+          "clear" : "clearAndPublish",
           "click .iconic" : "clearAndPublish"
        },
        render: function() {
-         $(this.el).html("<a href='#'>"+ this.name + "<span class='iconic x-alt'></span></a>").addClass("-x" + this.params.color.substring(1) );
+         $(this.el)
+         .html("<a href='#'>"+ this.name + "<span class='iconic x-alt'></span></a>").addClass("-x" + this.params.color.substring(1) )
+         .data("filter",this);
          return this;
        },
        clicked : function(ev) {
