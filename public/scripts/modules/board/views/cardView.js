@@ -27,23 +27,17 @@ define(["text!../templates/card.html","../models/card", "../events/postal"],func
       postal.publish("Closed.Issue",{card: this});
     },
     render: function(){
-
-
       $(this.el).html( _.template(template, this.issue.attributes))
       .data("issue",this.issue.attributes);
-      if(this.issue.attributes.repo.color){
-        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(this.issue.attributes.repo.color);
-        var rgb = result ? {
-          r: parseInt(result[1], 16),
-          g: parseInt(result[2], 16),
-          b: parseInt(result[3], 16)
-        } : null;
 
-        var rgbacolor = "4px solid rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + ",0.7)";
+      if(this.issue.attributes.repo.color){
+
+        var color = $.Color("#" + this.issue.attributes.repo.color);
+
+        var rgbacolor = "3px solid " + $.Color(color.alpha(0.5)).toRgbaString();
         $(this.el)
         .css({
-          border: rgbacolor,
-          "border-radius" : "8px"
+          "border-left": rgbacolor
         });
 
       }

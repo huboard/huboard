@@ -162,8 +162,7 @@
   position: absolute;
   top: 12px;
   right: 3px;
-  font-size:30px;
-  color:$red;
+  font-size:24px;
   opacity:0.0;
 }
 .column li:hover a.close {
@@ -171,7 +170,6 @@
 }
 .column li a.close:hover {
   opacity:0.5;
-  color:$red;
 }
 
 .column li a small {
