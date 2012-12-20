@@ -5,16 +5,15 @@ define(["text!../templates/card.html","../models/card", "../events/postal"],func
       this.issue = new card({model:params.issue, user:params.user,repo: params.repo});
       _.bind(this,'moved',this.moved);
       _.bind(this,'drop',this.drop);
-      postal.subscribe("Filter.*", $.proxy(this.filter, this));
-      postal.subscribe("XFilter", $.proxy(this.xfilter, this));
+      postal.subscribe("Filter.Simple", $.proxy(this.simpleFilter, this));
+      postal.subscribe("Filter.Complex", $.proxy(this.complexFilter, this));
       postal.socket(params.user + "/" + params.repo,"Moved." + params.issue.number, $.proxy(this.onMoved,this));
       postal.socket(params.user + "/" + params.repo,"Closed." + params.issue.number, $.proxy(this.onClosed,this));
 
-      this.filtersHash = {};
+      this.filtersHash = { simple: {}, complex: {}};
     },
     events: {
       "moved" : "moved",
-      "click .milestone": "publishFilter",
       "click .close": "closed",
       "drop" : "drop"
     },
@@ -52,37 +51,33 @@ define(["text!../templates/card.html","../models/card", "../events/postal"],func
       this.remove();
       postal.publish("Closed.Issue",{card: this});
     },
-    publishFilter: function() {
-      var self = this;
-      postal.publish("Filter.Milestone", 
-                     function (issue) { 
-                       return issue.milestone ? issue.milestone.number === self.issue.attributes.milestone.number : false;
-                     });
-    },
-    filter: function (shouldFilter) {
-      $(this.el).toggle(shouldFilter(this.issue.attributes));
-    },
-    xfilter: function(message){
-      var self = this;
+    transition: function() {
 
-      console.log("filter", message);
-
-      this.filtersHash[message.id] = message;
-      var filters = [];
-      for(var key in this.filtersHash) {
-          filters.push(this.filtersHash[key]);
+      var filters = [], self = this;
+      for(var key in this.filtersHash.simple) {
+          filters.push(this.filtersHash.simple[key]);
       }
       var fade = _.filter(filters,function(f){ return f.state === 1;});
       var hide = _.filter(filters,function(f){ return f.state === 2;});
       if(_.any(hide,function(f){ return !f.condition(self.issue.attributes); })){
-         $(self.el).hide();
+         $(self.el).addClass("hide").removeClass("dim");
          return;
       }
       if(_.any(fade,function(f){ return !f.condition(self.issue.attributes); })){
-         $(self.el).css({display:"block",opacity: 0.6});
+         $(self.el).addClass("dim").removeClass("hide");
          return;
       }
-      $(self.el).css({display:"block",opacity: 1});
+      $(self.el).removeClass("dim hide")
+
+    },
+    simpleFilter: function(message){
+      var self = this;
+
+      console.log("filter", message);
+
+      this.filtersHash.simple[message.id] = message;
+
+      this.transition();
     },
     drop: function(ev,order){
       this.issue.reorder({order:order});

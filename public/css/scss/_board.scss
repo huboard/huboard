@@ -95,6 +95,10 @@
   background-color: #fff;
   border: 1px solid #e5e5e5;
   border-bottom-color: darken(#e5e5e5, 5%); 
+  &.dim {
+    opacity: 0.5;
+    @include transition (opacity 0.6s, ease-out);
+  }
   .card-labels {
     position: absolute;
     bottom: -3px;
@@ -138,10 +142,9 @@
     white-space: nowrap;
     text-overflow: ellipsis;
   }         
-  .milestone a {
+  .milestone {
     color: $lightGrey;
     font-size:11px;
-    cursor:pointer;
   }         
   img {
     position: absolute;

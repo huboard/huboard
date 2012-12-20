@@ -11,6 +11,7 @@ define(["../events/postal"], function(postal) {
             this.params = params;
             this.condition = params.condition;
             this.name = params.name;
+            this.type = params.type || "Simple";
             this.state = 0;
             this.states = [0,1,2,0];
        },
@@ -42,7 +43,7 @@ define(["../events/postal"], function(postal) {
          $(this.el).find("a").removeClass("dim").removeClass("active");
        },
        publish : function() {
-         postal.publish("XFilter", { id: this.cid, condition: this.condition, state:this.state});
+         postal.publish("Filter." + this.type, { id: this.cid, condition: this.condition, state:this.state});
        },
        clearAndPublish: function(ev) {
          ev.preventDefault();
