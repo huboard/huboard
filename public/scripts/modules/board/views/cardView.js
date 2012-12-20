@@ -54,20 +54,23 @@ define(["text!../templates/card.html","../models/card", "../events/postal"],func
     transition: function() {
 
       var filters = [], self = this;
-      for(var key in this.filtersHash.simple) {
-          filters.push(this.filtersHash.simple[key]);
-      }
-      var fade = _.filter(filters,function(f){ return f.state === 1;});
-      var hide = _.filter(filters,function(f){ return f.state === 2;});
-      if(_.any(hide,function(f){ return !f.condition(self.issue.attributes); })){
-         $(self.el).addClass("hide").removeClass("dim");
-         return;
-      }
-      if(_.any(fade,function(f){ return !f.condition(self.issue.attributes); })){
-         $(self.el).addClass("dim").removeClass("hide");
-         return;
-      }
-      $(self.el).removeClass("dim hide")
+      setTimeout(function(){
+        for(var key in self.filtersHash.simple) {
+            filters.push(self.filtersHash.simple[key]);
+        }
+        var fade = _.filter(filters,function(f){ return f.state === 1;});
+        var hide = _.filter(filters,function(f){ return f.state === 2;});
+        if(_.any(hide,function(f){ return !f.condition(self.issue.attributes); })){
+           $(self.el).addClass("hide").removeClass("dim");
+           return;
+        }
+        if(_.any(fade,function(f){ return !f.condition(self.issue.attributes); })){
+           $(self.el).addClass("dim").removeClass("hide");
+           return;
+        }
+        $(self.el).removeClass("dim hide")
+
+      }, 0);
 
     },
     simpleFilter: function(message){

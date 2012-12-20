@@ -6,13 +6,18 @@ define(["../events/postal"], function(postal){
        "keyup input" : "onkeyup"
      },
      initialize: function(){
+       var self = this;
 
+       this.publish = _.debounce(function() {
+          var val = $(self.el).find("input").val();
+          postal.publish("Filter.Simple",{id: "search", condition: function(issue){
+               return issue.title.toLocaleLowerCase().indexOf(val.toLocaleLowerCase()) !== -1;
+          }, state:2});
+
+       }, 300);
      },
      onkeyup : function(ev){
-        var val = $(this.el).find("input").val();
-        postal.publish("XFilter",{id: "search", condition: function(issue){
-             return issue.title.toLocaleLowerCase().indexOf(val.toLocaleLowerCase()) !== -1;
-        }, state:2});
+       this.publish();
      }
 
   });
