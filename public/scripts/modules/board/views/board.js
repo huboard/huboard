@@ -19,6 +19,7 @@ define(["../collections/issues","text!../templates/board.html", "./columnView","
           .find(".toggle-drawer").removeClass("arrow-right").addClass("arrow-left")
           .end()
           .animate({left: '+=270px'}, 300);
+        $("#content").animate({"margin-left": "+=100px"},300);
         break;
       case "close":
         $("#drawer")
@@ -27,6 +28,7 @@ define(["../collections/issues","text!../templates/board.html", "./columnView","
               .find(".toggle-drawer").removeClass("arrow-left").addClass("arrow-right")
               .end();
           });
+        $("#content").animate({"margin-left": "-=100px"},300);
     }
   };
 
