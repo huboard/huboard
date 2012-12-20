@@ -25,12 +25,12 @@ define(["../events/postal","./filterView"], function (postal, filterView) {
       var combined = (grouped.wip || []).concat(grouped.backlog || []);
       var milestoneViews = _.map(combined, function (milestone) {
         return new filterView({color: "#0069D6", name: milestone.title, count: milestone.open_issues,
-                              condition: function (issue) { return issue.milestone && issue.milestone.title === milestone.title;}}).render().el;
+                              condition: function (issue) { return issue.milestone && issue.milestone.title.toLocaleLowerCase() === milestone.title.toLocaleLowerCase();}}).render().el;
       });
       $this.append(milestoneViews);
       var labels = _.map(this.labels, function(label) {
-          return new filterView({color: "#" + label.color, name: label.name, condition: function (issue) { return _.any(issue.labels, function(l){ return l.name === label.name;})}}).render().el;
-      });
+          return new filterView({color: "#" + label.color, name: label.name, condition: function (issue) { return _.any(issue.labels, function(l){ return l.name.toLocaleLowerCase() === label.name.toLocaleLowerCase();})}}).render().el;
+      });                                                                                                                                                                                                             r
       $this.append(labels);
       return this;
     }

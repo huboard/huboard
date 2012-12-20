@@ -79,8 +79,10 @@ module Stint
               end
 
           end
-        board[:other_labels] = board[:other_labels].group_by { |l| l["name"] }.map{|k,v| v.first }
-        board[:milestones] = board[:milestones].group_by { |l| l["title"] }.map{|k,v| v.first }
+        # labels have to share the exact same color to work
+        board[:other_labels] = board[:other_labels].group_by { |l| l["name"].downcase }.map{|k,v| v.first }
+
+        board[:milestones] = board[:milestones].group_by { |l| l["title"].downcase }.map{|k,v| v.first }
         return board
     end
 

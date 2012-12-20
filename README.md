@@ -64,10 +64,37 @@ Example:
 For help distiguishing cards add a custom color to label and huboard
 will add a border to issues belonging to the linked board
 
-![linked board](http://f.cl.ly/items/13453x43053r2G0d3x0v/Screen%20Shot%202012-04-28%20at%2010.48.17%20AM.png)
+Note:
+    linked boards will aggregate milestone and label together.
+Milestones are aggregated by the title and **must** be exactly the
+same in order to work. Labels are aggregated by the label's name the
+labels **name and color** must match in order to work.
 
 
-## To run locally
+# To run locally
+
+### Install dependencies
+
+    gem install bundler
+    bundle install
+
+### Register app for Github OAuth
+
+Go to https://github.com/account/applications and register your
+application to get the application keys needed for OAuth.
+
+- URL: Pow: `http://huboard.dev`, Rack: `http://localhost:9292`
+- Callback: Pow: `http://huboard.dev/auth/github/callback`, Rack:
+  `http://localhost:9292/auth/github/callback`
+
+### Configure your app
+
+    cp .settings.sample .settings
+
+Edit `.settings` to set the Client ID and Client Secret provided by
+Github when you registered the application.
+
+## Using Pow
 
 ### Install Pow from [pow.cx](http://pow.cx)
 
@@ -90,29 +117,18 @@ Edit `.rvmrc` to specify your ruby version/gemset
 
 Recommend MRI 1.9.2, to match the [bamboo stack on heroku](http://devcenter.heroku.com/articles/stack)
 
-### Install dependencies
-
-    gem install bundler -v 1.1.rc
-    bundle install
-
-### Register app for Github OAuth
-
-Go to https://github.com/account/applications and register your
-application to get the application keys needed for OAuth.
-
-- URL: `http://huboard.dev`
-- Callback: `http://huboard.dev/auth/github/callback`
-
-### Configure your app
-
-    cp .settings.sample .settings
-
-Edit `.settings` to set the Client ID and Client Secret provided by
-Github when you registered the application.
 
 ### Try the app
 
 Open your browser to http://huboard.dev/board
+
+## Using rack (shotgun, thin, ect.)
+
+`bundle exec shotgun -p 9292`
+
+or
+
+`bundle exec rackup config.ru`
 
 
 ## Deploy to Heroku
@@ -166,14 +182,6 @@ application to get the application keys needed for OAuth.
 - Callback: `http://<your-app-name>.herokuapp.com/auth/github/callback`
 
 
-### 3. Configure a Github Team
-
-Create a Github team that will be used by Huboard, or use an existing one. 
-
-Make note of the team ID. You can see it in the URL when editing the team.
-
-*If you get bounced by [SecuroCat](http://octodex.github.com/bouncer/), you should first check your team ID.*
-
 
 ### 4. Configure Heroku Environment
 
@@ -199,7 +207,7 @@ git push heroku master
 -------
 
 The MIT License (MIT)
-Copyright (c) 2012 Ryan Rauh
+Copyright (c) 2012-2013 Ryan Rauh
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
