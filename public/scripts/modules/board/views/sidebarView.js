@@ -4,27 +4,18 @@ define(["../events/postal","./filterView"], function (postal, filterView) {
     tagName: "ul",
     className: "filters",
     initialize: function (params) {
-      console.log("sidebar",params);
       this.milestones = params.data.milestones;
       this.login = params.params.login;
       this.labels = params.data.other_labels;
     },
     render: function () {
       var $this = $(this.el),
-          login = this.login,
-          clear = $("<li class='hide clear-filters'><a href='#'>Clear active filters</a></li>");
-
-      clear.click(function(ev){
-         ev.preventDefault();
-         postal.publish("Filter.Milestone", function (issue,override) { return (override != null) ? override : true; });
-         clear.hide();
-      });
-
-
-      clear.appendTo($this);
+          login = this.login;
 
       var userFilter = new filterView({color: "#0069D6", name:"Assigned to me" , condition:function(issue) { return issue.assignee && issue.assignee.login === login; } }).render();
       $(userFilter.el).appendTo($this);
+
+      // assigned to others?
 
 
       var grouped = _.groupBy(this.milestones, function (milestone) {

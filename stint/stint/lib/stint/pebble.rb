@@ -79,6 +79,8 @@ module Stint
               end
 
           end
+        board[:other_labels] = board[:other_labels].group_by { |l| l["name"] }.map{|k,v| v.first }
+        board[:milestones] = board[:milestones].group_by { |l| l["title"] }.map{|k,v| v.first }
         return board
     end
 

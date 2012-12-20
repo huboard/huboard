@@ -85,7 +85,7 @@ define(["text!../templates/card.html","../models/card", "../events/postal"],func
          return;
       }
       if(_.any(fade,function(f){ return !f.condition(self.issue.attributes); })){
-         $(self.el).css({display:"block",opacity: 0.3});
+         $(self.el).css({display:"block",opacity: 0.6});
          return;
       }
       $(self.el).css({display:"block",opacity: 1});
