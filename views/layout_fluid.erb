@@ -56,7 +56,9 @@
       </div>
     </div>
     <div class="container-fluid" id="main-stage">
-      <% yield_content :header %>
+      <div class="page-header-wrapper">
+        <% yield_content :header %>
+      </div>
       <div class="sidebar">
         <% yield_content :sidebar %>
       </div>
