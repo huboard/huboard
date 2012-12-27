@@ -52,7 +52,7 @@ module Stint
           :issues => issues
       end
 
-      reply.delete_if{|x| x.nil? }.sort_by {|m| m[:due_on]}
+      reply.delete_if{|x| x.nil? || x.empty? }.sort_by {|m| m["due_on"] || "0"}
     end
 
     def milestone(user_name, repo, number)

@@ -1,4 +1,6 @@
 require 'ghee'
+#require 'rack-cache'
+#require 'active_support/cache'
 module Huboard
   module Common
     module Settings
@@ -31,15 +33,15 @@ module Huboard
         RUBY
       end
     end
-    class SimpleCache
+    class SimpleCache < Hash
       def read(key)
         if cached = self[key]
-          Marshal.load(cached)
+          cached
         end
       end
 
       def write(key, data)
-        self[key] = Marshal.dump(data)
+        self[key] = data
       end
 
       def fetch(key)
@@ -72,10 +74,11 @@ module Huboard
 
       def cache
          @cache ||= SimpleCache.new
+         #@cache ||= ActiveSupport::Cache::FileStore.new "tmp", :namespace => 'huboard', :expires_in => 3600
       end
 
       def github
-        @github ||= Stint::Github.new(gh) { |conn| conn.use FaradayMiddleware::Caching, cache }
+        @github ||= Stint::Github.new(gh) 
       end
 
       def pebble
@@ -87,7 +90,9 @@ module Huboard
       end
 
       def gh(token = nil)
-        @gh ||= Ghee.new(:access_token => token || user_token)
+        @gh ||= Ghee.new(:access_token => token || user_token) do |conn| 
+          conn.use FaradayMiddleware::Caching, cache 
+        end
       end
 
       def socket_backend

@@ -245,7 +245,6 @@ module Stint
     def milestones(user_name, repo)
       milestones = github.milestones user_name, repo
       milestones = milestones.map { |m|
-
         m["pull_requests"] = m[:issues].select {|i| !i["pull_request"]["html_url"].nil?}
         m[:issues] = m[:issues].delete_if {|i| !i["pull_request"]["html_url"].nil?}
         m["open_issues"] = m[:issues].size
