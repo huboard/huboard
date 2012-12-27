@@ -1,5 +1,18 @@
-define(["../collections/issues","text!../templates/board.html", "./columnView","./sidebarView", "./headerView","../events/postal","./cssView"], 
-       function (issues, template, columnView, sidebarView, headerView, postal) {
+define(["../collections/issues",
+       "text!../templates/board.html",
+       "./columnView",
+       "./sidebarView",
+       "./headerView",
+       "./assigneeView",
+       "../events/postal",
+       "./cssView"], 
+       function (issues,
+                 template,
+                 columnView,
+                 sidebarView,
+                 headerView,
+                 assigneeView,
+                 postal) {
 
   var calculateTallest = function (){
 
@@ -64,7 +77,8 @@ define(["../collections/issues","text!../templates/board.html", "./columnView","
                noneColumn = _.first(data.labels),
                rest = _.rest(data.labels),
                sidebar = new sidebarView({data:data,params:this.params}),
-               searchView = new headerView({data:data, params: this.params}),
+               searchView = new headerView(),
+               assigneesView = new assigneeView({data:data, params: this.params}),
                self = this;
            
            $(noneBoard).append(new columnView({column: noneColumn, user:this.user,repo:this.repo}).render().el);
