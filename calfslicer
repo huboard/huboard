@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo "Compressing javascript"
+node calfslicer.js $2 $1 > $3

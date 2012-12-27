@@ -13,3 +13,14 @@ task :css do
     end
   end
 end
+
+desc "rebuild js files"
+task :js do
+  Dir.glob("**/[sS]cripts").each do |d|
+    Dir.glob("#{d}/**/*.slicer") do |slicer|
+      sh "echo #{slicer}"
+      #sh "node calfslicer.js #{slicer} ./#{d} #{d}/#{File.basename(slicer, ".*")}.js"
+      `sh ./calfslicer #{d} #{slicer} #{d}/#{File.basename(slicer,".*")}.js`
+    end
+  end
+end
