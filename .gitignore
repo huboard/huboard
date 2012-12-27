@@ -5,3 +5,4 @@ tmp/
 .DS_Store
 .sass-cache
 *.min.css
+application.min.js
