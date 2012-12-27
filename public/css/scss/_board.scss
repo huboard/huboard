@@ -95,6 +95,9 @@
   background-color: #fff;
   border: 1px solid #e5e5e5;
   border-bottom-color: darken(#e5e5e5, 5%); 
+  &.assignee-accept {
+     border-color: blue;
+  }
   &.dim {
     opacity: 0.5;
     @include transition (opacity 0.6s, ease-out);

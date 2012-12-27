@@ -30,6 +30,10 @@ module Huboard
       json pebble.reorder_milestone params[:user], params[:repo], milestone["number"], params[:index], params[:status]
     end
 
+    post '/:user/:repo/assigncard' do 
+      publish "#{params[:user]}/#{params[:repo]}", "Assigned.#{params[:issue][:number]}", { issue:params[:issue], assignee: params[:assignee]}
+      json pebble.assign_card params[:user], params[:repo], params[:issue], params[:assignee]
+    end
     post '/:user/:repo/movecard' do 
       publish "#{params[:user]}/#{params[:repo]}", "Moved.#{params[:issue][:number]}", { issue:params[:issue], index: params[:index]}
       json pebble.move_card params[:user], params[:repo], params[:issue], params[:index]

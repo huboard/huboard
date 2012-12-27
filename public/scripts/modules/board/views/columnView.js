@@ -85,18 +85,18 @@ define(["text!../templates/column.html","./cardView","../events/postal"],functio
         // dragged it to the top
         currentData._data.order = (after || 1)/2;
         currentElement
-        .trigger("drop", currentData._data.order)  
+        .trigger("reorder", currentData._data.order)  
         .data("issue", currentData);  
       } else if (last) {
         // dragged to the bottom
         currentData._data.order = (before + 1);
         currentElement
-        .trigger("drop", currentData._data.order)  
+        .trigger("reorder", currentData._data.order)  
         .data("issue", currentData);  
       }  else {
         currentData._data.order = (((after + before) || 1)/2);
         currentElement
-        .trigger("drop", currentData._data.order)  
+        .trigger("reorder", currentData._data.order)  
         .data("issue", currentData);  
       }
     }

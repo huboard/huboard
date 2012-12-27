@@ -25,6 +25,16 @@ define(["../events/postal"],function(postal){
         //console.log("closed issue", data.index);
       });
     },
+    assign: function(assignee){
+      this.attributes.assignee = assignee;
+      $.post("/api/" + this.attributes.repo.owner.login + "/" + this.attributes.repo.name + "/assigncard",{
+        issue: this.attributes,
+        assignee: assignee.login
+      }, function(response) {
+
+      });
+
+    },
     reorder: function(data) {
       $.post("/api/" + this.attributes.repo.owner.login + "/" + this.attributes.repo.name + "/reorderissue",{
         index: data.order,

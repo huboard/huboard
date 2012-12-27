@@ -4,7 +4,7 @@ define(["text!../templates/card.html","../models/card", "../events/postal"],func
     initialize: function ( params ) {
       this.issue = new card({model:params.issue, user:params.user,repo: params.repo});
       _.bind(this,'moved',this.moved);
-      _.bind(this,'drop',this.drop);
+      _.bind(this,'reorder',this.drop);
       postal.subscribe("Filter.Simple", $.proxy(this.simpleFilter, this));
       postal.subscribe("Filter.Complex", $.proxy(this.complexFilter, this));
       postal.socket(params.user + "/" + params.repo,"Moved." + params.issue.number, $.proxy(this.onMoved,this));
@@ -15,7 +15,8 @@ define(["text!../templates/card.html","../models/card", "../events/postal"],func
     events: {
       "moved" : "moved",
       "click .close": "closed",
-      "drop" : "drop"
+      "drop": "dropped",
+      "reorder" : "drop"
     },
     tagName:"li",
     onMoved: function(data){
@@ -27,6 +28,7 @@ define(["text!../templates/card.html","../models/card", "../events/postal"],func
     },
     render: function(){
       $(this.el).html( _.template(template, this.issue.attributes))
+      .droppable({scope:"assignee",hoverClass:"assignee-accept"})
       .data("issue",this.issue.attributes);
 
       if(this.issue.attributes.repo.color){
@@ -44,6 +46,14 @@ define(["text!../templates/card.html","../models/card", "../events/postal"],func
     },
     moved: function(ev,index){
       this.issue.save({index: index});
+    },
+    dropped: function(ev, ui){
+      console.log("i got dropped yo!",ev, ui);
+      console.log($(ui.draggable).data("login"));
+      this.issue.assign($(ui.draggable).data("assignee"));
+      console.log(this.issue.attributes);
+      this.render();
+      
     },
     closed: function(ev, index){
       ev.preventDefault();

@@ -83,6 +83,7 @@ module Stint
         board[:other_labels] = board[:other_labels].group_by { |l| l["name"].downcase }.map{|k,v| v.first }
 
         board[:milestones] = board[:milestones].group_by { |l| l["title"].downcase }.map{|k,v| v.first }
+        board[:assignees] = github.assignees(user_name, repo).map{|a| a}
         return board
     end
 
@@ -223,6 +224,10 @@ module Stint
       issue["labels"] = issue["labels"].delete_if { |l| l["name"] == state["name"] }
 
       github.update_issue user_name, repo, {"number" => issue["number"],"labels" => issue["labels"]}
+    end
+
+    def assign_card(user_name, repo, the_issue, assignee)
+      github.update_issue user_name, repo, {"number" => the_issue["number"], "assignee" => assignee}
     end
 
     def move_card(user_name, repo, the_issue, index)

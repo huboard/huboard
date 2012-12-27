@@ -64,7 +64,7 @@ define(["../collections/issues","text!../templates/board.html", "./columnView","
                noneColumn = _.first(data.labels),
                rest = _.rest(data.labels),
                sidebar = new sidebarView({data:data,params:this.params}),
-               searchView = new headerView(),
+               searchView = new headerView({data:data, params: this.params}),
                self = this;
            
            $(noneBoard).append(new columnView({column: noneColumn, user:this.user,repo:this.repo}).render().el);
