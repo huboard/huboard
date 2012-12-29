@@ -5,10 +5,13 @@ define(["text!../templates/card.html","../models/card", "../events/postal"],func
       this.issue = new card({model:params.issue, user:params.user,repo: params.repo});
       _.bind(this,'moved',this.moved);
       _.bind(this,'reorder',this.drop);
+
       postal.subscribe("Filter.Simple", $.proxy(this.simpleFilter, this));
       postal.subscribe("Filter.Complex", $.proxy(this.complexFilter, this));
+
       postal.socket(params.user + "/" + params.repo,"Moved." + params.issue.number, $.proxy(this.onMoved,this));
       postal.socket(params.user + "/" + params.repo,"Closed." + params.issue.number, $.proxy(this.onClosed,this));
+      postal.socket(params.user + "/" + params.repo,"Assigned." + params.issue.number, $.proxy(this.onAssigned,this));
 
       this.filtersHash = { simple: {}, complex: {}};
     },
@@ -48,12 +51,13 @@ define(["text!../templates/card.html","../models/card", "../events/postal"],func
       this.issue.save({index: index});
     },
     dropped: function(ev, ui){
-      console.log("i got dropped yo!",ev, ui);
-      console.log($(ui.draggable).data("login"));
-      this.issue.assign($(ui.draggable).data("assignee"));
-      console.log(this.issue.attributes);
-      this.render();
-      
+      var assignee =  $(ui.draggable).data("assignee");
+      this.issue.assign(assignee);
+      this.onAssigned({assignee: assignee});
+    },
+    onAssigned: function(data) {
+         this.issue.attributes.assignee = data.assignee;
+         this.render();
     },
     closed: function(ev, index){
       ev.preventDefault();

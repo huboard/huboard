@@ -1,36 +1,37 @@
 .header {
   font-size: 24px;
 
-   .author{
-     color: #08C;
-     font-weight: normal;
-   }
-   .repo {
-     color: #08C;
-   }
-   input {
-     border: 0;
-     outline: 0;
-     background: #fff;
-     vertical-align: baseline;
-     line-height: 40px;
-     margin: 0;
-     padding:0;
-     font-size: 24px;
-   }
+  .author{
+    color: #08C;
+    font-weight: normal;
+  }
+  .repo {
+    color: #08C;
+  }
+  input {
+    border: 0;
+    outline: 0;
+    background: #fff;
+    vertical-align: baseline;
+    line-height: 40px;
+    margin: 0;
+    padding:0;
+    font-size: 24px;
+  }
 }
 .assignee {
-       list-style: none;
-       line-height: 40px;
-       float:left;
-       margin:0 2px;
+  list-style: none;
+  line-height: 40px;
+  float:left;
+  margin:0 2px;
+  cursor:pointer;
 }
 .page-header-wrapper {
-   ol {
-     margin: 0;
-     padding: 0;
-     float: right;
-     list-style: none;
-   }
+  ol {
+    margin: 0;
+    padding: 0;
+    float: right;
+    list-style: none;
+  }
 }
 

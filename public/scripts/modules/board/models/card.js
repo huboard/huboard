@@ -29,6 +29,7 @@ define(["../events/postal"],function(postal){
       this.attributes.assignee = assignee;
       $.post("/api/" + this.attributes.repo.owner.login + "/" + this.attributes.repo.name + "/assigncard",{
         issue: this.attributes,
+        correlationId: postal.correlationId,
         assignee: assignee.login
       }, function(response) {
 
