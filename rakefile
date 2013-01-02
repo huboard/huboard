@@ -24,3 +24,6 @@ task :js do
     end
   end
 end
+
+desc "precomile assets"
+task "assets:precompile" => [:css]

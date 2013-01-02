@@ -50,7 +50,10 @@ module Huboard
 
     get '/:user/?' do 
       protected!
-      @repos = pebble.all_repos.select {|r| r["owner"]["login"] == params[:user]}
+      user = gh.users(params[:user])
+       @repos = user.repos.all.sort_by{|r|r["pushed_at"] || "111111"}.reverse if user["type"] == "User" 
+       @repos = gh.orgs(user["login"]).repos.all.sort_by{|r|r["pushed_at"] || "111111"}.reverse if user["type"] == "Organization"
+      #@repos = pebble.all_repos.select {|r| r["owner"]["login"] == params[:user]}
       @filtered = params[:user]
       erb :index
     end
