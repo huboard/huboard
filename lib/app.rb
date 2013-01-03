@@ -15,7 +15,6 @@ module Huboard
 
     PUBLIC_URLS = ['/', '/logout','/webhook']
     before do
-      @parameters = params
       protected! unless PUBLIC_URLS.include? request.path_info
     end
 
@@ -43,6 +42,7 @@ module Huboard
     end
 
     get '/' do 
+      @parameters = params
       return erb :home, :layout => :marketing unless authenticated?
       protected!
       @repos = pebble.all_repos
@@ -51,6 +51,7 @@ module Huboard
 
     get '/:user/?' do 
       protected!
+      @parameters = params
       user = gh.users(params[:user])
        @repos = user.repos.all.sort_by{|r|r["pushed_at"] || "111111"}.reverse if user["type"] == "User" 
        @repos = gh.orgs(user["login"]).repos.all.sort_by{|r|r["pushed_at"] || "111111"}.reverse if user["type"] == "Organization"
@@ -60,6 +61,7 @@ module Huboard
     end
 
     get '/:user/:repo/milestones' do 
+      @parameters = params
       erb :milestones
     end
 
@@ -80,6 +82,7 @@ module Huboard
 
 
     get '/:user/:repo/hook' do 
+      @parameters = params
       json(pebble.create_hook( params[:user], params[:repo], "#{base_url}/webhook?token=#{encrypted_token}"))
     end
 
