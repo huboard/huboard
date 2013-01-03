@@ -15,6 +15,7 @@ module Huboard
 
     PUBLIC_URLS = ['/', '/logout','/webhook']
     before do
+      @parameters = params
       protected! unless PUBLIC_URLS.include? request.path_info
     end
 
@@ -59,17 +60,14 @@ module Huboard
     end
 
     get '/:user/:repo/milestones' do 
-      @parameters = params
       erb :milestones
     end
 
     get '/:user/:repo/board/create' do
-      @parameters = params
       erb :create_board
     end
 
     post '/:user/:repo/board/create/?' do
-      @parameters = params
       pebble.create_board(params[:user],params[:repo],"#{base_url}/webhook?token=#{encrypted_token}")
       redirect "/#{params[:user]}/#{params[:repo]}/board"
     end

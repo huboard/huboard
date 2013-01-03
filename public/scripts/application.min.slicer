@@ -1,8 +1,8 @@
 firebugx.js
-require.js
 jquery.color.js
 underscore.js
 backbone.js
 postal.min.js
 module-loader.js
 bootstrap/bootstrap.min.js
+modules/huboard.allmodules.js

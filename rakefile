@@ -25,6 +25,54 @@ task :js do
   end
 end
 
+task :rjs do
+  class RequireModules
+    def initialize
+      @files = Dir.glob("**/[sS]cripts/modules/**/main.js")
+    end
+
+    def modules
+      @files.map do |f|
+        "#{File.dirname(f).gsub(/.*modules\//,"")}/#{File.basename(f,".js")}"
+      end
+    end
+
+    def baseUrl
+      File.dirname(@files[0]).gsub(/modules\/.*/,"modules")
+    end
+
+
+    def template
+      erb_template = %{
+                       var config =  {
+                          name:"marker",
+                          include: <%= modules %>,
+                          exclude: ["socket"],
+                          baseUrl: "<%= baseUrl %>",
+                          out : "<%= baseUrl %>/huboard.allmodules.js"
+                        }
+                      console.log("config",config)
+                      var requirejs = require("requirejs")
+
+                      console.log("config",requirejs)
+                      requirejs.optimize(config, function(contents){
+                        console.log(contents);
+                      }, function(err) {
+ console.log(err)
+});
+      }
+      erb = ERB.new erb_template
+      erb.result binding
+    end
+  end
+  modules = RequireModules.new
+  config = modules.template
+  File.open("app.build.js","wb") { |f|
+    f.write config
+  }
+  sh "node app.build.js"
+
+end
 desc "precomile assets"
 namespace :assets do 
   task :precompile => [:css]

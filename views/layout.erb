@@ -3,12 +3,30 @@
   <head>
     <title><% yield_content :title %>Huboard</title>
     <link rel="shortcut icon" type="image/png" href="/img/favicon.png" />
-
-    <!-- This is a special version of jQuery with RequireJS built-in -->
-    <script src="/scripts/firebugx.js" type="text/javascript" charset="utf-8"></script>
-    <script src="/scripts/require.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/scripts/modules/require.js"></script>
+    <% if @parameters[:socket_backend] %>
+      <script src="<%= @parameters[:socket_backend] %>/socket.io/socket.io.js"></script>
+      <script>
+        define("socket",function() {
+          return io.connect("<%= @parameters[:socket_backend] %>");
+        });
+
+      </script>
+    <% else %>
+      <script>
+        define("socket",function() {
+          return null;
+        });
+      </script>
+    <% end %>
+
+    <!-- This is a special version of jQuery with RequireJS built-in -->
+    <% if settings.environment.to_sym == :development  %>
+    <!-- I know this is really bad to do -->
+    <script src="/scripts/firebugx.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/scripts/modules/require.js"></script>
     <script src="/scripts/jquery.color.js" type="text/javascript" charset="utf-8"></script>
     <script src="/scripts/underscore.js" type="text/javascript" charset="utf-8"></script>
     <script src="/scripts/backbone.js" type="text/javascript" charset="utf-8"></script>
@@ -16,6 +34,10 @@
     <script src="/scripts/module-loader.js"></script>
 
     <script src="/scripts/bootstrap/bootstrap.min.js"></script>
+    <% else %>
+    <script src="/scripts/application.min.js"></script>
+
+    <% end %>
 
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/main.min.css" type="text/css" media="screen" charset="utf-8">
