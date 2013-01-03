@@ -12,11 +12,27 @@ define(["../events/postal","./filterView"], function (postal, filterView) {
       var $this = $(this.el),
           login = this.login;
 
-      var userFilter = new filterView({color: "#0069D6", name:"Assigned to me" , condition:function(issue) { return issue.assignee && issue.assignee.login === login; } }).render();
-      $(userFilter.el).appendTo($this);
+      var assignedToMe = new filterView({color: "#0069D6", name:"Assigned to me" , condition:function(issue) { return issue.assignee && issue.assignee.login === login; } }).render();
+      var assignedToOthers = new filterView({color: "#0069D6", name:"Assigned to others" , condition:function(issue) { return issue.assignee && issue.assignee.login !== login; } }).render();
+      var unassigned = new filterView({color: "#0069D6", name:"Unassigned issues" , condition:function(issue) { return !issue.assignee; } }).render();
 
-      // assigned to others?
+      var userFilterViews = $([assignedToMe.el,assignedToOthers.el,unassigned.el]);
 
+      $this.append(userFilterViews);
+
+      userFilterViews
+          .click(function(ev) {
+           ev.preventDefault();
+           var $this = $(this),
+               $clicked = $this.data("filter");
+           var othersActive = _(userFilterViews).filter(function(v) {
+             var data = $(v).data("filter");
+                 return $clicked.cid !== data.cid && data.state !== 0;        
+           });
+           _(othersActive).each(function(v) {
+             $(v).trigger("clear");
+           });
+        });
 
       var grouped = _.groupBy(this.milestones, function (milestone) {
          return milestone._data.status || "backlog";
