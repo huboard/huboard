@@ -64,6 +64,7 @@ module Huboard
     end
 
     get '/:user/:repo/board/create' do
+      @parameters = params
       erb :create_board
     end
 
