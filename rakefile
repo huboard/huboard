@@ -26,4 +26,6 @@ task :js do
 end
 
 desc "precomile assets"
-task "assets:precompile" => [:css]
+namespace :assets do 
+  task :precompile => [:css]
+end

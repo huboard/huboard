@@ -10,7 +10,6 @@ gem 'stint', :path => "./stint/stint"
 gem 'ghee'
 gem 'rack-cache'
 gem 'activesupport'
-gem 'execjs'
 
 group :development do
   gem 'watchr'
