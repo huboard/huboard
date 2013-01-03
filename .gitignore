@@ -6,3 +6,4 @@ tmp/
 .sass-cache
 #*.min.css
 application.min.js
+app.build.js

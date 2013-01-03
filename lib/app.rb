@@ -105,6 +105,7 @@ module Huboard
 
       #blank embedded data
       issue["_data"] = {} unless issue.nil?
+      issue["other_labels"] = []
       issue["repo"] = payload["repository"]
 
       case payload["action"]
