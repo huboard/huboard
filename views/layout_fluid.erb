@@ -3,11 +3,9 @@
   <head>
     <title><% yield_content :title %>Huboard</title>
     <link rel="shortcut icon" type="image/png" href="/img/favicon.png" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="/scripts/modules/require.js"></script>
     <% if @parameters[:socket_backend] %>
       <script src="<%= @parameters[:socket_backend] %>/socket.io/socket.io.js"></script>
+      <script src="/scripts/modules/require.js"></script>
       <script>
         define("socket",function() {
           return io.connect("<%= @parameters[:socket_backend] %>");
@@ -15,18 +13,20 @@
 
       </script>
     <% else %>
+      <script src="/scripts/modules/require.js"></script>
       <script>
         define("socket",function() {
           return null;
         });
       </script>
     <% end %>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
 
     <!-- This is a special version of jQuery with RequireJS built-in -->
     <% if settings.environment.to_sym == :development  %>
     <!-- I know this is really bad to do -->
     <script src="/scripts/firebugx.js" type="text/javascript" charset="utf-8"></script>
-    <script src="/scripts/modules/require.js"></script>
     <script src="/scripts/jquery.color.js" type="text/javascript" charset="utf-8"></script>
     <script src="/scripts/underscore.js" type="text/javascript" charset="utf-8"></script>
     <script src="/scripts/backbone.js" type="text/javascript" charset="utf-8"></script>
