@@ -25,6 +25,8 @@ task :js do
   end
 end
 
+
+desc "compile require modules"
 task :rjs do
   class RequireModules
     def initialize
