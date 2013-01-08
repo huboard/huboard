@@ -71,7 +71,7 @@ module Huboard
     end
 
     post '/:user/:repo/board/create/?' do
-      pebble.create_board(params[:user],params[:repo],"#{base_url}/webhook?token=#{encrypted_token}")
+      pebble.create_board(params[:user],params[:repo],"#{socket_backend}/issues/webhook?token=#{encrypted_token}") unless socket_backend.nil?
       redirect "/#{params[:user]}/#{params[:repo]}/board"
     end
 
@@ -83,41 +83,25 @@ module Huboard
 
     get '/:user/:repo/hook' do 
       @parameters = params
-      json(pebble.create_hook( params[:user], params[:repo], "#{base_url}/webhook?token=#{encrypted_token}"))
+      json(pebble.create_hook( params[:user], params[:repo], "#{socket_backend}/issues/webhook?token=#{encrypted_token}")) unless socket_backend.nil?
     end
 
     post '/webhook' do 
+      begin
+        token =  decrypt_token( params[:token] )
+        ghee = gh(token)
+        hub = Stint::Pebble.new(Stint::Github.new(ghee))
 
-      token =  decrypt_token( params[:token] )
-      ghee = gh(token)
-      hub = Stint::Pebble.new(Stint::Github.new(ghee))
-
-      payload = JSON.parse(params[:payload])
-      issue = payload["issue"]
-
-      if issue.nil?
+        payload = JSON.parse(params[:payload])
         user = payload["repository"]["owner"]["login"]
         repo = payload["repository"]["name"]
-        hooks = ghee.repos(user, repo).hooks
-                                        .reject {|x| x["name"] != "web" }
-                                        .find_all {|x| ["config"]["url"].start_with? base_url}
+        hooks = ghee.repos(payload["repository"]["full_name"]).hooks.reject {|x| x["name"] != "web" }.find_all {|x| x["config"]["url"].start_with? base_url}
         hub.fix_hooks user, repo, hooks
         puts "fixed hooks"
-        return json({:message => "fixed hooks"})
+        return json(hub.create_hook(user, repo, "#{socket_backend}/issues/webhook?token=#{params[:token]}")) unless socket_backend.nil?
+      rescue
+        return json({:message => "something go wrong?"})
       end
-
-      #blank embedded data
-      issue["_data"] = {} unless issue.nil?
-      issue["other_labels"] = []
-      issue["repo"] = payload["repository"]
-
-      case payload["action"]
-        when "opened" then publish payload["repository"]["full_name"], "Opened.0", issue
-        when "closed" then publish payload["repository"]["full_name"], "Closed.#{issue["number"]}", issue
-        # reopened is a bit more complex
-      end
-
-      json({"hooked" => "successful"})
     end
 
     helpers Sinatra::ContentFor

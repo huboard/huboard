@@ -159,25 +159,12 @@ module Stint
 
       hook_url = uri.to_s.gsub(uri.query,"")
 
-      return fix_hooks(user_name, repo, hooks.reject{ |x| x["name"] != "web" }.find_all{ |x| x["config"]["url"].start_with? hook_url}) 
+      hooks.reject{ |x| x["name"] != "web" }.find_all{ |x| x["config"]["url"].start_with? hook_url}.size > 0
+
     end
 
     def fix_hooks(user_name, repo, hooks)
-
-      return false if hooks.empty?
-
-      if hooks.size > 1
-        hooks.each { |h| delete_hook user_name, repo, h }
-        return false
-      end
-
-      return true if hooks.size == 1 and hooks[0]["events"].include? "issues"
-
-      if hooks.size == 1 and !hooks[0]["events"].include? "issues"
-         delete_hook user_name, repo, hooks[0] 
-         return false
-      end
-
+      hooks.each { |h| delete_hook user_name, repo, h }
     end
 
     def delete_hook(user_name, repo, hook)
