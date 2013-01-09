@@ -67,6 +67,7 @@ module Stint
     end
 
     def get_issues(user_name, repo)
+      #return [] if gh.connection.get("/repos/#{user_name}/#{repo}").status != 200
       gh.repos(user_name, repo).issues(:direction => "asc").all
     end
 

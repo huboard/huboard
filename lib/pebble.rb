@@ -73,9 +73,9 @@ module Stint
           .select{ |l| @link_pattern.match l["name"] }
           .each do |l|
               match = @link_pattern.match l["name"]
-              user, repo = match[:user_name], match[:repo]
+              linked_user, linked_repo = match[:user_name], match[:repo]
               begin
-                linked_board = build_board user, repo
+                linked_board = build_board linked_user, linked_repo
                 next if linked_board[:labels].size != board[:labels].size
                 board[:labels].each_with_index do |label, index|
 
@@ -90,7 +90,7 @@ module Stint
                 board[:other_labels].concat(linked_board[:other_labels])
 
               rescue
-                puts "Warning: Unable to link board: #{user}, #{repo}"
+                puts "Warning: Unable to link board: #{linked_user}, #{linked_repo}"
               end
 
           end
