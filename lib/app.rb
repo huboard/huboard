@@ -1,7 +1,6 @@
 require 'rdiscount'
 require 'sinatra'
 require 'sinatra/content_for'
-require 'stint'
 require 'encryptor'
 require 'base64'
 require_relative "helpers"

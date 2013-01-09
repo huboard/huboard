@@ -16,7 +16,7 @@
       <li class="repo">
       <a href="<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/milestones" %>"><span>milestones</span></a> 
       <a class="board" href="<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/board" %>"><span>open issues</span><strong><%=repo["open_issues"]%></strong></a> 
-      <span><a href='<%= "/#{repo["owner"]["login"]}" %>'><%= repo["owner"]["login"] %></a> / <a target="_blank" href='<%= "https://github.com/#{repo["owner"]["login"]}/#{repo["name"]}" %>'><%= repo["name"] %></a></span>
+      <span><a href='<%= "/#{repo["owner"]["login"]}" %>'><%= repo["owner"]["login"] %></a> / <a href='<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/board" %>'><%= repo["name"] %></a></span>
       </li>
     <% end %>
   </ul>

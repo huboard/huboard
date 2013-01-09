@@ -6,7 +6,6 @@ gem 'sinatra'
 gem 'thin'
 gem 'sinatra_auth_github'
 gem 'sinatra-content-for', "~> 0.1.0"
-gem 'stint', :path => "./stint/stint"
 gem 'ghee'
 gem 'rack-cache'
 gem 'activesupport'
