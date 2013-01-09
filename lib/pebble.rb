@@ -13,12 +13,11 @@ module Stint
             :milestone => m.merge(:_data => embedded_data(m["description"])),
             :issues => issues.find_all {|i| i["milestone"] && i["milestone"]["number"] == m["number"]}
             }
-        }
-
-      #by_milestone = by_milestone.delete_if{|x| x.nil? || x.empty? }.sort_by {|m| m["due_on"] || "0"}
+        }.sort_by { |m| m[:milestone]["_data"]["order"] || m[:milestone]["number"].to_f}
 
       return :milestones => milestones, 
         :unassigned => {:issues => issues.find_all {|i| i.milestone.nil? }, :milestone => {:title => "No milestone"}},
+        :assignees =>  github.assignees(user_name, repo).map{|a| a},
         other_labels: github.labels(user_name, repo).reject { |l| @huboard_patterns.any?{|p| p.match(l["name"]) } }
     end
 

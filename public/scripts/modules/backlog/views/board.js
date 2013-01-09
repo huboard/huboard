@@ -3,6 +3,7 @@ define(["../collections/issues",
        "./columnView",
        "./sidebarView",
        "./headerView",
+       "./assigneeView",
        "../events/postal",
        "./cssView"], 
        function (issues,
@@ -10,6 +11,7 @@ define(["../collections/issues",
                  columnView,
                  sidebarView,
                  headerView,
+                 assigneeView,
                  postal) {
 
   var calculateTallest = function (){
@@ -69,9 +71,13 @@ define(["../collections/issues",
            var board = $(_.template(template, data)),
                noneBoard = board.clone(),
                noneColumn = data.unassigned,
-               rest = data.milestones,
+               grouped = _.groupBy(data.milestones, function (m){
+                return m.milestone._data.status || "backlog";
+               }),
+               rest = (grouped.wip || []).concat(grouped.backlog),
                sidebar = new sidebarView({data:data,params:this.params}),
                searchView = new headerView(),
+               assigneesView = new assigneeView({data:data, params: this.params}),
                self = this;
            
            $(noneBoard).append(new columnView({column: noneColumn, user:this.user,repo:this.repo}).render().el);
@@ -80,18 +86,20 @@ define(["../collections/issues",
 
            _.each(rest, function (label){
                var column = new columnView({column: label, user:self.user,repo:self.repo});
-               var markup = $(column.render().el).css({width:width + "%"});
+               var markup = $(column.render().el).css({width:260 + "px"});
                $(board).append(markup);
            });
 
            $("#stage").append(board);
 
            $("#drawer","#main-stage")
+              //.append(noneBoard)
               .append(sidebar.render().el)
               .find(".toggle-drawer").show();
 
            //$(".sidebar-wrapper").append(userFilter.render().el).show();
            $(".sidebar-wrapper")
+             //.append(sidebar.render().el)
              .append(noneBoard)
            .show();
 

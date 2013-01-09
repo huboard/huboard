@@ -6,3 +6,4 @@ tmp/
 .sass-cache
 #*.min.css
 app.build.js
+.powenv

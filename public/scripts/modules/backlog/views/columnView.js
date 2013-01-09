@@ -6,8 +6,8 @@ define(["text!../templates/column.html","./cardView","../events/postal"],functio
       this.repo = params.repo;
       this.user = params.user;
 
-      postal.subscribe("Moved.Socket." + params.column.index, $.proxy(this.onSocket,this));
-      postal.socket(params.user + "/" + params.repo, "Opened." + params.column.index, $.proxy(this.onOpened,this))
+      //postal.subscribe("Moved.Socket." + params.column.index, $.proxy(this.onSocket,this));
+      //postal.socket(params.user + "/" + params.repo, "Opened." + params.column.index, $.proxy(this.onOpened,this))
     },
     onOpened: function(issue){
       var card = new CardView({issue: issue, user: this.user, repo: this.repo});

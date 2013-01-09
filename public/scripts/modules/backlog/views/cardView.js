@@ -9,7 +9,7 @@ define(["text!../templates/card.html","../models/card", "../events/postal"],func
       postal.subscribe("Filter.Simple", $.proxy(this.simpleFilter, this));
       postal.subscribe("Filter.Complex", $.proxy(this.complexFilter, this));
 
-      postal.socket(params.user + "/" + params.repo,"Moved." + params.issue.number, $.proxy(this.onMoved,this));
+      //postal.socket(params.user + "/" + params.repo,"Moved." + params.issue.number, $.proxy(this.onMoved,this));
       postal.socket(params.user + "/" + params.repo,"Closed." + params.issue.number, $.proxy(this.onClosed,this));
       postal.socket(params.user + "/" + params.repo,"Assigned." + params.issue.number, $.proxy(this.onAssigned,this));
 
@@ -99,7 +99,6 @@ define(["text!../templates/card.html","../models/card", "../events/postal"],func
       this.transition();
     },
     drop: function(ev,order){
-      this.issue.reorder({order:order});
     }
   });
 
