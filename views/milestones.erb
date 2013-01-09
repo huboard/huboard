@@ -20,5 +20,8 @@
   <li>
   <a href="/<%=@parameters[:user]%>/<%=@parameters[:repo]%>/board">Tasks</a>
   </li>
+  <li >
+  <a href="/<%= h @parameters[:user]%>/<%= h @parameters[:repo]%>/backlog">Backlog</a>
+  </li>
 
 <% end %>

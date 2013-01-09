@@ -1,4 +1,4 @@
-<div id="stage" data-module="board/main" data-parameters='<%= @parameters.to_json %>'>
+<div id="stage" data-module="backlog/main" data-parameters='<%= @parameters.to_json %>'>
 <div id="drawer" > 
   <a href="#toggle-drawer" class="hide iconic arrow-right  toggle-drawer"><span></span></a>
 </div>
@@ -8,10 +8,10 @@
   <li>
   <a href="/<%= h @parameters[:user]%>/<%= h @parameters[:repo]%>/milestones">Milestones</a>
   </li>
-  <li class="active">
+  <li>
   <a href="/<%= h @parameters[:user]%>/<%= h @parameters[:repo]%>/board">Tasks</a>
   </li>
-  <li >
+  <li class="active">
   <a href="/<%= h @parameters[:user]%>/<%= h @parameters[:repo]%>/backlog">Backlog</a>
   </li>
 

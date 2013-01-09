@@ -64,6 +64,11 @@ module Huboard
       erb :milestones
     end
 
+    get '/:user/:repo/backlog' do 
+      @parameters = params.merge({:login => current_user.login, :socket_backend => socket_backend})
+      erb :backlog, :layout => :layout_fluid
+    end
+
     get '/:user/:repo/board/create' do
       @parameters = params
       erb :create_board

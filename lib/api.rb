@@ -16,6 +16,11 @@ module Huboard
       return json pebble.milestones(params[:user],params[:repo])
     end
 
+
+    get '/:user/:repo/backlog' do 
+      return json pebble.build_backlog(params[:user], params[:repo])
+    end
+
     get '/:user/:repo/board' do 
       return json pebble.board(params[:user], params[:repo])
     end
@@ -35,6 +40,14 @@ module Huboard
       publish "#{params[:user]}/#{params[:repo]}", "Assigned.#{params[:issue][:number]}", issue
       json issue
     end
+
+    post '/:user/:repo/assignmilestone' do 
+      issue = pebble.assign_milestone params[:user], params[:repo], params[:issue], params[:milestone]
+      publish "#{params[:user]}/#{params[:repo]}", "Milestone.#{params[:issue][:number]}", issue
+      json issue
+    end
+    
+
     post '/:user/:repo/movecard' do 
       publish "#{params[:user]}/#{params[:repo]}", "Moved.#{params[:issue][:number]}", { issue:params[:issue], index: params[:index]}
       json pebble.move_card params[:user], params[:repo], params[:issue], params[:index]

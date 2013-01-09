@@ -6,6 +6,22 @@ module Stint
   class Pebble
     attr_accessor :github
 
+    def build_backlog(user_name, repo)
+      issues = get_issues user_name, repo
+      milestones = github.get_milestones(user_name, repo)
+        .map {|m| {
+            :milestone => m.merge(:_data => embedded_data(m["description"])),
+            :issues => issues.find_all {|i| i["milestone"] && i["milestone"]["number"] == m["number"]}
+            }
+        }
+
+      #by_milestone = by_milestone.delete_if{|x| x.nil? || x.empty? }.sort_by {|m| m["due_on"] || "0"}
+
+      return :milestones => milestones, 
+        :unassigned => {:issues => issues.find_all {|i| i.milestone.nil? }, :milestone => {:title => "No milestone"}},
+        other_labels: github.labels(user_name, repo).reject { |l| @huboard_patterns.any?{|p| p.match(l["name"]) } }
+    end
+
     def build_board(user_name, repo)
       issues = get_issues(user_name, repo)
       issues_by_label = issues.group_by { |issue| issue["current_state"]["name"] }
@@ -215,6 +231,11 @@ module Stint
 
     def assign_card(user_name, repo, the_issue, assignee)
       github.update_issue user_name, repo, {"number" => the_issue["number"], "assignee" => assignee}
+    end
+
+    def assign_milestone(user_name, repo, the_issue, milestone)
+      number = milestone["number"] 
+      github.update_issue user_name, repo, {"number" => the_issue["number"], "milestone" => number}
     end
 
     def move_card(user_name, repo, the_issue, index)

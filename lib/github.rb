@@ -48,6 +48,9 @@ module Stint
       gh.repos(user_name,repo).assignees.all
     end
 
+    def get_milestones(user_name, repo)
+      gh.repos(user_name, repo).milestones.all
+    end
     def milestones(user_name, repo)
       response = get_issues user_name, repo
       reply = response.group_by { |issue| issue["milestone"] }.map do |milestone, issues|
