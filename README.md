@@ -80,7 +80,7 @@ labels **name and color** must match in order to work.
 
 ### Register app for Github OAuth
 
-Go to https://github.com/account/applications and register your
+Go to https://github.com/settings/applications and register your
 application to get the application keys needed for OAuth.
 
 - URL: Pow: `http://huboard.dev`, Rack: `http://localhost:9292`
