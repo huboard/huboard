@@ -5,4 +5,5 @@ set :team_id, "1235125"
 set :github_options, {
                             :secret    => '12351463161',
                             :client_id => '213414514636134631731364',
+                            :scopes => "user,repo"
                      }
