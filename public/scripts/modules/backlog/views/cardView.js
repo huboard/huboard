@@ -99,6 +99,7 @@ define(["text!../templates/card.html","../models/card", "../events/postal"],func
       this.transition();
     },
     drop: function(ev,order){
+      this.issue.reorder({order:order});
     }
   });
 
