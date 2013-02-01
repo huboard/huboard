@@ -6,6 +6,7 @@ define(["text!../templates/assignee.html"], function(template){
        var self = this;
        self.data = options.data;
 
+
        self.render();
      },
      render: function() {

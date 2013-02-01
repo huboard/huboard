@@ -10,7 +10,7 @@ module Stint
       issues = get_issues user_name, repo
       milestones = github.get_milestones(user_name, repo)
         .map {|m| {
-            :milestone => m.merge(:_data => embedded_data(m["description"])),
+            :milestone => m.merge(:_data => embedded_data(m["description"]).reject {|key| key.to_s == "status" }),
             :issues => issues.find_all {|i| i["milestone"] && i["milestone"]["number"] == m["number"]}
             }
         }.sort_by { |m| m[:milestone]["_data"]["order"] || m[:milestone]["number"].to_f}

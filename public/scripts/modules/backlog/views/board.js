@@ -92,6 +92,17 @@ define(["../collections/issues",
 
            $("#stage").append(board);
 
+           $(board).sortable({
+              axis: "x",
+              handle: "h3",
+              cursor: "move",
+               stop: $.proxy(this.fullStop,this),
+               start: $.proxy(this.onStart,this),
+               remove: $.proxy(this.onRemove, this),
+               over: $.proxy(this.onOver, this),
+               update: $.proxy(this.onStop, this)
+           });
+
            $("#drawer","#main-stage")
               //.append(noneBoard)
               .append(sidebar.render().el)
@@ -118,6 +129,61 @@ define(["../collections/issues",
             .hasClass("arrow-left");
 
           open ? animateDrawer("close") : animateDrawer("open");
+        },
+        onReceive: function(ev, ui){
+        },
+        onRemove: function(ev, ui){
+           // don't know if need yet
+        },
+        onOver: function(ev, ui){
+        },
+        onOut: function (ev, ui){
+        },
+        fullStop: function(ev, ui) {
+         $(ui.item).removeClass("ui-state-dragging");
+        },
+        onStart: function(ev, ui) {
+         $(ui.item).addClass("ui-state-dragging");
+        },
+        onStop : function(ev,ui){
+          var elements = $(".backlog > div", this.el),
+          index = elements.index(ui.item);
+
+          if(index === -1) { return; }
+
+          var first = index === 0,
+          last = index === elements.size() - 1,
+          currentElement = $(ui.item),
+          currentData = currentElement.data("milestone"),
+          beforeElement = elements.get(index ? index - 1 : index),
+          beforeIndex = elements.index(beforeElement),
+          beforeData = $(beforeElement).data("milestone"),
+          afterElement = elements.get(elements.size() - 1 > index ? index + 1 : index),
+          afterIndex = elements.index(afterElement),
+          afterData = $(afterElement).data("milestone"),
+          current = currentData._data.order || currentData.number,
+          before = beforeData._data.order || beforeData.number,
+          after = afterData._data.order || afterData.number;
+
+          // its the only one in the list
+          if(first && last) {
+            currentData._data.order = current;
+          }
+          else if(first) {
+            // dragged it to the top
+            var t = after || 1;
+            currentData._data.order = (t - 1) > 0 ? (t - 1) : (t / 2);
+          } else if (last) {
+            // dragged to the bottom
+            currentData._data.order = (before + 1);
+          }  else {
+            currentData._data.order = (((after + before) || 1)/2);
+          }
+
+          currentElement
+            .trigger("reorder", {order:currentData._data.order})  
+            .data("milestone", currentData);  
+
         }
    });
 });
