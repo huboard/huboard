@@ -130,11 +130,11 @@ module Stint
     def reorder_milestone(user_name, repo, number, index, status)
       post_data = {:number => number}
       milestone = github.milestone user_name, repo, number
-      _data = embedded_data milestone["description"]
+      _data = embedded_data(milestone["description"]).reject { |key| key.to_s == "status" }
       if _data.empty?
-        post_data["description"] = milestone["description"].concat "\r\n\r\n<!---\r\n@huboard:#{JSON.dump({"status" => status,"order" => index.to_f})}\r\n-->\r\n" 
+        post_data["description"] = milestone["description"].concat "\r\n\r\n<!---\r\n@huboard:#{JSON.dump({"order" => index.to_f})}\r\n-->\r\n" 
       else
-        post_data["description"] = milestone["description"].gsub /@huboard:.*/, "@huboard:#{JSON.dump(_data.merge({"order" => index.to_f, "status" => status}))}"
+        post_data["description"] = milestone["description"].gsub /@huboard:.*/, "@huboard:#{JSON.dump(_data.merge({"order" => index.to_f}))}"
       end
 
       github.update_milestone user_name, repo, post_data
@@ -260,7 +260,7 @@ module Stint
         m["pull_requests"] = m[:issues].select {|i| !i["pull_request"]["html_url"].nil?}
         m[:issues] = m[:issues].delete_if {|i| !i["pull_request"]["html_url"].nil?}
         m["open_issues"] = m[:issues].size
-        m["_data"] = embedded_data m["description"]
+        m["_data"] = embedded_data( m["description"]).reject { |key| key.to_s == "status" }
         m
       }
       milestones.sort_by { |m| m["_data"]["order"] || m["number"].to_f}
