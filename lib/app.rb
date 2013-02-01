@@ -59,11 +59,6 @@ module Huboard
       erb :index
     end
 
-    get '/:user/:repo/milestones' do 
-      @parameters = params
-      erb :milestones
-    end
-
     get '/:user/:repo/backlog' do 
       @parameters = params.merge({:login => current_user.login, :socket_backend => socket_backend})
       erb :backlog, :layout => :layout_fluid

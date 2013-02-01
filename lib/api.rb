@@ -12,10 +12,6 @@ module Huboard
     end
 
     # json api
-    get '/:user/:repo/milestones' do
-      return json pebble.milestones(params[:user],params[:repo])
-    end
-
 
     get '/:user/:repo/backlog' do 
       return json pebble.build_backlog(params[:user], params[:repo])
