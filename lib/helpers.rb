@@ -13,6 +13,9 @@ module Huboard
               token_file =  File.new("#{File.dirname(__FILE__)}/../.settings")
               # TODO: read this from a yaml
               eval(token_file.read) 
+              ENV['GITHUB_OAUTH_DOMAIN'] = github_options[:oauth_domain]
+              ENV['OCTOKIT_API_ENDPOINT'] = github_options[:oauth_domain]
+              ENV['GITHUB_OAUTH_API_DOMAIN'] = github_options[:oauth_domain]
             elsif ENV['GITHUB_CLIENT_ID']
               set :secret_key, ENV['SECRET_KEY']
               set :team_id, ENV["TEAM_ID"]
@@ -59,6 +62,10 @@ module Huboard
         github_user.token
       end
 
+      def github_api_url
+        ENV['GITHUB_OAUTH_DOMAIN'] || nil
+      end
+
       def decrypt_token(token)
         decoded = Base64.urlsafe_decode64 token
         Encryptor.decrypt decoded, :key => settings.secret_key
@@ -90,7 +97,7 @@ module Huboard
       end
 
       def gh(token = nil)
-        @gh ||= Ghee.new(:access_token => token || user_token) do |conn| 
+        @gh ||= Ghee.access_token(token || user_token, github_api_url) do |conn| 
           conn.use FaradayMiddleware::Caching, cache 
         end
       end
