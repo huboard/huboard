@@ -1,4 +1,4 @@
-define(["text!../templates/column.html","./cardView","../events/postal"],function(template, CardView, postal){
+define(["../collections/issues","text!../templates/column.html","./cardView","../events/postal"],function(issues,template, CardView, postal){
 
   var Column = Backbone.View.extend({
     initialize : function(params) {
@@ -9,6 +9,18 @@ define(["text!../templates/column.html","./cardView","../events/postal"],functio
 
       postal.subscribe("Moved.Socket." + params.column.index, $.proxy(this.onSocket,this));
       postal.socket(params.user + "/" + params.repo, "Opened." + params.column.index, $.proxy(this.onOpened,this))
+
+      issues.bind("onissuesreceived." + params.column.index, this.onfetch, this);
+    },
+    onfetch : function (issues) {
+
+      var cards = _.map(issues, function(issue){
+        var card = new CardView({issue : issue, user: self.user, repo: self.repo});
+        return card.render().el;
+      });
+
+       $("ul", this.el).append(cards);
+
     },
     onOpened: function(issue){
       var card = new CardView({issue: issue, user: this.user, repo: this.repo});
@@ -28,10 +40,12 @@ define(["text!../templates/column.html","./cardView","../events/postal"],functio
       var column = $(_.template(template, this.column)),
           self = this;
 
+      /*
       _.each(this.column.issues, function(issue){
         var card = new CardView({issue : issue, user: self.user, repo: self.repo});
         $("ul",column).append(card.render().el);
       });
+      */
 
       this.el = column;
 

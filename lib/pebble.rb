@@ -7,7 +7,7 @@ module Stint
     attr_accessor :github
 
     def build_backlog(user_name, repo)
-      issues = get_issues user_name, repo
+      issues = get_issues user_name, repo, 0, false
       milestones = github.get_milestones(user_name, repo)
         .map {|m| {
             :milestone => m.merge(:_data => embedded_data(m["description"]).reject {|key| key.to_s == "status" }),
@@ -22,7 +22,8 @@ module Stint
     end
 
     def build_board(user_name, repo)
-      issues = get_issues(user_name, repo)
+      include_backlog = settings(user_name, repo)[:show_all]
+      issues = get_issues(user_name, repo, include_backlog ? 1 : 0)
       issues_by_label = issues.group_by { |issue| issue["current_state"]["name"] }
       all_labels = labels(user_name, repo)
       all_labels = all_labels.each_with_index do |label, index|
@@ -31,7 +32,7 @@ module Stint
         label
       end
 
-      if settings(user_name, repo)[:show_all]
+      if include_backlog
         all_labels[0][:issues] = (issues_by_label["__nil__"] || []).concat(all_labels[0][:issues]).sort_by { |i| i["_data"]["order"] || i["number"].to_f} unless all_labels.empty?
       end
 
@@ -40,6 +41,17 @@ module Stint
         milestones: get_milestones(user_name, repo),
         other_labels: github.labels(user_name, repo).reject { |l| @huboard_patterns.any?{|p| p.match(l["name"]) } }
       }
+    end
+
+    def backlog_column(user_name, repo) 
+      return {issues: []} unless settings(user_name, repo)[:show_all]
+
+      issues = get_issues(user_name, repo, 0, false)
+      issues_by_label = issues.group_by { |issue| issue["current_state"]["name"] }
+      backlog_label = labels(user_name, repo).first
+      concated_issues = (issues_by_label["__nil__"] || []).concat(issues_by_label[backlog_label[:name]] || []).sort_by { |i| i["_data"]["order"] || i["number"].to_f}
+
+      return { issues: concated_issues }
     end
 
     def settings(user_name, repo)
@@ -103,13 +115,14 @@ module Stint
         return board
     end
 
-    def get_issues(user_name, repo)
+    def get_issues(user_name, repo, skip = 0, optimize = true)
 
-      columns = labels(user_name, repo)
-
-      columns = columns.drop(1) if settings(user_name, repo)[:show_all]
-
-      issues = columns.map { |c| github.get_issues(user_name, repo, c[:name]) }.flat_map {|i| i }
+      if optimize
+        columns = labels(user_name, repo).drop(skip)
+        issues = columns.map { |c| github.get_issues(user_name, repo, c[:name]) }.flat_map {|i| i }
+      else
+        issues = github.get_issues user_name, repo
+      end
 
       issues.each do |issue|
         issue["current_state"] = current_state(issue)

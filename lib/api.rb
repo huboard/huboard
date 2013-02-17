@@ -21,6 +21,11 @@ module Huboard
       return json pebble.board(params[:user], params[:repo])
     end
 
+    get '/:user/:repo/column' do 
+      return json pebble.backlog_column(params[:user], params[:repo])
+    end
+    
+
     post '/:user/:repo/reorderissue' do 
       milestone = params["issue"]
       json pebble.reorder_issue params[:user], params[:repo], milestone["number"], params[:index]

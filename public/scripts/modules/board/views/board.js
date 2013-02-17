@@ -53,10 +53,14 @@ define(["../collections/issues",
         },
         initialize: function (params) {
            issues.bind("ondatareceived", this.onfetch, this);
+           issues.bind("afterreceived", this.resizeColumns, this)
+
            issues.fetch(params.user, params.repo);
+
            this.user = params.user;
            this.repo = params.repo;
            this.params = params;
+
            postal.subscribe("Opened.Issue", $.proxy(this.onOpened,this))
            postal.subscribe("Closed.Issue", $.proxy(this.onClosed,this))
         },

@@ -3,13 +3,34 @@ define(function () {
      var issues = {
       fetch : function (user,repo){
          var self = this;
-         $.ajax({
+         var board = $.ajax({
               url: "/api/" + user + "/" + repo + "/board",
               dataType: "json",
               success: function (data){
-                 self.trigger("ondatareceived", data);
               }
          });
+         var backlog = $.ajax({
+              url: "/api/" + user + "/" + repo + "/column",
+              dataType: "json",
+         });
+
+         $.when(board)
+          .then(function (theBoard) {
+                // handle first response
+                 self.trigger("ondatareceived", theBoard);
+
+                 _.each(theBoard.labels, function (label, index) {
+                   self.trigger("onissuesreceived." + index, label.issues)
+                 }); 
+
+                self.trigger("afterreceived");
+
+                 $.when(backlog)
+                    .then(function(theBacklog) {
+                       self.trigger("onissuesreceived." + 0, theBacklog.issues)
+                       self.trigger("afterreceived");
+                    });
+          });
       }
      };
 
