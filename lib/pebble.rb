@@ -37,7 +37,7 @@ module Stint
 
       {
         labels: all_labels,
-        milestones: milestones(user_name, repo),
+        milestones: get_milestones(user_name, repo),
         other_labels: github.labels(user_name, repo).reject { |l| @huboard_patterns.any?{|p| p.match(l["name"]) } }
       }
     end
@@ -66,9 +66,10 @@ module Stint
     end
 
     def board(user_name, repo)
+        labels = github.labels(user_name,repo)
+
         board = build_board(user_name, repo)
 
-        labels = github.labels(user_name,repo)
         labels
           .select{ |l| @link_pattern.match l["name"] }
           .each do |l|
@@ -103,7 +104,13 @@ module Stint
     end
 
     def get_issues(user_name, repo)
-      issues = github.get_issues user_name, repo
+
+      columns = labels(user_name, repo)
+
+      columns = columns.drop(1) if settings(user_name, repo)[:show_all]
+
+      issues = columns.map { |c| github.get_issues(user_name, repo, c[:name]) }.flat_map {|i| i }
+
       issues.each do |issue|
         issue["current_state"] = current_state(issue)
         issue["_data"] = embedded_data issue["body"]
@@ -251,6 +258,16 @@ module Stint
       issue["labels"] = issue["labels"].delete_if { |l| l["name"] == state["name"] }
 
       github.update_issue user_name, repo, {"number" => issue["number"], "labels" => issue["labels"]}
+
+    end
+
+    def get_milestones(user_name, repo)
+      milestones = github.get_milestones user_name, repo
+      milestones = milestones.map { |m|
+        m["_data"] = embedded_data( m["description"]).reject { |key| key.to_s == "status" }
+        m
+      }
+      milestones.sort_by { |m| m["_data"]["order"] || m["number"].to_f}
 
     end
 

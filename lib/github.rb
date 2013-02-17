@@ -66,9 +66,11 @@ module Stint
       gh.repos(user_name, repo).milestones number
     end
 
-    def get_issues(user_name, repo)
+    def get_issues(user_name, repo, label = nil)
       #return [] if gh.connection.get("/repos/#{user_name}/#{repo}").status != 200
-      gh.repos(user_name, repo).issues(:direction => "asc").all
+      params = {:direction => "asc"}
+      params = params.merge({:labels => "#{label}"}) if label 
+      gh.repos(user_name, repo).issues(params).all
     end
 
     def issue_by_id(user_name, repo, id)
