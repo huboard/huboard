@@ -1,3 +1,3 @@
-worker_processes 3
-timeout 30
+worker_processes 5
+timeout 60
 preload_app true
