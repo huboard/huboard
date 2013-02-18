@@ -10,6 +10,10 @@ require './lib/api.rb'
 require './lib/github.rb'
 require './lib/pebble.rb'
 
+configure :production do 
+  require "newrelic_rpm"
+end
+
 use Rack::NoWWW
 use Rack::Static, :urls => [ "/font","/img", "/scripts","/css"], :root => "public"
 

@@ -27,6 +27,7 @@ GEM
     mime-types (1.19)
     multi_json (1.5.0)
     multipart-post (1.1.5)
+    newrelic_rpm (3.5.6.55)
     oauth2 (0.5.2)
       faraday (~> 0.7)
       multi_json (~> 1.0)
@@ -85,6 +86,7 @@ DEPENDENCIES
   encryptor
   foreman
   ghee
+  newrelic_rpm
   rack-cache
   rack-no-www
   rdiscount

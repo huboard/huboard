@@ -17,3 +17,7 @@ group :development do
   gem 'sass'
   gem 'bourbon'
 end
+
+group :production do
+  gem 'newrelic_rpm'
+end
