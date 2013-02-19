@@ -19,8 +19,8 @@ define(function () {
                 // handle first response
                  self.trigger("ondatareceived", theBoard);
 
-                 _.each(theBoard.labels, function (label, index) {
-                   self.trigger("onissuesreceived." + index, label.issues)
+                 _.each(theBoard.labels, function (label) {
+                   self.trigger("onissuesreceived." + label.index, label.issues)
                  }); 
 
                 self.trigger("afterreceived");
