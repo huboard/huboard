@@ -1,3 +1,9 @@
+#How to contribute
+
+  * The easiest way you can contribute by simply using huboard and adding issues. Find bugs or think of cool features, let me know by submitting issues
+  * Take a look at the open issues. Anything is fair game, pick one and send me a pull request. 
+  * I've added a label called `Please contribute`, these are features/defects that are lower priority but would still be a great addition to the product
+
 # How To Set Up Your Repo
 
 Add labels to your repository with the following pattern
