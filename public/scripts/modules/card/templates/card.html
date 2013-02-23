@@ -8,4 +8,12 @@
   </div>
 </div>
 <div class="fullscreen-card-right">
+  <% _(other_labels).each(function(l) { %>
+  <ul > 
+    <li class="card-label -x<%= l.color %> active large"> 
+      <span> <%= l.name %> </span>
+    </li>
+  </ul>
+
+  <% }); %>
 </div>
