@@ -1,4 +1,4 @@
-define(["../events/postal"], function(postal){
+define(["../../common/events/postal"], function(postal){
 
   return Backbone.View.extend({
      el: $(".page-header-wrapper"),

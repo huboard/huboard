@@ -1,4 +1,4 @@
-define(["text!../templates/card.html","../models/card", "../events/postal"],function(template,card, postal){
+define(["text!../templates/card.html","../models/card", "../../common/events/postal"],function(template,card, postal){
 
   return Backbone.View.extend({
     initialize: function ( params ) {
@@ -19,7 +19,9 @@ define(["text!../templates/card.html","../models/card", "../events/postal"],func
       "moved" : "moved",
       "click .close": "closed",
       "drop": "dropped",
-      "reorder" : "drop"
+      "reorder" : "drop",
+      "click" : "fullscreen"
+
     },
     tagName:"li",
     onMoved: function(data){
@@ -28,6 +30,9 @@ define(["text!../templates/card.html","../models/card", "../events/postal"],func
     onClosed: function(){
       this.remove();
       postal.publish("Closed.Issue",{card: this});
+    },
+    fullscreen: function (ev) {
+      postal.publish("Card.Fullscreen",this.issue);
     },
     render: function(){
       $(this.el).html( _.template(template, this.issue.attributes))

@@ -1,4 +1,4 @@
-define(["text!../templates/card.html","../models/card", "../events/postal"],function(template,card, postal){
+define(["text!../templates/card.html","../models/card", "../../common/events/postal"],function(template,card, postal){
 
   return Backbone.View.extend({
     initialize: function ( params ) {

@@ -1,0 +1,93 @@
+.fullscreen-overlay {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  // just above drawer
+  z-index: 10;
+
+
+  height: 100%;
+  width: 100%;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  background-color: rgba(243,243,243, 0.8);
+
+  display:none;
+
+}
+
+.fullscreen-open {
+
+  overflow: hidden;
+
+  .fullscreen-overlay {
+    display: block;
+  }
+
+}
+
+.fullscreen-wrapper {
+  margin: 0px 60px;
+
+}
+
+.fullscreen-card {
+  position: relative;
+
+  background-color: #fff;
+
+  margin: 50px auto;
+
+  border-radius: 2px;
+  border: 1px solid rgba(0,0,0, 0.3);
+
+  padding: 20px 0px;
+
+  overflow:hidden;
+
+}
+
+.fullscreen-card-header {
+  h2{
+    margin-top: 0;
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+}
+.fullscreen-card-description {
+  p {
+  -ms-word-break: break-all;
+     word-break: break-all;
+
+     // Non standard for webkit
+     word-break: break-word;
+
+-webkit-hyphens: auto;
+   -moz-hyphens: auto;
+        hyphens: auto;
+  }
+}
+.fullscreen-card-right{
+    position: absolute;
+    right: 0;
+    top: 20px;
+
+   margin-right: 20px;
+   width: 160px;
+
+   height: 100px;
+
+}
+.fullscreen-card-left {
+   margin-left: 20px;
+   margin-right: 200px;
+   border-right: 1px solid #ccc;
+   padding-right: 10px;
+   @include prefixer(box-sizing, border-box);
+   overflow: hidden;
+}
+
+

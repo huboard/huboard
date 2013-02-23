@@ -1,4 +1,4 @@
-define(["../events/postal"],function(postal){
+define(["../../common/events/postal"],function(postal){
 
   var card = function(params) {
    this.attributes = params.model;

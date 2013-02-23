@@ -1,4 +1,4 @@
-define(["../events/postal","./filterView"], function (postal, filterView) {
+define(["../../common/events/postal","./filterView"], function (postal, filterView) {
 
   return Backbone.View.extend( { 
     tagName: "ul",

@@ -49,6 +49,27 @@ module Huboard
       end
     end
 
+    class Mimetype < Faraday::Middleware
+      begin
+
+      rescue LoadError, NameError => e
+        self.load_error = e
+      end
+
+      def initialize(app, *args)
+        @app = app
+      end
+
+
+
+      def call(env)
+
+        env[:request_headers].merge!('Accept' => "application/vnd.github.beta.full+json" )
+
+        @app.call env
+      end
+    end
+
     module Helpers
       def encrypted_token
         encrypted = Encryptor.encrypt user_token, :key => settings.secret_key
@@ -73,8 +94,8 @@ module Huboard
       end
 
       def cache
-         @cache ||= SimpleCache.new
-         #@cache ||= ActiveSupport::Cache::FileStore.new "tmp", :namespace => 'huboard', :expires_in => 3600
+        @cache ||= SimpleCache.new
+        #@cache ||= ActiveSupport::Cache::FileStore.new "tmp", :namespace => 'huboard', :expires_in => 3600
       end
 
       def github
@@ -92,6 +113,7 @@ module Huboard
       def gh(token = nil)
         @gh ||= Ghee.new(:access_token => token || user_token) do |conn| 
           conn.use FaradayMiddleware::Caching, cache 
+          conn.use Mimetype
         end
       end
 
