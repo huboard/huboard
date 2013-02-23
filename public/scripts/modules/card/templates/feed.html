@@ -1,0 +1,10 @@
+
+  <div class="fullscreen-card-activity">
+    <h3> Activity </h3>
+    <% _(comments).each(function(c) { %>
+    <div class="card-comment">
+      <img  src="https://secure.gravatar.com/avatar/<%= user.gravatar_id%>?s=30" />
+      <%= c.body_html %>
+    </div>
+    <% }); %>
+  </div>

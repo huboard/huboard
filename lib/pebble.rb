@@ -147,6 +147,10 @@ module Stint
       github.update_issue user_name, repo, post_data
     end
 
+    def feed_for_issue(user, repo, number)
+      github.feed_for_issue user, repo, number
+    end
+
     def reorder_milestone(user_name, repo, number, index, status)
       post_data = {:number => number}
       milestone = github.milestone user_name, repo, number

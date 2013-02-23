@@ -24,7 +24,11 @@ module Huboard
     get '/:user/:repo/column' do 
       return json pebble.backlog_column(params[:user], params[:repo])
     end
-    
+
+    get '/:user/:repo/issues/:number/feed' do 
+      return json pebble.feed_for_issue(params[:user], params[:repo], params[:number])
+
+    end
 
     post '/:user/:repo/reorderissue' do 
       milestone = params["issue"]
