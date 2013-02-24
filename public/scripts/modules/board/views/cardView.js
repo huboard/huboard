@@ -20,10 +20,14 @@ define(["text!../templates/card.html","../models/card", "../../common/events/pos
       "click .close": "closed",
       "drop": "dropped",
       "reorder" : "drop",
+      "click .number" : "onNumber",
       "click" : "fullscreen"
 
     },
     tagName:"li",
+    onNumber: function (ev) {
+      ev.stopPropagation();
+    },
     onMoved: function(data){
       postal.publish("Moved.Socket." + data.index,{card: this});
     },
@@ -66,6 +70,7 @@ define(["text!../templates/card.html","../models/card", "../../common/events/pos
     },
     closed: function(ev, index){
       ev.preventDefault();
+      ev.stopPropagation();
       this.issue.close({index: index});
       this.remove();
       postal.publish("Closed.Issue",{card: this});

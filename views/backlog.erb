@@ -30,5 +30,15 @@
 
   <div class="sidebar-wrapper lifted hide" > </div>
 <% end %>
+<% content_for :overlay do %>
+  <div class="fullscreen-overlay" >
+
+    <div class="fullscreen-wrapper" data-module="card/main" data-parameters='<%= @parameters.to_json %>'>
+      
+    </div>
+    
+  </div>
+
+<% end %>
 
 <% content_for :title do %><%= h @parameters[:repo]%> :: <% end %>

@@ -71,10 +71,6 @@ define(["../collections/issues",
            var board = $(_.template(template, data)),
                noneBoard = board.clone(),
                noneColumn = data.unassigned,
-               grouped = _.groupBy(data.milestones, function (m){
-                return m.milestone._data.status || "backlog";
-               }),
-               rest = (grouped.wip || []).concat(grouped.backlog),
                sidebar = new sidebarView({data:data,params:this.params}),
                searchView = new headerView(),
                assigneesView = new assigneeView({data:data, params: this.params}),
@@ -82,9 +78,7 @@ define(["../collections/issues",
            
            $(noneBoard).append(new columnView({column: noneColumn, user:this.user,repo:this.repo}).render().el);
 
-           var width = (100 / rest.length);
-
-           _.each(rest, function (label){
+           _.each(data.milestones, function (label){
                var column = new columnView({column: label, user:self.user,repo:self.repo});
                var markup = $(column.render().el).css({width:260 + "px"});
                $(board).append(markup);

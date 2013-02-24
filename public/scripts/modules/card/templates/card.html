@@ -1,6 +1,8 @@
 <div class="fullscreen-card-left">
-  <div class="fullscreen-card-header">
-    <h2> <%= title %> </h2>
+  <div class='fullscreen-card-preamble'>
+    <div class="fullscreen-header">
+      <h2> <%= title %> </h2>
+    </div>
   </div>
 
   <div class="fullscreen-card-description">
@@ -9,9 +11,10 @@
 </div>
 <div class="fullscreen-card-right">
   <% _(other_labels).each(function(l) { %>
-  <ul > 
-    <li class="card-label -x<%= l.color %> active large"> 
-      <span> <%= l.name %> </span>
+  <ul class="labels"> 
+    <h5> Labels </h5>
+    <li class="card-label -x<%= l.color %>"> 
+      <span class="active"> <%= l.name %> </span>
     </li>
   </ul>
 

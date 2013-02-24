@@ -35,6 +35,7 @@
 
 .fullscreen-card {
   position: relative;
+  max-width: 960px;
 
   background-color: #fff;
 
@@ -49,11 +50,24 @@
 
 }
 
-.fullscreen-card-header {
+.fullscreen-header {
+  margin: 20px 0;
+
   h2{
-    margin-top: 0;
+    margin: 0;
     font-size: 20px;
     line-height: 28px;
+  }
+  h3 {
+    margin: 0;
+    font-size: 18px;
+    line-height: 26px;
+  }
+
+}
+.fullscreen-card-preamble {
+  .fullscreen-header {
+    margin-top: 0;
   }
 
 }
@@ -84,10 +98,53 @@
 .fullscreen-card-left {
    margin-left: 20px;
    margin-right: 200px;
-   border-right: 1px solid #ccc;
    padding-right: 10px;
    @include prefixer(box-sizing, border-box);
    overflow: hidden;
+}
+
+
+.fullscreen-card-activity {
+  .card-comment {
+    overflow:hidden;
+    margin-bottom: 10px;
+    > img {
+      float: left;
+    }
+  }
+  .comment-body {
+    margin-left: 40px;
+    .email-fragment {
+      margin-bottom: 10px;
+    }
+    .email-hidden-toggle {
+       display:none;
+    }
+  }
+  
+}
+
+.labels {
+  list-style: none;
+  margin:0;
+  padding:0;
+  h5 {
+   margin-top: 0px;
+  }
+}
+
+.labels li {
+  margin-bottom: 10px;
+  border-radius: 4px;
+}
+
+.labels li span {
+  position:relative;
+  padding: 10px;
+  display:block;
+  text-decoration: none;
+  border-radius: 4px;
+  color:#777;
 }
 
 

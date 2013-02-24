@@ -19,15 +19,23 @@ define(["text!../templates/card.html","../models/card", "../../common/events/pos
       "moved" : "moved",
       "click .close": "closed",
       "drop": "dropped",
-      "reorder" : "drop"
+      "reorder" : "drop",
+      "click .number" : "onNumber",
+      "click" : "fullscreen"
     },
     tagName:"li",
     onMoved: function(data){
       postal.publish("Moved.Socket." + data.index,{card: this});
     },
+    onNumber: function (ev) {
+      ev.stopPropagation();
+    },
     onClosed: function(){
       this.remove();
       postal.publish("Closed.Issue",{card: this});
+    },
+    fullscreen: function (ev) {
+      postal.publish("Card.Fullscreen",this.issue);
     },
     render: function(){
       $(this.el).html( _.template(template, this.issue.attributes))
