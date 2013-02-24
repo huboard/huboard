@@ -3,7 +3,7 @@
     <div class="fullscreen-header">
       <h3> Activity </h3>
     </div>
-    <% _(comments).each(function(c) { %>
+    <% _(issue.comments).each(function(c) { %>
     <div class="card-comment">
       <img  src="https://secure.gravatar.com/avatar/<%= c.user.gravatar_id%>?s=30" />
       <div class="comment-body">

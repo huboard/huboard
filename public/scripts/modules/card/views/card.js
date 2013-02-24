@@ -1,6 +1,7 @@
 define(["../../common/events/postal",
        "text!../templates/card.html",
-        "text!../templates/feed.html"],function (postal, template, feed) {
+        "text!../templates/feed.html",
+        "./actions/labels"],function (postal, template, feed, labels) {
   return Backbone.View.extend({
     tagName: "div",
     className : "fullscreen-card",
@@ -12,7 +13,6 @@ define(["../../common/events/postal",
       return this;
     },
     open: function (issue) {
-      console.log(issue)
       var that = this;
       this.issue = issue;
       this.render(issue.attributes);
@@ -20,6 +20,9 @@ define(["../../common/events/postal",
         .done(function (feedData) {
           $(that.el).find(".fullscreen-card-left")
             .append(_.template(feed, feedData))
+
+          $(that.el).find(".fullscreen-card-right")
+            .append(labels.create(feedData.actions.labels, that.issue).render().el)
         })
     }
   });

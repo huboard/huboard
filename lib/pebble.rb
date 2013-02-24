@@ -148,7 +148,34 @@ module Stint
     end
 
     def feed_for_issue(user, repo, number)
-      github.feed_for_issue user, repo, number
+      issue = github.feed_for_issue user, repo, number
+      issue["other_labels"] = issue["labels"].reject {|l| @huboard_patterns.any? {|p| p.match(l["name"])}}
+
+      actions = { :actions => {
+          :labels => {
+            :available_labels => github.labels(user, repo).reject {|l| @huboard_patterns.any? {|p| p.match(l["name"])}},
+            :current_labels => issue["other_labels"]
+          }
+        }
+      }
+
+      { :issue => issue }.merge! actions
+      
+    end
+
+    def update_issue_labels(user, repo, number, labels)
+      issue = github.issue_by_id user, repo, number
+
+      keep_labels = issue["labels"].find_all {|l| @huboard_patterns.any? {|p| p.match(l["name"])}}
+
+      update_with = labels.concat(keep_labels.map{ |l| l["name"] }) 
+
+      updated = github.update_issue user, repo, { "number" => issue.number, :labels => update_with }
+
+      updated["other_labels"] = updated["labels"].reject {|l| @huboard_patterns.any? {|p| p.match(l["name"])}}.map { |x| x }
+
+      updated
+
     end
 
     def reorder_milestone(user_name, repo, number, index, status)

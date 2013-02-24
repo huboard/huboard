@@ -29,6 +29,15 @@ module Huboard
       return json pebble.feed_for_issue(params[:user], params[:repo], params[:number])
 
     end
+    post '/:user/:repo/issues/:number/update_labels' do 
+      labels = params[:labels] ? params[:labels][:name] : []
+      issue = pebble.update_issue_labels(params[:user], params[:repo], params[:number], labels).to_hash
+
+      publish "#{params[:user]}/#{params[:repo]}", "Updated.#{params[:number]}", { issue: issue }
+
+      return json  issue
+
+    end
 
     post '/:user/:repo/reorderissue' do 
       milestone = params["issue"]

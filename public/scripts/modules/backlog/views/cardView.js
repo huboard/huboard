@@ -12,6 +12,7 @@ define(["text!../templates/card.html","../models/card", "../../common/events/pos
       //postal.socket(params.user + "/" + params.repo,"Moved." + params.issue.number, $.proxy(this.onMoved,this));
       postal.socket(params.user + "/" + params.repo,"Closed." + params.issue.number, $.proxy(this.onClosed,this));
       postal.socket(params.user + "/" + params.repo,"Assigned." + params.issue.number, $.proxy(this.onAssigned,this));
+      postal.socket(params.user + "/" + params.repo,"Updated." + params.issue.number, $.proxy(this.onUpdated,this));
 
       this.filtersHash = { simple: {}, complex: {}};
     },
@@ -29,6 +30,11 @@ define(["text!../templates/card.html","../models/card", "../../common/events/pos
     },
     onNumber: function (ev) {
       ev.stopPropagation();
+    },
+    onUpdated: function (data) {
+         this.issue.attributes = _.extend(this.issue.attributes, data.issue);
+         this.render();
+         this.transition();
     },
     onClosed: function(){
       this.remove();

@@ -1,0 +1,16 @@
+
+
+  <ul class="labels"> 
+    <h5> Labels </h5>
+  <% _(available_labels).each(function(l) { %>
+    <li class="card-label -x<%= l.color %>"> 
+    <% if(_.find(current_labels, function(x){ return x.name === l.name})) { %>
+      <span class="active"> <%= l.name %> </span>
+      <input type="checkbox" style="display:none" name="labels[name][]" value='<%= l.name %>' checked='checked' />
+      <% } else {  %>
+        <span > <%= l.name %> </span>
+        <input type='checkbox' style="display:none" name="labels[name][]" value='<%= l.name %>' />
+      <% } %>
+    </li>
+  <% }); %>
+  </ul>
