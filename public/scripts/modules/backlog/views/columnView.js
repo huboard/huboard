@@ -52,6 +52,7 @@ define(["text!../templates/column.html","./cardView","../../common/events/postal
         .append(cards);
 
       $("ul",this.el).sortable({
+         helper: 'clone',
          connectWith: ".sortable",
          placeholder: "ui-sortable-placeholder",
          receive: $.proxy(this.onReceive,this),

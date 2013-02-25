@@ -50,6 +50,7 @@ define(["../collections/issues","text!../templates/column.html","./cardView","..
       this.el = column;
 
       $("ul",this.el).sortable({
+         helper: 'clone',
          connectWith: ".sortable",
          placeholder: "ui-sortable-placeholder",
          receive: $.proxy(this.onReceive,this),
