@@ -150,7 +150,7 @@ or, if you'd prefer to name your app yourself:
 
 ## 2. Register App For Github OAuth
 
-Go to https://github.com/account/applications and register your
+Go to https://github.com/settings/applications and register your
 application to get the application keys needed for OAuth.
 
 - URL: `http://<your-app-name>.herokuapp.com`
