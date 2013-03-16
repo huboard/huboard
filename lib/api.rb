@@ -7,11 +7,32 @@ module Huboard
 
     extend Huboard::Common::Settings
 
+    PUBLIC_URLS = ['/authorized']
+
     before do
-      authenticate! unless authenticated?
+      protected! unless PUBLIC_URLS.include? request.path_info
+    end
+
+    helpers do
+      def protected! 
+        return current_user if authenticated?
+        authenticate! 
+      end
     end
 
     # json api
+
+    get '/authorized' do
+      token = params[:token]
+      begin
+        token = decrypt_token token
+      rescue
+       halt([401, "Bad token"])
+      end
+
+      halt([401, "Unauthorized User"]) unless check_token(token)
+      "Authorized yo!"
+    end
 
     get '/:user/:repo/backlog' do 
       return json pebble.build_backlog(params[:user], params[:repo])
@@ -77,7 +98,7 @@ module Huboard
     end
 
     get "/token" do
-      return "User Token: #{encrypted_token}"
+      return "Encrypted: #{encrypted_token}"
     end
 
   end

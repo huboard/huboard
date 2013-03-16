@@ -7,6 +7,7 @@ module Huboard
 
       def self.extended(klass)
         klass.class_eval <<-RUBY, __FILE__, __LINE__ + 1
+
             enable :sessions
             if File.exists? "#{File.dirname(__FILE__)}/../.settings"
               puts "settings file"
@@ -72,8 +73,12 @@ module Huboard
 
     module Helpers
       def encrypted_token
-        encrypted = Encryptor.encrypt user_token, :key => settings.secret_key
+        encrypted = encrypt_token
         Base64.urlsafe_encode64 encrypted
+      end
+
+      def encrypt_token
+        Encryptor.encrypt user_token, :key => settings.secret_key
       end
 
       def user_token
@@ -83,6 +88,11 @@ module Huboard
       def decrypt_token(token)
         decoded = Base64.urlsafe_decode64 token
         Encryptor.decrypt decoded, :key => settings.secret_key
+      end
+
+      def check_token(token)
+        ghee = gh token
+        ghee.connection.get('/').status == 200
       end
 
       def current_user

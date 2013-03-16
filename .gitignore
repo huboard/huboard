@@ -2,6 +2,7 @@
 .token
 .rvmrc
 tmp/
+log/
 .DS_Store
 .sass-cache
 #*.min.css
