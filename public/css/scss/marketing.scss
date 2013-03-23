@@ -21,6 +21,18 @@
   url("../font/proxima_nova_bold-webfont.ttf") format('truetype');
 }
 
+blockquote {
+  > div {
+
+    padding-bottom: 6px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid #ccc;
+  }
+
+  img {
+   border-radius: 2px;
+  }
+}
 
 .preamble {
   background-color: #353535;
