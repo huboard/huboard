@@ -1,11 +1,11 @@
 class Huboard
 
   def self.column_pattern
-   return /(?<id>\d+) *- *(?<name>.+)/ 
+    return /(?<id>\d+) *- *(?<name>.+)/ 
   end
 
   def self.link_pattern
-   return /Link <=> (?<user_name>.*)\/(?<repo>.*)/
+    return /Link <=> (?<user_name>.*)\/(?<repo>.*)/
   end
 
   def self.settings_pattern
@@ -20,10 +20,10 @@ class Huboard
   module Config
 
     VALID_OPTIONS_KEYS = [
-       :oauth_token,
-       :faraday_config_block,
-       :api_endpoint,
-       :access_token
+      :oauth_token,
+      :faraday_config_block,
+      :api_endpoint,
+      :access_token
 
     ].freeze
 
@@ -52,9 +52,9 @@ class Huboard
   class << self
 
     def client
-        @gh ||= Ghee.new(:access_token => access_token) do |conn|
-          faraday_config_block.call(conn) if faraday_config_block
-        end
+      @gh ||= Ghee.new(:access_token => access_token) do |conn|
+        faraday_config_block.call(conn) if faraday_config_block
+      end
     end
 
     def board_for(user, repo)
@@ -84,12 +84,12 @@ class Huboard
     end
 
     def repos_by_user(user)
-       user = client.users user
-       the_repos = repos(user.login) if user.type == "Organization"
-       the_repos = user.repos.all.sort_by{|r| r["pushed_at"] || "1111111111111111"}.reverse if user.type == "User"
-       the_repos.reject { |r| !r.has_issues }.sort_by{|r| r["pushed_at"] || "1111111111111111"}.reverse
+      user = client.users user
+      the_repos = repos(user.login) if user.type == "Organization"
+      the_repos = user.repos.all.sort_by{|r| r["pushed_at"] || "1111111111111111"}.reverse if user.type == "User"
+      the_repos.reject { |r| !r.has_issues }.sort_by{|r| r["pushed_at"] || "1111111111111111"}.reverse
     end
-     
+
 
   end
 
@@ -98,10 +98,10 @@ class Huboard
 
   module Assignees
     def assignees
-        gh.assignees.all
+      gh.assignees.all
     end
   end
-              
+
 
   module Labels
 
@@ -158,7 +158,7 @@ class Huboard
     end
 
     def issue(number)
-       gh.issues(number).extend(Card).merge!({:repo => {:owner => {:login => user}, :name => repo }})
+      gh.issues(number).extend(Card).merge!({:repo => {:owner => {:login => user}, :name => repo }})
     end
 
     module Card
@@ -166,6 +166,16 @@ class Huboard
       def current_state
         r = Huboard.column_pattern
         self.labels.sort_by {|l| l["name"]}.reverse.find {|x| r.match(x["name"])}  || {"name" => "__nil__"}
+      end
+
+      def update_labels(labels)
+
+        keep_labels = self.labels.find_all {|l| Huboard.all_patterns.any? {|p| p.match(l.name)}}
+
+        update_with = labels.concat(keep_labels.map{ |l| l["name"] }) 
+
+        patch "labels" => update_with
+
       end
 
       def other_labels
@@ -177,14 +187,15 @@ class Huboard
       end
 
       def patch(hash)
-         client.patch hash 
+        updated = client.patch hash 
+        updated.extend(Card).merge!(:repo => repo)
       end
 
       def move(index)
         board = Huboard.board_for(self[:repo][:owner][:login], self[:repo][:name])
         column_labels = board.column_labels
         new_state = column_labels.find { |l| /#{index}\s*- *.+/.match l.name }
-        self.labels << new_state unless new_state.nil?
+          self.labels << new_state unless new_state.nil?
         self.labels = self.labels.delete_if { |l| l["name"] == self[:current_state]["name"]}
         patch "labels" => self.labels
       end
@@ -200,24 +211,24 @@ class Huboard
       end
 
       def embed_data(data = nil)
-       if !data
-        r = /@huboard:(.*)/
-          match = r.match self.body
-        return { } if match.nil?
+        if !data
+          r = /@huboard:(.*)/
+            match = r.match self.body
+          return { } if match.nil?
 
-        begin
-          return JSON.load(match[1])
-        rescue
-          return {}
-        end
-       else
-         _data = embed_data
-         if _data.empty?
+          begin
+            return JSON.load(match[1])
+          rescue
+            return {}
+          end
+        else
+          _data = embed_data
+          if _data.empty?
             self.body = self.body.concat  "\r\n\r\n<!---\r\n@huboard:#{JSON.dump(data)}\r\n-->\r\n" 
-         else
+          else
             self.body = self.body.gsub /@huboard:.*/, "@huboard:#{JSON.dump(_data.merge(data))}"
-         end
-       end
+          end
+        end
       end
 
       def self.extended(klass)

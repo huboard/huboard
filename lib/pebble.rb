@@ -133,18 +133,8 @@ module Stint
     end
 
     def update_issue_labels(user, repo, number, labels)
-      issue = github.issue_by_id user, repo, number
-
-      keep_labels = issue["labels"].find_all {|l| @huboard_patterns.any? {|p| p.match(l["name"])}}
-
-      update_with = labels.concat(keep_labels.map{ |l| l["name"] }) 
-
-      updated = github.update_issue user, repo, { "number" => issue.number, :labels => update_with }
-
-      updated["other_labels"] = updated["labels"].reject {|l| @huboard_patterns.any? {|p| p.match(l["name"])}}.map { |x| x }
-
-      updated
-
+      issue = Huboard.board_for(user, repo).issue number
+      issue.update_labels labels
     end
 
     def reorder_milestone(user_name, repo, number, index, status)
@@ -158,11 +148,6 @@ module Stint
       end
 
       github.update_milestone user_name, repo, post_data
-    end
-
-    def current_state(issue)
-      r = @column_pattern
-      issue["labels"].sort_by {|l| l["name"]}.reverse.find {|x| r.match(x["name"])}  || {"name" => "__nil__"}
     end
 
 

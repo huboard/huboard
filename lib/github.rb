@@ -98,18 +98,11 @@ module Stint
       issue.feed
     end
 
-    def update_issue(user_name, repo, issue)
-      gh.repos(user_name, repo).issues(issue["number"]).patch(issue)
-    end
 
     def update_milestone(user_name, repo, milestone)
       gh.repos(user_name, repo).milestones(milestone[:number]).patch(milestone)
     end
 
-    def close_issue(user_name, repo, issue)
-      status = gh.repos(user_name, repo).issues(issue["number"]).close
-      { success: status }
-    end
 
     def labels(user_name, repo)
       Huboard.board_for(user_name, repo).labels
