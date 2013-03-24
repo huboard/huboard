@@ -86,10 +86,7 @@ module Stint
     end
 
     def get_issues(user_name, repo, label = nil)
-      #return [] if gh.connection.get("/repos/#{user_name}/#{repo}").status != 200
-      params = {:direction => "asc"}
-      params = params.merge({:labels => "#{label}"}) if label 
-      gh.repos(user_name, repo).issues(params).all
+      Huboard.board_for(user_name, repo).issues(label)
     end
 
     def issue_by_id(user_name, repo, id)

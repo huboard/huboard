@@ -51,8 +51,7 @@ class Huboard
     get '/:user/?' do 
       protected!
       @parameters = params
-       @repos = Huboard.repos_by_user(params[:user])
-      #@repos = pebble.all_repos.select {|r| r["owner"]["login"] == params[:user]}
+      @repos = Huboard.repos_by_user(params[:user])
       @filtered = params[:user]
       erb :index
     end

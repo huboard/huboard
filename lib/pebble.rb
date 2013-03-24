@@ -98,35 +98,23 @@ module Stint
     end
 
     def get_issues(user_name, repo, skip = 0, optimize = true)
+      board = Huboard.board_for user_name, repo
+
 
       if optimize
-        columns = labels(user_name, repo).drop(skip)
-        issues = columns.map { |c| github.get_issues(user_name, repo, c[:name]) }.flat_map {|i| i }
+        columns = board.column_labels.drop(skip)
+        issues = columns.map { |c| board.issues(c[:name]) }.flat_map {|i| i }
       else
-        issues = github.get_issues user_name, repo
+        issues = board.issues
       end
 
-      issues.each do |issue|
-        issue["current_state"] = current_state(issue)
-        issue["_data"] = embedded_data issue["body"]
-        issue["repo"] = {owner: {login:user_name},name: repo}
-        issue["other_labels"] = issue["labels"].reject {|l| @huboard_patterns.any? {|p| p.match(l["name"])}}
-      end
-      issues.sort_by { |i| i["_data"]["order"] || i["number"].to_f}
+      issues
     end
 
     def reorder_issue(user_name, repo, number, index)
 
-      post_data = {"number" => number}
-      issue = github.issue_by_id user_name, repo, number
-      _data = embedded_data issue["body"]
-      if _data.empty?
-        post_data["body"] = issue["body"].concat "\r\n\r\n<!---\r\n@huboard:#{JSON.dump({:order => index.to_f})}\r\n-->\r\n" 
-      else
-        post_data["body"] = issue["body"].gsub /@huboard:.*/, "@huboard:#{JSON.dump(_data.merge({"order" => index.to_f}))}"
-      end
-
-      github.update_issue user_name, repo, post_data
+      issue = Huboard.board_for(user_name, repo).issue(number)
+      issue.reorder(index)
     end
 
     def feed_for_issue(user, repo, number)
