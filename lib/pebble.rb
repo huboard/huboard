@@ -1,6 +1,7 @@
 require 'time'
 require 'json'
 require 'yaml'
+require_relative 'bridge/huboard'
 
 module Stint
   class Pebble
@@ -18,7 +19,7 @@ module Stint
       return :milestones => milestones, 
         :unassigned => {:issues => issues.find_all {|i| i.milestone.nil? }, :milestone => {:title => "No milestone"}},
         :assignees =>  github.assignees(user_name, repo).map{|a| a},
-        other_labels: github.labels(user_name, repo).reject { |l| @huboard_patterns.any?{|p| p.match(l["name"]) } }
+        other_labels: Huboard.board_for(user_name, repo).other_labels
     end
 
     def build_board(user_name, repo)
@@ -55,26 +56,7 @@ module Stint
     end
 
     def settings(user_name, repo)
-      defaults = {
-        :show_all => true
-      }
-
-      labels = github.labels user_name, repo
-
-      r = @settings_pattern
-      settings = labels
-                  .select{|l| r.match l["name"]}
-                  .map do |l|
-                    match = r.match l["name"]
-                    begin
-                      YAML.load(match[1])
-                    rescue
-                      return {}
-                    end
-                  end.reduce(:merge)
-
-      defaults.merge(settings || {})
-
+      Huboard.board_for(user_name,repo).settings
     end
 
     def board(user_name, repo)
@@ -344,24 +326,19 @@ module Stint
     end
 
     def repos(user_name = nil)
-      repos = github.repos user_name
-      repos.sort_by{|r| r["pushed_at"] || "1111111111111111"}.reverse 
+      Huboard.repos(user_name)
     end
 
     def all_repos
-      the_repos = github.repos
-      github.orgs.each do |org|
-        the_repos.concat(github.repos(org["login"]))
-      end
-      the_repos.sort_by{|r| r["pushed_at"] || "1111111111111111"}.reverse
+      Huboard.all_repos
     end
 
     def initialize(github)
       @github = github
-      @column_pattern = /(?<id>\d+) *- *(?<name>.+)/
-      @link_pattern = /Link <=> (?<user_name>.*)\/(?<repo>.*)/
-      @settings_pattern = /@huboard:(.*)/
-      @huboard_patterns = [@column_pattern, @link_pattern, @settings_pattern]
+      @column_pattern = Huboard.column_pattern
+      @link_pattern =   Huboard.link_pattern
+      @settings_pattern = Huboard.settings_pattern
+      @huboard_patterns = Huboard.all_patterns
     end
   end
 end

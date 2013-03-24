@@ -5,7 +5,7 @@ require 'encryptor'
 require 'base64'
 require_relative "helpers"
 
-module Huboard
+class Huboard
   class App < Sinatra::Base
     register Sinatra::Auth::Github
     register Huboard::Common
@@ -51,9 +51,7 @@ module Huboard
     get '/:user/?' do 
       protected!
       @parameters = params
-      user = gh.users(params[:user])
-       @repos = user.repos.all.sort_by{|r|r["pushed_at"] || "111111"}.reverse if user["type"] == "User" 
-       @repos = gh.orgs(user["login"]).repos.all.sort_by{|r|r["pushed_at"] || "111111"}.reverse if user["type"] == "Organization"
+       @repos = Huboard.repos_by_user(params[:user])
       #@repos = pebble.all_repos.select {|r| r["owner"]["login"] == params[:user]}
       @filtered = params[:user]
       erb :index

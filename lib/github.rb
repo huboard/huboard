@@ -64,7 +64,7 @@ module Stint
     end
 
     def assignees(user_name, repo)
-      gh.repos(user_name,repo).assignees.all
+      Huboard.board_for(user_name, repo).assignees
     end
 
     def get_milestones(user_name, repo)
@@ -115,7 +115,7 @@ module Stint
     end
 
     def labels(user_name, repo)
-      gh.repos(user_name, repo).labels
+      Huboard.board_for(user_name, repo).labels
     end
 
   end
