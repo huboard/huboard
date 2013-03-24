@@ -112,10 +112,9 @@ module Stint
     end
 
     def reorder_issue(user_name, repo, number, index)
-
       issue = Huboard.board_for(user_name, repo).issue(number)
       issue.reorder(index)
-    end
+   end
 
     def feed_for_issue(user, repo, number)
       issue = github.feed_for_issue user, repo, number
@@ -222,57 +221,20 @@ module Stint
       github.create_hook( user_name, repo, params).merge( { success: true, message: "hook created successfully"})
     end
 
-    def push_card(user_name, repo, commit)
-      r = /(?<command>\w+) [gG][hH]-+(?<issue>\d+)/
-        match = r.match(commit["message"])
-      return "no match" unless match
-      return "no match" unless /push|pushes|moves?/i.match( match[:command])  
-
-      issue = github.issue_by_id user_name, repo, match[:issue]
-
-      #return issue
-      state = current_state(issue)
-
-      sr = @column_pattern
-      next_state = sr.nil? ? 0 : (sr[:id].to_i + 1)
-
-      labels = github.labels user_name, repo
-
-      next_label = labels.find { |l| /#{next_state}\s*- *.+/.match(l["name"]) }
-
-        return github.close_issue(user_name, repo, issue) if next_label.nil?
-
-      issue["labels"] << next_label
-
-      issue["labels"] = issue["labels"].delete_if { |l| l["name"] == state["name"] }
-
-      github.update_issue user_name, repo, {"number" => issue["number"],"labels" => issue["labels"]}
-    end
 
     def assign_card(user_name, repo, the_issue, assignee)
-      github.update_issue user_name, repo, {"number" => the_issue["number"], "assignee" => assignee}
+      issue = Huboard.board_for(user_name, repo).issue(the_issue["number"])
+      issue.patch "assignee" => assignee
     end
 
     def assign_milestone(user_name, repo, the_issue, milestone)
-      number = milestone["number"] 
-      github.update_issue user_name, repo, {"number" => the_issue["number"], "milestone" => number}
+      issue = Huboard.board_for(user_name, repo).issue(the_issue["number"])
+      issue.patch "milestone" => milestone["number"]
     end
 
     def move_card(user_name, repo, the_issue, index)
-      labels = github.labels user_name, repo
-
-      new_state = labels.find { |l| /#{index}\s*- *.+/.match(l["name"]) }
-
-        issue = github.issue_by_id user_name, repo, the_issue["number"]
-
-      state = current_state(issue)
-
-      issue["labels"] << new_state unless new_state.nil?
-
-      issue["labels"] = issue["labels"].delete_if { |l| l["name"] == state["name"] }
-
-      github.update_issue user_name, repo, {"number" => issue["number"], "labels" => issue["labels"]}
-
+      issue = Huboard.board_for(user_name, repo).issue(the_issue["number"])
+      issue.move index
     end
 
     def get_milestones(user_name, repo)
@@ -310,7 +272,8 @@ module Stint
     end
 
     def close_card(user_name, repo, the_issue)
-      github.close_issue(user_name, repo, the_issue)
+      issue = Huboard.board_for(user_name, repo).issue(the_issue["number"])
+      issue.close
     end
 
     def repos(user_name = nil)

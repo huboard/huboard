@@ -172,14 +172,26 @@ class Huboard
         self.labels.reject {|l| Huboard.all_patterns.any? {|p| p.match l.name }}
       end
 
-      
-
       def client
         Huboard.client.repos(self[:repo][:owner][:login], self[:repo][:name]).issues(self.number)
       end
 
       def patch(hash)
          client.patch hash 
+      end
+
+      def move(index)
+        board = Huboard.board_for(self[:repo][:owner][:login], self[:repo][:name])
+        column_labels = board.column_labels
+        new_state = column_labels.find { |l| /#{index}\s*- *.+/.match l.name }
+        self.labels << new_state unless new_state.nil?
+        self.labels = self.labels.delete_if { |l| l["name"] == self[:current_state]["name"]}
+        patch "labels" => self.labels
+      end
+
+      def close
+        status = client.close
+        return :success => status
       end
 
       def reorder(index)
