@@ -8,7 +8,7 @@
       <script src="/scripts/modules/require.js"></script>
       <script>
         define("socket",function() {
-          return io.connect("<%= @parameters[:socket_backend] %>?token=<%= encrypted_token %>");
+          return window.io ? io.connect("<%= @parameters[:socket_backend] %>?token=<%= encrypted_token %>") : null;
         });
 
       </script>
