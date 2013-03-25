@@ -64,7 +64,7 @@ module Stint
     end
 
     def assignees(user_name, repo)
-      Huboard.board_for(user_name, repo).assignees
+      Huboard.adapter_for(user_name, repo).assignees
     end
 
     def get_milestones(user_name, repo)
@@ -86,7 +86,7 @@ module Stint
     end
 
     def get_issues(user_name, repo, label = nil)
-      Huboard.board_for(user_name, repo).issues(label)
+      Huboard.adapter_for(user_name, repo).issues(label)
     end
 
     def issue_by_id(user_name, repo, id)
@@ -105,7 +105,7 @@ module Stint
 
 
     def labels(user_name, repo)
-      Huboard.board_for(user_name, repo).labels
+      Huboard.adapter_for(user_name, repo).labels
     end
 
   end

@@ -57,7 +57,7 @@ class Huboard
       end
     end
 
-    def board_for(user, repo)
+    def adapter_for(user, repo)
       Board.new(user, repo)
     end
 
@@ -192,7 +192,7 @@ class Huboard
       end
 
       def move(index)
-        board = Huboard.board_for(self[:repo][:owner][:login], self[:repo][:name])
+        board = Huboard.adapter_for(self[:repo][:owner][:login], self[:repo][:name])
         column_labels = board.column_labels
         new_state = column_labels.find { |l| /#{index}\s*- *.+/.match l.name }
           self.labels << new_state unless new_state.nil?

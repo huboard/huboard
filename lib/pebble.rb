@@ -8,12 +8,12 @@ module Stint
     attr_accessor :github
 
     def build_backlog(user_name, repo)
-      return Huboard.board_for(user_name, repo).backlog
+      return Huboard.adapter_for(user_name, repo).backlog
     end
 
     def build_board(user_name, repo)
       include_backlog = settings(user_name, repo)[:show_all]
-      board = Huboard.board_for(user_name, repo)
+      board = Huboard.adapter_for(user_name, repo)
 
       issues = board.board
       issues_by_label = issues.group_by { |issue| issue["current_state"]["name"] }
@@ -47,7 +47,7 @@ module Stint
     end
 
     def settings(user_name, repo)
-      Huboard.board_for(user_name,repo).settings
+      Huboard.adapter_for(user_name,repo).settings
     end
 
     def board(user_name, repo)
@@ -89,7 +89,7 @@ module Stint
     end
 
     def get_issues(user_name, repo, skip = 0, optimize = true)
-      board = Huboard.board_for user_name, repo
+      board = Huboard.adapter_for user_name, repo
 
 
       if optimize
@@ -103,7 +103,7 @@ module Stint
     end
 
     def reorder_issue(user_name, repo, number, index)
-      issue = Huboard.board_for(user_name, repo).issue(number)
+      issue = Huboard.adapter_for(user_name, repo).issue(number)
       issue.reorder(index)
    end
 
@@ -124,7 +124,7 @@ module Stint
     end
 
     def update_issue_labels(user, repo, number, labels)
-      issue = Huboard.board_for(user, repo).issue number
+      issue = Huboard.adapter_for(user, repo).issue number
       issue.update_labels labels
     end
 
@@ -199,17 +199,17 @@ module Stint
 
 
     def assign_card(user_name, repo, the_issue, assignee)
-      issue = Huboard.board_for(user_name, repo).issue(the_issue["number"])
+      issue = Huboard.adapter_for(user_name, repo).issue(the_issue["number"])
       issue.patch "assignee" => assignee
     end
 
     def assign_milestone(user_name, repo, the_issue, milestone)
-      issue = Huboard.board_for(user_name, repo).issue(the_issue["number"])
+      issue = Huboard.adapter_for(user_name, repo).issue(the_issue["number"])
       issue.patch "milestone" => milestone["number"]
     end
 
     def move_card(user_name, repo, the_issue, index)
-      issue = Huboard.board_for(user_name, repo).issue(the_issue["number"])
+      issue = Huboard.adapter_for(user_name, repo).issue(the_issue["number"])
       issue.move index
     end
 
@@ -248,7 +248,7 @@ module Stint
     end
 
     def close_card(user_name, repo, the_issue)
-      issue = Huboard.board_for(user_name, repo).issue(the_issue["number"])
+      issue = Huboard.adapter_for(user_name, repo).issue(the_issue["number"])
       issue.close
     end
 
