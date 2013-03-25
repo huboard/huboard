@@ -8,23 +8,14 @@ module Stint
     attr_accessor :github
 
     def build_backlog(user_name, repo)
-      issues = get_issues user_name, repo, 0, false
-      milestones = github.get_milestones(user_name, repo)
-        .map {|m| {
-            :milestone => m.merge(:_data => embedded_data(m["description"]).reject {|key| key.to_s == "status" }),
-            :issues => issues.find_all {|i| i["milestone"] && i["milestone"]["number"] == m["number"]}
-            }
-        }.sort_by { |m| m[:milestone]["_data"]["order"] || m[:milestone]["number"].to_f}
-
-      return :milestones => milestones, 
-        :unassigned => {:issues => issues.find_all {|i| i.milestone.nil? }, :milestone => {:title => "No milestone"}},
-        :assignees =>  github.assignees(user_name, repo).map{|a| a},
-        other_labels: Huboard.board_for(user_name, repo).other_labels
+      return Huboard.board_for(user_name, repo).backlog
     end
 
     def build_board(user_name, repo)
       include_backlog = settings(user_name, repo)[:show_all]
-      issues = get_issues(user_name, repo, include_backlog ? 1 : 0)
+      board = Huboard.board_for(user_name, repo)
+
+      issues = board.board
       issues_by_label = issues.group_by { |issue| issue["current_state"]["name"] }
       all_labels = labels(user_name, repo)
       all_labels = all_labels.each_with_index do |label, index|

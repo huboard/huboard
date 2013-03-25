@@ -238,6 +238,60 @@ class Huboard
       end
 
     end
+
+    def milestones
+      gh.milestones.all.each { |m| m.extend(Milestone) }
+    end
+
+    module Milestone
+      def embed_data(data = nil)
+        if !data
+          r = /@huboard:(.*)/
+            match = r.match self.description
+          return { } if match.nil?
+
+          begin
+            return JSON.load(match[1])
+          rescue
+            return {}
+          end
+        else
+          _data = embed_data
+          if _data.empty?
+            self.description = self.description.concat  "\r\n\r\n<!---\r\n@huboard:#{JSON.dump(data)}\r\n-->\r\n" 
+          else
+            self.description = self.description.gsub /@huboard:.*/, "@huboard:#{JSON.dump(_data.merge(data))}"
+          end
+        end
+      end
+
+      def self.extended(klass)
+        klass["_data"] = klass.embed_data
+      end
+
+    end
+  end
+
+
+  module Backlog
+    def backlog
+      issues = self.issues
+      milestones = self.milestones
+      milestones = milestones.map do |m|
+        {
+          :milestone => m,
+          :issues => issues.find_all {|i| i["milestone"] && i["milestone"]["number"] == m["number"]}
+        }
+      end
+
+      milestones = milestones.sort_by { |m| m[:milestone]["_data"]["order"] || m[:milestone]["number"].to_f }
+
+      return :milestones => milestones, 
+        :unassigned => {:issues => issues.find_all {|i| i.milestone.nil? }, :milestone => {:title => "No milestone"}},
+        :assignees =>  assignees.to_a,
+        :other_labels => other_labels
+
+    end
   end
 
   class Board
@@ -253,11 +307,18 @@ class Huboard
       @gh.repos(user, repo)
     end
 
+    def board
+       settings = self.settings
+       columns = column_labels.drop settings[:show_all] ? 0 : 1
+       columns.map { |c| issues(c.name) }.flat_map {|i| i }
+    end
+
 
     include Assignees
     include Labels
     include Settings
     include Issues
+    include Backlog
   end
 
 end
