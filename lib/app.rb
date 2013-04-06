@@ -44,7 +44,8 @@ class Huboard
       @parameters = params
       return erb :home, :layout => :marketing unless authenticated?
       protected!
-      @repos = pebble.all_repos
+      configure_gh
+      @repos = Huboard.all_repos
       erb :index
     end
 

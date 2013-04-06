@@ -118,7 +118,12 @@ class Huboard
     end
 
     def column_labels
-      labels.select{|l| Huboard.column_pattern.match l.name }
+      labels.select{|l| Huboard.column_pattern.match l.name }.map do |l| 
+        match = Huboard.column_pattern.match l.name
+          l[:index] = match[:id]
+          l[:text] = match[:name]
+          l
+      end
     end
 
     def link_labels
@@ -309,8 +314,19 @@ class Huboard
 
     def board
        settings = self.settings
-       columns = column_labels.drop settings[:show_all] ? 0 : 1
+       columns = column_labels.drop settings[:show_all] ? 1 : 0
        columns.map { |c| issues(c.name) }.flat_map {|i| i }
+       grouped = issues.group_by {|i| i["current_state"]["name"] }
+       columns = column_labels.each_with_index do |label, index|
+         label["issues"] = (grouped[label.name] || []).sort_by {|i| i["_data"]["order"] || i.number.to_f }
+         label
+       end
+
+       if settings[:show_all]
+         columns[0][:issues] = (grouped["__nil__"] || []).concat(columns[0][:issues]).sort_by { |i| i["_data"]["order"] || i["number"].to_f} unless columns.empty?
+       end
+
+       columns
     end
 
 

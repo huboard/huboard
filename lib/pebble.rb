@@ -1,7 +1,6 @@
 require 'time'
 require 'json'
 require 'yaml'
-require_relative 'bridge/huboard'
 
 module Stint
   class Pebble
@@ -15,23 +14,12 @@ module Stint
       include_backlog = settings(user_name, repo)[:show_all]
       board = Huboard.adapter_for(user_name, repo)
 
-      issues = board.board
-      issues_by_label = issues.group_by { |issue| issue["current_state"]["name"] }
-      all_labels = labels(user_name, repo)
-      all_labels = all_labels.each_with_index do |label, index|
-        x = issues_by_label[label[:name]]
-        label[:issues] = (x || []).sort_by { |i| i["_data"]["order"] || i["number"].to_f}
-        label
-      end
+      all_labels = board.board
 
-      if include_backlog
-        all_labels[0][:issues] = (issues_by_label["__nil__"] || []).concat(all_labels[0][:issues]).sort_by { |i| i["_data"]["order"] || i["number"].to_f} unless all_labels.empty?
-      end
-
-      {
-        labels: all_labels,
-        milestones: get_milestones(user_name, repo),
-        other_labels: github.labels(user_name, repo).reject { |l| @huboard_patterns.any?{|p| p.match(l["name"]) } }
+      return {
+        :labels => all_labels,
+        :milestones => get_milestones(user_name, repo),
+        :other_labels => github.labels(user_name, repo).reject { |l| @huboard_patterns.any?{|p| p.match(l["name"]) } }
       }
     end
 
