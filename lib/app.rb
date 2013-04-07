@@ -57,6 +57,23 @@ class Huboard
       erb :index
     end
 
+    get '/:user/:repo/?' do 
+      @parameters = params.merge({:login => current_user.login, :socket_backend => socket_backend})
+      configure_gh
+
+      adapter = Huboard.adapter_for(params[:user], params[:repo])
+
+
+
+      @actions = Hashie::Mash.new({
+          :linked => {
+            :labels => adapter.link_labels
+          }
+      })
+
+      erb :repo
+    end
+
     get '/:user/:repo/backlog' do 
       @parameters = params.merge({:login => current_user.login, :socket_backend => socket_backend})
       erb :backlog, :layout => :layout_fluid

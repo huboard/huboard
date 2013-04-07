@@ -1,0 +1,54 @@
+<% content_for :navigation do %>
+
+  <li >
+  <a href="/<%= h @parameters[:user]%>/<%= h @parameters[:repo]%>/backlog">Backlog</a>
+  </li>
+  <li>
+  <a href="/<%= h @parameters[:user]%>/<%= h @parameters[:repo]%>/board">Tasks</a>
+  </li>
+
+<% end %>
+
+<% content_for :header do %>
+  <h1 class="header">
+    <span class="author"><%= h @parameters[:user] %></span>
+    /
+    <span class="repo"><%= h @parameters[:repo] %></span>
+  </h1>
+
+<% end %>
+
+<% content_for :overlay do %>
+
+<% end %>
+
+<% content_for :title do %><%= h @parameters[:repo]%> :: <% end %>
+<div class="tabbable row">
+  <div class="span3">
+    <ul class="nav nav-list">
+      <li class="active"><a href="#linked" data-toggle="tab">Linked repos</a></li>
+      <li class=""><a href="#settings" data-toggle="tab">Settings</a></li>
+    </ul>
+  </div>
+  <div class="span9">
+  
+  <div class="tab-content">
+    <div class="tab-pane active" id="linked">
+      <h3> Linked repos </h3>
+      <ul>
+        <% @actions.linked.labels.each do |label| %>
+
+          <li> <%= label.name %> </li>
+
+        <% end %>
+      </ul>
+    </div>
+    <div class="tab-pane " id="settings">
+      <h3> Settings </h3>
+      <ul>
+      </ul>
+    </div>
+  </div>
+  </div>
+
+</div>
