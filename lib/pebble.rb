@@ -70,7 +70,7 @@ module Stint
     def feed_for_issue(user, repo, number)
       api = Huboard.adapter_for(user, repo)
 
-      issue = api.issue number
+      issue = api.issue(number).feed
 
       actions = { :actions => {
         :labels => {
@@ -90,16 +90,11 @@ module Stint
     end
 
     def reorder_milestone(user_name, repo, number, index, status)
-      post_data = {:number => number}
-      milestone = github.milestone user_name, repo, number
-      _data = embedded_data(milestone["description"]).reject { |key| key.to_s == "status" }
-      if _data.empty?
-        post_data["description"] = milestone["description"].concat "\r\n\r\n<!---\r\n@huboard:#{JSON.dump({"order" => index.to_f})}\r\n-->\r\n" 
-      else
-        post_data["description"] = milestone["description"].gsub /@huboard:.*/, "@huboard:#{JSON.dump(_data.merge({"order" => index.to_f}))}"
-      end
 
-      github.update_milestone user_name, repo, post_data
+      milestone =  Huboard.adapter_for(user_name, repo).milestone number
+
+      milestone.reorder index
+
     end
 
 

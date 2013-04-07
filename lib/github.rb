@@ -1,24 +1,5 @@
 require 'ghee'
 module Stint
-  class Issue
-    def initialize(issue)
-      @issue = issue
-    end
-
-    def events
-      @issue.events.all.map { |x| x }
-    end
-
-    def comments
-      @issue.comments.all.map { |x| x }
-    end
-
-    def feed
-      the_feed =  { :comments => comments, :events => events }
-      return @issue.merge! the_feed
-    end
-
-  end
   class Github
 
     def initialize(gh)
@@ -50,13 +31,6 @@ module Stint
     def milestone(user_name, repo, number)
       gh.repos(user_name, repo).milestones number
     end
-
-
-    def feed_for_issue(user, repo, number)
-      issue = Stint::Issue.new issue_by_id(user, repo, number)
-      issue.feed
-    end
-
 
     def update_milestone(user_name, repo, milestone)
       gh.repos(user_name, repo).milestones(milestone[:number]).patch(milestone)

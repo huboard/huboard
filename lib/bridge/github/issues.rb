@@ -12,6 +12,14 @@ class Huboard
       gh.issues(number).extend(Card).merge!({:repo => {:owner => {:login => user}, :name => repo }})
     end
 
+    def milestones
+      gh.milestones.all.each { |m| m.extend(Milestone) }.each{ |i| i.merge!({"repo" => {:owner => {:login => user}, :name => repo }}) }.sort_by { |i| i["_data"]["order"] || i["number"].to_f}
+    end
+
+    def milestone(number)
+      gh.milestones(number).extend(Milestone).merge!({:repo => {:owner => {:login => user}, :name => repo }})
+    end
+
     module Card
 
       def current_state
@@ -45,12 +53,12 @@ class Huboard
         client.events.all.to_a
       end
 
-      def comments
+      def all_comments
         client.comments.all.to_a
       end
 
       def feed
-        the_feed =  { :comments => comments, :events => events }
+        the_feed =  { :comments => self.all_comments, :events => events }
         return self.merge! the_feed
       end
 
@@ -107,11 +115,24 @@ class Huboard
 
     end
 
-    def milestones
-      gh.milestones.all.each { |m| m.extend(Milestone) }
-    end
 
     module Milestone
+
+      def reorder(index)
+        embed_data({"order" => index.to_f})
+        patch :description => self.description
+      end
+
+      def client
+       c = Huboard.client.repos(self[:repo][:owner][:login], self[:repo][:name])
+       c.milestones self.number
+      end
+
+      def patch(hash)
+        m = client.patch hash
+        m.extend(Milestone).merge! :repo => self["repo"]
+      end
+
       def embed_data(data = nil)
         if !data
           r = /@huboard:(.*)/
