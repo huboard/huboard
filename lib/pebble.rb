@@ -41,10 +41,6 @@ module Stint
       return column
     end
 
-    def settings(user_name, repo)
-      Huboard.adapter_for(user_name,repo).settings
-    end
-
     def board(user_name, repo)
       adapter = Huboard.adapter_for(user_name, repo)
 
@@ -54,9 +50,9 @@ module Stint
 
       linked.each do |l|
         begin
-         api = Huboard.adapter_for(l.user, l.repo)
+          api = Huboard.adapter_for(l.user, l.repo)
 
-         board = api.merge board, api.board, l
+          board = api.merge board, api.board, l
         rescue
           puts "Warning: Unable to link board: #{l.user}, #{l.repo}"
         end
@@ -65,19 +61,6 @@ module Stint
       return board
     end
 
-    def get_issues(user_name, repo, skip = 0, optimize = true)
-      board = Huboard.adapter_for user_name, repo
-
-
-      if optimize
-        columns = board.column_labels.drop(skip)
-        issues = columns.map { |c| board.issues(c[:name]) }.flat_map {|i| i }
-      else
-        issues = board.issues
-      end
-
-      issues
-    end
 
     def reorder_issue(user_name, repo, number, index)
       issue = Huboard.adapter_for(user_name, repo).issue(number)
@@ -85,12 +68,14 @@ module Stint
     end
 
     def feed_for_issue(user, repo, number)
+      api = Huboard.adapter_for(user, repo)
+
       issue = github.feed_for_issue user, repo, number
-      issue["other_labels"] = issue["labels"].reject {|l| @huboard_patterns.any? {|p| p.match(l["name"])}}
+      issue["other_labels"] = issue["labels"].reject {|l| Huboard.all_patterns.any? {|p| p.match(l["name"])}}
 
       actions = { :actions => {
         :labels => {
-        :available_labels => github.labels(user, repo).reject {|l| @huboard_patterns.any? {|p| p.match(l["name"])}},
+        :available_labels => api.other_labels,
         :current_labels => issue["other_labels"]
       }
       }
@@ -119,17 +104,6 @@ module Stint
     end
 
 
-    def labels(user_name, repo) 
-      response = github.labels(user_name, repo)
-      labels = []
-      response.each do |label|
-        r = @column_pattern
-        hash = r.match (label["name"])
-        labels << { name: label["name"], index: hash[:id], text: hash[:name], color: label["color"]} unless hash.nil?
-      end
-
-      labels.sort_by { |l| l[:index].to_i }
-    end
 
     def create_board(user_name, repo, hook)
       github.create_label user_name, repo, :name => "0 - Backlog", :color => "CCCCCC"
@@ -190,28 +164,6 @@ module Stint
       issue.move index
     end
 
-    def get_milestones(user_name, repo)
-      milestones = github.get_milestones user_name, repo
-      milestones = milestones.map { |m|
-        m["_data"] = embedded_data( m["description"]).reject { |key| key.to_s == "status" }
-        m
-      }
-      milestones.sort_by { |m| m["_data"]["order"] || m["number"].to_f}
-
-    end
-
-    def milestones(user_name, repo)
-      milestones = github.milestones user_name, repo
-      milestones = milestones.map { |m|
-        m["pull_requests"] = m[:issues].select {|i| !i["pull_request"]["html_url"].nil?}
-        m[:issues] = m[:issues].delete_if {|i| !i["pull_request"]["html_url"].nil?}
-        m["open_issues"] = m[:issues].size
-        m["_data"] = embedded_data( m["description"]).reject { |key| key.to_s == "status" }
-        m
-      }
-      milestones.sort_by { |m| m["_data"]["order"] || m["number"].to_f}
-    end
-
     def embedded_data(body)
       r = /@huboard:(.*)/
         match = r.match body
@@ -239,10 +191,6 @@ module Stint
 
     def initialize(github)
       @github = github
-      @column_pattern = Huboard.column_pattern
-      @link_pattern =   Huboard.link_pattern
-      @settings_pattern = Huboard.settings_pattern
-      @huboard_patterns = Huboard.all_patterns
     end
   end
 end
