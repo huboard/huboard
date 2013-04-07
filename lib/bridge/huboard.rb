@@ -127,7 +127,12 @@ class Huboard
     end
 
     def link_labels
-      labels.select{|l| Huboard.link_pattern.match l.name }
+      labels.select{|l| Huboard.link_pattern.match l.name }.map do |l|
+        match = Huboard.link_pattern.match l.name
+        l.user = match[:user_name]
+        l.repo = match[:repo]
+        l
+      end
     end
 
   end
@@ -171,6 +176,10 @@ class Huboard
       def current_state
         r = Huboard.column_pattern
         self.labels.sort_by {|l| l["name"]}.reverse.find {|x| r.match(x["name"])}  || {"name" => "__nil__"}
+      end
+
+      def order
+         self["_data"]["order"] || self.number.to_f
       end
 
       def update_labels(labels)
@@ -312,22 +321,54 @@ class Huboard
       @gh.repos(user, repo)
     end
 
+    def backlog_column
+       grouped = issues.group_by {|i| i["current_state"]["name"] }
+       first = column_labels.first 
+       issues =  (grouped["__nil__"] || []).concat(grouped[first.name]|| [])
+       return {
+         :issues => issues.sort_by {|i| i.order }
+       }
+    end
+
     def board
        settings = self.settings
-       columns = column_labels.drop settings[:show_all] ? 1 : 0
-       columns.map { |c| issues(c.name) }.flat_map {|i| i }
+       columns = column_labels.drop(settings[:show_all] ? 1 : 0)
+       issues = columns.map { |c| issues(c.name) }.flat_map {|i| i }
        grouped = issues.group_by {|i| i["current_state"]["name"] }
        columns = column_labels.each_with_index do |label, index|
-         label["issues"] = (grouped[label.name] || []).sort_by {|i| i["_data"]["order"] || i.number.to_f }
+         label["issues"] = (grouped[label.name] || [])
          label
        end
 
-       if settings[:show_all]
-         columns[0][:issues] = (grouped["__nil__"] || []).concat(columns[0][:issues]).sort_by { |i| i["_data"]["order"] || i["number"].to_f} unless columns.empty?
-       end
 
-       columns
+      return {
+        :labels => columns,
+        :milestones => milestones,
+        :other_labels => other_labels,
+        :assignees => assignees.to_a
+      }
     end
+
+    def merge(target, other, label)
+       return target unless target[:labels].size == other[:labels].size
+
+       target[:labels].each_with_index do |l, i|
+         linked = other[:labels][i][:issues].map do |issue|
+           issue["repo"][:color] = label.color
+           issue
+         end 
+         l[:issues] = l[:issues].concat(linked).sort_by { |issue| issue.order }
+       end
+       
+       milestones = other[:milestones].reject {|m| target[:milestones].any? { |o| o.title == m.title }}
+       target[:milestones] = target[:milestones].concat(milestones).sort_by { |m| m["_data"]["order"] || m["number"].to_f }
+
+       labels = other[:other_labels].reject {|m| target[:other_labels].any? { |o| o.name == m.name }}
+       target[:other_labels] = target[:other_labels].concat(labels)
+
+       return target
+    end
+
 
 
     include Assignees

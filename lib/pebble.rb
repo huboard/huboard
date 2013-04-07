@@ -11,27 +11,34 @@ module Stint
     end
 
     def build_board(user_name, repo)
-      include_backlog = settings(user_name, repo)[:show_all]
-      board = Huboard.adapter_for(user_name, repo)
-
-      all_labels = board.board
-
-      return {
-        :labels => all_labels,
-        :milestones => get_milestones(user_name, repo),
-        :other_labels => github.labels(user_name, repo).reject { |l| @huboard_patterns.any?{|p| p.match(l["name"]) } }
-      }
+      return Huboard.adapter_for(user_name, repo).board
     end
 
-    def backlog_column(user_name, repo) 
-      return {issues: []} unless settings(user_name, repo)[:show_all]
+    def backlog_column_for(user_name, repo) 
+      adapter = Huboard.adapter_for(user_name, repo)
 
-      issues = get_issues(user_name, repo, 0, false)
-      issues_by_label = issues.group_by { |issue| issue["current_state"]["name"] }
-      backlog_label = labels(user_name, repo).first
-      concated_issues = (issues_by_label["__nil__"] || []).concat(issues_by_label[backlog_label[:name]] || []).sort_by { |i| i["_data"]["order"] || i["number"].to_f}
+      return adapter.settings[:show_all] ?  adapter.backlog_column : { :issues =>[] } 
+    end
 
-      return { issues: concated_issues }
+    def backlog_column(user_name, repo)
+      adapter = Huboard.adapter_for(user_name, repo)
+
+      column = backlog_column_for(user_name, repo) 
+
+      linked = adapter.link_labels.each do |l| 
+        begin
+          issues = backlog_column_for(l.user, l.repo)[:issues].map do |i|
+            #ugly
+            i["repo"][:color] = l.color
+            i
+          end
+          column[:issues] = column[:issues].concat(issues).sort_by {|i| i.order }
+        rescue
+          puts "Warning: Unable to link board: #{l.user}, #{l.repo}"
+        end
+      end
+
+      return column
     end
 
     def settings(user_name, repo)
@@ -39,41 +46,23 @@ module Stint
     end
 
     def board(user_name, repo)
-        labels = github.labels(user_name,repo)
+      adapter = Huboard.adapter_for(user_name, repo)
 
-        board = build_board(user_name, repo)
+      linked = adapter.link_labels
 
-        labels
-          .select{ |l| @link_pattern.match l["name"] }
-          .each do |l|
-              match = @link_pattern.match l["name"]
-              linked_user, linked_repo = match[:user_name], match[:repo]
-              begin
-                linked_board = build_board linked_user, linked_repo
-                next if linked_board[:labels].size != board[:labels].size
-                board[:labels].each_with_index do |label, index|
+      board = adapter.board
 
-                  linked_issues = linked_board[:labels][index][:issues].map do |i|
-                    i["repo"][:color] = l["color"]
-                    i
-                  end
+      linked.each do |l|
+        begin
+         api = Huboard.adapter_for(l.user, l.repo)
 
-                  label[:issues] = label[:issues].concat(linked_issues).sort_by { |i| i["_data"]["order"] || i["number"].to_f}
-                end 
-                board[:milestones].concat(linked_board[:milestones]).sort_by { |m| m["_data"]["order"] || m["number"].to_f}
-                board[:other_labels].concat(linked_board[:other_labels])
+         board = api.merge board, api.board, l
+        rescue
+          puts "Warning: Unable to link board: #{l.user}, #{l.repo}"
+        end
+      end
 
-              rescue
-                puts "Warning: Unable to link board: #{linked_user}, #{linked_repo}"
-              end
-
-          end
-        # labels have to share the exact same color to work
-        board[:other_labels] = board[:other_labels].group_by { |l| l["name"].downcase }.map{|k,v| v.first }
-
-        board[:milestones] = board[:milestones].group_by { |l| l["title"].downcase }.map{|k,v| v.first }
-        board[:assignees] = github.assignees(user_name, repo).map{|a| a}
-        return board
+      return board
     end
 
     def get_issues(user_name, repo, skip = 0, optimize = true)
@@ -93,22 +82,22 @@ module Stint
     def reorder_issue(user_name, repo, number, index)
       issue = Huboard.adapter_for(user_name, repo).issue(number)
       issue.reorder(index)
-   end
+    end
 
     def feed_for_issue(user, repo, number)
       issue = github.feed_for_issue user, repo, number
       issue["other_labels"] = issue["labels"].reject {|l| @huboard_patterns.any? {|p| p.match(l["name"])}}
 
       actions = { :actions => {
-          :labels => {
-            :available_labels => github.labels(user, repo).reject {|l| @huboard_patterns.any? {|p| p.match(l["name"])}},
-            :current_labels => issue["other_labels"]
-          }
-        }
+        :labels => {
+        :available_labels => github.labels(user, repo).reject {|l| @huboard_patterns.any? {|p| p.match(l["name"])}},
+        :current_labels => issue["other_labels"]
+      }
+      }
       }
 
       { :issue => issue }.merge! actions
-      
+
     end
 
     def update_issue_labels(user, repo, number, labels)
