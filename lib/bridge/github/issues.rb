@@ -41,6 +41,19 @@ class Huboard
         Huboard.client.repos(self[:repo][:owner][:login], self[:repo][:name]).issues(self.number)
       end
 
+      def events
+        client.events.all.to_a
+      end
+
+      def comments
+        client.comments.all.to_a
+      end
+
+      def feed
+        the_feed =  { :comments => comments, :events => events }
+        return self.merge! the_feed
+      end
+
       def patch(hash)
         updated = client.patch hash 
         updated.extend(Card).merge!(:repo => repo)

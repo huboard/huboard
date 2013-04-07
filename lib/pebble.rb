@@ -70,8 +70,7 @@ module Stint
     def feed_for_issue(user, repo, number)
       api = Huboard.adapter_for(user, repo)
 
-      issue = github.feed_for_issue user, repo, number
-      issue["other_labels"] = issue["labels"].reject {|l| Huboard.all_patterns.any? {|p| p.match(l["name"])}}
+      issue = api.issue number
 
       actions = { :actions => {
         :labels => {

@@ -8,8 +8,10 @@
       <h2> <%= title %> </h2>
     </div>
   </div>
-
   <div class="fullscreen-card-description">
-    <%= body_html %>
+      <img  src="https://secure.gravatar.com/avatar/<%= user.gravatar_id%>?s=30" />
+    <div class="comment-body">
+      <%= body_html %>
+    </div>
   </div>
 </div>
