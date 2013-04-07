@@ -9,7 +9,9 @@
     </div>
   </div>
   <div class="fullscreen-card-description card-comment">
-      <img  src="https://secure.gravatar.com/avatar/<%= user.gravatar_id%>?s=30" />
+    <a href="<%= user.html_url %>" target="_blank">
+      <img title="Created by <%= user.login %>" src="https://secure.gravatar.com/avatar/<%= user.gravatar_id%>?s=30" />
+    </a>
     <div class="comment-body">
       <%= body_html %>
     </div>
