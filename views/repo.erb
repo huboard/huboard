@@ -26,29 +26,46 @@
 <div class="tabbable row">
   <div class="span3">
     <ul class="nav nav-list">
-      <li class="active"><a href="#linked" data-toggle="tab">Linked repos</a></li>
-      <li class=""><a href="#settings" data-toggle="tab">Settings</a></li>
+      <li class="active"><a href="#settings" data-toggle="tab">Options</a></li>
+      <li class=""><a href="#linked" data-toggle="tab">Linked repostories </a></li>
     </ul>
   </div>
   <div class="span9">
-  
-  <div class="tab-content">
-    <div class="tab-pane active" id="linked">
-      <h3> Linked repos </h3>
-      <ul>
-        <% @actions.linked.labels.each do |label| %>
 
-          <li> <%= label.name %> </li>
+    <div class="tab-content">
+      <div class="tab-pane active" id="settings">
+        <div class="nav-section">
+          <div class="widget-header" >
+            <h3> Settings </h3>
+          </div>
+          <div class="widget-body" >
+            <div class="widget-settings">
+              <div class="widget-action" >
+                <input name="settings" value="show_all" type="checkbox" checked />
+              </div>
+              <div class="widget-body" >
+                <div class="widget-header" >
+                  Show all issues
+                </div>
+                Toggles whether all issues show up in the backlog column. Toggling this setting on will make your 
+                board load faster, but only issues that have the lowest index label applied will show up in the backlog column
+              </div>
+            </div>
+          </div>
 
-        <% end %>
-      </ul>
+        </div>
+      </div>
+      <div class="tab-pane " id="linked">
+        <h3> Linked repos </h3>
+        <ul>
+          <% @actions.linked.labels.each do |label| %>
+
+            <li> <%= label.name %> </li>
+
+          <% end %>
+        </ul>
+      </div>
     </div>
-    <div class="tab-pane " id="settings">
-      <h3> Settings </h3>
-      <ul>
-      </ul>
-    </div>
-  </div>
   </div>
 
 </div>
