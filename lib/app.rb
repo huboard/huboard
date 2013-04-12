@@ -63,12 +63,11 @@ class Huboard
 
       adapter = Huboard.adapter_for(params[:user], params[:repo])
 
-
-
       @actions = Hashie::Mash.new({
           :linked => {
             :labels => adapter.link_labels
-          }
+          },
+          :settings => adapter.settings
       })
 
       erb :repo

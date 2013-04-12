@@ -8,7 +8,7 @@ define(['../common/events/postal',"./views/card"], function (postal, card) {
       $("body").removeClass("fullscreen-open");
     },
     init: function () {
-      $(".fullscreen-card").click(function (ev) {
+      $(".fullscreen-wrapper > div").click(function (ev) {
         ev.stopPropagation();
       })
 

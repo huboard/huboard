@@ -39,15 +39,16 @@
             <h3> Settings </h3>
           </div>
           <div class="widget-body" >
+
             <div class="widget-settings">
               <div class="widget-action" >
-                <input name="settings" value="show_all" type="checkbox" checked />
+                <input name="settings[show_all]" value="<%= @actions.settings.show_all %>" type="checkbox" <% if @actions.settings.show_all %> checked <% end %> />
               </div>
               <div class="widget-body" >
                 <div class="widget-header" >
                   Show all issues
                 </div>
-                Toggles whether all issues show up in the backlog column. Toggling this setting on will make your 
+                Toggles whether all issues show up in the backlog column. Toggling this setting off will make your 
                 board load faster, but only issues that have the lowest index label applied will show up in the backlog column
               </div>
             </div>
@@ -56,14 +57,22 @@
         </div>
       </div>
       <div class="tab-pane " id="linked">
-        <h3> Linked repos </h3>
+        <div class="nav-section">
+          <div class="widget-header" >
+            <h3> Linked repositories </h3>
+          </div>
+          <div class="widget-body" >
+
         <ul>
           <% @actions.linked.labels.each do |label| %>
 
-            <li> <%= label.name %> </li>
+            <li> <%= label.user %> / <%= label.repo %> </li>
 
           <% end %>
         </ul>
+          </div>
+
+        </div>
       </div>
     </div>
   </div>
