@@ -17,6 +17,12 @@ end
 use Rack::NoWWW
 use Rack::Static, :urls => [ "/font","/img", "/scripts","/css"], :root => "public"
 
+if ENV["BASIC_AUTH_USER"] && ENV["BASIC_AUTH_PASSWORD"]
+  use Rack::Auth::Basic, "Protected Area" do |username, password|
+    username == ENV["BASIC_AUTH_USER"] && password == ENV["BASIC_AUTH_PASSWORD"]
+  end
+end
+
 map "/api" do
   run Huboard::API
 
