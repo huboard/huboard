@@ -8,10 +8,13 @@
 
 Add labels to your repository with the following pattern
 
->  # - Title
+>  # - Title  
 
->  # == index of column
->  Title == column header
+Where:
+
+>  '#' == index of column
+
+> 'Title' == column header
 
 Example:
 
