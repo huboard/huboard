@@ -1,6 +1,6 @@
 require_relative "helpers"
 
-module Huboard
+class Huboard
   class API < Sinatra::Base
     register Sinatra::Auth::Github
     register Huboard::Common

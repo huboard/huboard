@@ -1,5 +1,6 @@
 <div class="fullscreen-card-right">
-
+      <h2> <a class="number" href="<%= html_url %>" target="_blank" title="View issue on github.com"><small>ISSUE #</small><%= number %></a> </h2>
+      <div class="labels-placeholder"></div>
 </div>
 <div class="fullscreen-card-left">
   <div class='fullscreen-card-preamble'>
@@ -7,8 +8,12 @@
       <h2> <%= title %> </h2>
     </div>
   </div>
-
-  <div class="fullscreen-card-description">
-    <%= body_html %>
+  <div class="fullscreen-card-description card-comment">
+    <a href="<%= user.html_url %>" target="_blank">
+      <img title="Created by <%= user.login %>" src="https://secure.gravatar.com/avatar/<%= user.gravatar_id%>?s=30" />
+    </a>
+    <div class="comment-body">
+      <%= body_html %>
+    </div>
   </div>
 </div>

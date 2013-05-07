@@ -1,7 +1,9 @@
 require 'ghee'
 #require 'rack-cache'
 #require 'active_support/cache'
-module Huboard
+require_relative 'bridge/huboard'
+
+class Huboard
   module Common
     module Settings
 
@@ -121,10 +123,27 @@ module Huboard
       end
 
       def gh(token = nil)
-        @gh ||= Ghee.new(:access_token => token || user_token) do |conn| 
-          conn.use FaradayMiddleware::Caching, cache 
-          conn.use Mimetype
+        configure_gh token
+        Huboard.client
+      end
+
+      def huboard(token = nil)
+        configure_gh token
+        Huboard
+      end
+
+      def configure_gh(token = nil)
+        Huboard.configure do |client|
+          client.api_endpoint = ENV['GITHUB_API_ENDPOINT'] || 'https://api.github.com'
+
+          client.faraday_config do |conn|
+            conn.use FaradayMiddleware::Caching, cache 
+            conn.use Mimetype
+          end
+          
+          client.access_token = token || user_token
         end
+
       end
 
       def socket_backend
