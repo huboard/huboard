@@ -145,7 +145,7 @@ Bundle:
 
 Create the app:
 
-    heroku app:create ---stack cedar
+    heroku apps:create ---stack cedar
 
 or, if you'd prefer to name your app yourself:
 
