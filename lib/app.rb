@@ -44,24 +44,22 @@ class Huboard
       @parameters = params
       return erb :home, :layout => :marketing unless authenticated?
       protected!
-      configure_gh
-      @repos = Huboard.all_repos
+      @repos = huboard.all_repos
       erb :index
     end
 
     get '/:user/?' do 
       protected!
       @parameters = params
-      @repos = Huboard.repos_by_user(params[:user])
+      @repos = huboard.repos_by_user(params[:user])
       @filtered = params[:user]
       erb :index
     end
 
     get '/:user/:repo/?' do 
       @parameters = params.merge({:login => current_user.login, :socket_backend => socket_backend})
-      configure_gh
 
-      adapter = Huboard.adapter_for(params[:user], params[:repo])
+      adapter = huboard.board(params[:user], params[:repo])
 
       @actions = Hashie::Mash.new({
           :linked => {

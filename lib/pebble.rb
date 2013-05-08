@@ -50,7 +50,7 @@ module Stint
 
       linked.each do |l|
         begin
-          api = Huboard.adapter_for(l.user, l.repo)
+          api = huboard.board(l.user, l.repo)
 
           board = api.merge board, api.board, l
         rescue
@@ -63,12 +63,12 @@ module Stint
 
 
     def reorder_issue(user_name, repo, number, index)
-      issue = Huboard.adapter_for(user_name, repo).issue(number)
+      issue = huboard.board(user_name, repo).issue(number)
       issue.reorder(index)
     end
 
     def feed_for_issue(user, repo, number)
-      api = Huboard.adapter_for(user, repo)
+      api = huboard.board(user, repo)
 
       issue = api.issue(number).feed
 
@@ -85,13 +85,13 @@ module Stint
     end
 
     def update_issue_labels(user, repo, number, labels)
-      issue = Huboard.adapter_for(user, repo).issue number
+      issue = huboard.board(user, repo).issue number
       issue.update_labels labels
     end
 
     def reorder_milestone(user_name, repo, number, index, status)
 
-      milestone =  Huboard.adapter_for(user_name, repo).milestone number
+      milestone =  huboard.board(user_name, repo).milestone number
 
       milestone.reorder index
 
@@ -144,43 +144,23 @@ module Stint
 
 
     def assign_card(user_name, repo, the_issue, assignee)
-      issue = Huboard.adapter_for(user_name, repo).issue(the_issue["number"])
+      issue = huboard.board(user_name, repo).issue(the_issue["number"])
       issue.patch "assignee" => assignee
     end
 
     def assign_milestone(user_name, repo, the_issue, milestone)
-      issue = Huboard.adapter_for(user_name, repo).issue(the_issue["number"])
+      issue = huboard.board(user_name, repo).issue(the_issue["number"])
       issue.patch "milestone" => milestone["number"]
     end
 
     def move_card(user_name, repo, the_issue, index)
-      issue = Huboard.adapter_for(user_name, repo).issue(the_issue["number"])
+      issue = huboard.board(user_name, repo).issue(the_issue["number"])
       issue.move index
     end
 
-    def embedded_data(body)
-      r = /@huboard:(.*)/
-        match = r.match body
-      return { } if match.nil?
-
-      begin
-        JSON.load(match[1])
-      rescue
-        return {}
-      end
-    end
-
     def close_card(user_name, repo, the_issue)
-      issue = Huboard.adapter_for(user_name, repo).issue(the_issue["number"])
+      issue = huboard.board(user_name, repo).issue(the_issue["number"])
       issue.close
-    end
-
-    def repos(user_name = nil)
-      Huboard.repos(user_name)
-    end
-
-    def all_repos
-      Huboard.all_repos
     end
 
     def initialize(github, huboard)

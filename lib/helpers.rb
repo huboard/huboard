@@ -36,42 +36,6 @@ class Huboard
         RUBY
       end
     end
-    class SimpleCache < Hash
-      def read(key)
-        if cached = self[key]
-          cached
-        end
-      end
-
-      def write(key, data)
-        self[key] = data
-      end
-
-      def fetch(key)
-        read(key) || yield.tap { |data| write(key, data) }
-      end
-    end
-
-    class Mimetype < Faraday::Middleware
-      begin
-
-      rescue LoadError, NameError => e
-        self.load_error = e
-      end
-
-      def initialize(app, *args)
-        @app = app
-      end
-
-
-
-      def call(env)
-
-        env[:request_headers].merge!('Accept' => "application/vnd.github.beta.full+json" )
-
-        @app.call env
-      end
-    end
 
     module Helpers
       def encrypted_token
@@ -105,11 +69,6 @@ class Huboard
         !!user_token
       end
 
-      def cache
-        @cache ||= SimpleCache.new
-        #@cache ||= ActiveSupport::Cache::FileStore.new "tmp", :namespace => 'huboard', :expires_in => 3600
-      end
-
       def github
         @github ||= Stint::Github.new(gh) 
       end
@@ -128,20 +87,6 @@ class Huboard
 
       def gh(token = nil)
         huboard.connection
-      end
-
-      def configure_gh(token = nil)
-        Huboard.configure do |client|
-          client.api_endpoint = ENV['GITHUB_API_ENDPOINT'] || 'https://api.github.com'
-
-          client.faraday_config do |conn|
-            conn.use FaradayMiddleware::Caching, cache 
-            conn.use Mimetype
-          end
-          
-          client.access_token = token || user_token
-        end
-
       end
 
       def socket_backend

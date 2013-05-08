@@ -1,10 +1,11 @@
 class Huboard
   class Board
 
-    attr_accessor :user, :repo
+    attr_accessor :user, :repo, :connection_factory
 
-    def initialize(user, repo, client = Huboard.client)
-      @gh = client
+    def initialize(user, repo, client)
+      @gh = client.call
+      @connection_factory = client
       @user = user
       @repo = repo
     end

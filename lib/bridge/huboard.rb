@@ -1,4 +1,3 @@
-require_relative "github/config"
 require_relative "github/repos"
 require_relative "github/assignees"
 require_relative "github/labels"
@@ -25,20 +24,6 @@ class Huboard
     [self.column_pattern, self.link_pattern, self.settings_pattern]
   end
 
-  class << self
-
-    def client
-      Ghee.new(:access_token => access_token) do |conn|
-        faraday_config_block.call(conn) if faraday_config_block
-      end
-    end
-
-    def adapter_for(user, repo)
-      Board.new(user, repo)
-    end
-
-
-  end
   class SimpleCache < Hash
     def read(key)
       if cached = self[key]
@@ -77,18 +62,23 @@ class Huboard
       end
     end
 
-    attr_accessor :connection
 
     def initialize(access_token)
       @cache = SimpleCache.new
-      @connection = Ghee.new(:access_token => access_token) do |conn|
-        conn.use FaradayMiddleware::Caching, @cache 
-        conn.use Mimetype
-      end
+      @connection_factory = ->(token = nil) {
+          Ghee.new(:access_token => token || access_token) do |conn|
+            conn.use FaradayMiddleware::Caching, @cache 
+            conn.use Mimetype
+          end
+      }
+    end
+
+    def connection
+        @connection_factory.call
     end
 
     def board(user, repo)
-      Board.new(user, repo, @connection)
+      Board.new(user, repo, @connection_factory)
     end
 
   end

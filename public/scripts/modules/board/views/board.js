@@ -71,10 +71,6 @@ define(["../collections/issues",
           this.resizeColumns();
         },
         onfetch: function(data) {
-          if (!data.labels.length) {
-             window.location.href = "/" + this.user + "/"+ this.repo + "/board/create";
-             return;
-          }
 
            var board = $(_.template(template, data)),
                noneBoard = board.clone(),

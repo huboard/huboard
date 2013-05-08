@@ -9,7 +9,9 @@ class Huboard
     end
 
     def issue(number)
-      gh.issues(number).extend(Card).merge!({:repo => {:owner => {:login => user}, :name => repo }})
+      issue = gh.issues(number).extend(Card).merge!({:repo => {:owner => {:login => user}, :name => repo }})
+      issue.attach_client connection_factory
+      issue
     end
 
     def milestones
@@ -17,7 +19,9 @@ class Huboard
     end
 
     def milestone(number)
-      gh.milestones(number).extend(Milestone).merge!({:repo => {:owner => {:login => user}, :name => repo }})
+      milestone = gh.milestones(number).extend(Milestone).merge!({:repo => {:owner => {:login => user}, :name => repo }})
+      milestone.attach_client connection_factory
+      milestone
     end
 
     module Card
@@ -45,8 +49,16 @@ class Huboard
         self.labels.reject {|l| Huboard.all_patterns.any? {|p| p.match l.name }}
       end
 
+      def attach_client connection
+          @connection_factory = connection 
+      end
+
+      def gh
+          @connection_factory.call
+      end
+
       def client
-        Huboard.client.repos(self[:repo][:owner][:login], self[:repo][:name]).issues(self.number)
+         gh.repos(self[:repo][:owner][:login], self[:repo][:name]).issues(self.number)
       end
 
       def events
@@ -68,7 +80,7 @@ class Huboard
       end
 
       def move(index)
-        board = Huboard.adapter_for(self[:repo][:owner][:login], self[:repo][:name])
+        board = Huboard::Board.new(self[:repo][:owner][:login], self[:repo][:name], @connection_factory)
         column_labels = board.column_labels
         new_state = column_labels.find { |l| /#{index}\s*- *.+/.match l.name }
           self.labels << new_state unless new_state.nil?
@@ -123,9 +135,16 @@ class Huboard
         patch :description => self.description
       end
 
+      def attach_client connection
+          @connection_factory = connection 
+      end
+
+      def gh
+          @connection_factory.call
+      end
+
       def client
-       c = Huboard.client.repos(self[:repo][:owner][:login], self[:repo][:name])
-       c.milestones self.number
+         gh.repos(self[:repo][:owner][:login], self[:repo][:name]).milestones(self.number)
       end
 
       def patch(hash)
