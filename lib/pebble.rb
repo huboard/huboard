@@ -4,24 +4,24 @@ require 'yaml'
 
 module Stint
   class Pebble
-    attr_accessor :github
+    attr_accessor :github, :huboard
 
     def build_backlog(user_name, repo)
-      return Huboard.adapter_for(user_name, repo).backlog
+      return huboard.board(user_name, repo).backlog
     end
 
     def build_board(user_name, repo)
-      return Huboard.adapter_for(user_name, repo).board
+      return huboard.board(user_name, repo).board
     end
 
     def backlog_column_for(user_name, repo) 
-      adapter = Huboard.adapter_for(user_name, repo)
+      adapter = huboard.board(user_name, repo)
 
       return adapter.settings[:show_all] ?  adapter.backlog_column : { :issues =>[] } 
     end
 
     def backlog_column(user_name, repo)
-      adapter = Huboard.adapter_for(user_name, repo)
+      adapter = huboard.board(user_name, repo)
 
       column = backlog_column_for(user_name, repo) 
 
@@ -42,7 +42,7 @@ module Stint
     end
 
     def board(user_name, repo)
-      adapter = Huboard.adapter_for(user_name, repo)
+      adapter = huboard.board(user_name, repo)
 
       linked = adapter.link_labels
 
@@ -183,8 +183,9 @@ module Stint
       Huboard.all_repos
     end
 
-    def initialize(github)
+    def initialize(github, huboard)
       @github = github
+      @huboard = huboard
     end
   end
 end

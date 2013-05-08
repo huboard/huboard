@@ -28,7 +28,7 @@ class Huboard
   class << self
 
     def client
-      @gh ||= Ghee.new(:access_token => access_token) do |conn|
+      Ghee.new(:access_token => access_token) do |conn|
         faraday_config_block.call(conn) if faraday_config_block
       end
     end
@@ -37,6 +37,59 @@ class Huboard
       Board.new(user, repo)
     end
 
+
+  end
+  class SimpleCache < Hash
+    def read(key)
+      if cached = self[key]
+        cached
+      end
+    end
+
+    def write(key, data)
+      self[key] = data
+    end
+
+    def fetch(key)
+      read(key) || yield.tap { |data| write(key, data) }
+    end
+  end
+
+  class Client
+    class Mimetype < Faraday::Middleware
+      begin
+
+      rescue LoadError, NameError => e
+        self.load_error = e
+      end
+
+      def initialize(app, *args)
+        @app = app
+      end
+
+
+
+      def call(env)
+
+        env[:request_headers].merge!('Accept' => "application/vnd.github.beta.full+json" )
+
+        @app.call env
+      end
+    end
+
+    attr_accessor :connection
+
+    def initialize(access_token)
+      @cache = SimpleCache.new
+      @connection = Ghee.new(:access_token => access_token) do |conn|
+        conn.use FaradayMiddleware::Caching, @cache 
+        conn.use Mimetype
+      end
+    end
+
+    def board(user, repo)
+      Board.new(user, repo, @connection)
+    end
 
   end
 

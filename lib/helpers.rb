@@ -115,21 +115,19 @@ class Huboard
       end
 
       def pebble
-        @pebble ||= Stint::Pebble.new(github)
+        @pebble ||= Stint::Pebble.new(github, huboard)
       end
 
       def h(input = "")
         ERB::Util.html_escape input
       end
 
-      def gh(token = nil)
-        configure_gh token
-        Huboard.client
+      def huboard(token = nil)
+        Huboard::Client.new token || user_token
       end
 
-      def huboard(token = nil)
-        configure_gh token
-        Huboard
+      def gh(token = nil)
+        huboard.connection
       end
 
       def configure_gh(token = nil)
