@@ -177,7 +177,7 @@ Customize your values and run the following from your project root:
 Note: I know this is crap, trust me I will fix it.
 
 Before deploying there are a few step you need to do manually to prepare the assets for production.
-Will will need node.js installed as well as the requirejs npm package
+Will will need node.js installed as well as the requirejs, uglify-js and lazy npm packages.
 
 Predeployment (if you've changed any js or css files) run the following rake tasks in this exact order
 
