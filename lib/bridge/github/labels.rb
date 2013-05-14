@@ -15,12 +15,14 @@ class Huboard
     end
 
     def column_labels
-      labels.select{|l| Huboard.column_pattern.match l.name }.map do |l| 
+      columns = labels.select{|l| Huboard.column_pattern.match l.name }.map do |l| 
         match = Huboard.column_pattern.match l.name
           l[:index] = match[:id]
           l[:text] = match[:name]
           l
       end
+
+      columns.sort_by {|i| i[:index] }
     end
 
     def link_labels
