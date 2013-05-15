@@ -293,12 +293,11 @@
 }
 
 .filter {
-  .iconic {
+  .ui-icon {
     position: absolute;
     top: 13px;
     right: 3px;
     width: 22px;
-    font-size: 30px;
     display:none;
     opacity: 0.8;
     &:hover {
@@ -311,7 +310,7 @@
   }
 
   .dim:hover, .active:hover { 
-    .iconic {
+    .ui-icon {
       display:inline;
     }
   }
