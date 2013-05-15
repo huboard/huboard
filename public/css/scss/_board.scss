@@ -20,8 +20,13 @@
   background: rgba(255,255,255,0.8);
   text-align: center;
 
+	font-family: 'ui-icon-font-0-1';
+
   &.arrow-right {
     right: -35px;
+    &:before {
+	    content: "\e052";
+    }
 
     background-color: #0069D6;
     background-color: rgba(0,105,214,0.6);
@@ -37,6 +42,9 @@
 
   &.arrow-left {
     right: -25px;
+    &:before {
+	    content: "\e053";
+    }
   }
 
   &:hover {

@@ -18,11 +18,11 @@ define(["../../common/events/postal"], function(postal) {
        events: {
           "click" : "clicked",
           "clear" : "clearAndPublish",
-          "click .iconic" : "clearAndPublish"
+          "click .ui-icon" : "clearAndPublish"
        },
        render: function() {
          $(this.el)
-         .html("<a href='#'>"+ this.name + "<span class='iconic x-alt'></span></a>").addClass("-x" + this.params.color.substring(1) )
+         .html("<a href='#'>"+ this.name + "<span class='ui-icon ui-icon-x'></span></a>").addClass("-x" + this.params.color.substring(1) )
          .data("filter",this);
          return this;
        },
