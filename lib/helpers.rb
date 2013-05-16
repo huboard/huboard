@@ -86,7 +86,7 @@ class Huboard
       end
 
       def gh(token = nil)
-        huboard.connection
+        huboard(token).connection
       end
 
       def socket_backend
