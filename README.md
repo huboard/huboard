@@ -18,13 +18,13 @@ Where:
 
 Example:
 
->  1 - Backlog
+>  0 - Backlog
 
->  2 - Ready
+>  1 - Ready
 
->  3 - Working
+>  2 - Working
 
->  4 - Done
+>  3 - Done
 
 The number represents the index of the column and the will be the column header
 
