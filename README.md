@@ -112,7 +112,7 @@ Sinatra doesn't automatically reload changes to your app, so tell Pow to restart
 
 Edit `.rvmrc` to specify your ruby version/gemset
 
-### Using Rack (shotgun, thin, ect.)
+### Using Rack (shotgun, thin, etc.)
 
 `bundle exec shotgun -p 9292`
 
