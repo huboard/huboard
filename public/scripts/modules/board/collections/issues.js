@@ -31,7 +31,7 @@ define(function () {
 
                 $.when(backlog)
                 .then(function(theBacklog) {
-                    self.trigger("onissuesreceived." + 0, theBacklog.issues)
+                    self.trigger("onissuesreceived." + theBacklog.index, theBacklog.issues)
                     self.trigger("afterreceived");
                 });
             });

@@ -19,6 +19,7 @@ class Huboard
        first = column_labels.first 
        issues =  (grouped["__nil__"] || []).concat(grouped[first.name]|| [])
        return {
+         :index => first[:index],
          :issues => issues.sort_by {|i| i.order }
        }
     end
