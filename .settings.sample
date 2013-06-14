@@ -6,3 +6,4 @@ set :github_options, {
                             :client_id => '213414514636134631731364',
                             :scopes => "user,repo"
                      }
+set :main_organization, 'MyOrganizationName'

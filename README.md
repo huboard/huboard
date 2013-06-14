@@ -1,14 +1,14 @@
 #How to contribute
 
   * The easiest way you can contribute by simply using huboard and adding issues. Find bugs or think of cool features, let me know by submitting issues
-  * Take a look at the open issues. Anything is fair game, pick one and send me a pull request. 
+  * Take a look at the open issues. Anything is fair game, pick one and send me a pull request.
   * I've added a label called `Please contribute`, these are features/defects that are lower priority but would still be a great addition to the product
 
 # How To Set Up Your Repo
 
 Add labels to your repository with the following pattern
 
->  # - Title  
+>  # - Title
 
 Where:
 
@@ -170,7 +170,8 @@ Customize your values and run the following from your project root:
       GITHUB_SECRET='<your-github-oauth-secret>' \
       SECRET_KEY='<your-random-secret-key>' \
       SESSION_SECRET='<your-complex-session-secret>' \
-      TEAM_ID='<your-github-team-id>'
+      TEAM_ID='<your-github-team-id>' \
+      MAIN_ORGANIZATION='<your-organization>'
 
 ## 4. Deploy
 
@@ -186,7 +187,7 @@ Predeployment (if you've changed any js or css files) run the following rake tas
     rake rjs
     rake js
     rake css
-    
+
 Commit the changes and
 
     git push heroku master

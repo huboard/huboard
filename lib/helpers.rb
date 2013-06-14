@@ -15,12 +15,13 @@ class Huboard
               puts "settings file"
               token_file =  File.new("#{File.dirname(__FILE__)}/../.settings")
               # TODO: read this from a yaml
-              eval(token_file.read) 
+              eval(token_file.read)
             elsif ENV['GITHUB_CLIENT_ID']
               set :secret_key, ENV['SECRET_KEY']
               set :team_id, ENV["TEAM_ID"]
               set :user_name, ENV["USER_NAME"]
               set :password, ENV["PASSWORD"]
+              set :main_organization, ENV["MAIN_ORGANIZATION"]
               set :github_options, {
                 :secret    => ENV['GITHUB_SECRET'],
                 :client_id => ENV['GITHUB_CLIENT_ID'],
@@ -70,7 +71,7 @@ class Huboard
       end
 
       def github
-        @github ||= Stint::Github.new(gh) 
+        @github ||= Stint::Github.new(gh)
       end
 
       def pebble
@@ -95,7 +96,7 @@ class Huboard
 
       def publish(channel,event,payload)
         return if socket_backend.nil?
-        conn = Faraday.post do |req| 
+        conn = Faraday.post do |req|
           req.url "#{socket_backend}/hook"
           req.headers['Content-Type'] = 'application/json'
           req.body =  json({channel:channel, payload:{ payload:payload, event:event, correlationId: params[:correlationId] || "herpderp"},secret:settings.socket_secret,})
@@ -113,6 +114,10 @@ class Huboard
 
       def team_id
         settings.team_id
+      end
+
+      def main_organization
+        settings.main_organization
       end
     end
 
