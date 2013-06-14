@@ -18,13 +18,13 @@ Where:
 
 Example:
 
->  1 - Backlog
+>  0 - Backlog
 
->  2 - Ready
+>  1 - Ready
 
->  3 - Working
+>  2 - Working
 
->  4 - Done
+>  3 - Done
 
 The number represents the index of the column and the will be the column header
 
@@ -112,7 +112,7 @@ Sinatra doesn't automatically reload changes to your app, so tell Pow to restart
 
 Edit `.rvmrc` to specify your ruby version/gemset
 
-### Using Rack (shotgun, thin, ect.)
+### Using Rack (shotgun, thin, etc.)
 
 `bundle exec shotgun -p 9292`
 
@@ -177,7 +177,9 @@ Customize your values and run the following from your project root:
 Note: I know this is crap, trust me I will fix it.
 
 Before deploying there are a few step you need to do manually to prepare the assets for production.
-Will will need node.js installed as well as the requirejs, uglify-js and lazy npm packages.
+Will will need node.js installed as well as the requirejs, uglify-js (v1.x) and lazy npm packages.
+
+    npm install requirejs uglify-js@1 lazy
 
 Predeployment (if you've changed any js or css files) run the following rake tasks in this exact order
 
