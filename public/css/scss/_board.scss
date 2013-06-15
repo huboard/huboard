@@ -188,9 +188,7 @@
   }
   .title {
     padding-right: 30px;
-    overflow:hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    word-wrap: break-word;
   }         
   .milestone {
     color: $lightGrey;
