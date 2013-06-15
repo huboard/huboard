@@ -187,8 +187,11 @@
     color: $darkGrey;
   }
   .title {
-    padding-right: 30px;
+    padding-right: 20px;
     word-wrap: break-word;
+    white-space: normal;
+    text-overflow: clip;
+    overflow:auto;
   }         
   .milestone {
     color: $lightGrey;
