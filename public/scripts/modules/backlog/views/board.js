@@ -98,14 +98,14 @@ define(["../collections/issues",
            });
 
            $("#drawer","#main-stage")
-              //.append(noneBoard)
-              .append(sidebar.render().el)
+              .append(noneBoard)
+              //.append(sidebar.render().el)
               .find(".toggle-drawer").show();
 
            //$(".sidebar-wrapper").append(userFilter.render().el).show();
            $(".sidebar-wrapper")
-             //.append(sidebar.render().el)
-             .append(noneBoard)
+             .append(sidebar.render().el)
+             //.append(noneBoard)
            .show();
 
            $('[rel~="twipsy"]').tooltip({live:true});
