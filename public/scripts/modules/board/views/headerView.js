@@ -6,15 +6,18 @@ define(["../../common/events/postal"], function(postal){
        "keyup input" : "onkeyup"
      },
      initialize: function(options){
-       var self = this;
+       var self = this,
+           input = $(self.el).find("input");
 
        this.publish = _.debounce(function() {
-          var val = $(self.el).find("input").val();
+          var val = input.val();
           postal.publish("Filter.Simple",{id: "search", condition: function(issue){
                return issue.title.toLocaleLowerCase().indexOf(val.toLocaleLowerCase()) !== -1;
           }, state:2});
 
        }, 300);
+
+         postal.subscribe("Shortcut.Search", function () { input.focus(); });
      },
      onkeyup : function(ev){
        this.publish();
