@@ -22,7 +22,6 @@ define(["../../common/events/postal", "text!../templates/assignee.html"], functi
          var login = current.data('login');
          var state = self.state;
          state = (state+1) % 3
-         console.log("assignee state %f", state)
          postal.publish("Filter.Simple", {
            condition: function(issue) { return issue.assignee && issue.assignee.login === login; },
            state: state
