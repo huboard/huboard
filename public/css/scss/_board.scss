@@ -82,7 +82,7 @@
 }
 
 
-.backlog { 
+.backlog {
   white-space: nowrap;
   overflow-x: auto;
   .column {
@@ -145,7 +145,7 @@
   position:relative;
   background-color: #fff;
   border: 1px solid #e5e5e5;
-  border-bottom-color: darken(#e5e5e5, 5%); 
+  border-bottom-color: darken(#e5e5e5, 5%);
   &.assignee-accept {
      border-color: #0069D6;
   }
@@ -192,23 +192,23 @@
     white-space: normal;
     text-overflow: clip;
     overflow:auto;
-  }         
+  }
   .milestone {
     color: $lightGrey;
     font-size:11px;
-  }         
+  }
   img {
     position: absolute;
     bottom:5px;
     left: 5px;
-  }          
+  }
   .number {
     position: absolute;
     vertical-align: bottom;
     bottom:5px;
     right: 5px;
     font-size:2em;
-  }               
+  }
 }
 
 
@@ -249,7 +249,7 @@
 }
 
 .filters li {
-  margin-bottom: 10px;
+  margin-bottom: 3px;
   background: #fff;
   border-radius: 4px;
 }
@@ -267,15 +267,16 @@
 
 .filters li a {
   position:relative;
-  padding: 10px;
+  padding: 5px;
   display:block;
   padding-right:25px;
+  padding-left:10px;
   text-decoration: none;
   border-radius: 4px;
   color:#777;
 }
 
-.filters li a strong { 
+.filters li a strong {
   position: absolute;
   top:12px;
   right:10px;
@@ -295,7 +296,7 @@
 .filter {
   .ui-icon {
     position: absolute;
-    top: 13px;
+    top: 7px;
     right: 3px;
     width: 22px;
     display:none;
@@ -309,7 +310,7 @@
     background-color:#efefef;
   }
 
-  .dim:hover, .active:hover { 
+  .dim:hover, .active:hover {
     .ui-icon {
       display:inline;
     }
