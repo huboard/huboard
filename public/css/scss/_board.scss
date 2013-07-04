@@ -140,16 +140,21 @@
 
 .column li {
   list-style: none;
-  padding: 5px 5px 34px 5px;
+  padding: 0px 5px 34px 5px;
   margin: 10px 0;
   cursor:move;
   position:relative;
   background-color: #fff;
   border: 1px solid #e5e5e5;
   border-bottom-color: darken(#e5e5e5, 5%);
+  box-shadow: 2px 2px 7px #888;
   &.assignee-accept {
      border-color: #0069D6;
   }
+  .card-labels {
+	margin-bottom: 5px;
+  }
+  /*
   .card-labels {
     position: absolute;
     bottom: -3px;
@@ -181,34 +186,36 @@
         }
       }
   }
+  */
 
   .card-header {
     border-bottom: 1px solid $borderColor;
-    padding: 5px 0;
+    padding-top: 5px;
     color: $darkGrey;
   }
   .title {
-    padding-right: 20px;
+	font-size: 12px;
     word-wrap: break-word;
     white-space: normal;
     text-overflow: clip;
     overflow:auto;
+	text-decoration: none;
+	color: black;
+	line-height: 85%;
+
+	&:hover {
+	  text-decoration: underline;
+	  color: blue;
+	}
   }
   .milestone {
     color: $lightGrey;
     font-size:11px;
   }
   img {
-    position: absolute;
-    bottom:5px;
-    left: 5px;
-  }
-  .number {
-    position: absolute;
-    vertical-align: bottom;
-    bottom:5px;
-    right: 5px;
-    font-size:2em;
+    float: left;
+	margin: 5px;
+	margin-left: 0px;
   }
 }
 
