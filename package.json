@@ -1,0 +1,15 @@
+{
+  "name": "huboard_deploy_tools",
+  "description": "",
+  "private": true,
+  "author": "",
+  "version": "0.0.1",
+  "scripts": {},
+  "dependencies": {},
+  "devDependencies": {
+    "uglify-js": "~1.3.5",
+    "requirejs": "~2.1.6",
+    "lazy": "~1.0.11"
+  },
+  "engine": "node >= 0.10.4"
+}
