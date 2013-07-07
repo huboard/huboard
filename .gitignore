@@ -8,3 +8,4 @@ log/
 #*.min.css
 app.build.js
 .powenv
+node_modules
