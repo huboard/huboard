@@ -13,11 +13,11 @@ class Huboard
   end
 
   def self.link_pattern
-    return /Link <=> (?<user_name>.*)\/(?<repo>.*)/
+    return /^Link <=> (?<user_name>.*)\/(?<repo>.*)/
   end
 
   def self.settings_pattern
-    return /@huboard:(.*)/
+    return /^@huboard:(.*)/
   end
 
   def self.all_patterns
