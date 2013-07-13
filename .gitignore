@@ -8,3 +8,5 @@ log/
 #*.min.css
 app.build.js
 .powenv
+.idea/
+

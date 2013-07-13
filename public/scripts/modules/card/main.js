@@ -15,6 +15,7 @@ define(['../common/events/postal',"./views/card"], function (postal, card) {
       $(".fullscreen-overlay").click(app.close);
 
       postal.subscribe("Card.Fullscreen",$.proxy(this.open, this));
+      postal.subscribe("Shortcut.Exit", app.close);
     }
   };
 
