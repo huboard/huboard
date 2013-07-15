@@ -1,7 +1,9 @@
 require 'ghee'
+
 #require 'rack-cache'
 #require 'active_support/cache'
 require_relative 'bridge/huboard'
+require_relative 'couch/client'
 
 class Huboard
   module Common
@@ -38,6 +40,13 @@ class Huboard
     end
 
     module Helpers
+
+      def couch
+        puts "CLOUDANT_URL #{ENV['CLOUDANT_URL']}"
+        puts ENV['RACK_ENV']
+        @couch ||= Huboard::Couch.new :base_url => ENV["CLOUDANT_URL"]
+      end
+
       def encrypted_token
         encrypted = encrypt_token
         Base64.urlsafe_encode64 encrypted
