@@ -36,6 +36,8 @@ class Huboard
 
 
       return {
+        "id" => gh.id,
+        :full_name => gh.full_name,
         :labels => columns,
         :milestones => milestones,
         :other_labels => other_labels,
