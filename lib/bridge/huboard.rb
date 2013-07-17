@@ -7,9 +7,9 @@ require_relative "github/backlog"
 require_relative "github/board"
 
 class Huboard
-
+       
   def self.column_pattern
-    return /^(?<id>\d+) *- *(?<name>.+)/ 
+    return /(^|\:\s{1})(?<id>\d+) *- *(?<name>.+)/ 
   end
 
   def self.link_pattern
