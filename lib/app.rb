@@ -12,7 +12,7 @@ class Huboard
 
     extend Huboard::Common::Settings
 
-    PUBLIC_URLS = ['/', '/logout','/webhook']
+    PUBLIC_URLS = ['/', '/logout','/webhook', '/site/privacy','/site/terms']
     before do
       protected! unless PUBLIC_URLS.include? request.path_info
     end
@@ -48,6 +48,15 @@ class Huboard
       @repos = huboard.all_repos
       erb :index
     end
+
+    get "/site/privacy/?" do
+      return erb :privacy, :layout => :marketing unless authenticated?
+    end
+
+    get "/site/terms/?" do
+      return erb :terms_of_service, :layout => :marketing unless authenticated?
+    end
+
 
     get '/:user/?' do 
       protected!
