@@ -19,11 +19,8 @@ class Huboard
 
     helpers do
       def protected! 
-        p couch.users.get_or_create(current_user.attribs) if authenticated?
         return current_user if authenticated?
         authenticate! 
-
-        couch.users.get_or_create(current_user.attribs) if authenticated?
 
         #HAX! TODO remove
         #ghee = Ghee.new({ :basic_auth => {:user_name => settings.user_name, :password => settings.password}})

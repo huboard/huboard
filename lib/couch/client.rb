@@ -166,5 +166,49 @@ class Huboard
     class Board < ResourceProxy
       identify_by :id
     end
+
+    def orgs
+      return Orgs.new(connection,  :type => "org" )
+    end
+
+    class Orgs < ResourceProxy
+      identify_by :id
+    end
+
+    def repos
+      return Repos.new(connection,  :type => "repo" )
+    end
+
+    class Repos < ResourceProxy
+      identify_by :id
+    end
+
   end
+
+  class Board
+    board_method = self.instance_method(:board)
+
+    def couch
+      @couch ||= Huboard::Couch.new :base_url => ENV["CLOUDANT_URL"]
+    end
+
+    define_method(:board) do
+
+      api = connection_factory.call
+      therepo = api.repos(user, repo)
+      theuser = api.users(user)
+
+      couch.users.get_or_create theuser if theuser.type == "User"
+      couch.orgs.get_or_create theuser if theuser.type == "Organization"
+      couch.repos.get_or_create therepo 
+
+      theboard = board_method.bind(self).call
+
+      #couch.boards.save theboard
+
+      theboard
+    end
+
+  end
+
 end

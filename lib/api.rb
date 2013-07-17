@@ -39,8 +39,7 @@ class Huboard
     end
 
     get '/:user/:repo/board' do 
-      board =  pebble.board(params[:user], params[:repo])
-      couch.boards.save(board)
+      board = pebble.board(params[:user], params[:repo])
       return json board
     end
 
