@@ -7,7 +7,7 @@ class Huboard
 
     extend Huboard::Common::Settings
 
-     def initialize(app = nil, params = {})
+     def initialize(app = nil)
       super(app)
       @parameters = {}
      end
