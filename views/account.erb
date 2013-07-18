@@ -1,1 +1,37 @@
-<h1> Hello account </h1>
+<div class="tabbable row">
+  <div class="span3">
+    <ul class="nav nav-list">
+      <li><h2> <%= @user.login %></h2></li>
+      <% @orgs.each do |org| %>
+
+      <li><h2> <%= org.login %></h2></li>
+      <% end %>
+    </ul>
+  </div>
+  <div class="span9">
+    <div class="tab-content">
+      <div class="tab-pane active" id="settings">
+        <div class="nav-section">
+          <div class="widget-header" >
+            <h3> Settings </h3>
+          </div>
+          <div class="widget-body" >
+
+          </div>
+
+        </div>
+      </div>
+      <div class="tab-pane " id="linked">
+        <div class="nav-section">
+          <div class="widget-header" >
+            <h3> Linked repositories </h3>
+          </div>
+          <div class="widget-body" >
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

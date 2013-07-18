@@ -48,6 +48,10 @@ class Huboard
 
 
     get "/profile/?" do
+      
+      @user = gh.user
+      @orgs = gh.orgs
+
       erb :account
     end
 
