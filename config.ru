@@ -7,6 +7,7 @@ Bundler.require
 
 require './lib/app.rb'
 require './lib/api.rb'
+require './lib/account.rb'
 require './lib/github.rb'
 require './lib/pebble.rb'
 
@@ -23,4 +24,8 @@ map "/api" do
 end
 map "/" do 
     run Huboard::App
+end
+
+map "/settings" do 
+    run Huboard::Accounts
 end
