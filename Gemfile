@@ -11,7 +11,10 @@ gem 'rack-cache'
 gem 'activesupport'
 gem "couchrest"
 
+gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
+
 group :development do
+  gem 'couch_docs'
   gem 'watchr'
   gem 'shotgun'
   gem 'foreman'

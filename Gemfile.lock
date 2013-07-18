@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/stripe/stripe-ruby
+  revision: fd09e677311d7d78a02af9b6c7f61b3a2c3b752d
+  specs:
+    stripe (1.8.4)
+      multi_json (>= 1.0.4, < 2)
+      rest-client (~> 1.4)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -8,11 +16,16 @@ GEM
     bourbon (3.0.1)
       sass (>= 3.2.0)
       thor
+    couch_docs (1.1.0)
+      directory_watcher (>= 1.3.1)
+      json (>= 1.2.0)
+      rest-client (>= 1.1.0)
     couchrest (1.2.0)
       mime-types (~> 1.15)
       multi_json (~> 1.0)
       rest-client (~> 1.6.1)
     daemons (1.1.9)
+    directory_watcher (1.5.1)
     encryptor (1.1.3)
     eventmachine (1.0.0)
     faraday (0.8.4)
@@ -93,6 +106,7 @@ PLATFORMS
 DEPENDENCIES
   activesupport
   bourbon
+  couch_docs
   couchrest
   encryptor
   foreman
@@ -106,6 +120,7 @@ DEPENDENCIES
   sinatra (~> 1.3.0)
   sinatra-content-for (~> 0.1.0)
   sinatra_auth_github
+  stripe!
   thin
   unicorn
   watchr

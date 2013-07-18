@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'sinatra/content_for'
+require 'stripe'
 class Huboard
   class Accounts < Sinatra::Base
     register Sinatra::Auth::Github
@@ -7,14 +8,30 @@ class Huboard
 
     extend Huboard::Common::Settings
 
-     def initialize(app = nil)
+    enable :sessions
+
+    def initialize(app = nil)
       super(app)
       @parameters = {}
-     end
+    end
 
-     before do
-       protected!
-     end
+    if File.exists? "#{File.dirname(__FILE__)}/../.settings"
+      puts "settings file"
+      token_file =  File.new("#{File.dirname(__FILE__)}/../.settings")
+      # TODO: read this from a yaml
+      eval(token_file.read) 
+    elsif ENV['STRIPE_API']
+      set :stripe_key, ENV['STRIPE_API']
+    else
+      raise "Configuration information not found: you need to provide a .settings file or ENV variables"
+    end
+
+    Stripe.api_key = settings.stripe_key
+
+    before do
+      protected!
+    end
+
     helpers do
       def protected! 
         return current_user if authenticated?
@@ -26,6 +43,7 @@ class Huboard
         #current_user
         #github_team_authenticate! team_id
       end
+
     end
 
 
