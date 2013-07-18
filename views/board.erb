@@ -25,19 +25,15 @@
 
 <% end %>
 <% content_for :header do %>
-  <ol class="assignees">
+<ol class="assignees">
 
-  </ol>
+  </ol>  
   <h1 class="header">
-    <span class="author"><%= h @parameters[:user] %></span>
-    /
-    <span class="repo"><%= h @parameters[:repo] %></span>
     <input placeholder="search..."/>
   </h1>
 
 <% end %>
 <% content_for :sidebar do %>
-
   <div class="sidebar-wrapper lifted hide" > </div>
 <% end %>
 

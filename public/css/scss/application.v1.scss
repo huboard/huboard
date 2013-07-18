@@ -15,6 +15,35 @@
       @include box-shadow(none);
     }
   }
+  .header {
+    font-size: 18px;
+	position: relative;
+	left: 0;
+	display: block;
+	float: left;
+
+  	.author{
+	    color: #08C;
+	    font-weight: normal;
+	}
+    .repo {
+	    color: #08C;
+		font-weight:bold;
+	}
+
+	input {
+	    border: 1px solid #e5e5e5;
+		outline: none;
+	    background: #fff;
+	    vertical-align: baseline;
+	    line-height: 30px;
+	    margin: 4px 10px;
+	    padding: 0 15px;
+	    font-size: 18px;
+		border-radius: 17px;
+	}
+   }
+
   .navbar-inner {
     @include linear-gradient(#F9F9F9, #F3F3F3);
     border-bottom: 1px solid #e5e5e5;
@@ -43,6 +72,7 @@
   }
 }
 
+
 .hide {display:none;}
 
 .breadcrumb {
@@ -51,18 +81,22 @@
 
 #main-stage  { 
   margin-bottom: 50px;
+  margin-top: 10px;
 }
 
+#stage{
+	min-width: 1200px;
+}
 .container-fluid {
   position:relative;
   > .sidebar {
-     width: 230px;
+     width: 190px;
      position: absolute;
      border-right: 1px solid #ccc;
      @include box-sizing(border-box);
   }
   > .content {
-     margin-left: 250px;
+     margin-left: 200px;
      position: relative;
   }
 }

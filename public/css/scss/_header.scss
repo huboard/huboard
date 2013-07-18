@@ -1,5 +1,7 @@
-.header {
-  font-size: 24px;
+.page-header-wrapper .header {
+  font-size: 18px;
+  margin:0;
+  line-height:20px;
 
   .author{
     color: #08C;
@@ -9,14 +11,15 @@
     color: #08C;
   }
   input {
-    border: 0;
-    outline: 0;
-    background: #fff;
-    vertical-align: baseline;
-    line-height: 40px;
-    margin: 0;
-    padding:0;
-    font-size: 24px;
+    	border: 0;
+		outline: none;
+	    background: #fff;
+	    vertical-align: baseline;
+	    line-height: 20px;
+	    margin: 4px 10px;
+	    padding: 0 15px;
+	    font-size: 16px;
+		border-radius: 17px;
   }
 }
 %grow {
@@ -25,7 +28,7 @@
 }
 .assignee {
   list-style: none;
-  line-height: 40px;
+  line-height: 30px;
   float:left;
   margin:0 2px;
   cursor:pointer;
@@ -49,7 +52,7 @@
   ol {
     margin: 0;
     padding: 0;
-    float: right;
+    float: left;
     list-style: none;
   }
 }

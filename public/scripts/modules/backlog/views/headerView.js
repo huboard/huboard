@@ -1,7 +1,7 @@
 define(["../../common/events/postal"], function(postal){
 
   return Backbone.View.extend({
-     el: $(".page-header-wrapper"),
+     el: $(".header"),
      events: {
        "keyup input" : "onkeyup"
      },

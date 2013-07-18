@@ -140,7 +140,7 @@
 
 .column li {
   list-style: none;
-  padding: 0px 5px 34px 5px;
+  padding: 0px 5px 5px 5px;
   margin: 10px 0;
   cursor:move;
   position:relative;
@@ -148,6 +148,8 @@
   border: 1px solid #e5e5e5;
   border-bottom-color: darken(#e5e5e5, 5%);
   box-shadow: 2px 2px 7px #888;
+  line-height: 14px;
+  border-radius:3px;
   &.assignee-accept {
      border-color: #0069D6;
   }
@@ -189,7 +191,8 @@
   */
 
   .card-header {
-    border-bottom: 1px solid $borderColor;
+    /* Commented out until we have body stuff...
+	border-bottom: 1px solid $borderColor;*/
     padding-top: 5px;
     color: $darkGrey;
   }
@@ -201,11 +204,12 @@
     overflow:auto;
 	text-decoration: none;
 	color: black;
-	line-height: 85%;
 
 	&:hover {
-	  text-decoration: underline;
-	  color: blue;
+	  //text-decoration: underline;
+	  color: #08C;
+	  background-color: lighten(#08C, 70%);
+	  border-bottom:1px solid;
 	}
   }
   .milestone {
@@ -213,12 +217,11 @@
     font-size:11px;
   }
   img {
-    float: left;
-	margin: 5px;
-	margin-left: 0px;
+    float: right;
+	margin: -6px;
+	border-radius: 0 3px 0 0;
   }
 }
-
 
 .column li a.close {
   position: absolute;
@@ -252,14 +255,16 @@
 
 .filters {
   list-style: none;
-  margin:0;
-  padding:0 20px 0 0;
+  margin:10px 0 0;
+  padding:0 10px 0 0;
+line-height: 16px;
 }
 
 .filters li {
   margin-bottom: 3px;
   background: #fff;
   border-radius: 4px;
+  line-height: 14px;
 }
 .filters li.clear-filters, .filters li.clear-filters a {
   background: none;
@@ -303,10 +308,12 @@
 
 .filter {
   .ui-icon {
+	font-size: 12px;
+	height:12px;
     position: absolute;
     top: 7px;
-    right: 3px;
-    width: 22px;
+    right: 7px;
+    width: 12px;
     display:none;
     opacity: 0.8;
     &:hover {
