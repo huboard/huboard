@@ -1,10 +1,20 @@
+<% content_for :header do %>
+  <h1 class="header">
+    Accounts
+  </h1>
+
+<% end %>
 <div class="tabbable row">
   <div class="span3">
     <ul class="nav nav-list">
-      <li><h2> <%= @user.login %></h2></li>
+      <li <% unless @org %> class="active" <% end %> >
+      <a href="/settings/profile" class="active"> <%= @user.login %></a>
+      </li>
       <% @orgs.each do |org| %>
 
-      <li><h2> <%= org.login %></h2></li>
+        <li <% if @org && @org.id == org.id %> class="active" <% end %> >
+        <a href="/settings/profile/<%= org.login %>"> <%= org.login %></a>
+        </li>
       <% end %>
     </ul>
   </div>
@@ -13,9 +23,31 @@
       <div class="tab-pane active" id="settings">
         <div class="nav-section">
           <div class="widget-header" >
-            <h3> Settings </h3>
+            <h3> Plans </h3>
           </div>
           <div class="widget-body" >
+            <% if(@org && @org.is_owner) %>
+              <h2> I is an owner </h2>
+              <form class="payment" method="POST" action="/settings/charge/<%= @org.login %>">
+                <article>
+                <label class="amount">
+                  <span>Amount: $24.00</span>
+                </label>
+                <label class="email">
+                  <span>Email:</span>
+                  <input name="email" value="<%= current_user.email %>" />
+                </label>
+                <input type="hidden" name="plan" value="org_basic"/>
+                </article>
+
+                <script src="https://checkout.stripe.com/v2/checkout.js" class="stripe-button"
+                  data-key="<%= settings.stripe_publishable_key %>"></script>
+              </form>
+            <% end %>
+
+            <% if(@org && !@org.is_owner) %>
+              <h2> Not an owner </h2>
+            <% end %>
 
           </div>
 

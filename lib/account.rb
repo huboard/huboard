@@ -22,6 +22,7 @@ class Huboard
       eval(token_file.read) 
     elsif ENV['STRIPE_API']
       set :stripe_key, ENV['STRIPE_API']
+      set :stripe_publishable_key, ENV['STRIPE_PUBLISHABLE_API']
     else
       raise "Configuration information not found: you need to provide a .settings file or ENV variables"
     end
@@ -48,11 +49,46 @@ class Huboard
 
 
     get "/profile/?" do
-      
+
       @user = gh.user
       @orgs = gh.orgs
 
       erb :account
+    end
+
+    get "/profile/:org/?" do 
+      @user = gh.user
+      @orgs = gh.orgs
+      @org = gh.orgs(params[:org])
+      is_owner = gh.orgs(params[:org]).teams.any? { |t| t.name == "Owners" }
+      @org.merge! :is_owner => is_owner
+
+      erb :account
+    end
+
+    post "/charge/:org/?" do 
+
+      customer = Stripe::Customer.create(
+        :email => params[:email],
+        :card  => params[:stripeToken],
+        :plan =>  params[:plan]
+      )
+
+      user = gh.user
+      org = gh.orgs(params[:org])
+
+      couch.customers.save({
+         "id" => customer.id,
+         github: {
+          :user => user.to_hash,
+          :org => org.to_hash
+         },
+         stripe: {
+            customer: customer
+         }
+      })
+
+      erb :charge
     end
 
 

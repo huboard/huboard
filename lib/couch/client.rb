@@ -183,6 +183,14 @@ class Huboard
       identify_by :id
     end
 
+    def customers
+      return Customers.new(connection,  :type => "customer" )
+    end
+
+    class Customers < ResourceProxy
+      identify_by :id
+    end
+
   end
 
   class Board
