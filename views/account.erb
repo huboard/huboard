@@ -20,7 +20,20 @@
   </div>
   <div class="span9">
     <div class="tab-content">
-      <div class="tab-pane active" id="settings">
+      <div class="tab-pane <% unless @org %> active <% end %>  " id="user"> 
+        <div class="nav-section">
+          <div class="widget-header" >
+            <h3> <%= @user.login %> </h3>
+          </div>
+          <div class="widget-body" >
+            users yeah
+            <%= @authorization %>
+
+          </div>
+
+        </div>
+      </div>
+      <div class="tab-pane <% if @org %> active <% end %>  " id="settings"> 
         <div class="nav-section">
           <div class="widget-header" >
             <h3> Plans </h3>
