@@ -63,6 +63,8 @@ class Huboard
       is_owner = gh.orgs(params[:org]).teams.any? { |t| t.name == "Owners" }
       @org.merge! :is_owner => is_owner
 
+      @customer = couch.customers.findByUserId @user.id
+
       erb :account
     end
 

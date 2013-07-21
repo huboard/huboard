@@ -79,3 +79,13 @@ desc "precomile assets"
 namespace :assets do 
   task :precompile => [:css]
 end
+
+
+namespace :couch do 
+  desc "push development documents"
+  task "dev:push" do
+    Dir.chdir "couch" do
+      `couch-docs push http://127.0.0.1:5984/huboard -d`
+    end
+  end
+end

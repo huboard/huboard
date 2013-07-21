@@ -56,6 +56,7 @@
                 <script src="https://checkout.stripe.com/v2/checkout.js" class="stripe-button"
                   data-key="<%= settings.stripe_publishable_key %>"></script>
               </form>
+              <%= @customer %>
             <% end %>
 
             <% if(@org && !@org.is_owner) %>

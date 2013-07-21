@@ -35,6 +35,16 @@ class Huboard
         p response.body.merge clone
       end
 
+      def query_view(viewname, options = {})
+        puts "Query => _design/#{class_name}/_view/#{viewname} #{options}"
+        result = connection.get("_design/#{class_name}/_view/#{viewname}") do |request|
+          request.params.merge! options
+          puts request
+        end
+        puts result.body
+        return result.body
+      end
+
 
       def get_or_create(doc)
         clone = doc.clone.merge "_id" => escape_docid(doc), "meta" => meta
@@ -81,6 +91,9 @@ class Huboard
           builder.use     FaradayMiddleware::ParseJson
           #  builder.use     Ghee::Middleware::UriEscape
           builder.adapter Faraday.default_adapter
+
+          builder.request :url_encoded
+          builder.response :logger
 
         end
 
@@ -189,6 +202,10 @@ class Huboard
 
     class Customers < ResourceProxy
       identify_by :id
+
+      def findByUserId(id)
+        query_view "findByUserId", :key => id
+      end
     end
 
   end
