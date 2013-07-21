@@ -3,6 +3,8 @@ require 'bundler'
 require 'rack/no-www'
 require 'sinatra_auth_github'
 
+require 'sprockets'
+
 Bundler.require
 
 require './lib/app.rb'
@@ -18,6 +20,8 @@ end
 use Rack::NoWWW
 use Rack::Static, :urls => [ "/font","/img", "/scripts","/css"], :root => "public"
 
+
+
 map "/api" do
   run Huboard::API
 
@@ -28,4 +32,11 @@ end
 
 map "/settings" do 
     run Huboard::Accounts
+end
+
+map "/assets" do
+  environment = Sprockets::Environment.new
+  environment.append_path 'assets/javascripts'
+  environment.append_path 'assets/stylesheets'
+  run environment
 end
