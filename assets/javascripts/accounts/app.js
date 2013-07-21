@@ -8,24 +8,20 @@
 
   App.ApplicationRoute = Ember.Route.extend({
     model : function () {
-      return $.getJSON("/api/profiles")
+      return Ember.RSVP.hash($.getJSON("/api/profiles"))
     }
   });
 
-  App.ApplicationController = Ember.ArrayController.extend({
-    lookupItemController: function(object) {
-      console.log("application:controller","object", object)
-      
-      console.log("application:controller","itemController", Ember.get(this, 'itemController'))
-      return Ember.get(this, 'itemController');
-    },
-  });
 
   App.IndexRoute = Ember.Route.extend({
-    redirect : function() {
-      var profiles = this.modelFor("application");
-      this.transitionTo("profile", profiles.get("firstObject"))
+    model : function () {
+       var model = this.modelFor("application");
+       return model.user;
     }
+    //redirect : function() {
+    //  var profiles = this.modelFor("application");
+    //  this.transitionTo("profile", profiles.orgs.get("firstObject"))
+    //}
   })
 
   App.Router.map(function(){
@@ -36,7 +32,7 @@
     model: function(params) {
 
       var profiles = this.modelFor("application");
-      return profiles.find(function(item) {
+      return profiles.orgs.find(function(item) {
         return item.id == params.profile_id;                   
       })
 

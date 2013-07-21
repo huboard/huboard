@@ -4,9 +4,14 @@
 
   <div class="span3">
 
-  <ul>
+    <ul>
+      <li>
+        {{#linkTo "index" }} {{ model.user.login }} {{/linkTo}}
 
-    {{#each controller}}
+      </li>
+
+    {{log this}}
+    {{#each controller.orgs}}
       <li>
       {{#linkTo "profile" this}} {{ login }} {{/linkTo}}
       {{ outlet subnav }}
@@ -23,6 +28,14 @@
 
 
 </script>
+
+<script type="text/x-handlebars" id="index">
+
+ <h1> {{ model.login }} hello </h1>
+  
+
+</script>
+
 
 <script type="text/x-handlebars" id="profile">
 

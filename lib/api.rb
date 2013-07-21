@@ -102,7 +102,7 @@ class Huboard
       user = gh.user.to_hash
       orgs = gh.orgs.to_a
 
-      json [user].concat(orgs)
+      json :user => user, :orgs => orgs
     end
 
     get "/token" do
