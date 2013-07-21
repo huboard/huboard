@@ -53,7 +53,7 @@ class Huboard
       @user = gh.user
       @orgs = gh.orgs
 
-      erb :account
+      erb :accounts, :layout => :ember_layout
     end
 
     get "/profile/:org/?" do 

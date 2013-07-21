@@ -98,6 +98,13 @@ class Huboard
       json :hooks => gh.repos(params[:user],params[:repo]).hooks
     end
 
+    get '/profiles/?' do
+      user = gh.user.to_hash
+      orgs = gh.orgs.to_a
+
+      json [user].concat(orgs)
+    end
+
     get "/token" do
       return "Encrypted: #{encrypted_token}"
     end

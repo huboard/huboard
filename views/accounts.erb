@@ -1,0 +1,33 @@
+
+<script type="text/x-handlebars" >
+  <div class="row">
+
+  <div class="span3">
+
+  <ul>
+
+    {{#each controller}}
+      <li>
+      {{#linkTo "profile" this}} {{ login }} {{/linkTo}}
+      {{ outlet subnav }}
+      </li>
+
+    {{/each}}
+  </ul>
+  </div> 
+  <div class="span9">
+
+  {{ outlet }}
+  </div> 
+  </div> 
+
+
+</script>
+
+<script type="text/x-handlebars" id="profile">
+
+ <h1> {{ login }} hello </h1>
+  
+
+</script>
+
