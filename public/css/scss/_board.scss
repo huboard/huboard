@@ -147,14 +147,18 @@
   background-color: #fff;
   border: 1px solid #e5e5e5;
   border-bottom-color: darken(#e5e5e5, 5%);
-  box-shadow: 2px 2px 7px #888;
-  line-height: 14px;
+  box-shadow: 1px 1px 5px rgba(162, 162, 162, 0.36);
+  line-height: 1.4em;
   border-radius:3px;
+  &:hover{
+	    box-shadow: 1px 1px 7px rgb(162,162,162);
+}
+
   &.assignee-accept {
      border-color: #0069D6;
+	box-shadow: 1px 1px 5px #0069D6;
   }
   .card-labels {
-	margin-bottom: 5px;
   }
   /*
   .card-labels {
@@ -197,13 +201,18 @@
     color: $darkGrey;
   }
   .title {
-	font-size: 12px;
+	font-size: 14px;
     word-wrap: break-word;
     white-space: normal;
     text-overflow: clip;
     overflow:auto;
 	text-decoration: none;
 	color: black;
+	display: block;
+	width: 100%;
+	padding-right: 29px;
+	box-sizing: border-box;
+	border-bottom: 1px solid rgba(255, 255, 255, 0);
 
 	&:hover {
 	  //text-decoration: underline;
@@ -217,8 +226,9 @@
     font-size:11px;
   }
   img {
-    float: right;
-	margin: -6px;
+	position: absolute;
+	top: 0;
+	right: -1px;
 	border-radius: 0 3px 0 0;
   }
 }
@@ -250,8 +260,6 @@
 .column .ui-sortable-hover {
   background:#efefef;
 }
-
-
 
 .filters {
   list-style: none;

@@ -3,7 +3,9 @@ body {
 }
 
 .navbar {
-  &.navbar-fixed-top, &.navbar-static-top {
+  
+
+  &.navbar-fixed-top, &.navbar-static-top {	
     .navbar-inner {
       @include box-shadow(none);
     }

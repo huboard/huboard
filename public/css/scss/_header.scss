@@ -26,10 +26,13 @@
    @include transform(scale(1.25));
    @include transition (all 0.2s ease-in 0.1s);
 }
+ol.assignees{
+	margin:0;
+}
 .assignee {
   list-style: none;
-  line-height: 30px;
-  float:left;
+  line-height: 28px;
+  display:inline-block;
   margin:0 2px;
   cursor:pointer;
   &:hover, &.active {

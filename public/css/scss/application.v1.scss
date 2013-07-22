@@ -10,8 +10,11 @@
 @import "section";
 
 .navbar {
+	box-shadow: 0 0 6px rgba(168, 168, 168, 0.5);
+	border-bottom: 1px solid #E2E2E2;
   &.navbar-fixed-top, &.navbar-static-top {
     .navbar-inner {
+	  padding:0;
       @include box-shadow(none);
     }
   }
@@ -90,13 +93,13 @@
 .container-fluid {
   position:relative;
   > .sidebar {
-     width: 190px;
+     width: 165px;
      position: absolute;
      border-right: 1px solid #ccc;
      @include box-sizing(border-box);
   }
   > .content {
-     margin-left: 200px;
+     margin-left: 180px;
      position: relative;
   }
 }
