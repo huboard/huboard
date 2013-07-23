@@ -12,9 +12,12 @@
 .navbar {
 	box-shadow: 0 0 6px rgba(168, 168, 168, 0.5);
 	border-bottom: 1px solid #E2E2E2;
-  &.navbar-fixed-top, &.navbar-static-top {
+  &.navbar-fixed-top{
+	position:fixed;
     .navbar-inner {
-	  padding:0;
+		  padding:0;
+		height: 41px;
+		overflow: hidden;
       @include box-shadow(none);
     }
   }
@@ -84,7 +87,7 @@
 
 #main-stage  { 
   margin-bottom: 50px;
-  margin-top: 10px;
+  margin-top: 55px;
 }
 
 #stage{
