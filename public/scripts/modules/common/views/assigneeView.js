@@ -1,7 +1,7 @@
 define(["../../common/events/postal", "text!../templates/assignee.html"], function(postal, template) {
 
   return Backbone.View.extend({
-     el: $(".page-header-wrapper"),
+     el: $(".sidebar"),
      initialize: function(options){
        var self = this;
        self.data = options.data;

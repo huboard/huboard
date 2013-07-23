@@ -53,9 +53,9 @@
 }
 #drawer {
     position:absolute;
-    width:352px;
+    width:280px;
     top:0;
-    left:-640px;
+    left:-497px;
 
    .board, .backlog, .filters {
      background: #fff;
@@ -82,7 +82,7 @@
 }
 
 
-.backlog { 
+.backlog {
   white-space: nowrap;
   overflow-x: auto;
   .column {
@@ -101,7 +101,8 @@
 .column h3 {
   line-height: 20px;
   margin-bottom: 10px;
-  padding: 10px;
+  padding: 3px;
+  padding-left: 10px;
   border: 1px solid #e5e5e5;
   background: #f3f3f3;
 
@@ -139,16 +140,27 @@
 
 .column li {
   list-style: none;
-  padding: 5px 5px 34px 5px;
+  padding: 0px 5px 5px 5px;
   margin: 10px 0;
   cursor:move;
   position:relative;
   background-color: #fff;
   border: 1px solid #e5e5e5;
-  border-bottom-color: darken(#e5e5e5, 5%); 
+  border-bottom-color: darken(#e5e5e5, 5%);
+  box-shadow: 1px 1px 5px rgba(162, 162, 162, 0.36);
+  line-height: 1.4em;
+  border-radius:3px;
+  &:hover{
+	    box-shadow: 1px 1px 7px rgb(162,162,162);
+}
+
   &.assignee-accept {
      border-color: #0069D6;
+	box-shadow: 1px 1px 5px #0069D6;
   }
+  .card-labels {
+  }
+  /*
   .card-labels {
     position: absolute;
     bottom: -3px;
@@ -180,37 +192,46 @@
         }
       }
   }
+  */
 
   .card-header {
-    border-bottom: 1px solid $borderColor;
-    padding: 5px 0;
+    /* Commented out until we have body stuff...
+	border-bottom: 1px solid $borderColor;*/
+    padding-top: 5px;
     color: $darkGrey;
   }
   .title {
-    padding-right: 20px;
+	font-size: 14px;
     word-wrap: break-word;
     white-space: normal;
     text-overflow: clip;
     overflow:auto;
-  }         
+	text-decoration: none;
+	color: black;
+	display: block;
+	width: 100%;
+	padding-right: 29px;
+	box-sizing: border-box;
+	border-bottom: 1px solid rgba(255, 255, 255, 0);
+
+	&:hover {
+	  //text-decoration: underline;
+	  color: #08C;
+	  background-color: lighten(#08C, 70%);
+	  border-bottom:1px solid;
+	}
+  }
   .milestone {
     color: $lightGrey;
     font-size:11px;
-  }         
+  }
   img {
-    position: absolute;
-    bottom:5px;
-    left: 5px;
-  }          
-  .number {
-    position: absolute;
-    vertical-align: bottom;
-    bottom:5px;
-    right: 5px;
-    font-size:2em;
-  }               
+	position: absolute;
+	top: 0;
+	right: -1px;
+	border-radius: 0 3px 0 0;
+  }
 }
-
 
 .column li a.close {
   position: absolute;
@@ -240,18 +261,18 @@
   background:#efefef;
 }
 
-
-
 .filters {
   list-style: none;
-  margin:0;
-  padding:0 20px 0 0;
+  margin:10px 0 0;
+  padding:0 10px 0 0;
+line-height: 16px;
 }
 
 .filters li {
-  margin-bottom: 10px;
+  margin-bottom: 3px;
   background: #fff;
   border-radius: 4px;
+  line-height: 14px;
 }
 .filters li.clear-filters, .filters li.clear-filters a {
   background: none;
@@ -267,15 +288,16 @@
 
 .filters li a {
   position:relative;
-  padding: 10px;
+  padding: 5px;
   display:block;
   padding-right:25px;
+  padding-left:10px;
   text-decoration: none;
   border-radius: 4px;
   color:#777;
 }
 
-.filters li a strong { 
+.filters li a strong {
   position: absolute;
   top:12px;
   right:10px;
@@ -294,10 +316,12 @@
 
 .filter {
   .ui-icon {
+	font-size: 12px;
+	height:12px;
     position: absolute;
-    top: 13px;
-    right: 3px;
-    width: 22px;
+    top: 7px;
+    right: 7px;
+    width: 12px;
     display:none;
     opacity: 0.8;
     &:hover {
@@ -309,7 +333,7 @@
     background-color:#efefef;
   }
 
-  .dim:hover, .active:hover { 
+  .dim:hover, .active:hover {
     .ui-icon {
       display:inline;
     }

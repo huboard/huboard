@@ -45,18 +45,21 @@
   </head>
   <body>
     <div id="wrapper">
-       <div class="navbar navbar-static-top">
+       <div class="navbar navbar-fixed-top">
          <div class="navbar-inner">
         <div class="container-fluid">
-          <a class="brand" href="/">huboard</a>
-            <ul class="nav">
-              <% yield_content :navigation %>
-            </ul>
+          	<div class="header">
+				<a class="author" href="\<%= h @parameters[:user] %>"><%= h @parameters[:user] %></a> /
+		    	<span class="repo"><%= h @parameters[:repo] %></span>
+                <input class="search" placeholder="search..."/>
+            </div>
             <ul class="nav pull-right">
+			  <% yield_content :navigation %>
               <% yield_content :sub_navigation %>
               <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= h @user.login %><b class='caret'></b></a>
               <ul class="dropdown-menu">
+				<li><a href="/">All Repos</a></li>
                 <li><a href="/logout">Logout</a></li>
               </ul>
               </li>
@@ -65,9 +68,7 @@
       </div>
     </div>
     <div class="container-fluid" id="main-stage">
-      <div class="page-header-wrapper">
-        <% yield_content :header %>
-      </div>
+      
       <div class="sidebar">
         <% yield_content :sidebar %>
       </div>

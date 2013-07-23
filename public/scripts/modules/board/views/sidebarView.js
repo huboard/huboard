@@ -43,7 +43,7 @@ define(["../../common/events/postal","./filterView"], function (postal, filterVi
         return new filterView({color: "#0069D6", name: milestone.title, count: milestone.open_issues,
                               condition: function (issue) { return issue.milestone && issue.milestone.title.toLocaleLowerCase() === milestone.title.toLocaleLowerCase();}}).render().el;
       });
-      var noMilestone = new filterView({color: "#0069D6", name: "No milestone assigned", 
+      var noMilestone = new filterView({color: "#0069D6", name: "No milestone", 
                               condition: function (issue) { return !issue.milestone; }}).render().el;
 
       $this.append("<h5>Milestones</h5>");
