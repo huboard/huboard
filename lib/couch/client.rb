@@ -206,6 +206,10 @@ class Huboard
       def findByUserId(id)
         query_view "findByUserId", :key => id
       end
+
+      def findByOrgId(id)
+        query_view "findByOrgId", :key => id
+      end
     end
 
   end

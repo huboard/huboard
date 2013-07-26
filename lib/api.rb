@@ -105,6 +105,21 @@ class Huboard
       json :user => user, :orgs => orgs
     end
 
+    get '/profiles/user/?' do 
+      json :herp => "herp"
+    end
+
+    get '/profiles/:org/?' do 
+
+      org = gh.orgs(params[:org])
+      is_owner = gh.orgs(params[:org]).teams.any? { |t| t.name == "Owners" }
+      org.merge! :is_owner => is_owner
+
+      customer = couch.customers.findByOrgId org.id
+
+      json :org => org.to_hash, :plan => customer.to_hash
+    end
+
     get "/token" do
       return "Encrypted: #{encrypted_token}"
     end

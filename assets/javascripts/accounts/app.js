@@ -12,16 +12,43 @@
     }
   });
 
+  App.User = Ember.Object.extend({
+
+    loadDetails : function () {
+       var user = this; 
+       return Em.Deferred.promise(function(p) {
+          p.resolve($.getJSON("/api/profiles/user").then(function (response) {
+             user.set("details", response)
+             return response;
+          }));
+        });
+    },
+
+  })
+
+  App.Org = Ember.Object.extend({
+
+    loadDetails : function () {
+       var org = this; 
+       return Em.Deferred.promise(function(p) {
+          p.resolve($.getJSON("/api/profiles/"+ org.get("login")).then(function (response) {
+             org.set("details", response)
+             return response;
+          }));
+        });
+    },
+
+  })
 
   App.IndexRoute = Ember.Route.extend({
     model : function () {
        var model = this.modelFor("application");
-       return model.user;
+       return App.User.create(model.user);
+    },
+
+    afterModel: function (model) {
+      return model.loadDetails();
     }
-    //redirect : function() {
-    //  var profiles = this.modelFor("application");
-    //  this.transitionTo("profile", profiles.orgs.get("firstObject"))
-    //}
   })
 
   App.Router.map(function(){
@@ -32,14 +59,17 @@
     model: function(params) {
 
       var profiles = this.modelFor("application");
-      return profiles.orgs.find(function(item) {
+      return App.Org.create(profiles.orgs.find(function(item) {
         return item.id == params.profile_id;                   
-      })
+      }));
 
+    },
+    afterModel : function (model) {
+      return model.loadDetails();
     }
-
-
   })
+ 
+
 
 })(this);
 
