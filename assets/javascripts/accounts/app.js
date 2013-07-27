@@ -8,6 +8,30 @@
 
   App.ApplicationRoute = Ember.Route.extend({
     model : function () {
+      return Em.Deferred.promise(function(p) {
+
+        $.getJSON("/api/profiles").then(function(response) {
+
+          var user = App.User.create(response.user);
+
+          var orgs = Em.A();
+
+          response.orgs.forEach(function(org) {
+             orgs.pushObject(App.Org.create(org));
+          });
+
+          p.resolve(Ember.Object.create({
+             user : user,
+             orgs : orgs
+          }));
+
+
+        });
+
+
+      });
+
+
       return Ember.RSVP.hash($.getJSON("/api/profiles"))
     }
   });
@@ -68,6 +92,9 @@
       return model.loadDetails();
     }
   })
+
+  App.AccountController = Ember.ObjectController.extend();
+
  
 
 

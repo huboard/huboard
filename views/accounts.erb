@@ -2,27 +2,27 @@
 <script type="text/x-handlebars" >
   <div class="row">
 
-  <div class="span3">
+    <div class="span3">
 
-    <ul>
-      <li>
+      <ul>
+        <li>
         {{#linkTo "index" }} {{ model.user.login }} {{/linkTo}}
-      </li>
+        </li>
 
-    {{log this}}
-    {{#each controller.orgs}}
-      <li>
-      {{#linkTo "profile" this}} {{ login }} {{/linkTo}}
-      {{ outlet subnav }}
-      </li>
+        {{log this}}
+        {{#each controller.orgs}}
+        <li>
+        {{#linkTo "profile" this}} {{ login }} {{/linkTo}}
+        {{ outlet subnav }}
+        </li>
 
-    {{/each}}
-  </ul>
-  </div> 
-  <div class="span9">
+        {{/each}}
+      </ul>
+    </div> 
+    <div class="span9">
 
-  {{ outlet }}
-  </div> 
+      {{ outlet }}
+    </div> 
   </div> 
 
 
@@ -30,26 +30,66 @@
 
 <script type="text/x-handlebars" id="index">
 
- <h1> {{ model.login }} hello </h1>
+  <h1> {{ model.login }} hello </h1>
 
- <p> {{ model.details.herp }} </p>
-  
+  <p> {{ model.details.herp }} </p>
+
 
 </script>
 
 
+<script type="text/x-handlebars" id="account">
+  <h1>Stripe Checkout inside of Ember</h1>
+
+
+  {{render purchase_form}}
+</script>   
+
+<script type="text/x-handlebars" data-template-name="purchase_form">
+  <h2>Buy {{description}} for ${{price}} with Stripe </h2>
+
+  <form {{action purchase on=submit}}>
+    <span class="payment-errors">{{errors}}</span>
+
+    <div class="form-row">
+      <label>
+        <span>Card Number</span>
+        {{view App.CardNumberField valueBinding="number" size=20}}
+      </label>
+    </div>
+
+    <div class="form-row">
+      <label>
+        <span>CVC</span>
+        {{view App.CvcField valueBinding="cvc" size="4" data-stripe="cvc"}}
+      </label>
+    </div>
+
+    <div class="form-row">
+      <label>
+        <span>Expiration ({{ expMonth }} / {{ expYear }})</span>
+        {{view App.CardExpiryField valueBinding="exp" }}
+      </label>
+    </div>
+
+    <button type="submit" {{bindAttr disabled="processingPurchase"}}> Submit Payment</button>
+  </form>
+</script>
+
 <script type="text/x-handlebars" id="profile">
 
- <h1> {{ login }} hello </h1>
-  
- {{#if model.details.org.isOwner }}
+  <h1> {{ login }} hello </h1>
 
-  Owner
+  {{ log model.details.org }}
 
- {{else}}
- Not owner
+  {{#if model.details.org.is_owner }}
 
- {{/if}}
+  {{ render account }}
+
+  {{else}}
+  Not owner
+
+  {{/if}}
 
 </script>
 

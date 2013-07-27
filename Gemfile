@@ -11,7 +11,9 @@ gem 'rack-cache'
 gem 'activesupport'
 gem "couchrest"
 
+gem 'coffee-script'
 gem 'sprockets'
+
 
 gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 
