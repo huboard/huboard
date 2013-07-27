@@ -223,9 +223,13 @@ class Huboard
       therepo = api.repos(user, repo)
       theuser = api.users(user)
 
-      couch.users.get_or_create theuser if theuser.type == "User"
-      couch.orgs.get_or_create theuser if theuser.type == "Organization"
-      couch.repos.get_or_create therepo 
+      begin
+        couch.users.get_or_create theuser if theuser.type == "User"
+        couch.orgs.get_or_create theuser if theuser.type == "Organization"
+        couch.repos.get_or_create therepo 
+      rescue
+        return board_method.bind(self).call
+      end
 
       theboard = board_method.bind(self).call
 
