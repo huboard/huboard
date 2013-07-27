@@ -3,7 +3,8 @@ class Huboard
   module Labels
 
     def labels
-      gh.labels
+      labels = gh.labels
+      labels.is_a?(Array) ? labels : []
     end
 
     def other_labels
