@@ -1,7 +1,6 @@
 App.PurchaseFormController = Ember.Controller.extend
-  apiKey: 'sk_test_GSKmCIsYPW9tjrTtTHdL7MTm',
-  key: 'pk_test_CRzkpHAchGeztE2X3htRv5M5'
-  
+  key : '<%= settings.stripe_publishable_key %>'
+
   processingPurchase: false
   
   number: null
@@ -20,8 +19,8 @@ App.PurchaseFormController = Ember.Controller.extend
   ).property("exp")
 
   
-  price: 10
-  description: "Dem Widgets"
+  price: 24
+  description: "organization plan"
   
   purchase: ->
     @set('processingPurchase', true)
@@ -36,11 +35,11 @@ App.PurchaseFormController = Ember.Controller.extend
     }, @didCreateToken.bind(this))
  
   didCreateToken: (status, response) ->
-    if response.errors
+    if response.error
       @set('processingPurchase', false)
       @set('errors', response.error.message)
     else
-      @postCharge(response.id)
+      #@postCharge(response.id)
   
   postCharge: (token) ->
     this.ajax("https://api.stripe.com/v1/charges", {

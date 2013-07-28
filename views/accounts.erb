@@ -1,21 +1,25 @@
+<% content_for :header do %>
+  <h1> Accounts </h1>
+<% end %>
 
 <script type="text/x-handlebars" >
   <div class="row">
 
     <div class="span3">
 
-      <ul>
+      <ul class="nav nav-list">
         <li>
-        {{#linkTo "index" }} {{ model.user.login }} {{/linkTo}}
+        {{#linkTo index }} 
+          {{ log this }}
+          {{ log view }}
+          {{ model.user.login }}
+        {{/linkTo}}
         </li>
 
-        {{log this}}
-        {{#each controller.orgs}}
+        {{#each model.orgs}}
         <li>
-        {{#linkTo "profile" this}} {{ login }} {{/linkTo}}
-        {{ outlet subnav }}
+        {{#linkTo profile this}} {{ login }} {{/linkTo}}
         </li>
-
         {{/each}}
       </ul>
     </div> 
@@ -29,19 +33,18 @@
 </script>
 
 <script type="text/x-handlebars" id="index">
+  <div class="nav-section">
 
-  <h1> {{ model.login }} hello </h1>
-
-  <p> {{ model.details.herp }} </p>
-
-
+    <div class="widget-header">
+      <h3> {{ model.login }} </h3>
+    </div>
+    <div class="widget-body">
+      <p> {{ model.details.herp }} </p>
+    </div>
+  </div>
 </script>
 
-
 <script type="text/x-handlebars" id="account">
-  <h1>Stripe Checkout inside of Ember</h1>
-
-
   {{render purchase_form}}
 </script>   
 
@@ -49,47 +52,50 @@
   <h2>Buy {{description}} for ${{price}} with Stripe </h2>
 
   <form {{action purchase on=submit}}>
-    <span class="payment-errors">{{errors}}</span>
+    <fieldset>
+      <span class="payment-errors">{{errors}}</span>
 
-    <div class="form-row">
-      <label>
-        <span>Card Number</span>
-        {{view App.CardNumberField valueBinding="number" size=20}}
-      </label>
-    </div>
+      <div class="form-row">
+        <label>
+          <span>Card Number</span>
+          {{view App.CardNumberField valueBinding="number" size=20}}
+        </label>
+      </div>
 
-    <div class="form-row">
-      <label>
-        <span>CVC</span>
-        {{view App.CvcField valueBinding="cvc" size="4" data-stripe="cvc"}}
-      </label>
-    </div>
+      <div class="form-row">
+        <label>
+          <span>CVC</span>
+          {{view App.CvcField valueBinding="cvc" size="4" data-stripe="cvc"}}
+        </label>
+      </div>
 
-    <div class="form-row">
-      <label>
-        <span>Expiration ({{ expMonth }} / {{ expYear }})</span>
-        {{view App.CardExpiryField valueBinding="exp" }}
-      </label>
-    </div>
+      <div class="form-row">
+        <label>
+          <span>Expiration ({{ expMonth }} / {{ expYear }})</span>
+          {{view App.CardExpiryField valueBinding="exp" }}
+        </label>
+      </div>
 
-    <button type="submit" {{bindAttr disabled="processingPurchase"}}> Submit Payment</button>
+      <button type="submit" {{bindAttr disabled="processingPurchase"}}> Submit Payment</button>
+    </fieldset>
   </form>
 </script>
 
 <script type="text/x-handlebars" id="profile">
+  <div class="nav-section">
+    <div class="widget-header">
+      <h3> {{ model.login }} </h3>
+    </div>
+    <div class="widget-body">
+      {{#if model.details.org.is_owner }}
 
-  <h1> {{ login }} hello </h1>
+      {{ render account }}
 
-  {{ log model.details.org }}
+      {{else}}
+      Not owner
 
-  {{#if model.details.org.is_owner }}
-
-  {{ render account }}
-
-  {{else}}
-  Not owner
-
-  {{/if}}
-
+      {{/if}}
+    </div>
+  </div>
 </script>
 

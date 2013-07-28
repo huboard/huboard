@@ -6,6 +6,8 @@
     rootElement : "#main-stage"
   })
 
+  App.ApplicationController = Ember.Controller.extend();
+
   App.ApplicationRoute = Ember.Route.extend({
     model : function () {
       return Em.Deferred.promise(function(p) {
