@@ -32,13 +32,15 @@
 
 
       });
-
-
-      return Ember.RSVP.hash($.getJSON("/api/profiles"))
     }
   });
 
   App.User = Ember.Object.extend({
+
+    gravatar_url : function() {
+      return this.get("avatar_url") + "&s=24&d=retro"
+
+    }.property("avatar_url"),
 
     loadDetails : function () {
        var user = this; 
@@ -53,6 +55,11 @@
   })
 
   App.Org = Ember.Object.extend({
+
+    gravatar_url : function() {
+      return this.get("avatar_url") + "&s=24&d=retro"
+
+    }.property("avatar_url"),
 
     loadDetails : function () {
        var org = this; 
@@ -69,7 +76,7 @@
   App.IndexRoute = Ember.Route.extend({
     model : function () {
        var model = this.modelFor("application");
-       return App.User.create(model.user);
+       return model.user;
     },
 
     afterModel: function (model) {
@@ -78,16 +85,16 @@
   })
 
   App.Router.map(function(){
-    this.route("profile", { path: "/:profile_id" });
+    this.resource("profile", { path: "/:profile_id" });
     //this.resource("profile")
   })
   App.ProfileRoute = Ember.Route.extend({
     model: function(params) {
 
       var profiles = this.modelFor("application");
-      return App.Org.create(profiles.orgs.find(function(item) {
+      return profiles.orgs.find(function(item) {
         return item.id == params.profile_id;                   
-      }));
+      });
 
     },
     afterModel : function (model) {

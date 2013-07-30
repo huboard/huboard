@@ -2,6 +2,12 @@
   <h1> Accounts </h1>
 <% end %>
 
+<style>
+  .nav-list a.active { background: blue; color: white;}
+  .nav-list a.active:hover { background: blue; color: white;}
+
+</style>
+
 <script type="text/x-handlebars" >
   <div class="row">
 
@@ -10,21 +16,22 @@
       <ul class="nav nav-list">
         <li>
         {{#linkTo index }} 
-          {{ log this }}
-          {{ log view }}
-          {{ model.user.login }}
+        <img {{bindAttr src=model.user.gravatar_url  }} /> 
+        {{ model.user.login }}
         {{/linkTo}}
         </li>
 
         {{#each model.orgs}}
         <li>
-        {{#linkTo profile this}} {{ login }} {{/linkTo}}
+        {{#linkTo profile this}} 
+        <img {{bindAttr src=gravatar_url  }} /> 
+          {{ login }} 
+        {{/linkTo}}
         </li>
         {{/each}}
       </ul>
     </div> 
     <div class="span9">
-
       {{ outlet }}
     </div> 
   </div> 
@@ -45,7 +52,12 @@
 </script>
 
 <script type="text/x-handlebars" id="account">
-  {{render purchase_form}}
+  {{#if model.details.has_plan }}
+    {{render purchase_form model.details }}
+    Cancel plan button
+  {{else}}
+    {{render purchase_form model.details }}
+  {{/if}}
 </script>   
 
 <script type="text/x-handlebars" data-template-name="purchase_form">
@@ -53,27 +65,42 @@
 
   <form {{action purchase on=submit}}>
     <fieldset>
-      <span class="payment-errors">{{errors}}</span>
+      {{#if errors}}
+        <div class="alert alert-error">{{errors}}</div>
+      {{/if}}
+      <div class="form-row">
+        <label>
+          <span>Billing email</span>
+        </label>
+        {{input valueBinding="model.org.billing_email" type=text required=true }}
+      </div>
 
       <div class="form-row">
         <label>
           <span>Card Number</span>
-          {{view App.CardNumberField valueBinding="number" size=20}}
         </label>
+        {{view App.CardNumberField valueBinding="number" size=20}}
       </div>
 
       <div class="form-row">
         <label>
           <span>CVC</span>
-          {{view App.CvcField valueBinding="cvc" size="4" data-stripe="cvc"}}
         </label>
+        {{view App.CvcField valueBinding="cvc" size="4" data-stripe="cvc"}}
       </div>
 
       <div class="form-row">
         <label>
           <span>Expiration ({{ expMonth }} / {{ expYear }})</span>
-          {{view App.CardExpiryField valueBinding="exp" }}
         </label>
+        {{view App.CardExpiryField valueBinding="exp" }}
+      </div>
+
+      <div class="form-row">
+        <label>
+          <span>Coupon code</span>
+        </label>
+        {{input valueBinding="coupon" }}
       </div>
 
       <button type="submit" {{bindAttr disabled="processingPurchase"}}> Submit Payment</button>
@@ -89,11 +116,16 @@
     <div class="widget-body">
       {{#if model.details.org.is_owner }}
 
-      {{ render account }}
+      {{ render account model }}
 
       {{else}}
-      Not owner
-
+        <div class="alert">
+          <h5>You must be an owner to purchase</h5>
+          It appears like you are not a member of the owners team for {{ model.login }}. 
+          We strongly encourage that only members of the &quot;Owners&quot; team have access to subscription
+          information. If you have any questions feel free to email customer support at
+          <a href="mailto:huboard@huboard.com">huboard@huboard.com</a>. 
+        </div>
       {{/if}}
     </div>
   </div>

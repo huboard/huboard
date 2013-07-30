@@ -117,7 +117,10 @@ class Huboard
 
       customer = couch.customers.findByOrgId org.id
 
-      json :org => org.to_hash, :plan => customer.to_hash
+      json :org => org.to_hash, 
+        :plan => customer.rows.first,
+        :is_owner => is_owner,
+        :has_plan => customer.rows.size > 0
     end
 
     get "/token" do

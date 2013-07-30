@@ -1,4 +1,6 @@
+
 App.PurchaseFormController = Ember.Controller.extend
+  
   key : '<%= settings.stripe_publishable_key %>'
 
   processingPurchase: false
@@ -14,12 +16,15 @@ App.PurchaseFormController = Ember.Controller.extend
   ).property("exp")
   expYear: (->
     if @get("exp")
-      return Ember.$.payment.cardExpiryVal(@get("exp")).year
+      return Ember.$.payment.cardExpiryVal(@get("exp")).year || "YYYY"
     "YYYY"
   ).property("exp")
 
+
+  coupon: null,
   
   price: 24
+
   description: "organization plan"
   
   purchase: ->
