@@ -56,7 +56,7 @@ class Huboard
 
       def call(env)
 
-        env[:request_headers].merge!('Accept' => "application/vnd.github.beta.full+json" )
+        env[:request_headers].merge!('Accept' => "application/vnd.github.v3.full+json" )
 
         @app.call env
       end
