@@ -1,4 +1,4 @@
-$footer-height: 60px;
+$footer-height: 81px;
 body, html {
   height: 100%;
 
@@ -13,18 +13,27 @@ body, html {
 
 
 
-#footer, #footer-pusher {
+#footer-pusher {
    min-height: $footer-height;
 }
+
 #footer {
     @include linear-gradient(#F3F3F3, #F9F9F9);
     border-top: 1px solid #e5e5e5;
-    h2 {
+    padding-top:40px;
+    padding-bottom:20px;
+
+    &, a {
      -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(#000), to(rgba(0,0,0,0.75)));
 
       color: #999;
       color: rgba(255,255,255,0.3);
       text-shadow: -1px -1px rgba(0,0,0,0.4);
+      
+    }
 
+    .links {
+      a { margin: 0 10px;}
+      text-align: right;
     }
 }

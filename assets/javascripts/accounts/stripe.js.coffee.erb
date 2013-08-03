@@ -10,7 +10,7 @@ App.PurchaseFormController = Ember.Controller.extend
   exp: null
   expMonth: (->
     if @get("exp")
-      return Ember.$.payment.cardExpiryVal(@get("exp")).month
+      return Ember.$.payment.cardExpiryVal(@get("exp")).month || "MM"
 
     "MM"
   ).property("exp")

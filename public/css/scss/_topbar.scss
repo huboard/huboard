@@ -37,7 +37,17 @@ body {
 
 }
 
-.navbar .nav > li > a {
+.navbar {
+ .nav {
+    float: right;
+    ul {
+      margin: 0;
+      list-style-type: none;
+    }
+ }
+} 
+
+.navbar .nav  li > a {
   font-family: "ProximaNovaRegular", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, "Lucida Grande", sans-serif;
   font-size: 18px;
   line-height: 90px;
