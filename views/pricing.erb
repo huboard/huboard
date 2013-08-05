@@ -54,11 +54,13 @@
       </div>
       <div class="row">
         <div class="span12">
-          <div class="plan-picker input-append right">
+          <form class="plan-picker">
+          <div class=" input-append right">
             <span>https://github.com/</span>
             <input placeholder="username" class="plan-help" type="text" />
-              <a class="btn btn-success" type="button">Find plan</a>
+              <button class="btn btn-success">Find plan</button>
             </div>
+          </form>
           <p>
           <strong>Need help?</strong> Tell us the username of the private repository you want to create a huboard for.
           </p>
@@ -100,7 +102,8 @@
   </div>
 </div>
 <script>
-  $(".plan-picker .btn").on("click", function(){
+  $(".plan-picker").on("submit", function(ev){
+    ev.preventDefault();
     $(".plan").removeClass("featured")
     var val = $(".plan-picker input").val();
     if(!val) {
