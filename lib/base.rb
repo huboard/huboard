@@ -26,7 +26,8 @@ class HuboardApplication < Sinatra::Base
     set :password, ENV["PASSWORD"]
     GITHUB_CONFIG = {
       :client_id     => ENV['GITHUB_CLIENT_ID'],
-      :client_secret => ENV['GITHUB_SECRET']
+      :client_secret => ENV['GITHUB_SECRET'],
+      :scope => "public_repo"
     }
     set :session_secret, ENV["SESSION_SECRET"]
     set :socket_backend, ENV["SOCKET_BACKEND"]
@@ -46,7 +47,7 @@ class HuboardApplication < Sinatra::Base
     config.failure_app = BadAuthentication
     config.default_strategies :github
     config.scope_defaults :default, :config => GITHUB_CONFIG
-    config.scope_defaults :admin, :config => GITHUB_CONFIG.merge(:scope => 'user,notifications')
+    config.scope_defaults :private, :config => GITHUB_CONFIG.merge(:scope => 'repo')
   end
 
   helpers do
@@ -69,7 +70,7 @@ class HuboardApplication < Sinatra::Base
     #
     # Supports a variety of methods, name, full_name, email, etc
     def github_user
-      warden.user || Hashie::Mash.new
+      warden.user(:private) || warden.user || Hashie::Mash.new
     end
   end
 end

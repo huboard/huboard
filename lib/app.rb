@@ -11,13 +11,28 @@ class Huboard
 
     PUBLIC_URLS = ['/', '/logout','/webhook']
     before do
-      protected! unless PUBLIC_URLS.include? request.path_info
+      #protected! unless PUBLIC_URLS.include? request.path_info
+    end
+
+    before "/:user/:repo/?*" do 
+      puts "user #{params[:user]}"
+      
+      if authenticated? :private
+        puts "private access yeah!"
+        repo = gh.repos params[:user], params[:repo]
+      else
+        puts "default access yeah!"
+        repo = gh.repos params[:user], params[:repo]
+      end
+
+      raise Sinatra::NotFound if repo.message == "Not Found"
+
     end
 
     helpers do
-      def protected! 
-        return current_user if authenticated?
-        authenticate! 
+      def protected!(*args)
+        return current_user if authenticated?(*args)
+        authenticate!(*args)
         #HAX! TODO remove
         #ghee = Ghee.new({ :basic_auth => {:user_name => settings.user_name, :password => settings.password}})
         #Stint::Github.new(ghee).add_to_team(settings.team_id, current_user.login) unless github_team_access? settings.team_id
@@ -39,7 +54,7 @@ class Huboard
 
     get '/' do 
       @parameters = params
-      return erb :home, :layout => :marketing unless authenticated?
+      return erb :home, :layout => :marketing if warden.user.nil?
       protected!
       @repos = huboard.all_repos
       erb :index
