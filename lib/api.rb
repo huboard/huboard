@@ -1,11 +1,9 @@
 require_relative "helpers"
 
 class Huboard
-  class API < Sinatra::Base
-    register Sinatra::Auth::Github
-    register Huboard::Common
+  class API < HuboardApplication
+    #register Sinatra::Auth::Github
 
-    extend Huboard::Common::Settings
 
     PUBLIC_URLS = ['/authorized']
 

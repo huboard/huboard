@@ -1,14 +1,16 @@
 require 'rubygems'
 require 'bundler'
 require 'rack/no-www'
-require 'sinatra_auth_github'
+#require 'sinatra_auth_github'
 
 Bundler.require
 
-require './lib/app.rb'
-require './lib/api.rb'
-require './lib/github.rb'
-require './lib/pebble.rb'
+require './lib/helpers'
+require './lib/base'
+require './lib/app'
+require './lib/api'
+require './lib/github'
+require './lib/pebble'
 
 configure :production do 
   require "newrelic_rpm"

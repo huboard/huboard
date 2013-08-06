@@ -66,7 +66,9 @@ class Huboard
     def initialize(access_token)
       @cache = SimpleCache.new
       @connection_factory = ->(token = nil) {
-          Ghee.new(:access_token => token || access_token) do |conn|
+          options = { :access_token => token || access_token }
+          options = {} if(token.nil? && access_token.nil?)
+          Ghee.new(options) do |conn|
             conn.use FaradayMiddleware::Caching, @cache 
             conn.use Mimetype
           end

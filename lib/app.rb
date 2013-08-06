@@ -6,11 +6,8 @@ require 'base64'
 require_relative "helpers"
 
 class Huboard
-  class App < Sinatra::Base
-    register Sinatra::Auth::Github
-    register Huboard::Common
-
-    extend Huboard::Common::Settings
+  class App < HuboardApplication
+    #register Sinatra::Auth::Github
 
     PUBLIC_URLS = ['/', '/logout','/webhook']
     before do
