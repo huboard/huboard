@@ -8,6 +8,7 @@ gem 'sinatra-content-for', "~> 0.1.0"
 gem 'ghee'
 gem 'rack-cache'
 gem 'activesupport'
+gem 'addressable'
 
 group :development do
   gem 'watchr'

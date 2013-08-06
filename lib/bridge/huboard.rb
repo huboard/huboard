@@ -6,6 +6,8 @@ require_relative "github/issues"
 require_relative "github/backlog"
 require_relative "github/board"
 
+require "addressable/uri"
+
 class Huboard
 
   def self.column_pattern
@@ -63,20 +65,52 @@ class Huboard
     end
 
 
-    def initialize(access_token)
+    class ClientId < Faraday::Middleware
+      begin
+
+      rescue LoadError, NameError => e
+        self.load_error = e
+      end
+
+      def initialize(app, params={})
+        @app = app
+        @params = params
+      end
+
+
+
+      def call(env)
+
+        uri = Addressable::URI.parse(env[:url].to_s)
+        puts uri
+        puts env[:url].class
+
+        uri.query_values = uri.query_values.merge(@params) if uri.query_values
+        uri.query_values = @params unless uri.query_values
+        puts @params
+
+        env[:url] = URI::parse(uri.to_s)
+
+        @app.call env
+      end
+    end
+
+    def initialize(access_token, params={})
       @cache = SimpleCache.new
+      
       @connection_factory = ->(token = nil) {
-          options = { :access_token => token || access_token }
-          options = {} if(token.nil? && access_token.nil?)
-          Ghee.new(options) do |conn|
-            conn.use FaradayMiddleware::Caching, @cache 
-            conn.use Mimetype
-          end
+        options = { :access_token => token || access_token }
+        options = {} if(token.nil? && access_token.nil?)
+        Ghee.new(options) do |conn|
+          conn.use FaradayMiddleware::Caching, @cache 
+          conn.use Mimetype
+          conn.use ClientId, params unless token || access_token
+        end
       }
     end
 
     def connection
-        @connection_factory.call
+      @connection_factory.call
     end
 
     def board(user, repo)

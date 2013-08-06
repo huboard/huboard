@@ -23,6 +23,11 @@
     }
   }
   .nav {
+    form {
+       padding: 0;
+       margin: 0;
+    }
+
     > li {
       > a {
         &:hover {

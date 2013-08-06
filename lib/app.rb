@@ -61,7 +61,6 @@ class Huboard
     end
 
     get '/:user/?' do 
-      protected!
       @parameters = params
       @repos = huboard.repos_by_user(params[:user])
       @filtered = params[:user]
@@ -99,7 +98,7 @@ class Huboard
     end
 
     get '/:user/:repo/board/?' do 
-      @parameters = params.merge({:login => current_user.login, :socket_backend => socket_backend})
+      @parameters = params.merge({ :socket_backend => socket_backend})
       erb :board, :layout => :layout_fluid
     end
 

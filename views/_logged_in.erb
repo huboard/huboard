@@ -1,0 +1,10 @@
+<ul class="nav pull-right">
+ <% yield_content :sub_navigation %>
+ <li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= h current_user.login %><b class='caret'></b></a>
+ <ul class="dropdown-menu">
+   <li><a href="/logout">Logout</a></li>
+ </ul>
+ </li>
+</ul>
+

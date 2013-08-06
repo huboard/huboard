@@ -46,7 +46,7 @@ class Huboard
       end
 
       def huboard(token = nil)
-        Huboard::Client.new token || user_token
+        Huboard::Client.new(token || user_token, github_config)
       end
 
       def gh(token = nil)
