@@ -70,7 +70,7 @@ class Huboard
     end
 
     get '/:user/:repo/?' do 
-      @parameters = params.merge({:login => current_user.login, :socket_backend => socket_backend})
+      @parameters = params.merge({ :socket_backend => socket_backend})
 
       adapter = huboard.board(params[:user], params[:repo])
 
@@ -85,7 +85,7 @@ class Huboard
     end
 
     get '/:user/:repo/backlog' do 
-      @parameters = params.merge({:login => current_user.login, :socket_backend => socket_backend})
+      @parameters = params.merge({ :socket_backend => socket_backend})
       erb :backlog, :layout => :layout_fluid
     end
 
