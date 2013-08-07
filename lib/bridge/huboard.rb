@@ -29,15 +29,18 @@ class Huboard
   class SimpleCache < Hash
     def read(key)
       if cached = self[key]
-        cached
+        puts "cache:read #{key}"
+        p cached
       end
     end
 
     def write(key, data)
+      puts "cache:write #{key}"
       self[key] = data
     end
 
     def fetch(key)
+      puts "cache:fetch #{key}"
       read(key) || yield.tap { |data| write(key, data) }
     end
   end
