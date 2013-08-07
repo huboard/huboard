@@ -10,8 +10,10 @@ class Huboard
     #register Sinatra::Auth::Github
 
     PUBLIC_URLS = ['/', '/logout','/webhook']
+
     before do
-      #protected! unless PUBLIC_URLS.include? request.path_info
+      # TODO check the api rate limit to make sure it hasn't exceeded
+      #
     end
 
     before "/:user/:repo/?*" do 
