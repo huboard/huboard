@@ -82,12 +82,9 @@ class Huboard
       def call(env)
 
         uri = Addressable::URI.parse(env[:url].to_s)
-        puts uri
-        puts env[:url].class
 
         uri.query_values = uri.query_values.merge(@params) if uri.query_values
         uri.query_values = @params unless uri.query_values
-        puts @params
 
         env[:url] = URI::parse(uri.to_s)
 
