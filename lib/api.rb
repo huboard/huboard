@@ -12,13 +12,10 @@ class Huboard
     end
 
     before "/:user/:repo/?*" do 
-      puts "user #{params[:user]}"
       
       if authenticated? :private
-        puts "private access yeah!"
         repo = gh.repos params[:user], params[:repo]
       else
-        puts "default access yeah!"
         repo = gh.repos params[:user], params[:repo]
       end
 
