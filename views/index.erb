@@ -1,23 +1,42 @@
-<% content_for :header do %>
-  <h1 class="header">
-    <% if (@filtered.nil?) %>
-      <span class="author">Repos</span>
-      /
-    <% else %>
-      <span class="author"><%= @filtered %></span>
-      /
-    <% end %>
-  </h1>
 
-<% end %>
-<div>
-  <ul class="repos drop-shadow ">
-    <% @repos.each do |repo| %>
-      <li class="repo">
-      <a href="<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/backlog" %>"><span>backlog</span></a> 
-      <a class="board" href="<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/board" %>"><span>open issues</span><strong><%=repo["open_issues"]%></strong></a> 
-      <span><a href='<%= "/#{repo["owner"]["login"]}" %>'><%= repo["owner"]["login"] %></a> / <a href='<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/board" %>'><%= repo["name"] %></a></span>
+<div class="row no-header">
+  <div class="span3">
+    <div class="vcard">
+      <a href="http://gravatar.com/emails">
+        <img class="img-polaroid"  src="https://secure.gravatar.com/avatar/<%= current_user.gravatar_id %>?s=270?d=retro" />
+      </a>
+      <h1>
+        <%= current_user.name %>
+        <small> <%= current_user.login %></small>
+      </h1>
+
+    </div>
+  </div>
+  <div class="span9">
+    <ul class="nav nav-tabs">
+      <li class="pull-right">
+      <a href="/repositories/private" ><span class="label label-warning">Private</span></a>
       </li>
-    <% end %>
-  </ul>
-</div>
+      <li class="pull-right">
+      <a href="/repositories/public"><span class="label label-success">Public<span></a>
+          </li>
+          <li >
+          <a href="/repositories/public"><span class="label label-success">Public<span></a>
+              </li>
+            </ul>
+            <div>
+              <ul class="repos drop-shadow ">
+                <% @repos.each do |repo| %>
+                  <li class="repo">
+                  <a href="<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/backlog" %>"><span>backlog</span></a> 
+                  <a class="board" href="<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/board" %>"><span>open issues</span><strong><%=repo["open_issues"]%></strong></a> 
+                  <span><a href='<%= "/#{repo["owner"]["login"]}" %>'><%= repo["owner"]["login"] %></a> / <a href='<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/board" %>'><%= repo["name"] %></a></span>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+
+          </div>
+
+        </div>
+

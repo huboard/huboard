@@ -56,8 +56,7 @@ class Huboard
 
     get '/' do 
       @parameters = params
-      return erb :home, :layout => :marketing if warden.user.nil?
-      protected!
+      return erb :home, :layout => :marketing unless logged_in?
       @repos = huboard.all_repos
       erb :index
     end
