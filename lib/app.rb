@@ -68,9 +68,11 @@ class Huboard
 
 
     get '/:user/?' do 
+      user =   gh.users(params[:user]).raw
+      raise Sinatra::NotFound unless user.status == 200 
       @parameters = params
       @repos = huboard.repos_by_user(params[:user])
-      @filtered = params[:user]
+      @user = user.body
       erb :index
     end
 

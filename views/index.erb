@@ -1,16 +1,7 @@
 
 <div class="row no-header">
   <div class="span3">
-    <div class="vcard">
-      <a href="http://gravatar.com/emails">
-        <img class="img-polaroid"  src="https://secure.gravatar.com/avatar/<%= current_user.gravatar_id %>?s=270?d=retro" />
-      </a>
-      <h1>
-        <%= current_user.name %>
-        <small> <%= current_user.login %></small>
-      </h1>
-
-    </div>
+    <%= partial :vcard, :locals => {user: @user || current_user } %>
   </div>
   <div class="span9">
     <ul class="nav nav-tabs">

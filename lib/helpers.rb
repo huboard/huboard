@@ -30,7 +30,7 @@ class Huboard
       end
 
       def current_user
-        @user ||= github_user
+        github_user
       end
 
       def github
