@@ -12,22 +12,22 @@ class Huboard
     PUBLIC_URLS = ['/', '/logout','/webhook']
 
     before do
-      # TODO check the api rate limit to make sure it hasn't exceeded
-      #
+
     end
 
     before "/:user/:repo/?*" do 
-      puts "user #{params[:user]}"
+
+
+      return if ["images", "about", "site" ,"login"].include? params[:user]
       
       if authenticated? :private
-        puts "private access yeah!"
         repo = gh.repos params[:user], params[:repo]
+        raise Sinatra::NotFound if repo.message == "Not Found"
       else
-        puts "default access yeah!"
         repo = gh.repos params[:user], params[:repo]
+        halt([401, "Repo not found"]) if repo.message == "Not Found"
       end
 
-      raise Sinatra::NotFound if repo.message == "Not Found"
 
     end
 
@@ -62,6 +62,12 @@ class Huboard
       erb :index
     end
 
+    get '/login/private/?' do
+      authenticate! :scope => :private
+      redirect params[:redirect_to] || '/'
+    end
+
+
     get '/:user/?' do 
       @parameters = params
       @repos = huboard.repos_by_user(params[:user])
@@ -70,6 +76,8 @@ class Huboard
     end
 
     get '/:user/:repo/?' do 
+      redirect "/#{params[:user]}/#{params[:repo]}/board/create" unless huboard.board(params[:user], params[:repo]).has_board?
+
       @parameters = params.merge({ :socket_backend => socket_backend})
 
       adapter = huboard.board(params[:user], params[:repo])
@@ -94,18 +102,21 @@ class Huboard
       erb :create_board
     end
 
+
     post '/:user/:repo/board/create/?' do
       pebble.create_board(params[:user],params[:repo],"#{socket_backend}/issues/webhook?token=#{encrypted_token}") unless socket_backend.nil?
       redirect "/#{params[:user]}/#{params[:repo]}/board"
     end
 
     get '/:user/:repo/board/?' do 
+      redirect "/#{params[:user]}/#{params[:repo]}/board/create" unless huboard.board(params[:user], params[:repo]).has_board?
       @parameters = params.merge({ :socket_backend => socket_backend})
       erb :board, :layout => :layout_fluid
     end
 
 
     get '/:user/:repo/hook' do 
+      raise Sinatra::NotFound unless huboard.board(params[:user], params[:repo]).has_board?
       @parameters = params
       json(pebble.create_hook( params[:user], params[:repo], "#{socket_backend}/issues/webhook?token=#{encrypted_token}")) unless socket_backend.nil?
     end
@@ -121,7 +132,6 @@ class Huboard
         repo = payload["repository"]["name"]
         hooks = ghee.repos(payload["repository"]["full_name"]).hooks.reject {|x| x["name"] != "web" }.find_all {|x| x["config"]["url"].start_with? base_url}
         hub.fix_hooks user, repo, hooks
-        puts "fixed hooks"
         return json(hub.create_hook(user, repo, "#{socket_backend}/issues/webhook?token=#{params[:token]}")) unless socket_backend.nil?
       rescue
         return json({:message => "something go wrong?"})
