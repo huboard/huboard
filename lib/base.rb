@@ -1,4 +1,5 @@
 require "hashie" 
+require_relative "auth/github"
 
 # stolen from http://github.com/cschneid/irclogger/blob/master/lib/partials.rb
 #   and made a lot more robust by me
@@ -22,15 +23,6 @@ module Sinatra::Partials
   end
 end
 
-class BadAuthentication < Sinatra::Base
-  get '/unauthenticated' do
-    status 403
-    <<-EOS
-      <h2>Unable to authenticate, sorry bud.</h2>
-      <p>#{env['warden'].message}</p>
-    EOS
-  end
-end
 class HuboardApplication < Sinatra::Base
 
   enable  :sessions
@@ -38,7 +30,6 @@ class HuboardApplication < Sinatra::Base
   disable :show_exceptions
 
   if File.exists? "#{File.dirname(__FILE__)}/../.settings"
-    puts "settings file"
     token_file =  File.new("#{File.dirname(__FILE__)}/../.settings")
     # TODO: read this from a yaml
     eval(token_file.read) 
@@ -60,7 +51,6 @@ class HuboardApplication < Sinatra::Base
     raise "Configuration information not found: you need to provide a .settings file or ENV variables"
   end
 
-  puts settings.session_secret
 
   helpers Huboard::Common::Helpers
   helpers Sinatra::Partials
@@ -68,8 +58,11 @@ class HuboardApplication < Sinatra::Base
   use Rack::Session::Cookie, :key => 'rack.session', :path => '/', :secret => settings.session_secret
   set :views, File.expand_path("../views",File.dirname(__FILE__))
 
+  use Sinatra::Auth::Github::BadAuthentication
+  use Sinatra::Auth::Github::AccessDenied
+
   use Warden::Manager do |config|
-    config.failure_app = BadAuthentication
+    config.failure_app = Sinatra::Auth::Github::BadAuthentication
     config.default_strategies :github
     config.scope_defaults :default, :config => GITHUB_CONFIG
     config.scope_defaults :private, :config => GITHUB_CONFIG.merge(:scope => 'repo')

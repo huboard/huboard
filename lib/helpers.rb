@@ -62,7 +62,7 @@ class Huboard
         conn = Faraday.post do |req| 
           req.url "#{socket_backend}/hook"
           req.headers['Content-Type'] = 'application/json'
-          req.body =  json({channel:channel, payload:{ payload:payload, event:event, correlationId: params[:correlationId] || "herpderp"},secret:settings.socket_secret,})
+          req.body =  json({channel:channel, payload:{ payload:payload, event:event, correlationId: params[:correlationId] || "herpderp"},secret:settings.socket_secret})
         end
       end
 

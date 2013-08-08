@@ -30,7 +30,7 @@ class Huboard
     def read(key)
       if cached = self[key]
         puts "cache:read #{key}"
-        p cached
+        cached
       end
     end
 
