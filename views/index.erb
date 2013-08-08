@@ -6,10 +6,10 @@
   <div class="span9">
     <ul class="nav nav-tabs">
       <li class="pull-right">
-      <a href="/repositories/private" ><span class="label label-warning">Private</span></a>
+      <a href="/repositories/private/<%= @user ? @user.login : current_user.login %>" ><span class="label label-warning">Private</span></a>
       </li>
       <li class="pull-right">
-      <a href="/repositories/public"><span class="label label-success">Public<span></a>
+      <a href="/repositories/public/<%= @user ? @user.login : current_user.login %>"><span class="label label-success">Public<span></a>
           </li>
           <li class="active" >
           <a href="/">Repositories</a>

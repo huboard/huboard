@@ -18,7 +18,7 @@ class Huboard
     before "/:user/:repo/?*" do 
 
 
-      return if ["images", "about", "site" ,"login"].include? params[:user]
+      return if ["repositories","images", "about", "site" ,"login"].include? params[:user]
       
       if authenticated? :private
         repo = gh.repos params[:user], params[:repo]
@@ -64,6 +64,31 @@ class Huboard
     get '/login/private/?' do
       authenticate! :scope => :private
       redirect params[:redirect_to] || '/'
+    end
+
+    get "/repositories/public/:user/?" do
+      user =   gh.users(params[:user]).raw
+      raise Sinatra::NotFound unless user.status == 200 
+
+      @parameters = params
+      @repos = huboard.repos_by_user(params[:user]).select {|r| !r.private }
+      @user = user.body
+      erb :index
+    end
+
+    get "/repositories/private/:user/?" do
+      user =   gh.users(params[:user]).raw
+      raise Sinatra::NotFound unless user.status == 200 
+      unless authenticated? :private 
+         uri = Addressable::URI.convert_path("#{base_url}/login/private")
+         uri.query_values = {redirect_to: "/repositories/private/#{params[:user]}"}
+         redirect uri.to_s
+      end
+      @parameters = params
+      @repos = huboard.repos_by_user(params[:user]).select {|r| r.private }
+      @user = user.body
+      erb :index
+
     end
 
 
