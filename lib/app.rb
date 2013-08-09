@@ -85,7 +85,13 @@ class Huboard
          redirect uri.to_s
       end
       @parameters = params
-      @repos = huboard.repos_by_user(params[:user]).select {|r| r.private }
+
+      if logged_in? && current_user.login == params[:user]
+        @repos = huboard.all_repos.select {|r| r.private }
+      else
+        @repos = huboard.all_repos.select {|r| r.private && r.owner.login.casecmp(params[:user]) == 0 }
+      end
+
       @user = user.body
       erb :index
 
@@ -96,7 +102,13 @@ class Huboard
       user =   gh.users(params[:user]).raw
       raise Sinatra::NotFound unless user.status == 200 
       @parameters = params
-      @repos = huboard.repos_by_user(params[:user])
+
+      if logged_in? && current_user.login == params[:user]
+        @repos = huboard.repos
+      else
+        @repos = huboard.repos_by_user(params[:user])
+      end
+
       @user = user.body
       erb :index
     end

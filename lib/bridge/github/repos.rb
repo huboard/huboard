@@ -18,11 +18,11 @@ class Huboard
       the_repos.sort_by{|r| r["pushed_at"] || "1111111111111111"}.reverse
     end
 
-    def repos_by_user(user)
-      user = connection.users user
+    def repos_by_user(username)
+      user = connection.users username
       the_repos = repos(user.login) if user.type == "Organization"
-      the_repos = user.repos.all.sort_by{|r| r["pushed_at"] || "1111111111111111"}.reverse if user.type == "User"
-      (the_repos || []).reject { |r| !r.has_issues }.sort_by{|r| r["pushed_at"] || "1111111111111111"}.reverse
+      the_repos = connection.users(username).repos.all if user.type == "User"
+      (the_repos || []).sort_by{|r| r["pushed_at"] || "11111"}.reverse
     end
 
 
