@@ -95,7 +95,7 @@ class Huboard
       @user = user.body
       erb :index
 
-    end
+    end                                                
 
 
     get '/:user/?' do 

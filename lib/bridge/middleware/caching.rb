@@ -31,7 +31,9 @@ class Huboard
           response
         else
           data = app.call(env)
-          write(key, data)
+          if data.status == 200
+            write(key, data)
+          end
           data
         end
       end
