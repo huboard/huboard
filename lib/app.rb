@@ -44,8 +44,8 @@ class Huboard
     end
 
     get '/login' do
-      protected!
-      redirect '/'
+      @parameters = params
+      erb :login, :layout => :marketing
     end
 
 
@@ -63,6 +63,10 @@ class Huboard
 
     get '/login/private/?' do
       authenticate! :scope => :private
+      redirect params[:redirect_to] || '/'
+    end
+    get '/login/public/?' do
+      authenticate!
       redirect params[:redirect_to] || '/'
     end
 
