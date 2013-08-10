@@ -9,6 +9,8 @@ gem 'ghee'
 gem 'rack-cache'
 gem 'activesupport'
 gem 'addressable'
+gem 'kgio'
+gem 'dalli'
 
 group :development do
   gem 'watchr'

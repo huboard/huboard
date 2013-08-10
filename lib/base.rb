@@ -47,6 +47,12 @@ class HuboardApplication < Sinatra::Base
     set :socket_backend, ENV["SOCKET_BACKEND"]
     set :socket_secret, ENV["SOCKET_SECRET"]
 
+    set :cache_config, {
+      servers: ENV["CACHE_SERVERS"] = ENV["MEMCACHIER_SERVERS"],
+      username: ENV["CACHE_USERNAME"] = ENV["MEMCACHIER_USERNAME"],
+      password: ENV["CACHE_PASSWORD"] = ENV["MEMCACHIER_PASSWORD"]
+    }
+
   else
     raise "Configuration information not found: you need to provide a .settings file or ENV variables"
   end

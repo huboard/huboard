@@ -9,6 +9,7 @@ GEM
       sass (>= 3.2.0)
       thor
     daemons (1.1.9)
+    dalli (2.6.4)
     encryptor (1.1.3)
     eventmachine (1.0.0)
     faraday (0.8.8)
@@ -79,9 +80,11 @@ DEPENDENCIES
   activesupport
   addressable
   bourbon
+  dalli
   encryptor
   foreman
   ghee
+  kgio
   newrelic_rpm
   rack-cache
   rack-no-www
