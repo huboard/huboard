@@ -11,7 +11,7 @@ class Huboard
       end
 
       def dalli
-        @dalli ||= Dalli::Client.new(ENV["CACHE_SERVERS"] || "localhost:11211", @options)
+        @dalli ||= Dalli::Client.new(ENV["CACHE_SERVERS"].split(","), @options)
       end
 
       def read(key, app, env)
@@ -61,7 +61,8 @@ class Huboard
       #                            key (default: []).
       #
       # Yields if no cache is given. The block should return a cache object.
-      def initialize(app, options = {:namespace => "huboard_v1", :compress => true, :username => ENV["CACHE_USERNAME"], :password => ENV["CACHE_PASSWORD"]})
+      def initialize(app, options = {:namespace => "huboard_v1", :compress => true, :expires_in => 1.day,
+                     :username => ENV["CACHE_USERNAME"], :password => ENV["CACHE_PASSWORD"]})
         super(app)
         @cache = SimpleCache.new app, options
         @options = options

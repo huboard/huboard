@@ -1,3 +1,4 @@
+require "active_support/core_ext/numeric/time"
 require_relative "github/repos"
 require_relative "github/assignees"
 require_relative "github/labels"
