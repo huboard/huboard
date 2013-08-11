@@ -186,6 +186,7 @@ class Huboard
   end
 
   error do
+    puts "======= ERROR! ========="
     logout!
     redirect "/login"
   end

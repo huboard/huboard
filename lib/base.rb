@@ -26,6 +26,7 @@ end
 class HuboardApplication < Sinatra::Base
 
   enable  :sessions
+  enable :raise_exceptions
 
   if File.exists? "#{File.dirname(__FILE__)}/../.settings"
     token_file =  File.new("#{File.dirname(__FILE__)}/../.settings")
@@ -103,6 +104,20 @@ class HuboardApplication < Sinatra::Base
     def github_user
       warden.user(:private) || warden.user || Hashie::Mash.new
     end
+  end
+
+  set :raise_errors, true
+
+  use Rack::Robustness do |g|
+
+    g.no_catch_all
+    g.status 302
+    g.content_type 'text/html'
+    g.body 'A fatal error occured.'
+    g.headers "Location" => "/logout"
+
+    g.on(Octokit::Error) 
+
   end
 
 
