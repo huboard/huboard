@@ -14,12 +14,12 @@ class Huboard
     before "/:user/:repo/?*" do 
       
       if authenticated? :private
-        repo = gh.repos params[:user], params[:repo]
+        repo = gh.repos(params[:user], params[:repo]).raw
       else
-        repo = gh.repos params[:user], params[:repo]
+        repo = gh.repos(params[:user], params[:repo]).raw
       end
 
-      raise Sinatra::NotFound if repo.message == "Not Found"
+      raise Sinatra::NotFound if repo.status == 404
 
     end
 
