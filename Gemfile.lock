@@ -90,6 +90,7 @@ DEPENDENCIES
   ghee
   kgio
   newrelic_rpm
+  octokit
   rack-cache
   rack-no-www
   rdiscount

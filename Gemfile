@@ -12,6 +12,7 @@ gem 'activesupport'
 gem 'addressable'
 gem 'kgio'
 gem 'dalli'
+gem 'octokit'
 
 group :development do
   gem 'watchr'

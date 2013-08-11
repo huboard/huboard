@@ -184,5 +184,10 @@ class Huboard
     helpers Sinatra::ContentFor
 
   end
+
+  error Octokit::Error do
+    logout!
+    redirect "/login"
+  end
 end
 

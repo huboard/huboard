@@ -1,4 +1,5 @@
 require "active_support/core_ext/numeric/time"
+require "faraday/response/raise_octokit_error"
 require_relative "github/repos"
 require_relative "github/assignees"
 require_relative "github/labels"
@@ -36,6 +37,7 @@ class Huboard
         options = { :access_token => token || access_token }
         options = {} if(token.nil? && access_token.nil?)
         Ghee.new(options) do |conn|
+          conn.use Faraday::Response::RaiseOctokitError
           conn.use ClientId, params unless token || access_token
           conn.use Mimetype
           conn.request :retry, 3

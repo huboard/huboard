@@ -26,8 +26,6 @@ end
 class HuboardApplication < Sinatra::Base
 
   enable  :sessions
-  enable  :raise_errors
-  disable :show_exceptions
 
   if File.exists? "#{File.dirname(__FILE__)}/../.settings"
     token_file =  File.new("#{File.dirname(__FILE__)}/../.settings")
@@ -106,4 +104,6 @@ class HuboardApplication < Sinatra::Base
       warden.user(:private) || warden.user || Hashie::Mash.new
     end
   end
+
+
 end
