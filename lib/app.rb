@@ -59,6 +59,7 @@ class Huboard
       @parameters = params
       return erb :home, :layout => :marketing unless logged_in?
       @repos = huboard.all_repos
+      @private = nil
       erb :index
     end
 
@@ -78,6 +79,7 @@ class Huboard
       @parameters = params
       @repos = huboard.repos_by_user(params[:user]).select {|r| !r.private }
       @user = user.body
+      @private = 0
       erb :index
     end
 
@@ -86,7 +88,7 @@ class Huboard
       raise Sinatra::NotFound unless user.status == 200 
       unless authenticated? :private 
          uri = Addressable::URI.convert_path("#{base_url}/login/private")
-         uri.query_values = {redirect_to: "/repositories/private/#{params[:user]}"}
+         uri.query_values = { redirect_to: "/repositories/private/#{params[:user]}" }
          redirect uri.to_s
       end
       @parameters = params
@@ -98,6 +100,7 @@ class Huboard
       end
 
       @user = user.body
+      @private = 1
       erb :index
 
     end                                                
@@ -115,6 +118,7 @@ class Huboard
       end
 
       @user = user.body
+      @private = nil
       erb :index
     end
 
