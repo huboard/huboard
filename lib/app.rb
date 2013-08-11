@@ -185,7 +185,7 @@ class Huboard
 
   end
 
-  error Octokit::Error do
+  error do
     logout!
     redirect "/login"
   end
