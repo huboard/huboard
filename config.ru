@@ -1,8 +1,7 @@
 require 'rubygems'
 require 'bundler'
 require 'rack/no-www'
-#require 'rack/robustness'
-#require 'sinatra_auth_github'
+require 'rack/robustness'
 
 Bundler.require
 
@@ -14,14 +13,9 @@ require './lib/github'
 require './lib/pebble'
 
 configure :production do 
-  #require "newrelic_rpm"
+  require "newrelic_rpm"
 end
 
-use Rack::Robustness do |g|
-  g.status 500
-  g.content_type 'text/plain'
-  g.body 'A fatal error occured.'
-end
 
 use Rack::NoWWW
 use Rack::Static, :urls => [ "/font","/img", "/scripts","/css"], :root => "public"

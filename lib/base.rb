@@ -116,7 +116,7 @@ class HuboardApplication < Sinatra::Base
     g.body 'A fatal error occured.'
     g.headers "Location" => "/logout"
 
-    g.on(Octokit::Error) 
+    g.on(Ghee::Error) 
 
   end
 
