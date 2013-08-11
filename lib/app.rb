@@ -42,6 +42,14 @@ class Huboard
       redirect '/'
     end
 
+    get "/site/privacy/?" do
+      return erb :privacy, :layout => :marketing unless authenticated?
+    end
+
+    get "/site/terms/?" do
+      return erb :terms_of_service, :layout => :marketing unless authenticated?
+    end
+
     get '/login' do
       @parameters = params
       erb :login, :layout => :marketing
@@ -81,13 +89,24 @@ class Huboard
       erb :index
     end
 
+    get "/repositories/public/:user/?" do
+      user =   gh.users(params[:user]).raw
+      raise Sinatra::NotFound unless user.status == 200 
+
+      @parameters = params
+      @repos = huboard.repos_by_user(params[:user]).select {|r| !r.private }
+      @user = user.body
+      @private = 0
+      erb :index
+    end
+
     get "/repositories/private/:user/?" do
       user =   gh.users(params[:user]).raw
       raise Sinatra::NotFound unless user.status == 200 
       unless authenticated? :private 
-         uri = Addressable::URI.convert_path("#{base_url}/login/private")
-         uri.query_values = { redirect_to: "/repositories/private/#{params[:user]}" }
-         redirect uri.to_s
+        uri = Addressable::URI.convert_path("#{base_url}/login/private")
+        uri.query_values = { redirect_to: "/repositories/private/#{params[:user]}" }
+        redirect uri.to_s
       end
       @parameters = params
 
@@ -111,10 +130,10 @@ class Huboard
       adapter = huboard.board(params[:user], params[:repo])
 
       @actions = Hashie::Mash.new({
-          :linked => {
-            :labels => adapter.link_labels
-          },
-          :settings => adapter.settings
+        :linked => {
+          :labels => adapter.link_labels
+        },
+        :settings => adapter.settings
       })
 
       erb :repo
@@ -166,14 +185,11 @@ class Huboard
       end
     end
 
+
+
     helpers Sinatra::ContentFor
 
   end
 
-  error do
-    puts "======= ERROR! ========="
-    logout!
-    redirect "/login"
-  end
 end
 

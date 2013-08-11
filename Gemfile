@@ -10,7 +10,6 @@ gem 'sinatra-content-for', "~> 0.1.0"
 gem 'ghee'
 gem 'rack-cache'
 gem 'activesupport'
-gem "couchrest"
 gem 'addressable'
 gem 'kgio'
 gem 'dalli'

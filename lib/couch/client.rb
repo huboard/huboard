@@ -1,6 +1,5 @@
 
 require "json/ext"
-require "couchrest"
 
 class Huboard
 
@@ -65,14 +64,11 @@ class Huboard
 
     class Connection < Faraday::Connection
 
-      attr_reader :db
 
       # Instantiates connection, accepts an options hash
       # for authenticated access
       #
       def initialize(hash={})
-        puts "initializing db"
-        @db = CouchRest.database!("#{hash[:base_url] || "http://127.0.0.1:5984" }/huboard")
 
         super("#{hash[:base_url] || "http://127.0.0.1:5984" }/huboard") do |builder|
           yield builder if block_given?
