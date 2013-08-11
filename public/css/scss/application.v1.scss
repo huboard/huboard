@@ -1,6 +1,7 @@
 @import "bourbon/bourbon";
 @import "colors";
 @import "font";
+@import "buttons";
 @import "repos";
 @import "milestones";
 @import "board";
@@ -23,6 +24,11 @@
     }
   }
   .nav {
+    form {
+       padding: 0;
+       margin: 0;
+    }
+
     > li {
       > a {
         &:hover {
@@ -51,6 +57,7 @@
 
 #main-stage  { 
   margin-bottom: 50px;
+  margin-top: 60px;
 }
 
 .container-fluid {

@@ -1,0 +1,33 @@
+ruby:
+  def current_page_class(param)
+    return "active" if param == :private and @private == 1
+    return "active" if param == :public and @private == 0
+    return "active" if param == :all and @private.nil?
+    return ""
+  end
+
+ul.nav.nav-tabs
+  li.pull-right  class=(current_page_class :private)
+    a href="/repositories/private/#{user.login}"
+      span.label.label-warning Private
+  li.pull-right class=(current_page_class :public)
+    a href="/repositories/public/#{user.login}"
+      span.label.label-success Public
+
+  - if is_current_user
+      li.pull-right class=(current_page_class :all)
+        a href="/"
+          span All
+  - else
+      li.pull-right class=(current_page_class :all)
+        a href="/#{user.login}"
+          span All
+
+  - if is_current_user
+      li.active
+        a href="/" Repositories
+  - else
+      li.active
+        a href="/#{user.login}" Repositories
+
+

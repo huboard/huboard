@@ -1,21 +1,35 @@
 require_relative "helpers"
 
 class Huboard
-  class API < Sinatra::Base
-    register Sinatra::Auth::Github
-    register Huboard::Common
+  class API < HuboardApplication
+    #register Sinatra::Auth::Github
 
-    extend Huboard::Common::Settings
 
     PUBLIC_URLS = ['/authorized']
 
     before do
-      protected! unless PUBLIC_URLS.include? request.path_info
+#      protected! unless PUBLIC_URLS.include? request.path_info
+    end
+
+    before "/:user/:repo/?*" do 
+      
+      if authenticated? :private
+        repo = gh.repos params[:user], params[:repo]
+      else
+        repo = gh.repos params[:user], params[:repo]
+      end
+
+      raise Sinatra::NotFound if repo.message == "Not Found"
+
     end
 
     helpers do
       def protected! 
-        return current_user if authenticated?
+        if authenticated? :private
+          return
+        elsif authenticated?
+          return
+        end
         authenticate! 
       end
     end

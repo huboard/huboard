@@ -149,7 +149,7 @@ Create the app:
 
 or, if you'd prefer to name your app yourself:
 
-    heroku app:create <your-app-name> --stack cedar
+    heroku apps:create <your-app-name> --stack cedar
 
 ## 2. Register App For Github OAuth
 

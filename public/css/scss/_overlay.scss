@@ -1,5 +1,9 @@
-.fullscreen-overlay {
+body > .fullscreen-overlay {
   position: fixed;
+}
+
+.fullscreen-overlay {
+  position: absolute;
   top: 0px;
   left: 0px;
   // just above drawer
