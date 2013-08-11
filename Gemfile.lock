@@ -4,51 +4,50 @@ GEM
     activesupport (3.2.9)
       i18n (~> 0.6)
       multi_json (~> 1.0)
-    addressable (2.3.2)
+    addressable (2.3.5)
     bourbon (3.0.1)
       sass (>= 3.2.0)
       thor
     daemons (1.1.9)
+    dalli (2.6.4)
     encryptor (1.1.3)
     eventmachine (1.0.0)
-    faraday (0.8.4)
-      multipart-post (~> 1.1)
+    faraday (0.8.8)
+      multipart-post (~> 1.2.0)
     faraday_middleware (0.9.0)
       faraday (>= 0.7.4, < 0.9)
     foreman (0.60.2)
       thor (>= 0.13.6)
-    ghee (0.9.8)
+    ghee (0.9.10)
       faraday (~> 0.8)
       faraday_middleware (~> 0.9)
       hashie (~> 1.2)
+      highline (~> 1.6.15)
       multi_json (~> 1.3)
     hashie (1.2.0)
+    highline (1.6.19)
     i18n (0.6.1)
-    json (1.7.5)
     kgio (2.8.0)
-    mime-types (1.19)
-    multi_json (1.5.0)
-    multipart-post (1.1.5)
+    multi_json (1.7.8)
+    multipart-post (1.2.0)
+    netrc (0.7.7)
     newrelic_rpm (3.5.6.55)
-    oauth2 (0.5.2)
-      faraday (~> 0.7)
-      multi_json (~> 1.0)
-    octokit (1.19.0)
+    octokit (1.23.0)
       addressable (~> 2.2)
       faraday (~> 0.8)
       faraday_middleware (~> 0.9)
       hashie (~> 1.2)
       multi_json (~> 1.3)
-    rack (1.4.1)
+      netrc (~> 0.7.7)
+    rack (1.5.2)
     rack-cache (1.2)
       rack (>= 0.4)
     rack-no-www (0.0.2)
     rack-protection (1.2.0)
       rack
+    rack-robustness (1.1.0)
     raindrops (0.10.0)
     rdiscount (1.6.8)
-    rest-client (1.6.7)
-      mime-types (>= 1.16)
     sass (3.2.3)
     shotgun (0.9)
       rack (>= 1.0)
@@ -58,9 +57,10 @@ GEM
       tilt (~> 1.3, >= 1.3.3)
     sinatra-content-for (0.1)
       sinatra
-    sinatra_auth_github (0.12.0)
-      sinatra (~> 1.0)
-      warden-github (~> 0.12.0)
+    slim (2.0.1)
+      temple (~> 0.6.6)
+      tilt (>= 1.3.3, < 2.1)
+    temple (0.6.6)
     thin (1.5.0)
       daemons (>= 1.0.9)
       eventmachine (>= 0.12.6)
@@ -71,36 +71,37 @@ GEM
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
-    warden (1.2.1)
+    warden (1.2.3)
       rack (>= 1.0)
-    warden-github (0.12.0)
-      json (~> 1.5)
-      oauth2 (~> 0.5.2)
-      octokit (~> 1.19.0)
-      rest-client (~> 1.6.1)
-      warden (~> 1.0)
-      yajl-ruby (~> 1.1)
+    warden-github (0.14.0)
+      octokit (>= 1.22.0)
+      warden (> 1.0)
     watchr (0.7)
-    yajl-ruby (1.1.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   activesupport
+  addressable
   bourbon
+  dalli
   encryptor
   foreman
   ghee
+  kgio
   newrelic_rpm
+  octokit
   rack-cache
   rack-no-www
+  rack-robustness
   rdiscount
   sass
   shotgun
   sinatra (~> 1.3.0)
   sinatra-content-for (~> 0.1.0)
-  sinatra_auth_github
+  slim
   thin
   unicorn
+  warden-github
   watchr

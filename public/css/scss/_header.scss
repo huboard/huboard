@@ -1,5 +1,8 @@
 .header {
   font-size: 24px;
+  margin: 0;
+  margin-top: -60px;
+  padding: 10px 0;
 
   .author{
     color: #08C;
@@ -19,6 +22,11 @@
     font-size: 24px;
   }
 }
+
+.no-header {
+   margin-top: -30px;
+}
+
 %grow {
    @include transform(scale(1.25));
    @include transition (all 0.2s ease-in 0.1s);

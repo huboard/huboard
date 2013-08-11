@@ -5,14 +5,17 @@ define(["../collections/issues",
        "./headerView",
        "../../common/views/assigneeView",
        "../../common/events/postal",
-       "./cssView"], 
+       "./cssView",
+       "../../common/spinner"], 
        function (issues,
                  template,
                  columnView,
                  sidebarView,
                  headerView,
                  assigneeView,
-                 postal) {
+                 postal,
+                 cssView,
+                 spinner) {
 
   var calculateTallest = function (){
 
@@ -53,6 +56,11 @@ define(["../collections/issues",
         },
         initialize: function (params) {
            issues.bind("ondatareceived", this.onfetch, this);
+           
+           this.overlay = $("<div class='fullscreen-overlay'>");
+           $("#wrapper").append(this.overlay.show());
+           spinner.spin(this.overlay.get(0));
+
            issues.fetch(params.user, params.repo);
            this.user = params.user;
            this.repo = params.repo;
@@ -67,6 +75,7 @@ define(["../collections/issues",
           this.resizeColumns();
         },
         onfetch: function(data) {
+          this.overlay.remove();
 
            var board = $(_.template(template, data)),
                noneBoard = board.clone(),
