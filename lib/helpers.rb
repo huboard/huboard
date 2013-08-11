@@ -33,6 +33,13 @@ class Huboard
         github_user
       end
 
+      # The authenticated user object
+      #
+      # Supports a variety of methods, name, full_name, email, etc
+      def github_user
+        warden.user(:private) || warden.user || Hashie::Mash.new
+      end
+
       def github
         @github ||= Stint::Github.new(gh) 
       end

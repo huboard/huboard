@@ -98,12 +98,6 @@ class HuboardApplication < Sinatra::Base
       return :client_id => GITHUB_CONFIG[:client_id], :client_secret => GITHUB_CONFIG[:client_secret] 
     end
 
-    # The authenticated user object
-    #
-    # Supports a variety of methods, name, full_name, email, etc
-    def github_user
-      warden.user(:private) || warden.user || Hashie::Mash.new
-    end
   end
 
   set :raise_errors, true
