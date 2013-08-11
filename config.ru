@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'bundler'
 require 'rack/no-www'
+require 'rack-rescue'
 #require 'sinatra_auth_github'
 
 Bundler.require
@@ -16,6 +17,7 @@ configure :production do
   require "newrelic_rpm"
 end
 
+use Rack::Rescue
 use Rack::NoWWW
 use Rack::Static, :urls => [ "/font","/img", "/scripts","/css"], :root => "public"
 

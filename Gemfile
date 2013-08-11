@@ -13,6 +13,7 @@ gem 'addressable'
 gem 'kgio'
 gem 'dalli'
 gem 'octokit'
+gem 'rack-rescue'
 
 group :development do
   gem 'watchr'
