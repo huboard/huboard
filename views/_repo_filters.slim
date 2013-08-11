@@ -1,0 +1,15 @@
+ul.nav.nav-tabs
+  li.pull-right
+    a href="/repositories/private/#{user.login}"
+      span.label.label-warning Private
+  li.pull-right
+    a href="/repositories/public/#{user.login}"
+      span.label.label-success Public
+  - if is_current_user
+    li.active
+      a href="/" Repositories
+  - else
+    li.active
+      a href="/#{user.login}" Repositories
+
+

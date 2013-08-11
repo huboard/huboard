@@ -4,30 +4,20 @@
     <%= partial :vcard, :locals => {user: @user || current_user } %>
   </div>
   <div class="span9">
-    <ul class="nav nav-tabs">
-      <li class="pull-right">
-      <a href="/repositories/private/<%= @user ? @user.login : current_user.login %>" ><span class="label label-warning">Private</span></a>
-      </li>
-      <li class="pull-right">
-      <a href="/repositories/public/<%= @user ? @user.login : current_user.login %>"><span class="label label-success">Public<span></a>
-          </li>
-          <li class="active" >
-          <a href="/">Repositories</a>
-              </li>
-            </ul>
-            <div>
-              <ul class="repos drop-shadow ">
-                <% @repos.each do |repo| %>
-                  <li class="repo">
-                  <a href="<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/backlog" %>"><span>backlog</span></a> 
-                  <a class="board" href="<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/board" %>"><span>open issues</span><strong><%=repo["open_issues"]%></strong></a> 
-                  <span><a href='<%= "/#{repo["owner"]["login"]}" %>'><%= repo["owner"]["login"] %></a> / <a href='<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/board" %>'><%= repo["name"] %></a></span>
-                  </li>
-                <% end %>
-              </ul>
-            </div>
+    <div>
+      <%= partial :repo_filters, :locals => { user: @user || current_user, is_current_user: @user.nil? } %>
+      <ul class="repos drop-shadow ">
+        <% @repos.each do |repo| %>
+          <li class="repo">
+        <a href="<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/backlog" %>"><span>backlog</span></a> 
+        <a class="board" href="<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/board" %>"><span>open issues</span><strong><%=repo["open_issues"]%></strong></a> 
+        <span><a href='<%= "/#{repo["owner"]["login"]}" %>'><%= repo["owner"]["login"] %></a> / <a href='<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/board" %>'><%= repo["name"] %></a></span>
+        </li>
+      <% end %>
+      </ul>
+    </div>
 
-          </div>
+  </div>
 
-        </div>
+</div>
 

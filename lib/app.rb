@@ -1,5 +1,6 @@
 require 'rdiscount'
 require 'sinatra'
+require 'slim'
 require 'sinatra/content_for'
 require 'encryptor'
 require 'base64'
