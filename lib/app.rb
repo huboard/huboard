@@ -18,7 +18,6 @@ class Huboard
 
     before "/:user/:repo/?*" do 
 
-
       return if ["repositories","images", "about", "site" ,"login"].include? params[:user]
       
       if authenticated? :private
@@ -28,20 +27,19 @@ class Huboard
         repo = gh.repos params[:user], params[:repo]
         halt([401, "Repo not found"]) if repo.message == "Not Found"
       end
-
-
     end
 
     helpers do
       def protected!(*args)
         return current_user if authenticated?(*args)
         authenticate!(*args)
-        #HAX! TODO remove
-        #ghee = Ghee.new({ :basic_auth => {:user_name => settings.user_name, :password => settings.password}})
-        #Stint::Github.new(ghee).add_to_team(settings.team_id, current_user.login) unless github_team_access? settings.team_id
-        #current_user
-        #github_team_authenticate! team_id
       end
+    end
+
+
+    get '/logout' do
+      logout!
+      redirect '/'
     end
 
     get '/login' do
@@ -49,10 +47,14 @@ class Huboard
       erb :login, :layout => :marketing
     end
 
+    get '/login/private/?' do
+      authenticate! :scope => :private
+      redirect params[:redirect_to] || '/'
+    end
 
-    get '/logout' do
-      logout!
-      redirect '/'
+    get '/login/public/?' do
+      authenticate!
+      redirect params[:redirect_to] || '/'
     end
 
     get '/' do 
@@ -63,13 +65,20 @@ class Huboard
       erb :index
     end
 
-    get '/login/private/?' do
-      authenticate! :scope => :private
-      redirect params[:redirect_to] || '/'
-    end
-    get '/login/public/?' do
-      authenticate!
-      redirect params[:redirect_to] || '/'
+    get '/:user/?' do 
+      user =   gh.users(params[:user]).raw
+      raise Sinatra::NotFound unless user.status == 200 
+      @parameters = params
+
+      if logged_in? && current_user.login == params[:user]
+        @repos = huboard.repos
+      else
+        @repos = huboard.repos_by_user(params[:user])
+      end
+
+      @user = user.body
+      @private = nil
+      erb :index
     end
 
     get "/repositories/public/:user/?" do
@@ -103,23 +112,6 @@ class Huboard
       @private = 1
       erb :index
 
-    end                                                
-
-
-    get '/:user/?' do 
-      user =   gh.users(params[:user]).raw
-      raise Sinatra::NotFound unless user.status == 200 
-      @parameters = params
-
-      if logged_in? && current_user.login == params[:user]
-        @repos = huboard.repos
-      else
-        @repos = huboard.repos_by_user(params[:user])
-      end
-
-      @user = user.body
-      @private = nil
-      erb :index
     end
 
     get '/:user/:repo/?' do 
