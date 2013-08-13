@@ -28,7 +28,9 @@ class Huboard
 
       def current_state
         r = Huboard.column_pattern
-        self.labels.sort_by {|l| l["name"]}.reverse.find {|x| r.match(x["name"])}  || {"name" => "__nil__"}
+        nil_label = {"name" => "__nil__"}
+        return nil_label if self.labels.nil?
+        self.labels.sort_by {|l| l["name"]}.reverse.find {|x| r.match(x["name"])}  || nil_label
       end
 
       def order
@@ -75,16 +77,16 @@ class Huboard
       end
 
       def patch(hash)
-        updated = client.patch hash 
+        updated = client.patch hash
         updated.extend(Card).merge!(:repo => repo)
       end
 
       def move(index)
         board = Huboard::Board.new(self[:repo][:owner][:login], self[:repo][:name], @connection_factory)
         column_labels = board.column_labels
+        self.labels = self.labels.delete_if { |l| Huboard.column_pattern.match l.name }
         new_state = column_labels.find { |l| /#{index}\s*- *.+/.match l.name }
-          self.labels << new_state unless new_state.nil?
-        self.labels = self.labels.delete_if { |l| l["name"] == self[:current_state]["name"]}
+        self.labels << new_state unless new_state.nil?
         patch "labels" => self.labels
       end
 
@@ -101,7 +103,7 @@ class Huboard
       def embed_data(data = nil)
         if !data
           r = /@huboard:(.*)/
-            match = r.match self.body
+          match = r.match self.body
           return { } if match.nil?
 
           begin
@@ -136,15 +138,15 @@ class Huboard
       end
 
       def attach_client connection
-          @connection_factory = connection 
+        @connection_factory = connection 
       end
 
       def gh
-          @connection_factory.call
+        @connection_factory.call
       end
 
       def client
-         gh.repos(self[:repo][:owner][:login], self[:repo][:name]).milestones(self.number)
+        gh.repos(self[:repo][:owner][:login], self[:repo][:name]).milestones(self.number)
       end
 
       def patch(hash)
@@ -155,7 +157,7 @@ class Huboard
       def embed_data(data = nil)
         if !data
           r = /@huboard:(.*)/
-            match = r.match self.description
+          match = r.match self.description
           return { } if match.nil?
 
           begin
