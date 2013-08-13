@@ -52,7 +52,11 @@ class Huboard
       end
 
       def other_labels
-        self.labels.reject {|l| Huboard.all_patterns.any? {|p| p.match l.name }}
+        begin
+          self.labels.reject {|l| Huboard.all_patterns.any? {|p| p.match l.name }}
+        rescue
+          return []
+        end
       end
 
       def attach_client connection
@@ -107,7 +111,7 @@ class Huboard
       def embed_data(data = nil)
         if !data
           r = /@huboard:(.*)/
-          match = r.match self.body
+          match = r.match(self.body || "")
           return { } if match.nil?
 
           begin
