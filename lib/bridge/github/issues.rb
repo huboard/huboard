@@ -29,9 +29,11 @@ class Huboard
       def current_state
         r = Huboard.column_pattern
         nil_label = {"name" => "__nil__"}
-        return nil_label if self.respond_to?("labels")
-        return nil_label if self.labels.nil?
-        self.labels.sort_by {|l| l["name"]}.reverse.find {|x| r.match(x["name"])}  || nil_label
+        begin
+          return self.labels.sort_by {|l| l["name"]}.reverse.find {|x| r.match(x["name"])}  || nil_label
+        rescue
+          return nil_label
+        end
       end
 
       def order
