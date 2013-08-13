@@ -9,6 +9,7 @@ class Huboard
     end
 
     def issue(number)
+      raise "number is nil" unless number
       issue = gh.issues(number).extend(Card).merge!({:repo => {:owner => {:login => user}, :name => repo }})
       issue.attach_client connection_factory
       issue
