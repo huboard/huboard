@@ -16,7 +16,7 @@ define(["text!../templates/column.html","./cardView","../../common/events/postal
     tagName: "div",
     className: "column",
     events: {
-      "reorder":"reordered"
+      "reorderMilestone":"reordered"
     },
     reordered: function(ev,data) {
        this.milestone.save(data);

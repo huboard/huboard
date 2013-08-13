@@ -14,6 +14,10 @@ class Huboard
         @dalli ||= Dalli::Client.new(ENV["CACHE_SERVERS"].split(","), @options)
       end
 
+      def clear(key)
+        dalli.delete(key.downcase)
+      end
+
       def read(key, app, env)
         if cached = dalli.get(key.downcase)
           cached = Marshal.load(cached)
@@ -81,6 +85,9 @@ class Huboard
             response = cache.fetch(cache_key(env), @app, env)
             finalize_response(response, env)
           end
+        elsif :patch == env[:method] || :post == env[:method] || :delete == env[:method]
+          cache.clear(cache_key(env))
+          @app.call(env)
         else
           @app.call(env)
         end

@@ -149,7 +149,7 @@ define(["../collections/issues",
          $(ui.item).addClass("ui-state-dragging");
         },
         onStop : function(ev,ui){
-          var elements = $(".backlog > div", this.el),
+          var elements = $(".backlog.ui-sortable > div", this.el),
           index = elements.index(ui.item);
 
           if(index === -1) { return; }
@@ -184,7 +184,7 @@ define(["../collections/issues",
           }
 
           currentElement
-            .trigger("reorder", {order:currentData._data.order})  
+            .trigger("reorderMilestone", {order:currentData._data.order})  
             .data("milestone", currentData);  
 
         }

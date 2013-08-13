@@ -16,8 +16,7 @@ define(function(){
       }
       $.post("/api/"+ this.user + "/" + this.repo + "/reordermilestone",{
         index : data.order,
-        status: data.status,
-        milestone: this.attributes
+        number: this.attributes.number
       },function (response){
         // console.log(response);
       });
