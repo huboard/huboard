@@ -49,11 +49,14 @@ class Huboard
     end
 
     get '/:user/:repo/backlog' do 
-      return json pebble.build_backlog(params[:user], params[:repo])
+      backlog =  pebble.build_backlog(params[:user], params[:repo])
+      backlog.merge! :logged_in => logged_in?
+      return json backlog
     end
 
     get '/:user/:repo/board' do 
       board = pebble.board(params[:user], params[:repo])
+      board.merge! :logged_in => logged_in?
       return json board
     end
 

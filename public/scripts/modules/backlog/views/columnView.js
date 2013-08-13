@@ -5,6 +5,7 @@ define(["text!../templates/column.html","./cardView","../../common/events/postal
       this.column = params.column;
       this.repo = params.repo;
       this.user = params.user;
+      this.logged_in = params.logged_in;
 
       this.milestone = new milestone({model: this.column.milestone, user: params.user, repo: params.repo});
 
@@ -51,16 +52,18 @@ define(["text!../templates/column.html","./cardView","../../common/events/postal
         .find("ul")
         .append(cards);
 
-      $("ul",this.el).sortable({
-         helper: 'clone',
-         connectWith: ".sortable",
-         placeholder: "ui-sortable-placeholder",
-         receive: $.proxy(this.onReceive,this),
-         remove: $.proxy(this.onRemove, this),
-         over: $.proxy(this.onOver, this),
-         update: $.proxy(this.onStop, this),
-         out: $.proxy(this.onOut, this)
-      });
+      if (this.logged_in) {
+        $("ul",this.el).sortable({
+           helper: 'clone',
+           connectWith: ".sortable",
+           placeholder: "ui-sortable-placeholder",
+           receive: $.proxy(this.onReceive,this),
+           remove: $.proxy(this.onRemove, this),
+           over: $.proxy(this.onOver, this),
+           update: $.proxy(this.onStop, this),
+           out: $.proxy(this.onOut, this)
+        });
+      }
 
       return this;
     },

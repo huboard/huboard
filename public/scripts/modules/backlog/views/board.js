@@ -85,26 +85,27 @@ define(["../collections/issues",
                assigneesView = new assigneeView({data:data, params: this.params}),
                self = this;
            
-           $(noneBoard).append(new columnView({column: noneColumn, user:this.user,repo:this.repo}).render().el);
+           $(noneBoard).append(new columnView({logged_in: data.logged_in, column: noneColumn, user:this.user,repo:this.repo}).render().el);
 
            _.each(data.milestones, function (label){
-               var column = new columnView({column: label, user:self.user,repo:self.repo});
+               var column = new columnView({logged_in: data.logged_in, column: label, user:self.user,repo:self.repo});
                var markup = $(column.render().el).css({width:260 + "px"});
                $(board).append(markup);
            });
 
            $("#stage").append(board);
-
-           $(board).sortable({
-              axis: "x",
-              handle: "h3",
-              cursor: "move",
-               stop: $.proxy(this.fullStop,this),
-               start: $.proxy(this.onStart,this),
-               remove: $.proxy(this.onRemove, this),
-               over: $.proxy(this.onOver, this),
-               update: $.proxy(this.onStop, this)
-           });
+           if (data.logged_in) {
+             $(board).sortable({
+                axis: "x",
+                handle: "h3",
+                cursor: "move",
+                 stop: $.proxy(this.fullStop,this),
+                 start: $.proxy(this.onStart,this),
+                 remove: $.proxy(this.onRemove, this),
+                 over: $.proxy(this.onOver, this),
+                 update: $.proxy(this.onStop, this)
+             });
+           }
 
            $("#drawer","#main-stage")
               .append(noneBoard)

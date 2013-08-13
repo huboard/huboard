@@ -6,6 +6,7 @@ define(["../collections/issues","text!../templates/column.html","./cardView","..
       this.repo = params.repo;
       this.user = params.user;
       this.latched = false;
+      this.logged_in = params.logged_in;
 
       postal.subscribe("Moved.Socket." + params.column.index, $.proxy(this.onSocket,this));
       postal.socket(params.user + "/" + params.repo, "Opened." + params.column.index, $.proxy(this.onOpened,this))
@@ -49,16 +50,18 @@ define(["../collections/issues","text!../templates/column.html","./cardView","..
 
       this.el = column;
 
-      $("ul",this.el).sortable({
-         helper: 'clone',
-         connectWith: ".sortable",
-         placeholder: "ui-sortable-placeholder",
-         receive: $.proxy(this.onReceive,this),
-         remove: $.proxy(this.onRemove, this),
-         over: $.proxy(this.onOver, this),
-         update: $.proxy(this.onStop, this),
-         out: $.proxy(this.onOut, this)
-      });
+      if(this.logged_in){
+        $("ul",this.el).sortable({
+           helper: 'clone',
+           connectWith: ".sortable",
+           placeholder: "ui-sortable-placeholder",
+           receive: $.proxy(this.onReceive,this),
+           remove: $.proxy(this.onRemove, this),
+           over: $.proxy(this.onOver, this),
+           update: $.proxy(this.onStop, this),
+           out: $.proxy(this.onOut, this)
+        });
+      }
 
       return this;
     },
