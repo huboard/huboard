@@ -3,17 +3,15 @@
   <head>
     <title><% yield_content :title %>Huboard</title>
     <link rel="shortcut icon" type="image/png" href="/img/favicon.png" />
-    <% if @parameters[:socket_backend] %>
+    <% if @parameters[:socket_backend] && logged_in? %>
       <script src="<%= @parameters[:socket_backend] %>/socket.io/socket.io.js"></script>
       <script src="/scripts/modules/require.js"></script>
-      <% if logged_in? %>
         <script>
           define("socket",function() {
             return window.io ? io.connect("<%= @parameters[:socket_backend] %>?token=<%= encrypted_token %>") : null;
           });
 
         </script>
-      <% end %>
     <% else %>
       <script src="/scripts/modules/require.js"></script>
       <script>
