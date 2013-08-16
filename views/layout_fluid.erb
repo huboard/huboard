@@ -6,12 +6,14 @@
     <% if @parameters[:socket_backend] %>
       <script src="<%= @parameters[:socket_backend] %>/socket.io/socket.io.js"></script>
       <script src="/scripts/modules/require.js"></script>
-      <script>
-        define("socket",function() {
-          return window.io ? io.connect("<%= @parameters[:socket_backend] %>?token=<%= encrypted_token %>") : null;
-        });
+      <% if logged_in? %>
+        <script>
+          define("socket",function() {
+            return window.io ? io.connect("<%= @parameters[:socket_backend] %>?token=<%= encrypted_token %>") : null;
+          });
 
-      </script>
+        </script>
+      <% end %>
     <% else %>
       <script src="/scripts/modules/require.js"></script>
       <script>
