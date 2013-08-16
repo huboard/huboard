@@ -1,5 +1,21 @@
 .permissions{
+  .well {
+    h5 {
+      color: #999;
+      margin: -19px;
+      margin-bottom: 10px;
+      padding: 19px;
+      border-bottom: 1px solid #ccc;
+    }
+    .body {
 
+
+    }
+  }
+
+  .hb-button {
+    display:block;
+  }
   .permission {
 
     padding: 3px 0;
@@ -8,10 +24,6 @@
   .group {
     margin-bottom: 10px;
     @include clearfix;
-    h5 {
-
-      color: #999;
-    }
   }
 
   blockquote {
