@@ -16,7 +16,13 @@
           <li class="repo">
         <a href="<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/backlog" %>"><span>backlog</span></a> 
         <a class="board" href="<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/board" %>"><span>open issues</span><strong><%=repo["open_issues"]%></strong></a> 
-        <span><a href='<%= "/#{repo["owner"]["login"]}" %>'><%= repo["owner"]["login"] %></a> / <a href='<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/board" %>'><%= repo["name"] %></a></span>
+        <span>
+          <% if repo.private %>
+            <i class="ui-icon-lock icon private"></i>
+          <% else %>
+            <i class="ui-icon-note icon public"></i>
+            <%end%>
+        <a href='<%= "/#{repo["owner"]["login"]}" %>'><%= repo["owner"]["login"] %></a> / <a href='<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/board" %>'><%= repo["name"] %></a></span>
         </li>
       <% end %>
       </ul>

@@ -3,6 +3,27 @@
    img {
       @include box-sizing(border-box);
    }
+   h1 {
+    small {
+     display:block;
+    }
+   }
+}
+
+.repo {
+  .icon {
+    line-height: 20px;
+
+    &.public {
+      color: #7cc45c;
+      color: rgba(#7cc45c, 0.7);
+      
+    }
+    &.private {
+      color:#ee9c49;
+      color:rgba(#ee9c49, 0.7);
+    }
+  }
 }
 
 ul.repos, ul.repos li {
