@@ -100,6 +100,11 @@ class HuboardApplication < Sinatra::Base
 
   end
 
+  configure :development do
+    enable :logging
+  end
+
+
   set :raise_errors, true
 
   use Rack::Robustness do |g|

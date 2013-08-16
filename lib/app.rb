@@ -11,6 +11,7 @@ class Huboard
     #register Sinatra::Auth::Github
 
     PUBLIC_URLS = ['/', '/logout','/webhook']
+    RESERVED_URLS = %w{ repositories images about site login logout favicon.ico }
 
     before do
 
@@ -18,7 +19,7 @@ class Huboard
 
     before "/:user/:repo/?*" do 
 
-      return if ["repositories","images", "about", "site" ,"login"].include? params[:user]
+      return if RESERVED_URLS.include? params[:user]
       
       if authenticated? :private
         repo = gh.repos params[:user], params[:repo]
@@ -71,6 +72,16 @@ class Huboard
       @repos = huboard.all_repos
       @private = nil
       erb :index
+    end
+
+    get "/favicon.ico" do
+      path = Path.expand_path("../public/img/favicon.ico",__FILE__)
+
+      response = [ ::File.open(path, 'rb') { |file| file.read } ]
+
+      headers["Content-Length"] = response.join.bytesize.to_s
+      headers["Content-Type"]   = "image/vnd.microsoft.icon"
+      [status, headers, response]
     end
 
     get '/:user/?' do 
