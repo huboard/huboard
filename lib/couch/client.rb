@@ -147,8 +147,17 @@ class Huboard
       end
 
     end
+
     def users
       return Users.new(connection,  :type => "user" )
+    end
+
+    class User < ResourceProxy
+      identify_by :id
+    end
+
+    def user
+      return User.new(connection,  :type => "user", :from => "login" )
     end
 
     class Users < ResourceProxy
@@ -195,10 +204,14 @@ class Huboard
       theuser = api.users(user)
 
       begin
+        puts "saving to couch"
+        couch.user.get_or_create api.user
         couch.users.get_or_create theuser if theuser.type == "User"
         couch.orgs.get_or_create theuser if theuser.type == "Organization"
         couch.repos.get_or_create therepo 
-      rescue
+      rescue Exception => e
+        puts "error with couch"
+        puts e.message
         return board_method.bind(self).call
       end
 
