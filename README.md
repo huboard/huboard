@@ -124,6 +124,11 @@ or
 
 **Please use the latest stable tag if you are hosting your own instance of huboard.**
 
+# Warning - the deployment instructions are out of date. 
+# Huboard now requires memcached and couchdb. Please help me update the
+# documentation
+
+
 [huboard.com](http://huboard.com) is fully operational and free. If you feel the need to host your own instance
 please use the latest stable tag. The master branch doesn't always reflect the deployed version on huboard.com and
 very difficult to support and troubleshoot if you run into any issues.
