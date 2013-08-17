@@ -1,9 +1,11 @@
 require 'rubygems'
 require 'bundler'
+
+Bundler.setup
+
 require 'rack/no-www'
 require 'rack/robustness'
 
-Bundler.require
 
 require './lib/helpers'
 require './lib/base'
