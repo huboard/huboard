@@ -41,13 +41,21 @@ define(["text!../templates/card.html","../models/card", "../../common/events/pos
       this.remove();
       postal.publish("Closed.Issue",{card: this});
     },
+    setLastMoved: function (ev) {
+      this._lastMoved = ev;
+    },
     fullscreen: function (ev) {
+      if(this._lastMoved && this._lastMoved.timeStamp == ev.timeStamp) {
+        ev.stopPropagation();
+        return;
+      }
       postal.publish("Card.Fullscreen",this.issue);
     },
     render: function(){
       $(this.el).html( _.template(template, this.issue.attributes))
       .droppable({scope:"assignee",hoverClass:"assignee-accept"})
-      .data("issue",this.issue.attributes);
+      .data("issue",this.issue.attributes)
+      .data("_view", this);
 
       if(this.issue.attributes.repo.color){
 

@@ -54,18 +54,21 @@ define(["text!../templates/column.html","./cardView","../../common/events/postal
 
       if (this.logged_in) {
         $("ul",this.el).sortable({
-           helper: 'clone',
            connectWith: ".sortable",
            placeholder: "ui-sortable-placeholder",
            receive: $.proxy(this.onReceive,this),
            remove: $.proxy(this.onRemove, this),
            over: $.proxy(this.onOver, this),
            update: $.proxy(this.onStop, this),
-           out: $.proxy(this.onOut, this)
+           out: $.proxy(this.onOut, this),
+           stop: $.proxy(this.onFullStop, this)
         });
       }
 
       return this;
+    },
+    onFullStop: function(ev, ui){
+      $(ui.item).data("_view").setLastMoved(ev);
     },
     onReceive: function(ev, ui){
       $(ui.item).trigger("moved",this.column);
