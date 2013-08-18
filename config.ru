@@ -20,7 +20,7 @@ end
 
 
 use Rack::NoWWW
-use Rack::Static, :urls => [ "/font","/img", "/scripts","/css"], :root => "public"
+use Rack::Static, :urls => ["/files", "/font","/img", "/scripts","/css"], :root => "public"
 
 map "/api" do
   run Huboard::API
