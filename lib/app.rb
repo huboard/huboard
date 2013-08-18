@@ -75,7 +75,8 @@ class Huboard
     end
 
     get "/favicon.ico" do
-      path = File.expand_path("../public/img/favicon.ico",__FILE__)
+      puts "hello"
+      path = File.expand_path("../../public/img/favicon.ico",__FILE__)
 
       response = [ ::File.open(path, 'rb') { |file| file.read } ]
 

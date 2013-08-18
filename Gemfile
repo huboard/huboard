@@ -23,6 +23,7 @@ group :development do
   gem 'sass'
   gem 'bourbon'
   gem 'thin'
+  gem 'heroku'
 end
 
 group :production do
