@@ -1,3 +1,4 @@
+require 'dalli'
 require 'forwardable'
 require 'faraday_middleware/addressable_patch'
 
