@@ -40,7 +40,8 @@ class Huboard
           conn.use ClientId, params unless token || access_token
           conn.use Mimetype
           conn.request :retry, 3
-          conn.use Caching
+          # disable cache because github api is broken
+          conn.use Caching unless token || access_token
         end
       }
     end
