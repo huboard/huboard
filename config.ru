@@ -24,8 +24,8 @@ use Rack::Static, :urls => ["/files", "/font","/img", "/scripts","/css"], :root 
 
 map "/api" do
   run Huboard::API
-
 end
+
 map "/" do 
   run Huboard::App
 end

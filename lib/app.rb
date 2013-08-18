@@ -11,7 +11,7 @@ class Huboard
     #register Sinatra::Auth::Github
 
     PUBLIC_URLS = ['/', '/logout','/webhook']
-    RESERVED_URLS = %w{ repositories images about site login logout favicon.ico }
+    RESERVED_URLS = %w{ repositories images about site login logout favicon.ico robots.txt }
 
     before do
 
@@ -82,6 +82,17 @@ class Huboard
 
       headers["Content-Length"] = response.join.bytesize.to_s
       headers["Content-Type"]   = "image/vnd.microsoft.icon"
+      [status, headers, response]
+    end
+
+    get "/robots.txt" do
+      puts "hello"
+      path = File.expand_path("../../public/files/robots.txt",__FILE__)
+
+      response = [ ::File.open(path, 'rb') { |file| file.read } ]
+
+      headers["Content-Length"] = response.join.bytesize.to_s
+      headers["Content-Type"]   = "text/plain"
       [status, headers, response]
     end
 
