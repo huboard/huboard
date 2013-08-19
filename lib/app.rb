@@ -145,7 +145,7 @@ class Huboard
 
     end
 
-    get '/:user/:repo/?' do 
+    get '/:user/:repo/settings/?' do 
       redirect "/#{params[:user]}/#{params[:repo]}/board/create" unless huboard.board(params[:user], params[:repo]).has_board?
 
       @parameters = params.merge({ :socket_backend => socket_backend})
@@ -166,6 +166,9 @@ class Huboard
       @parameters = params.merge({ :socket_backend => socket_backend})
       erb :backlog, :layout => :layout_fluid
     end
+    get '/:user/:repo/board/?' do 
+      redirect "/#{params[:user]}/#{params[:repo]}"
+    end
 
     get '/:user/:repo/board/create' do
       @parameters = params
@@ -178,7 +181,7 @@ class Huboard
       redirect "/#{params[:user]}/#{params[:repo]}/board"
     end
 
-    get '/:user/:repo/board/?' do 
+    get '/:user/:repo/?' do 
       redirect "/#{params[:user]}/#{params[:repo]}/board/create" unless huboard.board(params[:user], params[:repo]).has_board?
       @parameters = params.merge({ :socket_backend => socket_backend})
       erb :board, :layout => :layout_fluid
