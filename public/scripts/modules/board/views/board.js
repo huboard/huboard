@@ -57,6 +57,7 @@ define(["../collections/issues",
         initialize: function (params) {
            issues.bind("ondatareceived", this.onfetch, this);
            issues.bind("afterreceived", this.resizeColumns, this)
+           issues.bind("afterreceived", this.doneLoading, this)
 
            this.overlay = $("<div class='fullscreen-overlay'>");
            $("#wrapper").append(this.overlay.show());
@@ -77,8 +78,10 @@ define(["../collections/issues",
         onClosed: function() {
           this.resizeColumns();
         },
-        onfetch: function(data) {
+        doneLoading: function() {
           this.overlay.remove();
+        },
+        onfetch: function(data) {
 
            var board = $(_.template(template, data)),
                noneBoard = board.clone(),
