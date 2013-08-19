@@ -1,6 +1,7 @@
 require 'dalli'
 require 'forwardable'
 require 'faraday_middleware/addressable_patch'
+require 'digest/md5'
 
 class Huboard
   class Client
@@ -16,17 +17,20 @@ class Huboard
       end
 
       def clear(key)
-        dalli.delete(key.downcase)
+        dalli.delete(key)
       end
 
       def read(key, app, env)
-        if cached = dalli.get(key.downcase)
+        if cached = dalli.get(key)
           cached = Marshal.load(cached)
           etag =  cached.headers[:etag]
+
           env[:request_headers].merge!('If-None-Match' => etag)
+
           response = app.call(env)
+
           if response.status == 304
-            puts "cache hit #{key}"
+            puts "cache hit #{key} = #{cached.headers[:etag]} #{response.headers[:etag]}"
             return cached
           elsif response.status == 200
             puts "cache bust #{key}"
@@ -44,7 +48,7 @@ class Huboard
       end
 
       def write(key, data)
-        dalli.set(key.downcase, Marshal.dump(data))
+        dalli.set(key, Marshal.dump(data))
         data
       end
 
@@ -102,7 +106,7 @@ class Huboard
           url.query = build_query params
         end
         url.normalize!
-        url.request_uri
+        Digest::MD5.hexdigest(url.request_uri)
       end
 
       def params_to_ignore
