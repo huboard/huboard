@@ -24,7 +24,7 @@ define(["text!../../templates/actions/labels.html"], function (template) {
         },
         update : function (ev, ui) {
           var li = $(ev.currentTarget),
-          span = li.find("span").toggleClass("active"),
+          span = li.toggleClass("active"),
           input = li.find("input");
 
           input.prop("checked", !input.prop("checked"));
