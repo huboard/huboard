@@ -202,7 +202,7 @@ class Huboard
         issue = super(index)
         begin
           couch.connection.post("./",{
-            :github => old_self.merge(issue),
+            :github => {:issue => old_self.merge(issue), :user => gh.user.to_hash},
             :meta => { :type => "event", :name => "card:move" },
             :timestamp => Time.now.utc.iso8601
           }).body
