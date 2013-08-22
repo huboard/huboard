@@ -1,5 +1,6 @@
-
+require 'time'
 require "json/ext"
+
 
 class Huboard
 
@@ -20,7 +21,7 @@ class Huboard
       end
 
       def save(doc)
-        clone = doc.clone.merge "_id" => escape_docid(doc), "meta" => meta
+        clone = doc.clone.merge "_id" => escape_docid(doc), "meta" => meta, :timestamp => Time.now.utc.iso8601
 
         response = connection.get(clone["_id"])
 
@@ -188,6 +189,29 @@ class Huboard
       identify_by :id
     end
 
+  end
+
+  module Issues
+    module Card
+      def couch
+        @couch ||= Huboard::Couch.new :base_url => ENV["CLOUDANT_URL"]
+      end
+
+      def move(index)
+        old_self = self
+        issue = super(index)
+        begin
+          couch.connection.post("./",{
+            :github => old_self.merge(issue),
+            :meta => { :type => "event", :name => "card:move" },
+            :timestamp => Time.now.utc.iso8601
+          }).body
+        rescue
+
+        end
+        issue
+      end
+    end
   end
 
   class Board

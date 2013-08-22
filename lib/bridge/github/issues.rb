@@ -1,3 +1,9 @@
+class Module
+  def overridable(&blk)
+    mod = Module.new(&blk)
+    include mod
+  end
+end
 class Huboard
 
   module Issues
@@ -89,13 +95,15 @@ class Huboard
         updated.extend(Card).merge!(:repo => repo)
       end
 
-      def move(index)
-        board = Huboard::Board.new(self[:repo][:owner][:login], self[:repo][:name], @connection_factory)
-        column_labels = board.column_labels
-        self.labels = self.labels.delete_if { |l| Huboard.column_pattern.match l.name }
-        new_state = column_labels.find { |l| /#{index}\s*- *.+/.match l.name }
-        self.labels << new_state unless new_state.nil?
-        patch "labels" => self.labels
+      overridable do
+        def move(index)
+          board = Huboard::Board.new(self[:repo][:owner][:login], self[:repo][:name], @connection_factory)
+          column_labels = board.column_labels
+          self.labels = self.labels.delete_if { |l| Huboard.column_pattern.match l.name }
+          new_state = column_labels.find { |l| /#{index}\s*- *.+/.match l.name }
+          self.labels << new_state unless new_state.nil?
+          patch "labels" => self.labels
+        end
       end
 
       def close

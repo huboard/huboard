@@ -30,10 +30,8 @@ class Huboard
           response = app.call(env)
 
           if response.status == 304
-            puts "cache hit #{key} = #{cached.headers[:etag]} #{response.headers[:etag]}"
             return cached
           elsif response.status == 200
-            puts "cache bust #{key}"
             write(key, response)
             return response
           end
