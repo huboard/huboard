@@ -123,9 +123,13 @@ body > .fullscreen-overlay {
 .fullscreen-card {
   .card-label {
     @extend %card-shadow;
+    &.active {
+      box-shadow: none;
+      border-color: transparent;
+    }
   }
   .card-comment {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     > a {
       padding: 1px;
       border: 1px solid hsla(0,0%,87%,0.8);
