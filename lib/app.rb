@@ -51,7 +51,7 @@ class Huboard
       return erb :terms_of_service, :layout => :marketing unless authenticated?
     end
 
-    get '/login' do
+    get '/login/?' do
       @parameters = params
       erb :login, :layout => :marketing
     end
@@ -162,7 +162,7 @@ class Huboard
       erb :repo
     end
 
-    get '/:user/:repo/backlog' do 
+    get '/:user/:repo/backlog/?' do 
       @parameters = params.merge({ :socket_backend => socket_backend})
       erb :backlog, :layout => :layout_fluid
     end
@@ -170,7 +170,7 @@ class Huboard
       redirect "/#{params[:user]}/#{params[:repo]}"
     end
 
-    get '/:user/:repo/board/create' do
+    get '/:user/:repo/board/create/?' do
       @parameters = params
       erb :create_board
     end
@@ -188,13 +188,13 @@ class Huboard
     end
 
 
-    get '/:user/:repo/hook' do 
+    get '/:user/:repo/hook/?' do 
       raise Sinatra::NotFound unless huboard.board(params[:user], params[:repo]).has_board?
       @parameters = params
       json(pebble.create_hook( params[:user], params[:repo], "#{socket_backend}/issues/webhook?token=#{encrypted_token}")) unless socket_backend.nil?
     end
 
-    post '/webhook' do 
+    post '/webhook/?' do 
       begin
         token =  decrypt_token( params[:token] )
         ghee = gh(token)
