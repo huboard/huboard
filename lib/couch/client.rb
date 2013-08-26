@@ -1,6 +1,6 @@
-
+require 'time'
 require "json/ext"
-require "couchrest"
+
 
 class Huboard
 
@@ -21,7 +21,7 @@ class Huboard
       end
 
       def save(doc)
-        clone = doc.clone.merge "_id" => escape_docid(doc), "meta" => meta
+        clone = doc.clone.merge "_id" => escape_docid(doc), "meta" => meta, :timestamp => Time.now.utc.iso8601
 
         response = connection.get(clone["_id"])
 
@@ -75,14 +75,11 @@ class Huboard
 
     class Connection < Faraday::Connection
 
-      attr_reader :db
 
       # Instantiates connection, accepts an options hash
       # for authenticated access
       #
       def initialize(hash={})
-        puts "initializing db"
-        @db = CouchRest.database!("#{hash[:base_url] || "http://127.0.0.1:5984" }/huboard")
 
         super("#{hash[:base_url] || "http://127.0.0.1:5984" }/huboard") do |builder|
           yield builder if block_given?
@@ -164,8 +161,17 @@ class Huboard
       end
 
     end
+
     def users
       return Users.new(connection,  :type => "user" )
+    end
+
+    class User < ResourceProxy
+      identify_by :id
+    end
+
+    def user
+      return User.new(connection,  :type => "user", :from => "login" )
     end
 
     class Users < ResourceProxy
@@ -214,6 +220,29 @@ class Huboard
 
   end
 
+  module Issues
+    module Card
+      def couch
+        @couch ||= Huboard::Couch.new :base_url => ENV["CLOUDANT_URL"]
+      end
+
+      def move(index)
+        old_self = self
+        issue = super(index)
+        begin
+          couch.connection.post("./",{
+            :github => {:issue => old_self.merge(issue), :user => gh.user.to_hash},
+            :meta => { :type => "event", :name => "card:move" },
+            :timestamp => Time.now.utc.iso8601
+          }).body
+        rescue
+
+        end
+        issue
+      end
+    end
+  end
+
   class Board
     board_method = self.instance_method(:board)
 
@@ -228,10 +257,14 @@ class Huboard
       theuser = api.users(user)
 
       begin
+        puts "saving to couch"
+        couch.user.get_or_create api.user
         couch.users.get_or_create theuser if theuser.type == "User"
         couch.orgs.get_or_create theuser if theuser.type == "Organization"
         couch.repos.get_or_create therepo 
-      rescue
+      rescue Exception => e
+        puts "error with couch"
+        puts e.message
         return board_method.bind(self).call
       end
 

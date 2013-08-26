@@ -1,3 +1,4 @@
+require "active_support/core_ext/numeric/time"
 require_relative "github/repos"
 require_relative "github/assignees"
 require_relative "github/labels"
@@ -5,6 +6,9 @@ require_relative "github/settings"
 require_relative "github/issues"
 require_relative "github/backlog"
 require_relative "github/board"
+require_relative "middleware"
+
+require "addressable/uri"
 
 class Huboard
        
@@ -24,57 +28,27 @@ class Huboard
     [self.column_pattern, self.link_pattern, self.settings_pattern]
   end
 
-  class SimpleCache < Hash
-    def read(key)
-      if cached = self[key]
-        cached
-      end
-    end
-
-    def write(key, data)
-      self[key] = data
-    end
-
-    def fetch(key)
-      read(key) || yield.tap { |data| write(key, data) }
-    end
-  end
-
   class Client
-    class Mimetype < Faraday::Middleware
-      begin
 
-      rescue LoadError, NameError => e
-        self.load_error = e
-      end
-
-      def initialize(app, *args)
-        @app = app
-      end
-
-
-
-      def call(env)
-
-        env[:request_headers].merge!('Accept' => "application/vnd.github.v3.full+json" )
-
-        @app.call env
-      end
-    end
-
-
-    def initialize(access_token)
-      @cache = SimpleCache.new
+    def initialize(access_token, params={})
+      
+        env[:request_headers].merge!('Accept' => "application/vnd.github.beta.full+json" )
       @connection_factory = ->(token = nil) {
-          Ghee.new(:access_token => token || access_token) do |conn|
-            conn.use FaradayMiddleware::Caching, @cache 
-            conn.use Mimetype
-          end
+        options = { :access_token => token || access_token }
+        options = {} if(token.nil? && access_token.nil?)
+        Ghee.new(options) do |conn|
+          conn.use Faraday::Response::RaiseGheeError
+          conn.use ClientId, params unless token || access_token
+          conn.use Mimetype
+          conn.request :retry, 3
+          # disable cache because github api is broken
+          conn.use Caching unless token || access_token
+        end
       }
     end
 
     def connection
-        @connection_factory.call
+      @connection_factory.call
     end
 
     def board(user, repo)

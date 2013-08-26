@@ -1,0 +1,9 @@
+ul.nav.pull-right
+  li.dropdown
+    a.dropdown-toggle data-toggle="dropdown" href="#"
+      | #{current_user.login } <b class="caret"></b>
+    ul.dropdown-menu
+      li
+        a href="/logout" Logout
+
+

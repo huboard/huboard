@@ -24,6 +24,10 @@ class Huboard
        }
     end
 
+    def has_board?
+      gh.raw.status == 200 && column_labels.size > 0
+    end
+
     def board
        settings = self.settings
        columns = column_labels.drop(settings[:show_all] ? 1 : 0)

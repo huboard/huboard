@@ -1,5 +1,11 @@
 #How to contribute
 
+Before contributing to Huboard, please:
+
+  1. Read and sign the [Contributor License Agreement](https://docs.google.com/forms/d/1hapbhON_AdtwVPgRFQqf5d600ayptoYcVfgcSQO0FQg/viewform)
+
+Ways to contribute:
+
   * The easiest way you can contribute by simply using huboard and adding issues. Find bugs or think of cool features, let me know by submitting issues
   * Take a look at the open issues. Anything is fair game, pick one and send me a pull request. 
   * I've added a label called `Please contribute`, these are features/defects that are lower priority but would still be a great addition to the product
@@ -124,6 +130,11 @@ or
 
 **Please use the latest stable tag if you are hosting your own instance of huboard.**
 
+# Warning - the deployment instructions are out of date. 
+# Huboard now requires memcached and couchdb. Please help me update the
+# documentation
+
+
 [huboard.com](http://huboard.com) is fully operational and free. If you feel the need to host your own instance
 please use the latest stable tag. The master branch doesn't always reflect the deployed version on huboard.com and
 very difficult to support and troubleshoot if you run into any issues.
@@ -149,7 +160,7 @@ Create the app:
 
 or, if you'd prefer to name your app yourself:
 
-    heroku app:create <your-app-name> --stack cedar
+    heroku apps:create <your-app-name> --stack cedar
 
 ## 2. Register App For Github OAuth
 
@@ -190,6 +201,9 @@ Predeployment (if you've changed any js or css files) run the following rake tas
 Commit the changes and
 
     git push heroku master
+    
+    
+    
 
 # License
 

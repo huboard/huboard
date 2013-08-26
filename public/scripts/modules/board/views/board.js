@@ -5,14 +5,17 @@ define(["../collections/issues",
        "./headerView",
        "../../common/views/assigneeView",
        "../../common/events/postal",
-       "./cssView"], 
+       "./cssView",
+       "../../common/spinner"], 
        function (issues,
                  template,
                  columnView,
                  sidebarView,
                  headerView,
                  assigneeView,
-                 postal) {
+                 postal,
+                cssView,
+                spinner) {
 
   var calculateTallest = function (){
 
@@ -54,6 +57,11 @@ define(["../collections/issues",
         initialize: function (params) {
            issues.bind("ondatareceived", this.onfetch, this);
            issues.bind("afterreceived", this.resizeColumns, this)
+           issues.bind("afterreceived", this.doneLoading, this)
+
+           this.overlay = $("<div class='fullscreen-overlay'>");
+           $("#wrapper").append(this.overlay.show());
+           spinner.spin(this.overlay.get(0));
 
            issues.fetch(params.user, params.repo);
 
@@ -70,6 +78,9 @@ define(["../collections/issues",
         onClosed: function() {
           this.resizeColumns();
         },
+        doneLoading: function() {
+          this.overlay.remove();
+        },
         onfetch: function(data) {
 
            var board = $(_.template(template, data)),
@@ -81,12 +92,12 @@ define(["../collections/issues",
                assigneesView = new assigneeView({data:data, params: this.params}),
                self = this;
            
-           $(noneBoard).append(new columnView({column: noneColumn, user:this.user,repo:this.repo}).render().el);
+           $(noneBoard).append(new columnView({logged_in: data.logged_in, column: noneColumn, user:this.user,repo:this.repo}).render().el);
 
            var width = (100 / rest.length);
 
            _.each(rest, function (label){
-               var column = new columnView({column: label, user:self.user,repo:self.repo});
+               var column = new columnView({logged_in: data.logged_in, column: label, user:self.user,repo:self.repo});
                var markup = $(column.render().el).css({width:width + "%"});
                $(board).append(markup);
            });

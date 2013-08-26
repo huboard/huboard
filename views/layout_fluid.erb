@@ -3,15 +3,14 @@
   <head>
     <title><% yield_content :title %>Huboard</title>
     <link rel="shortcut icon" type="image/png" href="/img/favicon.png" />
-    <% if @parameters[:socket_backend] %>
+    <% if @parameters[:socket_backend] && logged_in? %>
       <script src="<%= @parameters[:socket_backend] %>/socket.io/socket.io.js"></script>
       <script src="/scripts/modules/require.js"></script>
-      <script>
-        define("socket",function() {
-          return window.io ? io.connect("<%= @parameters[:socket_backend] %>?token=<%= encrypted_token %>") : null;
-        });
-
-      </script>
+        <script>
+          define("socket",function() {
+            return window.io ? io.connect("<%= @parameters[:socket_backend] %>?token=<%= encrypted_token %>") : null;
+          });
+        </script>
     <% else %>
       <script src="/scripts/modules/require.js"></script>
       <script>
@@ -21,7 +20,7 @@
       </script>
     <% end %>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
 
     <!-- This is a special version of jQuery with RequireJS built-in -->
     <% if settings.environment.to_sym == :development  %>
@@ -52,16 +51,17 @@
             <ul class="nav">
               <% yield_content :navigation %>
             </ul>
-            <ul class="nav pull-right">
-              <% yield_content :sub_navigation %>
-              <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= h @user.login %><b class='caret'></b></a>
-              <ul class="dropdown-menu">
-                 <li><a href="/settings/profile">Account</a></li>
-                <li><a href="/logout">Logout</a></li>
-              </ul>
-              </li>
-            </ul>
+             <% if logged_in? %>
+               <%= partial :logged_in %>
+             <% else %>
+                <ul class="nav pull-right">
+                 <li>
+                 <form action="/login" method="GET">
+                  <button class="hb-button"> Sign in </button>
+                </form>
+                 </li>
+                </ul>
+             <% end %>
         </div>
       </div>
     </div>

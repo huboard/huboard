@@ -61,12 +61,6 @@ module Stint
       return board
     end
 
-
-    def reorder_issue(user_name, repo, number, index)
-      issue = huboard.board(user_name, repo).issue(number)
-      issue.reorder(index)
-    end
-
     def feed_for_issue(user, repo, number)
       api = huboard.board(user, repo)
 
@@ -89,15 +83,15 @@ module Stint
       issue.update_labels labels
     end
 
-    def reorder_milestone(user_name, repo, number, index, status)
-
+    def reorder_milestone(user_name, repo, number, index)
       milestone =  huboard.board(user_name, repo).milestone number
-
       milestone.reorder index
-
     end
 
-
+    def reorder_issue(user_name, repo, number, index)
+      issue = huboard.board(user_name, repo).issue(number)
+      issue.reorder(index)
+    end
 
     def create_board(user_name, repo, hook)
       github.create_label user_name, repo, :name => "0 - Backlog", :color => "CCCCCC"
@@ -144,22 +138,22 @@ module Stint
 
 
     def assign_card(user_name, repo, the_issue, assignee)
-      issue = huboard.board(user_name, repo).issue(the_issue["number"])
+      issue = huboard.board(user_name, repo).issue(the_issue)
       issue.patch "assignee" => assignee
     end
 
     def assign_milestone(user_name, repo, the_issue, milestone)
-      issue = huboard.board(user_name, repo).issue(the_issue["number"])
-      issue.patch "milestone" => milestone["number"]
+      issue = huboard.board(user_name, repo).issue(the_issue)
+      issue.patch "milestone" => milestone
     end
 
-    def move_card(user_name, repo, the_issue, index)
-      issue = huboard.board(user_name, repo).issue(the_issue["number"])
-      issue.move index
+    def move_card(params)
+      issue = huboard.board(params[:user], params[:repo]).issue(params[:number])
+      issue.move params[:index]
     end
 
     def close_card(user_name, repo, the_issue)
-      issue = huboard.board(user_name, repo).issue(the_issue["number"])
+      issue = huboard.board(user_name, repo).issue(the_issue)
       issue.close
     end
 

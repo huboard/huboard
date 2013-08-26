@@ -9,4 +9,9 @@ log/
 app.build.js
 .powenv
 .idea/
+*.orig
+.bundle/
+.powconfig
+.rbenv-version
+vendor/
 

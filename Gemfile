@@ -3,13 +3,18 @@ source 'https://rubygems.org'
 gem 'encryptor'
 gem 'rack-no-www'
 gem 'rdiscount'
+gem 'slim'
 gem 'sinatra', "~> 1.3.0"
-gem 'sinatra_auth_github'
+gem 'warden-github'
 gem 'sinatra-content-for', "~> 0.1.0"
 gem 'ghee'
 gem 'rack-cache'
 gem 'activesupport'
-gem "couchrest"
+gem 'addressable'
+gem 'kgio'
+gem 'dalli'
+gem 'octokit'
+gem 'rack-robustness'
 
 gem 'coffee-script'
 gem 'sprockets'
@@ -25,6 +30,7 @@ group :development do
   gem 'sass'
   gem 'bourbon'
   gem 'thin'
+  gem 'heroku'
 end
 
 group :production do

@@ -1,3 +1,6 @@
+require "bundler"
+Bundler.setup
+
 require 'sass'
 require 'bourbon'
 require "#{File.join(File.dirname(__FILE__),"public/css/scss/bourbon/lib/bourbon/sass_extensions.rb")}"
@@ -7,8 +10,9 @@ task :css do
   Dir.glob("**/s{a,c}ss") { |d| Sass.load_paths << d }
 
   Dir.glob("**/s{a,c}ss") do |d|
-    Dir.glob("#{d}/**/*.s[ac]ss").reject {|x| File.basename(x).start_with?"_"}.each do |sass|
+    Dir.glob("#{d}/*.s[ac]ss").reject {|x| File.basename(x).start_with?"_"}.each do |sass|
       cssfile = "#{d}/../#{File.basename(sass,".*")}.min.css"
+      puts sass
       Sass.compile_file sass, cssfile, {style: :compressed }
     end
   end

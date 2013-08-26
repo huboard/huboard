@@ -88,7 +88,7 @@ common: &default_settings
   # For more about the Apdex standard, see
   # http://newrelic.com/docs/general/apdex
 
-  apdex_t: 0.5
+  apdex_t: 0.8
   
   #============================== Browser Monitoring ===============================
   # New Relic Real User Monitoring gives you insight into the performance real users are
@@ -179,7 +179,7 @@ common: &default_settings
     # to comma separated values.  Default is to ignore routing errors
     # which are how 404's get triggered.
     #
-    ignore_errors: ActionController::RoutingError
+    ignore_errors: ActionController::RoutingError, Sinatra::NotFound
 
   # (Advanced) Uncomment this to ensure the cpu and memory samplers
   # won't run.  Useful when you are using the agent to monitor an

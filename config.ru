@@ -1,24 +1,29 @@
 require 'rubygems'
 require 'bundler'
+
+Bundler.setup
+
 require 'rack/no-www'
-require 'sinatra_auth_github'
+require 'rack/robustness'
 
 require 'sprockets'
 
-Bundler.require
 
-require './lib/app.rb'
-require './lib/api.rb'
+require './lib/helpers'
+require './lib/base'
+require './lib/app'
+require './lib/api'
 require './lib/account.rb'
-require './lib/github.rb'
-require './lib/pebble.rb'
+require './lib/github'
+require './lib/pebble'
 
 configure :production do 
   require "newrelic_rpm"
 end
 
+
 use Rack::NoWWW
-use Rack::Static, :urls => [ "/font","/img", "/scripts","/css"], :root => "public"
+use Rack::Static, :urls => ["/files", "/font","/img", "/scripts","/css"], :root => "public"
 
 
 
@@ -27,7 +32,7 @@ map "/api" do
 end
 
 map "/" do 
-    run Huboard::App
+  run Huboard::App
 end
 
 map "/settings" do 

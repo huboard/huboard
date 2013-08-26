@@ -1,3 +1,9 @@
+class Module
+  def overridable(&blk)
+    mod = Module.new(&blk)
+    include mod
+  end
+end
 class Huboard
 
   module Issues
@@ -9,6 +15,7 @@ class Huboard
     end
 
     def issue(number)
+      raise "number is nil" unless number
       issue = gh.issues(number).extend(Card).merge!({:repo => {:owner => {:login => user}, :name => repo }})
       issue.attach_client connection_factory
       issue
@@ -28,7 +35,12 @@ class Huboard
 
       def current_state
         r = Huboard.column_pattern
-        self.labels.sort_by {|l| l["name"]}.reverse.find {|x| r.match(x["name"])}  || {"name" => "__nil__"}
+        nil_label = {"name" => "__nil__"}
+        begin
+          return self.labels.sort_by {|l| l["name"]}.reverse.find {|x| r.match(x["name"])}  || nil_label
+        rescue
+          return nil_label
+        end
       end
 
       def order
@@ -46,7 +58,11 @@ class Huboard
       end
 
       def other_labels
-        self.labels.reject {|l| Huboard.all_patterns.any? {|p| p.match l.name }}
+        begin
+          self.labels.reject {|l| Huboard.all_patterns.any? {|p| p.match l.name }}
+        rescue
+          return []
+        end
       end
 
       def attach_client connection
@@ -75,17 +91,19 @@ class Huboard
       end
 
       def patch(hash)
-        updated = client.patch hash 
+        updated = client.patch hash
         updated.extend(Card).merge!(:repo => repo)
       end
 
-      def move(index)
-        board = Huboard::Board.new(self[:repo][:owner][:login], self[:repo][:name], @connection_factory)
-        column_labels = board.column_labels
-        new_state = column_labels.find { |l| /#{index}\s*- *.+/.match l.name }
+      overridable do
+        def move(index)
+          board = Huboard::Board.new(self[:repo][:owner][:login], self[:repo][:name], @connection_factory)
+          column_labels = board.column_labels
+          self.labels = self.labels.delete_if { |l| Huboard.column_pattern.match l.name }
+          new_state = column_labels.find { |l| /#{index}\s*- *.+/.match l.name }
           self.labels << new_state unless new_state.nil?
-        self.labels = self.labels.delete_if { |l| l["name"] == self[:current_state]["name"]}
-        patch "labels" => self.labels
+          patch "labels" => self.labels
+        end
       end
 
       def close
@@ -101,7 +119,7 @@ class Huboard
       def embed_data(data = nil)
         if !data
           r = /@huboard:(.*)/
-            match = r.match self.body
+          match = r.match(self.body || "")
           return { } if match.nil?
 
           begin
@@ -136,15 +154,15 @@ class Huboard
       end
 
       def attach_client connection
-          @connection_factory = connection 
+        @connection_factory = connection 
       end
 
       def gh
-          @connection_factory.call
+        @connection_factory.call
       end
 
       def client
-         gh.repos(self[:repo][:owner][:login], self[:repo][:name]).milestones(self.number)
+        gh.repos(self[:repo][:owner][:login], self[:repo][:name]).milestones(self.number)
       end
 
       def patch(hash)
@@ -155,7 +173,7 @@ class Huboard
       def embed_data(data = nil)
         if !data
           r = /@huboard:(.*)/
-            match = r.match self.description
+          match = r.match self.description
           return { } if match.nil?
 
           begin

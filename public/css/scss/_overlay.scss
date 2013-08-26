@@ -1,5 +1,9 @@
-.fullscreen-overlay {
+body > .fullscreen-overlay {
   position: fixed;
+}
+
+.fullscreen-overlay {
+  position: absolute;
   top: 0px;
   left: 0px;
   // just above drawer
@@ -12,7 +16,7 @@
   overflow-x: hidden;
   overflow-y: auto;
 
-  background-color: rgba(243,243,243, 0.8);
+  background-color: rgba(0,0,0, 0.6);
 
   display:none;
 
@@ -34,10 +38,16 @@
 }
 
 .fullscreen-card {
+
+  .empty {
+    color: #999;
+    font-style: italic;
+  }
+
   position: relative;
   max-width: 960px;
 
-  background-color: #fff;
+  background-color: #fafafa;
 
   margin: 50px auto;
 
@@ -90,6 +100,10 @@
    margin-right: 20px;
    width: 160px;
 
+   h2 {
+    margin-bottom: 17px;
+   }
+
 
 }
 .fullscreen-card-left {
@@ -100,33 +114,81 @@
    overflow: hidden;
 }
 
+%card-shadow {
+  border: 1px solid hsla(0,0%,87%,0.8);
+  background: #fff;
+  box-shadow: 0px 1px 2px hsla(0, 0%, 70%, 0.5);
+}
 
 .fullscreen-card {
-  .card-comment {
-    overflow:hidden;
-    margin-bottom: 10px;
-    > a {
-      float: left;
+  .card-label {
+    @extend %card-shadow;
+    &.active {
+      box-shadow: none;
+      border-color: transparent;
     }
   }
+  .card-comment {
+    margin-bottom: 20px;
+    > a {
+      padding: 1px;
+      border: 1px solid hsla(0,0%,87%,0.8);
+      float: left;
+      opacity: 0.9;
+    }
+  }
+
   .comment-body {
-    margin-left: 40px;
+    border-radius: 0px 3px 3px 3px;
+    position: relative;
+    padding: 10px;
+    margin-left: 34px;
+
+    @extend %card-shadow;
+
+    &:before, &:after {
+      position: absolute;
+      width: 0;
+      height: 0;
+      content: "";
+      border-style: solid;
+      border-color: transparent;
+      pointer-events: none;
+    }
+    &:after {
+      top: 0px;
+      left: -9px;
+      border-width: 0px 9px 10px 0;
+      border-right-color: #fff;
+
+    }
+    &:before {
+      top: -1px;
+      left: -12px;
+      border-width: 0px 9px 10px 1px;
+      border-right-color: #ccc;
+      border-right-color: hsla(0, 0%, 88%, 0.8);
+
+    }
+
     .email-fragment {
       margin-bottom: 10px;
     }
     .email-hidden-toggle {
-       display:none;
+      display:none;
     }
   }
-  
+
 }
+
+
 
 .labels {
   list-style: none;
   margin:0;
   padding:0;
   h5 {
-   margin-top: 0px;
+    margin-top: 0px;
   }
 }
 
@@ -142,7 +204,6 @@
   display:block;
   text-decoration: none;
   border-radius: 4px;
-  color:#777;
 }
 
 

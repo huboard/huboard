@@ -1,4 +1,11 @@
-<div id="stage" data-module="board/main" data-parameters='<%= @parameters.to_json %>'>
+<div id="stage">
+      <script type="text/module" data-module="board/main">
+        <% if logged_in? %>
+          <%= params.clone.merge!({login: current_user.login }).to_json %>
+        <% else %>
+          <%= params.to_json %>
+        <% end %>
+      </script>
 <div id="drawer" > 
   <a href="#toggle-drawer" class="hide  arrow-right toggle-drawer"><span></span></a>
 </div>
@@ -9,7 +16,7 @@
   <a href="/<%= h @parameters[:user]%>/<%= h @parameters[:repo]%>/backlog">Milestones</a>
   </li>
   <li class="active">
-  <a href="/<%= h @parameters[:user]%>/<%= h @parameters[:repo]%>/board">Tasks</a>
+  <a href="/<%= h @parameters[:user]%>/<%= h @parameters[:repo]%>">Tasks</a>
   </li>
 
 <% end %>
@@ -17,7 +24,14 @@
 <% content_for :overlay do %>
   <div class="fullscreen-overlay" >
 
-    <div class="fullscreen-wrapper" data-module="card/main" data-parameters='<%= @parameters.to_json %>'>
+    <div class="fullscreen-wrapper">
+      <script type="text/module" data-module="card/main">
+        <% if logged_in? %>
+          <%= params.clone.merge!({login: current_user.login }).to_json %>
+        <% else %>
+          <%= params.to_json %>
+        <% end %>
+      </script>
       
     </div>
     

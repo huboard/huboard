@@ -12,8 +12,8 @@ define(["../../common/events/postal"],function(postal){
   _.extend(card.prototype, {
     save : function (data) {
       $.post("/api/" + this.attributes.repo.owner.login + "/" + this.attributes.repo.name + "/assignmilestone",{
-        milestone: data.milestone,
-        issue: this.attributes,
+        milestone: data.milestone.number,
+        issue: this.attributes.number,
         correlationId: postal.correlationId
       }, function (response) {
         //console.log("moved to column", data.index);
@@ -22,7 +22,7 @@ define(["../../common/events/postal"],function(postal){
     close: function(data) {
       $.post("/api/" + this.attributes.repo.owner.login + "/" + this.attributes.repo.name + "/close",{
         index: data.index,
-        issue: this.attributes,
+        number: this.attributes.number,
         correlationId: postal.correlationId
       }, function (response) {
         //console.log("closed issue", data.index);
@@ -31,7 +31,7 @@ define(["../../common/events/postal"],function(postal){
     assign: function(assignee){
       this.attributes.assignee = assignee;
       $.post("/api/" + this.attributes.repo.owner.login + "/" + this.attributes.repo.name + "/assigncard",{
-        issue: this.attributes,
+        number: this.attributes.number,
         correlationId: postal.correlationId,
         assignee: assignee.login
       }, function(response) {
@@ -42,7 +42,7 @@ define(["../../common/events/postal"],function(postal){
     reorder: function(data) {
       $.post("/api/" + this.attributes.repo.owner.login + "/" + this.attributes.repo.name + "/reorderissue",{
         index: data.order,
-        issue: this.attributes,
+        number: this.attributes.number,
         correlationId: postal.correlationId
       }, function (response) {
         //console.log("reordered issue", data.order);

@@ -27,8 +27,6 @@ define(function () {
                     self.trigger("onissuesreceived." + label.index, label.issues)
                 }); 
 
-                self.trigger("afterreceived");
-
                 $.when(backlog)
                 .then(function(theBacklog) {
                     self.trigger("onissuesreceived." + theBacklog.index, theBacklog.issues)

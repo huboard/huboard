@@ -5,14 +5,17 @@ define(["../collections/issues",
        "./headerView",
        "../../common/views/assigneeView",
        "../../common/events/postal",
-       "./cssView"], 
+       "./cssView",
+       "../../common/spinner"], 
        function (issues,
                  template,
                  columnView,
                  sidebarView,
                  headerView,
                  assigneeView,
-                 postal) {
+                 postal,
+                 cssView,
+                 spinner) {
 
   var calculateTallest = function (){
 
@@ -53,6 +56,11 @@ define(["../collections/issues",
         },
         initialize: function (params) {
            issues.bind("ondatareceived", this.onfetch, this);
+           
+           this.overlay = $("<div class='fullscreen-overlay'>");
+           $("#wrapper").append(this.overlay.show());
+           spinner.spin(this.overlay.get(0));
+
            issues.fetch(params.user, params.repo);
            this.user = params.user;
            this.repo = params.repo;
@@ -67,6 +75,7 @@ define(["../collections/issues",
           this.resizeColumns();
         },
         onfetch: function(data) {
+          this.overlay.remove();
 
            var board = $(_.template(template, data)),
                noneBoard = board.clone(),
@@ -76,26 +85,27 @@ define(["../collections/issues",
                assigneesView = new assigneeView({data:data, params: this.params}),
                self = this;
            
-           $(noneBoard).append(new columnView({column: noneColumn, user:this.user,repo:this.repo}).render().el);
+           $(noneBoard).append(new columnView({logged_in: data.logged_in, column: noneColumn, user:this.user,repo:this.repo}).render().el);
 
            _.each(data.milestones, function (label){
-               var column = new columnView({column: label, user:self.user,repo:self.repo});
+               var column = new columnView({logged_in: data.logged_in, column: label, user:self.user,repo:self.repo});
                var markup = $(column.render().el).css({width:260 + "px"});
                $(board).append(markup);
            });
 
            $("#stage").append(board);
-
-           $(board).sortable({
-              axis: "x",
-              handle: "h3",
-              cursor: "move",
-               stop: $.proxy(this.fullStop,this),
-               start: $.proxy(this.onStart,this),
-               remove: $.proxy(this.onRemove, this),
-               over: $.proxy(this.onOver, this),
-               update: $.proxy(this.onStop, this)
-           });
+           if (data.logged_in) {
+             $(board).sortable({
+                axis: "x",
+                handle: "h3",
+                cursor: "move",
+                 stop: $.proxy(this.fullStop,this),
+                 start: $.proxy(this.onStart,this),
+                 remove: $.proxy(this.onRemove, this),
+                 over: $.proxy(this.onOver, this),
+                 update: $.proxy(this.onStop, this)
+             });
+           }
 
            $("#drawer","#main-stage")
               .append(noneBoard)
@@ -140,7 +150,7 @@ define(["../collections/issues",
          $(ui.item).addClass("ui-state-dragging");
         },
         onStop : function(ev,ui){
-          var elements = $(".backlog > div", this.el),
+          var elements = $(".backlog.ui-sortable > div", this.el),
           index = elements.index(ui.item);
 
           if(index === -1) { return; }
@@ -175,7 +185,7 @@ define(["../collections/issues",
           }
 
           currentElement
-            .trigger("reorder", {order:currentData._data.order})  
+            .trigger("reorderMilestone", {order:currentData._data.order})  
             .data("milestone", currentData);  
 
         }
