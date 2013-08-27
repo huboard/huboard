@@ -1,6 +1,6 @@
 
 body {
-  font-family: "ProximaNovaRegular", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-family: "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
 
 .navbar {
@@ -10,10 +10,14 @@ body {
     }
   }
   .navbar-inner {
-    @include linear-gradient(#F9F9F9, #F3F3F3);
-    border-bottom: 1px solid #e5e5e5;
+    background: $hb-purple;
     .nav a {
-     -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(#000), to(rgba(0,0,0,0.75)));
+      background-color:lighten(#000,27%);
+      color:transparent;
+      text-shadow: 0px 1px 0px fade-out($hb-purple-dark, 0.1);
+      -webkit-background-clip: text;
+      -moz-background-clip: text;
+      background-clip: text;
     }
   }
 }
@@ -23,37 +27,32 @@ body {
   padding-top: 0;
   padding-bottom: 0;
 
-  color: rgba(255,255,255,0.3);
-  text-shadow: -1px -1px rgba(0,0,0,0.4);
+  color: #fff;
 
-  font-family: "ProximaNovaBold", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, "Lucida Grande", sans-serif;
-  font-weight: bold;
+  font-family:"Din Text Pro Medium", "HelveticaNeue", Verdana, sans-serif; 
+  font-size-adjust:0.5; 
+  font-weight:500;
   font-size: 40px;
-
-  &:hover {
-    color: rgba(255,255,255,0.3);
-    text-shadow: -1px -1px rgba(0,0,0,0.7);
-  }
 
 }
 
 .navbar {
- .nav {
+  .nav {
     float: right;
     ul {
       margin: 0;
       list-style-type: none;
     }
- }
+  }
 } 
 
 .navbar .nav  li > a {
-  font-family: "ProximaNovaRegular", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, "Lucida Grande", sans-serif;
-  font-size: 18px;
+  font-family:"Din Text Pro Medium", "HelveticaNeue", Verdana, sans-serif; 
+  font-size-adjust:0.5; 
+  font-weight:500;
+  font-size: 21px;
   line-height: 90px;
   padding-top: 0;
   padding-bottom: 0;
 }
-.navbar .nav a {
-  -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(#000), to(rgba(0,0,0,0.75)));
-}
+
