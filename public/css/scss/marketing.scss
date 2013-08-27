@@ -6,21 +6,6 @@
 @import "footer";
 @import "permissions ";
 
-@font-face {
-  font-family: 'ProximaNovaRegular';
-  src: url("../font/proximanova-regular-webfont.eot");
-  src: local('ProximaNovaRegular'),
-  url("../font/proximanova-regular-webfont.woff") format('woff'),
-  url("../font/proximanova-regular-webfont.ttf") format('truetype');
-}
-
-@font-face {
-  font-family: 'ProximaNovaBold';
-  src: url("../font/proximanova-bold-webfont.eot");
-  src: local('ProximaNovaBold'),
-  url("../font/proxima_nova_bold-webfont.woff") format('woff'),
-  url("../font/proxima_nova_bold-webfont.ttf") format('truetype');
-}
 
 blockquote {
   > div {
@@ -47,7 +32,9 @@ blockquote {
     text-shadow: -1px -1px rgba(0,0,0,0.1);
   }
   h1, h2 {
-    font-family: "ProximaNovaBold", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-family:"Din Text Pro Medium", "HelveticaNeue", Verdana, sans-serif; 
+    font-size-adjust:0.5; 
+    font-weight:500;
   }
   .hb-button {
 
@@ -67,7 +54,9 @@ blockquote {
 
 .features {
   h3, h2 {
-    font-family: "ProximaNovaBold", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-family:"Din Text Pro Light", "Helvetica Neue", Verdana, sans-serif; 
+    font-size-adjust:0.5; 
+    font-weight:200;
   }
 
   padding-bottom: 100px;

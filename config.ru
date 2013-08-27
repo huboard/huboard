@@ -49,3 +49,4 @@ map "/assets" do
   environment.append_path 'assets/stylesheets'
   run environment
 end
+

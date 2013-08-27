@@ -104,7 +104,6 @@ class HuboardApplication < Sinatra::Base
     enable :logging
   end
 
-
   set :raise_errors, true
 
   use Rack::Robustness do |g|
