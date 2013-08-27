@@ -14,7 +14,7 @@
    Milestone: <%- milestone.title %>
 </div>
 <% } %>
-<% if(pull_request) { %>
+<% if(pull_request && (pull_request.html_url)) { %>
 <span class="label label-info">Pull request</span> <%}%>
 <div class="card-labels">
 <% _(other_labels).each(function(l) { %>

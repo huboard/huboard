@@ -6,7 +6,7 @@ class Huboard
     register Sinatra::Auth::Github
     register Huboard::Common
 
-    extend Huboard::Common::Settings
+    
 
     enable :sessions
 

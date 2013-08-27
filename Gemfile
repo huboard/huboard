@@ -15,7 +15,6 @@ gem 'kgio'
 gem 'dalli'
 gem 'octokit'
 gem 'rack-robustness'
-
 gem 'coffee-script'
 gem 'sprockets'
 
@@ -23,7 +22,7 @@ gem 'sprockets'
 gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 
 group :development do
-  gem 'couch_docs'
+  #gem 'couch_docs'
   gem 'watchr'
   gem 'shotgun'
   gem 'foreman'

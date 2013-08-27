@@ -40,7 +40,7 @@ map "/settings" do
 end
 
 class HuboardAssets < Sprockets::Environment
-  extend Huboard::Common::Settings
+  #extend Huboard::Common::Settings
 end
 
 map "/assets" do

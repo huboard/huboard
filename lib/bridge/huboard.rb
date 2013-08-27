@@ -32,7 +32,7 @@ class Huboard
 
     def initialize(access_token, params={})
       
-        env[:request_headers].merge!('Accept' => "application/vnd.github.beta.full+json" )
+      
       @connection_factory = ->(token = nil) {
         options = { :access_token => token || access_token }
         options = {} if(token.nil? && access_token.nil?)
