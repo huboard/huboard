@@ -3,7 +3,7 @@
 (function () {
 
   App = Ember.Application.create({
-    rootElement : "#main-stage"
+    rootElement : "#main-application"
   })
 
   App.ApplicationController = Ember.Controller.extend();

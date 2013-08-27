@@ -6,13 +6,13 @@ class Huboard
 
 
     PUBLIC_URLS = ['/authorized']
+    RESERVED_URLS = %w{ settings profiles }
 
-    before do
-#      protected! unless PUBLIC_URLS.include? request.path_info
-    end
 
     before "/:user/:repo/?*" do 
       
+      return if RESERVED_URLS.include? params[:user]
+
       if authenticated? :private
         repo = gh.repos(params[:user], params[:repo]).raw
       else

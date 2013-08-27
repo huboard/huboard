@@ -1,14 +1,9 @@
 require 'sinatra'
 require 'sinatra/content_for'
 require 'stripe'
+
 class Huboard
-  class Accounts < Sinatra::Base
-    register Sinatra::Auth::Github
-    register Huboard::Common
-
-    
-
-    enable :sessions
+  class Accounts < HuboardApplication
 
     def initialize(app = nil)
       super(app)
@@ -35,14 +30,8 @@ class Huboard
 
     helpers do
       def protected! 
-        return current_user if authenticated?
-        authenticate! 
-
-        #HAX! TODO remove
-        #ghee = Ghee.new({ :basic_auth => {:user_name => settings.user_name, :password => settings.password}})
-        #Stint::Github.new(ghee).add_to_team(settings.team_id, current_user.login) unless github_team_access? settings.team_id
-        #current_user
-        #github_team_authenticate! team_id
+        return current_user if authenticated? :private
+        authenticate! :scope => :private
       end
 
     end
@@ -54,18 +43,6 @@ class Huboard
       @orgs = gh.orgs
 
       erb :accounts, :layout => :ember_layout
-    end
-
-    get "/profile/:org/?" do 
-      @user = gh.user
-      @orgs = gh.orgs
-      @org = gh.orgs(params[:org])
-      is_owner = gh.orgs(params[:org]).teams.any? { |t| t.name == "Owners" }
-      @org.merge! :is_owner => is_owner
-
-      @customer = couch.customers.findByUserId @user.id
-
-      erb :account
     end
 
     post "/charge/:org/?" do 
@@ -92,7 +69,6 @@ class Huboard
 
       erb :charge
     end
-
 
     helpers Sinatra::ContentFor
   end

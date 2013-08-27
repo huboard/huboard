@@ -98,12 +98,5 @@ class Huboard
         settings.team_id
       end
     end
-
-    def self.registered(app)
-      app.helpers Huboard::Common::Helpers
-      app.use Rack::Session::Cookie, :key => 'rack.session', :path => '/', :secret => settings.session_secret
-      app.set :views, settings.root + "/views"
-    end
-
   end
 end

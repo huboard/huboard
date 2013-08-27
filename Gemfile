@@ -17,6 +17,7 @@ gem 'octokit'
 gem 'rack-robustness'
 gem 'coffee-script'
 gem 'sprockets'
+gem 'execjs', "~> 1.4"
 
 
 gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'

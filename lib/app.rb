@@ -8,7 +8,6 @@ require_relative "helpers"
 
 class Huboard
   class App < HuboardApplication
-    #register Sinatra::Auth::Github
 
     PUBLIC_URLS = ['/', '/logout','/webhook', '/site/privacy','/site/terms']
     RESERVED_URLS = %w{ repositories images about site login logout favicon.ico robots.txt }
