@@ -56,6 +56,31 @@ class HuboardApplication < Sinatra::Base
     raise "Configuration information not found: you need to provide a .settings file or ENV variables"
   end
 
+  set :sprockets, Sprockets::Environment.new(root)
+  set :assets_prefix, '/assets'
+  set :digest_assets, false
+
+  configure do
+    # Setup Sprockets
+    root_path = File.expand_path("../", File.dirname(__FILE__))
+    sprockets.append_path File.join(root_path, 'assets', 'stylesheets')
+    sprockets.append_path File.join(root_path, 'assets', 'javascripts')
+    sprockets.append_path File.join(root_path, 'assets', 'images')
+
+
+    Sprockets::Helpers.configure do |config|
+      config.environment = sprockets
+      config.prefix      = assets_prefix
+      config.digest      = digest_assets
+      config.public_path = public_folder
+
+      config.debug       = true if development?
+    end
+  end
+
+  helpers do
+    include Sprockets::Helpers
+  end
 
   helpers Huboard::Common::Helpers
   helpers Sinatra::Partials

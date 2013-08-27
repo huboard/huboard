@@ -10,7 +10,7 @@ class Huboard
   class App < HuboardApplication
 
     PUBLIC_URLS = ['/', '/logout','/webhook', '/site/privacy','/site/terms']
-    RESERVED_URLS = %w{ repositories images about site login logout favicon.ico robots.txt }
+    RESERVED_URLS = %w{ assets repositories images about site login logout favicon.ico robots.txt }
 
     before do
 

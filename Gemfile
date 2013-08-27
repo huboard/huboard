@@ -17,6 +17,7 @@ gem 'octokit'
 gem 'rack-robustness'
 gem 'coffee-script'
 gem 'sprockets'
+gem 'sprockets-helpers'
 gem 'execjs', "~> 1.4"
 
 

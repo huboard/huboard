@@ -6,8 +6,9 @@ Bundler.setup
 require 'rack/no-www'
 require 'rack/robustness'
 
+require 'bourbon'
 require 'sprockets'
-
+require 'sprockets-helpers'
 
 require './lib/helpers'
 require './lib/base'
@@ -21,11 +22,13 @@ configure :production do
   require "newrelic_rpm"
 end
 
-
 use Rack::NoWWW
 use Rack::Static, :urls => ["/files", "/font","/img", "/scripts","/css"], :root => "public"
 
-
+class HuboardAssets < Sprockets::Environment
+  load ".settings"
+end
+environment = HuboardAssets.new
 
 map "/api" do
   run Huboard::API
@@ -39,12 +42,7 @@ map "/settings" do
     run Huboard::Accounts
 end
 
-class HuboardAssets < Sprockets::Environment
-  load ".settings"
-end
-
 map "/assets" do
-  environment = HuboardAssets.new
   environment.append_path 'assets/javascripts'
   environment.append_path 'assets/stylesheets'
   run environment
