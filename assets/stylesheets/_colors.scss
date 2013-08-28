@@ -1,4 +1,3 @@
-
 $lighterGrey: #CCC;
 $lightGrey: #999;
 $grey: #666;
@@ -20,4 +19,9 @@ $hb-font-headings: "Din Text Pro Medium", "HelveticaNeue", Verdana, sans-serif;
 $hb-font-sub-headings: "Din Text Pro Light", "Helvetica Neue", Verdana, sans-serif; 
 
 
-
+html {
+   color: $hb-grey-dark;
+}
+h1,h2,h3,h4,h5,h6 {
+   color: $hb-grey-dark;
+}
