@@ -20,12 +20,14 @@
 
 // Simple Button
 //************************************************************************//
-@mixin simple($base-color, $grayscale: false) {
+@mixin simple($base-color, $grayscale: false, $size: regular) {
   $color:         hsl(0, 0, 100%);
   $border:        adjust-color($base-color, $saturation:  9%,  $lightness: -14%);
   $inset-shadow:  adjust-color($base-color, $saturation: -8%,  $lightness:  15%);
   $stop-gradient: adjust-color($base-color, $saturation:  9%,  $lightness: -11%);
   $text-shadow:   adjust-color($base-color, $saturation:  15%, $lightness: -18%);
+  $shadow-size: 2px;
+  $padding: 7px 18px;
 
   @if lightness($base-color) > 70% {
     $color:       hsl(0, 0, 20%);
@@ -38,9 +40,7 @@
     $stop-gradient: grayscale($stop-gradient);
     $text-shadow:   grayscale($text-shadow);
   }
-
- 
-  //@include box-shadow (inset 0 1px 0 0 $inset-shadow);
+                        
   outline: none;
   border:none;
   @include box-shadow(0 2px $border);
@@ -49,8 +49,7 @@
   display: inline-block;
   font-size: 11px;
   background-color: $base-color;
-  //@include linear-gradient ($base-color, $stop-gradient);
-  padding: 7px 18px;
+  padding: $padding;
   text-decoration: none;
   text-shadow: 0 1px 0 $text-shadow;
   -webkit-background-clip: padding-box;
@@ -79,8 +78,6 @@
       $border-active:       grayscale($border-active);
       $inset-shadow-active: grayscale($inset-shadow-active);
     }
-
-    //@include box-shadow (inset 0 0 8px 4px $inset-shadow-active, inset 0 0 8px 4px $inset-shadow-active, 0 2px 1px 0 #eee);
     @include box-shadow (inset 0 2px 1px 0 $border-active);
   }
 }
@@ -103,5 +100,9 @@
   &:hover {
      color:#FFF;
      text-decoration: none;
+  }
+  &.small {
+     padding-top:3px;
+     padding-bottom: 3px;                                  
   }
 }
