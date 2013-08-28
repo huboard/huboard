@@ -56,6 +56,8 @@ blockquote {
 }
 
 .features {
+  background-color: $hb-grey-light;
+  
   h3, h2 {
     font-family: $hb-font-sub-headings;
     font-size-adjust:0.5; 
@@ -64,6 +66,17 @@ blockquote {
 
   padding-bottom: 100px;
   padding-top: 100px;
+  
+  .feature-well {
+     padding:5px;
+     margin: 5px 0;
+     box-shadow: inset 0px 0px 2px 2px rgba(0,0,0,0.1), inset 0px 1px 2px rgba(0,0,0,0.3);
+    .feature-well-inner {
+       width: 95%;
+       height: 95%;
+       overflow: hidden;
+    }
+  }
 }
 
 .gutter {
