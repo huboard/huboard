@@ -79,6 +79,8 @@
       $inset-shadow-active: grayscale($inset-shadow-active);
     }
     @include box-shadow (inset 0 2px 1px 0 $border-active);
+    
+    padding: 9px 18px;
   }
 }
 
@@ -103,6 +105,10 @@
   }
   &.small {
      padding-top:3px;
-     padding-bottom: 3px;                                  
+     padding-bottom: 3px;     
+     &:active:not(:disabled) {
+       padding-top:4px;
+       padding-bottom: 4px;     
+     }
   }
 }
