@@ -1,0 +1,88 @@
+@import "bourbon/bourbon";
+@mixin button ($base-color: #4294f0) {
+
+  // Grayscale button
+  @if $base-color == grayscale($base-color) {
+      @include simple($base-color, $grayscale: true);
+  }
+
+  // Colored button
+  @else {
+      @include simple($base-color);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+
+// Simple Button
+//************************************************************************//
+@mixin simple($base-color, $grayscale: false, $size: regular) {
+  $color:         hsl(0, 0, 100%);
+  $border:        adjust-color($base-color, $saturation:  9%,  $lightness: -14%);
+  $inset-shadow:  adjust-color($base-color, $saturation: -8%,  $lightness:  15%);
+  $stop-gradient: adjust-color($base-color, $saturation:  9%,  $lightness: -11%);
+  $text-shadow:   adjust-color($base-color, $saturation:  15%, $lightness: -18%);
+  $shadow-size: 2px;
+  $padding: 7px 18px;
+
+  @if lightness($base-color) > 70% {
+    $color:       hsl(0, 0, 20%);
+    $text-shadow: adjust-color($base-color, $saturation: 10%, $lightness: 4%);
+  }
+
+  @if $grayscale == true {
+    $border:        grayscale($border);
+    $inset-shadow:  grayscale($inset-shadow);
+    $stop-gradient: grayscale($stop-gradient);
+    $text-shadow:   grayscale($text-shadow);
+  }
+                        
+  outline: none;
+  border:none;
+  @include box-shadow(0 1px $border);
+  border-radius: 3px;
+  color: $color;
+  display: inline-block;
+  font-size: 11px;
+  background-color: $base-color;
+  padding: $padding;
+  text-decoration: none;
+  text-shadow: 0 1px 0 $text-shadow;
+  -webkit-background-clip: padding-box;
+
+  &:hover:not(:disabled) {
+    $base-color-hover:    adjust-color($base-color, $saturation: -4%, $lightness: -5%);
+    $inset-shadow-hover:  adjust-color($base-color, $saturation: -7%, $lightness:  5%);
+    $stop-gradient-hover: adjust-color($base-color, $saturation:  8%, $lightness: -14%);
+
+    @if $grayscale == true {
+      $base-color-hover:    grayscale($base-color-hover);
+      $inset-shadow-hover:  grayscale($inset-shadow-hover);
+      $stop-gradient-hover: grayscale($stop-gradient-hover);
+    }
+
+    cursor: pointer;
+    background-color: $base-color-hover;
+    //@include linear-gradient ($base-color-hover, $stop-gradient-hover);
+  }
+
+  &:active:not(:disabled) {
+    $border-active:       adjust-color($base-color, $saturation: 9%, $lightness: -14%);
+    $inset-shadow-active: adjust-color($base-color, $saturation: 7%, $lightness: -17%);
+
+    @if $grayscale == true {
+      $border-active:       grayscale($border-active);
+      $inset-shadow-active: grayscale($inset-shadow-active);
+    }
+    @include box-shadow (0 -1px 0px 0 $border-active);
+                                          
+    -webkit-transform: translate(0, 1px);
+    -moz-transform: translate(0, 1px);
+    -o-transform: translate(0, 1px);
+    transform: translate(0, 1px);
+  }
+}

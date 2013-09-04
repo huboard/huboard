@@ -1,4 +1,5 @@
 @import "bourbon/bourbon";
+@import "mixins";
 @import "colors";
 @import "buttons";
 @import "scroll";
@@ -21,59 +22,50 @@ blockquote {
 }
 
 .preamble {
+
   background-color: #3d3d3d;
   color: #e2e2e2;
   padding-top: 60px;
   h1 {
-    color: transparent;
-    text-shadow: 0px 1px 0px hsla(0,0%,95%,0.9);
+    color: #fff;
+    color: rgba(255,255,255, 0.9);
+    text-shadow: 0px -1px 0px hsla(0,0%,0%,0.5);
   }
   h1, h2 {
-    font-family: $hb-font-headings;
-    font-size-adjust:0.5; 
-    font-weight:500;
-    @include prefixer(background-clip, text);
+    @extend %font-headings;
   }
   h2 {
     background-color: hsla(0, 0%, 0%, 0.9);
-    color: transparent;
-    text-shadow: 0px 1px 0px hsla(0,0%,50%,0.9);
+    color: $hb-grey-light;
+    color: rgba(255,255,255, 0.6);
+    text-shadow: 0px -1px 0px hsla(0,0%,0%,0.5);
   }
   .hb-button {
     font-family:  $hb-font-sub-headings;
     font-size-adjust:0.5; 
     font-weight:200;
-    margin: 0 auto;
-    width: 200px;
-    display:block;
+    min-width: 200px;
     padding: 20px;
     font-size: 24px;
     
   }
   .sign-up {
-    margin-top: 80px;
+    margin: 80px 0;
   }
 }
 
 .features {
-  background-color: $hb-grey-light;
-  
-  h3, h2 {
-    font-family: $hb-font-sub-headings;
-    font-size-adjust:0.5; 
-    font-weight:200;
-  }
-
+ 
   padding-bottom: 100px;
   padding-top: 100px;
   
   .feature-well {
      padding:5px;
      margin: 5px 0;
+     background-color: #fff;
+     border-radius: 3px;
      box-shadow: inset 0px 0px 2px 2px rgba(0,0,0,0.1), inset 0px 1px 2px rgba(0,0,0,0.3);
     .feature-well-inner {
-       width: 95%;
-       height: 95%;
        overflow: hidden;
     }
   }
@@ -100,13 +92,16 @@ h1 {
 }
 
 .pricing {
-
+  .page-header {
+     margin-top: 0; 
+  }
   .right {
     float: right;
   }
   .plan-intro {
      border-bottom: 1px solid #e2e7ec;
      margin-bottom: 20px;
+     padding-bottom: 5px;
      font-size: 18px;
      line-height: 1.5em;
      .hb-button {
@@ -119,6 +114,8 @@ h1 {
     text-align: center;
     margin: 40px 0;
     span {
+      @extend %font-body;
+      font-weight: 100;
       font-size: 24px;
     }
   }
@@ -126,7 +123,7 @@ h1 {
   .plan {
     position: relative;
     &.featured {
-      border-color: green;
+      border-color: $hb-purple;
       &:after {
         content: "";
         position: absolute;
@@ -136,7 +133,7 @@ h1 {
         height: 0;
         border-left: 30px solid transparent;
         border-right: 30px solid transparent;
-        border-bottom: 30px solid green;
+        border-bottom: 30px solid $hb-purple;
       }
     }
 
@@ -159,10 +156,8 @@ h1 {
     }
   }
 
-  h3 {
-    font-size: 22px;
-    line-height: 1.2em;
-    padding: 18px 0;
+  h2 {
+    
     border-bottom: 3px solid #f3f4f6;
 
     span {

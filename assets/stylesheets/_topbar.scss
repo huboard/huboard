@@ -18,11 +18,21 @@ body {
       -webkit-background-clip: text;
       -moz-background-clip: text;
       background-clip: text;
-      &:hover {
+      &:hover, &.active {
          color: #fff;
          text-decoration: none;
       }
     }
+  }
+  .nav-btn {
+     color: #fff;
+     background-color: rgba(255,255,255, 0.2);
+     border: 1px solid rgba(255,255,255, 0.3);
+     padding: 7px 25px;
+     border-radius: 3px;
+     &:hover {
+        background-color: rgba(255,255,255, 0.1);
+      }
   }
 }
 .navbar .brand {
@@ -33,9 +43,7 @@ body {
 
   color: #fff;
 
-  font-family:"Din Text Pro Medium", "HelveticaNeue", Verdana, sans-serif; 
-  font-size-adjust:0.5; 
-  font-weight:500;
+  @extend %font-headings;
   font-size: 40px;
 
 }
@@ -50,13 +58,14 @@ body {
   }
 } 
 
-.navbar .nav  li > a {
-  font-family:"Din Text Pro Medium", "HelveticaNeue", Verdana, sans-serif; 
-  font-size-adjust:0.5; 
-  font-weight:500;
-  font-size: 21px;
+.navbar .nav  li {
   line-height: 90px;
-  padding-top: 0;
-  padding-bottom: 0;
+  > a {
+    @extend %font-headings;
+    font-size: 21px;
+ 
+    padding-top: 0;
+    padding-bottom: 0;
+  }
 }
 
