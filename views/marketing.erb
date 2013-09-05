@@ -68,7 +68,9 @@
       function animateNumber($input, end, duration, easing) {
         
         if($input.data("label")){
-          $($input.data("label")).delay(duration - (duration-(duration-500))).animate({ opacity : 1}, { duration: duration - (duration-(duration-500)), easing: easing == undefined ? "linear" : easing });
+          $($input.data("label"))
+            .delay(duration - (duration-(duration-500)))
+            .animate({ opacity : 1}, { duration: duration - (duration-(duration-500)), easing: easing == undefined ? "linear" : easing });
         }
         
         $input
@@ -82,6 +84,7 @@
             step: function(fin,obj) {
               
               if(obj.prop === "val"){
+                console.log(fin)
                 var $this = jQuery(this);
                 var start = parseInt($this.data("start"));
                 $this.text(addCommas(parseInt(fin).toString())); 
@@ -91,7 +94,7 @@
       }
 
         setTimeout(function() {
-          animateNumber($(".brand .stat"), Math.random() * 10000, 4000, "easeInOutCubic");
+          animateNumber($(".brand .stat"), Math.random() * 10000000, 4000, "easeInOutCubic");
         }, 2000);
       
       
