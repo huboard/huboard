@@ -37,6 +37,7 @@ body {
 }
 .navbar .brand {
 
+  position: relative;
   line-height: 90px;
   padding-top: 0;
   padding-bottom: 0;
@@ -46,6 +47,28 @@ body {
   @extend %font-headings;
   font-size: 40px;
 
+  .stat {
+    position: relative;
+    display: inline-block;
+    span {
+     font-family: "Clayton";
+     color: $hb-purple-dark;
+     text-shadow: none;
+      opacity: 0.5;
+    }
+    label {
+     opacity: 0; 
+     position: absolute;
+     top: 60px;
+     width: 100%;
+     text-align: center;
+      white-space: nowrap;
+       @extend %font-sub-headings;
+    }
+  }
+  
+  
+  
 }
 
 .navbar {

@@ -18,7 +18,7 @@
       <div class="navbar navbar-static-top">
         <div class="navbar-inner">
           <div class="container">
-            <a class="brand" href="/">HuBoard</a>
+            <a class="brand" href="/">HuBo<div class="stat" data-label=".brand label"><span></span><label>cards&nbsp;moved</label></div>ard </a>
             <div class="nav">
               <ul class="nav">
                 <li>
@@ -64,6 +64,51 @@
        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
        })();
+      (function(){
+      function animateNumber($input, end, duration, easing) {
+        
+        if($input.data("label")){
+          $($input.data("label")).delay(duration - (duration-(duration-500))).animate({ opacity : 1}, { duration: duration - (duration-(duration-500)), easing: easing == undefined ? "linear" : easing });
+        }
+        
+        $input
+          .data("start", 0)
+        
+        .find("span")
+            .animate({ width:"15px" },{duration:500, complete: function () {$(this).width("auto")}})
+        .animate({"val": Math.ceil(end), opacity: 1, "paddingLeft": "6px", "paddingRight":"6px" }, {
+            easing: easing == undefined ? "linear" : easing,
+            duration: duration == undefined ? 500 : parseInt(duration),
+            step: function(fin,obj) {
+              
+              if(obj.prop === "val"){
+                var $this = jQuery(this);
+                var start = parseInt($this.data("start"));
+                $this.text(addCommas(parseInt(fin).toString())); 
+              }
+            }
+        });
+      }
+
+        setTimeout(function() {
+          animateNumber($(".brand .stat"), Math.random() * 10000, 4000, "easeInOutCubic");
+        }, 2000);
+      
+      
+      function addCommas(nStr) {
+        
+        nStr += '';
+        x = nStr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+        x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        }
+        return x1 + x2;
+      }
+    })();
+
 
 </script>
    </body>
