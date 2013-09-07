@@ -86,7 +86,7 @@ App.PurchaseFormController = Ember.Controller.extend
       Ember.$.ajax(hash)
 
   
-App.PurchaseForm = Ember.View.extend 
+App.PurchaseFormView = App.ModalView.extend 
   processingPurchase: Ember.computed.alias('controller.processingPurchase')
 
   

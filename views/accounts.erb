@@ -5,6 +5,13 @@
 <style>
   .nav-list a.active { background: blue; color: white;}
   .nav-list a.active:hover { background: blue; color: white;}
+.tab-pane {
+  display: none;
+}
+
+.tab-pane.active {
+  display: block;
+}
 
 </style>
 
@@ -33,6 +40,7 @@
     </div> 
     <div class="span9">
       {{ outlet }}
+      {{outlet modal}}
     </div> 
   </div> 
 
@@ -52,15 +60,26 @@
 </script>
 
 <script type="text/x-handlebars" id="account">
-  {{#if model.details.has_plan }}
-    {{render purchase_form model.details }}
-    Cancel plan button
-  {{else}}
-    {{render purchase_form model.details }}
-  {{/if}}
+  <table class="table">
+    <thead>
+      <th>Plan</th>
+      <th>Price</th>
+      <th>Private repositories</th>
+      <th></th>
+    </head>
+    <tbody>
+      <tr>
+        <td>Organization</td>
+        <td>$24/month</td>
+        <td>unlimited</td>
+        <td><button class="hb-button small" {{action purchase model.details }}>Upgrade</button></td>
+      </tr>
+    </tbody>
+  </table>
 </script>   
 
 <script type="text/x-handlebars" data-template-name="purchase_form">
+<div class="modal">
   <h2>Buy {{description}} for ${{price}} with Stripe </h2>
 
   <form {{action purchase on=submit}}>
@@ -106,28 +125,58 @@
       <button type="submit" {{bindAttr disabled="processingPurchase"}}> Submit Payment</button>
     </fieldset>
   </form>
+  
+  </div>
 </script>
 
 <script type="text/x-handlebars" id="profile">
-  <div class="nav-section">
-    <div class="widget-header">
-      <h3> {{ model.login }} </h3>
+
+{{#x-tabs}}
+    {{#x-pane title="Plans"}}
+    <div class="nav-section">
+     
+      <div class="widget-body">
+        {{#if model.details.org.is_owner }}
+
+          {{ render account model }}
+
+        {{else}}
+          <div class="alert">
+            <h5>You must be an owner to purchase</h5>
+            It appears like you are not a member of the owners team for {{ model.login }}. 
+            We strongly encourage that only members of the &quot;Owners&quot; team have access to subscription
+            information. If you have any questions feel free to email customer support at
+            <a href="mailto:huboard@huboard.com">huboard@huboard.com</a>. 
+          </div>
+        {{/if}}
+      </div>
     </div>
-    <div class="widget-body">
-      {{#if model.details.org.is_owner }}
+    {{/x-pane}}
+      {{#x-pane title="Payment history"}}
+       Payment history stuff
+      {{/x-pane}}
+    {{/x-tabs}}
 
-      {{ render account model }}
+</script>
 
-      {{else}}
-        <div class="alert">
-          <h5>You must be an owner to purchase</h5>
-          It appears like you are not a member of the owners team for {{ model.login }}. 
-          We strongly encourage that only members of the &quot;Owners&quot; team have access to subscription
-          information. If you have any questions feel free to email customer support at
-          <a href="mailto:huboard@huboard.com">huboard@huboard.com</a>. 
-        </div>
-      {{/if}}
+  <script type="text/x-handlebars" id="components/x-tabs">
+  <div class="tabbable">
+    <ul class="nav nav-tabs">
+      {{#each pane in panes}}
+      <li {{bindAttr class="pane.selected:active"}}>
+        <a href="#" {{action select pane}}>{{pane.title}}</a>
+      </li>
+      {{/each}}
+    </ul>
+    <div class="tab-content">
+      {{yield}}
     </div>
   </div>
-</script>
+  </script>
+  
+  <script type="text/x-handlebars" id="components/x-pane">
+    <div class="tab-pane" {{bindAttr class="selected:active"}}>
+      {{yield}}
+    </div>
+  </script>
 

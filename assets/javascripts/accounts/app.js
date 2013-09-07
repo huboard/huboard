@@ -9,6 +9,15 @@
   App.ApplicationController = Ember.Controller.extend();
 
   App.ApplicationRoute = Ember.Route.extend({
+    actions: {
+      openModal: function (view){
+        this.render(view, {
+          into: "application",
+          outlet: "modal"
+        })
+      }
+    },
+    
     model : function () {
       return Em.Deferred.promise(function(p) {
 
@@ -102,10 +111,68 @@
     }
   })
 
-  App.AccountController = Ember.ObjectController.extend();
+  App.AccountController = Ember.ObjectController.extend({
+    needs: ["purchaseForm"],  
+    actions: {
+      purchase: function (model) {
+        this.set("controllers.purchaseForm.model", model)
+        this.send("openModal","purchaseForm")
+      }
+    }  
+  });
 
- 
+ App.XTabsComponent = Ember.Component.extend({
+  init: function() {
+    this._super.apply(this, arguments);
+    this.panes = [];
+  },
+  
+  addPane: function(pane) {
+    if (this.get('panes.length') == 0) this.select(pane);
+    this.panes.pushObject(pane);
+  },
+  
+  select: function(pane) {
+    this.set('selected', pane);
+  }
 
+});
+
+App.XPaneComponent = Ember.Component.extend({
+  didInsertElement: function() {
+    this.get('parentView').addPane(this);
+  },
+  
+  selected: function() {
+    return this.get('parentView.selected') === this;
+  }.property('parentView.selected')
+});
+
+App.animateModalClose = function() {
+  var promise = new Ember.RSVP.defer();
+
+  $('.modal.in').removeClass('in');
+  $('.modal-backdrop.in').removeClass('in');
+
+  setTimeout(function() {
+    promise.resolve();
+  }, 250);
+
+  return promise.promise;
+};
+
+App.animateModalOpen = function() {
+  var promise = new Ember.RSVP.defer();
+
+  $('.modal').addClass('in');
+  $('.modal-backdrop').addClass('in');
+
+  setTimeout(function() {
+    promise.resolve();
+  }, 250);
+
+  return promise.promise;
+};
 
 })(this);
 
