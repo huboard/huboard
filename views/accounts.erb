@@ -22,7 +22,7 @@
 
       <ul class="nav nav-list">
         <li>
-        {{#linkTo index }} 
+        {{#linkTo "index" }} 
         <img {{bindAttr src=model.user.gravatar_url  }} /> 
         {{ model.user.login }}
         {{/linkTo}}
@@ -30,7 +30,7 @@
 
         {{#each model.orgs}}
         <li>
-        {{#linkTo profile this}} 
+        {{#linkTo "profile" this}} 
         <img {{bindAttr src=gravatar_url  }} /> 
           {{ login }} 
         {{/linkTo}}

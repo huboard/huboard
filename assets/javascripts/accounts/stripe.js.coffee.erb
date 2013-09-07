@@ -1,6 +1,9 @@
 
 App.PurchaseFormController = Ember.Controller.extend
-  
+  actions: 
+    close: -> 
+      this.send "closeModal"
+
   key : '<%= settings.stripe_publishable_key %>'
 
   processingPurchase: false
