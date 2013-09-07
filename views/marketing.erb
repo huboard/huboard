@@ -64,7 +64,7 @@
        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
        })();
-      (function(){
+   (function(){
       function animateNumber($input, end, duration, easing) {
         
         if($input.data("label")){
@@ -77,24 +77,27 @@
           .data("start", 0)
         
         .find("span")
-            .animate({ width:"15px" },{duration:500, complete: function () {$(this).width("auto")}})
-        .animate({"val": Math.ceil(end), opacity: 1, "paddingLeft": "6px", "paddingRight":"6px" }, {
+        .animate({ width:"25px" },{duration:500, complete: function () {$(this).width("auto")}})
+        .animate({"val": Math.ceil(end), opacity: 1 }, {
             easing: easing == undefined ? "linear" : easing,
             duration: duration == undefined ? 500 : parseInt(duration),
-            step: function(fin,obj) {
+            step: function(fin, obj) {
               
               if(obj.prop === "val"){
                 console.log(fin)
                 var $this = jQuery(this);
                 var start = parseInt($this.data("start"));
-                $this.text(addCommas(parseInt(fin).toString())); 
+                var number = addCommas(parseInt(fin).toString());
+                $this
+                  .css({"min-width": (number.length*16) + "px" })
+                  .text(number); 
               }
             }
         });
       }
 
         setTimeout(function() {
-          animateNumber($(".brand .stat"), Math.random() * 10000000, 4000, "easeInOutCubic");
+          animateNumber($(".brand .stat"), Math.random() * 10000, 4000, "easeInOutCubic");
         }, 2000);
       
       
@@ -110,7 +113,7 @@
         }
         return x1 + x2;
       }
-    })();
+   })();
 
 
 </script>

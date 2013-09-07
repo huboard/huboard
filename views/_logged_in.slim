@@ -3,6 +3,8 @@ ul.nav.pull-right
     a.dropdown-toggle data-toggle="dropdown" href="#"
       | #{current_user.login } <b class="caret"></b>
     ul.dropdown-menu
+      li 
+        a href="/settings/profile" Account
       li
         a href="/logout" Logout
 

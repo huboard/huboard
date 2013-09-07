@@ -51,4 +51,9 @@ h3,h4,h5,h6 {
   @extend %font-sub-headings;
   color: $hb-purple;
 }
+a {
+    &, &:hover {
+      color: $hb-purple-dark;
+    }
+}
 

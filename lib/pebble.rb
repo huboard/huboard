@@ -94,11 +94,12 @@ module Stint
     end
 
     def create_board(user_name, repo, hook)
+      puts "adding labels"
       github.create_label user_name, repo, :name => "0 - Backlog", :color => "CCCCCC"
       github.create_label user_name, repo, :name => "1 - Ready", :color => "CCCCCC"
       github.create_label user_name, repo, :name => "2 - Working", :color => "CCCCCC"
       github.create_label user_name, repo, :name => "3 - Done", :color => "CCCCCC"
-      create_hook user_name, repo, hook
+      create_hook user_name, repo, hook if hook
     end
 
 
