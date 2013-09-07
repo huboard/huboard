@@ -28,6 +28,7 @@ use Rack::Static, :urls => ["/files", "/font","/img", "/scripts","/css"], :root 
 class HuboardAssets < Sprockets::Environment
   load ".settings"
 end
+
 environment = HuboardAssets.new
 
 map "/api" do
@@ -45,6 +46,7 @@ end
 map "/assets" do
   environment.append_path 'assets/javascripts'
   environment.append_path 'assets/stylesheets'
+  environment.append_path 'assets/images'
   run environment
 end
 

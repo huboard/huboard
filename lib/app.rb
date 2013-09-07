@@ -19,7 +19,7 @@ class Huboard
     before "/:user/:repo/?*" do 
 
       return if RESERVED_URLS.include? params[:user]
-      
+
       if authenticated? :private
         repo = gh.repos params[:user], params[:repo]
         raise Sinatra::NotFound if repo.message == "Not Found"
@@ -78,7 +78,7 @@ class Huboard
     end
 
     get "/favicon.ico" do
-      puts "hello"
+     
       path = File.expand_path("../../public/img/favicon.ico",__FILE__)
 
       response = [ ::File.open(path, 'rb') { |file| file.read } ]

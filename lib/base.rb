@@ -66,7 +66,6 @@ class HuboardApplication < Sinatra::Base
     sprockets.append_path File.join(root_path, 'assets', 'stylesheets')
     sprockets.append_path File.join(root_path, 'assets', 'javascripts')
     sprockets.append_path File.join(root_path, 'assets', 'images')
-    sprockets.append_path File.join(root_path, 'assets', 'fonts')
 
 
     Sprockets::Helpers.configure do |config|

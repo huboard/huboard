@@ -2,7 +2,7 @@
 <html>
   <head>
     <title><% yield_content :title %>Huboard</title>
-    <link rel="shortcut icon" type="image/png" href="/img/favicon.png" />
+    <link rel="shortcut icon" href="/img/favicon.ico?v=2" />
     <!-- This is a special version of jQuery with RequireJS built-in -->
     <script src="/scripts/firebugx.js" type="text/javascript" charset="utf-8"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>
@@ -18,7 +18,11 @@
       <div class="navbar navbar-static-top">
         <div class="navbar-inner">
           <div class="container">
-            <a class="brand" href="/">HuBo<div class="stat" data-label=".brand label"><span></span><label>cards&nbsp;moved</label></div>ard </a>
+            
+            <a class="brand" href="/">
+              <img class="animate-before" src="<%=image_path 'LogoWhiteFull.png' %>"/>
+              <img class="animate-after" src="<%=image_path 'HuboWhite.png' %>"/><div class="stat" data-label=".brand label"><span></span><label>cards&nbsp;moved</label></div><img class="animate-after" src="<%=image_path 'ardWhite.png' %>"/>
+            </a>
             <div class="nav">
               <ul class="nav">
                 <li>
@@ -64,7 +68,7 @@
        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
        })();
-   (function(){
+   (function($){
       function animateNumber($input, end, duration, easing) {
         
         if($input.data("label")){
@@ -89,16 +93,19 @@
                 var start = parseInt($this.data("start"));
                 var number = addCommas(parseInt(fin).toString());
                 $this
-                  .css({"min-width": (number.length*16) + "px" })
+                  .css({"min-width": (number.length*17) + "px" })
                   .text(number); 
               }
             }
         });
       }
 
+      $(window).on("load", function () {
         setTimeout(function() {
-          animateNumber($(".brand .stat"), Math.random() * 10000, 4000, "easeInOutCubic");
+          $(".navbar .brand").addClass("animating")
+          animateNumber($(".brand .stat"), Math.random() * 10000, 3000, "easeInOutCubic");
         }, 2000);
+      });
       
       
       function addCommas(nStr) {
@@ -113,7 +120,7 @@
         }
         return x1 + x2;
       }
-   })();
+   })(jQuery);
 
 
 </script>

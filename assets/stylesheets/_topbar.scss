@@ -37,6 +37,20 @@ body {
 }
 .navbar .brand {
 
+  &.animating {
+    .animate-before {
+       display: none; 
+    }
+    .animate-after {
+       position: static;
+    }
+  }
+  .animate-after {
+       position: absolute;
+       left: -999999px;
+   }
+
+  
   position: relative;
   line-height: 90px;
   padding-top: 0;
@@ -46,7 +60,9 @@ body {
 
   @extend %font-headings;
   font-size: 40px;
-
+  img {
+   vertical-align: baseline; 
+  }
   .stat {
     position: relative;
     display: inline-block;
@@ -56,6 +72,7 @@ body {
      text-shadow: none;
       text-align: center;
       opacity: 0.5;
+      font-size: 43px;
     }
     label {
      opacity: 0; 
