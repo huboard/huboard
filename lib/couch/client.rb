@@ -218,6 +218,19 @@ class Huboard
       end
     end
 
+    def stats
+      return Stats.new connection, :type => "stats"
+    end
+    class Stats < ResourceProxy
+      identify_by :id
+
+      def dashboard
+        query_view "dashboardStats", :group_level => 1
+      end
+    end
+
+    
+
   end
 
   module Issues

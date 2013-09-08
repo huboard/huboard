@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><% yield_content :title %>Huboard</title>
+    <title><% yield_content :title %>HuBoard</title>
     <link rel="shortcut icon" href="/img/favicon.ico?v=2" />
     <!-- This is a special version of jQuery with RequireJS built-in -->
     <script src="/scripts/firebugx.js" type="text/javascript" charset="utf-8"></script>
@@ -21,7 +21,7 @@
             
             <a class="brand" href="/">
               <img class="animate-before" src="<%=image_path 'LogoWhiteFull.png' %>"/>
-              <img class="animate-after" src="<%=image_path 'HuboWhite.png' %>"/><div class="stat" data-label=".brand label"><span></span><label>cards&nbsp;moved</label></div><img class="animate-after" src="<%=image_path 'ardWhite.png' %>"/>
+              <img class="animate-after" src="<%=image_path 'HuboWhite.png' %>"/><div class="stat" data-label=".brand label"><span></span><label></label></div><img class="animate-after" src="<%=image_path 'ardWhite.png' %>"/>
             </a>
             <div class="nav">
               <ul class="nav">
@@ -101,9 +101,14 @@
       }
 
       $(window).on("load", function () {
+        var stats = <%= couch.stats.dashboard.rows.to_json %>,
+            stat = stats[Math.floor(Math.random() * stats.length)]
+
+        $(".navbar .brand label").text(stat.key);
+
         setTimeout(function() {
           $(".navbar .brand").addClass("animating")
-          animateNumber($(".brand .stat"), Math.random() * 10000, 3000, "easeInOutCubic");
+          animateNumber($(".brand .stat"), stat.value, 3000, "easeInOutCubic");
         }, 2000);
       });
       
@@ -121,7 +126,7 @@
         return x1 + x2;
       }
    })(jQuery);
-
+  
 
 </script>
    </body>
