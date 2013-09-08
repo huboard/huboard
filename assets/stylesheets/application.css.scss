@@ -11,6 +11,9 @@
 @import "overlay";
 @import "section";
 
+form {
+  margin: 0;
+}
 .navbar {
   &.navbar-fixed-top, &.navbar-static-top {
     .navbar-inner {

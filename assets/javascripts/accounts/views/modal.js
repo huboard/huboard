@@ -1,5 +1,5 @@
 App.ModalView = Em.View.extend({
-  layout: Em.Handlebars.compile("{{yield}}"),
+  layout: Em.Handlebars.compile("{{yield}}<div class='modal-backdrop'></div>"),
 
   didInsertElement: function() {
     //App.animateModalOpen();
@@ -8,7 +8,7 @@ App.ModalView = Em.View.extend({
       if (event.keyCode === 27) this.get('controller').send('close');
     }.bind(this));
 
-    this.$(':input').first().focus();
+    this.$(':input:not(.close)').first().focus();
   },
 
   willDestroyElement: function() {

@@ -16,6 +16,7 @@
 </style>
 
 <script type="text/x-handlebars" >
+  {{outlet modal}}
   <div class="row">
 
     <div class="span3">
@@ -40,7 +41,6 @@
     </div> 
     <div class="span9">
       {{ outlet }}
-      {{outlet modal}}
     </div> 
   </div> 
 
@@ -72,7 +72,18 @@
         <td>Organization</td>
         <td>$24/month</td>
         <td>unlimited</td>
-        <td><button class="hb-button small" {{action purchase model.details }}>Upgrade</button></td>
+        <td>
+          {{#if model.details.has_plan }} 
+            Your plan
+            <button class="hb-button small"
+               {{action cancel model.details }}>Cancel plan</button>
+          {{else}}
+            <button class="hb-button small"
+               {{bindAttr disabled="model.details.has_plan" }}
+               {{action purchase model.details }}>Upgrade</button>
+            
+          {{/if}}
+        </td>
       </tr>
     </tbody>
   </table>
@@ -80,19 +91,16 @@
 
 <script type="text/x-handlebars" data-template-name="purchase_form">
 <div class="modal">
-  <h2>Buy {{description}} for ${{price}} with Stripe </h2>
-
   <form {{action purchase on=submit}}>
+  <div class="modal-header">
+    <button type="button" class="close" {{action close}} data-dismiss="modal" aria-hidden="true">×</button>
+    Credit card infomation
+  </div>
+  <div class="modal-body">
     <fieldset>
       {{#if errors}}
         <div class="alert alert-error">{{errors}}</div>
       {{/if}}
-      <div class="form-row">
-        <label>
-          <span>Billing email</span>
-        </label>
-        {{input valueBinding="model.org.billing_email" type=text required=true }}
-      </div>
 
       <div class="form-row">
         <label>
@@ -117,15 +125,18 @@
 
       <div class="form-row">
         <label>
-          <span>Coupon code</span>
+          <span>Billing email</span>
         </label>
-        {{input valueBinding="coupon" }}
+        {{input valueBinding="model.org.billing_email" type=text required=true }}
       </div>
 
-      <button type="submit" {{bindAttr disabled="processingPurchase"}}> Submit Payment</button>
     </fieldset>
-  </form>
   
+  </div>
+  <div class="modal-footer">
+      <button class="hb-button" type="submit" {{bindAttr disabled="processingPurchase"}}> Submit Payment</button>
+  </div>
+  </form>
   </div>
 </script>
 
@@ -178,5 +189,9 @@
     <div class="tab-pane" {{bindAttr class="selected:active"}}>
       {{yield}}
     </div>
+  </script>
+
+  <script type="text/x-handlebars" id="empty">
+
   </script>
 

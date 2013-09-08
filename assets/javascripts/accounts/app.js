@@ -15,9 +15,17 @@
           into: "application",
           outlet: "modal"
         })
+      },
+      closeModal: function() {
+        App.animateModalClose().then(function() {
+          this.render('empty', {
+            into: 'application',
+            outlet: 'modal'
+          });
+        }.bind(this));
       }
     },
-    
+
     model : function () {
       return Em.Deferred.promise(function(p) {
 
@@ -28,12 +36,12 @@
           var orgs = Em.A();
 
           response.orgs.forEach(function(org) {
-             orgs.pushObject(App.Org.create(org));
+            orgs.pushObject(App.Org.create(org));
           });
 
           p.resolve(Ember.Object.create({
-             user : user,
-             orgs : orgs
+            user : user,
+            orgs : orgs
           }));
 
 
@@ -52,13 +60,13 @@
     }.property("avatar_url"),
 
     loadDetails : function () {
-       var user = this; 
-       return Em.Deferred.promise(function(p) {
-          p.resolve($.getJSON("/api/profiles/user").then(function (response) {
-             user.set("details", response)
-             return response;
-          }));
-        });
+      var user = this; 
+      return Em.Deferred.promise(function(p) {
+        p.resolve($.getJSON("/api/profiles/user").then(function (response) {
+          user.set("details", response)
+          return response;
+        }));
+      });
     },
 
   })
@@ -71,21 +79,21 @@
     }.property("avatar_url"),
 
     loadDetails : function () {
-       var org = this; 
-       return Em.Deferred.promise(function(p) {
-          p.resolve($.getJSON("/api/profiles/"+ org.get("login")).then(function (response) {
-             org.set("details", response)
-             return response;
-          }));
-        });
+      var org = this; 
+      return Em.Deferred.promise(function(p) {
+        p.resolve($.getJSON("/api/profiles/"+ org.get("login")).then(function (response) {
+          org.set("details", response)
+          return response;
+        }));
+      });
     },
 
   })
 
   App.IndexRoute = Ember.Route.extend({
     model : function () {
-       var model = this.modelFor("application");
-       return model.user;
+      var model = this.modelFor("application");
+      return model.user;
     },
 
     afterModel: function (model) {
@@ -109,7 +117,7 @@
     serialize: function (model) {
       return { profile_id: model.get("login")}
     },
-    
+
     afterModel : function (model) {
       return model.loadDetails();
     }
@@ -125,58 +133,58 @@
     }  
   });
 
- App.XTabsComponent = Ember.Component.extend({
-  init: function() {
-    this._super.apply(this, arguments);
-    this.panes = [];
-  },
-  
-  addPane: function(pane) {
-    if (this.get('panes.length') == 0) this.select(pane);
-    this.panes.pushObject(pane);
-  },
-  
-  select: function(pane) {
-    this.set('selected', pane);
-  }
+  App.XTabsComponent = Ember.Component.extend({
+    init: function() {
+      this._super.apply(this, arguments);
+      this.panes = [];
+    },
 
-});
+    addPane: function(pane) {
+      if (this.get('panes.length') == 0) this.select(pane);
+      this.panes.pushObject(pane);
+    },
 
-App.XPaneComponent = Ember.Component.extend({
-  didInsertElement: function() {
-    this.get('parentView').addPane(this);
-  },
-  
-  selected: function() {
-    return this.get('parentView.selected') === this;
-  }.property('parentView.selected')
-});
+    select: function(pane) {
+      this.set('selected', pane);
+    }
 
-App.animateModalClose = function() {
-  var promise = new Ember.RSVP.defer();
+  });
 
-  $('.modal.in').removeClass('in');
-  $('.modal-backdrop.in').removeClass('in');
+  App.XPaneComponent = Ember.Component.extend({
+    didInsertElement: function() {
+      this.get('parentView').addPane(this);
+    },
 
-  setTimeout(function() {
-    promise.resolve();
-  }, 250);
+    selected: function() {
+      return this.get('parentView.selected') === this;
+    }.property('parentView.selected')
+  });
 
-  return promise.promise;
-};
+  App.animateModalClose = function() {
+    var promise = new Ember.RSVP.defer();
 
-App.animateModalOpen = function() {
-  var promise = new Ember.RSVP.defer();
+    $('.modal.in').removeClass('in');
+    $('.modal-backdrop.in').removeClass('in');
 
-  $('.modal').addClass('in');
-  $('.modal-backdrop').addClass('in');
+    setTimeout(function() {
+      promise.resolve();
+    }, 250);
 
-  setTimeout(function() {
-    promise.resolve();
-  }, 250);
+    return promise.promise;
+  };
 
-  return promise.promise;
-};
+  App.animateModalOpen = function() {
+    var promise = new Ember.RSVP.defer();
+
+    $('.modal').addClass('in');
+    $('.modal-backdrop').addClass('in');
+
+    setTimeout(function() {
+      promise.resolve();
+    }, 250);
+
+    return promise.promise;
+  };
 
 })(this);
 
