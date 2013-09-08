@@ -102,10 +102,14 @@
 
       var profiles = this.modelFor("application");
       return profiles.orgs.find(function(item) {
-        return item.id == params.profile_id;                   
+        return item.login == params.profile_id;                   
       });
 
     },
+    serialize: function (model) {
+      return { profile_id: model.get("login")}
+    },
+    
     afterModel : function (model) {
       return model.loadDetails();
     }
