@@ -81,10 +81,16 @@
             <button class="hb-button small"
                {{bindAttr disabled="model.details.has_plan" }}
                {{action purchase model.details }}>Upgrade</button>
-            
           {{/if}}
         </td>
       </tr>
+      {{#each model.details.plans }}
+        <td>{{ name }}</td>
+        <td>{{ amount }}</td>
+        <td>unlimited</td>
+        <td></td>
+        
+      {{/each}}
     </tbody>
   </table>
 </script>   

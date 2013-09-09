@@ -138,9 +138,10 @@ class Huboard
       org.merge! :is_owner => is_owner
 
       customer = couch.customers.findByOrgId org.id
+      plans = p couch.connection.get("./plans").body
 
       json :org => org.to_hash, 
-        :plan => customer.rows.first,
+        :plans => plans.stripe[plans.meta.mode]["Organization"],
         :is_owner => is_owner,
         :has_plan => customer.rows.size > 0
     end
