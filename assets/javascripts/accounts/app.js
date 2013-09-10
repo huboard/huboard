@@ -7,7 +7,16 @@
   })
 
   App.ApplicationController = Ember.Controller.extend();
-
+  
+  App.LoadingRoute = Ember.Route.extend({
+    renderTemplate: function() {
+      if(this.router._activeViews.application){
+       return this.render({ "into" : "application", "outlet" : "loading"});
+      }
+      this.render("loading");
+    }
+  });
+  
   App.ApplicationRoute = Ember.Route.extend({
     actions: {
       openModal: function (view){
@@ -28,26 +37,25 @@
 
     model : function () {
       return Em.Deferred.promise(function(p) {
+        Ember.run.once(function() {
+          $.getJSON("/api/profiles").then(function(response) {
 
-        $.getJSON("/api/profiles").then(function(response) {
+            var user = App.User.create(response.user);
 
-          var user = App.User.create(response.user);
+            var orgs = Em.A();
 
-          var orgs = Em.A();
+            response.orgs.forEach(function(org) {
+              orgs.pushObject(App.Org.create(org));
+            });
 
-          response.orgs.forEach(function(org) {
-            orgs.pushObject(App.Org.create(org));
+            p.resolve(Ember.Object.create({
+              user : user,
+              orgs : orgs
+            }));
+
+
           });
-
-          p.resolve(Ember.Object.create({
-            user : user,
-            orgs : orgs
-          }));
-
-
         });
-
-
       });
     }
   });

@@ -21,7 +21,7 @@
             
             <a class="brand" href="/">
               <img class="animate-before" src="<%=image_path 'LogoWhiteFull.png' %>"/>
-              <img class="animate-after" src="<%=image_path 'HuboWhite.png' %>"/><div class="stat" data-label=".brand label"><span></span><label></label></div><img class="animate-after" src="<%=image_path 'ardWhite.png' %>"/>
+              <img class="animate-after" src="<%=image_path 'Hu.png' %>"/><div class="stat" data-label=".brand label"><span></span><label></label></div><img class="animate-after" src="<%=image_path 'Board.png' %>"/>
             </a>
             <div class="nav">
               <ul class="nav">
@@ -45,7 +45,7 @@
       <div class="container">
         <div class="row">
           <div class="span6">
-            <img class="animate-before" src="<%=image_path 'LogoFullPurpleLight.png' %>"/>
+            <img src="<%=image_path 'LogoFullPurpleLight.png' %>"/>
           </div>
           <div class="links span6">
             <a href="/site/terms">terms</a>
@@ -81,7 +81,9 @@
           .data("start", 0)
         
         .find("span")
-        .animate({ width:"25px" },{duration:500, complete: function () {$(this).width("auto")}})
+        .animate({ width:(addCommas(parseInt(end).toString()).length*17) + "px" },{easing: "easeInOutBack",duration: 900, complete: function () {
+          //$(this).width("auto")
+        }})
         .animate({"val": Math.ceil(end), opacity: 1 }, {
             easing: easing == undefined ? "linear" : easing,
             duration: duration == undefined ? 500 : parseInt(duration),
@@ -108,8 +110,8 @@
 
         setTimeout(function() {
           $(".navbar .brand").addClass("animating")
-          animateNumber($(".brand .stat"), stat.value, 3000, "easeInOutCubic");
-        }, 2000);
+          animateNumber($(".brand .stat"), stat.value, 1600, "easeInOutCubic");
+        }, 3500);
       });
       
       
