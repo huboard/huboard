@@ -16,14 +16,12 @@
 </style>
 
 <script type="text/x-handlebars" id="loading">
-  Loading
+  <div class="fullscreen-overlay"></div>
 </script>
 
 <script type="text/x-handlebars" >
   {{outlet modal}}
-  <div style="background: red;">
-     {{outlet loading}}
-   </div>
+  {{outlet loading}}
   <div class="row">
    
     <div class="span3">
@@ -55,9 +53,6 @@
 </script>
 
 <script type="text/x-handlebars" id="index">
-   <div style="background: blue;">
-   {{outlet loading}}
-   </div>
   <div class="nav-section">
 
     <div class="widget-header">

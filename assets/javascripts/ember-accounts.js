@@ -2,7 +2,7 @@
 //= require ./ember/handlebars-1.0.0.js
 //= require ./ember/ember.js
 //
-//= require ./vendor/jquery.payment.js
-//= require ./vendor/ember-bootstrap.js
+//= require spin.js
 //
+//= require ./vendor/jquery.payment.js
 //= require ./accounts

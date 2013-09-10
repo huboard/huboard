@@ -16,7 +16,7 @@ body > .fullscreen-overlay {
   overflow-x: hidden;
   overflow-y: auto;
 
-  background-color: rgba(0,0,0, 0.6);
+  background-color: rgba($hb-grey-dark, 0.5);
 
   display:none;
 
