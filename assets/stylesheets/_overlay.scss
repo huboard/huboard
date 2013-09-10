@@ -3,6 +3,9 @@ body > .fullscreen-overlay {
 }
 
 .fullscreen-overlay {
+  &.fixed {
+     position:fixed; 
+  }
   position: absolute;
   top: 0px;
   left: 0px;

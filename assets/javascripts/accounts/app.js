@@ -201,12 +201,9 @@
   App.animateModalClose = function() {
     var promise = new Ember.RSVP.defer();
 
-    $('.modal.in').removeClass('in');
-    $('.modal-backdrop.in').removeClass('in');
+    $('body').removeClass("fullscreen-open");
+    promise.resolve();
 
-    setTimeout(function() {
-      promise.resolve();
-    }, 250);
 
     return promise.promise;
   };
@@ -214,12 +211,9 @@
   App.animateModalOpen = function() {
     var promise = new Ember.RSVP.defer();
 
-    $('.modal').addClass('in');
-    $('.modal-backdrop').addClass('in');
-
-    setTimeout(function() {
-      promise.resolve();
-    }, 250);
+     $('body').addClass("fullscreen-open");
+    promise.resolve();
+    
 
     return promise.promise;
   };
