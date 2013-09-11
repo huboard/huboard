@@ -33,7 +33,7 @@
          rotate: 19, // The rotation offset
          direction: 1, // 1: clockwise, -1: counterclockwise
          color: '#4a3e93', // #rgb or #rrggbb or array of colors
-         speed: 0.5, // Rounds per second
+         speed: 0.3, // Rounds per second
          trail: 42, // Afterglow percentage
          shadow: false, // Whether to render a shadow
          hwaccel: true, // Whether to use hardware acceleration
