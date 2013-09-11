@@ -1,7 +1,11 @@
 
 // Create our Application
 (function () {
-
+  Handlebars.registerHelper("stripe-money", function(path) {
+    var value = Ember.getPath(this, path);
+    return "$" + parseFloat(value/100).toFixed(0);
+  });
+  
   App = Ember.Application.create({
     rootElement : "#main-application"
   })

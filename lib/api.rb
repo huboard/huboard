@@ -128,7 +128,16 @@ class Huboard
     end
 
     get '/profiles/user/?' do 
-      json :herp => "herp"
+      user = gh.user
+      user.merge! :billing_email => user.email
+
+      customer = couch.customers.findByUserId user.id
+      plans = couch.connection.get("./plans").body
+
+      json :org => user.to_hash, 
+        :plans => plans.stripe[plans.meta.mode]["User"],
+        :is_owner => true,
+        :has_plan => customer.rows.size > 0
     end
 
     get '/profiles/:org/?' do 
@@ -138,7 +147,7 @@ class Huboard
       org.merge! :is_owner => is_owner
 
       customer = couch.customers.findByOrgId org.id
-      plans = p couch.connection.get("./plans").body
+      plans = couch.connection.get("./plans").body
 
       json :org => org.to_hash, 
         :plans => plans.stripe[plans.meta.mode]["Organization"],

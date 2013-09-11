@@ -53,15 +53,22 @@
 </script>
 
 <script type="text/x-handlebars" id="index">
-  <div class="nav-section">
+{{#x-tabs}}
+    {{#x-pane title="Plans"}}
+    <div class="nav-section">
+     
+      <div class="widget-body">
+      
 
-    <div class="widget-header">
-      <h3> {{ model.login }} </h3>
+          {{ render account model }}
+
+   
+      </div>
     </div>
-    <div class="widget-body">
-      <p> {{ model.details.herp }} </p>
-    </div>
-  </div>
+    {{/x-pane}}
+     
+    {{/x-tabs}}
+
 </script>
 
 <script type="text/x-handlebars" id="account">
@@ -73,30 +80,22 @@
       <th></th>
     </head>
     <tbody>
-      <tr>
-        <td>Organization</td>
-        <td>$24/month</td>
-        <td>unlimited</td>
-        <td>
-          {{#if model.details.has_plan }} 
-            Your plan
-            <button class="hb-button small"
-               {{action cancel model.details }}>Cancel plan</button>
-          {{else}}
-            <button class="hb-button small"
-               {{bindAttr disabled="model.details.has_plan" }}
-               {{action purchase model.details }}>Upgrade</button>
-          {{/if}}
-        </td>
-      </tr>
+      
       {{#each model.details.plans }}
         <td>{{ name }}</td>
-        <td>{{ amount }}</td>
+        <td>{{stripe-money amount }}/month</td>
         <td>unlimited</td>
-        <td>    <button class="hb-button small"
-
-               {{action purchase this }}>Upgrade</button>
-</td>
+        <td class="text-right">    
+         {{#if purchased }} 
+            Your plan
+            <button class="hb-button small"
+               {{action cancel this }}>Cancel plan</button>
+          {{else}}
+            <button class="hb-button small"
+             {{action purchase this }}>Upgrade</button>
+          {{/if}}
+         
+        </td>
         
       {{/each}}
     </tbody>
