@@ -23,16 +23,20 @@ App.PurchaseFormController = Ember.Controller.extend
     "YYYY"
   ).property("exp")
 
+  cardType: (->
+    Ember.$.payment.cardType(@get('number'))
+  ).property('number')
 
   coupon: null,
+  selectedPlan: null,
   
-  price: 24
-
-  description: "organization plan"
+  price: (->
+    @get("model.amount")
+  ).property("amount")
   
-  purchase: ->
+  purchase: (plan) ->
     @set('processingPurchase', true)
-    
+    @set('selectedPlan', plan)
     Stripe.setPublishableKey(@get('key'))
     
     Stripe.card.createToken({
@@ -41,7 +45,7 @@ App.PurchaseFormController = Ember.Controller.extend
       exp_month: @get('expMonth')
       exp_year: @get('expYear')
     }, @didCreateToken.bind(this))
- 
+
   didCreateToken: (status, response) ->
     if response.error
       @set('processingPurchase', false)
@@ -50,7 +54,7 @@ App.PurchaseFormController = Ember.Controller.extend
       @didPurchase(response)
   
   postCharge: (token) ->
-    this.ajax("https://api.stripe.com/v1/charges", {
+    this.ajax("/settings/charge/" + @get("model.org.id"), {
        amount: @get('price') * 100
        currency: 'USD'
        card: token
@@ -58,7 +62,6 @@ App.PurchaseFormController = Ember.Controller.extend
     }).then(@didPurchase.bind(this), @purchaseDidError.bind(this))
 
   didPurchase: (response) ->
-    console.log response
     @set('processingPurchase', false)
     @set("model.has_plan",true)
     this.send("close")
@@ -66,8 +69,6 @@ App.PurchaseFormController = Ember.Controller.extend
   purchaseDidError: (error) ->
     @set('errors', error.responseJSON.error.message)
     @set('processingPurchase', false)
-    
-    throw error
        
   ajax: (url, data) ->
     controller = this
@@ -79,9 +80,6 @@ App.PurchaseFormController = Ember.Controller.extend
       hash.context = controller
       hash.data = data
       
-      hash.beforeSend = (xhr) ->
-        xhr.setRequestHeader("Authorization", "Bearer #{controller.get('apiKey')}")
-     
       hash.success = (json) ->
         resolve(json)
 
@@ -121,7 +119,7 @@ App.CardNumberField = Ember.TextField.extend
 App.CardExpiryField = Ember.TextField.extend
   required: true
   autocompletetype: "cc-exp"
-  format: "01 / 13"
+  format: "MM / YY"
   placeholder: Ember.computed.alias("format")
   didInsertElement: ->
     @$().payment("formatCardExpiry")
