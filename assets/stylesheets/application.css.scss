@@ -52,6 +52,35 @@ form {
     }
   }
 }
+
+.nav-list {
+  > li {
+    margin-bottom: 3px;
+    > a {
+      padding: 3px 12px;
+      border-radius: 3px;
+      &.active, &.active:hover {
+        background: $hb-purple;
+        color: white;
+        text-shadow: none;
+      }
+    }
+  }
+    
+
+}
+
+  
+.tab-pane {
+  display: none;
+}
+
+.tab-pane.active {
+  display: block;
+}
+
+
+
 .dropdown-menu {
   li {
     > a {
