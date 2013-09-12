@@ -39,9 +39,7 @@ class Huboard
         puts "Query => _design/#{class_name}/_view/#{viewname} #{options}"
         result = connection.get("_design/#{class_name}/_view/#{viewname}") do |request|
           request.params.merge! options
-          puts request
         end
-        puts result.body
         return result.body
       end
 

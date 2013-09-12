@@ -45,29 +45,34 @@ class Huboard
       erb :accounts, :layout => :ember_layout
     end
 
-    post "/charge/:org/?" do 
+    post "/charge/:id/?" do 
+
+      puts params
 
       customer = Stripe::Customer.create(
         :email => params[:email],
-        :card  => params[:stripeToken],
-        :plan =>  params[:plan]
+        :card  => params[:card][:id],
+        :plan =>  params[:plan][:id]
       )
 
       user = gh.user
-      org = gh.orgs(params[:org])
+      account = gh.users(params[:id])
 
       couch.customers.save({
          "id" => customer.id,
          github: {
           :user => user.to_hash,
-          :org => org.to_hash
+          :account => account.to_hash
          },
          stripe: {
-            customer: customer
+            customer: customer,
+            plan: {
+              plan_id: params[:plan][:plan_id]
+            }
          }
       })
 
-      erb :charge
+      json :success => true
     end
 
     helpers Sinatra::ContentFor

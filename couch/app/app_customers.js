@@ -6,16 +6,16 @@ ddoc =
 
 ddoc.views.findByOrgId = {
   map: function (doc) {  
-    if(doc.meta.type === "customer") {
-      emit(doc.github.org.id, doc); 
+    if(doc.meta.type === "customer" && doc.github.account.type == "Organization") {
+      emit(doc.github.account.id, doc); 
     }
   }
 }
 
 ddoc.views.findByUserId = {
   map: function(doc) {
-    if(doc.meta.type === "customer") {
-      emit(doc.github.user.id, doc);
+    if(doc.meta.type === "customer" && doc.github.account.type == "User") {
+      emit(doc.github.account.id, doc);
     }
   }
 }

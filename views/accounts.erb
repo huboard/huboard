@@ -56,18 +56,12 @@
 {{#x-tabs}}
     {{#x-pane title="Plans"}}
     <div class="nav-section">
-     
       <div class="widget-body">
-      
-
           {{ render account model }}
-
-   
       </div>
     </div>
     {{/x-pane}}
-     
-    {{/x-tabs}}
+{{/x-tabs}}
 
 </script>
 
@@ -111,7 +105,7 @@
   </div>
   <div class="modal-body">
     <p>
-      Thanks for choosing to become a paying customer! Once we successfully charge your credit card, we'll immediately upgrade your account to the <strong>{{model.name}}</strong> plan.
+      Thanks for choosing to become a paying customer! Once we successfully charge your credit card, we'll immediately upgrade your account to the <strong>{{model.plan.name}}</strong> plan.
     </p>
     <fieldset>
       {{#if errors}}
@@ -194,9 +188,6 @@
       </div>
     </div>
     {{/x-pane}}
-      {{#x-pane title="Payment history"}}
-       Payment history stuff
-      {{/x-pane}}
     {{/x-tabs}}
 
 </script>

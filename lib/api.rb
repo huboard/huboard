@@ -131,11 +131,17 @@ class Huboard
       user = gh.user
       user.merge! :billing_email => user.email
 
-      customer = couch.customers.findByUserId user.id
-      plans = couch.connection.get("./plans").body
+      customer =  couch.customers.findByUserId(user.id)
+      plans_doc =  couch.connection.get("./plans").body
+
+      plans =  plans_doc.stripe[plans_doc.meta.mode]["User"]
+
+      plans = plans.map do |plan|
+        plan.merge! :purchased => customer.rows.any? { |row| row.value.stripe.plan.plan_id == plan.plan_id}
+      end
 
       json :org => user.to_hash, 
-        :plans => plans.stripe[plans.meta.mode]["User"],
+        :plans => plans,
         :is_owner => true,
         :has_plan => customer.rows.size > 0
     end
@@ -146,11 +152,17 @@ class Huboard
       is_owner = gh.orgs(params[:org]).teams.any? { |t| t.name == "Owners" }
       org.merge! :is_owner => is_owner
 
-      customer = couch.customers.findByOrgId org.id
-      plans = couch.connection.get("./plans").body
+      customer =  couch.customers.findByOrgId(org.id)
+      plans_doc =  couch.connection.get("./plans").body
+
+      plans =  plans_doc.stripe[plans_doc.meta.mode]["Organization"]
+
+      plans = plans.map do |plan|
+        plan.merge! :purchased => customer.rows.any? { |row| row.value.stripe.plan.plan_id == plan.plan_id}
+      end
 
       json :org => org.to_hash, 
-        :plans => plans.stripe[plans.meta.mode]["Organization"],
+        :plans => plans,
         :is_owner => is_owner,
         :has_plan => customer.rows.size > 0
     end

@@ -170,8 +170,8 @@
     actions: {
       purchase: function (model) {
         var org = this.get("model.details.org");
-        model = Ember.Object.create($.extend(model, {org:org}))
-        this.set("controllers.purchaseForm.model", model)
+        plan = Ember.Object.create({plan: model, org:org})
+        this.set("controllers.purchaseForm.model", plan)
         this.send("openModal","purchaseForm")
       }
     }  

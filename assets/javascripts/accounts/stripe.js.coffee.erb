@@ -32,11 +32,10 @@ App.PurchaseFormController = Ember.Controller.extend
   
   price: (->
     @get("model.amount")
-  ).property("amount")
+  ).property("plan.amount")
   
-  purchase: (plan) ->
+  purchase:  ->
     @set('processingPurchase', true)
-    @set('selectedPlan', plan)
     Stripe.setPublishableKey(@get('key'))
     
     Stripe.card.createToken({
@@ -51,19 +50,18 @@ App.PurchaseFormController = Ember.Controller.extend
       @set('processingPurchase', false)
       @set('errors', response.error.message)
     else
-      @didPurchase(response)
+      @postCharge(response)
   
   postCharge: (token) ->
-    this.ajax("/settings/charge/" + @get("model.org.id"), {
-       amount: @get('price') * 100
-       currency: 'USD'
-       card: token
-       description: @get('description')
+    this.ajax("/settings/charge/" + @get("model.org.login"), {
+      email:@get("model.org.billing_email"),
+      card: token,
+      plan: @get("model.plan")
     }).then(@didPurchase.bind(this), @purchaseDidError.bind(this))
 
   didPurchase: (response) ->
     @set('processingPurchase', false)
-    @set("model.has_plan",true)
+    @set("model.plan.purchased", true)
     this.send("close")
     
   purchaseDidError: (error) ->
