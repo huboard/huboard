@@ -69,7 +69,7 @@
   display: block;
   position: relative;
   padding: 0 12px 0 44px;
-  height: 30px;
+  height: 28px;
 
   background: #1275FF;
   background-image: -webkit-linear-gradient(#7DC5EE, #008CDD 85%, #30A2E4);
@@ -163,7 +163,7 @@
     background: #9babc2;
 }
 
-.stripe-connect.light-blue:active span {
+.stripe-connect.light-blue:active span, .stripe-connect.light-blue[disabled] span {
   color: #556F88;
   text-shadow: 0 1px rgba(255, 255, 255, 0.8);
 
