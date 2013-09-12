@@ -17,6 +17,9 @@ gem 'octokit'
 gem 'rack-robustness'
 gem 'coffee-script'
 gem 'sprockets'
+gem 'compass'
+gem 'sass'
+gem 'bourbon'
 gem 'sprockets-helpers'
 gem 'execjs', "~> 1.4"
 
@@ -28,8 +31,7 @@ group :development do
   gem 'watchr'
   gem 'shotgun'
   gem 'foreman'
-  gem 'sass'
-  gem 'bourbon'
+
   gem 'thin'
   gem 'heroku'
 end

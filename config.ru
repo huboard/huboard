@@ -6,9 +6,11 @@ Bundler.setup
 require 'rack/no-www'
 require 'rack/robustness'
 
-require 'bourbon'
+
 require 'sprockets'
 require 'sprockets-helpers'
+require 'bourbon'
+require 'compass'
 
 require './lib/helpers'
 require './lib/base'
@@ -47,6 +49,7 @@ map "/assets" do
   environment.append_path 'assets/javascripts'
   environment.append_path 'assets/stylesheets'
   environment.append_path 'assets/images'
+  Compass.sass_engine_options[:load_paths].each { |d| environment.append_path d.to_s }
   run environment
 end
 
