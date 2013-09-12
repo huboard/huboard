@@ -28,10 +28,9 @@
 	    content: "\e052";
     }
 
-    background-color: #0069D6;
-    background-color: rgba(0,105,214,0.6);
-    border-color: #0069D6;
-    border-color: rgba(0,105,214,0.6);
+    background-color: $hb-purple; 
+    border-color: $hb-purple-dark;
+
     color: #fff;
 
     &:hover {
@@ -106,6 +105,7 @@
   background: #f3f3f3;
 
   font-size: 100%;
+  @extend %font-headings;
 }
 
 .board .column h3 {
@@ -282,12 +282,12 @@
 }
 
 .filter a.active, .filter a.active:hover {
-  background-color: #0069D6;
+  background-color: $hb-purple;
   color: #fff;
 }
 .filter a.dim, .filter a.dim:hover {
-  background-color: #0069D6;
-  background-color: rgba(0,105,214,0.6);
+  background-color: $hb-purple;
+  background-color: rgba($hb-purple,0.6);
   color: #fff;
 
 }

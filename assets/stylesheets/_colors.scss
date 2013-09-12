@@ -52,7 +52,8 @@ h3,h4,h5,h6 {
   color: $hb-purple;
 }
 a {
-    &, &:hover {
+    color: $hb-purple;
+    &:hover {
       color: $hb-purple-dark;
     }
 }

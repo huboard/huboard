@@ -24,10 +24,8 @@ form {
   }
   .navbar-inner {
     @include linear-gradient(#F9F9F9, #F3F3F3);
-    border-bottom: 1px solid #e5e5e5;
-    .nav a {
-     -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(#000), to(rgba(0,0,0,0.75)));
-    }
+    border-bottom: 1px solid $hb-grey-light;
+   
   }
   .nav {
     form {
@@ -38,19 +36,28 @@ form {
     > li {
       > a {
         &:hover {
-          border-top: 3px solid #DD4B39;
+          border-top: 3px solid $hb-purple-dark;
           padding-top: 7px;
         }
       }
       &.active, &.dropdown.open {
         > a, > a:hover, > .dropdown-toggle, > .dropdown-toggle:hover  {
-            border-top: 3px solid #2590D6;
+            border-top: 3px solid $hb-purple;
             padding-top: 7px;
             background:none;
             @include box-shadow(none);
         }
       }
 
+    }
+  }
+}
+.dropdown-menu {
+  li {
+    > a {
+      &:hover, &:focus {
+           @include linear-gradient(lighten($hb-purple, 5%), $hb-purple);
+      }
     }
   }
 }
