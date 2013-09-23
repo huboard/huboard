@@ -10,9 +10,7 @@ class Huboard
     module Helpers
 
       def couch
-        puts "CLOUDANT_URL #{ENV['CLOUDANT_URL']}"
-        puts ENV['RACK_ENV']
-        @couch ||= Huboard::Couch.new :base_url => ENV["CLOUDANT_URL"]
+        @couch ||= Huboard::Couch.new :base_url => ENV["COUCH_URL"], :database => ENV["COUCH_DATABASE"]
       end
 
       def encrypted_token

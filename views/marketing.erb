@@ -103,15 +103,17 @@
       }
 
       $(window).on("load", function () {
-        var stats = <%= couch.stats.dashboard.rows.to_json %>,
-            stat = stats[Math.floor(Math.random() * stats.length)]
+        var stats = <%= couch.stats.dashboard.rows.to_json %>;
+        if(stats && stats.length) {
+          var stat = stats[Math.floor(Math.random() * stats.length)]
 
-        $(".navbar .brand label").text(stat.key);
+          $(".navbar .brand label").text(stat.key);
 
-        setTimeout(function() {
-          $(".navbar .brand").addClass("animating")
-          animateNumber($(".brand .stat"), stat.value, 1600, "easeInOutCubic");
-        }, 3500);
+          setTimeout(function() {
+            $(".navbar .brand").addClass("animating")
+            animateNumber($(".brand .stat"), stat.value, 1600, "easeInOutCubic");
+          }, 3500);
+        }
       });
       
       

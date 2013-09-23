@@ -79,7 +79,7 @@ class Huboard
       #
       def initialize(hash={})
 
-        super("#{hash[:base_url] || "http://127.0.0.1:5984" }/huboard") do |builder|
+        super("#{hash[:base_url] || "http://127.0.0.1:5984" }/#{hash[:database] || "huboard"}") do |builder|
           yield builder if block_given?
           builder.use     FaradayMiddleware::EncodeJson
           builder.use     FaradayMiddleware::Mashify
@@ -234,7 +234,7 @@ class Huboard
   module Issues
     module Card
       def couch
-        @couch ||= Huboard::Couch.new :base_url => ENV["CLOUDANT_URL"]
+        @couch ||= Huboard::Couch.new :base_url => ENV["COUCH_URL"], :database => ENV["COUCH_DATABASE"]
       end
 
       def move(index)
@@ -258,7 +258,7 @@ class Huboard
     board_method = self.instance_method(:board)
 
     def couch
-      @couch ||= Huboard::Couch.new :base_url => ENV["CLOUDANT_URL"]
+      @couch ||= Huboard::Couch.new :base_url => ENV["COUCH_URL"], :database => ENV["COUCH_DATABASE"]
     end
 
     define_method(:board) do
