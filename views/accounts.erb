@@ -83,6 +83,27 @@
   </table>
 </script>   
 
+<script type="text/x-handlebars" data-template-name="cancel_form">
+<div class="fullscreen-credit-card">
+  <form {{action cancel on=submit}}>
+    <div class="modal-header">
+      <button type="button" class="close" {{action close}} data-dismiss="modal" aria-hidden="true">×</button>
+      Cancel plan
+    </div>
+    <div class="modal-body">
+      <p> 
+        We'd hate to see you go, are you sure you want to cancel?
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button href="#" class="hb-button danger full" type="submit" {{bindAttr disabled="processingAction"}}><span>Cancel my plan</span></button>
+    </div>
+  </form>
+</div>
+  
+</script>   
+
+
 <script type="text/x-handlebars" data-template-name="purchase_form">
 <div class="fullscreen-credit-card">
   <form {{action purchase on=submit}}>
@@ -95,6 +116,7 @@
       Thanks for choosing to become a paying customer! Once we successfully charge your credit card, we'll immediately upgrade your account to the <strong>{{model.plan.name}}</strong> plan.
     </p>
     <fieldset>
+
       {{#if errors}}
         <div class="alert alert-error">{{errors}}</div>
       {{/if}}
@@ -105,6 +127,7 @@
         </label>
         {{view App.CardNumberField valueBinding="number" size=20}}
       </div>
+
       <ul class="credit-cards">
         <li {{bind-attr class=":card :card-visa cardType"}} >
         </li>
@@ -139,11 +162,15 @@
       </div>
 
     </fieldset>
-    
+
     <p>
       Please review the <a href="/site/terms" target="_blank">terms of service</a>, and <a href="/site/privacy" target="_blank">privacy policy</a>.
     </p>
-  
+
+    {{#if processingPurchase }}
+      <div class="fullscreen-overlay">
+      </div>
+    {{/if}}
   </div>
   <div class="modal-footer">
       <button href="#" class="stripe-connect light-blue" type="submit" {{bindAttr disabled="processingPurchase"}}><span>Pay with stripe</span></button>

@@ -166,13 +166,20 @@
   })
 
   App.AccountController = Ember.ObjectController.extend({
-    needs: ["purchaseForm"],  
+    needs: ["purchaseForm","cancelForm"],  
     actions: {
       purchase: function (model) {
         var org = this.get("model.details.org");
         plan = Ember.Object.create({plan: model, org:org})
         this.set("controllers.purchaseForm.model", plan)
         this.send("openModal","purchaseForm")
+      },
+      cancel: function (model) {
+        var org = this.get("model.details.org");
+        plan = Ember.Object.create({plan: model, org:org})
+        this.set("controllers.cancelForm.model", plan)
+        this.send("openModal","cancelForm")
+      
       }
     }  
   });

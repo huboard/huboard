@@ -28,7 +28,6 @@ App.PurchaseFormController = Ember.Controller.extend
   ).property('number')
 
   coupon: null,
-  selectedPlan: null,
   
   price: (->
     @get("model.amount")
@@ -89,6 +88,44 @@ App.PurchaseFormController = Ember.Controller.extend
   
 App.PurchaseFormView = App.ModalView.extend 
   processingPurchase: Ember.computed.alias('controller.processingPurchase')
+
+App.CancelFormController = Ember.Controller.extend
+  processingAction: false
+  actions: 
+    close: -> 
+      this.send "closeModal"
+    cancel:  ->
+      @set('processingAction', true)
+      this.ajax("/settings/profile/" + @get("model.org.login") + "/plans/" + @get('model.plan.id'),{})
+        .then(@didCancel.bind(this), @cancelDidError.bind(this))
+  didCancel: ->
+    @set('processingAction', false)
+    this.send "closeModal"
+  cancelDidError: (error) ->
+    @set('errors', error.responseJSON.error.message)
+    @set('processingAction', false)
+
+
+  ajax: (url, data) ->
+    controller = this
+
+    new Ember.RSVP.Promise (resolve, reject) ->
+      hash = {}
+      hash.url = url
+      hash.type = 'DELETE'
+      hash.context = controller
+      hash.data = data
+      
+      hash.success = (json) ->
+        resolve(json)
+
+      hash.error = (jqXHR, textStatus, errorThrown) ->
+        reject(jqXHR)
+
+      Ember.$.ajax(hash)
+
+App.CancelFormView = App.ModalView.extend 
+  processingAction: Ember.computed.alias('controller.processingAction')
 
 
   

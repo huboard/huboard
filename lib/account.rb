@@ -45,6 +45,11 @@ class Huboard
       erb :accounts, :layout => :ember_layout
     end
 
+    delete "/profile/:name/plans/:plan_id/?" do
+      json success:true
+
+    end
+
     post "/charge/:id/?" do 
 
       puts params
