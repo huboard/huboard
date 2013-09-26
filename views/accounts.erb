@@ -94,6 +94,10 @@
       <p> 
         We'd hate to see you go, are you sure you want to cancel?
       </p>
+      {{#if processingAction }}
+        <div class="fullscreen-overlay">
+        </div>
+      {{/if}}
     </div>
     <div class="modal-footer">
       <button href="#" class="hb-button danger full" type="submit" {{bindAttr disabled="processingAction"}}><span>Cancel my plan</span></button>

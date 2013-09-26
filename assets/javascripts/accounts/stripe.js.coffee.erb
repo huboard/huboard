@@ -100,6 +100,7 @@ App.CancelFormController = Ember.Controller.extend
         .then(@didCancel.bind(this), @cancelDidError.bind(this))
   didCancel: ->
     @set('processingAction', false)
+    @set("model.plan.purchased", false)
     this.send "closeModal"
   cancelDidError: (error) ->
     @set('errors', error.responseJSON.error.message)
