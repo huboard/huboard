@@ -129,13 +129,13 @@ h1 {
       &:after {
         content: "";
         position: absolute;
-        right: 15%;
         bottom: 0;
         width: 0;
         height: 0;
-        border-left: 30px solid transparent;
-        border-right: 30px solid transparent;
-        border-bottom: 30px solid $hb-purple;
+        border-left: 15px solid transparent;
+        border-right: 15px solid transparent;
+        border-bottom: 15px solid $hb-purple;
+        margin-left:-15px;
       }
     }
 
