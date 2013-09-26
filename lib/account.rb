@@ -46,7 +46,12 @@ class Huboard
     end
 
     delete "/profile/:name/plans/:plan_id/?" do
-      json success:true
+      user = gh.users params[:name]
+
+
+      response = couch.customers.delete user.id
+
+      json response.body
 
     end
 

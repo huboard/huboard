@@ -20,6 +20,11 @@ class Huboard
         CGI.escape("#{class_name}-#{doc[identifier.to_s].to_s}")
       end
 
+      def delete(id)
+         id = CGI.escape "#{class_name}-#{id}"
+         connection.delete id
+      end
+
       def save(doc)
         clone = doc.clone.merge "_id" => escape_docid(doc), "meta" => meta, :timestamp => Time.now.utc.iso8601
 
