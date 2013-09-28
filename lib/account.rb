@@ -116,7 +116,7 @@ class Huboard
          }
       })
 
-      json :success => true
+      json :success => true, card: customer["cards"]["data"].first
     end
 
     helpers Sinatra::ContentFor

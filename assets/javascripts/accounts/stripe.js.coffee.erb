@@ -105,6 +105,7 @@ App.PurchaseFormController = App.CreditCardForm.extend
   didPurchase: (response) ->
     @set('processingCard', false)
     @set("model.plan.purchased", true)
+    @set("model.details.card", response.card)
     this.send("close")
     
   purchaseDidError: (error) ->
