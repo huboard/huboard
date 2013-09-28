@@ -131,7 +131,7 @@ class Huboard
       user = gh.user
       user.merge! :billing_email => user.email
 
-      customer =  couch.customers.findByUserId(user.id)
+      customer =  couch.customers.findPlanById(user.id)
       plans_doc =  couch.connection.get("./plans").body
 
       plans =  plans_doc.stripe[plans_doc.meta.mode]["User"]
@@ -152,7 +152,7 @@ class Huboard
       is_owner = gh.orgs(params[:org]).teams.any? { |t| t.name == "Owners" }
       org.merge! :is_owner => is_owner
 
-      customer =  couch.customers.findByOrgId(org.id)
+      customer =  couch.customers.findPlanById(org.id)
       plans_doc =  couch.connection.get("./plans").body
 
       plans =  plans_doc.stripe[plans_doc.meta.mode]["Organization"]

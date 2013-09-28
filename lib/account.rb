@@ -48,11 +48,22 @@ class Huboard
     delete "/profile/:name/plans/:plan_id/?" do
       user = gh.users params[:name]
 
+      docs = couch.customers.findPlanById user.id
 
-      response = couch.customers.delete user.id
+      if docs.rows.any?
+        plan_doc = docs.rows.first.value
 
-      json response.body
+        customer = Stripe::Customer.retrieve(plan_doc.stripe.customer.id)
 
+        customer.cancel_subscription at_period_end: false
+        customer.delete
+
+        couch.customers.delete! plan_doc
+
+        json success: true, message: "Sorry to see you go"
+      else
+        json success: false, message: "Unable to find plan"
+      end
     end
 
     post "/charge/:id/?" do 

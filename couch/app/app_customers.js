@@ -4,20 +4,13 @@ ddoc =
   }
   ;
 
-ddoc.views.findByOrgId = {
-  map: function (doc) {  
-    if(doc.meta.type === "customer" && doc.github.account.type == "Organization") {
-      emit(doc.github.account.id, doc); 
-    }
-  }
-}
-
-ddoc.views.findByUserId = {
+ddoc.views.findPlanById = {
   map: function(doc) {
-    if(doc.meta.type === "customer" && doc.github.account.type == "User") {
+    if(doc.meta.type === "customer") {
       emit(doc.github.account.id, doc);
     }
   }
+
 }
 
 

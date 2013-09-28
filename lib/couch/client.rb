@@ -20,9 +20,12 @@ class Huboard
         CGI.escape("#{class_name}-#{doc[identifier.to_s].to_s}")
       end
 
-      def delete(id)
-         id = CGI.escape "#{class_name}-#{id}"
-         connection.delete id
+      def delete!(doc)
+        connection.delete(doc._id) do |req|
+          req.params[:rev] = doc._rev
+        end
+        id = CGI.escape("Deleted-#{doc._id}")
+        connection.put id, meta: { type: "deleted" }, doc: doc
       end
 
       def save(doc)
@@ -212,12 +215,8 @@ class Huboard
     class Customers < ResourceProxy
       identify_by :id
 
-      def findByUserId(id)
-        query_view "findByUserId", :key => id
-      end
-
-      def findByOrgId(id)
-        query_view "findByOrgId", :key => id
+      def findPlanById(id)
+        query_view "findPlanById", :key => id
       end
     end
 
