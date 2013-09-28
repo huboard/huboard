@@ -17,7 +17,7 @@ class Huboard
     module CUD
 
       def escape_docid(doc)
-        CGI.escape("#{class_name}-#{doc[identifier.to_s].to_s}")
+        CGI.escape("#{class_name}-#{doc["_id"] || doc[identifier.to_s].to_s}")
       end
 
       def delete!(doc)
@@ -29,13 +29,14 @@ class Huboard
       end
 
       def save(doc)
-        clone = doc.clone.merge "_id" => escape_docid(doc), "meta" => meta, :timestamp => Time.now.utc.iso8601
+        clone = doc.clone.merge "_id" => doc["_id"] || escape_docid(doc), "meta" => meta, :last_updated => Time.now.utc.iso8601
 
         response = connection.get(clone["_id"])
 
         if response.status == 200
           response = connection.put(clone["_id"], clone.merge("_rev" => response.body._rev ))
         else
+          clone = doc.clone.merge "_id" => escape_docid(doc), "meta" => meta, :timestamp => Time.now.utc.iso8601
           response = connection.put(clone["_id"], clone)
         end
 

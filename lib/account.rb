@@ -45,6 +45,29 @@ class Huboard
       erb :accounts, :layout => :ember_layout
     end
 
+    put "/profile/:name/card/?" do
+      user = gh.users params[:name]
+
+      docs = couch.customers.findPlanById user.id
+
+      if docs.rows.any?
+        plan_doc = docs.rows.first.value
+
+        customer = Stripe::Customer.retrieve(plan_doc.stripe.customer.id)
+
+        customer.card = params[:card][:id]
+        updated = customer.save
+
+        plan_doc.stripe.customer = updated
+
+        couch.customers.save plan_doc
+
+        json success: true, message: "Card updated", card: updated["cards"]["data"].first
+      else
+        json success: false, message: "Unable to find plan"
+      end
+
+    end
     delete "/profile/:name/plans/:plan_id/?" do
       user = gh.users params[:name]
 

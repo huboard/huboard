@@ -142,6 +142,7 @@ class Huboard
 
       json :org => user.to_hash, 
         :plans => plans,
+        :card => customer.rows.any? ? customer.rows.map {|cust| cust.value.stripe.customer.cards.data.find {|card| card.id == cust.value.stripe.customer.default_card }}.first : nil,
         :is_owner => true,
         :has_plan => customer.rows.size > 0
     end
@@ -163,6 +164,7 @@ class Huboard
 
       json :org => org.to_hash, 
         :plans => plans,
+        :card => customer.rows.any? ? customer.rows.map {|cust| cust.value.stripe.customer.cards.data.find {|card| card.id == cust.value.stripe.customer.default_card }}.first : nil,
         :is_owner => is_owner,
         :has_plan => customer.rows.size > 0
     end

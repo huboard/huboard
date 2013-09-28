@@ -38,6 +38,46 @@ App.CreditCardForm = Ember.Controller.extend
     }, @didProcessToken.bind(this))
   
 
+App.UpdateCardController = App.CreditCardForm.extend
+  didProcessToken: (status, response) ->
+    if response.error
+      @set('processingCard', false)
+      @set('errors', response.error.message)
+    else
+      @set('errors', "")
+      @postUpdate(response)
+
+  postUpdate: (token) ->
+    this.ajax("/settings/profile/" + @get("model.org.login") + "/card", {
+      email:@get("model.org.billing_email"),
+      card: token
+    }).then(@didUpdate.bind(this))
+
+  didUpdate: (response) ->
+    @set('processingCard', false)
+    @set('model.card.details.card',response.card)
+    @send "close"
+
+  ajax: (url, data) ->
+    controller = this
+
+    new Ember.RSVP.Promise (resolve, reject) ->
+      hash = {}
+      hash.url = url
+      hash.type = 'PUT'
+      hash.context = controller
+      hash.data = data
+      
+      hash.success = (json) ->
+        resolve(json)
+
+      hash.error = (jqXHR, textStatus, errorThrown) ->
+        reject(jqXHR)
+
+      Ember.$.ajax(hash)
+
+App.UpdateCardView = App.ModalView.extend 
+  processingCard: Ember.computed.alias('controller.processingCard')
 
 App.PurchaseFormController = App.CreditCardForm.extend
 
