@@ -91,9 +91,17 @@
       Cancel plan
     </div>
     <div class="modal-body">
+      <p>
+        By cancelling your subscription you will not be billed again and your account will be suspended immediately.
+      </p>
       <p> 
         We'd hate to see you go, are you sure you want to cancel?
       </p>
+
+      <p>
+        If you have any questions, <a href="mailto:huboard@huboard.com?subject=Cancel subscription">contact us</a> anytime.
+      </p>
+
       {{#if processingAction }}
         <div class="fullscreen-overlay">
         </div>
@@ -110,7 +118,7 @@
 
 <script type="text/x-handlebars" data-template-name="purchase_form">
 <div class="fullscreen-credit-card">
-  <form {{action purchase on=submit}}>
+  <form {{action process on=submit}}>
   <div class="modal-header">
     <button type="button" class="close" {{action close}} data-dismiss="modal" aria-hidden="true">×</button>
     Credit card infomation 
@@ -171,13 +179,13 @@
       Please review the <a href="/site/terms" target="_blank">terms of service</a>, and <a href="/site/privacy" target="_blank">privacy policy</a>.
     </p>
 
-    {{#if processingPurchase }}
+    {{#if processingCard }}
       <div class="fullscreen-overlay">
       </div>
     {{/if}}
   </div>
   <div class="modal-footer">
-      <button href="#" class="stripe-connect light-blue" type="submit" {{bindAttr disabled="processingPurchase"}}><span>Pay with stripe</span></button>
+      <button href="#" class="stripe-connect light-blue" type="submit" {{bindAttr disabled="processingCard"}}><span>Pay with stripe</span></button>
   </div>
   </form>
   </div>

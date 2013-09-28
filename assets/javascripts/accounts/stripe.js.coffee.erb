@@ -1,12 +1,11 @@
-
-App.PurchaseFormController = Ember.Controller.extend
+App.CreditCardForm = Ember.Controller.extend
   actions: 
     close: -> 
       this.send "closeModal"
 
   key : '<%= settings.stripe_publishable_key %>'
 
-  processingPurchase: false
+  processingCard: false
   
   number: null
   cvc: null
@@ -27,14 +26,8 @@ App.PurchaseFormController = Ember.Controller.extend
     Ember.$.payment.cardType(@get('number'))
   ).property('number')
 
-  coupon: null,
-  
-  price: (->
-    @get("model.amount")
-  ).property("plan.amount")
-  
-  purchase:  ->
-    @set('processingPurchase', true)
+  process:  ->
+    @set('processingCard', true)
     Stripe.setPublishableKey(@get('key'))
     
     Stripe.card.createToken({
@@ -42,11 +35,22 @@ App.PurchaseFormController = Ember.Controller.extend
       cvc: @get('cvc')
       exp_month: @get('expMonth')
       exp_year: @get('expYear')
-    }, @didCreateToken.bind(this))
+    }, @didProcessToken.bind(this))
+  
 
-  didCreateToken: (status, response) ->
+
+App.PurchaseFormController = App.CreditCardForm.extend
+
+  coupon: null,
+  
+  price: (->
+    @get("model.amount")
+  ).property("plan.amount")
+  
+
+  didProcessToken: (status, response) ->
     if response.error
-      @set('processingPurchase', false)
+      @set('processingCard', false)
       @set('errors', response.error.message)
     else
       @postCharge(response)
@@ -59,13 +63,13 @@ App.PurchaseFormController = Ember.Controller.extend
     }).then(@didPurchase.bind(this), @purchaseDidError.bind(this))
 
   didPurchase: (response) ->
-    @set('processingPurchase', false)
+    @set('processingCard', false)
     @set("model.plan.purchased", true)
     this.send("close")
     
   purchaseDidError: (error) ->
     @set('errors', error.responseJSON.error.message)
-    @set('processingPurchase', false)
+    @set('processingCard', false)
        
   ajax: (url, data) ->
     controller = this
@@ -87,7 +91,7 @@ App.PurchaseFormController = Ember.Controller.extend
 
   
 App.PurchaseFormView = App.ModalView.extend 
-  processingPurchase: Ember.computed.alias('controller.processingPurchase')
+  processingPurchase: Ember.computed.alias('controller.processingCard')
 
 App.CancelFormController = Ember.Controller.extend
   processingAction: false
