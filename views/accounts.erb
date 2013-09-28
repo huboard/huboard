@@ -62,37 +62,37 @@
      <img src="<%= image_path 'Plain.png' %>" /> <strong>No Credit card on file.</strong>
 
     {{/if}}
-    
   </div>
+   <div class="table-wrapper">
+    <table class="table">
+      <thead>
+        <th>Plan</th>
+        <th>Price</th>
+        <th>Private repositories</th>
+        <th></th>
+      </head>
+      <tbody>
 
-  <table class="table">
-    <thead>
-      <th>Plan</th>
-      <th>Price</th>
-      <th>Private repositories</th>
-      <th></th>
-    </head>
-    <tbody>
-      
-      {{#each model.details.plans }}
-        <td>{{ name }}</td>
-        <td>{{stripe-money amount }}/month</td>
-        <td>unlimited</td>
-        <td class="text-right">    
-         {{#if purchased }} 
-            Your plan
-            <button class="hb-button small"
-               {{action cancel this }}>Cancel plan</button>
-          {{else}}
-            <button class="hb-button small"
-             {{action purchase this }}>Upgrade</button>
-          {{/if}}
-         
-        </td>
-        
-      {{/each}}
-    </tbody>
-  </table>
+        {{#each model.details.plans }}
+          <td>{{ name }}</td>
+          <td>{{stripe-money amount }}/month</td>
+          <td>unlimited</td>
+          <td class="text-right">    
+           {{#if purchased }} 
+              Your plan
+              <button class="hb-button small"
+                 {{action cancel this }}>Cancel plan</button>
+            {{else}}
+              <button class="hb-button small"
+               {{action purchase this }}>Upgrade</button>
+            {{/if}}
+
+          </td>
+
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
 </script>   
 
 <script type="text/x-handlebars" data-template-name="cancel_form">
@@ -124,7 +124,7 @@
     </div>
   </form>
 </div>
-  
+
 </script>   
 
 <script type="text/x-handlebars" data-template-name="update_card">
@@ -272,7 +272,7 @@
 {{#x-tabs}}
     {{#x-pane title="Plans"}}
     <div class="nav-section">
-     
+
       <div class="widget-body">
         {{#if model.details.org.is_owner }}
 
@@ -294,8 +294,8 @@
 
 </script>
 
-  <script type="text/x-handlebars" id="components/x-tabs">
-  <div class="tabbable">
+<script type="text/x-handlebars" id="components/x-tabs">
+<div class="tabbable">
     <ul class="nav nav-tabs">
       {{#each pane in panes}}
       <li {{bindAttr class="pane.selected:active"}}>
@@ -307,15 +307,15 @@
       {{yield}}
     </div>
   </div>
-  </script>
-  
-  <script type="text/x-handlebars" id="components/x-pane">
-    <div class="tab-pane" {{bindAttr class="selected:active"}}>
+</script>
+
+<script type="text/x-handlebars" id="components/x-pane">
+<div class="tab-pane" {{bindAttr class="selected:active"}}>
       {{yield}}
     </div>
-  </script>
+</script>
 
-  <script type="text/x-handlebars" id="empty">
+<script type="text/x-handlebars" id="empty">
 
-  </script>
+</script>
 

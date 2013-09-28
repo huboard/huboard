@@ -7,7 +7,10 @@
 .widget-body {
 
   .table {
-    margin: 0px -5px -5px -5px;
+    margin-bottom: 0;
+  }
+  .table-wrapper, .banner {
+    margin: 0 -5px;
   }
 }
 
