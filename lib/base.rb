@@ -57,7 +57,7 @@ class HuboardApplication < Sinatra::Base
     raise "Configuration information not found: you need to provide a .settings file or ENV variables"
   end
 
-  set :assets_precompile, %w(marketing.css application.js bootstrap.css application.css ember-accounts.js *.png *.jpg *.svg *.eot *.ttf *.woff).concat([/\w+\.(?!js|css).+/, /application.(css|js)$/])
+  set :assets_precompile, %w(splash.css marketing.css application.js bootstrap.css application.css ember-accounts.js *.png *.jpg *.svg *.eot *.ttf *.woff).concat([/\w+\.(?!js|css).+/, /application.(css|js)$/])
 
 
   register Sinatra::AssetPipeline
