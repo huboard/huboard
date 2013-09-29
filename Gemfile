@@ -16,6 +16,7 @@ gem 'dalli'
 gem 'octokit'
 gem 'rack-robustness'
 gem 'coffee-script'
+gem 'uglifier'
 gem 'sprockets'
 gem 'compass'
 gem 'sass'
@@ -34,6 +35,7 @@ group :development do
 
   gem 'thin'
   gem 'heroku'
+  gem 'guard-sprockets2'
 end
 
 group :production do

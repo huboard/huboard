@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'bundler'
 
-Bundler.setup
+Bundler.require
 
 require 'rack/no-www'
 require 'rack/robustness'
