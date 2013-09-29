@@ -23,6 +23,7 @@ gem 'compass'
 gem 'sass'
 gem 'bourbon'
 gem 'sprockets-helpers'
+gem 'sinatra-asset-pipeline'
 gem 'execjs', "~> 1.4"
 gem 'guard-sprockets2'
 

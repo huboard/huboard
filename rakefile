@@ -79,37 +79,9 @@ task :rjs do
 
 end
 
-require "guard/sprockets2"
-desc "precomile assets"
-namespace :assets do 
-  task :precompile do
-    class HuboardAssets < Sprockets::Environment
-      if File.exists? ".settings"
-        load ".settings"
-      elsif ENV['STRIPE_API']
-        set :stripe_key, ENV['STRIPE_API']
-        set :stripe_publishable_key, ENV['STRIPE_PUBLISHABLE_API']
-      else
-        raise "Configuration information not found: you need to provide a .settings file or ENV variables"
-      end
-    end
-
-    environment = HuboardAssets.new
-    environment.append_path 'assets/javascripts'
-    environment.append_path 'assets/stylesheets'
-    environment.append_path 'assets/images'
-
-    environment.js_compressor = :uglify
-    environment.css_compressor = :yui
-
-    Compass.sass_engine_options[:load_paths].each { |d| environment.append_path d.to_s }
-    compiler = Guard::Sprockets2::Compiler.new sprockets: environment, precompile:[ /\w+\.(?!js|css).+/, /application.(css|js)$/, /ember-accounts.(css|js)$/ ]
-
-    compiler.clean
-    compiler.compile
-  end
-end
-
+require 'sinatra/asset_pipeline/task.rb'
+require './lib/bootstrap'
+Sinatra::AssetPipeline::Task.define! Huboard::App
 
 namespace :couch do 
   desc "push development documents"

@@ -1,5 +1,6 @@
 require "hashie" 
 require_relative "auth/github"
+require "sinatra/asset_pipeline"
 
 # stolen from http://github.com/cschneid/irclogger/blob/master/lib/partials.rb
 #   and made a lot more robust by me
@@ -56,40 +57,15 @@ class HuboardApplication < Sinatra::Base
     raise "Configuration information not found: you need to provide a .settings file or ENV variables"
   end
 
-  set :sprockets, Sprockets::Environment.new(root)
-  set :precompile, [ /\w+\.(?!js|css).+/, /application.(css|js)$/, /ember-accounts.(css|js)$/ ]
-  set :assets_prefix, '/assets'
-  set(:assets_path) { File.join public_folder, assets_prefix }
-  set :digest_assets, environment == :production
+  set :assets_precompile, %w(application.js bootstrap.css application.css ember-accounts.js *.png *.jpg *.svg *.eot *.ttf *.woff)#.concat([/\w+\.(?!js|css).+/, /application.(css|js)$/])
 
+  register Sinatra::AssetPipeline
   configure :production do 
-    Sprockets::Helpers.configure do |config|
-      sprockets.js_compressor = :uglify
-      sprockets.css_compressor = :yui
-      config.manifest = Sprockets::Manifest.new(sprockets, assets_path)
-    end
+    puts "I is in production"
+    sprockets.js_compressor = :uglify
+    sprockets.css_compressor = :yui
   end
-
-  configure do
-    # Setup Sprockets
-    root_path = File.expand_path("../", File.dirname(__FILE__))
-    sprockets.append_path File.join(root_path, 'assets', 'stylesheets')
-    sprockets.append_path File.join(root_path, 'assets', 'javascripts')
-    sprockets.append_path File.join(root_path, 'assets', 'images')
-
-    Sprockets::Helpers.configure do |config|
-      config.environment = sprockets
-      config.prefix      = assets_prefix
-      config.digest      = digest_assets
-      config.public_path = public_folder
-
-      config.debug       = true if development?
-    end
-  end
-
-  helpers do
-    include Sprockets::Helpers
-  end
+  
 
   helpers Huboard::Common::Helpers
   helpers Sinatra::Partials
