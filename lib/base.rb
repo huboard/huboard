@@ -58,7 +58,7 @@ class HuboardApplication < Sinatra::Base
 
   set :sprockets, Sprockets::Environment.new(root)
   set :assets_prefix, '/assets'
-  set :digest_assets, false
+  set :digest_assets, environment == :production
 
   configure do
     # Setup Sprockets
