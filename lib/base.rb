@@ -68,10 +68,6 @@ class HuboardApplication < Sinatra::Base
     sprockets.append_path File.join(root_path, 'assets', 'stylesheets')
     sprockets.append_path File.join(root_path, 'assets', 'javascripts')
     sprockets.append_path File.join(root_path, 'assets', 'images')
-    sprockets.js_compressor = :uglifier
-    sprockets.css_compressor = :yui
-
-
 
     Sprockets::Helpers.configure do |config|
       config.environment = sprockets
