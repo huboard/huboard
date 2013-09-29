@@ -1,5 +1,6 @@
 require 'sinatra/base'
 require 'warden/github'
+require 'sinatra/asset_pipeline'
 
 module Sinatra
   module Auth
@@ -19,6 +20,15 @@ module Sinatra
       class BadAuthentication < Sinatra::Base
         enable :raise_errors 
         disable :show_exceptions
+
+        set :assets_precompile, %w(splash.css marketing.css application.js bootstrap.css application.css ember-accounts.js *.png *.jpg *.svg *.eot *.ttf *.woff).concat([/\w+\.(?!js|css).+/, /application.(css|js)$/])
+
+        register Sinatra::AssetPipeline
+
+        configure :production do 
+          sprockets.js_compressor = :uglify
+          sprockets.css_compressor = :yui
+        end
 
         get '/unauthenticated' do
           status 403
