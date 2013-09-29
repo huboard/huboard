@@ -17,18 +17,12 @@ module Sinatra
 
       # The default failure application, this is overridable from the extension config
       class BadAuthentication < Sinatra::Base
-        enable :raise_errors
+        enable :raise_errors 
         disable :show_exceptions
-
-        helpers do
-          def unauthorized_template
-            @unauthenticated_template ||= File.read(File.join(File.dirname(__FILE__), "views", "401.html"))
-          end
-        end
 
         get '/unauthenticated' do
           status 403
-          unauthorized_template
+          erb :"401"
         end
       end
 
