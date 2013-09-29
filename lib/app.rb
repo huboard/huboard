@@ -35,7 +35,7 @@ class Huboard
 
       else
         repo = gh.repos params[:user], params[:repo]
-        halt([401, "Repo not found"]) if repo.message == "Not Found"
+        raise Sinatra::NotFound if repo.message == "Not Found"
       end
     end
 
@@ -224,6 +224,10 @@ class Huboard
       rescue
         return json({:message => "something go wrong?"})
       end
+    end
+
+    not_found do
+      erb :"404", :layout => false
     end
 
 

@@ -46,3 +46,19 @@ padding: 20px;
 font-size: 24px;
   margin: 20px 0;
 }
+
+.back-link {
+  text-decoration: none;
+  font-size: 1.2em;
+  border: 2px solid $hb-purple;
+  padding: 0.3em 1.3em;
+  line-height: 1.3em;
+}
+
+.font-numbers {
+  font-family: "Clayton", san-serif;
+}
+
+.numbers-big {
+  font-size: 800%;
+}
