@@ -59,13 +59,16 @@ class HuboardApplication < Sinatra::Base
 
   set :assets_precompile, %w(marketing.css application.js bootstrap.css application.css ember-accounts.js *.png *.jpg *.svg *.eot *.ttf *.woff).concat([/\w+\.(?!js|css).+/, /application.(css|js)$/])
 
+
   register Sinatra::AssetPipeline
+
+
   configure :production do 
     puts "I is in production"
     sprockets.js_compressor = :uglify
     sprockets.css_compressor = :yui
   end
-  
+
 
   helpers Huboard::Common::Helpers
   helpers Sinatra::Partials

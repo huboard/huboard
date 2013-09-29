@@ -20,7 +20,7 @@
   @include clearfix;
   list-style:none;
   .card {
-    background-image: url(/assets/credit-cards-@1x.png);
+    background-image: image-url('credit-cards-@1x.png');
     float: left;
     width: 47px;
     height: 31px;
