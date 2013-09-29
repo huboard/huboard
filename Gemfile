@@ -24,6 +24,7 @@ gem 'sass'
 gem 'bourbon'
 gem 'sprockets-helpers'
 gem 'execjs', "~> 1.4"
+gem 'guard-sprockets2'
 
 
 gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
@@ -36,7 +37,7 @@ group :development do
 
   gem 'thin'
   gem 'heroku'
-  gem 'guard-sprockets2'
+  gem 'pry'
 end
 
 group :production do

@@ -57,8 +57,6 @@ map "/assets" do
   environment.append_path 'assets/stylesheets'
   environment.append_path 'assets/images'
   Compass.sass_engine_options[:load_paths].each { |d| environment.append_path d.to_s }
-    environment.js_compressor = :uglifier
-    environment.css_compressor = :yui
   run environment
 end
 

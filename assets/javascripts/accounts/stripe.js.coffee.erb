@@ -3,7 +3,7 @@ App.CreditCardForm = Ember.Controller.extend
     close: -> 
       this.send "closeModal"
 
-  key : '<%= settings.stripe_publishable_key %>'
+  key : '<%= ENV["STRIPE_PUBLISHABLE_API"] %>'
 
   processingCard: false
   

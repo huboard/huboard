@@ -8,7 +8,7 @@ require './lib/app'
 
 app = HuboardApplication.new
 
-guard("sprockets2", sprockets: HuboardApplication.sprockets, asset_path: HuboardApplication.assets_prefix, precompile: HuboardApplication.precompile) do
+guard("sprockets2", sprockets: HuboardApplication.sprockets, asset_path: HuboardApplication.assets_path, precompile: HuboardApplication.precompile) do
   watch %r(^assets/.+$)
 
 end

@@ -172,6 +172,7 @@ DEPENDENCIES
   kgio
   newrelic_rpm
   octokit
+  pry
   rack-cache
   rack-no-www
   rack-robustness
