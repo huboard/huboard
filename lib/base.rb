@@ -64,7 +64,8 @@ class HuboardApplication < Sinatra::Base
 
   configure :production do 
     Sprockets::Helpers.configure do |config|
-      sprockets.js_compression = :uglify
+      sprockets.js_compressor = :uglify
+      sprockets.css_compressor = :yui
       config.manifest = Sprockets::Manifest.new(sprockets, assets_path)
     end
   end
