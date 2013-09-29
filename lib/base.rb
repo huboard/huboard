@@ -57,6 +57,7 @@ class HuboardApplication < Sinatra::Base
   end
 
   set :sprockets, Sprockets::Environment.new(root)
+  set :precompile, [ /\w+\.(?!js|css).+/, /application.(css|js)$/ ]
   set :assets_prefix, '/assets'
   set :digest_assets, environment == :production
 
