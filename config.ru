@@ -28,7 +28,14 @@ use Rack::NoWWW
 use Rack::Static, :urls => ["/files", "/font","/img", "/scripts","/css"], :root => "public"
 
 class HuboardAssets < Sprockets::Environment
-  load ".settings"
+    if File.exists? ".settings"
+      load ".settings"
+    elsif ENV['STRIPE_API']
+      set :stripe_key, ENV['STRIPE_API']
+      set :stripe_publishable_key, ENV['STRIPE_PUBLISHABLE_API']
+    else
+      raise "Configuration information not found: you need to provide a .settings file or ENV variables"
+    end
 end
 
 environment = HuboardAssets.new
