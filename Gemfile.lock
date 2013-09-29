@@ -151,6 +151,7 @@ GEM
       octokit (>= 1.22.0)
       warden (> 1.0)
     watchr (0.7)
+    yui-compressor (0.11.0)
 
 PLATFORMS
   ruby
@@ -188,3 +189,4 @@ DEPENDENCIES
   unicorn
   warden-github
   watchr
+  yui-compressor

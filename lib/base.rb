@@ -57,8 +57,9 @@ class HuboardApplication < Sinatra::Base
   end
 
   set :sprockets, Sprockets::Environment.new(root)
-  set :precompile, [ /\w+\.(?!js|css).+/, /application.(css|js)$/ ]
+  set :precompile, [ /\w+\.(?!js|css).+/, /application.(css|js)$/, /ember-accounts.(css|js)$/ ]
   set :assets_prefix, '/assets'
+  set(:assets_path) { File.join public_folder, assets_prefix }
   set :digest_assets, environment == :production
 
   configure do
@@ -67,6 +68,9 @@ class HuboardApplication < Sinatra::Base
     sprockets.append_path File.join(root_path, 'assets', 'stylesheets')
     sprockets.append_path File.join(root_path, 'assets', 'javascripts')
     sprockets.append_path File.join(root_path, 'assets', 'images')
+    sprockets.js_compressor = :uglifier
+    sprockets.css_compressor = :yui
+
 
 
     Sprockets::Helpers.configure do |config|
