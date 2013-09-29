@@ -62,6 +62,12 @@ class HuboardApplication < Sinatra::Base
   set(:assets_path) { File.join public_folder, assets_prefix }
   set :digest_assets, environment == :production
 
+  configure :production do 
+    Sprockets::Helpers.configure do |config|
+      config.manifest = Sprockets::Manifest.new(sprockets, assets_path)
+    end
+  end
+
   configure do
     # Setup Sprockets
     root_path = File.expand_path("../", File.dirname(__FILE__))
