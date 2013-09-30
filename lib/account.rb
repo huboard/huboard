@@ -96,7 +96,8 @@ class Huboard
       customer = Stripe::Customer.create(
         :email => params[:email],
         :card  => params[:card][:id],
-        :plan =>  params[:plan][:id]
+        :plan =>  params[:plan][:id],
+        :trial_end => (Time.now.utc + (params[:plan][:trial_period].to_i * 60 * 60 * 24)).to_i
       )
 
       user = gh.user

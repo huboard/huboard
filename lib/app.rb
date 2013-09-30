@@ -110,6 +110,7 @@ class Huboard
     end
 
     get '/:user/?' do 
+      pass if params[:user] == "assets"
       user =   gh.users(params[:user]).raw
       raise Sinatra::NotFound unless user.status == 200 
       @parameters = params
@@ -159,6 +160,7 @@ class Huboard
     end
 
     get '/:user/:repo/settings/?' do 
+      pass if params[:user] == "assets"
       redirect "/#{params[:user]}/#{params[:repo]}/board/create" unless huboard.board(params[:user], params[:repo]).has_board?
 
       @parameters = params.merge({ :socket_backend => socket_backend})
@@ -176,20 +178,24 @@ class Huboard
     end
 
     get '/:user/:repo/backlog/?' do 
+      pass if params[:user] == "assets"
       @parameters = params.merge({ :socket_backend => socket_backend})
       erb :backlog, :layout => :layout_fluid
     end
     get '/:user/:repo/board/?' do 
+      pass if params[:user] == "assets"
       redirect "/#{params[:user]}/#{params[:repo]}"
     end
 
     get '/:user/:repo/board/create/?' do
+      pass if params[:user] == "assets"
       @parameters = params
       erb :create_board
     end
 
 
     post '/:user/:repo/board/create/?' do
+      pass if params[:user] == "assets"
       puts "creating board"
       hook_url = "#{socket_backend}/issues/webhook?token=#{encrypted_token}"
       pebble.create_board(params[:user],params[:repo], socket_backend.nil? ? nil : hook_url)
@@ -197,6 +203,7 @@ class Huboard
     end
 
     get '/:user/:repo/?' do 
+      pass if params[:user] == "assets"
       redirect "/#{params[:user]}/#{params[:repo]}/board/create" unless huboard.board(params[:user], params[:repo]).has_board?
       @parameters = params.merge({ :socket_backend => socket_backend})
       erb :board, :layout => :layout_fluid
@@ -204,6 +211,7 @@ class Huboard
 
 
     get '/:user/:repo/hook/?' do 
+      pass if params[:user] == "assets"
       raise Sinatra::NotFound unless huboard.board(params[:user], params[:repo]).has_board?
       @parameters = params
       json(pebble.create_hook( params[:user], params[:repo], "#{socket_backend}/issues/webhook?token=#{encrypted_token}")) unless socket_backend.nil?

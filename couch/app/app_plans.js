@@ -6,20 +6,36 @@ ddoc =
       mode: "test"
     },
     stripe: {
-      test: {
+      live: {
         User: [{
           id: "user_basic_v1",
           plan_id: "user_basic",
           name: "User",
           amount: 700,
-          trail_period: 180
+          trial_period: 180
         }],
         Organization: [{
           id: "org_basic_v1",
           plan_id: "org_basic",
           name: "Organization",
           amount: 2400,
-          trail_period: 180
+          trial_period: 180
+        }]
+      },
+      test: {
+        User: [{
+          id: "user_basic_v1",
+          plan_id: "user_basic",
+          name: "User",
+          amount: 700,
+          trial_period: 15
+        }],
+        Organization: [{
+          id: "org_basic_v1",
+          plan_id: "org_basic",
+          name: "Organization",
+          amount: 2400,
+          trial_period: 15
         }]
       }
     }
