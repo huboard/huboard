@@ -4,6 +4,7 @@ require 'bundler'
 Bundler.require
 
 require 'rack/no-www'
+require 'rack/ssl'
 require 'rack/robustness'
 
 
@@ -13,8 +14,10 @@ require 'bourbon'
 require 'compass'
 
 require './lib/bootstrap'
+
 configure :production do 
   require "newrelic_rpm"
+  use Rack::SSL
 end
 
 use Rack::NoWWW
