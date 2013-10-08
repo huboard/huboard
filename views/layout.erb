@@ -64,19 +64,19 @@
            <div class="container">
              <a class="brand" href="/">huboard</a>
              <ul class="nav">
-               <% yield_content :navigation %>
              </ul>
-             <% if logged_in? %>
-               <%= partial :logged_in %>
-             <% else %>
-                <ul class="nav pull-right">
-                 <li>
-                 <form action="/login" method="GET">
-                  <button class="hb-button"> Sign in </button>
-                </form>
-                 </li>
-                </ul>
-             <% end %>
+             <ul class="nav pull-right">
+               <% yield_content :navigation %>
+               <% if logged_in? %>
+                 <%= partial :logged_in %>
+               <% else %>
+                   <li>
+                   <form action="/login" method="GET">
+                    <button class="hb-button"> Sign in </button>
+                  </form>
+                   </li>
+               <% end %>
+             </ul>
            </div>
          </div>
        </div>

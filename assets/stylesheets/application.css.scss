@@ -33,6 +33,36 @@ form {
        margin: 0;
     }
 
+    .dropdown .avatar, .dropdown.open .avatar {
+      position: relative;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      padding-left: 10px;
+      margin-left: 10px;
+
+      &:before {
+        position: absolute;
+        left: 0;
+        content: ' ';
+        width: 1px;
+        height: 30px;
+        background-color: $hb-grey-light;
+      }
+      
+      &:hover {
+        border-top: none;
+      }
+
+      img {
+        border-radius: 50%;
+      }
+
+      .caret {
+        margin-top: 14px;
+      
+      }
+    }
+
     > li {
       > a {
         &:hover {
@@ -46,6 +76,9 @@ form {
             padding-top: 7px;
             background:none;
             @include box-shadow(none);
+            &.avatar {
+              padding-top:2px;
+            }
         }
       }
 
