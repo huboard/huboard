@@ -47,8 +47,10 @@
        <div class="navbar navbar-static-top">
          <div class="navbar-inner">
         <div class="container-fluid">
-          <a class="brand" href="/">huboard</a>
-            <ul class="nav">
+            <ul class="nav breadcrumbs">
+              <li><a href="/" class="home"><i class="ui-icon ui-icon-menu"></i></a></li>
+              <% yield_content :breadcrumb %>
+              <li><a><i class="ui-icon ui-icon-search"></i></a></li>
             </ul>
             <ul class="nav pull-right">
               <% yield_content :navigation %>

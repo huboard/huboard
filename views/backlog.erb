@@ -21,6 +21,11 @@
 
 <% end %>
 
+<% content_for :breadcrumb do %>
+  <li><a href="/<%= h @parameters[:user] %>"><%= h @parameters[:user] %></a></li>
+  <li><a href="/<%= h @parameters[:user] %>/<%= h @parameters[:repo] %>/backlog"><%= h @parameters[:repo] %></a></li>
+<% end %>
+
 <% content_for :header do %>
   <ol class="assignees">
 

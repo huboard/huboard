@@ -46,7 +46,7 @@ form {
         left: 0;
         content: ' ';
         width: 1px;
-        height: 40px;
+        height: 42px;
         background-color: $hb-grey-light;
         border-right: 1px solid #fff;
       }
@@ -84,6 +84,103 @@ form {
         }
       }
 
+    }
+  }
+
+  .nav.breadcrumbs {
+
+
+    li + li a {
+      padding-left: 25px;
+      &:hover {
+        padding-left: 25px;
+      
+      }
+    }
+
+    li:first-child {
+      > a:before, > a:after {
+        display:none;
+      }
+      + li a {
+        padding-left: 10px;
+      }
+    }
+    li:last-child {
+      > a:before, > a:after {
+        display:none;
+      }
+    }
+
+    > li {
+      > a, > span {
+
+        font-family: $hb-font-headings;
+        font-size-adjust:0.5; 
+        font-weight:500;
+        color: $hb-purple-dark;
+        border: 1px solid #ddd;
+        padding: 6px;
+        padding-right: 15px;
+        margin: 4px;
+        margin-left: -5px;
+        background-color: #fff;
+        &.home {
+          padding: 8px 6px 4px 6px;
+          &:hover {
+          padding: 8px 6px 4px 6px;
+          }
+          .ui-icon {
+            height: auto;
+          }
+        }
+
+        &:hover {
+          border: 1px solid #ddd;
+          padding-top: 6px;
+          padding-bottom: 6px;
+        }
+
+        position: relative;
+
+
+        &:before, &:after {
+          z-index: 5;
+          left: 100%;
+          border: solid transparent;
+          content: " ";
+          height: 0;
+          width: 0;
+          position: absolute;
+          pointer-events: none;
+          border-radius: 2px;
+        }                        
+        &:after {
+          border-left-color: #fff;
+          border-width: 17px;
+          top: 50%;
+          margin-top: -17px;
+        }
+
+        &:before {
+          border-left-color: #ddd;
+          border-width: 18px;
+          top: 50%;
+          margin-top: -18px;
+        }
+
+      }
+      &.active, &.dropdown.open {
+        > a, > a:hover, > .dropdown-toggle, > .dropdown-toggle:hover  {
+            border-top: none;
+            padding-top: 11px;
+            background:none;
+            @include box-shadow(none);
+            &.avatar {
+              padding-top:2px;
+            }
+        }
+      }
     }
   }
 }
