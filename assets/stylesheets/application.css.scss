@@ -42,11 +42,13 @@ form {
 
       &:before {
         position: absolute;
+        top: 0;
         left: 0;
         content: ' ';
         width: 1px;
-        height: 30px;
+        height: 40px;
         background-color: $hb-grey-light;
+        border-right: 1px solid #fff;
       }
       
       &:hover {
