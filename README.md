@@ -84,6 +84,10 @@ labels **name and color** must match in order to work.
     gem install bundler
     bundle install
 
+Also install memcached and couch, e.g.
+
+    apt-get install couchdb memcached
+
 ## Register App For Github OAuth
 
 Go to https://github.com/settings/applications and register your
