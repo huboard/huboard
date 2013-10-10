@@ -125,6 +125,7 @@ form {
 
         &:hover, &:focus, &.has-value {
           width: 210px;
+          outline: none;
           &:-moz-placeholder {
             text-indent: 2px;
             color:#666;
