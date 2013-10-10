@@ -96,6 +96,7 @@ form {
       margin-left: -5px;
       background: white;
       border: 1px solid #ddd;
+      height: 26px;
       .ui-icon {
         position: absolute;
         top: 9px;
@@ -106,14 +107,46 @@ form {
         padding-left: 24px;
         border: none;
         @include transition(width 0.5s);
+
+        &::-webkit-input-placeholder {
+          text-indent: 1px;
+        }
+        &:-moz-placeholder {
+          text-indent: 2px;
+          color:#fff;
+        }
+        &::-moz-placeholder {
+          text-indent: 2px;
+          color:#fff;
+        }
+        &:-ms-input-placeholder {
+          text-indent: 1px;
+        }
+
         &:hover, &:focus, &.has-value {
           width: 210px;
+          &:-moz-placeholder {
+            text-indent: 2px;
+            color:#666;
+          }
+          &::-moz-placeholder {
+            text-indent: 2px;
+            color:#666;
+          }
           @include transition(width 0.5s);
         }
       }
       &:hover input {
         width: 210px;
         @include transition(width 0.5s);
+        &:-moz-placeholder {
+          text-indent: 2px;
+          color:#666;
+        }
+        &::-moz-placeholder {
+          text-indent: 2px;
+          color:#666;
+        }
       }
     }
 
