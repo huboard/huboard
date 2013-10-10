@@ -91,30 +91,29 @@ form {
 
     .search {
       position:relative;
-      padding: 9px 8px 3px 20px;
+      padding: 3px 8px 3px 20px;
       margin: 4px;
       margin-left: -5px;
       background: white;
       border: 1px solid #ddd;
-      width: 16px;
-      @include transition(width 0.5s);
+      .ui-icon {
+        position: absolute;
+        top: 9px;
+      }
       input {
-        display:none;
-        border: none;
+        width: 0px;
         padding: 3px;
         padding-left: 24px;
+        border: none;
+        @include transition(width 0.5s);
+        &:hover, &:focus, &.has-value {
+          width: 210px;
+          @include transition(width 0.5s);
+        }
       }
-      &:hover {
-        padding-top: 3px;
-        width: 237px;
-        input {
-          display: inline;
-        }
-        .ui-icon {
-          position: absolute;
-          top: 9px;
-        
-        }
+      &:hover input {
+        width: 210px;
+        @include transition(width 0.5s);
       }
     }
 
