@@ -1,10 +1,10 @@
-require "hashie" 
+require "hashie"
 require_relative "auth/github"
 
 # stolen from http://github.com/cschneid/irclogger/blob/master/lib/partials.rb
 #   and made a lot more robust by me
 # this implementation uses erb by default. if you want to use any other template mechanism
-#   then replace `erb` on line 13 and line 17 with `haml` or whatever 
+#   then replace `erb` on line 13 and line 17 with `haml` or whatever
 module Sinatra::Partials
   def partial(template, *args)
     template_array = template.to_s.split('/')
@@ -31,7 +31,15 @@ class HuboardApplication < Sinatra::Base
   if File.exists? "#{File.dirname(__FILE__)}/../.settings"
     token_file =  File.new("#{File.dirname(__FILE__)}/../.settings")
     # TODO: read this from a yaml
-    eval(token_file.read) 
+    eval(token_file.read)
+    GITHUB_CONFIG = {
+      :client_id     => settings.github_options[:client_id],
+      :client_secret => settings.github_options[:secret],
+      :scope => settings.github_options[:scope]
+    }
+    ENV["CACHE_SERVERS"] = ENV["MEMCACHIER_SERVERS"]
+    ENV["CACHE_USERNAME"] = ENV["MEMCACHIER_USERNAME"]
+    ENV["CACHE_PASSWORD"] = ENV["MEMCACHIER_PASSWORD"]
   elsif ENV['GITHUB_CLIENT_ID']
     set :secret_key, ENV['SECRET_KEY']
     set :team_id, ENV["TEAM_ID"]
@@ -45,6 +53,7 @@ class HuboardApplication < Sinatra::Base
     set :session_secret, ENV["SESSION_SECRET"]
     set :socket_backend, ENV["SOCKET_BACKEND"]
     set :socket_secret, ENV["SOCKET_SECRET"]
+    set :couchdb_server, ENV["COUCHDB_SERVER"] = ENV["CLOUDANT_URL"]
 
     set :cache_config, {
       servers: ENV["CACHE_SERVERS"] = ENV["MEMCACHIER_SERVERS"],
@@ -94,8 +103,8 @@ class HuboardApplication < Sinatra::Base
       return authenticated?(:private) || authenticated?
     end
 
-    def github_config 
-      return :client_id => GITHUB_CONFIG[:client_id], :client_secret => GITHUB_CONFIG[:client_secret] 
+    def github_config
+      return :client_id => GITHUB_CONFIG[:client_id], :client_secret => GITHUB_CONFIG[:client_secret]
     end
 
   end
@@ -115,7 +124,7 @@ class HuboardApplication < Sinatra::Base
     g.body 'A fatal error occured.'
     g.headers "Location" => "/logout"
 
-    g.on(Ghee::Error) 
+    g.on(Ghee::Error)
 
   end
 

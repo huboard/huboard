@@ -48,14 +48,14 @@ class Huboard
         response.body.merge clone
       end
 
-      # Patchs 
+      # Patchs
       #
       # return json
       #
       def patch(attributes)
       end
 
-      # Destroys 
+      # Destroys
       #
       # return boolean
       #
@@ -70,7 +70,6 @@ class Huboard
       # for authenticated access
       #
       def initialize(hash={})
-
         super("#{hash[:base_url] || "http://127.0.0.1:5984" }/huboard") do |builder|
           yield builder if block_given?
           builder.use     FaradayMiddleware::EncodeJson
@@ -194,7 +193,7 @@ class Huboard
   module Issues
     module Card
       def couch
-        @couch ||= Huboard::Couch.new :base_url => ENV["CLOUDANT_URL"]
+        @couch ||= Huboard::Couch.new :base_url => HuboardApplication.couchdb_server
       end
 
       def move(index)
@@ -218,7 +217,7 @@ class Huboard
     board_method = self.instance_method(:board)
 
     def couch
-      @couch ||= Huboard::Couch.new :base_url => ENV["CLOUDANT_URL"]
+      @couch ||= Huboard::Couch.new :base_url => HuboardApplication.couchdb_server
     end
 
     define_method(:board) do
@@ -232,7 +231,7 @@ class Huboard
         couch.user.get_or_create api.user
         couch.users.get_or_create theuser if theuser.type == "User"
         couch.orgs.get_or_create theuser if theuser.type == "Organization"
-        couch.repos.get_or_create therepo 
+        couch.repos.get_or_create therepo
       rescue Exception => e
         puts "error with couch"
         puts e.message
