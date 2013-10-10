@@ -50,7 +50,12 @@
             <ul class="nav breadcrumbs">
               <li><a href="/" class="home"><i class="ui-icon ui-icon-menu"></i></a></li>
               <% yield_content :breadcrumb %>
-              <li><a><i class="ui-icon ui-icon-search"></i></a></li>
+              <li>
+                <div class="search">
+                  <i class="ui-icon ui-icon-search"></i>
+                  <input placeholder="search..." />
+                </div>
+              </li>
             </ul>
             <ul class="nav pull-right">
               <% yield_content :navigation %>

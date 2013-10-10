@@ -89,6 +89,34 @@ form {
 
   .nav.breadcrumbs {
 
+    .search {
+      position:relative;
+      padding: 9px 8px 3px 20px;
+      margin: 4px;
+      margin-left: -5px;
+      background: white;
+      border: 1px solid #ddd;
+      width: 16px;
+      @include transition(width 0.5s);
+      input {
+        display:none;
+        border: none;
+        padding: 3px;
+        padding-left: 24px;
+      }
+      &:hover {
+        padding-top: 3px;
+        width: 237px;
+        input {
+          display: inline;
+        }
+        .ui-icon {
+          position: absolute;
+          top: 9px;
+        
+        }
+      }
+    }
 
     li + li a {
       padding-left: 25px;
