@@ -182,6 +182,17 @@ class Huboard
       @parameters = params.merge({ :socket_backend => socket_backend})
       erb :backlog, :layout => :layout_fluid
     end
+
+    get '/:user/:repo/ember/?' do 
+
+      pass if params[:user] == "assets"
+      @parameters = params.merge({ :socket_backend => socket_backend})
+
+      @repo = gh.repos(params[:user],params[:repo])
+
+      erb :ember_board, :layout => :layout_ember
+    end
+
     get '/:user/:repo/board/?' do 
       pass if params[:user] == "assets"
       redirect "/#{params[:user]}/#{params[:repo]}"

@@ -1,0 +1,7 @@
+<% content_for :javascripts do %>
+  <%= javascript_tag 'board/application' %>
+  <script>
+    App.set("repo", Ember.Object.create(<%= @repo.to_hash.to_json %>));
+    App.advanceReadiness();
+  </script>
+<% end %>
