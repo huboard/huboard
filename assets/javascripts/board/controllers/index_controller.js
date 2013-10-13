@@ -5,6 +5,13 @@ var IndexController = Ember.ObjectController.extend({
 
   column_style: function() {
     return "width:" + (100/this.get("columns").length) + "%";
+  }.property(),
+
+  allIssues: function() {
+    return _.chain(this.get("labels"))
+      .map(function(l){return l.issues})
+      .flatten()
+      .value();
   }.property()
 });
 

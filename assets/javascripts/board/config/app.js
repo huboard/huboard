@@ -1,6 +1,7 @@
 // require other, dependencies here, ie:
 // require('./vendor/moment');
 
+require('../vendor/lodash');
 require('../vendor/jquery');
 require('../vendor/handlebars');
 require('../vendor/ember');

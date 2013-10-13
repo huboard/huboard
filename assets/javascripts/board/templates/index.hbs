@@ -1,6 +1,7 @@
 <div id="content" class="content">
   <div id="stage">
     <div class="board">
+     {{log allIssues.length}}
       <div class="headers">
         {{#each column in columns }}
           <div class="column" {{bind-attr style=column_style }}>
