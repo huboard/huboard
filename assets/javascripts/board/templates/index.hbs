@@ -4,9 +4,7 @@
     {{#each column in columns }}
       <div class="column" {{bind-attr style=column_style }}>
         <h3>{{column.name}}</h3>
-        <ul class="sortable">
-          
-        </ul>
+        {{ render column column }}
       </div>
     {{/each}}
     </div>
