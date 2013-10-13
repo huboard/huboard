@@ -3,9 +3,8 @@
    <div class="container">
     <ul class="nav breadcrumbs">
       <li><a href="/" class="home"><i class="ui-icon ui-icon-menu"></i></a></li>
-      {{ log this }}
-      {{ log model }}
       <li><a href="/{{model.owner.login}}">{{model.owner.login}}</a></li>
+      <li><a href="/{{model.owner.login}}/{{model.name}}">{{model.name}}</a></li>
     </ul>
      <ul class="nav pull-right">
      </ul>
@@ -13,5 +12,8 @@
  </div>
 </div>
 
-{{outlet}}
+<div class="container-fluid" id="main-stage">
+  
+  {{outlet}}
+</div>
 

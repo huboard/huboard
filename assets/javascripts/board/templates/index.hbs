@@ -1,2 +1,13 @@
-<h2>Index</h2>
+<div id="content" class="content">
+  <div id="stage">
+    <div class="board">
+    {{#each model.labels }}
+      <div class="column">
+        <h3>{{name}}</h3>
+        <ul class="sortable"></ul>
+      </div>
+    {{/each}}
+    </div>
+  </div>
 
+</div>
