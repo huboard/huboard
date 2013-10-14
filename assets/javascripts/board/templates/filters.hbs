@@ -7,5 +7,9 @@
   {{#each filter in milestoneFilters }}
     {{view App.FilterView lastClickedBinding=lastMilestoneFilterClicked nameBinding=filter.name modeBinding="filter.mode"}}
   {{/each}}
+  <h5>Labels</h5>
+  {{#each filter in labelFilters }}
+    {{view App.FilterView lastClickedBinding=lastLabelFilterClicked nameBinding=filter.name modeBinding="filter.mode"}}
+  {{/each}}
 
 </ul>

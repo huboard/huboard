@@ -1,6 +1,7 @@
 var FiltersController = Ember.ObjectController.extend({
   needs: ["index"],
   milestonesBinding: "controllers.index.model.milestones",
+  otherLabelsBinding: "controllers.index.model.other_labels",
   lastUserFilterClicked: null,
   lastUserFilterClickedChanged: function(){
     var self = this;
@@ -45,8 +46,16 @@ var FiltersController = Ember.ObjectController.extend({
         condition:function(){}
        })
     }));
+    this.set("labelFilters", this.get("otherLabels").map(function(l){
+       return Ember.Object.create({
+        name: l.name,
+        mode:0,
+        condition:function(){}
+       })
+    }));
   },
   lastMilestoneFilterClicked: null,
+  lastLabelFilterClicked: null
   
 });
 
