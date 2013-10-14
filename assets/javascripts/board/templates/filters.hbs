@@ -2,4 +2,10 @@
   {{#each filter in userFilters }}
     {{view App.FilterView lastClickedBinding=lastUserFilterClicked nameBinding=filter.name modeBinding="filter.mode"}}
   {{/each}}
+
+  <h5>Milestones</h5>
+  {{#each filter in milestoneFilters }}
+    {{view App.FilterView lastClickedBinding=lastMilestoneFilterClicked nameBinding=filter.name modeBinding="filter.mode"}}
+  {{/each}}
+
 </ul>

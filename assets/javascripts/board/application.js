@@ -42,6 +42,8 @@ module.exports = ColumnController;
 
 },{}],5:[function(require,module,exports){
 var FiltersController = Ember.ObjectController.extend({
+  needs: ["index"],
+  milestonesBinding: "controllers.index.model.milestones",
   lastUserFilterClicked: null,
   lastUserFilterClickedChanged: function(){
     var self = this;
@@ -69,6 +71,25 @@ var FiltersController = Ember.ObjectController.extend({
       condition: function(){}
     }
   ],
+  milestoneFilters: null,
+  lastMilestoneFilterClickedChanged: function(){
+    var self = this;
+    this.get("milestoneFilters").filter(function(f){
+      return f.name != self.get("lastMilestoneFilterClicked");
+    }).forEach(function(f){
+      Ember.set(f,"mode", 0);
+    })
+  }.observes("lastMilestoneFilterClicked"),
+  init: function(){
+    this.set("milestoneFilters", this.get("milestones").map(function(m){
+       return Ember.Object.create({
+        name: m.title,
+        mode:0,
+        condition:function(){}
+       })
+    }));
+  },
+  lastMilestoneFilterClicked: null,
   
 });
 
@@ -284,12 +305,32 @@ function program1(depth0,data) {
   return buffer;
   }
 
+function program3(depth0,data) {
+  
+  var buffer = '', hashContexts, hashTypes;
+  data.buffer.push("\n    ");
+  hashContexts = {'lastClickedBinding': depth0,'nameBinding': depth0,'modeBinding': depth0};
+  hashTypes = {'lastClickedBinding': "ID",'nameBinding': "ID",'modeBinding': "STRING"};
+  data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.FilterView", {hash:{
+    'lastClickedBinding': ("lastMilestoneFilterClicked"),
+    'nameBinding': ("filter.name"),
+    'modeBinding': ("filter.mode")
+  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n  ");
+  return buffer;
+  }
+
   data.buffer.push("<ul class='filters'>\n  ");
   hashTypes = {};
   hashContexts = {};
   stack1 = helpers.each.call(depth0, "filter", "in", "userFilters", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n</ul>\n");
+  data.buffer.push("\n\n  <h5>Milestones</h5>\n  ");
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers.each.call(depth0, "filter", "in", "milestoneFilters", {hash:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n\n</ul>\n");
   return buffer;
   
 });
