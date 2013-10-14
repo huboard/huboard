@@ -1,0 +1,5 @@
+<ul class='filters'>
+  {{#each filter in userFilters }}
+    {{view App.FilterView lastClickedBinding=lastUserFilterClicked nameBinding=filter.name modeBinding="filter.mode"}}
+  {{/each}}
+</ul>

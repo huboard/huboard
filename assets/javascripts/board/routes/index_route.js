@@ -4,6 +4,11 @@ var IndexRoute = Ember.Route.extend({
 
     return Ember.$.getJSON("/api/" + repo.get("full_name") + "/board");
 
+  },
+  renderTemplate: function() {
+    
+    this._super.apply(this, arguments);
+    this.render('filters', {into: 'index', outlet: 'sidebar'})
   }
 
 });
