@@ -49,14 +49,20 @@ var FiltersController = Ember.ObjectController.extend({
        return Ember.Object.create({
         name: m.title,
         mode:0,
-        condition:function(){}
+        condition:function(i){
+         return i.milestone && i.milestone.title.toLocaleLowerCase() === m.title.toLocaleLowerCase();
+        }
        })
     }));
     this.set("labelFilters", this.get("otherLabels").map(function(l){
        return Ember.Object.create({
         name: l.name,
         mode:0,
-        condition:function(){}
+        condition:function(i){
+          return i.labels.any(function(label){ 
+             return l.name.toLocaleLowerCase() === label.name.toLocaleLowerCase();
+          });
+        }
        })
     }));
   },
@@ -71,8 +77,13 @@ var FiltersController = Ember.ObjectController.extend({
       return f.mode == 1;
     }));
 
+    this.set("hideFilters", allFilters.filter(function(f){
+      return f.mode == 2;
+    }));
+
   }.observes("milestoneFilters.@each.mode", "userFilters.@each.mode","labelFilters.@each.mode"),
-  dimFiltersBinding: "App.dimFilters"
+  dimFiltersBinding: "App.dimFilters",
+  hideFiltersBinding: "App.hideFilters"
   
 });
 

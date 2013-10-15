@@ -6,7 +6,9 @@
   <a class="number" {{bind-attr href=html_url}} target="_blank" title="View issue on github.com"><small>#</small>{{number}}</a>
 </div>
 
- <img data-placement="right" rel="twipsy" title="Assigned to rauhryan" src="https://secure.gravatar.com/avatar/29283ede6c447fdc62f0ceac42df33ea?s=24">
+{{#if assignee }}
+{{hb-avatar user=assignee.gravatar_id }}
+{{/if}}
 
 <div class="card-labels">
 
