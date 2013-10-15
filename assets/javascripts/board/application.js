@@ -81,30 +81,7 @@ var FiltersController = Ember.ObjectController.extend({
       Ember.set(f,"mode", 0);
     })
   }.observes("lastUserFilterClicked"),
-  userFilters: [
-    {
-      name: "Assigned to me",
-      mode: 0,
-      condition: function(i){
-        return i.assignee && i.assignee.login === App.get("currentUser").login;
-      }
-    },
-
-    {
-      name: "Assigned to others",
-      mode: 0,
-      condition: function(i){
-        return i.assignee && i.assignee.login !== App.get("currentUser").login;
-      }
-    },
-    {
-      name: "Unassigned issues",
-      mode: 0,
-      condition: function(i){
-        return !i.assignee;
-      }
-    }
-  ],
+  userFilters: null,
   milestoneFilters: null,
   lastMilestoneFilterClickedChanged: function(){
     var self = this;
@@ -115,6 +92,44 @@ var FiltersController = Ember.ObjectController.extend({
     })
   }.observes("lastMilestoneFilterClicked"),
   init: function(){
+    if(App.get("logged_in")){
+      this.set("userFilters", [
+        {
+          name: "Assigned to me",
+          mode: 0,
+          condition: function(i){
+            return i.assignee && i.assignee.login === App.get("currentUser").login;
+          }
+        },
+
+        {
+          name: "Assigned to others",
+          mode: 0,
+          condition: function(i){
+            return i.assignee && i.assignee.login !== App.get("currentUser").login;
+          }
+        },
+        {
+          name: "Unassigned issues",
+          mode: 0,
+          condition: function(i){
+            return !i.assignee;
+          }
+        }
+      ]);
+    
+    }else{
+      this.set("userFilters", [
+        {
+          name: "Unassigned issues",
+          mode: 0,
+          condition: function(i){
+            return !i.assignee;
+          }
+        }
+      ]);
+    
+    }
     this.set("milestoneFilters", this.get("milestones").map(function(m){
        return Ember.Object.create({
         name: m.title,
