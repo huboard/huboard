@@ -22,7 +22,7 @@ var FiltersController = Ember.ObjectController.extend({
     })
   }.observes("lastMilestoneFilterClicked"),
   init: function(){
-    if(App.get("logged_in")){
+    if(App.get("loggedIn")){
       this.set("userFilters", [
         {
           name: "Assigned to me",

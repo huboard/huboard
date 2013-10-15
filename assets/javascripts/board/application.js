@@ -92,7 +92,7 @@ var FiltersController = Ember.ObjectController.extend({
     })
   }.observes("lastMilestoneFilterClicked"),
   init: function(){
-    if(App.get("logged_in")){
+    if(App.get("loggedIn")){
       this.set("userFilters", [
         {
           name: "Assigned to me",
@@ -303,7 +303,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = '', stack1, hashContexts, hashTypes, options;
-  data.buffer.push("\n");
+  data.buffer.push("\n  ");
   hashContexts = {'user': depth0};
   hashTypes = {'user': "ID"};
   options = {hash:{
