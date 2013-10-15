@@ -2,6 +2,12 @@
   <%= javascript_tag 'board/application' %>
   <script>
     App.set("repo", Ember.Object.create(<%= @repo.to_hash.to_json %>));
+    <% if logged_in? %>
+      App.set("loggedIn", true);
+      App.set("currentUser",<%= current_user.attribs.to_json %>);
+    <% else %>
+      App.set("loggedIn", false);
+    <% end %>
     App.advanceReadiness();
   </script>
 <% end %>

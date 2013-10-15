@@ -15,18 +15,24 @@ var FiltersController = Ember.ObjectController.extend({
     {
       name: "Assigned to me",
       mode: 0,
-      condition: function(){}
+      condition: function(i){
+        return i.assignee && i.assignee.login === App.get("currentUser").login;
+      }
     },
 
     {
       name: "Assigned to others",
       mode: 0,
-      condition: function(){}
+      condition: function(i){
+        return i.assignee && i.assignee.login !== App.get("currentUser").login;
+      }
     },
     {
       name: "Unassigned issues",
       mode: 0,
-      condition: function(){}
+      condition: function(i){
+        return !i.assignee;
+      }
     }
   ],
   milestoneFilters: null,
@@ -55,7 +61,18 @@ var FiltersController = Ember.ObjectController.extend({
     }));
   },
   lastMilestoneFilterClicked: null,
-  lastLabelFilterClicked: null
+  lastLabelFilterClicked: null,
+  dimFiltersChanged: function(){
+    var allFilters = this.get("milestoneFilters")
+                        .concat(this.get("userFilters"))
+                        .concat(this.get("labelFilters"));
+
+    this.set("dimFilters", allFilters.filter(function(f){
+      return f.mode == 1;
+    }));
+
+  }.observes("milestoneFilters.@each.mode", "userFilters.@each.mode","labelFilters.@each.mode"),
+  dimFiltersBinding: "App.dimFilters"
   
 });
 

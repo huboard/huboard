@@ -7,7 +7,9 @@ require('../vendor/handlebars');
 require('../vendor/ember');
 
 var App = Ember.Application.create({
-  rootElement: "#application"
+  rootElement: "#application",
+  dimFilters: [],
+  hideFilters: []
 
 });
 
