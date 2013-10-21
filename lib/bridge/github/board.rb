@@ -28,6 +28,21 @@ class Huboard
       gh.raw.status == 200 && column_labels.size > 0
     end
 
+    def meta
+       settings = self.settings
+       columns = column_labels
+
+      return {
+        "id" => gh.id,
+        :full_name => gh.full_name,
+        :columns => columns,
+        :milestones => milestones,
+        :other_labels => other_labels,
+        :assignees => assignees.to_a,
+        :issues => issues
+      }
+    end
+
     def board
        settings = self.settings
        columns = column_labels.drop(settings[:show_all] ? 1 : 0)

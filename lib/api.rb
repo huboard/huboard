@@ -6,7 +6,7 @@ class Huboard
 
 
     PUBLIC_URLS = ['/authorized']
-    RESERVED_URLS = %w{ settings profiles }
+    RESERVED_URLS = %w{ settings profiles v2 }
 
 
     before "/:user/:repo/?*" do 
@@ -52,6 +52,10 @@ class Huboard
       backlog =  pebble.build_backlog(params[:user], params[:repo])
       backlog.merge! :logged_in => logged_in?
       return json backlog
+    end
+
+    get '/v2/:user/:repo/board' do 
+       return json huboard.board(params[:user],params[:repo]).meta
     end
 
     get '/:user/:repo/board' do 

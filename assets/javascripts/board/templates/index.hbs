@@ -8,15 +8,15 @@
     <div class="board">
      {{log allIssues.length}}
       <div class="headers">
-        {{#each column in columns }}
-          <div class="column" {{bind-attr style=column_style }}>
-            <h3>{{column.name}}<small>{{ column.issues.length }}</small></h3>
+        {{#each column in board_columns }}
+          <div class="column" {{bind-attr style=header_style }}>
+            <h3>{{column.text}}<small>{{ render column_count column }}</small></h3>
           </div>
         {{/each}}
       </div>
       <div class="columns">
-        {{#each column in columns }}
-          <div class="column" {{bind-attr style=column_style }}>
+        {{#each column in board_columns }}
+          <div class="column" {{bind-attr style=header_style }}>
             {{ render column column }}
           </div>
         {{/each}}

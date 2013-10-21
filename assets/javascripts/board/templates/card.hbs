@@ -11,15 +11,12 @@
 {{/if}}
 
 <div class="card-labels">
-
-<div class="card-label-wrapper"> 
-  <div class="card-label -x8CBF26 active small"> 
+  <div class="card-label-wrapper"> 
+    {{#each label in other_labels }}
+         <div class="card-label active small"></div>
+         <div class="card-label active large">
+          <span>{{label.name}}</span>
+         </div>
+    {{/each}}
   </div>
-  <div class="card-label -x8CBF26 active large"> 
-    <span> Feature Request </span>
-  </div>
-</div>
-
-
-
 </div>

@@ -1,18 +1,22 @@
 var IndexController = Ember.ObjectController.extend({
-  columns: function(){
-     return this.get("labels").splice(1);
+  board_columns: function(){
+     return this.get("columns").splice(1);
   }.property(),
+  min_height: function(){
+     return _(Ember.$(".sortable")).chain()
+        .map(function(ul){ return $(ul).height(); })
+        .reduce(function(tallest, height){return height > tallest ? height : tallest;})
+        .value() || 100;
+  }.property("issues.@each.current_state"),
+
+  header_style: function() {
+    return "width:" + (100/this.get("board_columns").length) + "%;";
+  }.property("board_columns","min_height"),
 
   column_style: function() {
-    return "width:" + (100/this.get("columns").length) + "%";
-  }.property(),
+    return "min-height:" + this.get("min_height") + "px";
+  }.property("board_columns","min_height")
 
-  allIssues: function() {
-    return _.chain(this.get("labels"))
-      .map(function(l){return l.issues})
-      .flatten()
-      .value();
-  }.property()
 });
 
 module.exports = IndexController;
