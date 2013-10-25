@@ -1,0 +1,9 @@
+session_secret: herpderp
+secret_key: iam a secret key
+github_options: { secret:    '',
+                  client_id: '',
+                  scopes:    'user,repo' }
+
+cache_config: { servers:  '127.0.0.1',
+                username: '',
+                password: '' }
