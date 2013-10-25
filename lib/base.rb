@@ -39,14 +39,10 @@ class HuboardApplication < Sinatra::Base
     set :team_id, ENV["TEAM_ID"]
     set :user_name, ENV["USER_NAME"]
     set :password, ENV["PASSWORD"]
-    GITHUB_CONFIG = {
-      :client_id     => ENV['GITHUB_CLIENT_ID'],
-      :client_secret => ENV['GITHUB_SECRET'],
-      :scope => "public_repo"
-    }
     set :session_secret, ENV["SESSION_SECRET"]
     set :socket_backend, ENV["SOCKET_BACKEND"]
     set :socket_secret, ENV["SOCKET_SECRET"]
+    set :github_options, ENV["GITHUB_OPTIONS"]
 
     set :cache_config, {
       servers: ENV["MEMCACHIER_SERVERS"],
@@ -61,6 +57,12 @@ class HuboardApplication < Sinatra::Base
   ENV["CACHE_SERVERS"]  = settings.cache_config['servers']
   ENV["CACHE_USERNAME"] = settings.cache_config['username']
   ENV["CACHE_PASSWORD"] = settings.cache_config['password']
+
+  GITHUB_CONFIG = {
+    :client_id     => settings.github_options['client_id'],
+    :client_secret => settings.github_options['secret'],
+    :scope         => settings.github_options['scopes']
+  }
 
   helpers Huboard::Common::Helpers
   helpers Sinatra::Partials
