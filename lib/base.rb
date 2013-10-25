@@ -1,4 +1,5 @@
 require "hashie" 
+require "yaml"
 require_relative "auth/github"
 
 # stolen from http://github.com/cschneid/irclogger/blob/master/lib/partials.rb
@@ -28,10 +29,11 @@ class HuboardApplication < Sinatra::Base
   enable  :sessions
   enable :raise_exceptions
 
-  if File.exists? "#{File.dirname(__FILE__)}/../.settings"
-    token_file =  File.new("#{File.dirname(__FILE__)}/../.settings")
-    # TODO: read this from a yaml
-    eval(token_file.read) 
+  if File.exists? "#{File.dirname(__FILE__)}/../settings.yml"
+    token_file = File.read("#{File.dirname(__FILE__)}/../settings.yml")
+    YAML.load(token_file).each do |k,v|
+      set k.to_sym, v
+    end
   elsif ENV['GITHUB_CLIENT_ID']
     set :secret_key, ENV['SECRET_KEY']
     set :team_id, ENV["TEAM_ID"]
