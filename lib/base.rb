@@ -51,7 +51,7 @@ class HuboardApplication < Sinatra::Base
     }
 
   else
-    raise "Configuration information not found: you need to provide a .settings file or ENV variables"
+    raise "Configuration information not found: you need to provide a settings.yml file or ENV variables"
   end
 
   ENV["CACHE_SERVERS"]  = settings.cache_config['servers']
