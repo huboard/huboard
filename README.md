@@ -92,9 +92,9 @@ application to get the application keys needed for OAuth.
 
 ## Configure Your App
 
-    cp .settings.sample .settings
+    cp settings.sample.yml settings.yml
 
-Edit `.settings` to set the Client ID and Client Secret provided by
+Edit `settings.yml` to set the Client ID and Client Secret provided by
 Github when you registered the application.
 
 ### Using Pow
