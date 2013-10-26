@@ -1,5 +1,12 @@
 session_secret: herpderp
 secret_key: iam a secret key
+team_id:        ''
+user_name:      ''
+password:       ''
+socket_backend: 'http://localhost:9292' # Host where huboard app can be accessed - for github web hook callbacks
+socket_secret:  '' # shared secret for confirming push came from github - optional
+couchdb_server: 'http://127.0.0.1:5984'
+
 github_options: { secret:    '',
                   client_id: '',
                   scopes:    'user,repo' }
