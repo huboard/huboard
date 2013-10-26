@@ -7,14 +7,14 @@ Before contributing to Huboard, please:
 Ways to contribute:
 
   * The easiest way you can contribute by simply using huboard and adding issues. Find bugs or think of cool features, let me know by submitting issues
-  * Take a look at the open issues. Anything is fair game, pick one and send me a pull request. 
+  * Take a look at the open issues. Anything is fair game, pick one and send me a pull request.
   * I've added a label called `Please contribute`, these are features/defects that are lower priority but would still be a great addition to the product
 
 # How To Set Up Your Repo
 
 Add labels to your repository with the following pattern
 
->  # - Title  
+>  # - Title
 
 Where:
 
@@ -64,6 +64,9 @@ Example:
 
 > Link <=> rauhryan/ghee
 
+Reciprocal links must be present in any two repositories that are to
+be linked together.
+
 For help distiguishing cards add a custom color to label and huboard
 will add a border to issues belonging to the linked board
 
@@ -80,6 +83,10 @@ labels **name and color** must match in order to work.
 
     gem install bundler
     bundle install
+
+Also install memcached and couch, e.g.
+
+    apt-get install couchdb memcached
 
 ## Register App For Github OAuth
 
@@ -130,7 +137,7 @@ or
 
 **Please use the latest stable tag if you are hosting your own instance of huboard.**
 
-# Warning - the deployment instructions are out of date. 
+# Warning - the deployment instructions are out of date.
 # Huboard now requires memcached and couchdb. Please help me update the
 # documentation
 
@@ -168,7 +175,7 @@ Go to https://github.com/settings/applications and register your
 application to get the application keys needed for OAuth.
 
 - URL: `http://<your-app-name>.herokuapp.com`
-- Callback: `http://<your-app-name>.herokuapp.com/auth/github/callback`
+- Callback: `http://<your-app-name>.herokuapp.com`
 
 ## 3. Configure Heroku Environment
 
@@ -197,13 +204,13 @@ Predeployment (if you've changed any js or css files) run the following rake tas
     rake rjs
     rake js
     rake css
-    
+
 Commit the changes and
 
     git push heroku master
-    
-    
-    
+
+
+
 
 # License
 

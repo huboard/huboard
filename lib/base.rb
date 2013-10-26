@@ -5,7 +5,7 @@ require_relative "auth/github"
 # stolen from http://github.com/cschneid/irclogger/blob/master/lib/partials.rb
 #   and made a lot more robust by me
 # this implementation uses erb by default. if you want to use any other template mechanism
-#   then replace `erb` on line 13 and line 17 with `haml` or whatever 
+#   then replace `erb` on line 13 and line 17 with `haml` or whatever
 module Sinatra::Partials
   def partial(template, *args)
     template_array = template.to_s.split('/')
@@ -43,13 +43,13 @@ class HuboardApplication < Sinatra::Base
     set :socket_backend, ENV["SOCKET_BACKEND"]
     set :socket_secret, ENV["SOCKET_SECRET"]
     set :github_options, ENV["GITHUB_OPTIONS"]
+    set :couchdb_server, ENV["COUCHDB_SERVER"] = ENV["CLOUDANT_URL"]
 
     set :cache_config, {
       servers: ENV["MEMCACHIER_SERVERS"],
       username: ENV["MEMCACHIER_USERNAME"],
       password: ENV["MEMCACHIER_PASSWORD"]
     }
-
   else
     raise "Configuration information not found: you need to provide a settings.yml file or ENV variables"
   end
@@ -101,8 +101,8 @@ class HuboardApplication < Sinatra::Base
       return authenticated?(:private) || authenticated?
     end
 
-    def github_config 
-      return :client_id => GITHUB_CONFIG[:client_id], :client_secret => GITHUB_CONFIG[:client_secret] 
+    def github_config
+      return :client_id => GITHUB_CONFIG[:client_id], :client_secret => GITHUB_CONFIG[:client_secret]
     end
 
   end
@@ -122,7 +122,7 @@ class HuboardApplication < Sinatra::Base
     g.body 'A fatal error occured.'
     g.headers "Location" => "/logout"
 
-    g.on(Ghee::Error) 
+    g.on(Ghee::Error)
 
   end
 
