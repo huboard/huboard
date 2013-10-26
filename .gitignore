@@ -1,4 +1,5 @@
 .settings
+settings.yml
 .token
 .rvmrc
 tmp/
