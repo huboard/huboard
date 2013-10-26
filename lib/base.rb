@@ -31,8 +31,10 @@ class HuboardApplication < Sinatra::Base
 
   if File.exists? "#{File.dirname(__FILE__)}/../settings.yml"
     token_file = File.read("#{File.dirname(__FILE__)}/../settings.yml")
-    YAML.load(token_file).each do |k,v|
-      set k.to_sym, v
+    tokens = YAML.load(token_file).symbolize_keys!
+    tokens.each do |k,v|
+      v.symbolize_keys! if v.kind_of? Hash
+      set k, v
     end
   elsif ENV['GITHUB_CLIENT_ID']
     set :secret_key, ENV['SECRET_KEY']
