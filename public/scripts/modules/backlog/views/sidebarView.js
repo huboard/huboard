@@ -36,9 +36,10 @@ define(["../../common/events/postal","./filterView"], function (postal, filterVi
       });
 
 
-      var labels = _.map(this.labels, function(label) {
+      var labels = _.sortBy(this.labels, function(label){ return label.name; });
+      labels = _.map(labels, function(label) {
         return new filterView({color: "#" + label.color, name: label.name, condition: function (issue) { return _.any(issue.labels, function(l){ return l.name.toLocaleLowerCase() === label.name.toLocaleLowerCase();})}}).render().el;
-      });                                                                                                                                                                                                             
+      });
       $this.append("<h5>Labels</h5>");
       $this.append(labels);
       return this;
