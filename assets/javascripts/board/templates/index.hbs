@@ -5,6 +5,11 @@
 </div>
 <div id="content" class="content">
   <div id="stage">
+    <div id="drawer">  <a {{action "toggleDrawer"}} href="#" class="arrow-right toggle-drawer"><span></span></a>
+      <div class="board">
+        {{outlet drawer}}
+      </div>
+    </div>
     <div class="board">
      {{log allIssues.length}}
       <div class="headers">

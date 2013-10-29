@@ -9,7 +9,37 @@ var IndexRoute = Ember.Route.extend({
     
     this._super.apply(this, arguments);
     this.render('filters', {into: 'index', outlet: 'sidebar'})
-  }
+    this.render('drawer',{into: 'index', outlet: 'drawer'})
+  },
+  actions :{
+    toggleDrawer : function () {
+      console.log("toggle drawer")
+      var open = $(".toggle-drawer")
+        .hasClass("arrow-left");
+
+      open ? this.animateDrawer("close") : this.animateDrawer("open");
+    }
+  },
+    animateDrawer : function (direction) {
+
+    switch(direction) {
+      case "open":
+        $("#drawer")
+          .find(".toggle-drawer").removeClass("arrow-right").addClass("arrow-left")
+          .end()
+          .animate({left: '+=270px'}, 300);
+        $("#content").animate({"margin-left": "+=100px"},300);
+        break;
+      case "close":
+        $("#drawer")
+          .animate({left: '-=270px'}, 300, function(){
+             $(this)
+              .find(".toggle-drawer").removeClass("arrow-left").addClass("arrow-right")
+              .end();
+          });
+        $("#content").animate({"margin-left": "-=100px"},300);
+    }  
+    }
 
 });
 

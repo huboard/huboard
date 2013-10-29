@@ -8,6 +8,7 @@ var ColumnView = Ember.CollectionView.extend({
     var that = this;
     this.$().sortable({
       connectWith:".sortable",
+      placeholder: "ui-sortable-placeholder",
       receive: function(ev, ui) {
         that.controller.cardReceived(ui);
       }
