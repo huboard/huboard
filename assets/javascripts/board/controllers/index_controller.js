@@ -7,8 +7,8 @@ var IndexController = Ember.ObjectController.extend({
         .map(function(ul){ return $(ul).height(); })
         .reduce(function(tallest, height){return height > tallest ? height : tallest;})
         .value() || 100;
-  }.property("issues.@each.current_state"),
-
+  }.property("issues.@each.current_state","resizeTrigger"),
+  resizeTrigger: 0,
   header_style: function() {
     return "width:" + (100/this.get("board_columns").length) + "%;";
   }.property("board_columns","min_height"),

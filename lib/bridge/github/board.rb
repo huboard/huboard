@@ -32,6 +32,13 @@ class Huboard
        settings = self.settings
        columns = column_labels
 
+       first_column = columns.first
+
+       issues = issues().map do |i|
+          i[:current_state] = first_column if i[:current_state]["name"] == "__nil__"
+          i
+       end
+
       return {
         "id" => gh.id,
         :full_name => gh.full_name,
