@@ -1,9 +1,11 @@
 var ColumnView = Ember.CollectionView.extend({
   tagName:"ul",
   classNames: ["sortable"],
+  classNameBindings: ["isOverWip:hb-state-error"],
   attributeBindings: ["style"],
   style: Ember.computed.alias("controller.style"),
   content: Ember.computed.alias("controller.issues"),
+  isOverWip: Ember.computed.alias('controller.isOverWip'),
   didInsertElement: function(){
     var that = this;
     this.$().sortable({

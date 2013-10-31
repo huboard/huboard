@@ -79,6 +79,9 @@
     padding-right: 0;
   }
   @include box-sizing(border-box);
+  .hb-state-error {
+    background-color: red;
+  }
 }
 
 

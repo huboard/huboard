@@ -20,6 +20,17 @@ class Huboard
         match = Huboard.column_pattern.match l.name
           l[:index] = match[:id]
           l[:text] = match[:name]
+          if Huboard.wip_pattern =~ l[:text]
+            m = Huboard.wip_pattern.match l[:text]
+            text = l[:text]
+            wip = m[:wip]
+            all = m[:all]
+            l[:text] = text[0..text.length - all.length].strip
+            l[:wip] = wip
+          else
+            l[:wip] = 0
+
+          end
           l
       end
 

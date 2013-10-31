@@ -5,6 +5,7 @@ require('../vendor/lodash');
 require('../vendor/jquery');
 require('../vendor/handlebars');
 require('../vendor/ember');
+require('../utilities/observers');
 var Spinner = require('../../spin');
 
 var App = Ember.Application.create({

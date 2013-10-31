@@ -12,6 +12,10 @@ var ColumnController = Ember.ObjectController.extend({
   issues: function(){
     return this.getIssues();
   }.property(""),
+  isOverWip: function(){
+    var wip = this.get('model.wip')
+    return wip ? this.getIssues().length > wip : false;
+  }.property("controllers.index.issues.@each.current_state"),
   issuesObserver : function () {
     console.log("dragginObserver")
   }.observes("controllers.index.issues.@each.current_state"),

@@ -11,6 +11,9 @@ require_relative "middleware"
 require "addressable/uri"
 
 class Huboard
+  def self.wip_pattern
+    return /(?<all>\s{1}<=\s+(?<wip>\d+)$)/
+  end
        
   def self.column_pattern
     return /(^|\:\s{1})(?<id>\d+) *- *(?<name>.+)/ 
