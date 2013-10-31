@@ -84,7 +84,7 @@ App.deferReadiness();
 module.exports = App;
 
 
-},{"../../spin":28,"../utilities/observers":18,"../vendor/ember":19,"../vendor/handlebars":20,"../vendor/jquery":21,"../vendor/lodash":22}],3:[function(require,module,exports){
+},{"../../spin":29,"../utilities/observers":19,"../vendor/ember":20,"../vendor/handlebars":21,"../vendor/jquery":22,"../vendor/lodash":23}],3:[function(require,module,exports){
 var App = require('./app');
 
 App.Router.map(function() {
@@ -120,10 +120,6 @@ var ColumnController = Ember.ObjectController.extend({
   issues: function(){
     return this.getIssues();
   }.property(""),
-  isOverWip: function(){
-    var wip = this.get('model.wip')
-    return wip ? this.getIssues().length > wip : false;
-  }.property("controllers.index.issues.@each.current_state"),
   issuesObserver : function () {
     console.log("dragginObserver")
   }.observes("controllers.index.issues.@each.current_state"),
@@ -146,7 +142,11 @@ var ColumnCountController = Ember.ObjectController.extend({
 
     })
     return issues.length;
-  }.property("controllers.index.issues.@each.current_state")
+  }.property("controllers.index.issues.@each.current_state"),
+  isOverWip: function(){
+    var wip = this.get('model.wip')
+    return wip ? this.get("issuesCount") > wip : false;
+  }.property("issuesCount")
 })
 
 module.exports = ColumnCountController;
@@ -328,13 +328,22 @@ App.ColumnCountView = require('./views/column_count_view');
 App.ColumnView = require('./views/column_view');
 App.FilterView = require('./views/filter_view');
 App.SearchView = require('./views/search_view');
+App.WipLimit = require('./mixins/wip_limit');
 
 require('./config/routes');
 
 module.exports = App;
 
 
-},{"./components/hb_avatar_component":1,"./config/app":2,"./config/routes":3,"./controllers/card_controller":4,"./controllers/column_controller":5,"./controllers/column_count_controller":6,"./controllers/drawer_controller":7,"./controllers/filters_controller":8,"./controllers/index_controller":9,"./controllers/search_controller":10,"./models/board":12,"./models/repo":13,"./routes/application_route":14,"./routes/index_route":15,"./routes/issue_route":16,"./templates":17,"./views/card_view":23,"./views/column_count_view":24,"./views/column_view":25,"./views/filter_view":26,"./views/search_view":27}],12:[function(require,module,exports){
+},{"./components/hb_avatar_component":1,"./config/app":2,"./config/routes":3,"./controllers/card_controller":4,"./controllers/column_controller":5,"./controllers/column_count_controller":6,"./controllers/drawer_controller":7,"./controllers/filters_controller":8,"./controllers/index_controller":9,"./controllers/search_controller":10,"./mixins/wip_limit":12,"./models/board":13,"./models/repo":14,"./routes/application_route":15,"./routes/index_route":16,"./routes/issue_route":17,"./templates":18,"./views/card_view":24,"./views/column_count_view":25,"./views/column_view":26,"./views/filter_view":27,"./views/search_view":28}],12:[function(require,module,exports){
+var WipLimit = Ember.Mixin.create({
+
+});
+
+module.exports = WipLimit;
+
+
+},{}],13:[function(require,module,exports){
 var Board = Ember.Object.extend({
   name: ""
 });
@@ -342,7 +351,7 @@ var Board = Ember.Object.extend({
 module.exports = Board;
 
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 
 var Repo = Ember.Object.extend({
   userUrl :function () {
@@ -355,7 +364,7 @@ var Repo = Ember.Object.extend({
 
 module.exports = Repo;
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 var ApplicationRoute = Ember.Route.extend({
   model: function () {
     return Em.Deferred.promise(function(p){
@@ -369,7 +378,7 @@ var ApplicationRoute = Ember.Route.extend({
 
 module.exports = ApplicationRoute;
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 var IndexRoute = Ember.Route.extend({
   model: function(){
     var repo = this.modelFor("application");
@@ -420,7 +429,7 @@ var IndexRoute = Ember.Route.extend({
 
 module.exports = IndexRoute;
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 var IssueRoute = Ember.Route.extend({
   model : function (params){
      debugger;
@@ -432,7 +441,7 @@ var IssueRoute = Ember.Route.extend({
 
 module.exports = IssueRoute;
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 
 Ember.TEMPLATES['application'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
@@ -571,12 +580,33 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 Ember.TEMPLATES['column_count'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', hashTypes, hashContexts, escapeExpression=this.escapeExpression;
+  var buffer = '', stack1, hashTypes, hashContexts, escapeExpression=this.escapeExpression, self=this;
 
-
+function program1(depth0,data) {
+  
+  var buffer = '', hashTypes, hashContexts;
+  data.buffer.push("\n  ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "issuesCount", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" of ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "wip", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n");
+  return buffer;
+  }
+
+function program3(depth0,data) {
+  
+  
+  data.buffer.push("\n\n");
+  }
+
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers['if'].call(depth0, "wip", {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n");
   return buffer;
   
@@ -820,7 +850,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
 
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 Ember.debouncedObserver = function(func, key, time){
   return Em.observer(function(){
     Em.run.debounce(this, func, time)
@@ -833,7 +863,7 @@ Ember.throttledObserver = function(func, key, time){
   }, key)
 };
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 // Version: v1.0.0
 // Last commit: e2ea0cf (2013-08-31 23:47:39 -0700)
 
@@ -37305,7 +37335,7 @@ Ember.State = generateRemovedClass("Ember.State");
 
 })();
 
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 /*
 
 Copyright (C) 2011 by Yehuda Katz
@@ -37669,7 +37699,7 @@ Handlebars.template = Handlebars.VM.template;
 })(Handlebars);
 ;
 
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v1.9.1
  * http://jquery.com/
@@ -47267,7 +47297,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 }
 
 })( window );
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};/**
  * @license
  * Lo-Dash 2.2.1 (Custom Build) <http://lodash.com/>
@@ -53978,7 +54008,7 @@ var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? 
   }
 }.call(this));
 
-},{}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 var CardView = Ember.View.extend({
   
 });
@@ -53986,23 +54016,23 @@ var CardView = Ember.View.extend({
 module.exports = CardView;
 
 
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 var ColumnCountView = Ember.View.extend({
   tagName: "span",
-  templateName: "column_count"
+  templateName: "column_count",
+  classNameBindings: ["isOverWip:hb-state-error"],
+  isOverWip: Ember.computed.alias('controller.isOverWip')
 });
 
 module.exports = ColumnCountView;
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 var ColumnView = Ember.CollectionView.extend({
   tagName:"ul",
   classNames: ["sortable"],
-  classNameBindings: ["isOverWip:hb-state-error"],
   attributeBindings: ["style"],
   style: Ember.computed.alias("controller.style"),
   content: Ember.computed.alias("controller.issues"),
-  isOverWip: Ember.computed.alias('controller.isOverWip'),
   didInsertElement: function(){
     var that = this;
     this.$().sortable({
@@ -54039,7 +54069,7 @@ var ColumnView = Ember.CollectionView.extend({
 
 module.exports = ColumnView;
 
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 var FilterView = Ember.View.extend({
   tagName: "li",
   templateName: "filter",
@@ -54076,7 +54106,7 @@ var FilterView = Ember.View.extend({
 
 module.exports = FilterView;
 
-},{}],27:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 var SearchView = Ember.View.extend({
   classNames: ["search"],
   didInsertElement: function () {
@@ -54094,7 +54124,7 @@ var SearchView = Ember.View.extend({
 
 module.exports = SearchView;
 
-},{}],28:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 //fgnass.github.com/spin.js#v1.3
 
 /**

@@ -79,9 +79,6 @@
     padding-right: 0;
   }
   @include box-sizing(border-box);
-  .hb-state-error {
-    background-color: red;
-  }
 }
 
 
@@ -110,6 +107,13 @@
 
   font-size: 100%;
   @extend %font-headings;
+  small {
+    float:right;
+    line-height: 20px;
+  }
+  .hb-state-error {
+    color: red;
+  }
 }
 
 .board .column h3 {

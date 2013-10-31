@@ -7,7 +7,11 @@ var ColumnCountController = Ember.ObjectController.extend({
 
     })
     return issues.length;
-  }.property("controllers.index.issues.@each.current_state")
+  }.property("controllers.index.issues.@each.current_state"),
+  isOverWip: function(){
+    var wip = this.get('model.wip')
+    return wip ? this.get("issuesCount") > wip : false;
+  }.property("issuesCount")
 })
 
 module.exports = ColumnCountController;
