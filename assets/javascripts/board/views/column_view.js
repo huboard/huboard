@@ -32,7 +32,7 @@ var ColumnView = Ember.CollectionView.extend({
       if(hideFilters.any(function(f){
         return !f.condition(that.get("content"));
       })){
-        return "hide";
+        return "filter-hidden";
       }
     }.property("App.dimFilters", "App.hideFilters")
   })

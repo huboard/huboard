@@ -5,6 +5,12 @@ var IndexRoute = Ember.Route.extend({
     return Ember.$.getJSON("/api/v2/" + repo.get("full_name") + "/board");
 
   },
+  afterModel: function (model){
+    var cssView = App.CssView.create({
+      content: model
+    });
+    cssView.appendTo("head")
+  },
   renderTemplate: function() {
     
     this._super.apply(this, arguments);

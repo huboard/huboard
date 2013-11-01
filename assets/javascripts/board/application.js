@@ -84,7 +84,7 @@ App.deferReadiness();
 module.exports = App;
 
 
-},{"../../spin":29,"../utilities/observers":19,"../vendor/ember":20,"../vendor/handlebars":21,"../vendor/jquery":22,"../vendor/lodash":23}],3:[function(require,module,exports){
+},{"../../spin":30,"../utilities/observers":19,"../vendor/ember":20,"../vendor/handlebars":21,"../vendor/jquery":22,"../vendor/lodash":23}],3:[function(require,module,exports){
 var App = require('./app');
 
 App.Router.map(function() {
@@ -100,7 +100,12 @@ var CardController = Ember.ObjectController.extend({
     dragged: function (column) {
       this.set("model.current_state", column)
     }
-  }
+  },
+  cardLabels: function () {
+      return this.get("model.other_labels").map(function(l){
+        return Ember.Object.create(_.extend(l,{customColor: "-x"+l.color}));
+      });
+  }.property("model.other_labels")
 });
 
 module.exports = CardController;
@@ -236,6 +241,7 @@ var FiltersController = Ember.ObjectController.extend({
        return Ember.Object.create({
         name: l.name,
         mode:0,
+        color: l.color,
         condition:function(i){
           return i.labels.any(function(label){ 
              return l.name.toLocaleLowerCase() === label.name.toLocaleLowerCase();
@@ -326,6 +332,7 @@ App.IssueRoute = require('./routes/issue_route');
 App.CardView = require('./views/card_view');
 App.ColumnCountView = require('./views/column_count_view');
 App.ColumnView = require('./views/column_view');
+App.CssView = require('./views/css_view');
 App.FilterView = require('./views/filter_view');
 App.SearchView = require('./views/search_view');
 App.WipLimit = require('./mixins/wip_limit');
@@ -335,7 +342,7 @@ require('./config/routes');
 module.exports = App;
 
 
-},{"./components/hb_avatar_component":1,"./config/app":2,"./config/routes":3,"./controllers/card_controller":4,"./controllers/column_controller":5,"./controllers/column_count_controller":6,"./controllers/drawer_controller":7,"./controllers/filters_controller":8,"./controllers/index_controller":9,"./controllers/search_controller":10,"./mixins/wip_limit":12,"./models/board":13,"./models/repo":14,"./routes/application_route":15,"./routes/index_route":16,"./routes/issue_route":17,"./templates":18,"./views/card_view":24,"./views/column_count_view":25,"./views/column_view":26,"./views/filter_view":27,"./views/search_view":28}],12:[function(require,module,exports){
+},{"./components/hb_avatar_component":1,"./config/app":2,"./config/routes":3,"./controllers/card_controller":4,"./controllers/column_controller":5,"./controllers/column_count_controller":6,"./controllers/drawer_controller":7,"./controllers/filters_controller":8,"./controllers/index_controller":9,"./controllers/search_controller":10,"./mixins/wip_limit":12,"./models/board":13,"./models/repo":14,"./routes/application_route":15,"./routes/index_route":16,"./routes/issue_route":17,"./templates":18,"./views/card_view":24,"./views/column_count_view":25,"./views/column_view":26,"./views/css_view":27,"./views/filter_view":28,"./views/search_view":29}],12:[function(require,module,exports){
 var WipLimit = Ember.Mixin.create({
 
 });
@@ -385,6 +392,12 @@ var IndexRoute = Ember.Route.extend({
 
     return Ember.$.getJSON("/api/v2/" + repo.get("full_name") + "/board");
 
+  },
+  afterModel: function (model){
+    var cssView = App.CssView.create({
+      content: model
+    });
+    cssView.appendTo("head")
   },
   renderTemplate: function() {
     
@@ -449,7 +462,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   var buffer = '', stack1, hashContexts, hashTypes, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
 
 
-  data.buffer.push("<div class=\"navbar navbar-static-top\">\n <div class=\"navbar-inner\">\n   <div class=\"container\">\n    <ul class=\"nav breadcrumbs\">\n      <li><a href=\"/\" class=\"home\"><i class=\"ui-icon ui-icon-menu\"></i></a></li>\n      <li><a ");
+  data.buffer.push("<div class=\"navbar navbar-static-top\">\n <div class=\"navbar-inner\">\n   <div class=\"container-fluid\">\n    <ul class=\"nav breadcrumbs\">\n      <li><a href=\"/\" class=\"home\"><i class=\"ui-icon ui-icon-menu\"></i></a></li>\n      <li><a ");
   hashContexts = {'href': depth0};
   hashTypes = {'href': "STRING"};
   options = {hash:{
@@ -516,12 +529,26 @@ function program1(depth0,data) {
 
 function program3(depth0,data) {
   
-  var buffer = '', hashTypes, hashContexts;
-  data.buffer.push("\n         <div class=\"card-label active small\"></div>\n         <div class=\"card-label active large\">\n          <span>");
+  var buffer = '', stack1, hashContexts, hashTypes, options;
+  data.buffer.push("\n      <div class=\"card-label-wrapper\"> \n         <div ");
+  hashContexts = {'class': depth0};
+  hashTypes = {'class': "STRING"};
+  options = {hash:{
+    'class': (":card-label :active :small customColor")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
+  data.buffer.push(" ></div>\n         <div ");
+  hashContexts = {'class': depth0};
+  hashTypes = {'class': "STRING"};
+  options = {hash:{
+    'class': (":card-label :active :large customColor")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
+  data.buffer.push(" >\n          <span>");
   hashTypes = {};
   hashContexts = {};
-  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "label.name", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("</span>\n         </div>\n    ");
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "name", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("</span>\n         </div>\n      </div>\n    ");
   return buffer;
   }
 
@@ -552,12 +579,12 @@ function program3(depth0,data) {
   hashContexts = {};
   stack2 = helpers['if'].call(depth0, "assignee", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\n\n<div class=\"card-labels\">\n  <div class=\"card-label-wrapper\"> \n    ");
+  data.buffer.push("\n\n<div class=\"card-labels\">\n    ");
   hashTypes = {};
   hashContexts = {};
-  stack2 = helpers.each.call(depth0, "label", "in", "other_labels", {hash:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack2 = helpers.each.call(depth0, "cardLabels", {hash:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\n  </div>\n</div>\n");
+  data.buffer.push("\n</div>\n");
   return buffer;
   
 });
@@ -668,12 +695,13 @@ function program1(depth0,data) {
   
   var buffer = '', hashContexts, hashTypes;
   data.buffer.push("\n    ");
-  hashContexts = {'lastClickedBinding': depth0,'nameBinding': depth0,'modeBinding': depth0};
-  hashTypes = {'lastClickedBinding': "ID",'nameBinding': "ID",'modeBinding': "STRING"};
+  hashContexts = {'lastClickedBinding': depth0,'nameBinding': depth0,'modeBinding': depth0,'colorBinding': depth0};
+  hashTypes = {'lastClickedBinding': "ID",'nameBinding': "ID",'modeBinding': "STRING",'colorBinding': "STRING"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.FilterView", {hash:{
     'lastClickedBinding': ("lastUserFilterClicked"),
     'nameBinding': ("filter.name"),
-    'modeBinding': ("filter.mode")
+    'modeBinding': ("filter.mode"),
+    'colorBinding': ("filter.color")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("\n  ");
   return buffer;
@@ -683,12 +711,13 @@ function program3(depth0,data) {
   
   var buffer = '', hashContexts, hashTypes;
   data.buffer.push("\n    ");
-  hashContexts = {'lastClickedBinding': depth0,'nameBinding': depth0,'modeBinding': depth0};
-  hashTypes = {'lastClickedBinding': "ID",'nameBinding': "ID",'modeBinding': "STRING"};
+  hashContexts = {'lastClickedBinding': depth0,'nameBinding': depth0,'modeBinding': depth0,'colorBinding': depth0};
+  hashTypes = {'lastClickedBinding': "ID",'nameBinding': "ID",'modeBinding': "STRING",'colorBinding': "STRING"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.FilterView", {hash:{
     'lastClickedBinding': ("lastMilestoneFilterClicked"),
     'nameBinding': ("filter.name"),
-    'modeBinding': ("filter.mode")
+    'modeBinding': ("filter.mode"),
+    'colorBinding': ("filter.color")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("\n  ");
   return buffer;
@@ -698,12 +727,13 @@ function program5(depth0,data) {
   
   var buffer = '', hashContexts, hashTypes;
   data.buffer.push("\n    ");
-  hashContexts = {'lastClickedBinding': depth0,'nameBinding': depth0,'modeBinding': depth0};
-  hashTypes = {'lastClickedBinding': "ID",'nameBinding': "ID",'modeBinding': "STRING"};
+  hashContexts = {'lastClickedBinding': depth0,'nameBinding': depth0,'modeBinding': depth0,'colorBinding': depth0};
+  hashTypes = {'lastClickedBinding': "ID",'nameBinding': "ID",'modeBinding': "STRING",'colorBinding': "STRING"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.FilterView", {hash:{
     'lastClickedBinding': ("lastLabelFilterClicked"),
     'nameBinding': ("filter.name"),
-    'modeBinding': ("filter.mode")
+    'modeBinding': ("filter.mode"),
+    'colorBinding': ("filter.color")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("\n  ");
   return buffer;
@@ -54061,7 +54091,7 @@ var ColumnView = Ember.CollectionView.extend({
       if(hideFilters.any(function(f){
         return !f.condition(that.get("content"));
       })){
-        return "hide";
+        return "filter-hidden";
       }
     }.property("App.dimFilters", "App.hideFilters")
   })
@@ -54070,10 +54100,46 @@ var ColumnView = Ember.CollectionView.extend({
 module.exports = ColumnView;
 
 },{}],27:[function(require,module,exports){
+
+
+var CssView = Ember.View.extend({
+  tagName:"style",
+  attributeBindings: ["type"],
+  type: "text/css",
+  render: function () {
+    
+    var buffer = this.buffer,
+        that = this;
+    _(["filter","card-label"]).each(function(name){
+       _(that.get("content.other_labels")).each(function(l){
+       
+         _([
+           ".<%= name %>.-x<%= color %> a.dim, .<%= name %>.-x<%= color %> a.dim:hover",
+           ".<%= name %>.-x<%= color %> a.active, .<%= name %>.-x<%= color %> a.active:hover",
+           ".<%= name %>.-x<%= color %>.active, .<%= name %>.-x<%= color %>.active:hover"
+           ]).each(function(style){
+             var start = _.template(style,{name: name, color: l.color});
+             buffer.push(start);
+             buffer.push("{")
+             buffer.push("background-color: #" + l.color + ";")
+             buffer.push("}");
+           })
+       });
+    });
+  }
+});
+
+module.exports = CssView;
+
+},{}],28:[function(require,module,exports){
 var FilterView = Ember.View.extend({
   tagName: "li",
   templateName: "filter",
   classNames: ["filter"],
+  classNameBindings: ["customColor"],
+  customColor: function () {
+    return this.get("color") ? "-x" + this.get('color') : "";
+  }.property("color"),
   click: function(ev){
     ev.preventDefault();
     var $target = $(ev.target);
@@ -54106,7 +54172,7 @@ var FilterView = Ember.View.extend({
 
 module.exports = FilterView;
 
-},{}],28:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 var SearchView = Ember.View.extend({
   classNames: ["search"],
   didInsertElement: function () {
@@ -54124,7 +54190,7 @@ var SearchView = Ember.View.extend({
 
 module.exports = SearchView;
 
-},{}],29:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 //fgnass.github.com/spin.js#v1.3
 
 /**

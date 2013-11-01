@@ -2,6 +2,10 @@ var FilterView = Ember.View.extend({
   tagName: "li",
   templateName: "filter",
   classNames: ["filter"],
+  classNameBindings: ["customColor"],
+  customColor: function () {
+    return this.get("color") ? "-x" + this.get('color') : "";
+  }.property("color"),
   click: function(ev){
     ev.preventDefault();
     var $target = $(ev.target);

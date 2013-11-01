@@ -73,6 +73,7 @@ var FiltersController = Ember.ObjectController.extend({
        return Ember.Object.create({
         name: l.name,
         mode:0,
+        color: l.color,
         condition:function(i){
           return i.labels.any(function(label){ 
              return l.name.toLocaleLowerCase() === label.name.toLocaleLowerCase();

@@ -1,15 +1,15 @@
 <ul class='filters'>
   {{#each filter in userFilters }}
-    {{view App.FilterView lastClickedBinding=lastUserFilterClicked nameBinding=filter.name modeBinding="filter.mode"}}
+    {{view App.FilterView lastClickedBinding=lastUserFilterClicked nameBinding=filter.name modeBinding="filter.mode" colorBinding="filter.color"}}
   {{/each}}
 
   <h5>Milestones</h5>
   {{#each filter in milestoneFilters }}
-    {{view App.FilterView lastClickedBinding=lastMilestoneFilterClicked nameBinding=filter.name modeBinding="filter.mode"}}
+    {{view App.FilterView lastClickedBinding=lastMilestoneFilterClicked nameBinding=filter.name modeBinding="filter.mode" colorBinding="filter.color"}}
   {{/each}}
   <h5>Labels</h5>
   {{#each filter in labelFilters }}
-    {{view App.FilterView lastClickedBinding=lastLabelFilterClicked nameBinding=filter.name modeBinding="filter.mode"}}
+    {{view App.FilterView lastClickedBinding=lastLabelFilterClicked nameBinding=filter.name modeBinding="filter.mode" colorBinding="filter.color"}}
   {{/each}}
 
 </ul>
