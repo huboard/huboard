@@ -6,20 +6,41 @@ var CssView = Ember.View.extend({
   type: "text/css",
   render: function () {
     
+    jQuery.Color.fn.contrastColor = function() {
+        var r = this._rgba[0], g = this._rgba[1], b = this._rgba[2];
+        return (((r*299)+(g*587)+(b*144))/1000) >= 131.5 ? "#333" : "white";
+    };
+
     var buffer = this.buffer,
         that = this;
     _(["filter","card-label"]).each(function(name){
        _(that.get("content.other_labels")).each(function(l){
        
          _([
-           ".<%= name %>.-x<%= color %> a.dim, .<%= name %>.-x<%= color %> a.dim:hover",
-           ".<%= name %>.-x<%= color %> a.active, .<%= name %>.-x<%= color %> a.active:hover",
-           ".<%= name %>.-x<%= color %>.active, .<%= name %>.-x<%= color %>.active:hover"
+           {
+             template: ".<%= name %>.-x<%= color %> .dim, .<%= name %>.-x<%= color %> .dim:hover",
+             opacity: 0.6
+           },
+           { 
+             template: ".<%= name %>.-x<%= color %> .active, .<%= name %>.-x<%= color %> .active:hover",
+             opacity: 1
+           },
+           {
+             template: ".<%= name %>.-x<%= color %>.active, .<%= name %>.-x<%= color %>.active:hover",
+             opacity: 1
+           },
+           {
+             template: ".<%= name %>.-x<%= color %>.dim, .<%= name %>.-x<%= color %>.dim:hover",
+             opacity: 0.6
+           }
            ]).each(function(style){
-             var start = _.template(style,{name: name, color: l.color});
+             var start = _.template(style.template,{name: name, color: l.color, opacity: style.opacity});
              buffer.push(start);
              buffer.push("{")
              buffer.push("background-color: #" + l.color + ";")
+             var color =  $.Color("#"+ l.color).alpha(style.opacity);
+             buffer.push("background-color: " + $.Color(color).toString() + ";")
+             buffer.push("color: " + $.Color("#"+l.color).contrastColor() + ";")
              buffer.push("}");
            })
        });

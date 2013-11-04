@@ -5,6 +5,7 @@ require('../vendor/lodash');
 require('../vendor/jquery');
 require('../vendor/handlebars');
 require('../vendor/ember');
+var color = require('../../vendor/jquery.color');
 require('../utilities/observers');
 var Spinner = require('../../spin');
 
