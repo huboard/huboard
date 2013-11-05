@@ -25,7 +25,7 @@ class Huboard
 
         raise Sinatra::NotFound if repo.message == "Not Found"
 
-        if repo.private
+        if repo.private && settings.production?
           user = gh.users params[:user]
           customer = couch.customers.findPlanById user.id
           session[:github_login] = user.login
