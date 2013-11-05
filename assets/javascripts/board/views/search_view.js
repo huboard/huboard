@@ -1,5 +1,9 @@
 var SearchView = Ember.View.extend({
   classNames: ["search"],
+  classNameBindings: ["hasValue:has-value"],
+  hasValue: function(){
+    return !!this.get("controller.term");
+  }.property("controller.term"),
   didInsertElement: function () {
     var that = this;
     this.$().find(".ui-icon-search").on("click.hbsearch", function () {

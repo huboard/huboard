@@ -34,12 +34,14 @@ class Huboard
           l
       end
 
+      columns = columns.sort_by {|i| i[:index] }
+
       if columns.any?
         columns.first[:is_first] = true
         columns.last[:is_last] = true
       end
 
-      columns.sort_by {|i| i[:index] }
+      columns
     end
 
     def link_labels

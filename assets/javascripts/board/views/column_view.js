@@ -21,7 +21,12 @@ var ColumnView = Ember.CollectionView.extend({
     isFiltered: function() {
       var dimFilters = App.get("dimFilters"),
           hideFilters = App.get("hideFilters"),
+          searchFilter = App.get("searchFilter"),
           that = this;
+
+      if(searchFilter) {
+         hideFilters = hideFilters.concat([searchFilter]);
+      }
 
       if(dimFilters.any(function(f){
         return !f.condition(that.get("content"));
@@ -34,7 +39,7 @@ var ColumnView = Ember.CollectionView.extend({
       })){
         return "filter-hidden";
       }
-    }.property("App.dimFilters", "App.hideFilters")
+    }.property("App.dimFilters", "App.hideFilters", "App.searchFilter")
   })
 })
 

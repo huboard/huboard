@@ -103,6 +103,14 @@ form {
         position: absolute;
         top: 9px;
       }
+      &.has-value {
+        input {
+          width: 210px;
+          outline: none;
+          @include transition(width 0.5s);
+        }
+      
+      }
       input {
         height: auto;
         box-shadow: none;

@@ -34,7 +34,7 @@ class Huboard
 
        first_column = columns.first
 
-       issues = issues().map do |i|
+       issues = issues().concat(closed_issues(columns.last.name,"")).map do |i|
           i[:current_state] = first_column if i[:current_state]["name"] == "__nil__"
           i[:current_state] = columns.find { |c| c[:name] == i[:current_state]["name"] }
           i
@@ -45,7 +45,7 @@ class Huboard
         :full_name => gh.full_name,
         :columns => columns,
         :milestones => milestones,
-        :other_labels => other_labels,
+        :other_labels => other_labels.sort_by {|l| l.name },
         :assignees => assignees.to_a,
         :issues => issues
       }

@@ -12,7 +12,8 @@ var Spinner = require('../../spin');
 var App = Ember.Application.create({
   rootElement: "#application",
     dimFilters: [],
-    hideFilters: []
+    hideFilters: [],
+    searchFilter: null
 });
 
 App.LoadingRoute = Ember.Route.extend({

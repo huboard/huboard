@@ -38,7 +38,8 @@ var Spinner = require('../../spin');
 var App = Ember.Application.create({
   rootElement: "#application",
     dimFilters: [],
-    hideFilters: []
+    hideFilters: [],
+    searchFilter: null
 });
 
 App.LoadingRoute = Ember.Route.extend({
@@ -309,6 +310,10 @@ var SearchController = Ember.Controller.extend({
   hideFilterBinding: "App.hideFilters",
   term: "",
   termChanged : Ember.debouncedObserver(function(){
+    var term = this.get("term");
+    App.set("searchFilter", {condition: function(i){
+       return i.title.toLocaleLowerCase().indexOf(term.toLocaleLowerCase()) !== -1;
+    }});
 
   },"term", 300)
 });
@@ -54115,7 +54120,12 @@ var ColumnView = Ember.CollectionView.extend({
     isFiltered: function() {
       var dimFilters = App.get("dimFilters"),
           hideFilters = App.get("hideFilters"),
+          searchFilter = App.get("searchFilter"),
           that = this;
+
+      if(searchFilter) {
+         hideFilters = hideFilters.concat([searchFilter]);
+      }
 
       if(dimFilters.any(function(f){
         return !f.condition(that.get("content"));
@@ -54128,7 +54138,7 @@ var ColumnView = Ember.CollectionView.extend({
       })){
         return "filter-hidden";
       }
-    }.property("App.dimFilters", "App.hideFilters")
+    }.property("App.dimFilters", "App.hideFilters", "App.searchFilter")
   })
 })
 
@@ -54231,6 +54241,10 @@ module.exports = FilterView;
 },{}],29:[function(require,module,exports){
 var SearchView = Ember.View.extend({
   classNames: ["search"],
+  classNameBindings: ["hasValue:has-value"],
+  hasValue: function(){
+    return !!this.get("controller.term");
+  }.property("controller.term"),
   didInsertElement: function () {
     var that = this;
     this.$().find(".ui-icon-search").on("click.hbsearch", function () {
