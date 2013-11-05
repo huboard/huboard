@@ -101,9 +101,26 @@ var CardController = Ember.ObjectController.extend({
   actions : {
     dragged: function (column) {
       this.set("model.current_state", column)
+      // this is weird
+      var user = this.get("model.repo.owner.login"),
+          repo = this.get("model.repo.name"),
+          full_name = user + "/" + repo;
+
+      Ember.$.post("/api/" + full_name + "/movecard", {
+        index : column.index,
+        number : this.get("model.number")
+      })
     },
     close: function (issue){
       this.set("model.state","closed")
+
+      var user = this.get("model.repo.owner.login"),
+          repo = this.get("model.repo.name"),
+          full_name = user + "/" + repo;
+
+      Ember.$.post("/api/" + full_name + "/close", {
+        number : this.get("model.number")
+      })
     }
   },
   cardLabels: function () {
@@ -378,7 +395,13 @@ var Repo = Ember.Object.extend({
   }.property("owner.login"),
   repoUrl :function () {
     return this.get("userUrl") + "/" + this.get("name");
-  }.property("name", "userUrl")
+  }.property("name", "userUrl"),
+  backlogUrl: function () {
+     return this.get("repoUrl") + "/backlog";
+  }.property("repoUrl"),
+  betaUrl: function () {
+     return this.get("repoUrl") + "/ember";
+  }.property("repoUrl")
 });
 
 module.exports = Repo;
@@ -471,8 +494,28 @@ module.exports = IssueRoute;
 Ember.TEMPLATES['application'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, hashContexts, hashTypes, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  var buffer = '', stack1, stack2, hashContexts, hashTypes, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, self=this;
 
+function program1(depth0,data) {
+  
+  var buffer = '', stack1, hashContexts, hashTypes, options;
+  data.buffer.push("\n        <li class=\"dropdown\">\n          <a class=\"dropdown-toggle avatar\" data-toggle=\"dropdown\" href=\"#\">\n          ");
+  hashContexts = {'user': depth0,'width': depth0};
+  hashTypes = {'user': "ID",'width': "STRING"};
+  options = {hash:{
+    'user': ("App.currentUser.gravatar_id"),
+    'width': ("30")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['hb-avatar'] || depth0['hb-avatar']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-avatar", options))));
+  data.buffer.push(" <b class=\"caret\"></b>\n          </a>\n          <ul class=\"dropdown-menu\">\n            <li>\n              <a href=\"/settings/profile\">Account</a>\n            </li>\n            <li>\n              <a href=\"/logout\">Logout</a>\n            </li>\n          </ul>\n        </li>\n      ");
+  return buffer;
+  }
+
+function program3(depth0,data) {
+  
+  
+  data.buffer.push("\n         <li>\n           <form action=\"/login\" method=\"GET\">\n            <button class=\"hb-button\"> Sign in </button>\n          </form>\n         </li>\n      ");
+  }
 
   data.buffer.push("<div class=\"navbar navbar-static-top\">\n <div class=\"navbar-inner\">\n   <div class=\"container-fluid\">\n    <ul class=\"nav breadcrumbs\">\n      <li><a href=\"/\" class=\"home\"><i class=\"ui-icon ui-icon-menu\"></i></a></li>\n      <li><a ");
   hashContexts = {'href': depth0};
@@ -501,7 +544,33 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   hashContexts = {};
   options = {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.render || depth0.render),stack1 ? stack1.call(depth0, "search", options) : helperMissing.call(depth0, "render", "search", options))));
-  data.buffer.push(" \n      </li>\n    </ul>\n     <ul class=\"nav pull-right\">\n     </ul>\n   </div>\n </div>\n</div>\n\n<div class=\"container-fluid\" id=\"main-stage\">\n  \n  ");
+  data.buffer.push(" \n      </li>\n    </ul>\n     <ul class=\"nav pull-right\">\n      <li><a ");
+  hashContexts = {'href': depth0};
+  hashTypes = {'href': "STRING"};
+  options = {hash:{
+    'href': ("backlogUrl")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
+  data.buffer.push(" >Backlog</a></li>\n      <li><a ");
+  hashContexts = {'href': depth0};
+  hashTypes = {'href': "STRING"};
+  options = {hash:{
+    'href': ("repoUrl")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
+  data.buffer.push(">Tasks</a></li>\n      <li class=\"active\"><a ");
+  hashContexts = {'href': depth0};
+  hashTypes = {'href': "STRING"};
+  options = {hash:{
+    'href': ("betaUrl")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
+  data.buffer.push(">Beta</a></li>\n      ");
+  hashTypes = {};
+  hashContexts = {};
+  stack2 = helpers['if'].call(depth0, "App.loggedIn", {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+  data.buffer.push("\n     </ul>\n   </div>\n </div>\n</div>\n\n<div class=\"container-fluid\" id=\"main-stage\">\n  \n  ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "outlet", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));

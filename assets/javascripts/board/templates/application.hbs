@@ -10,6 +10,30 @@
       </li>
     </ul>
      <ul class="nav pull-right">
+      <li><a {{bind-attr href="backlogUrl"}} >Backlog</a></li>
+      <li><a {{bind-attr href="repoUrl"}}>Tasks</a></li>
+      <li class="active"><a {{bind-attr href="betaUrl"}}>Beta</a></li>
+      {{#if App.loggedIn}}
+        <li class="dropdown">
+          <a class="dropdown-toggle avatar" data-toggle="dropdown" href="#">
+          {{hb-avatar user=App.currentUser.gravatar_id width="30"}} <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="/settings/profile">Account</a>
+            </li>
+            <li>
+              <a href="/logout">Logout</a>
+            </li>
+          </ul>
+        </li>
+      {{else}}
+         <li>
+           <form action="/login" method="GET">
+            <button class="hb-button"> Sign in </button>
+          </form>
+         </li>
+      {{/if}}
      </ul>
    </div>
  </div>

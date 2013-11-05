@@ -1,5 +1,6 @@
 <% content_for :javascripts do %>
   <%= javascript_tag 'board/application' %>
+  <%= javascript_tag 'bootstrap' %>
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
   <script>
     App.set("repo", Ember.Object.create(<%= @repo.to_hash.to_json %>));

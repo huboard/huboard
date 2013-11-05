@@ -5,7 +5,13 @@ var Repo = Ember.Object.extend({
   }.property("owner.login"),
   repoUrl :function () {
     return this.get("userUrl") + "/" + this.get("name");
-  }.property("name", "userUrl")
+  }.property("name", "userUrl"),
+  backlogUrl: function () {
+     return this.get("repoUrl") + "/backlog";
+  }.property("repoUrl"),
+  betaUrl: function () {
+     return this.get("repoUrl") + "/ember";
+  }.property("repoUrl")
 });
 
 module.exports = Repo;
