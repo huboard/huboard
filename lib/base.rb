@@ -59,6 +59,10 @@ class HuboardApplication < Sinatra::Base
 
   set :assets_precompile, %w(splash.css marketing.css application.js bootstrap.css application.css ember-accounts.js board/application.js bootstrap.js *.png *.jpg *.svg *.eot *.ttf *.woff).concat([/\w+\.(?!js|css).+/, /application.(css|js)$/])
 
+  configure :production, :test do 
+    set :asset_protocol, :https
+  end
+
 
   register Sinatra::AssetPipeline
 
