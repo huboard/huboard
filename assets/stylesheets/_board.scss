@@ -200,30 +200,6 @@
     }
   }
 
-   .hb-state-closed {
-    .card-states {
-       background-color: #8274d6;
-     }
-   }
-  .card-states {
-     
-     position:absolute;
-     top: 10px;
-     right: -12px;
-     height: 20px;
-     width: 30px;
-     background-color: #8274d6;
-     &:after {
-      position: absolute;
-      right: 0px;
-      bottom: -11px;
-      content: '  ';
-      height: 0;
-      width: 0;
-      border-right: 11px solid transparent;
-      border-top: 11px solid #4b3d96;
-     }
-  }
 
   &.assignee-accept {
      border-color: #0069D6;

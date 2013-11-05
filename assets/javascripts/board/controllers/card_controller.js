@@ -4,7 +4,6 @@ var CardController = Ember.ObjectController.extend({
       this.set("model.current_state", column)
     },
     close: function (issue){
-      debugger;
       this.set("model.state","closed")
     }
   },
