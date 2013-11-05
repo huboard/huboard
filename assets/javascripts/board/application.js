@@ -100,6 +100,10 @@ var CardController = Ember.ObjectController.extend({
   actions : {
     dragged: function (column) {
       this.set("model.current_state", column)
+    },
+    close: function (issue){
+      debugger;
+      this.set("model.state","closed")
     }
   },
   cardLabels: function () {
@@ -115,6 +119,9 @@ module.exports = CardController;
 var ColumnController = Ember.ObjectController.extend({
   needs: ["index"],
   style: Ember.computed.alias("controllers.index.column_style"),
+  isLastColumn: function(){
+    return this.get("controllers.index.columns.lastObject.name") === this.get("model.name");
+  }.property("controllers.index.columns.lastObject"),
   getIssues: function(){
     var name = this.get("model.name");
     var issues = this.get("controllers.index.issues").filter(function(i){
@@ -553,7 +560,18 @@ function program3(depth0,data) {
   return buffer;
   }
 
-  data.buffer.push("<a href=\"#\" title=\"Close issue\" class=\"close ui-icon ui-icon-x\"><span></span></a>\n<div class=\"card-header\">\n  <div class=\"title\" ");
+function program5(depth0,data) {
+  
+  var buffer = '', hashTypes, hashContexts;
+  data.buffer.push("\n<div class=\"actions-close\">\n  <button class=\"hb-button\" ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "close", "", {hash:{},contexts:[depth0,depth0],types:["ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">Close</button>\n</div>\n");
+  return buffer;
+  }
+
+  data.buffer.push("<div class=\"card-header\">\n  <div class=\"title\" ");
   hashContexts = {'title': depth0};
   hashTypes = {'title': "ID"};
   options = {hash:{
@@ -586,6 +604,11 @@ function program3(depth0,data) {
   stack2 = helpers.each.call(depth0, "cardLabels", {hash:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n</div>\n");
+  hashTypes = {};
+  hashContexts = {};
+  stack2 = helpers['if'].call(depth0, "current_state.is_last", {hash:{},inverse:self.noop,fn:self.program(5, program5, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+  data.buffer.push("\n\n<div class=\"card-states\">\n   <img src=\"/img/check.png\"/>\n</div>\n");
   return buffer;
   
 });
@@ -54041,6 +54064,18 @@ var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? 
 
 },{}],24:[function(require,module,exports){
 var CardView = Ember.View.extend({
+  classNameBindings:["isClosable:closable", "stateClass"],
+  isClosable: function(){
+     var currentState = this.get("controller.model.current_state");
+
+     return currentState.is_last && this.get("controller.model.state") === "open";
+
+
+  }.property("controller.model.current_state","controller.model.state"),
+  stateClass: function(){
+     return "hb-state-" + this.get("controller.model.state");
+  }.property("controller.model.current_state", "controller.model.state")
+
   
 });
 

@@ -2,6 +2,10 @@ var CardController = Ember.ObjectController.extend({
   actions : {
     dragged: function (column) {
       this.set("model.current_state", column)
+    },
+    close: function (issue){
+      debugger;
+      this.set("model.state","closed")
     }
   },
   cardLabels: function () {

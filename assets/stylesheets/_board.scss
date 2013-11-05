@@ -175,6 +175,56 @@
   background-color: #fff;
   border: 1px solid #e5e5e5;
   border-bottom-color: darken(#e5e5e5, 5%); 
+  .closable {
+    .actions-close {
+      display:block;
+    }
+  }
+  .actions-close {
+      display: none;
+      position: absolute;
+      top:0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: hsla(0,0%, 85%, 0.4);
+    button {
+      position: absolute;
+      top:0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      width: 100px;
+      height: 30px;
+      margin:auto;
+    }
+  }
+
+   .hb-state-closed {
+    .card-states {
+       background-color: #8274d6;
+     }
+   }
+  .card-states {
+     
+     position:absolute;
+     top: 10px;
+     right: -12px;
+     height: 20px;
+     width: 30px;
+     background-color: #8274d6;
+     &:after {
+      position: absolute;
+      right: 0px;
+      bottom: -11px;
+      content: '  ';
+      height: 0;
+      width: 0;
+      border-right: 11px solid transparent;
+      border-top: 11px solid #4b3d96;
+     }
+  }
+
   &.assignee-accept {
      border-color: #0069D6;
   }

@@ -34,6 +34,11 @@ class Huboard
           l
       end
 
+      if columns.any?
+        columns.first[:is_first] = true
+        columns.last[:is_last] = true
+      end
+
       columns.sort_by {|i| i[:index] }
     end
 
