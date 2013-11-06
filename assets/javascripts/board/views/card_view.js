@@ -3,7 +3,7 @@ var CardView = Ember.View.extend({
   isClosable: function(){
      var currentState = this.get("controller.model.current_state");
 
-     return currentState.is_last && this.get("controller.model.state") === "open";
+     return App.get("loggedIn") && currentState.is_last && this.get("controller.model.state") === "open";
 
 
   }.property("controller.model.current_state","controller.model.state"),

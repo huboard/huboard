@@ -86,7 +86,7 @@ App.deferReadiness();
 module.exports = App;
 
 
-},{"../../spin":30,"../../vendor/jquery.color":31,"../utilities/observers":19,"../vendor/ember":20,"../vendor/handlebars":21,"../vendor/jquery":22,"../vendor/lodash":23}],3:[function(require,module,exports){
+},{"../../spin":31,"../../vendor/jquery.color":32,"../utilities/observers":19,"../vendor/ember":20,"../vendor/handlebars":21,"../vendor/jquery":22,"../vendor/lodash":23}],3:[function(require,module,exports){
 var App = require('./app');
 
 App.Router.map(function() {
@@ -359,6 +359,7 @@ App.ApplicationRoute = require('./routes/application_route');
 App.IndexRoute = require('./routes/index_route');
 App.IssueRoute = require('./routes/issue_route');
 App.CardView = require('./views/card_view');
+App.CardWrapperView = require('./views/card_wrapper_view');
 App.ColumnCountView = require('./views/column_count_view');
 App.ColumnView = require('./views/column_view');
 App.CssView = require('./views/css_view');
@@ -371,7 +372,7 @@ require('./config/routes');
 module.exports = App;
 
 
-},{"./components/hb_avatar_component":1,"./config/app":2,"./config/routes":3,"./controllers/card_controller":4,"./controllers/column_controller":5,"./controllers/column_count_controller":6,"./controllers/drawer_controller":7,"./controllers/filters_controller":8,"./controllers/index_controller":9,"./controllers/search_controller":10,"./mixins/wip_limit":12,"./models/board":13,"./models/repo":14,"./routes/application_route":15,"./routes/index_route":16,"./routes/issue_route":17,"./templates":18,"./views/card_view":24,"./views/column_count_view":25,"./views/column_view":26,"./views/css_view":27,"./views/filter_view":28,"./views/search_view":29}],12:[function(require,module,exports){
+},{"./components/hb_avatar_component":1,"./config/app":2,"./config/routes":3,"./controllers/card_controller":4,"./controllers/column_controller":5,"./controllers/column_count_controller":6,"./controllers/drawer_controller":7,"./controllers/filters_controller":8,"./controllers/index_controller":9,"./controllers/search_controller":10,"./mixins/wip_limit":12,"./models/board":13,"./models/repo":14,"./routes/application_route":15,"./routes/index_route":16,"./routes/issue_route":17,"./templates":18,"./views/card_view":24,"./views/card_wrapper_view":25,"./views/column_count_view":26,"./views/column_view":27,"./views/css_view":28,"./views/filter_view":29,"./views/search_view":30}],12:[function(require,module,exports){
 var WipLimit = Ember.Mixin.create({
 
 });
@@ -54141,7 +54142,7 @@ var CardView = Ember.View.extend({
   isClosable: function(){
      var currentState = this.get("controller.model.current_state");
 
-     return currentState.is_last && this.get("controller.model.state") === "open";
+     return App.get("loggedIn") && currentState.is_last && this.get("controller.model.state") === "open";
 
 
   }.property("controller.model.current_state","controller.model.state"),
@@ -54156,36 +54157,12 @@ module.exports = CardView;
 
 
 },{}],25:[function(require,module,exports){
-var ColumnCountView = Ember.View.extend({
-  tagName: "span",
-  templateName: "column_count",
-  classNameBindings: ["isOverWip:hb-state-error"],
-  isOverWip: Ember.computed.alias('controller.isOverWip')
-});
-
-module.exports = ColumnCountView;
-
-},{}],26:[function(require,module,exports){
-var ColumnView = Ember.CollectionView.extend({
-  tagName:"ul",
-  classNames: ["sortable"],
-  attributeBindings: ["style"],
-  style: Ember.computed.alias("controller.style"),
-  content: Ember.computed.alias("controller.issues"),
-  didInsertElement: function(){
-    var that = this;
-    this.$().sortable({
-      connectWith:".sortable",
-      placeholder: "ui-sortable-placeholder",
-      receive: function(ev, ui) {
-        that.controller.cardReceived(ui);
-      }
-    })
-    this._super();
-  },
-  itemViewClass: Em.View.extend({
+var CardWrapperView = Em.View.extend({
     templateName: "cardItem",
-    classNameBindings: ["isFiltered"],
+    classNameBindings: ["isFiltered","isDraggable:is-draggable"],
+    isDraggable: function( ){
+      return App.get("loggedIn") && this.get("content.state") !== "closed";
+    }.property("App.loggedIn","content.state"),
     isFiltered: function() {
       var dimFilters = App.get("dimFilters"),
           hideFilters = App.get("hideFilters"),
@@ -54208,12 +54185,45 @@ var ColumnView = Ember.CollectionView.extend({
         return "filter-hidden";
       }
     }.property("App.dimFilters", "App.hideFilters", "App.searchFilter")
-  })
+});
+
+module.exports = CardWrapperView;
+
+},{}],26:[function(require,module,exports){
+var ColumnCountView = Ember.View.extend({
+  tagName: "span",
+  templateName: "column_count",
+  classNameBindings: ["isOverWip:hb-state-error"],
+  isOverWip: Ember.computed.alias('controller.isOverWip')
+});
+
+module.exports = ColumnCountView;
+
+},{}],27:[function(require,module,exports){
+var ColumnView = Ember.CollectionView.extend({
+  tagName:"ul",
+  classNames: ["sortable"],
+  attributeBindings: ["style"],
+  style: Ember.computed.alias("controller.style"),
+  content: Ember.computed.alias("controller.issues"),
+  didInsertElement: function(){
+    var that = this;
+    this.$().sortable({
+      connectWith:".sortable",
+      placeholder: "ui-sortable-placeholder",
+      items: "li.is-draggable",
+      receive: function(ev, ui) {
+        that.controller.cardReceived(ui);
+      }
+    })
+    this._super();
+  },
+  itemViewClass: App.CardWrapperView
 })
 
 module.exports = ColumnView;
 
-},{}],27:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 
 
 var CssView = Ember.View.extend({
@@ -54266,7 +54276,7 @@ var CssView = Ember.View.extend({
 
 module.exports = CssView;
 
-},{}],28:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 var FilterView = Ember.View.extend({
   tagName: "li",
   templateName: "filter",
@@ -54307,7 +54317,7 @@ var FilterView = Ember.View.extend({
 
 module.exports = FilterView;
 
-},{}],29:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 var SearchView = Ember.View.extend({
   classNames: ["search"],
   classNameBindings: ["hasValue:has-value"],
@@ -54329,7 +54339,7 @@ var SearchView = Ember.View.extend({
 
 module.exports = SearchView;
 
-},{}],30:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 //fgnass.github.com/spin.js#v1.3
 
 /**
@@ -54680,7 +54690,7 @@ module.exports = SearchView;
 
 }));
 
-},{}],31:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 /*!
  * jQuery Color Animations v@VERSION
  * https://github.com/jquery/jquery-color
