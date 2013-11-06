@@ -26,6 +26,7 @@ define(["text!../templates/card.html","../models/card", "../../common/events/pos
 
     },
     tagName:"li",
+    className: "is-draggable",
     onNumber: function (ev) {
       ev.stopPropagation();
     },
