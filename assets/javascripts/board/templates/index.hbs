@@ -11,20 +11,12 @@
       </div>
     </div>
     <div class="board">
-      <div class="headers">
         {{#each column in board_columns }}
           <div class="column" {{bind-attr style=header_style }}>
             <h3>{{column.text}}<small>{{ render column_count column }}</small></h3>
-          </div>
-        {{/each}}
-      </div>
-      <div class="columns">
-        {{#each column in board_columns }}
-          <div class="column" {{bind-attr style=header_style }}>
             {{ render column column }}
           </div>
         {{/each}}
-      </div>
     </div>
   </div>
 

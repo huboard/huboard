@@ -5,7 +5,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico" />
     
      <%= stylesheet_tag 'bootstrap' %>
-     <%= stylesheet_tag 'application' %>
+     <%= stylesheet_tag 'flex_layout' %>
 
 
     <script type="text/javascript">
@@ -23,28 +23,9 @@
 
      </script>
   </head>
-  <body>
-     <div id="wrapper">
-       <div id="application">
-       </div>
-       <div id="footer-pusher"></div>
+  <body class="flex-body">
+     <div id="application">
      </div>
-     <div id="footer">
-       <div class="container">
-         <div class="row">
-           <div class="span6">
-             <img class="animate-before" src="<%=image_path 'LogoFullPurpleLight.png' %>"/>
-           </div>
-           <div class="links span6">
-             <a href="/site/terms">terms</a>
-             <a href="/site/privacy">privacy</a>
-             <a href="https://github.com/rauhryan/huboard">github</a>
-           </div>
-         </div>
-
-       </div>
-     </div>
-
      <% yield_content :overlay %>
 
      <% yield_content :javascripts %>
