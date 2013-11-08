@@ -739,6 +739,25 @@ function program3(depth0,data) {
   
 });
 
+Ember.TEMPLATES['column_header'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', stack1, hashTypes, hashContexts, options, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
+
+
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "text", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("<small>");
+  hashTypes = {};
+  hashContexts = {};
+  options = {hash:{},contexts:[depth0,depth0],types:["ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.render || depth0.render),stack1 ? stack1.call(depth0, "column_count", "model", options) : helperMissing.call(depth0, "render", "column_count", "model", options))));
+  data.buffer.push("</small>\n");
+  return buffer;
+  
+});
+
 Ember.TEMPLATES['drawer'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
@@ -866,29 +885,13 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
 function program1(depth0,data) {
   
-  var buffer = '', stack1, hashContexts, hashTypes, options;
-  data.buffer.push("\n          <div class=\"column\" ");
-  hashContexts = {'style': depth0};
-  hashTypes = {'style': "ID"};
-  options = {hash:{
-    'style': ("header_style")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
-  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
-  data.buffer.push(">\n            <h3>");
-  hashTypes = {};
-  hashContexts = {};
-  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "column.text", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("<small>");
-  hashTypes = {};
-  hashContexts = {};
-  options = {hash:{},contexts:[depth0,depth0],types:["ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
-  data.buffer.push(escapeExpression(((stack1 = helpers.render || depth0.render),stack1 ? stack1.call(depth0, "column_count", "column", options) : helperMissing.call(depth0, "render", "column_count", "column", options))));
-  data.buffer.push("</small></h3>\n            ");
+  var buffer = '', stack1, hashTypes, hashContexts, options;
+  data.buffer.push("\n          ");
   hashTypes = {};
   hashContexts = {};
   options = {hash:{},contexts:[depth0,depth0],types:["ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.render || depth0.render),stack1 ? stack1.call(depth0, "column", "column", options) : helperMissing.call(depth0, "render", "column", "column", options))));
-  data.buffer.push("\n          </div>\n        ");
+  data.buffer.push("\n        ");
   return buffer;
   }
 
@@ -54183,7 +54186,7 @@ var ColumnCountView = Ember.View.extend({
 module.exports = ColumnCountView;
 
 },{}],27:[function(require,module,exports){
-var ColumnView = Ember.CollectionView.extend({
+var CollectionView = Ember.CollectionView.extend({
   tagName:"ul",
   classNames: ["sortable"],
   attributeBindings: ["style"],
@@ -54196,13 +54199,24 @@ var ColumnView = Ember.CollectionView.extend({
       placeholder: "ui-sortable-placeholder",
       items: "li.is-draggable",
       receive: function(ev, ui) {
-        that.controller.cardReceived(ui);
+        that.get("controller").cardReceived(ui);
       }
     })
     this._super();
   },
   itemViewClass: App.CardWrapperView
 })
+
+var ColumnView = Ember.ContainerView.extend({
+  classNames:["column","isCollapsed:hb-state-collapsed"],
+  isCollapsed: false,
+  childViews: ["headerView", CollectionView],
+  headerView: Ember.View.extend({
+    tagName: "h3",
+    templateName: "columnHeader"
+  })
+
+});
 
 module.exports = ColumnView;
 

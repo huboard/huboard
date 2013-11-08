@@ -1,4 +1,4 @@
-var ColumnView = Ember.CollectionView.extend({
+var CollectionView = Ember.CollectionView.extend({
   tagName:"ul",
   classNames: ["sortable"],
   attributeBindings: ["style"],
@@ -11,12 +11,23 @@ var ColumnView = Ember.CollectionView.extend({
       placeholder: "ui-sortable-placeholder",
       items: "li.is-draggable",
       receive: function(ev, ui) {
-        that.controller.cardReceived(ui);
+        that.get("controller").cardReceived(ui);
       }
     })
     this._super();
   },
   itemViewClass: App.CardWrapperView
 })
+
+var ColumnView = Ember.ContainerView.extend({
+  classNames:["column","isCollapsed:hb-state-collapsed"],
+  isCollapsed: false,
+  childViews: ["headerView", CollectionView],
+  headerView: Ember.View.extend({
+    tagName: "h3",
+    templateName: "columnHeader"
+  })
+
+});
 
 module.exports = ColumnView;
