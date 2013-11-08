@@ -139,6 +139,13 @@ var ColumnController = Ember.ObjectController.extend({
   isLastColumn: function(){
     return this.get("controllers.index.columns.lastObject.name") === this.get("model.name");
   }.property("controllers.index.columns.lastObject"),
+  isFirstColumn: function(){
+    return this.get("controllers.index.columns.firstObject.name") === this.get("model.name");
+  }.property("controllers.index.columns.firstObject"),
+  isCollapsed: function() {
+    return this.get("isFirstColumn");
+  }.property(),
+  isHovering: false,
   getIssues: function(){
     var name = this.get("model.name");
     var issues = this.get("controllers.index.issues").filter(function(i){
@@ -745,10 +752,11 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   var buffer = '', stack1, hashTypes, hashContexts, options, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
 
 
+  data.buffer.push("<i class=\"ui-icon ui-icon-plus\"></i>\n<i class=\"ui-icon ui-icon-minus\"></i>\n<span class=\"text\">");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "text", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("<small>");
+  data.buffer.push("</span>\n<small>");
   hashTypes = {};
   hashContexts = {};
   options = {hash:{},contexts:[depth0,depth0],types:["ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
@@ -886,12 +894,12 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = '', stack1, hashTypes, hashContexts, options;
-  data.buffer.push("\n          ");
+  data.buffer.push("\n        ");
   hashTypes = {};
   hashContexts = {};
   options = {hash:{},contexts:[depth0,depth0],types:["ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.render || depth0.render),stack1 ? stack1.call(depth0, "column", "column", options) : helperMissing.call(depth0, "render", "column", "column", options))));
-  data.buffer.push("\n        ");
+  data.buffer.push("\n      ");
   return buffer;
   }
 
@@ -900,21 +908,21 @@ function program1(depth0,data) {
   hashContexts = {};
   options = {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.outlet || depth0.outlet),stack1 ? stack1.call(depth0, "sidebar", options) : helperMissing.call(depth0, "outlet", "sidebar", options))));
-  data.buffer.push("\n  </div>\n</div>\n<div id=\"content\" class=\"content\">\n  <div id=\"stage\">\n    <div id=\"drawer\">  <a ");
+  data.buffer.push("\n  </div>\n</div>\n<div id=\"content\" class=\"content\">\n  <div id=\"drawer\">  <a ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "toggleDrawer", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(" href=\"#\" class=\"arrow-right toggle-drawer\"><span></span></a>\n      <div class=\"board\">\n        ");
+  data.buffer.push(" href=\"#\" class=\"arrow-right toggle-drawer\"><span></span></a>\n    <div class=\"board\">\n      ");
   hashTypes = {};
   hashContexts = {};
   options = {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.outlet || depth0.outlet),stack1 ? stack1.call(depth0, "drawer", options) : helperMissing.call(depth0, "outlet", "drawer", options))));
-  data.buffer.push("\n      </div>\n    </div>\n    <div class=\"board\">\n        ");
+  data.buffer.push("\n    </div>\n  </div>\n  <div class=\"board\">\n      ");
   hashTypes = {};
   hashContexts = {};
   stack2 = helpers.each.call(depth0, "column", "in", "board_columns", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\n    </div>\n  </div>\n\n</div>\n");
+  data.buffer.push("\n  </div>\n</div>\n");
   return buffer;
   
 });
@@ -54147,7 +54155,7 @@ var CardWrapperView = Em.View.extend({
     templateName: "cardItem",
     classNameBindings: ["isFiltered","isDraggable:is-draggable"],
     isDraggable: function( ){
-      return App.get("loggedIn") && this.get("content.state") !== "closed";
+      return App.get("loggedIn");
     }.property("App.loggedIn","content.state"),
     isFiltered: function() {
       var dimFilters = App.get("dimFilters"),
@@ -54159,17 +54167,18 @@ var CardWrapperView = Em.View.extend({
          hideFilters = hideFilters.concat([searchFilter]);
       }
 
+      if(hideFilters.any(function(f){
+        return !f.condition(that.get("content"));
+      })){
+        return "filter-hidden";
+      }
+
       if(dimFilters.any(function(f){
         return !f.condition(that.get("content"));
       })){
         return "dim";
       }
 
-      if(hideFilters.any(function(f){
-        return !f.condition(that.get("content"));
-      })){
-        return "filter-hidden";
-      }
     }.property("App.dimFilters", "App.hideFilters", "App.searchFilter")
 });
 
@@ -54195,26 +54204,55 @@ var CollectionView = Ember.CollectionView.extend({
   didInsertElement: function(){
     var that = this;
     this.$().sortable({
+      tolerance: 'pointer',
       connectWith:".sortable",
       placeholder: "ui-sortable-placeholder",
       items: "li.is-draggable",
       receive: function(ev, ui) {
         that.get("controller").cardReceived(ui);
+      },
+      activate: function () {
+        that.get("controller").set("isHovering", true);
+      },
+      deactivate: function() {
+        that.get("controller").set("isHovering", false);
       }
     })
     this._super();
   },
-  itemViewClass: App.CardWrapperView
+  itemViewClass: App.CardWrapperView 
 })
 
 var ColumnView = Ember.ContainerView.extend({
-  classNames:["column","isCollapsed:hb-state-collapsed"],
-  isCollapsed: false,
-  childViews: ["headerView", CollectionView],
+  classNameBindings:[":column","isCollapsed:hb-state-collapsed","isHovering:hovering"],
+  isCollapsed: Ember.computed.alias("controller.isCollapsed"),
+  isHovering: Ember.computed.alias("controller.isHovering"),
+  childViews: ["headerView", CollectionView, "collapsedView"],
   headerView: Ember.View.extend({
     tagName: "h3",
-    templateName: "columnHeader"
-  })
+    templateName: "columnHeader",
+    click: function(){
+      this.get("controller").toggleProperty('isCollapsed')
+    }
+  }),
+  collapsedView: Ember.View.extend({
+    classNames:["collapsed"],
+    click: function(){
+      this.get("controller").toggleProperty('isCollapsed')
+    },
+    didInsertElement: function(){
+      var that = this;
+      this.$().droppable({
+        out: function() {
+         // that.get("controller").set("isHovering",false);
+        },
+        over: function () {
+         // that.get("controller").set("isHovering",true);
+        }
+      })
+      this._super();
+    }
+  }),
 
 });
 

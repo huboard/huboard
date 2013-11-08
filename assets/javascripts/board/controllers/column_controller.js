@@ -4,6 +4,13 @@ var ColumnController = Ember.ObjectController.extend({
   isLastColumn: function(){
     return this.get("controllers.index.columns.lastObject.name") === this.get("model.name");
   }.property("controllers.index.columns.lastObject"),
+  isFirstColumn: function(){
+    return this.get("controllers.index.columns.firstObject.name") === this.get("model.name");
+  }.property("controllers.index.columns.firstObject"),
+  isCollapsed: function() {
+    return this.get("isFirstColumn");
+  }.property(),
+  isHovering: false,
   getIssues: function(){
     var name = this.get("model.name");
     var issues = this.get("controllers.index.issues").filter(function(i){
