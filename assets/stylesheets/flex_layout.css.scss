@@ -102,10 +102,18 @@
     @include align-content(stretch);
   }
 
+   @media only screen and (max-width: 480px) {
+    @include flex-direction(column);
+    > .sidebar {
+        @include flex(0 1 auto);
+    }
+   }
    @media only screen and (max-width: 1024px) {
     .board {
       @include flex-direction(column);
       .column {
+        @include flex(0 1 auto);
+
         &.hb-state-collapsed {
           width: auto;
          

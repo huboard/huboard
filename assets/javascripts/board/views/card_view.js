@@ -9,7 +9,10 @@ var CardView = Ember.View.extend({
   }.property("controller.model.current_state","controller.model.state"),
   stateClass: function(){
      return "hb-state-" + this.get("controller.model.state");
-  }.property("controller.model.current_state", "controller.model.state")
+  }.property("controller.model.current_state", "controller.model.state"),
+  click: function(){
+     this.get("controller").send("openModal","modal")
+  }
 
   
 });

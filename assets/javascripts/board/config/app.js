@@ -55,6 +55,26 @@ new Spinner(opts).spin(this.$().get(0))
     }
 });
 
+App.animateModalClose = function() {
+  var promise = new Ember.RSVP.defer();
+
+  $('body').removeClass("fullscreen-open");
+  promise.resolve();
+
+
+  return promise.promise;
+};
+
+App.animateModalOpen = function() {
+  var promise = new Ember.RSVP.defer();
+
+   $('body').addClass("fullscreen-open");
+  promise.resolve();
+  
+
+  return promise.promise;
+};
+
 App.deferReadiness();
 
 module.exports = App;

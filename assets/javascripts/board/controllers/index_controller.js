@@ -1,7 +1,7 @@
 var IndexController = Ember.ObjectController.extend({
   board_columns: function(){
      return this.get("columns");
-  }.property(),
+  }.property("columns"),
   min_height: function(){
      return _(Ember.$(".sortable")).chain()
         .map(function(ul){ return $(ul).height(); })
