@@ -142,6 +142,7 @@ var CardController = Ember.ObjectController.extend({
     fullscreen: function(){
       this.set("controllers.issueEdit.model",this.get("model"));
       this.send("openModal","issueEdit")
+      //this.transitionToRoute("issue", this.get("model"))
     },
     close: function (issue){
       this.set("model.state","closed")
@@ -552,6 +553,9 @@ module.exports = IndexRoute;
 },{}],19:[function(require,module,exports){
 var IssueRoute = Ember.Route.extend({
   model : function (params){
+     debugger;
+  },
+  setupController: function() {
      debugger;
   },
   renderTemplate: function () {

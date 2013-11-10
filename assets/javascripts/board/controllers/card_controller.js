@@ -16,6 +16,7 @@ var CardController = Ember.ObjectController.extend({
     fullscreen: function(){
       this.set("controllers.issueEdit.model",this.get("model"));
       this.send("openModal","issueEdit")
+      //this.transitionToRoute("issue", this.get("model"))
     },
     close: function (issue){
       this.set("model.state","closed")
