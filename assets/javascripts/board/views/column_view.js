@@ -15,10 +15,10 @@ var CollectionView = Ember.CollectionView.extend({
         that.get("controller").cardReceived(ui);
       },
       activate: function () {
-        that.get("controller").set("isHovering", true);
+        // that.get("controller").set("isHovering", true);
       },
       deactivate: function() {
-        that.get("controller").set("isHovering", false);
+        // that.get("controller").set("isHovering", false);
       }
     })
     this._super();

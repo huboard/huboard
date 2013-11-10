@@ -1,0 +1,43 @@
+<div class="fullscreen-card">
+  <div class="fullscreen-card-right">
+      <h2> <a class="number" href="{{{unbound html_url }}}" target="_blank" {{bind-attr title="title"}}><small>ISSUE #</small>{{number}}</a> </h2>
+      <div class="labels-placeholder">
+       <div>
+          <form action="/api/rauhryan/skipping_stones_repo/issues/16/update_labels">
+
+            <ul class="labels"> 
+              <h5> Labels </h5>
+              {{! for each label }}
+            </ul>
+          </form>
+        </div>
+      </div>
+  </div>
+<div class="fullscreen-card-left">
+  <div class="fullscreen-card-preamble">
+    <div class="fullscreen-header">
+      <h2>{{ title }}</h2>
+    </div>
+  </div>
+  <div class="fullscreen-card-description card-comment">
+   {{! created by avatar }}
+    <a href="https://github.com/rauhryan" target="_blank">
+      <img title="Created by rauhryan" src="https://secure.gravatar.com/avatar/29283ede6c447fdc62f0ceac42df33ea?s=30">
+    </a>
+    <div class="comment-body">
+      {{#if body_html }}
+        {{{body_html}}}
+      {{else}}
+        <p class="empty"> No description given </p>
+      {{/if}}
+    </div>
+  </div>
+
+  <div class="fullscreen-card-activity">
+    <div class="fullscreen-header">
+      <h4> Activity </h4>
+    </div>
+    {{! render the activity stream }}
+  </div>
+</div>
+</div>

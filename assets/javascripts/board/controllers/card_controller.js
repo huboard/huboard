@@ -1,4 +1,5 @@
 var CardController = Ember.ObjectController.extend({
+  needs:["issueEdit"],
   actions : {
     dragged: function (column) {
       this.set("model.current_state", column)
@@ -11,6 +12,10 @@ var CardController = Ember.ObjectController.extend({
         index : column.index,
         number : this.get("model.number")
       })
+    },
+    fullscreen: function(){
+      this.set("controllers.issueEdit.model",this.get("model"));
+      this.send("openModal","issueEdit")
     },
     close: function (issue){
       this.set("model.state","closed")

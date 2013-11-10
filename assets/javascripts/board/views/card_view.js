@@ -11,7 +11,7 @@ var CardView = Ember.View.extend({
      return "hb-state-" + this.get("controller.model.state");
   }.property("controller.model.current_state", "controller.model.state"),
   click: function(){
-     this.get("controller").send("openModal","modal")
+     this.get("controller").send("fullscreen")
   }
 
   
