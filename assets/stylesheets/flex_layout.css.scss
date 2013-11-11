@@ -58,6 +58,21 @@
 
 }
 
+.sidebar-toggle {
+  a {
+    @include transition(all 0.1s);
+   color: #999;
+   i {
+     position: relative;
+     top: 3px;
+     @include transition(all 0.1s);
+   }
+   &:hover {
+     padding: 0 5px;
+     color: #666;
+   }
+  }
+}
 .sidebar-open {
   > .sidebar {
     width: auto;
@@ -75,11 +90,15 @@
   @include display(flex);
   @include flex-direction(column);
   @include transition(all 0.4s ease-out);
+  h3 {
+    cursor: pointer;
+  }
   ul {
     @include flex(1);
     min-height: 72px;
   }
   .collapsed {
+    cursor: pointer;
     display: none;
     background: #f3f3f3;
     border: 1px solid #e5e5e5;
