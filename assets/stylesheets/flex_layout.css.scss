@@ -96,6 +96,9 @@
   ul {
     @include flex(1);
     min-height: 72px;
+    li {
+      box-shadow: 0px 1px 1px rgba(0,0,0,0.1);
+    }
   }
   .collapsed {
     cursor: pointer;
