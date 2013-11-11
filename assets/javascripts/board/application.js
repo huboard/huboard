@@ -949,7 +949,7 @@ function program1(depth0,data) {
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "toggleSidebar", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(">Toggle sidebar <i class=\"ui-icon ui-icon-triangle-1-e\"></i></a>\n  </div>\n\n</div>\n<div id=\"main-stage\" ");
+  data.buffer.push(">Filters <i class=\"ui-icon ui-icon-triangle-1-e\"></i></a>\n  </div>\n\n</div>\n<div id=\"main-stage\" ");
   hashContexts = {'class': depth0};
   hashTypes = {'class': "STRING"};
   options = {hash:{
