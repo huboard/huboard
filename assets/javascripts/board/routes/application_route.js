@@ -1,6 +1,6 @@
 var ApplicationRoute = Ember.Route.extend({
   actions: {
-    openSidebar: function(){
+    toggleSidebar: function(){
       this.controllerFor("application").toggleProperty("isSidebarOpen");
     },
     openModal: function (view){

@@ -21,118 +21,143 @@
 }
 
 
+.main-toolbar {
+   height: 40px;
+   line-height: 40px;
+   padding: 0 25px;
+   box-shadow: 0px 1px 1px rgba(0,0,0,0.2);
+   a {
+    &:hover {
+     text-decoration: none;
+    }
+   }
+}
 
-#main-stage {
-  padding: 50px 25px 0;
+
+.main-content {
   position:relative;
   @include flex(1);
   @include display(flex);
 
   > .sidebar {
-     @include flex(0 0 230px);
+     width: 0;
+     flex:0;
      border-right: 1px solid #ccc;
      @include box-sizing(border-box);
+     @include transition(width,flex 0.2s ease-out);
   }
   > .content {
+     padding: 6px 25px;
      @include flex(1);
      @include display(flex);
      position: relative;
-  }
-  #drawer {
-    display:none;
-  }
-
-  .column {
-    float:none;
-    @include flex(1);
-    @include display(flex);
-    @include flex-direction(column);
-    @include transition(all 0.4s ease-out);
-    ul {
-      @include flex(1);
-      min-height: 72px;
-    }
-    .collapsed {
-      display: none;
-      background: #f3f3f3;
-      border: 1px solid #e5e5e5;
-      box-sizing: border-box;
-      @include flex(1);
-
-    }
-    > h3 .ui-icon-plus {
-      display:none;
-    }
-    &.hb-state-collapsed {
-      @include flex(0 1 auto);
-      width: 90px;
-      > h3 .ui-icon-plus { display:inline; }
-      .collapsed {
-        display: block;
-      }
-      > h3 span, > h3 .ui-icon-minus, > h3 small, ul {
-        display:none;
-      }
-    }
-    &.hb-state-collapsed {
-      @include flex(0 1 auto);
-      width: 90px;
-      > h3 .ui-icon-plus { display:inline; }
-      .collapsed {
-        display: block;
-      }
-      > h3 span, > h3 .ui-icon-minus, > h3 small, ul {
-        display:none;
-      }
-    }
-    &.hb-state-collapsed.hovering {
-        @include flex(1);
-        width: auto;
-        .collapsed {
-          display: none;
-        }
-        ul {
-          display:block;
-        }
-     }
-  }
-  .board {
-    @include display(flex);
-    @include flex(1);
-    @include align-content(stretch);
+     background-color: #fafafa;
+     box-shadow: inset -1px 1px 1px rgba(0,0,0,0.2);
+     @include transition(all 0.4s ease-out);
   }
 
-   @media only screen and (max-width: 480px) {
-    @include flex-direction(column);
-    > .sidebar {
-        @include flex(0 1 auto);
-    }
-   }
-   @media only screen and (max-width: 1024px) {
-    .board {
-      @include flex-direction(column);
-      .column {
-        @include flex(0 1 auto);
-
-        &.hb-state-collapsed {
-          width: auto;
-         
-          &.hovering {
-            ul {
-              display:none;
-            }
-          }
-          .collapsed {
-            display:none;
-          }
-          
-        }
-      }
-    }
-
-   }
 }
 
+.sidebar-open {
+  > .sidebar {
+    width: auto;
+    padding: 6px 0 6px 25px;
+    @include flex(0 0 230px);
+  }
+  > .content {
+    padding-left: 0;
+  }
+}
+
+.column {
+  float:none;
+  @include flex(1);
+  @include display(flex);
+  @include flex-direction(column);
+  @include transition(all 0.4s ease-out);
+  ul {
+    @include flex(1);
+    min-height: 72px;
+  }
+  .collapsed {
+    display: none;
+    background: #f3f3f3;
+    border: 1px solid #e5e5e5;
+    box-sizing: border-box;
+    @include flex(1);
+
+  }
+  > h3 .ui-icon-plus {
+    display:none;
+  }
+  &.hb-state-collapsed {
+    @include flex(0 1 auto);
+    width: 80px;
+    > h3 .ui-icon-plus { display:inline; }
+    .collapsed {
+      display: block;
+    }
+    > h3 span, > h3 .ui-icon-minus, > h3 small, ul {
+      display:none;
+    }
+  }
+  &.hb-state-collapsed {
+    @include flex(0 1 auto);
+    width: 90px;
+    > h3 .ui-icon-plus { display:inline; }
+    .collapsed {
+      display: block;
+    }
+    > h3 span, > h3 .ui-icon-minus, > h3 small, ul {
+      display:none;
+    }
+  }
+  &.hb-state-collapsed.hovering {
+      @include flex(1);
+      width: auto;
+      .collapsed {
+        display: none;
+      }
+      ul {
+        display:block;
+      }
+   }
+}
+.board {
+  @include display(flex);
+  @include flex(1);
+  @include align-content(stretch);
+}
+
+ @media only screen and (max-width: 480px) {
+  @include flex-direction(column);
+  > .sidebar {
+      @include flex(0 1 auto);
+  }
+ }
+ @media only screen and (max-width: 1024px) {
+  .board {
+    @include flex-direction(column);
+    .column {
+      @include flex(0 1 auto);
+
+      &.hb-state-collapsed {
+        width: auto;
+       
+        &.hovering {
+          ul {
+            display:none;
+          }
+        }
+        .collapsed {
+          display:none;
+        }
+        
+      }
+    }
+  }
+
+ }
 
 /* crap crap crap */
 .navbar {
