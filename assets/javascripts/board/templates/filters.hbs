@@ -1,4 +1,5 @@
 <ul class='filters'>
+  <h5>Assignment</h5>
   {{#each filter in userFilters }}
     {{view App.FilterView lastClickedBinding=lastUserFilterClicked nameBinding=filter.name modeBinding="filter.mode" colorBinding="filter.color"}}
   {{/each}}

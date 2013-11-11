@@ -5,9 +5,10 @@
 
 </div>
 <div id="main-stage" {{bind-attr class=":main-content isSidebarOpen:sidebar-open"}}>
-  <div class="sidebar">
+  <div class="sidebar left">
     <div class="sidebar-wrapper">
-      {{outlet sidebar}}
+      {{outlet sidebarTop}}
+      {{outlet sidebarMiddle}}
     </div>
   </div>
   

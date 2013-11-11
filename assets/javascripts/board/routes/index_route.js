@@ -14,7 +14,9 @@ var IndexRoute = Ember.Route.extend({
   renderTemplate: function() {
     
     this._super.apply(this, arguments);
-    this.render('filters', {into: 'index', outlet: 'sidebar'})
+    this.render('filters', {into: 'index', outlet: 'sidebarMiddle'})
+    this.render('assignee', {into: 'index', outlet: 'sidebarTop'})
+
     Ember.run.scheduleOnce("afterRender", this, function () {
       this.controllerFor("index").incrementProperty("resizeTrigger");
     });
