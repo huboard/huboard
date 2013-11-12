@@ -13,7 +13,8 @@ var App = Ember.Application.create({
   rootElement: "#application",
     dimFilters: [],
     hideFilters: [],
-    searchFilter: null
+    searchFilter: null,
+    memberFilter: null
 });
 
 App.LoadingRoute = Ember.Route.extend({

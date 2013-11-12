@@ -39,7 +39,8 @@ var App = Ember.Application.create({
   rootElement: "#application",
     dimFilters: [],
     hideFilters: [],
-    searchFilter: null
+    searchFilter: null,
+    memberFilter: null
 });
 
 App.LoadingRoute = Ember.Route.extend({
@@ -106,7 +107,7 @@ App.deferReadiness();
 module.exports = App;
 
 
-},{"../../spin":35,"../../vendor/jquery.color":36,"../utilities/observers":21,"../vendor/ember":22,"../vendor/handlebars":23,"../vendor/jquery":24,"../vendor/lodash":25}],3:[function(require,module,exports){
+},{"../../spin":36,"../../vendor/jquery.color":37,"../utilities/observers":21,"../vendor/ember":22,"../vendor/handlebars":23,"../vendor/jquery":24,"../vendor/lodash":25}],3:[function(require,module,exports){
 var App = require('./app');
 
 App.Router.map(function() {
@@ -126,9 +127,48 @@ module.exports = ApplicationController;
 },{}],5:[function(require,module,exports){
 var AssigneeController = Ember.ObjectController.extend({
   needs: ["index"],
+  actions: {
+    toggleShowMode: function(mode){
+      this.set("showMode", mode);
+    },
+    filterBy: function (user) {
+    
+    }
+  },
+  showMode: "less",
   assigneesBinding: "controllers.index.model.assignees",
-  dimFiltersBinding: "App.dimFilters",
-  hideFiltersBinding: "App.hideFilters"
+  memberFilter: "App.memberFilter",
+  lastClicked: null,
+  filterChanged : function(){
+    debugger;
+  }.observes("lastClicked"),
+  displayShowMore: function(){
+    return this.get("assignees").length > 25;
+  },
+  shouldShowMore: function () {
+    return this.get("showMode") === "more";
+  }.property("showMode"),
+  avatars : function () {
+    switch (this.get("showMode")){
+      case "less":
+        return _.take(this.get("assignees"), 25)
+        break;
+      case "more":
+        return this.get("assignees");
+        break;
+    }
+  }.property("showMode"),
+  filters : function () {
+     return this.get("avatars").map(function(a){
+         return Ember.Object.create({
+           avatar : a,
+           mode: 0,
+           condition: function (i) {
+              return i.assignee && i.assignee.login === a.login;
+           }
+         })
+     });
+  }.property("avatars")
 });
 
 module.exports = AssigneeController;
@@ -417,6 +457,7 @@ App.Repo = require('./models/repo');
 App.ApplicationRoute = require('./routes/application_route');
 App.IndexRoute = require('./routes/index_route');
 App.IssueRoute = require('./routes/issue_route');
+App.AssigneeFilterView = require('./views/assignee_filter_view');
 App.CardView = require('./views/card_view');
 App.CardWrapperView = require('./views/card_wrapper_view');
 App.ColumnCountView = require('./views/column_count_view');
@@ -433,7 +474,7 @@ require('./config/routes');
 module.exports = App;
 
 
-},{"./components/hb_avatar_component":1,"./config/app":2,"./config/routes":3,"./controllers/application_controller":4,"./controllers/assignee_controller":5,"./controllers/card_controller":6,"./controllers/column_controller":7,"./controllers/column_count_controller":8,"./controllers/filters_controller":9,"./controllers/index_controller":10,"./controllers/issue/edit_controller":11,"./controllers/search_controller":12,"./mixins/wip_limit":14,"./models/board":15,"./models/repo":16,"./routes/application_route":17,"./routes/index_route":18,"./routes/issue_route":19,"./templates":20,"./views/card_view":26,"./views/card_wrapper_view":27,"./views/column_count_view":28,"./views/column_view":29,"./views/css_view":30,"./views/filter_view":31,"./views/issue/edit_view":32,"./views/modal_view":33,"./views/search_view":34}],14:[function(require,module,exports){
+},{"./components/hb_avatar_component":1,"./config/app":2,"./config/routes":3,"./controllers/application_controller":4,"./controllers/assignee_controller":5,"./controllers/card_controller":6,"./controllers/column_controller":7,"./controllers/column_count_controller":8,"./controllers/filters_controller":9,"./controllers/index_controller":10,"./controllers/issue/edit_controller":11,"./controllers/search_controller":12,"./mixins/wip_limit":14,"./models/board":15,"./models/repo":16,"./routes/application_route":17,"./routes/index_route":18,"./routes/issue_route":19,"./templates":20,"./views/assignee_filter_view":26,"./views/card_view":27,"./views/card_wrapper_view":28,"./views/column_count_view":29,"./views/column_view":30,"./views/css_view":31,"./views/filter_view":32,"./views/issue/edit_view":33,"./views/modal_view":34,"./views/search_view":35}],14:[function(require,module,exports){
 var WipLimit = Ember.Mixin.create({
 
 });
@@ -677,28 +718,55 @@ function program3(depth0,data) {
 Ember.TEMPLATES['assignee'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, hashTypes, hashContexts, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, self=this;
+  var buffer = '', stack1, hashTypes, hashContexts, escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
-  var buffer = '', stack1, hashContexts, hashTypes, options;
-  data.buffer.push("\n ");
-  hashContexts = {'user': depth0};
-  hashTypes = {'user': "ID"};
-  options = {hash:{
-    'user': ("gravatar_id")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
-  data.buffer.push(escapeExpression(((stack1 = helpers['hb-avatar'] || depth0['hb-avatar']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-avatar", options))));
-  data.buffer.push("\n");
+  var buffer = '', hashTypes, hashContexts;
+  data.buffer.push("\n  <a href=\"#\" ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "toggleShowMode", "less", {hash:{},contexts:[depth0,depth0],types:["ID","STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">less</a>\n");
   return buffer;
   }
 
-  data.buffer.push("<h5>Members</h5>\n");
+function program3(depth0,data) {
+  
+  var buffer = '', hashTypes, hashContexts;
+  data.buffer.push("\n  <a href=\"#\" ");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers.each.call(depth0, "assignees", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "toggleShowMode", "more", {hash:{},contexts:[depth0,depth0],types:["ID","STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">more</a>\n");
+  return buffer;
+  }
+
+function program5(depth0,data) {
+  
+  var buffer = '', hashContexts, hashTypes;
+  data.buffer.push("\n    ");
+  hashContexts = {'lastClickedBinding': depth0,'gravatarIdBinding': depth0};
+  hashTypes = {'lastClickedBinding': "ID",'gravatarIdBinding': "STRING"};
+  data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.AssigneeFilterView", {hash:{
+    'lastClickedBinding': ("controller.lastClicked"),
+    'gravatarIdBinding': ("filter.avatar.gravatar_id")
+  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n  ");
+  return buffer;
+  }
+
+  data.buffer.push("<h5>Members\n\n");
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers['if'].call(depth0, "shouldShowMore", {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n");
+  data.buffer.push("\n\n</h5>\n<div class=\"assignees filters\">\n  ");
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers.each.call(depth0, "filter", "in", "filters", {hash:{},inverse:self.noop,fn:self.program(5, program5, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n</div>\n");
   return buffer;
   
 });
@@ -992,11 +1060,18 @@ function program1(depth0,data) {
   return buffer;
   }
 
-  data.buffer.push("<div class=\"main-toolbar\">\n  <div class=\"sidebar-toggle\">\n    <a href=\"#\" ");
+  data.buffer.push("<div class=\"main-toolbar\">\n  <div class=\"create-button\">\n    <button class=\"hb-button small\">Create new issue</button>\n  </div>\n  <div class=\"sidebar-toggle\">\n    <a href=\"#\" ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "toggleSidebar", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(">Filters <i class=\"ui-icon ui-icon-triangle-1-e\"></i></a>\n  </div>\n\n</div>\n<div id=\"main-stage\" ");
+  data.buffer.push(">Filters <i ");
+  hashContexts = {'class': depth0};
+  hashTypes = {'class': "STRING"};
+  options = {hash:{
+    'class': (":ui-icon isSidebarOpen:ui-icon-triangle-1-w:ui-icon-triangle-1-e")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
+  data.buffer.push(" class=\"ui-icon ui-icon-triangle-1-e\"></i></a>\n  </div>\n\n</div>\n<div id=\"main-stage\" ");
   hashContexts = {'class': depth0};
   hashTypes = {'class': "STRING"};
   options = {hash:{
@@ -1135,6 +1210,25 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "yield", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("\n");
+  return buffer;
+  
+});
+
+Ember.TEMPLATES['assignee/filter'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', stack1, hashContexts, hashTypes, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+
+
+  hashContexts = {'user': depth0,'height': depth0,'width': depth0};
+  hashTypes = {'user': "ID",'height': "STRING",'width': "STRING"};
+  options = {hash:{
+    'user': ("view.gravatarId"),
+    'height': ("32"),
+    'width': ("32")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['hb-avatar'] || depth0['hb-avatar']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-avatar", options))));
+  data.buffer.push("\n\n");
   return buffer;
   
 });
@@ -54300,6 +54394,19 @@ var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? 
 }.call(this));
 
 },{}],26:[function(require,module,exports){
+var AssigneeFilterView = Ember.View.extend({
+  templateName : "assignee/filter",
+  classNames: ["assignee"],
+  classNameBindings: ["modeClass"],
+  click: function (){
+    this.set("lastClicked", this);
+  },
+  gravatarId: null
+});
+
+module.exports = AssigneeFilterView;
+
+},{}],27:[function(require,module,exports){
 var CardView = Ember.View.extend({
   classNameBindings:["isClosable:closable", "stateClass"],
   isClosable: function(){
@@ -54322,7 +54429,7 @@ var CardView = Ember.View.extend({
 module.exports = CardView;
 
 
-},{}],27:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 var CardWrapperView = Em.View.extend({
     templateName: "cardItem",
     classNameBindings: ["isFiltered","isDraggable:is-draggable"],
@@ -54333,10 +54440,16 @@ var CardWrapperView = Em.View.extend({
       var dimFilters = App.get("dimFilters"),
           hideFilters = App.get("hideFilters"),
           searchFilter = App.get("searchFilter"),
+          memberFilter = App.get("memberFilter"),
           that = this;
 
       if(searchFilter) {
          hideFilters = hideFilters.concat([searchFilter]);
+      }
+
+      if(memberFilter) {
+        memberFilter.mode === 1 ? dimFilters.concat([memberFilter]) 
+                                : hideFilters.concat([memberFilter]);
       }
 
       if(hideFilters.any(function(f){
@@ -54351,12 +54464,12 @@ var CardWrapperView = Em.View.extend({
         return "dim";
       }
 
-    }.property("App.dimFilters", "App.hideFilters", "App.searchFilter")
+    }.property("App.memberFilter", "App.dimFilters", "App.hideFilters", "App.searchFilter")
 });
 
 module.exports = CardWrapperView;
 
-},{}],28:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 var ColumnCountView = Ember.View.extend({
   tagName: "span",
   templateName: "column_count",
@@ -54366,7 +54479,7 @@ var ColumnCountView = Ember.View.extend({
 
 module.exports = ColumnCountView;
 
-},{}],29:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 var CollectionView = Ember.CollectionView.extend({
   tagName:"ul",
   classNames: ["sortable"],
@@ -54430,7 +54543,7 @@ var ColumnView = Ember.ContainerView.extend({
 
 module.exports = ColumnView;
 
-},{}],30:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 
 
 var CssView = Ember.View.extend({
@@ -54483,7 +54596,7 @@ var CssView = Ember.View.extend({
 
 module.exports = CssView;
 
-},{}],31:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 var FilterView = Ember.View.extend({
   tagName: "li",
   templateName: "filter",
@@ -54524,14 +54637,14 @@ var FilterView = Ember.View.extend({
 
 module.exports = FilterView;
 
-},{}],32:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 var IssuesEditView = App.ModalView.extend({
   templateName: "issue/edit"
 });
 
 module.exports = IssuesEditView;
 
-},{}],33:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 var ModalView = Em.View.extend({
   layoutName: "layouts/modal",
 
@@ -54564,7 +54677,7 @@ var ModalView = Em.View.extend({
 
 module.exports = ModalView;
 
-},{}],34:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 var SearchView = Ember.View.extend({
   classNames: ["search"],
   classNameBindings: ["hasValue:has-value"],
@@ -54586,7 +54699,7 @@ var SearchView = Ember.View.extend({
 
 module.exports = SearchView;
 
-},{}],35:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 //fgnass.github.com/spin.js#v1.3
 
 /**
@@ -54937,7 +55050,7 @@ module.exports = SearchView;
 
 }));
 
-},{}],36:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 /*!
  * jQuery Color Animations v@VERSION
  * https://github.com/jquery/jquery-color

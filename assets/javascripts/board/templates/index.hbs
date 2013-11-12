@@ -1,6 +1,9 @@
 <div class="main-toolbar">
+  <div class="create-button">
+    <button class="hb-button small">Create new issue</button>
+  </div>
   <div class="sidebar-toggle">
-    <a href="#" {{action "toggleSidebar" }}>Filters <i class="ui-icon ui-icon-triangle-1-e"></i></a>
+    <a href="#" {{action "toggleSidebar" }}>Filters <i {{bind-attr class=":ui-icon isSidebarOpen:ui-icon-triangle-1-w:ui-icon-triangle-1-e"}} class="ui-icon ui-icon-triangle-1-e"></i></a>
   </div>
 
 </div>

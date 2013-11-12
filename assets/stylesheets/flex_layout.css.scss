@@ -13,6 +13,7 @@
 @import "overlay";
 @import "section";
 @import "credit_cards";
+@import "assignees";
 
 #application > .ember-view {
    @include display(flex);
@@ -22,6 +23,9 @@
 
 
 .main-toolbar {
+  .create-button {
+    float:right;
+  }
    height: 40px;
    line-height: 40px;
    padding: 0 25px;
