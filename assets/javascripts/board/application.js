@@ -3,14 +3,14 @@ var HbAvatarComponent = Ember.Component.extend({
    tagName: 'img',
  
   classNames: 'img-responsive',
-  attributeBindings: ["src"],
+  attributeBindings: ["src", "title"],
   
   width: 24,
   
   height: 24,
  
   service: 'gravatar',
- 
+  title: "",
   src: function() {
     return this[this.get('service')+'Url']();
   }.property('service', 'user'),
@@ -1224,12 +1224,13 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   var buffer = '', stack1, hashContexts, hashTypes, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
 
 
-  hashContexts = {'user': depth0,'height': depth0,'width': depth0};
-  hashTypes = {'user': "ID",'height': "STRING",'width': "STRING"};
+  hashContexts = {'user': depth0,'height': depth0,'width': depth0,'title': depth0};
+  hashTypes = {'user': "ID",'height': "STRING",'width': "STRING",'title': "ID"};
   options = {hash:{
     'user': ("view.gravatarId"),
     'height': ("32"),
-    'width': ("32")
+    'width': ("32"),
+    'title': ("view.content.avatar.login")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers['hb-avatar'] || depth0['hb-avatar']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-avatar", options))));
   data.buffer.push("\n\n");
