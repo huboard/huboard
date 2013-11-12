@@ -3,18 +3,21 @@ var AssigneeController = Ember.ObjectController.extend({
   actions: {
     toggleShowMode: function(mode){
       this.set("showMode", mode);
-    },
-    filterBy: function (user) {
-    
     }
   },
   showMode: "less",
   assigneesBinding: "controllers.index.model.assignees",
-  memberFilter: "App.memberFilter",
+  memberFilterBinding: "App.memberFilter",
   lastClicked: null,
   filterChanged : function(){
-    debugger;
-  }.observes("lastClicked"),
+    Ember.run.once(function(){
+      var filter = this.get("lastClicked").get("content");
+      this.set("memberFilter", {
+        mode: this.get("lastClicked.mode"),
+        condition: this.get("lastClicked.content.condition")
+      })
+    }.bind(this))
+  }.observes("lastClicked.mode"),
   displayShowMore: function(){
     return this.get("assignees").length > 25;
   },

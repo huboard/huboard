@@ -16,8 +16,8 @@ var CardWrapperView = Em.View.extend({
       }
 
       if(memberFilter) {
-        memberFilter.mode === 1 ? dimFilters.concat([memberFilter]) 
-                                : hideFilters.concat([memberFilter]);
+        memberFilter.mode === 1 && (dimFilters = dimFilters.concat([memberFilter]))
+        memberFilter.mode === 2 && (hideFilters = hideFilters.concat([memberFilter]));
       }
 
       if(hideFilters.any(function(f){
@@ -32,7 +32,9 @@ var CardWrapperView = Em.View.extend({
         return "dim";
       }
 
-    }.property("App.memberFilter", "App.dimFilters", "App.hideFilters", "App.searchFilter")
+      return "";
+
+    }.property("App.memberFilter.mode", "App.dimFilters", "App.hideFilters", "App.searchFilter")
 });
 
 module.exports = CardWrapperView;

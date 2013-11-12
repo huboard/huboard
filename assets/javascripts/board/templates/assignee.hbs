@@ -1,14 +1,14 @@
 <h5>Members
 
 {{#if shouldShowMore }}
-  <a href="#" {{action toggleShowMode "less"}}>less</a>
+  <a href="#" {{action toggleShowMode "less"}}> (less)</a>
 {{else}}
-  <a href="#" {{action toggleShowMode "more"}}>more</a>
+  <a href="#" {{action toggleShowMode "more"}}> (more)</a>
 {{/if}}
 
 </h5>
 <div class="assignees filters">
   {{#each filter in filters}}
-    {{view App.AssigneeFilterView lastClickedBinding=controller.lastClicked  gravatarIdBinding="filter.avatar.gravatar_id" }}
+    {{view App.AssigneeFilterView lastClickedBinding=controller.lastClicked  gravatarIdBinding="filter.avatar.gravatar_id" contentBinding="filter" }}
   {{/each}}
 </div>

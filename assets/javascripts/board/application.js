@@ -130,18 +130,21 @@ var AssigneeController = Ember.ObjectController.extend({
   actions: {
     toggleShowMode: function(mode){
       this.set("showMode", mode);
-    },
-    filterBy: function (user) {
-    
     }
   },
   showMode: "less",
   assigneesBinding: "controllers.index.model.assignees",
-  memberFilter: "App.memberFilter",
+  memberFilterBinding: "App.memberFilter",
   lastClicked: null,
   filterChanged : function(){
-    debugger;
-  }.observes("lastClicked"),
+    Ember.run.once(function(){
+      var filter = this.get("lastClicked").get("content");
+      this.set("memberFilter", {
+        mode: this.get("lastClicked.mode"),
+        condition: this.get("lastClicked.content.condition")
+      })
+    }.bind(this))
+  }.observes("lastClicked.mode"),
   displayShowMore: function(){
     return this.get("assignees").length > 25;
   },
@@ -727,7 +730,7 @@ function program1(depth0,data) {
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "toggleShowMode", "less", {hash:{},contexts:[depth0,depth0],types:["ID","STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(">less</a>\n");
+  data.buffer.push("> (less)</a>\n");
   return buffer;
   }
 
@@ -738,7 +741,7 @@ function program3(depth0,data) {
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "toggleShowMode", "more", {hash:{},contexts:[depth0,depth0],types:["ID","STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(">more</a>\n");
+  data.buffer.push("> (more)</a>\n");
   return buffer;
   }
 
@@ -746,11 +749,12 @@ function program5(depth0,data) {
   
   var buffer = '', hashContexts, hashTypes;
   data.buffer.push("\n    ");
-  hashContexts = {'lastClickedBinding': depth0,'gravatarIdBinding': depth0};
-  hashTypes = {'lastClickedBinding': "ID",'gravatarIdBinding': "STRING"};
+  hashContexts = {'lastClickedBinding': depth0,'gravatarIdBinding': depth0,'contentBinding': depth0};
+  hashTypes = {'lastClickedBinding': "ID",'gravatarIdBinding': "STRING",'contentBinding': "STRING"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.AssigneeFilterView", {hash:{
     'lastClickedBinding': ("controller.lastClicked"),
-    'gravatarIdBinding': ("filter.avatar.gravatar_id")
+    'gravatarIdBinding': ("filter.avatar.gravatar_id"),
+    'contentBinding': ("filter")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("\n  ");
   return buffer;
@@ -54399,8 +54403,50 @@ var AssigneeFilterView = Ember.View.extend({
   classNames: ["assignee"],
   classNameBindings: ["modeClass"],
   click: function (){
+    var previous = this.get("lastClicked");
+
     this.set("lastClicked", this);
+
+    if(previous && previous !== this){
+      Ember.run.once(function(){
+        previous.set("mode", 0);
+      })
+    }
+
+    this.set("mode", this.get("modes")[this.get("mode") + 1]);
   },
+  modeClass : function() {
+    var lastClicked = this.get("lastClicked");
+    
+    if(!lastClicked) return "";
+
+    if (lastClicked === this){
+      switch(this.get("mode")) {
+        case 0:
+          return "";
+        break;
+        case 1:
+          return "active";
+        break;
+        case 2:
+          return "active";
+        break;
+      }
+    }
+    switch(lastClicked.get("mode")) {
+      case 0:
+        return "";
+      break;
+      case 1:
+        return "dim";
+      break;
+      case 2:
+        return "inactive";
+      break;
+    }
+  }.property("lastClicked.mode"),
+  mode: 0,
+  modes:[0,1,2,0],
   gravatarId: null
 });
 
@@ -54448,8 +54494,8 @@ var CardWrapperView = Em.View.extend({
       }
 
       if(memberFilter) {
-        memberFilter.mode === 1 ? dimFilters.concat([memberFilter]) 
-                                : hideFilters.concat([memberFilter]);
+        memberFilter.mode === 1 && (dimFilters = dimFilters.concat([memberFilter]))
+        memberFilter.mode === 2 && (hideFilters = hideFilters.concat([memberFilter]));
       }
 
       if(hideFilters.any(function(f){
@@ -54464,7 +54510,9 @@ var CardWrapperView = Em.View.extend({
         return "dim";
       }
 
-    }.property("App.memberFilter", "App.dimFilters", "App.hideFilters", "App.searchFilter")
+      return "";
+
+    }.property("App.memberFilter.mode", "App.dimFilters", "App.hideFilters", "App.searchFilter")
 });
 
 module.exports = CardWrapperView;
