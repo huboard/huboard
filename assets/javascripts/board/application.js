@@ -146,7 +146,7 @@ var AssigneeController = Ember.ObjectController.extend({
     }.bind(this))
   }.observes("lastClicked.mode"),
   displayShowMore: function(){
-    return this.get("assignees").length > 25;
+    return this.get("assignees").length > 24;
   },
   shouldShowMore: function () {
     return this.get("showMode") === "more";
@@ -154,7 +154,7 @@ var AssigneeController = Ember.ObjectController.extend({
   avatars : function () {
     switch (this.get("showMode")){
       case "less":
-        return _.take(this.get("assignees"), 25)
+        return _.take(this.get("assignees"), 24)
         break;
       case "more":
         return this.get("assignees");
