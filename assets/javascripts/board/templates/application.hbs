@@ -11,8 +11,8 @@
     </ul>
      <ul class="nav pull-right">
       <li><a {{bind-attr href="backlogUrl"}} >Backlog</a></li>
-      <li><a {{bind-attr href="repoUrl"}}>Tasks</a></li>
-      <li class="active"><a {{bind-attr href="betaUrl"}}>Beta</a></li>
+      <li class="active"><a class="active" {{bind-attr href="repoUrl"}}>Tasks</a></li>
+      {{!-- <li class="active"><a {{bind-attr href="betaUrl"}}>Beta</a></li> --}}
       {{#if App.loggedIn}}
         <li class="dropdown">
           <a class="dropdown-toggle avatar" data-toggle="dropdown" href="#">

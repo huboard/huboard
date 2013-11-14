@@ -2,6 +2,8 @@ class Huboard
   class Board
 
     attr_accessor :user, :repo, :connection_factory
+
+    def initialize(user, repo, client)
       @gh = client.call
       @connection_factory = client
       @user = user

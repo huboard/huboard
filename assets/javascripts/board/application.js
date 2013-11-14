@@ -793,21 +793,15 @@ function program3(depth0,data) {
     'href': ("backlogUrl")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
-  data.buffer.push(" >Backlog</a></li>\n      <li><a ");
+  data.buffer.push(" >Backlog</a></li>\n      <li class=\"active\"><a class=\"active\" ");
   hashContexts = {'href': depth0};
   hashTypes = {'href': "STRING"};
   options = {hash:{
     'href': ("repoUrl")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
-  data.buffer.push(">Tasks</a></li>\n      <li class=\"active\"><a ");
-  hashContexts = {'href': depth0};
-  hashTypes = {'href': "STRING"};
-  options = {hash:{
-    'href': ("betaUrl")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
-  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
-  data.buffer.push(">Beta</a></li>\n      ");
+  data.buffer.push(">Tasks</a></li>\n      ");
+  data.buffer.push("\n      ");
   hashTypes = {};
   hashContexts = {};
   stack2 = helpers['if'].call(depth0, "App.loggedIn", {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
