@@ -1,9 +1,11 @@
 <h5>Members
 
-{{#if shouldShowMore }}
-  <a href="#" {{action toggleShowMode "less"}}> (less)</a>
-{{else}}
-  <a href="#" {{action toggleShowMode "more"}}> (more)</a>
+{{#if displayShowMore }}
+  {{#if shouldShowMore }}
+    <a href="#" {{action toggleShowMode "less"}}> (less)</a>
+  {{else}}
+    <a href="#" {{action toggleShowMode "more"}}> (more)</a>
+  {{/if}}
 {{/if}}
 
 </h5>

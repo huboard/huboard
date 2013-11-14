@@ -20,7 +20,7 @@ var AssigneeController = Ember.ObjectController.extend({
   }.observes("lastClicked.mode"),
   displayShowMore: function(){
     return this.get("assignees").length > 24;
-  },
+  }.property(),
   shouldShowMore: function () {
     return this.get("showMode") === "more";
   }.property("showMode"),

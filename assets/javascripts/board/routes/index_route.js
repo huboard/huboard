@@ -28,6 +28,9 @@ var IndexRoute = Ember.Route.extend({
         .hasClass("arrow-left");
 
       open ? this.animateDrawer("close") : this.animateDrawer("open");
+    },
+    createNewIssue : function () {
+    
     }
   },
     animateDrawer : function (direction) {
