@@ -1,0 +1,27 @@
+.flex-form {
+  margin: 0;
+
+  display: flex;
+  flex:1;
+  flex-flow: column nowrap;
+  &.split-form {
+    flex-flow: row nowrap;
+    .flex-form-left {
+      display: flex;
+      flex: 1;
+      flex-flow: column nowrap;
+      padding: 0 10px;
+      border-right: 1px solid #ccc;
+    }
+    .flex-form-right {
+      padding: 0 10px;
+      flex: 0 0 210px;
+    }
+  }
+  label {
+    display: flex;
+    input, textarea {
+      flex:1;
+    }
+  }
+}

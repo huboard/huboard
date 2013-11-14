@@ -28,6 +28,14 @@ class Huboard
       gh.raw.status == 200 && column_labels.size > 0
     end
 
+    def create_issue(params)
+       gh.issues.create({
+         title: params[:title],
+         body: params[:body],
+         labels: [column_labels.first]
+       }).extend(Huboard::Issues::Card).merge!({"repo" => {:owner => {:login => @user}, :name => @repo }})
+    end
+
     def meta
        settings = self.settings
        columns = column_labels

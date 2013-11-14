@@ -1,9 +1,7 @@
 var IndexRoute = Ember.Route.extend({
   model: function(){
     var repo = this.modelFor("application");
-
-    return Ember.$.getJSON("/api/v2/" + repo.get("full_name") + "/board");
-
+    return App.Board.fetch(repo);
   },
   afterModel: function (model){
     var cssView = App.CssView.create({
@@ -16,10 +14,6 @@ var IndexRoute = Ember.Route.extend({
     this._super.apply(this, arguments);
     this.render('filters', {into: 'index', outlet: 'sidebarMiddle'})
     this.render('assignee', {into: 'index', outlet: 'sidebarTop'})
-
-    Ember.run.scheduleOnce("afterRender", this, function () {
-      this.controllerFor("index").incrementProperty("resizeTrigger");
-    });
   },
   actions :{
     toggleDrawer : function () {
@@ -30,7 +24,8 @@ var IndexRoute = Ember.Route.extend({
       open ? this.animateDrawer("close") : this.animateDrawer("open");
     },
     createNewIssue : function () {
-    
+      this.controllerFor("issue.create").set("model", App.Issue.createNew());
+      this.send("openModal","issue.create")
     }
   },
     animateDrawer : function (direction) {

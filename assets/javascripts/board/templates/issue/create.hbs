@@ -1,0 +1,16 @@
+<div class="fullscreen-card">
+  <form {{action submit on="submit"}} class="flex-form split-form">
+    <div class="flex-form-left"> 
+      <label>
+        {{input value=title placeholder="Title" }}
+      </label>
+      <label>
+        {{textarea value=body placeholder="Leave a comment"}}
+      </label>
+      <button {{bind-attr disabled=disabled}} class="hb-button">Submit issue</button>
+    </div>
+    <div class="flex-form-right">
+    </div>
+  </form>
+</div>
+

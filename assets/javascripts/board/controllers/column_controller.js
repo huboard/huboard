@@ -21,7 +21,7 @@ var ColumnController = Ember.ObjectController.extend({
   },
   issues: function(){
     return this.getIssues();
-  }.property(""),
+  }.property("controllers.index.forceRedraw"),
   issuesObserver : function () {
     console.log("dragginObserver")
   }.observes("controllers.index.issues.@each.current_state"),

@@ -58,6 +58,10 @@ class Huboard
        return json huboard.board(params[:user],params[:repo]).meta
     end
 
+    post '/v2/:user/:repo/issues/create' do 
+       return json huboard.board(params[:user],params[:repo]).create_issue params
+    end
+
     get '/:user/:repo/board' do 
       board = pebble.board(params[:user], params[:repo])
       board.merge! :logged_in => logged_in?
