@@ -181,7 +181,8 @@
   border: 1px solid #e5e5e5;
   border-bottom-color: darken(#e5e5e5, 5%); 
 
-  .closable {
+  &.closable {
+    background-color: #f5f5f5;
     .actions-close {
       display:block;
     }
@@ -189,11 +190,7 @@
   .actions-close {
       display: none;
       position: absolute;
-      top:0;
-      left: 0;
-      height: 100%;
       width: 100%;
-      background: hsla(0,0%, 85%, 0.4);
     button {
       position: absolute;
       top:0;

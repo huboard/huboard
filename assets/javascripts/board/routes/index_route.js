@@ -1,10 +1,12 @@
+var CssView = require("../views/css_view");
+
 var IndexRoute = Ember.Route.extend({
   model: function(){
     var repo = this.modelFor("application");
     return App.Board.fetch(repo);
   },
   afterModel: function (model){
-    var cssView = App.CssView.create({
+    var cssView = CssView.create({
       content: model
     });
     cssView.appendTo("head")

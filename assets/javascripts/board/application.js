@@ -636,13 +636,15 @@ var ApplicationRoute = Ember.Route.extend({
 module.exports = ApplicationRoute;
 
 },{}],21:[function(require,module,exports){
+var CssView = require("../views/css_view");
+
 var IndexRoute = Ember.Route.extend({
   model: function(){
     var repo = this.modelFor("application");
     return App.Board.fetch(repo);
   },
   afterModel: function (model){
-    var cssView = App.CssView.create({
+    var cssView = CssView.create({
       content: model
     });
     cssView.appendTo("head")
@@ -691,7 +693,7 @@ var IndexRoute = Ember.Route.extend({
 
 module.exports = IndexRoute;
 
-},{}],22:[function(require,module,exports){
+},{"../views/css_view":34}],22:[function(require,module,exports){
 var IssueRoute = Ember.Route.extend({
   model : function (params){
      debugger;
@@ -54606,12 +54608,7 @@ module.exports = AssigneeFilterView;
 
 },{}],30:[function(require,module,exports){
 var CardView = Ember.View.extend({
-  classNameBindings:["isClosable:closable", "stateClass"],
-  isClosable: function(){
-     var currentState = this.get("controller.model.current_state");
-
-     return App.get("loggedIn") && currentState.is_last && this.get("controller.model.state") === "open";
-  }.property("controller.model.current_state","controller.model.state"),
+  classNameBindings:["stateClass"],
   stateClass: function(){
      return "hb-state-" + this.get("controller.model.state");
   }.property("controller.model.current_state", "controller.model.state"),
@@ -54633,7 +54630,12 @@ module.exports = CardView;
 },{}],31:[function(require,module,exports){
 var CardWrapperView = Em.View.extend({
     templateName: "cardItem",
-    classNameBindings: ["isFiltered","isDraggable:is-draggable"],
+    classNameBindings: ["isFiltered","isDraggable:is-draggable", "isClosable:closable"],
+    isClosable: function () {
+     var currentState = this.get("content.current_state");
+
+     return App.get("loggedIn") && currentState.is_last && this.get("content.state") === "open";
+    }.property("App.loggedIn", "content.current_state","content.state"),
     isDraggable: function( ){
       return App.get("loggedIn");
     }.property("App.loggedIn","content.state"),

@@ -1,6 +1,11 @@
 var CardWrapperView = Em.View.extend({
     templateName: "cardItem",
-    classNameBindings: ["isFiltered","isDraggable:is-draggable"],
+    classNameBindings: ["isFiltered","isDraggable:is-draggable", "isClosable:closable"],
+    isClosable: function () {
+     var currentState = this.get("content.current_state");
+
+     return App.get("loggedIn") && currentState.is_last && this.get("content.state") === "open";
+    }.property("App.loggedIn", "content.current_state","content.state"),
     isDraggable: function( ){
       return App.get("loggedIn");
     }.property("App.loggedIn","content.state"),
