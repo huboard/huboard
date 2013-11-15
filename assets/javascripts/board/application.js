@@ -188,8 +188,20 @@ var CardController = Ember.ObjectController.extend({
           full_name = user + "/" + repo;
 
       Ember.$.post("/api/" + full_name + "/movecard", {
-        index : column.index,
+        index : column.index.toString(),
         number : this.get("model.number")
+      })
+    },
+    moved: function (index){
+      this.get("model._data.order", index);
+
+      var user = this.get("model.repo.owner.login"),
+          repo = this.get("model.repo.name"),
+          full_name = user + "/" + repo;
+
+      Ember.$.post("/api/" + full_name + "/reorderissue", {
+        number : this.get("model.number"),
+        index: index
       })
     },
     fullscreen: function(){
@@ -237,7 +249,9 @@ var ColumnController = Ember.ObjectController.extend({
     var issues = this.get("controllers.index.issues").filter(function(i){
       return i.current_state.name === name;
 
-    })
+    }).sort(function (a, b){
+       return a._data.order - b._data.order;
+    });
     return issues;
   },
   issues: function(){
@@ -54720,6 +54734,46 @@ var CollectionView = Ember.CollectionView.extend({
       },
       deactivate: function() {
         // that.get("controller").set("isHovering", false);
+      }, 
+      update: function (ev, ui) {
+
+        var findViewData = function (element){
+           return Em.View.views[$(element).find("> div").attr("id")].get("controller");
+        };
+
+        var elements = $("li", that.$()),
+        index = elements.index(ui.item);
+
+        if(index === -1) { return; }
+
+        var first = index === 0,
+        last = index === elements.size() - 1,
+        currentElement = $(ui.item),
+        currentData = findViewData(currentElement),
+        beforeElement = elements.get(index ? index - 1 : index),
+        beforeIndex = elements.index(beforeElement),
+        beforeData = findViewData(beforeElement),
+        afterElement = elements.get(elements.size() - 1 > index ? index + 1 : index),
+        afterIndex = elements.index(afterElement),
+        afterData = findViewData(afterElement),
+        current = currentData.get("model._data.order") || currentData.get("model.number"),
+        before = beforeData.get("model._data.order") || beforeData.get("model.number"),
+        after = afterData.get("model._data.order") || afterData.get("model.number");
+
+        if(first && last) {return;}
+        
+        if(first) {
+          // dragged it to the top
+          currentData.send("moved",(after || 1)/2);
+
+        } else if (last) {
+          // dragged to the bottom
+          currentData.send("moved",(before + 1));
+
+        }  else {
+          currentData.send("moved",(((after + before) || 1)/2));
+
+        }
       }
     })
     this._super();

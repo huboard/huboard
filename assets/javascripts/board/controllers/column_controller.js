@@ -16,7 +16,9 @@ var ColumnController = Ember.ObjectController.extend({
     var issues = this.get("controllers.index.issues").filter(function(i){
       return i.current_state.name === name;
 
-    })
+    }).sort(function (a, b){
+       return a._data.order - b._data.order;
+    });
     return issues;
   },
   issues: function(){

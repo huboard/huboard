@@ -1,0 +1,4 @@
+web: bundle exec shotgun
+memcache: memcached
+couchdb: couchdb
+

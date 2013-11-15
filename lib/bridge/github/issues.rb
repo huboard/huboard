@@ -127,12 +127,12 @@ class Huboard
         if !data
           r = /@huboard:(.*)/
           match = r.match(self.body || "")
-          return { } if match.nil?
+          return { order: self.number } if match.nil?
 
           begin
             return JSON.load(match[1])
           rescue
-            return {}
+            return { order: self.number }
           end
         else
           _data = embed_data
