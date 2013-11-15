@@ -20,9 +20,10 @@
     {{/each}}
 </div>
 {{#if current_state.is_last}}
+
 <div class="actions-close">
-  <button class="hb-button" {{action close this}}>Close</button>
-</div>
+  <button class="hb-button" {{action close this bubbles=false}}>Close</button>
+</div>                                                      
 {{/if}}
 
 <div class="card-states">

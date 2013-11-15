@@ -1,9 +1,13 @@
+var WrapperView = require("./card_wrapper_view");
+
 var CollectionView = Ember.CollectionView.extend({
   tagName:"ul",
   classNames: ["sortable"],
+  classNameBindings:["isHovering:ui-sortable-hover"],
   attributeBindings: ["style"],
   style: Ember.computed.alias("controller.style"),
   content: Ember.computed.alias("controller.issues"),
+  isHovering: false,
   didInsertElement: function(){
     var that = this;
     this.$().sortable({
@@ -14,6 +18,12 @@ var CollectionView = Ember.CollectionView.extend({
       receive: function(ev, ui) {
         that.get("controller").cardReceived(ui);
       },
+      over: function () {
+        that.set("isHovering", true);
+      },
+      out: function () {
+        that.set("isHovering", false);
+      },
       activate: function () {
         // that.get("controller").set("isHovering", true);
       },
@@ -22,8 +32,9 @@ var CollectionView = Ember.CollectionView.extend({
       }
     })
     this._super();
+
   },
-  itemViewClass: App.CardWrapperView 
+  itemViewClass: WrapperView
 })
 
 var ColumnView = Ember.ContainerView.extend({

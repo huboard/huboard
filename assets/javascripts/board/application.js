@@ -509,8 +509,8 @@ function serialize() {
         {
             continue;
         }
-        if(this[key].toString()[0] === "<" && this[key].toString()[this[key].toString().length - 1] === ">") {
-           result[key] = serialize.call(thik[key]);
+        if(this[key] && this[key].toString()[0] === "<" && this[key].toString()[this[key].toString().length - 1] === ">") {
+           result[key] = serialize.call(this[key]);
            
         }else {
           result[key] = this[key];
@@ -519,6 +519,7 @@ function serialize() {
     return result;
 
 }
+
 var Serializable = Ember.Mixin.create({
   serialize: function () {
     return serialize.call(this);
@@ -555,34 +556,8 @@ module.exports = Board;
 
 
 },{}],18:[function(require,module,exports){
-function serialize() {
-    var result = {};
-    for (var key in $.extend(true, {}, this))
-    {
-        // Skip these
-        if (key === 'isInstance' ||
-        key === 'isDestroyed' ||
-        key === 'isDestroying' ||
-        key === 'concatenatedProperties' ||
-        typeof this[key] === 'function')
-        {
-            continue;
-        }
-        if(this[key] && this[key].toString()[0] === "<" && this[key].toString()[this[key].toString().length - 1] === ">") {
-           result[key] = serialize.call(this[key]);
-           
-        }else {
-          result[key] = this[key];
-        }
-    }
-    return result;
 
-}
-var Serializable = Ember.Mixin.create({
-  serialize: function () {
-    return serialize.call(this);
-  }
-});
+var Serializable = require("../mixins/serializable");
 
 var Issue = Ember.Object.extend(Serializable,{
   saveNew: function () {
@@ -608,7 +583,7 @@ Issue.reopenClass({
 module.exports = Issue;
 
 
-},{}],19:[function(require,module,exports){
+},{"../mixins/serializable":15}],19:[function(require,module,exports){
 
 var Repo = Ember.Object.extend({
   userUrl :function () {
@@ -939,12 +914,14 @@ function program3(depth0,data) {
 
 function program5(depth0,data) {
   
-  var buffer = '', hashTypes, hashContexts;
-  data.buffer.push("\n<div class=\"actions-close\">\n  <button class=\"hb-button\" ");
-  hashTypes = {};
-  hashContexts = {};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "close", "", {hash:{},contexts:[depth0,depth0],types:["ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(">Close</button>\n</div>\n");
+  var buffer = '', hashContexts, hashTypes;
+  data.buffer.push("\n\n<div class=\"actions-close\">\n  <button class=\"hb-button\" ");
+  hashContexts = {'bubbles': depth0};
+  hashTypes = {'bubbles': "BOOLEAN"};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "close", "", {hash:{
+    'bubbles': (false)
+  },contexts:[depth0,depth0],types:["ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">Close</button>\n</div>                                                      \n");
   return buffer;
   }
 
@@ -54634,14 +54611,17 @@ var CardView = Ember.View.extend({
      var currentState = this.get("controller.model.current_state");
 
      return App.get("loggedIn") && currentState.is_last && this.get("controller.model.state") === "open";
-
-
   }.property("controller.model.current_state","controller.model.state"),
   stateClass: function(){
      return "hb-state-" + this.get("controller.model.state");
   }.property("controller.model.current_state", "controller.model.state"),
-  click: function(){
-     this.get("controller").send("fullscreen")
+  didInsertElement: function () {
+    this._super();
+    this.$("a, .clickable").on("click.hbcard", function (ev){ console.log(arguments); ev.stopPropagation(); } )
+  },
+  willDestroyElement : function () {
+    this.$("a, .clickable").off("click.hbcard");
+    return this._super();
   }
 
   
@@ -54687,7 +54667,11 @@ var CardWrapperView = Em.View.extend({
 
       return "";
 
-    }.property("App.memberFilter.mode", "App.dimFilters", "App.hideFilters", "App.searchFilter")
+    }.property("App.memberFilter.mode", "App.dimFilters", "App.hideFilters", "App.searchFilter"),
+    click: function(){
+      var view = Em.View.views[this.$().find("> div").attr("id")];
+      view.get("controller").send("fullscreen")
+    }                                                                      
 });
 
 module.exports = CardWrapperView;
@@ -54703,12 +54687,16 @@ var ColumnCountView = Ember.View.extend({
 module.exports = ColumnCountView;
 
 },{}],33:[function(require,module,exports){
+var WrapperView = require("./card_wrapper_view");
+
 var CollectionView = Ember.CollectionView.extend({
   tagName:"ul",
   classNames: ["sortable"],
+  classNameBindings:["isHovering:ui-sortable-hover"],
   attributeBindings: ["style"],
   style: Ember.computed.alias("controller.style"),
   content: Ember.computed.alias("controller.issues"),
+  isHovering: false,
   didInsertElement: function(){
     var that = this;
     this.$().sortable({
@@ -54719,6 +54707,12 @@ var CollectionView = Ember.CollectionView.extend({
       receive: function(ev, ui) {
         that.get("controller").cardReceived(ui);
       },
+      over: function () {
+        that.set("isHovering", true);
+      },
+      out: function () {
+        that.set("isHovering", false);
+      },
       activate: function () {
         // that.get("controller").set("isHovering", true);
       },
@@ -54727,8 +54721,9 @@ var CollectionView = Ember.CollectionView.extend({
       }
     })
     this._super();
+
   },
-  itemViewClass: App.CardWrapperView 
+  itemViewClass: WrapperView
 })
 
 var ColumnView = Ember.ContainerView.extend({
@@ -54766,7 +54761,7 @@ var ColumnView = Ember.ContainerView.extend({
 
 module.exports = ColumnView;
 
-},{}],34:[function(require,module,exports){
+},{"./card_wrapper_view":31}],34:[function(require,module,exports){
 
 
 var CssView = Ember.View.extend({
@@ -54782,6 +54777,7 @@ var CssView = Ember.View.extend({
 
     var buffer = this.buffer,
         that = this;
+
     _(["filter","card-label"]).each(function(name){
        _(that.get("content.other_labels")).each(function(l){
        

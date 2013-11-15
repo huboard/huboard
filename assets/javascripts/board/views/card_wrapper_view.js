@@ -34,7 +34,11 @@ var CardWrapperView = Em.View.extend({
 
       return "";
 
-    }.property("App.memberFilter.mode", "App.dimFilters", "App.hideFilters", "App.searchFilter")
+    }.property("App.memberFilter.mode", "App.dimFilters", "App.hideFilters", "App.searchFilter"),
+    click: function(){
+      var view = Em.View.views[this.$().find("> div").attr("id")];
+      view.get("controller").send("fullscreen")
+    }                                                                      
 });
 
 module.exports = CardWrapperView;

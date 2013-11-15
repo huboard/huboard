@@ -13,6 +13,7 @@ var CssView = Ember.View.extend({
 
     var buffer = this.buffer,
         that = this;
+
     _(["filter","card-label"]).each(function(name){
        _(that.get("content.other_labels")).each(function(l){
        
