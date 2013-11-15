@@ -2,28 +2,10 @@ var CardController = Ember.ObjectController.extend({
   needs:["issueEdit"],
   actions : {
     dragged: function (column) {
-      this.set("model.current_state", column)
-      // this is weird
-      var user = this.get("model.repo.owner.login"),
-          repo = this.get("model.repo.name"),
-          full_name = user + "/" + repo;
-
-      Ember.$.post("/api/" + full_name + "/movecard", {
-        index : column.index.toString(),
-        number : this.get("model.number")
-      })
+      return this.get("model").drag(column);
     },
     moved: function (index){
-      this.get("model._data.order", index);
-
-      var user = this.get("model.repo.owner.login"),
-          repo = this.get("model.repo.name"),
-          full_name = user + "/" + repo;
-
-      Ember.$.post("/api/" + full_name + "/reorderissue", {
-        number : this.get("model.number"),
-        index: index
-      })
+       return this.get("model").reorder(index);
     },
     fullscreen: function(){
       this.set("controllers.issueEdit.model",this.get("model"));

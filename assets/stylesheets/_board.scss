@@ -192,6 +192,7 @@
       position: absolute;
       width: 100%;
     button {
+      opacity: 0.3;
       position: absolute;
       top:0;
       left: 0;
@@ -200,6 +201,14 @@
       width: 100px;
       height: 30px;
       margin:auto;
+      @include transition(opacity 0.2s);
+    }
+  }
+  &:hover {
+    .actions-close {
+        button {
+        opacity: 1;
+      }
     }
   }
 
