@@ -1,0 +1,10 @@
+<ul class="nav nav-tabs">
+  {{#each pane in panes}}
+  <li {{bind-attr class="pane.selected:active"}}>
+    <a href="#" {{action 'select' pane bubbles=false}}>{{pane.title}}</a>
+  </li>
+  {{/each}}
+</ul>
+<div class="tab-content">
+  {{yield}}
+</div>

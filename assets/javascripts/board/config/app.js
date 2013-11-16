@@ -5,9 +5,13 @@ require('../vendor/lodash');
 require('../vendor/jquery');
 require('../vendor/handlebars');
 require('../vendor/ember');
+require("../vendor/autoresize");
 var color = require('../../vendor/jquery.color');
 require('../utilities/observers');
 var Spinner = require('../../spin');
+
+var Markdown = require("../vendor/marked")
+
 
 var App = Ember.Application.create({
   rootElement: "#application",
@@ -16,6 +20,8 @@ var App = Ember.Application.create({
     searchFilter: null,
     memberFilter: null
 });
+
+App.Markdown = Markdown;
 
 App.LoadingRoute = Ember.Route.extend({
   renderTemplate: function() {

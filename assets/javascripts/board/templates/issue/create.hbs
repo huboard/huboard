@@ -4,12 +4,31 @@
       <label>
         {{input value=title placeholder="Title" }}
       </label>
-      <label>
-        {{textarea value=body placeholder="Leave a comment"}}
-      </label>
+      {{hb-markdown-editor markdown=body}}
       <button {{bind-attr disabled=disabled}} class="hb-button">Submit issue</button>
     </div>
     <div class="flex-form-right">
+      <ul class="labels">
+        <h5>Column</h5>
+        {{#each label in columns}}
+            <li {{action "selectColumn" label bubbles=false}} class="card-label">
+              <span>{{label.text}}</span>
+            </li>
+        {{/each}}
+      </ul>
+      {{#hb-single-selector title="Column"}}
+        {{#each column in columns}}
+          {{hb-selector-item text=column.text }}
+        {{/each}}
+      {{/hb-single-selector}}
+      <ul class="labels">
+        <h5>Labels</h5>
+        {{#each label in otherLabels}}
+            <li {{action "selectLabel" label bubbles=false}} class="card-label">
+              <span>{{label.name}}</span>
+            </li>
+        {{/each}}
+      </ul>
     </div>
   </form>
 </div>

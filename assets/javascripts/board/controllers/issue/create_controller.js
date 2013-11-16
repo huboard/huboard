@@ -15,6 +15,8 @@ var IssuesCreateController = Ember.ObjectController.extend({
       });
     }
   },
+  otherLabelsBinding: "controllers.index.model.other_labels",
+  columnsBinding: "controllers.index.model.columns",
   disabled: function () {
       return this.get("processing") || !this.get("isValid");
   }.property("processing","isValid"),

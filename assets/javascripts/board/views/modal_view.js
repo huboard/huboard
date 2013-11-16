@@ -9,10 +9,12 @@ var ModalView = Em.View.extend({
     }.bind(this));
     
     this.$(".fullscreen-body").on('click.modal', function(event){
+       if($(event.target).is("[data-ember-action]")){return;}
        event.stopPropagation();    
     }.bind(this))
      
     this.$(".fullscreen-overlay, .close").on('click.modal', function(event){
+     if($(event.target).is("[data-ember-action]")){return;}
      this.get('controller').send('closeModal');        
     }.bind(this))
     

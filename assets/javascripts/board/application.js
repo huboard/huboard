@@ -24,6 +24,113 @@ module.exports = HbAvatarComponent;
 
 
 },{}],2:[function(require,module,exports){
+var Markdown = require("../vendor/marked");
+
+
+var HbMarkdownEditorComponent = Ember.Component.extend({
+  classNames: ["markdown-editor"],
+  init: function () {
+    this._super.apply(this, arguments);
+    var that = this;
+    Markdown(this.get('markdown') || "Nothing to preview",{gfm: true},function (err, content) {
+      that.set("preview",content);
+    });
+  },
+  markdown: "",
+  preview: "",
+  onMarkdownChange: function () {
+    var that = this;
+    return Ember.run.once(function () {
+       var markdown = that.get("markdown");
+
+       Markdown(markdown || "Nothing to preview",{gfm: true},function (err, content) {
+         that.set("preview",content);
+       });
+    });
+  }.observes("markdown")
+});
+
+module.exports = HbMarkdownEditorComponent;
+
+
+},{"../vendor/marked":35}],3:[function(require,module,exports){
+var HbPaneComponent = Ember.Component.extend({
+    classNameBindings: [":tab-pane","selected:active"],
+    didInsertElement: function() {
+      this.get('parentView').addPane(this);
+    },
+
+    selected: function() {
+      return this.get('parentView.selected') === this;
+    }.property('parentView.selected')
+});
+
+module.exports = HbPaneComponent;
+
+
+},{}],4:[function(require,module,exports){
+var HbSelectorItemComponent = Ember.Component.extend({
+    classNameBindings: [":card-label","selected:active"],
+    tagName: "li",
+    didInsertElement: function() {
+      this.get('parentView').addItem(this);
+      this.$().on("click", function () {
+        this.get("parentView").send("select", this);
+      }.bind(this))
+    },
+    selected:false
+});
+
+module.exports = HbSelectorItemComponent;
+
+
+},{}],5:[function(require,module,exports){
+var HbSingleSelectorComponent = Ember.Component.extend({
+  tagName: "ul",
+  init: function() {
+    this._super.apply(this, arguments);
+    this.items = [];
+  },
+  addItem: function (item){
+     this.items.pushObject(item);
+  },
+  actions: {
+    select: function (item) {
+      this.items.forEach(function (i) {
+        i.set("selected", false)
+      })
+      item.set("selected", true);
+    }
+  }
+});
+
+module.exports = HbSingleSelectorComponent;
+
+
+},{}],6:[function(require,module,exports){
+var HbTabsComponent = Ember.Component.extend({
+    classNames: ["tabbable"],
+    init: function() {
+      this._super.apply(this, arguments);
+      this.panes = [];
+    },
+
+    addPane: function(pane) {
+      if (this.get('panes.length') == 0) this.set("selected", pane);
+      this.panes.pushObject(pane);
+    },
+    actions: {
+      select: function(pane) {
+        this.set('selected', pane);
+      }
+    
+    }
+});
+
+module.exports = HbTabsComponent;
+
+
+},{}],7:[function(require,module,exports){
 // require other, dependencies here, ie:
 // require('./vendor/moment');
 
@@ -31,9 +138,13 @@ require('../vendor/lodash');
 require('../vendor/jquery');
 require('../vendor/handlebars');
 require('../vendor/ember');
+require("../vendor/autoresize");
 var color = require('../../vendor/jquery.color');
 require('../utilities/observers');
 var Spinner = require('../../spin');
+
+var Markdown = require("../vendor/marked")
+
 
 var App = Ember.Application.create({
   rootElement: "#application",
@@ -42,6 +153,8 @@ var App = Ember.Application.create({
     searchFilter: null,
     memberFilter: null
 });
+
+App.Markdown = Markdown;
 
 App.LoadingRoute = Ember.Route.extend({
   renderTemplate: function() {
@@ -107,7 +220,7 @@ App.deferReadiness();
 module.exports = App;
 
 
-},{"../../spin":40,"../../vendor/jquery.color":41,"../utilities/observers":24,"../vendor/ember":25,"../vendor/handlebars":26,"../vendor/jquery":27,"../vendor/lodash":28}],3:[function(require,module,exports){
+},{"../../spin":47,"../../vendor/jquery.color":48,"../utilities/observers":29,"../vendor/autoresize":30,"../vendor/ember":31,"../vendor/handlebars":32,"../vendor/jquery":33,"../vendor/lodash":34,"../vendor/marked":35}],8:[function(require,module,exports){
 var App = require('./app');
 
 App.Router.map(function() {
@@ -117,14 +230,14 @@ App.Router.map(function() {
 });
 
 
-},{"./app":2}],4:[function(require,module,exports){
+},{"./app":7}],9:[function(require,module,exports){
 var ApplicationController = Ember.ObjectController.extend({
   isSidebarOpen: false
 })
 
 module.exports = ApplicationController;
 
-},{}],5:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 var AssigneeController = Ember.ObjectController.extend({
   needs: ["index"],
   actions: {
@@ -176,7 +289,7 @@ var AssigneeController = Ember.ObjectController.extend({
 
 module.exports = AssigneeController;
 
-},{}],6:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 var CardController = Ember.ObjectController.extend({
   needs:["issueEdit"],
   actions : {
@@ -207,7 +320,7 @@ var CardController = Ember.ObjectController.extend({
 
 module.exports = CardController;
 
-},{}],7:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 var ColumnController = Ember.ObjectController.extend({
   actions: {
     archive: function (issue) {
@@ -252,7 +365,7 @@ var ColumnController = Ember.ObjectController.extend({
 
 module.exports = ColumnController;
 
-},{}],8:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 var ColumnCountController = Ember.ObjectController.extend({
   needs: ["index"],
   issuesCount: function(){
@@ -272,7 +385,7 @@ var ColumnCountController = Ember.ObjectController.extend({
 module.exports = ColumnCountController;
 
 
-},{}],9:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 var FiltersController = Ember.ObjectController.extend({
   needs: ["index"],
   milestonesBinding: "controllers.index.model.milestones",
@@ -385,7 +498,7 @@ var FiltersController = Ember.ObjectController.extend({
 
 module.exports = FiltersController;
 
-},{}],10:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 var IndexController = Ember.ObjectController.extend({
   needs: ["application"],
   isSidebarOpen: Ember.computed.alias("controllers.application.isSidebarOpen"),
@@ -397,7 +510,7 @@ var IndexController = Ember.ObjectController.extend({
 
 module.exports = IndexController;
 
-},{}],11:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 var IssuesCreateController = Ember.ObjectController.extend({
   needs: ["index"],
   actions: {
@@ -415,6 +528,8 @@ var IssuesCreateController = Ember.ObjectController.extend({
       });
     }
   },
+  otherLabelsBinding: "controllers.index.model.other_labels",
+  columnsBinding: "controllers.index.model.columns",
   disabled: function () {
       return this.get("processing") || !this.get("isValid");
   }.property("processing","isValid"),
@@ -427,13 +542,13 @@ var IssuesCreateController = Ember.ObjectController.extend({
 module.exports = IssuesCreateController;
 
 
-},{}],12:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 var IssuesEditController = Ember.ObjectController.extend();
 
 module.exports = IssuesEditController;
 
 
-},{}],13:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 var SearchController = Ember.Controller.extend({
   hideFilterBinding: "App.hideFilters",
   term: "",
@@ -448,7 +563,7 @@ var SearchController = Ember.Controller.extend({
 
 module.exports = SearchController;
 
-},{}],14:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 // This file is auto-generated by `ember build`.
 // You should not modify it.
 
@@ -457,6 +572,11 @@ require('./templates');
 
 
 App.HbAvatarComponent = require('./components/hb_avatar_component');
+App.HbMarkdownEditorComponent = require('./components/hb_markdown_editor_component');
+App.HbPaneComponent = require('./components/hb_pane_component');
+App.HbSelectorItemComponent = require('./components/hb_selector_item_component');
+App.HbSingleSelectorComponent = require('./components/hb_single_selector_component');
+App.HbTabsComponent = require('./components/hb_tabs_component');
 App.ApplicationController = require('./controllers/application_controller');
 App.AssigneeController = require('./controllers/assignee_controller');
 App.CardController = require('./controllers/card_controller');
@@ -492,7 +612,7 @@ require('./config/routes');
 module.exports = App;
 
 
-},{"./components/hb_avatar_component":1,"./config/app":2,"./config/routes":3,"./controllers/application_controller":4,"./controllers/assignee_controller":5,"./controllers/card_controller":6,"./controllers/column_controller":7,"./controllers/column_count_controller":8,"./controllers/filters_controller":9,"./controllers/index_controller":10,"./controllers/issue/create_controller":11,"./controllers/issue/edit_controller":12,"./controllers/search_controller":13,"./mixins/serializable":15,"./mixins/wip_limit":16,"./models/board":17,"./models/issue":18,"./models/repo":19,"./routes/application_route":20,"./routes/index_route":21,"./routes/issue_route":22,"./templates":23,"./views/assignee_filter_view":29,"./views/card_view":30,"./views/card_wrapper_view":31,"./views/column_count_view":32,"./views/column_view":33,"./views/css_view":34,"./views/filter_view":35,"./views/issue/create_view":36,"./views/issue/edit_view":37,"./views/modal_view":38,"./views/search_view":39}],15:[function(require,module,exports){
+},{"./components/hb_avatar_component":1,"./components/hb_markdown_editor_component":2,"./components/hb_pane_component":3,"./components/hb_selector_item_component":4,"./components/hb_single_selector_component":5,"./components/hb_tabs_component":6,"./config/app":7,"./config/routes":8,"./controllers/application_controller":9,"./controllers/assignee_controller":10,"./controllers/card_controller":11,"./controllers/column_controller":12,"./controllers/column_count_controller":13,"./controllers/filters_controller":14,"./controllers/index_controller":15,"./controllers/issue/create_controller":16,"./controllers/issue/edit_controller":17,"./controllers/search_controller":18,"./mixins/serializable":20,"./mixins/wip_limit":21,"./models/board":22,"./models/issue":23,"./models/repo":24,"./routes/application_route":25,"./routes/index_route":26,"./routes/issue_route":27,"./templates":28,"./views/assignee_filter_view":36,"./views/card_view":37,"./views/card_wrapper_view":38,"./views/column_count_view":39,"./views/column_view":40,"./views/css_view":41,"./views/filter_view":42,"./views/issue/create_view":43,"./views/issue/edit_view":44,"./views/modal_view":45,"./views/search_view":46}],20:[function(require,module,exports){
 function serialize() {
     var result = {};
     for (var key in $.extend(true, {}, this))
@@ -525,7 +645,7 @@ var Serializable = Ember.Mixin.create({
 
 module.exports = Serializable;
 
-},{}],16:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 var WipLimit = Ember.Mixin.create({
 
 });
@@ -533,7 +653,7 @@ var WipLimit = Ember.Mixin.create({
 module.exports = WipLimit;
 
 
-},{}],17:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 var Board = Ember.Object.extend({
 });
 
@@ -552,7 +672,7 @@ Board.reopenClass({
 module.exports = Board;
 
 
-},{}],18:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 
 var Serializable = require("../mixins/serializable");
 
@@ -637,7 +757,7 @@ Issue.reopenClass({
 module.exports = Issue;
 
 
-},{"../mixins/serializable":15}],19:[function(require,module,exports){
+},{"../mixins/serializable":20}],24:[function(require,module,exports){
 
 var Repo = Ember.Object.extend({
   userUrl :function () {
@@ -656,7 +776,7 @@ var Repo = Ember.Object.extend({
 
 module.exports = Repo;
 
-},{}],20:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 var ApplicationRoute = Ember.Route.extend({
   actions: {
     toggleSidebar: function(){
@@ -689,7 +809,7 @@ var ApplicationRoute = Ember.Route.extend({
 
 module.exports = ApplicationRoute;
 
-},{}],21:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 var CssView = require("../views/css_view");
 
 var IndexRoute = Ember.Route.extend({
@@ -747,7 +867,7 @@ var IndexRoute = Ember.Route.extend({
 
 module.exports = IndexRoute;
 
-},{"../views/css_view":34}],22:[function(require,module,exports){
+},{"../views/css_view":41}],27:[function(require,module,exports){
 var IssueRoute = Ember.Route.extend({
   model : function (params){
      debugger;
@@ -762,7 +882,7 @@ var IssueRoute = Ember.Route.extend({
 
 module.exports = IssueRoute;
 
-},{}],23:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 
 Ember.TEMPLATES['application'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
@@ -1348,8 +1468,66 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 Ember.TEMPLATES['issue/create'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, hashContexts, hashTypes, options, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
+  var buffer = '', stack1, stack2, hashContexts, hashTypes, options, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, self=this;
 
+function program1(depth0,data) {
+  
+  var buffer = '', hashContexts, hashTypes;
+  data.buffer.push("\n            <li ");
+  hashContexts = {'bubbles': depth0};
+  hashTypes = {'bubbles': "BOOLEAN"};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "selectColumn", "label", {hash:{
+    'bubbles': (false)
+  },contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" class=\"card-label\">\n              <span>");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "label.text", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("</span>\n            </li>\n        ");
+  return buffer;
+  }
+
+function program3(depth0,data) {
+  
+  var buffer = '', stack1, hashTypes, hashContexts;
+  data.buffer.push("\n        ");
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers.each.call(depth0, "column", "in", "columns", {hash:{},inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n      ");
+  return buffer;
+  }
+function program4(depth0,data) {
+  
+  var buffer = '', stack1, hashContexts, hashTypes, options;
+  data.buffer.push("\n          ");
+  hashContexts = {'text': depth0};
+  hashTypes = {'text': "ID"};
+  options = {hash:{
+    'text': ("column.text")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['hb-selector-item'] || depth0['hb-selector-item']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-selector-item", options))));
+  data.buffer.push("\n        ");
+  return buffer;
+  }
+
+function program6(depth0,data) {
+  
+  var buffer = '', hashContexts, hashTypes;
+  data.buffer.push("\n            <li ");
+  hashContexts = {'bubbles': depth0};
+  hashTypes = {'bubbles': "BOOLEAN"};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "selectLabel", "label", {hash:{
+    'bubbles': (false)
+  },contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" class=\"card-label\">\n              <span>");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "label.name", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("</span>\n            </li>\n        ");
+  return buffer;
+  }
 
   data.buffer.push("<div class=\"fullscreen-card\">\n  <form ");
   hashContexts = {'on': depth0};
@@ -1365,22 +1543,39 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
     'placeholder': ("Title")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
-  data.buffer.push("\n      </label>\n      <label>\n        ");
-  hashContexts = {'value': depth0,'placeholder': depth0};
-  hashTypes = {'value': "ID",'placeholder': "STRING"};
+  data.buffer.push("\n      </label>\n      ");
+  hashContexts = {'markdown': depth0};
+  hashTypes = {'markdown': "ID"};
   options = {hash:{
-    'value': ("body"),
-    'placeholder': ("Leave a comment")
+    'markdown': ("body")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
-  data.buffer.push(escapeExpression(((stack1 = helpers.textarea || depth0.textarea),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "textarea", options))));
-  data.buffer.push("\n      </label>\n      <button ");
+  data.buffer.push(escapeExpression(((stack1 = helpers['hb-markdown-editor'] || depth0['hb-markdown-editor']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-markdown-editor", options))));
+  data.buffer.push("\n      <button ");
   hashContexts = {'disabled': depth0};
   hashTypes = {'disabled': "ID"};
   options = {hash:{
     'disabled': ("disabled")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
-  data.buffer.push(" class=\"hb-button\">Submit issue</button>\n    </div>\n    <div class=\"flex-form-right\">\n    </div>\n  </form>\n</div>\n\n");
+  data.buffer.push(" class=\"hb-button\">Submit issue</button>\n    </div>\n    <div class=\"flex-form-right\">\n      <ul class=\"labels\">\n        <h5>Column</h5>\n        ");
+  hashTypes = {};
+  hashContexts = {};
+  stack2 = helpers.each.call(depth0, "label", "in", "columns", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+  data.buffer.push("\n      </ul>\n      ");
+  hashContexts = {'title': depth0};
+  hashTypes = {'title': "STRING"};
+  options = {hash:{
+    'title': ("Column")
+  },inverse:self.noop,fn:self.program(3, program3, data),contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  stack2 = ((stack1 = helpers['hb-single-selector'] || depth0['hb-single-selector']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-single-selector", options));
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+  data.buffer.push("\n      <ul class=\"labels\">\n        <h5>Labels</h5>\n        ");
+  hashTypes = {};
+  hashContexts = {};
+  stack2 = helpers.each.call(depth0, "label", "in", "otherLabels", {hash:{},inverse:self.noop,fn:self.program(6, program6, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+  data.buffer.push("\n      </ul>\n    </div>\n  </form>\n</div>\n\n");
   return buffer;
   
 });
@@ -1457,6 +1652,175 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   
 });
 
+Ember.TEMPLATES['components/hb-markdown-editor'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', stack1, options, hashTypes, hashContexts, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, self=this, functionType="function", blockHelperMissing=helpers.blockHelperMissing;
+
+function program1(depth0,data) {
+  
+  var buffer = '', stack1, stack2, hashContexts, hashTypes, options;
+  data.buffer.push("\n  ");
+  hashContexts = {'title': depth0};
+  hashTypes = {'title': "STRING"};
+  options = {hash:{
+    'title': ("Compose")
+  },inverse:self.noop,fn:self.program(2, program2, data),contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  stack2 = ((stack1 = helpers['hb-pane'] || depth0['hb-pane']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-pane", options));
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+  data.buffer.push("\n  ");
+  hashContexts = {'title': depth0};
+  hashTypes = {'title': "STRING"};
+  options = {hash:{
+    'title': ("Preview")
+  },inverse:self.noop,fn:self.program(4, program4, data),contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  stack2 = ((stack1 = helpers['hb-pane'] || depth0['hb-pane']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-pane", options));
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+  data.buffer.push("\n");
+  return buffer;
+  }
+function program2(depth0,data) {
+  
+  var buffer = '', stack1, hashContexts, hashTypes, options;
+  data.buffer.push("\n    <div class=\"markdown-composer\">\n      ");
+  hashContexts = {'autoresize': depth0,'value': depth0,'placeholder': depth0};
+  hashTypes = {'autoresize': "BOOLEAN",'value': "ID",'placeholder': "STRING"};
+  options = {hash:{
+    'autoresize': (true),
+    'value': ("markdown"),
+    'placeholder': ("Leave a comment")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.textarea || depth0.textarea),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "textarea", options))));
+  data.buffer.push("\n    </div>\n  ");
+  return buffer;
+  }
+
+function program4(depth0,data) {
+  
+  var buffer = '', stack1, hashContexts, hashTypes;
+  data.buffer.push("\n    <div class=\"markdown-preview\">\n      ");
+  hashContexts = {'unescaped': depth0};
+  hashTypes = {'unescaped': "STRING"};
+  stack1 = helpers._triageMustache.call(depth0, "preview", {hash:{
+    'unescaped': ("true")
+  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n    </div>\n  ");
+  return buffer;
+  }
+
+  options = {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  if (stack1 = helpers['hb-tabs']) { stack1 = stack1.call(depth0, options); }
+  else { stack1 = depth0['hb-tabs']; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  hashTypes = {};
+  hashContexts = {};
+  if (!helpers['hb-tabs']) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n\n\n");
+  return buffer;
+  
+});
+
+Ember.TEMPLATES['components/hb-pane'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', hashTypes, hashContexts, escapeExpression=this.escapeExpression;
+
+
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "yield", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n");
+  return buffer;
+  
+});
+
+Ember.TEMPLATES['components/hb-selector-item'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', hashTypes, hashContexts, escapeExpression=this.escapeExpression;
+
+
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "text", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n");
+  return buffer;
+  
+});
+
+Ember.TEMPLATES['components/hb-single-selector'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', stack1, hashTypes, hashContexts, escapeExpression=this.escapeExpression, self=this;
+
+function program1(depth0,data) {
+  
+  var buffer = '', hashTypes, hashContexts;
+  data.buffer.push("\n <h5> ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "title", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" </h5>\n");
+  return buffer;
+  }
+
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers['if'].call(depth0, "title", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "yield", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n");
+  return buffer;
+  
+});
+
+Ember.TEMPLATES['components/hb-tabs'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', stack1, hashTypes, hashContexts, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, self=this;
+
+function program1(depth0,data) {
+  
+  var buffer = '', stack1, hashContexts, hashTypes, options;
+  data.buffer.push("\n  <li ");
+  hashContexts = {'class': depth0};
+  hashTypes = {'class': "STRING"};
+  options = {hash:{
+    'class': ("pane.selected:active")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
+  data.buffer.push(">\n    <a href=\"#\" ");
+  hashContexts = {'bubbles': depth0};
+  hashTypes = {'bubbles': "BOOLEAN"};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "select", "pane", {hash:{
+    'bubbles': (false)
+  },contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "pane.title", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("</a>\n  </li>\n  ");
+  return buffer;
+  }
+
+  data.buffer.push("<ul class=\"nav nav-tabs\">\n  ");
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers.each.call(depth0, "pane", "in", "panes", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n</ul>\n<div class=\"tab-content\">\n  ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "yield", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n</div>\n");
+  return buffer;
+  
+});
+
 Ember.TEMPLATES['assignee/filter'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
@@ -1479,7 +1843,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
 
 
-},{}],24:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 Ember.debouncedObserver = function(func, key, time){
   return Em.observer(function(){
     Em.run.debounce(this, func, time)
@@ -1492,7 +1856,801 @@ Ember.throttledObserver = function(func, key, time){
   }, key)
 };
 
-},{}],25:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
+// Last commit: 0ba0d24 (2013-11-06 10:53:04 -0500)
+
+
+(function() {
+var metricsCalculationElement = null,
+    // A list of all of the style properties
+    // to copy over to our example element
+    layoutStyles = [
+      'maxWidth',
+      'maxHeight',
+      'paddingLeft',
+      'paddingRight',
+      'paddingTop',
+      'paddingBottom',
+      'borderLeftStyle',
+      'borderRightStyle',
+      'borderTopStyle',
+      'borderBottomStyle',
+      'borderLeftWidth',
+      'borderRightWidth',
+      'borderTopWidth',
+      'borderBottomWidth',
+      'fontFamily',
+      'fontSize',
+      'fontWeight',
+      'fontVariant',
+      'lineHeight',
+      'whiteSpace',
+      'letterSpacing',
+      'wordWrap',
+      'boxSizing',
+      'MozBoxSizing',
+      'textTransform',
+      'textRendering',
+      // Font feature settings
+      'webkitFontFeatureSettings',
+      'mozFontFeatureSettings',
+      'msFontFeatureSettings',
+      'oFontFeatureSettings',
+      'fontFeatureSettings'
+    ],
+    defaultBoxSizing;
+
+/**
+  Return the computed styles for a given element.
+
+  TODO: Cache the last used element's computed style
+        properties so they don't have to be fetched again.
+
+  @private
+ */
+function computedStylesFor(element) {
+  // Retrieve the computed style of the element
+  var styles;
+  if (document.defaultView && document.defaultView.getComputedStyle) {
+    styles = document.defaultView.getComputedStyle(element, null);
+  } else {
+    styles = element.currentStyle;
+  }
+
+  return styles;
+};
+
+/**
+  Detect the browser's default box sizing.
+  This should detect old IE quirks and then
+  provide the correct box model when detecting
+  per-element box-sizing.
+
+  @private
+ */
+var detectDefaultBoxSizing = function () {
+  var tester    = document.createElement('div'),
+      boxSizing;
+
+  document.body.appendChild(tester);
+  tester.style.cssText = 'width:24px; padding:10px; border:2px solid #000;' +
+                         'box-sizing:content-box; -moz-box-sizing:content-box;';
+
+  switch (tester.offsetWidth) {
+  case 24:
+    boxSizing = 'border-box';
+    break;
+  case 44:
+    boxSizing = 'padding-box';
+    break;
+  case 48:
+    boxSizing = 'content-box';
+    break;
+  }
+
+  document.body.removeChild(tester);
+  return boxSizing;
+};
+
+/**
+  @private
+  @return {String} The box sizing of the current element
+ */
+var boxSizingOf = function (element) {
+  // Detect the browser's default box sizing model
+  if (defaultBoxSizing == null) {
+    defaultBoxSizing = detectDefaultBoxSizing();
+  }
+
+  var styles = computedStylesFor(element);
+  return styles.boxSizing       ||
+         styles.webkitBoxSizing ||
+         styles.MozBoxSizing    ||
+         styles.msBoxSizing     ||
+         styles.oBoxSizing      ||
+         defaultBoxSizing;
+};
+
+/**
+  @private
+  @returns {Number|String} Returns a normalized margin so it's a number or 'auto'.
+ */
+var normalizeMargin = function (margin) {
+  if (margin !== 'auto') {
+    return parseInt(margin, 10);
+  }
+  return margin;
+};
+
+/**
+  Computes the layout of an element that matches
+  the inspector properties of the DOM element.
+
+  @method layoutOf
+  @for Ember.Metrics
+  @static
+  @param element {DOMELement} The element to compute the layout of.
+  @return {Object} Layout properties of the element
+ */
+function layoutOf(element) {
+  // Handle window
+  if ((window.Window && element instanceof Window) || // Standards
+      element === window) {                           // Safari 5.1
+    var dimensions = {
+          width:  element.innerWidth,
+          height: element.innerHeight
+        },
+        dimensionsWithChrome = {
+          width:  element.outerWidth,
+          height: element.outerHeight
+        };
+
+    // IE<8 doesn't support window.innerWidth / window.outerWidth
+
+    return {
+      width:     element.innerWidth,
+      height:    element.innerHeight,
+      boxSizing: null,
+      content: dimensions,
+      borders: dimensions,
+      margins: dimensionsWithChrome
+    };
+  }
+
+  // Handle document
+  if ((window.Document && element instanceof Document) || // Standards
+      element === document) {                             // old IE
+    var dimensions = {
+      width:  Math.max(
+        element.body.scrollWidth, element.documentElement.scrollWidth,
+        element.body.offsetWidth, element.documentElement.offsetWidth,
+        element.body.clientWidth, element.documentElement.clientWidth
+      ),
+      height: Math.max(
+        element.body.scrollHeight, element.documentElement.scrollHeight,
+        element.body.offsetHeight, element.documentElement.offsetHeight,
+        element.body.clientHeight, element.documentElement.clientHeight
+      )
+    };
+
+    // The document has no chrome
+    return {
+      width:    dimensions.width,
+      height:   dimensions.height,
+      boxSizing: null,
+      content: dimensions,
+      borders: dimensions,
+      margins: dimensions
+    };
+  }
+
+  var boxSizing = boxSizingOf(element),
+      content = {
+        width:  element.offsetWidth,
+        height: element.offsetHeight
+      },
+      styles = computedStylesFor(element),
+      layout = {
+        width:     null,
+        height:    null,
+        boxSizing: boxSizing,
+        content:   {},
+        padding:   {},
+        borders:   {},
+        margins:   {}
+      },
+      padding = {
+        top:    parseInt(styles.paddingTop,        10),
+        right:  parseInt(styles.paddingRight,      10),
+        bottom: parseInt(styles.paddingBottom,     10),
+        left:   parseInt(styles.paddingLeft,       10)
+      },
+      borders = {
+        top:    parseInt(styles.borderTopWidth,    10),
+        right:  parseInt(styles.borderRightWidth,  10),
+        bottom: parseInt(styles.borderBottomWidth, 10),
+        left:   parseInt(styles.borderLeftWidth,   10)
+      },
+      margins = {
+        top:    normalizeMargin(styles.marginTop),
+        right:  normalizeMargin(styles.marginRight),
+        bottom: normalizeMargin(styles.marginBottom),
+        left:   normalizeMargin(styles.marginLeft)
+      };
+
+  // Normalize the width and height so
+  // they refer to the content
+  content.width  -= borders.right + borders.left +
+                    padding.right + padding.left;
+  content.height -= borders.top + borders.bottom +
+                    padding.top + padding.bottom;
+  layout.content = content;
+
+  padding.width  = content.width +
+                   padding.left + padding.right;
+  padding.height = content.height +
+                   padding.top + padding.bottom;
+  layout.padding = padding;
+
+  borders.width  = padding.width +
+                   borders.left + borders.right;
+  borders.height = padding.height +
+                   borders.top + borders.bottom;
+  layout.borders = borders;
+
+  // Provide the "true" width and height
+  // of the box in terms of the current box model
+  switch (boxSizing) {
+  case 'border-box':
+    layout.width  = borders.width;
+    layout.height = borders.height;
+    break;
+  case 'padding-box':
+    layout.width  = padding.width;
+    layout.height = padding.height;
+    break;
+  default:
+    layout.width  = content.width;
+    layout.height = content.height;
+  }
+
+  if (margins.left !== 'auto' && margins.right !== 'auto') {
+    margins.width = borders.width +
+                    margins.left + margins.right;
+  } else {
+    margins.width = 'auto';
+  }
+
+  if (margins.top !== 'auto' && margins.bottom !== 'auto') {
+    margins.height = borders.height +
+                     margins.top + margins.bottom;
+  } else {
+    margins.height = 'auto';
+  }
+  layout.margins = margins;
+
+  return layout;
+};
+
+/**
+  Prepare for measuring the layout of a string.
+
+  @method prepareStringMeasurement
+  @for Ember.Metrics
+  @static
+  @param exampleElement {DOMElement}
+    A DOM element to use as a template for measuring a string in.
+  @param additionalStyles {Object}
+    Additional styles to apply to the calculation element.
+ */
+function prepareStringMeasurement(exampleElement, additionalStyles) {
+  var element = metricsCalculationElement;
+
+  if (additionalStyles == null) {
+    additionalStyles = {};
+  }
+
+  if (metricsCalculationElement == null) {
+    var parent = document.createElement('div');
+    parent.style.cssText = "position:absolute; left:-10010px; top:-10px;" +
+                           "width:10000px; height:0px; overflow:hidden;" +
+                           "visibility:hidden;";
+
+    element = metricsCalculationElement = document.createElement('div');
+
+    parent.appendChild(metricsCalculationElement);
+    document.body.insertBefore(parent, null);
+  }
+
+  // Retrieve the computed style of the element
+  var styles = computedStylesFor(exampleElement);
+
+  // Iterate through the styles that we care about for layout
+  // and apply them to the element
+  for (var i = 0, len = layoutStyles.length; i < len; i++) {
+    var style = layoutStyles[i],
+        value = styles[style];
+    element.style[style] = value;
+  }
+
+  // Explicitly set the `font` property for Mozilla
+  var font = "";
+  if (styles.font === "") {
+    if (styles.fontStyle)   font += styles.fontStyle   + " ";
+    if (styles.fontVariant) font += styles.fontVariant + " ";
+    if (styles.fontWeight)  font += styles.fontWeight  + " ";
+    if (styles.fontSize)    font += styles.fontSize    + " ";
+    else                    font += "10px";
+    if (styles.lineHeight)  font += "/" + styles.lineHeight;
+
+    font += " ";
+    if (styles.fontFamily)  font += styles.fontFamily;
+    else                    font += "sans-serif";
+
+    element.style.font = font;
+  }
+
+  Ember.mixin(element.style, {
+    position: "absolute",
+    top:    "0px",
+    right:  "auto",
+    bottom: "auto",
+    left:   "0px",
+    width:  "auto",
+    height: "auto"
+  }, additionalStyles);
+};
+
+/**
+  Cleanup properties used by `measureString`
+  setup in `prepareStringMeasurement`.
+
+  @for Ember.Metrics
+  @static
+  @method teardownStringMeasurement
+ */
+function teardownStringMeasurement() {
+  // Remove any leftover styling from string measurements
+  if (metricsCalculationElement) {
+    metricsCalculationElement.innerHTML = "";
+    metricsCalculationElement.className = "";
+    metricsCalculationElement.setAttribute('style', '');
+  }
+};
+
+/**
+  Measures a string given the styles applied
+  when setting up string measurements.
+
+  @for Ember.Metrics
+  @static
+  @method measureString
+  @param string {String} The string to measure
+  @param ignoreEscape {Boolean} Whether the string should be escaped.
+  @return {Object} The layout of the string passed in.
+ */
+function measureString(string, ignoreEscape) {
+  var element = metricsCalculationElement;
+
+  if (ignoreEscape) {
+    element.innerHTML = string;
+
+  // Escape the string by entering it as
+  // a text node to the DOM element
+  } else if (Ember.typeOf(element.innerText) !== "undefined") {
+    element.innerText = string;
+  } else {
+    element.textContent = string;
+  }
+
+  // Trigger a repaint so the height and width are correct
+  // Webkit / Blink needs this to trigger a reflow
+  element.style.overflow = 'visible';
+  element.style.overflow = 'hidden';
+
+  return layoutOf(element);
+};
+
+Ember.Metrics = {
+  prepareStringMeasurement:  prepareStringMeasurement,
+  teardownStringMeasurement: teardownStringMeasurement,
+  measureString:             measureString,
+  layoutOf:                  layoutOf
+};
+
+})();
+
+
+
+(function() {
+
+})();
+
+
+
+(function() {
+/**
+  This mixin provides common functionality for automatically
+  resizing view depending on the contents of the view. To
+  make your view resize, you need to set the `autoresize`
+  property to `true`, and let the mixin know whether it
+  can resize the height of width.
+
+  In addition, `autoResizeText` is a required property for
+  this mixin. It is already provided for `Em.TextField` and
+  `Em.TextArea`.
+
+  @class AutoResize
+  @namespace Ember
+  @extends Ember.Mixin
+  @since Ember 1.0.0-rc3
+ */
+Ember.AutoResize = Ember.Mixin.create(/** @scope Ember.AutoResize.prototype */{
+
+  /**
+    Add `ember-auto-resize` so additional
+    styling can be applied indicating that
+    the text field will automatically resize.
+
+    @property classNameBindings
+   */
+  classNameBindings: ['autoresize:ember-auto-resize'],
+
+  /**
+    Whether the view using this mixin should
+    autoresize it's contents. To enable autoresizing
+    using the view's default resizing, set
+    the attribute in your template.
+
+    ```handlebars
+    {{view Ember.TextField autoresize=true}}
+    ```
+
+    @property autoresize
+    @type Boolean
+    @default false
+   */
+  autoresize: false,
+
+  /**
+    When the auto resize mixin is activated,
+    trigger an initial measurement, which
+    should layout the text fields properly.
+
+    @private
+   */
+  init: function () {
+    this._super();
+    if (this.get('autoresize')) {
+      this.scheduleMeasurement();
+    }
+  },
+
+  /**
+    The current dimensions of the view being
+    resized in terms of an object hash that
+    includes a `width` and `height` property.
+
+    @property dimensions
+    @default null
+    @type Object
+   */
+  dimensions: null,
+
+  /**
+    Whether the auto resize mixin should resize
+    the width of this view.
+
+    @property shouldResizeWidth
+    @default false
+    @type Boolean
+   */
+  shouldResizeWidth: false,
+
+  /**
+    Whether the auto resize mixin should resize
+    the height of this view.
+
+    @property shouldResizeHeight
+    @default false
+    @type Boolean
+   */
+  shouldResizeHeight: false,
+
+  /**
+    If set, this property will dictate how much
+    the view is allowed to resize horizontally
+    until it either falls back to scrolling or
+    resizing vertically.
+
+    @property maxWidth
+    @default null
+    @type Number
+   */
+  maxWidth: null,
+
+  /**
+    If set, this property dictates how much
+    the view is allowed to resize vertically.
+    If this is not set and the view is allowed
+    to resize vertically, it will do so infinitely.
+
+    @property maxHeight
+    @default null
+    @type Number
+   */
+  maxHeight: null,
+
+  /**
+    A required property that should alias the
+    property that should trigger recalculating
+    the dimensions of the view.
+
+    @property autoResizeText
+    @required
+    @type String
+   */
+  autoResizeText: Ember.required(),
+
+  /**
+    Whether the autoResizeText has been sanitized
+    and should be treated as HTML.
+
+    @property ignoreEscape
+    @default false
+    @type Boolean
+   */
+  ignoreEscape: false,
+
+  /**
+    Whether whitespace should be treated as significant
+    contrary to any styles on the view.
+
+    @property significantWhitespace
+    @default false
+    @type Boolean
+   */
+  significantWhitespace: false,
+
+  /**
+    Schedule measuring the view's size.
+    This happens automatically when the
+    `autoResizeText` property changes.
+
+    @method scheduleMeasurement
+   */
+  scheduleMeasurement: function () {
+    if (this.get('autoresize')) {
+      Ember.run.once(this, 'measureSize');
+    }
+  }.observes('autoResizeText'),
+
+  /**
+    Measures the size of the text of the element.
+
+    @method measureSize
+   */
+  measureSize: function () {
+    var text = this.get('autoResizeText'),
+        size;
+
+    if (!Ember.isEmpty(text) && !this.get('isDestroying')) {
+      // Provide extra styles that will restrict
+      // width / height growth
+      var styles  = {},
+          element = this.$()[0];
+
+      if (this.get('shouldResizeWidth')) {
+        if (this.get('maxWidth') != null) {
+          styles.maxWidth = this.get('maxWidth') + "px";
+        }
+      } else {
+        styles.maxWidth = Ember.Metrics.layoutOf(element).width + "px";
+      }
+
+      if (this.get('shouldResizeHeight')) {
+        if (this.get('maxHeight') != null) {
+          styles.maxHeight = this.get('maxHeight') + "px";
+        }
+      } else {
+        styles.maxHeight = Ember.Metrics.layoutOf(element).height + "px";
+      }
+
+      // Force white-space to pre-wrap to make
+      // whitespace significant
+      if (this.get('significantWhitespace')) {
+        styles.whiteSpace = 'pre-wrap';
+      }
+
+      Ember.Metrics.prepareStringMeasurement(element, styles);
+      size = Ember.Metrics.measureString(text, this.get('ignoreEscape'));
+      Ember.Metrics.teardownStringMeasurement();
+    } else {
+      size = { width: 0, height: 0 };
+    }
+
+    this.set('measuredSize', size);
+  },
+
+  /**
+    Alter the `dimensions` property of the
+    view to conform to the measured size of
+    the view.
+
+    @method measuredSizeDidChange
+   */
+  measuredSizeDidChange: function () {
+    var size      = this.get('measuredSize'),
+        maxWidth  = this.get('maxWidth'),
+        maxHeight = this.get('maxHeight'),
+        layoutDidChange = false,
+        dimensions = {};
+
+    if (this.get('shouldResizeWidth')) {
+      // Account for off-by-one error in FireFox
+      // (specifically, input elements have 1px
+      //  of scroll when this isn't applied)
+      // TODO: sniff for this bug and fix it!
+      size.width += 1;
+
+      if (maxWidth != null &&
+          size.width > maxWidth) {
+        dimensions.width = maxWidth;
+      } else {
+        dimensions.width = size.width;
+      }
+      layoutDidChange = true;
+    }
+
+    if (this.get('shouldResizeHeight')) {
+      if (maxHeight != null &&
+          size.height > maxHeight) {
+        dimensions.height = maxHeight;
+      } else {
+        dimensions.height = size.height;
+      }
+      layoutDidChange = true;
+    }
+
+    this.set('dimensions', dimensions);
+
+    if (layoutDidChange) {
+      Ember.run.scheduleOnce('render', this, this.dimensionsDidChange);
+    }
+  }.observes('measuredSize'),
+
+  /**
+    Retiles the view at the end of the render queue.
+    @method dimensionsDidChange
+   */
+  dimensionsDidChange: function () {
+    var dimensions = this.get('dimensions'),
+        styles = {};
+
+    for (var key in dimensions) {
+      if (dimensions.hasOwnProperty(key) &&
+          key != null) {
+        styles[key] = dimensions[key] + 'px';
+      }
+    }
+
+    var $element = this.$();
+    if ($element) {
+      $element.css(styles);
+    }
+  }
+
+});
+
+
+/**
+  @namespace Ember
+  @class TextField
+ */
+Ember.TextField.reopen(Ember.AutoResize, /** @scope Ember.TextField.prototype */{
+
+  /**
+    By default, text fields only
+    resize their width.
+
+    @property shouldResizeWidth
+    @default true
+    @type Boolean
+   */
+  shouldResizeWidth: true,
+
+  /**
+    Whitespace should be treated as significant
+    for text fields.
+
+    @property significantWhitespace
+    @default true
+    @type Boolean
+   */
+  significantWhitespace: true,
+
+  /**
+    This provides a single character
+    so users can click into an empty
+    text field without it being too small
+
+    @property autoResizeText
+    @type String
+   */
+  autoResizeText: function () {
+    var value = this.get('value');
+    return Ember.isEmpty(value) ? '.' : value;
+  }.property('value')
+
+});
+
+/**
+  @namespace Ember
+  @class TextArea
+ */
+Ember.TextArea.reopen(Ember.AutoResize, /** @scope Ember.TextArea.prototype */{
+
+  /**
+    By default, textareas only resize
+    their height.
+
+    @property shouldResizeHeight
+    @type Boolean
+   */
+  shouldResizeHeight: true,
+
+  /**
+    Whitespace should be treated as significant
+    for text areas.
+
+    @property significantWhitespace
+    @default true
+    @type Boolean
+   */
+  significantWhitespace: true,
+
+  /**
+    Optimistically resize the height
+    of the textarea so when users reach
+    the end of a line, they will be
+    presented with space to begin typing.
+
+    @property autoResizeText
+    @type String
+   */
+  autoResizeText: function () {
+    var value = this.get('value');
+    if (Ember.isNone(value)) {
+      value = '';
+    }
+    return value + '@';
+  }.property('value')
+
+});
+
+})();
+
+
+
+(function() {
+
+})();
+
+
+
+(function() {
+/**
+  Ember AutoResize
+
+  @module ember
+  @submodule ember-autoresize
+  @requires ember-views
+ */
+
+})();
+
+
+},{}],31:[function(require,module,exports){
 // Version: v1.0.0
 // Last commit: e2ea0cf (2013-08-31 23:47:39 -0700)
 
@@ -37964,7 +39122,7 @@ Ember.State = generateRemovedClass("Ember.State");
 
 })();
 
-},{}],26:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 /*
 
 Copyright (C) 2011 by Yehuda Katz
@@ -38328,7 +39486,7 @@ Handlebars.template = Handlebars.VM.template;
 })(Handlebars);
 ;
 
-},{}],27:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v1.9.1
  * http://jquery.com/
@@ -47926,7 +49084,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 }
 
 })( window );
-},{}],28:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};/**
  * @license
  * Lo-Dash 2.2.1 (Custom Build) <http://lodash.com/>
@@ -54637,7 +55795,1176 @@ var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? 
   }
 }.call(this));
 
-},{}],29:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
+var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};/**
+ * marked - a markdown parser
+ * Copyright (c) 2011-2013, Christopher Jeffrey. (MIT Licensed)
+ * https://github.com/chjj/marked
+ */
+
+;(function() {
+
+/**
+ * Block-Level Grammar
+ */
+
+var block = {
+  newline: /^\n+/,
+  code: /^( {4}[^\n]+\n*)+/,
+  fences: noop,
+  hr: /^( *[-*_]){3,} *(?:\n+|$)/,
+  heading: /^ *(#{1,6}) *([^\n]+?) *#* *(?:\n+|$)/,
+  nptable: noop,
+  lheading: /^([^\n]+)\n *(=|-){2,} *(?:\n+|$)/,
+  blockquote: /^( *>[^\n]+(\n[^\n]+)*\n*)+/,
+  list: /^( *)(bull) [\s\S]+?(?:hr|\n{2,}(?! )(?!\1bull )\n*|\s*$)/,
+  html: /^ *(?:comment|closed|closing) *(?:\n{2,}|\s*$)/,
+  def: /^ *\[([^\]]+)\]: *<?([^\s>]+)>?(?: +["(]([^\n]+)[")])? *(?:\n+|$)/,
+  table: noop,
+  paragraph: /^((?:[^\n]+\n?(?!hr|heading|lheading|blockquote|tag|def))+)\n*/,
+  text: /^[^\n]+/
+};
+
+block.bullet = /(?:[*+-]|\d+\.)/;
+block.item = /^( *)(bull) [^\n]*(?:\n(?!\1bull )[^\n]*)*/;
+block.item = replace(block.item, 'gm')
+  (/bull/g, block.bullet)
+  ();
+
+block.list = replace(block.list)
+  (/bull/g, block.bullet)
+  ('hr', /\n+(?=(?: *[-*_]){3,} *(?:\n+|$))/)
+  ();
+
+block._tag = '(?!(?:'
+  + 'a|em|strong|small|s|cite|q|dfn|abbr|data|time|code'
+  + '|var|samp|kbd|sub|sup|i|b|u|mark|ruby|rt|rp|bdi|bdo'
+  + '|span|br|wbr|ins|del|img)\\b)\\w+(?!:/|@)\\b';
+
+block.html = replace(block.html)
+  ('comment', /<!--[\s\S]*?-->/)
+  ('closed', /<(tag)[\s\S]+?<\/\1>/)
+  ('closing', /<tag(?:"[^"]*"|'[^']*'|[^'">])*?>/)
+  (/tag/g, block._tag)
+  ();
+
+block.paragraph = replace(block.paragraph)
+  ('hr', block.hr)
+  ('heading', block.heading)
+  ('lheading', block.lheading)
+  ('blockquote', block.blockquote)
+  ('tag', '<' + block._tag)
+  ('def', block.def)
+  ();
+
+/**
+ * Normal Block Grammar
+ */
+
+block.normal = merge({}, block);
+
+/**
+ * GFM Block Grammar
+ */
+
+block.gfm = merge({}, block.normal, {
+  fences: /^ *(`{3,}|~{3,}) *(\S+)? *\n([\s\S]+?)\s*\1 *(?:\n+|$)/,
+  paragraph: /^/
+});
+
+block.gfm.paragraph = replace(block.paragraph)
+  ('(?!', '(?!'
+    + block.gfm.fences.source.replace('\\1', '\\2') + '|'
+    + block.list.source.replace('\\1', '\\3') + '|')
+  ();
+
+/**
+ * GFM + Tables Block Grammar
+ */
+
+block.tables = merge({}, block.gfm, {
+  nptable: /^ *(\S.*\|.*)\n *([-:]+ *\|[-| :]*)\n((?:.*\|.*(?:\n|$))*)\n*/,
+  table: /^ *\|(.+)\n *\|( *[-:]+[-| :]*)\n((?: *\|.*(?:\n|$))*)\n*/
+});
+
+/**
+ * Block Lexer
+ */
+
+function Lexer(options) {
+  this.tokens = [];
+  this.tokens.links = {};
+  this.options = options || marked.defaults;
+  this.rules = block.normal;
+
+  if (this.options.gfm) {
+    if (this.options.tables) {
+      this.rules = block.tables;
+    } else {
+      this.rules = block.gfm;
+    }
+  }
+}
+
+/**
+ * Expose Block Rules
+ */
+
+Lexer.rules = block;
+
+/**
+ * Static Lex Method
+ */
+
+Lexer.lex = function(src, options) {
+  var lexer = new Lexer(options);
+  return lexer.lex(src);
+};
+
+/**
+ * Preprocessing
+ */
+
+Lexer.prototype.lex = function(src) {
+  src = src
+    .replace(/\r\n|\r/g, '\n')
+    .replace(/\t/g, '    ')
+    .replace(/\u00a0/g, ' ')
+    .replace(/\u2424/g, '\n');
+
+  return this.token(src, true);
+};
+
+/**
+ * Lexing
+ */
+
+Lexer.prototype.token = function(src, top) {
+  var src = src.replace(/^ +$/gm, '')
+    , next
+    , loose
+    , cap
+    , bull
+    , b
+    , item
+    , space
+    , i
+    , l;
+
+  while (src) {
+    // newline
+    if (cap = this.rules.newline.exec(src)) {
+      src = src.substring(cap[0].length);
+      if (cap[0].length > 1) {
+        this.tokens.push({
+          type: 'space'
+        });
+      }
+    }
+
+    // code
+    if (cap = this.rules.code.exec(src)) {
+      src = src.substring(cap[0].length);
+      cap = cap[0].replace(/^ {4}/gm, '');
+      this.tokens.push({
+        type: 'code',
+        text: !this.options.pedantic
+          ? cap.replace(/\n+$/, '')
+          : cap
+      });
+      continue;
+    }
+
+    // fences (gfm)
+    if (cap = this.rules.fences.exec(src)) {
+      src = src.substring(cap[0].length);
+      this.tokens.push({
+        type: 'code',
+        lang: cap[2],
+        text: cap[3]
+      });
+      continue;
+    }
+
+    // heading
+    if (cap = this.rules.heading.exec(src)) {
+      src = src.substring(cap[0].length);
+      this.tokens.push({
+        type: 'heading',
+        depth: cap[1].length,
+        text: cap[2]
+      });
+      continue;
+    }
+
+    // table no leading pipe (gfm)
+    if (top && (cap = this.rules.nptable.exec(src))) {
+      src = src.substring(cap[0].length);
+
+      item = {
+        type: 'table',
+        header: cap[1].replace(/^ *| *\| *$/g, '').split(/ *\| */),
+        align: cap[2].replace(/^ *|\| *$/g, '').split(/ *\| */),
+        cells: cap[3].replace(/\n$/, '').split('\n')
+      };
+
+      for (i = 0; i < item.align.length; i++) {
+        if (/^ *-+: *$/.test(item.align[i])) {
+          item.align[i] = 'right';
+        } else if (/^ *:-+: *$/.test(item.align[i])) {
+          item.align[i] = 'center';
+        } else if (/^ *:-+ *$/.test(item.align[i])) {
+          item.align[i] = 'left';
+        } else {
+          item.align[i] = null;
+        }
+      }
+
+      for (i = 0; i < item.cells.length; i++) {
+        item.cells[i] = item.cells[i].split(/ *\| */);
+      }
+
+      this.tokens.push(item);
+
+      continue;
+    }
+
+    // lheading
+    if (cap = this.rules.lheading.exec(src)) {
+      src = src.substring(cap[0].length);
+      this.tokens.push({
+        type: 'heading',
+        depth: cap[2] === '=' ? 1 : 2,
+        text: cap[1]
+      });
+      continue;
+    }
+
+    // hr
+    if (cap = this.rules.hr.exec(src)) {
+      src = src.substring(cap[0].length);
+      this.tokens.push({
+        type: 'hr'
+      });
+      continue;
+    }
+
+    // blockquote
+    if (cap = this.rules.blockquote.exec(src)) {
+      src = src.substring(cap[0].length);
+
+      this.tokens.push({
+        type: 'blockquote_start'
+      });
+
+      cap = cap[0].replace(/^ *> ?/gm, '');
+
+      // Pass `top` to keep the current
+      // "toplevel" state. This is exactly
+      // how markdown.pl works.
+      this.token(cap, top);
+
+      this.tokens.push({
+        type: 'blockquote_end'
+      });
+
+      continue;
+    }
+
+    // list
+    if (cap = this.rules.list.exec(src)) {
+      src = src.substring(cap[0].length);
+      bull = cap[2];
+
+      this.tokens.push({
+        type: 'list_start',
+        ordered: bull.length > 1
+      });
+
+      // Get each top-level item.
+      cap = cap[0].match(this.rules.item);
+
+      next = false;
+      l = cap.length;
+      i = 0;
+
+      for (; i < l; i++) {
+        item = cap[i];
+
+        // Remove the list item's bullet
+        // so it is seen as the next token.
+        space = item.length;
+        item = item.replace(/^ *([*+-]|\d+\.) +/, '');
+
+        // Outdent whatever the
+        // list item contains. Hacky.
+        if (~item.indexOf('\n ')) {
+          space -= item.length;
+          item = !this.options.pedantic
+            ? item.replace(new RegExp('^ {1,' + space + '}', 'gm'), '')
+            : item.replace(/^ {1,4}/gm, '');
+        }
+
+        // Determine whether the next list item belongs here.
+        // Backpedal if it does not belong in this list.
+        if (this.options.smartLists && i !== l - 1) {
+          b = block.bullet.exec(cap[i + 1])[0];
+          if (bull !== b && !(bull.length > 1 && b.length > 1)) {
+            src = cap.slice(i + 1).join('\n') + src;
+            i = l - 1;
+          }
+        }
+
+        // Determine whether item is loose or not.
+        // Use: /(^|\n)(?! )[^\n]+\n\n(?!\s*$)/
+        // for discount behavior.
+        loose = next || /\n\n(?!\s*$)/.test(item);
+        if (i !== l - 1) {
+          next = item.charAt(item.length - 1) === '\n';
+          if (!loose) loose = next;
+        }
+
+        this.tokens.push({
+          type: loose
+            ? 'loose_item_start'
+            : 'list_item_start'
+        });
+
+        // Recurse.
+        this.token(item, false);
+
+        this.tokens.push({
+          type: 'list_item_end'
+        });
+      }
+
+      this.tokens.push({
+        type: 'list_end'
+      });
+
+      continue;
+    }
+
+    // html
+    if (cap = this.rules.html.exec(src)) {
+      src = src.substring(cap[0].length);
+      this.tokens.push({
+        type: this.options.sanitize
+          ? 'paragraph'
+          : 'html',
+        pre: cap[1] === 'pre' || cap[1] === 'script' || cap[1] === 'style',
+        text: cap[0]
+      });
+      continue;
+    }
+
+    // def
+    if (top && (cap = this.rules.def.exec(src))) {
+      src = src.substring(cap[0].length);
+      this.tokens.links[cap[1].toLowerCase()] = {
+        href: cap[2],
+        title: cap[3]
+      };
+      continue;
+    }
+
+    // table (gfm)
+    if (top && (cap = this.rules.table.exec(src))) {
+      src = src.substring(cap[0].length);
+
+      item = {
+        type: 'table',
+        header: cap[1].replace(/^ *| *\| *$/g, '').split(/ *\| */),
+        align: cap[2].replace(/^ *|\| *$/g, '').split(/ *\| */),
+        cells: cap[3].replace(/(?: *\| *)?\n$/, '').split('\n')
+      };
+
+      for (i = 0; i < item.align.length; i++) {
+        if (/^ *-+: *$/.test(item.align[i])) {
+          item.align[i] = 'right';
+        } else if (/^ *:-+: *$/.test(item.align[i])) {
+          item.align[i] = 'center';
+        } else if (/^ *:-+ *$/.test(item.align[i])) {
+          item.align[i] = 'left';
+        } else {
+          item.align[i] = null;
+        }
+      }
+
+      for (i = 0; i < item.cells.length; i++) {
+        item.cells[i] = item.cells[i]
+          .replace(/^ *\| *| *\| *$/g, '')
+          .split(/ *\| */);
+      }
+
+      this.tokens.push(item);
+
+      continue;
+    }
+
+    // top-level paragraph
+    if (top && (cap = this.rules.paragraph.exec(src))) {
+      src = src.substring(cap[0].length);
+      this.tokens.push({
+        type: 'paragraph',
+        text: cap[1].charAt(cap[1].length - 1) === '\n'
+          ? cap[1].slice(0, -1)
+          : cap[1]
+      });
+      continue;
+    }
+
+    // text
+    if (cap = this.rules.text.exec(src)) {
+      // Top-level should never reach here.
+      src = src.substring(cap[0].length);
+      this.tokens.push({
+        type: 'text',
+        text: cap[0]
+      });
+      continue;
+    }
+
+    if (src) {
+      throw new
+        Error('Infinite loop on byte: ' + src.charCodeAt(0));
+    }
+  }
+
+  return this.tokens;
+};
+
+/**
+ * Inline-Level Grammar
+ */
+
+var inline = {
+  escape: /^\\([\\`*{}\[\]()#+\-.!_>])/,
+  autolink: /^<([^ >]+(@|:\/)[^ >]+)>/,
+  url: noop,
+  tag: /^<!--[\s\S]*?-->|^<\/?\w+(?:"[^"]*"|'[^']*'|[^'">])*?>/,
+  link: /^!?\[(inside)\]\(href\)/,
+  reflink: /^!?\[(inside)\]\s*\[([^\]]*)\]/,
+  nolink: /^!?\[((?:\[[^\]]*\]|[^\[\]])*)\]/,
+  strong: /^__([\s\S]+?)__(?!_)|^\*\*([\s\S]+?)\*\*(?!\*)/,
+  em: /^\b_((?:__|[\s\S])+?)_\b|^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,
+  code: /^(`+)\s*([\s\S]*?[^`])\s*\1(?!`)/,
+  br: /^ {2,}\n(?!\s*$)/,
+  del: noop,
+  text: /^[\s\S]+?(?=[\\<!\[_*`]| {2,}\n|$)/
+};
+
+inline._inside = /(?:\[[^\]]*\]|[^\[\]]|\](?=[^\[]*\]))*/;
+inline._href = /\s*<?([\s\S]*?)>?(?:\s+['"]([\s\S]*?)['"])?\s*/;
+
+inline.link = replace(inline.link)
+  ('inside', inline._inside)
+  ('href', inline._href)
+  ();
+
+inline.reflink = replace(inline.reflink)
+  ('inside', inline._inside)
+  ();
+
+/**
+ * Normal Inline Grammar
+ */
+
+inline.normal = merge({}, inline);
+
+/**
+ * Pedantic Inline Grammar
+ */
+
+inline.pedantic = merge({}, inline.normal, {
+  strong: /^__(?=\S)([\s\S]*?\S)__(?!_)|^\*\*(?=\S)([\s\S]*?\S)\*\*(?!\*)/,
+  em: /^_(?=\S)([\s\S]*?\S)_(?!_)|^\*(?=\S)([\s\S]*?\S)\*(?!\*)/
+});
+
+/**
+ * GFM Inline Grammar
+ */
+
+inline.gfm = merge({}, inline.normal, {
+  escape: replace(inline.escape)('])', '~|])')(),
+  url: /^(https?:\/\/[^\s<]+[^<.,:;"')\]\s])/,
+  del: /^~~(?=\S)([\s\S]*?\S)~~/,
+  text: replace(inline.text)
+    (']|', '~]|')
+    ('|', '|https?://|')
+    ()
+});
+
+/**
+ * GFM + Line Breaks Inline Grammar
+ */
+
+inline.breaks = merge({}, inline.gfm, {
+  br: replace(inline.br)('{2,}', '*')(),
+  text: replace(inline.gfm.text)('{2,}', '*')()
+});
+
+/**
+ * Inline Lexer & Compiler
+ */
+
+function InlineLexer(links, options) {
+  this.options = options || marked.defaults;
+  this.links = links;
+  this.rules = inline.normal;
+
+  if (!this.links) {
+    throw new
+      Error('Tokens array requires a `links` property.');
+  }
+
+  if (this.options.gfm) {
+    if (this.options.breaks) {
+      this.rules = inline.breaks;
+    } else {
+      this.rules = inline.gfm;
+    }
+  } else if (this.options.pedantic) {
+    this.rules = inline.pedantic;
+  }
+}
+
+/**
+ * Expose Inline Rules
+ */
+
+InlineLexer.rules = inline;
+
+/**
+ * Static Lexing/Compiling Method
+ */
+
+InlineLexer.output = function(src, links, options) {
+  var inline = new InlineLexer(links, options);
+  return inline.output(src);
+};
+
+/**
+ * Lexing/Compiling
+ */
+
+InlineLexer.prototype.output = function(src) {
+  var out = ''
+    , link
+    , text
+    , href
+    , cap;
+
+  while (src) {
+    // escape
+    if (cap = this.rules.escape.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += cap[1];
+      continue;
+    }
+
+    // autolink
+    if (cap = this.rules.autolink.exec(src)) {
+      src = src.substring(cap[0].length);
+      if (cap[2] === '@') {
+        text = cap[1].charAt(6) === ':'
+          ? this.mangle(cap[1].substring(7))
+          : this.mangle(cap[1]);
+        href = this.mangle('mailto:') + text;
+      } else {
+        text = escape(cap[1]);
+        href = text;
+      }
+      out += '<a href="'
+        + href
+        + '">'
+        + text
+        + '</a>';
+      continue;
+    }
+
+    // url (gfm)
+    if (cap = this.rules.url.exec(src)) {
+      src = src.substring(cap[0].length);
+      text = escape(cap[1]);
+      href = text;
+      out += '<a href="'
+        + href
+        + '">'
+        + text
+        + '</a>';
+      continue;
+    }
+
+    // tag
+    if (cap = this.rules.tag.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += this.options.sanitize
+        ? escape(cap[0])
+        : cap[0];
+      continue;
+    }
+
+    // link
+    if (cap = this.rules.link.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += this.outputLink(cap, {
+        href: cap[2],
+        title: cap[3]
+      });
+      continue;
+    }
+
+    // reflink, nolink
+    if ((cap = this.rules.reflink.exec(src))
+        || (cap = this.rules.nolink.exec(src))) {
+      src = src.substring(cap[0].length);
+      link = (cap[2] || cap[1]).replace(/\s+/g, ' ');
+      link = this.links[link.toLowerCase()];
+      if (!link || !link.href) {
+        out += cap[0].charAt(0);
+        src = cap[0].substring(1) + src;
+        continue;
+      }
+      out += this.outputLink(cap, link);
+      continue;
+    }
+
+    // strong
+    if (cap = this.rules.strong.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += '<strong>'
+        + this.output(cap[2] || cap[1])
+        + '</strong>';
+      continue;
+    }
+
+    // em
+    if (cap = this.rules.em.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += '<em>'
+        + this.output(cap[2] || cap[1])
+        + '</em>';
+      continue;
+    }
+
+    // code
+    if (cap = this.rules.code.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += '<code>'
+        + escape(cap[2], true)
+        + '</code>';
+      continue;
+    }
+
+    // br
+    if (cap = this.rules.br.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += '<br>';
+      continue;
+    }
+
+    // del (gfm)
+    if (cap = this.rules.del.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += '<del>'
+        + this.output(cap[1])
+        + '</del>';
+      continue;
+    }
+
+    // text
+    if (cap = this.rules.text.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += escape(this.smartypants(cap[0]));
+      continue;
+    }
+
+    if (src) {
+      throw new
+        Error('Infinite loop on byte: ' + src.charCodeAt(0));
+    }
+  }
+
+  return out;
+};
+
+/**
+ * Compile Link
+ */
+
+InlineLexer.prototype.outputLink = function(cap, link) {
+  if (cap[0].charAt(0) !== '!') {
+    return '<a href="'
+      + escape(link.href)
+      + '"'
+      + (link.title
+      ? ' title="'
+      + escape(link.title)
+      + '"'
+      : '')
+      + '>'
+      + this.output(cap[1])
+      + '</a>';
+  } else {
+    return '<img src="'
+      + escape(link.href)
+      + '" alt="'
+      + escape(cap[1])
+      + '"'
+      + (link.title
+      ? ' title="'
+      + escape(link.title)
+      + '"'
+      : '')
+      + '>';
+  }
+};
+
+/**
+ * Smartypants Transformations
+ */
+
+InlineLexer.prototype.smartypants = function(text) {
+  if (!this.options.smartypants) return text;
+  return text
+    // em-dashes
+    .replace(/--/g, '\u2014')
+    // opening singles
+    .replace(/(^|[-\u2014/(\[{"\s])'/g, '$1\u2018')
+    // closing singles & apostrophes
+    .replace(/'/g, '\u2019')
+    // opening doubles
+    .replace(/(^|[-\u2014/(\[{\u2018\s])"/g, '$1\u201c')
+    // closing doubles
+    .replace(/"/g, '\u201d')
+    // ellipses
+    .replace(/\.{3}/g, '\u2026');
+};
+
+/**
+ * Mangle Links
+ */
+
+InlineLexer.prototype.mangle = function(text) {
+  var out = ''
+    , l = text.length
+    , i = 0
+    , ch;
+
+  for (; i < l; i++) {
+    ch = text.charCodeAt(i);
+    if (Math.random() > 0.5) {
+      ch = 'x' + ch.toString(16);
+    }
+    out += '&#' + ch + ';';
+  }
+
+  return out;
+};
+
+/**
+ * Parsing & Compiling
+ */
+
+function Parser(options) {
+  this.tokens = [];
+  this.token = null;
+  this.options = options || marked.defaults;
+}
+
+/**
+ * Static Parse Method
+ */
+
+Parser.parse = function(src, options) {
+  var parser = new Parser(options);
+  return parser.parse(src);
+};
+
+/**
+ * Parse Loop
+ */
+
+Parser.prototype.parse = function(src) {
+  this.inline = new InlineLexer(src.links, this.options);
+  this.tokens = src.reverse();
+
+  var out = '';
+  while (this.next()) {
+    out += this.tok();
+  }
+
+  return out;
+};
+
+/**
+ * Next Token
+ */
+
+Parser.prototype.next = function() {
+  return this.token = this.tokens.pop();
+};
+
+/**
+ * Preview Next Token
+ */
+
+Parser.prototype.peek = function() {
+  return this.tokens[this.tokens.length - 1] || 0;
+};
+
+/**
+ * Parse Text Tokens
+ */
+
+Parser.prototype.parseText = function() {
+  var body = this.token.text;
+
+  while (this.peek().type === 'text') {
+    body += '\n' + this.next().text;
+  }
+
+  return this.inline.output(body);
+};
+
+/**
+ * Parse Current Token
+ */
+
+Parser.prototype.tok = function() {
+  switch (this.token.type) {
+    case 'space': {
+      return '';
+    }
+    case 'hr': {
+      return '<hr>\n';
+    }
+    case 'heading': {
+      return '<h'
+        + this.token.depth
+        + ' id="'
+        + this.options.headerPrefix
+        + this.token.text.toLowerCase().replace(/[^\w]+/g, '-')
+        + '">'
+        + this.inline.output(this.token.text)
+        + '</h'
+        + this.token.depth
+        + '>\n';
+    }
+    case 'code': {
+      if (this.options.highlight) {
+        var code = this.options.highlight(this.token.text, this.token.lang);
+        if (code != null && code !== this.token.text) {
+          this.token.escaped = true;
+          this.token.text = code;
+        }
+      }
+
+      if (!this.token.escaped) {
+        this.token.text = escape(this.token.text, true);
+      }
+
+      return '<pre><code'
+        + (this.token.lang
+        ? ' class="'
+        + this.options.langPrefix
+        + this.token.lang
+        + '"'
+        : '')
+        + '>'
+        + this.token.text
+        + '</code></pre>\n';
+    }
+    case 'table': {
+      var body = ''
+        , heading
+        , i
+        , row
+        , cell
+        , j;
+
+      // header
+      body += '<thead>\n<tr>\n';
+      for (i = 0; i < this.token.header.length; i++) {
+        heading = this.inline.output(this.token.header[i]);
+        body += '<th';
+        if (this.token.align[i]) {
+          body += ' style="text-align:' + this.token.align[i] + '"';
+        }
+        body += '>' + heading + '</th>\n';
+      }
+      body += '</tr>\n</thead>\n';
+
+      // body
+      body += '<tbody>\n'
+      for (i = 0; i < this.token.cells.length; i++) {
+        row = this.token.cells[i];
+        body += '<tr>\n';
+        for (j = 0; j < row.length; j++) {
+          cell = this.inline.output(row[j]);
+          body += '<td';
+          if (this.token.align[j]) {
+            body += ' style="text-align:' + this.token.align[j] + '"';
+          }
+          body += '>' + cell + '</td>\n';
+        }
+        body += '</tr>\n';
+      }
+      body += '</tbody>\n';
+
+      return '<table>\n'
+        + body
+        + '</table>\n';
+    }
+    case 'blockquote_start': {
+      var body = '';
+
+      while (this.next().type !== 'blockquote_end') {
+        body += this.tok();
+      }
+
+      return '<blockquote>\n'
+        + body
+        + '</blockquote>\n';
+    }
+    case 'list_start': {
+      var type = this.token.ordered ? 'ol' : 'ul'
+        , body = '';
+
+      while (this.next().type !== 'list_end') {
+        body += this.tok();
+      }
+
+      return '<'
+        + type
+        + '>\n'
+        + body
+        + '</'
+        + type
+        + '>\n';
+    }
+    case 'list_item_start': {
+      var body = '';
+
+      while (this.next().type !== 'list_item_end') {
+        body += this.token.type === 'text'
+          ? this.parseText()
+          : this.tok();
+      }
+
+      return '<li>'
+        + body
+        + '</li>\n';
+    }
+    case 'loose_item_start': {
+      var body = '';
+
+      while (this.next().type !== 'list_item_end') {
+        body += this.tok();
+      }
+
+      return '<li>'
+        + body
+        + '</li>\n';
+    }
+    case 'html': {
+      return !this.token.pre && !this.options.pedantic
+        ? this.inline.output(this.token.text)
+        : this.token.text;
+    }
+    case 'paragraph': {
+      return '<p>'
+        + this.inline.output(this.token.text)
+        + '</p>\n';
+    }
+    case 'text': {
+      return '<p>'
+        + this.parseText()
+        + '</p>\n';
+    }
+  }
+};
+
+/**
+ * Helpers
+ */
+
+function escape(html, encode) {
+  return html
+    .replace(!encode ? /&(?!#?\w+;)/g : /&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function replace(regex, opt) {
+  regex = regex.source;
+  opt = opt || '';
+  return function self(name, val) {
+    if (!name) return new RegExp(regex, opt);
+    val = val.source || val;
+    val = val.replace(/(^|[^\[])\^/g, '$1');
+    regex = regex.replace(name, val);
+    return self;
+  };
+}
+
+function noop() {}
+noop.exec = noop;
+
+function merge(obj) {
+  var i = 1
+    , target
+    , key;
+
+  for (; i < arguments.length; i++) {
+    target = arguments[i];
+    for (key in target) {
+      if (Object.prototype.hasOwnProperty.call(target, key)) {
+        obj[key] = target[key];
+      }
+    }
+  }
+
+  return obj;
+}
+
+/**
+ * Marked
+ */
+
+function marked(src, opt, callback) {
+  if (callback || typeof opt === 'function') {
+    if (!callback) {
+      callback = opt;
+      opt = null;
+    }
+
+    opt = merge({}, marked.defaults, opt || {});
+
+    var highlight = opt.highlight
+      , tokens
+      , pending
+      , i = 0;
+
+    try {
+      tokens = Lexer.lex(src, opt)
+    } catch (e) {
+      return callback(e);
+    }
+
+    pending = tokens.length;
+
+    var done = function() {
+      var out, err;
+
+      try {
+        out = Parser.parse(tokens, opt);
+      } catch (e) {
+        err = e;
+      }
+
+      opt.highlight = highlight;
+
+      return err
+        ? callback(err)
+        : callback(null, out);
+    };
+
+    if (!highlight || highlight.length < 3) {
+      return done();
+    }
+
+    delete opt.highlight;
+
+    if (!pending) return done();
+
+    for (; i < tokens.length; i++) {
+      (function(token) {
+        if (token.type !== 'code') {
+          return --pending || done();
+        }
+        return highlight(token.text, token.lang, function(err, code) {
+          if (code == null || code === token.text) {
+            return --pending || done();
+          }
+          token.text = code;
+          token.escaped = true;
+          --pending || done();
+        });
+      })(tokens[i]);
+    }
+
+    return;
+  }
+  try {
+    if (opt) opt = merge({}, marked.defaults, opt);
+    return Parser.parse(Lexer.lex(src, opt), opt);
+  } catch (e) {
+    e.message += '\nPlease report this to https://github.com/chjj/marked.';
+    if ((opt || marked.defaults).silent) {
+      return '<p>An error occured:</p><pre>'
+        + escape(e.message + '', true)
+        + '</pre>';
+    }
+    throw e;
+  }
+}
+
+/**
+ * Options
+ */
+
+marked.options =
+marked.setOptions = function(opt) {
+  merge(marked.defaults, opt);
+  return marked;
+};
+
+marked.defaults = {
+  gfm: true,
+  tables: true,
+  breaks: false,
+  pedantic: false,
+  sanitize: false,
+  smartLists: false,
+  silent: false,
+  highlight: null,
+  langPrefix: 'lang-',
+  smartypants: false,
+  headerPrefix: ''
+};
+
+/**
+ * Expose
+ */
+
+marked.Parser = Parser;
+marked.parser = Parser.parse;
+
+marked.Lexer = Lexer;
+marked.lexer = Lexer.lex;
+
+marked.InlineLexer = InlineLexer;
+marked.inlineLexer = InlineLexer.output;
+
+marked.parse = marked;
+
+if (typeof exports === 'object') {
+  module.exports = marked;
+} else if (typeof define === 'function' && define.amd) {
+  define(function() { return marked; });
+} else {
+  this.marked = marked;
+}
+
+}).call(function() {
+  return this || (typeof window !== 'undefined' ? window : global);
+}());
+
+},{}],36:[function(require,module,exports){
 var AssigneeFilterView = Ember.View.extend({
   templateName : "assignee/filter",
   classNames: ["assignee"],
@@ -54692,7 +57019,7 @@ var AssigneeFilterView = Ember.View.extend({
 
 module.exports = AssigneeFilterView;
 
-},{}],30:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 var CardView = Ember.View.extend({
   classNameBindings:["stateClass"],
   stateClass: function(){
@@ -54713,7 +57040,7 @@ var CardView = Ember.View.extend({
 module.exports = CardView;
 
 
-},{}],31:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 var CardWrapperView = Em.View.extend({
     templateName: "cardItem",
     classNameBindings: ["isFiltered","isDraggable:is-draggable", "isClosable:closable"],
@@ -54772,7 +57099,7 @@ var CardWrapperView = Em.View.extend({
 
 module.exports = CardWrapperView;
 
-},{}],32:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 var ColumnCountView = Ember.View.extend({
   tagName: "span",
   templateName: "column_count",
@@ -54782,7 +57109,7 @@ var ColumnCountView = Ember.View.extend({
 
 module.exports = ColumnCountView;
 
-},{}],33:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 var WrapperView = require("./card_wrapper_view");
 
 var CollectionView = Ember.CollectionView.extend({
@@ -54897,7 +57224,7 @@ var ColumnView = Ember.ContainerView.extend({
 
 module.exports = ColumnView;
 
-},{"./card_wrapper_view":31}],34:[function(require,module,exports){
+},{"./card_wrapper_view":38}],41:[function(require,module,exports){
 
 
 var CssView = Ember.View.extend({
@@ -54951,7 +57278,7 @@ var CssView = Ember.View.extend({
 
 module.exports = CssView;
 
-},{}],35:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 var FilterView = Ember.View.extend({
   tagName: "li",
   templateName: "filter",
@@ -54992,20 +57319,20 @@ var FilterView = Ember.View.extend({
 
 module.exports = FilterView;
 
-},{}],36:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 var IssuesCreateView = App.ModalView.extend({
 });
 
 module.exports = IssuesCreateView;
 
-},{}],37:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 var IssuesEditView = App.ModalView.extend({
   templateName: "issue/edit"
 });
 
 module.exports = IssuesEditView;
 
-},{}],38:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 var ModalView = Em.View.extend({
   layoutName: "layouts/modal",
 
@@ -55017,10 +57344,12 @@ var ModalView = Em.View.extend({
     }.bind(this));
     
     this.$(".fullscreen-body").on('click.modal', function(event){
+       if($(event.target).is("[data-ember-action]")){return;}
        event.stopPropagation();    
     }.bind(this))
      
     this.$(".fullscreen-overlay, .close").on('click.modal', function(event){
+     if($(event.target).is("[data-ember-action]")){return;}
      this.get('controller').send('closeModal');        
     }.bind(this))
     
@@ -55038,7 +57367,7 @@ var ModalView = Em.View.extend({
 
 module.exports = ModalView;
 
-},{}],39:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 var SearchView = Ember.View.extend({
   classNames: ["search"],
   classNameBindings: ["hasValue:has-value"],
@@ -55060,7 +57389,7 @@ var SearchView = Ember.View.extend({
 
 module.exports = SearchView;
 
-},{}],40:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 //fgnass.github.com/spin.js#v1.3
 
 /**
@@ -55411,7 +57740,7 @@ module.exports = SearchView;
 
 }));
 
-},{}],41:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 /*!
  * jQuery Color Animations v@VERSION
  * https://github.com/jquery/jquery-color
@@ -56076,5 +58405,5 @@ colors = jQuery.Color.names = {
 
 })( jQuery );
 
-},{}]},{},[14])
+},{}]},{},[19])
 ;
