@@ -188,7 +188,10 @@
     }
   }
   .actions-close {
-      display: none;
+    display:none;
+  }
+  
+  .hb-action {
       position: absolute;
       width: 100%;
     button {
@@ -205,7 +208,7 @@
     }
   }
   &:hover {
-    .actions-close {
+    .hb-action {
         button {
         opacity: 1;
       }

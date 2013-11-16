@@ -1,4 +1,10 @@
 var ColumnController = Ember.ObjectController.extend({
+  actions: {
+    archive: function (issue) {
+      this.get("controllers.index.issues").removeObject(issue);
+      issue.archive();
+    }
+  },
   needs: ["index"],
   style: Ember.computed.alias("controllers.index.column_style"),
   isLastColumn: function(){

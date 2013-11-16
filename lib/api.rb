@@ -92,6 +92,11 @@ class Huboard
       json pebble.reorder_issue user, repo, number, index
     end
 
+    post '/:user/:repo/archiveissue' do 
+      user, repo, number = params[:user], params[:repo], params[:number]
+      json huboard.board(user, repo).archive_issue(number)
+    end
+
     post '/:user/:repo/reordermilestone' do 
       user, repo, number, index = params[:user], params[:repo], params[:number], params[:index]
       json pebble.reorder_milestone user, repo, number, index

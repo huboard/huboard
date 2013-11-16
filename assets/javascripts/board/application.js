@@ -192,17 +192,12 @@ var CardController = Ember.ObjectController.extend({
       //this.transitionToRoute("issue", this.get("model"))
     },
     close: function (issue){
-      this.set("model.state","closed")
-
-      var user = this.get("model.repo.owner.login"),
-          repo = this.get("model.repo.name"),
-          full_name = user + "/" + repo;
-
-      Ember.$.post("/api/" + full_name + "/close", {
-        number : this.get("model.number")
-      })
+      return this.get("model").close();
     }
   },
+  canArchive: function () {
+    return this.get("model.state") === "closed";
+  }.property("model.state"),
   cardLabels: function () {
       return this.get("model.other_labels").map(function(l){
         return Ember.Object.create(_.extend(l,{customColor: "-x"+l.color}));
@@ -214,6 +209,12 @@ module.exports = CardController;
 
 },{}],7:[function(require,module,exports){
 var ColumnController = Ember.ObjectController.extend({
+  actions: {
+    archive: function (issue) {
+      this.get("controllers.index.issues").removeObject(issue);
+      issue.archive();
+    }
+  },
   needs: ["index"],
   style: Ember.computed.alias("controllers.index.column_style"),
   isLastColumn: function(){
@@ -561,6 +562,20 @@ var Issue = Ember.Object.extend(Serializable,{
       return Issue.create(response);
     })
   },
+  processing: false,
+  archive: function() {
+     this.set("processing", true);
+      var user = this.get("repo.owner.login"),
+          repo = this.get("repo.name"),
+          full_name = user + "/" + repo;
+
+      return Ember.$.post("/api/" + full_name + "/archiveissue", {
+        number : this.get("number")
+      }).then(function () {
+        this.set("processing", false);
+        this.set("isDestroying", true);
+      }.bind(this))
+  },
   drag: function (column) {
       this.set("current_state", column)
       // this is weird
@@ -572,6 +587,20 @@ var Issue = Ember.Object.extend(Serializable,{
         index : column.index.toString(),
         number : this.get("number")
       })
+  },
+  close: function () {
+     this.set("processing", true);
+
+      var user = this.get("repo.owner.login"),
+          repo = this.get("repo.name"),
+          full_name = user + "/" + repo;
+
+      Ember.$.post("/api/" + full_name + "/close", {
+        number : this.get("number")
+      }).then(function() {
+        this.set("state","closed")
+        this.set("processing", false);
+      }.bind(this))
   },
   reorder: function (index) {
       this.set("_data.order", index);
@@ -941,14 +970,41 @@ function program3(depth0,data) {
 
 function program5(depth0,data) {
   
-  var buffer = '', hashContexts, hashTypes;
-  data.buffer.push("\n\n<div class=\"actions-close\">\n  <button class=\"hb-button\" ");
+  var buffer = '', stack1, hashContexts, hashTypes, options;
+  data.buffer.push("\n\n<div class=\"hb-action actions-close\">\n  <button class=\"hb-button\" ");
+  hashContexts = {'disabled': depth0};
+  hashTypes = {'disabled': "ID"};
+  options = {hash:{
+    'disabled': ("processing")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
+  data.buffer.push(" ");
   hashContexts = {'bubbles': depth0};
   hashTypes = {'bubbles': "BOOLEAN"};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "close", "", {hash:{
     'bubbles': (false)
   },contexts:[depth0,depth0],types:["ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(">Close</button>\n</div>                                                      \n");
+  return buffer;
+  }
+
+function program7(depth0,data) {
+  
+  var buffer = '', stack1, hashContexts, hashTypes, options;
+  data.buffer.push("\n\n<div class=\"hb-action actions-archive\">\n  <button class=\"hb-button-icon hb-button hb-button-grey\" ");
+  hashContexts = {'disabled': depth0};
+  hashTypes = {'disabled': "ID"};
+  options = {hash:{
+    'disabled': ("processing")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
+  data.buffer.push(" ");
+  hashContexts = {'bubbles': depth0};
+  hashTypes = {'bubbles': "BOOLEAN"};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "archive", "", {hash:{
+    'bubbles': (false)
+  },contexts:[depth0,depth0],types:["ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("><i class=\"ui-icon ui-icon-box-add\"></i>Archive</button>\n</div>                                                      \n");
   return buffer;
   }
 
@@ -984,10 +1040,15 @@ function program5(depth0,data) {
   hashContexts = {};
   stack2 = helpers.each.call(depth0, "cardLabels", {hash:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\n</div>\n");
+  data.buffer.push("\n</div>\n\n");
   hashTypes = {};
   hashContexts = {};
   stack2 = helpers['if'].call(depth0, "current_state.is_last", {hash:{},inverse:self.noop,fn:self.program(5, program5, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+  data.buffer.push("\n\n");
+  hashTypes = {};
+  hashContexts = {};
+  stack2 = helpers['if'].call(depth0, "canArchive", {hash:{},inverse:self.noop,fn:self.program(7, program7, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n\n<div class=\"card-states\">\n   <img src=\"/img/check.png\" class=\"hb-state-closed\"/>\n   <img src=\"/img/arrow.png\" class=\"hb-state-ready\"/>\n   <img src=\"/img/x.png\" class=\"hb-state-blocked\"/>\n</div>\n");
   return buffer;
@@ -54661,6 +54722,14 @@ var CardWrapperView = Em.View.extend({
 
      return App.get("loggedIn") && currentState.is_last && this.get("content.state") === "open";
     }.property("App.loggedIn", "content.current_state","content.state"),
+    onDestroy: function (){
+      Ember.run.once(function () {
+        var view = this;
+        this.$().fadeOut(function () {
+          view.destroy();
+        })
+      }.bind(this))
+    }.observes("content.isDestroying"),
     isDraggable: function( ){
       return App.get("loggedIn");
     }.property("App.loggedIn","content.state"),

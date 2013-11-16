@@ -23,6 +23,19 @@
   &.hb-button-white {
       @include button(#fff);
   }
+
+  &.hb-button-grey {
+      @include button(hsl(0, 0%, 92%));
+  }
+
+  &.hb-button-icon {
+    position:relative;
+    padding-left: 36px;
+    .ui-icon {
+      position: absolute;
+      left: 10px;
+    }
+  }
     
 }
                                   

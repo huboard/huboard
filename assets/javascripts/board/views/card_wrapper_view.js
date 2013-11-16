@@ -6,6 +6,14 @@ var CardWrapperView = Em.View.extend({
 
      return App.get("loggedIn") && currentState.is_last && this.get("content.state") === "open";
     }.property("App.loggedIn", "content.current_state","content.state"),
+    onDestroy: function (){
+      Ember.run.once(function () {
+        var view = this;
+        this.$().fadeOut(function () {
+          view.destroy();
+        })
+      }.bind(this))
+    }.observes("content.isDestroying"),
     isDraggable: function( ){
       return App.get("loggedIn");
     }.property("App.loggedIn","content.state"),

@@ -7,6 +7,20 @@ var Issue = Ember.Object.extend(Serializable,{
       return Issue.create(response);
     })
   },
+  processing: false,
+  archive: function() {
+     this.set("processing", true);
+      var user = this.get("repo.owner.login"),
+          repo = this.get("repo.name"),
+          full_name = user + "/" + repo;
+
+      return Ember.$.post("/api/" + full_name + "/archiveissue", {
+        number : this.get("number")
+      }).then(function () {
+        this.set("processing", false);
+        this.set("isDestroying", true);
+      }.bind(this))
+  },
   drag: function (column) {
       this.set("current_state", column)
       // this is weird
@@ -18,6 +32,20 @@ var Issue = Ember.Object.extend(Serializable,{
         index : column.index.toString(),
         number : this.get("number")
       })
+  },
+  close: function () {
+     this.set("processing", true);
+
+      var user = this.get("repo.owner.login"),
+          repo = this.get("repo.name"),
+          full_name = user + "/" + repo;
+
+      Ember.$.post("/api/" + full_name + "/close", {
+        number : this.get("number")
+      }).then(function() {
+        this.set("state","closed")
+        this.set("processing", false);
+      }.bind(this))
   },
   reorder: function (index) {
       this.set("_data.order", index);

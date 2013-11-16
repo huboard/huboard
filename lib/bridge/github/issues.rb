@@ -16,6 +16,12 @@ class Huboard
       gh.issues(params).all.each{|i| i.extend(Card)}.each{ |i| i.merge!({"repo" => {:owner => {:login => user}, :name => repo }}) }.sort_by { |i| i["_data"]["order"] || i["number"].to_f}
     end
 
+    def archive_issue(number)
+       issue = gh.issues(number)
+       labels = issue.labels.reject {|l| Huboard.all_patterns.any? {|p| p.match l.name }}.sort_by {|l| l.name}
+       gh.issues(number).patch(labels: labels)
+    end
+
     def closed_issues(label, since = (Time.now - 7*24*60*60).utc.iso8601)
       params = {labels: label, state:"closed",since:since, per_page: 30}
       gh.issues(params).each{|i| i.extend(Card)}.each{ |i| i.merge!({"repo" => {:owner => {:login => user}, :name => repo }}) }.sort_by { |i| i["_data"]["order"] || i["number"].to_f}
