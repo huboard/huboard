@@ -78,6 +78,7 @@ var HbSelectorItemComponent = Ember.Component.extend({
         this.get("parentView").send("select", this);
       }.bind(this))
     },
+    data: null,
     selected:false
 });
 
@@ -1489,31 +1490,6 @@ function program1(depth0,data) {
 
 function program3(depth0,data) {
   
-  var buffer = '', stack1, hashTypes, hashContexts;
-  data.buffer.push("\n        ");
-  hashTypes = {};
-  hashContexts = {};
-  stack1 = helpers.each.call(depth0, "column", "in", "columns", {hash:{},inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n      ");
-  return buffer;
-  }
-function program4(depth0,data) {
-  
-  var buffer = '', stack1, hashContexts, hashTypes, options;
-  data.buffer.push("\n          ");
-  hashContexts = {'text': depth0};
-  hashTypes = {'text': "ID"};
-  options = {hash:{
-    'text': ("column.text")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
-  data.buffer.push(escapeExpression(((stack1 = helpers['hb-selector-item'] || depth0['hb-selector-item']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-selector-item", options))));
-  data.buffer.push("\n        ");
-  return buffer;
-  }
-
-function program6(depth0,data) {
-  
   var buffer = '', hashContexts, hashTypes;
   data.buffer.push("\n            <li ");
   hashContexts = {'bubbles': depth0};
@@ -1562,18 +1538,10 @@ function program6(depth0,data) {
   hashContexts = {};
   stack2 = helpers.each.call(depth0, "label", "in", "columns", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\n      </ul>\n      ");
-  hashContexts = {'title': depth0};
-  hashTypes = {'title': "STRING"};
-  options = {hash:{
-    'title': ("Column")
-  },inverse:self.noop,fn:self.program(3, program3, data),contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
-  stack2 = ((stack1 = helpers['hb-single-selector'] || depth0['hb-single-selector']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-single-selector", options));
-  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\n      <ul class=\"labels\">\n        <h5>Labels</h5>\n        ");
+  data.buffer.push("\n      </ul>\n      <ul class=\"labels\">\n        <h5>Labels</h5>\n        ");
   hashTypes = {};
   hashContexts = {};
-  stack2 = helpers.each.call(depth0, "label", "in", "otherLabels", {hash:{},inverse:self.noop,fn:self.program(6, program6, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack2 = helpers.each.call(depth0, "label", "in", "otherLabels", {hash:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n      </ul>\n    </div>\n  </form>\n</div>\n\n");
   return buffer;
