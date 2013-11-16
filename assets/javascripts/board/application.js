@@ -24,6 +24,46 @@ module.exports = HbAvatarComponent;
 
 
 },{}],2:[function(require,module,exports){
+var HbLabelComponent = Ember.Component.extend({
+  tagName: "li",
+  classNameBindings: [":card-label","colorClass", "selected:active"],
+  didInsertElement: function () {
+     this.$().on("click.label", function () {
+       this.get("parentView.controller").send("select", this.label)
+     }.bind(this))
+  },
+  willDestroyElement: function () {
+    this.$().off("click.label")
+    this._super.apply(this, arguments);
+  },
+  colorClass: function () {
+    return "-x" + this.get("label.color");
+  }.property(),
+  selected: function () {
+    return this.get("parentView.selected").contains(this.label);
+  }.property("parentView.selected.@each")
+
+});
+
+module.exports = HbLabelComponent;
+
+
+},{}],3:[function(require,module,exports){
+var HbLabelSelectorComponent = Ember.Component.extend({
+  tagName: "ul",
+  classNames: ["labels"],
+  selected: [],
+  actions: {
+    select : function (label) {
+      this.selected.contains(label) ? this.selected.removeObject(label) : this.selected.pushObject(label);
+    }
+  }
+});
+
+module.exports = HbLabelSelectorComponent;
+
+
+},{}],4:[function(require,module,exports){
 var Markdown = require("../vendor/marked");
 
 
@@ -53,7 +93,7 @@ var HbMarkdownEditorComponent = Ember.Component.extend({
 module.exports = HbMarkdownEditorComponent;
 
 
-},{"../vendor/marked":35}],3:[function(require,module,exports){
+},{"../vendor/marked":35}],5:[function(require,module,exports){
 var HbPaneComponent = Ember.Component.extend({
     classNameBindings: [":tab-pane","selected:active"],
     didInsertElement: function() {
@@ -66,46 +106,6 @@ var HbPaneComponent = Ember.Component.extend({
 });
 
 module.exports = HbPaneComponent;
-
-
-},{}],4:[function(require,module,exports){
-var HbSelectorItemComponent = Ember.Component.extend({
-    classNameBindings: [":card-label","selected:active"],
-    tagName: "li",
-    didInsertElement: function() {
-      this.get('parentView').addItem(this);
-      this.$().on("click", function () {
-        this.get("parentView").send("select", this);
-      }.bind(this))
-    },
-    data: null,
-    selected:false
-});
-
-module.exports = HbSelectorItemComponent;
-
-
-},{}],5:[function(require,module,exports){
-var HbSingleSelectorComponent = Ember.Component.extend({
-  tagName: "ul",
-  init: function() {
-    this._super.apply(this, arguments);
-    this.items = [];
-  },
-  addItem: function (item){
-     this.items.pushObject(item);
-  },
-  actions: {
-    select: function (item) {
-      this.items.forEach(function (i) {
-        i.set("selected", false)
-      })
-      item.set("selected", true);
-    }
-  }
-});
-
-module.exports = HbSingleSelectorComponent;
 
 
 },{}],6:[function(require,module,exports){
@@ -573,10 +573,10 @@ require('./templates');
 
 
 App.HbAvatarComponent = require('./components/hb_avatar_component');
+App.HbLabelComponent = require('./components/hb_label_component');
+App.HbLabelSelectorComponent = require('./components/hb_label_selector_component');
 App.HbMarkdownEditorComponent = require('./components/hb_markdown_editor_component');
 App.HbPaneComponent = require('./components/hb_pane_component');
-App.HbSelectorItemComponent = require('./components/hb_selector_item_component');
-App.HbSingleSelectorComponent = require('./components/hb_single_selector_component');
 App.HbTabsComponent = require('./components/hb_tabs_component');
 App.ApplicationController = require('./controllers/application_controller');
 App.AssigneeController = require('./controllers/assignee_controller');
@@ -613,7 +613,7 @@ require('./config/routes');
 module.exports = App;
 
 
-},{"./components/hb_avatar_component":1,"./components/hb_markdown_editor_component":2,"./components/hb_pane_component":3,"./components/hb_selector_item_component":4,"./components/hb_single_selector_component":5,"./components/hb_tabs_component":6,"./config/app":7,"./config/routes":8,"./controllers/application_controller":9,"./controllers/assignee_controller":10,"./controllers/card_controller":11,"./controllers/column_controller":12,"./controllers/column_count_controller":13,"./controllers/filters_controller":14,"./controllers/index_controller":15,"./controllers/issue/create_controller":16,"./controllers/issue/edit_controller":17,"./controllers/search_controller":18,"./mixins/serializable":20,"./mixins/wip_limit":21,"./models/board":22,"./models/issue":23,"./models/repo":24,"./routes/application_route":25,"./routes/index_route":26,"./routes/issue_route":27,"./templates":28,"./views/assignee_filter_view":36,"./views/card_view":37,"./views/card_wrapper_view":38,"./views/column_count_view":39,"./views/column_view":40,"./views/css_view":41,"./views/filter_view":42,"./views/issue/create_view":43,"./views/issue/edit_view":44,"./views/modal_view":45,"./views/search_view":46}],20:[function(require,module,exports){
+},{"./components/hb_avatar_component":1,"./components/hb_label_component":2,"./components/hb_label_selector_component":3,"./components/hb_markdown_editor_component":4,"./components/hb_pane_component":5,"./components/hb_tabs_component":6,"./config/app":7,"./config/routes":8,"./controllers/application_controller":9,"./controllers/assignee_controller":10,"./controllers/card_controller":11,"./controllers/column_controller":12,"./controllers/column_count_controller":13,"./controllers/filters_controller":14,"./controllers/index_controller":15,"./controllers/issue/create_controller":16,"./controllers/issue/edit_controller":17,"./controllers/search_controller":18,"./mixins/serializable":20,"./mixins/wip_limit":21,"./models/board":22,"./models/issue":23,"./models/repo":24,"./routes/application_route":25,"./routes/index_route":26,"./routes/issue_route":27,"./templates":28,"./views/assignee_filter_view":36,"./views/card_view":37,"./views/card_wrapper_view":38,"./views/column_count_view":39,"./views/column_view":40,"./views/css_view":41,"./views/filter_view":42,"./views/issue/create_view":43,"./views/issue/edit_view":44,"./views/modal_view":45,"./views/search_view":46}],20:[function(require,module,exports){
 function serialize() {
     var result = {};
     for (var key in $.extend(true, {}, this))
@@ -1488,23 +1488,6 @@ function program1(depth0,data) {
   return buffer;
   }
 
-function program3(depth0,data) {
-  
-  var buffer = '', hashContexts, hashTypes;
-  data.buffer.push("\n            <li ");
-  hashContexts = {'bubbles': depth0};
-  hashTypes = {'bubbles': "BOOLEAN"};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "selectLabel", "label", {hash:{
-    'bubbles': (false)
-  },contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(" class=\"card-label\">\n              <span>");
-  hashTypes = {};
-  hashContexts = {};
-  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "label.name", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("</span>\n            </li>\n        ");
-  return buffer;
-  }
-
   data.buffer.push("<div class=\"fullscreen-card\">\n  <form ");
   hashContexts = {'on': depth0};
   hashTypes = {'on': "STRING"};
@@ -1538,12 +1521,16 @@ function program3(depth0,data) {
   hashContexts = {};
   stack2 = helpers.each.call(depth0, "label", "in", "columns", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\n      </ul>\n      <ul class=\"labels\">\n        <h5>Labels</h5>\n        ");
-  hashTypes = {};
-  hashContexts = {};
-  stack2 = helpers.each.call(depth0, "label", "in", "otherLabels", {hash:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
-  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\n      </ul>\n    </div>\n  </form>\n</div>\n\n");
+  data.buffer.push("\n      </ul>\n      ");
+  hashContexts = {'selectedBinding': depth0,'title': depth0,'labels': depth0};
+  hashTypes = {'selectedBinding': "ID",'title': "STRING",'labels': "ID"};
+  options = {hash:{
+    'selectedBinding': ("labels"),
+    'title': ("Labels"),
+    'labels': ("otherLabels")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['hb-label-selector'] || depth0['hb-label-selector']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-label-selector", options))));
+  data.buffer.push("\n    </div>\n  </form>\n</div>\n\n");
   return buffer;
   
 });
@@ -1607,6 +1594,64 @@ function program3(depth0,data) {
 });
 
 Ember.TEMPLATES['components/hb-avatar'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', hashTypes, hashContexts, escapeExpression=this.escapeExpression;
+
+
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "yield", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n");
+  return buffer;
+  
+});
+
+Ember.TEMPLATES['components/hb-label-selector'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', stack1, hashTypes, hashContexts, escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
+
+function program1(depth0,data) {
+  
+  var buffer = '', stack1, stack2, hashContexts, hashTypes, options;
+  data.buffer.push("\n  ");
+  hashContexts = {'label': depth0};
+  hashTypes = {'label': "ID"};
+  options = {hash:{
+    'label': ("label")
+  },inverse:self.noop,fn:self.program(2, program2, data),contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  stack2 = ((stack1 = helpers['hb-label'] || depth0['hb-label']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-label", options));
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+  data.buffer.push("\n");
+  return buffer;
+  }
+function program2(depth0,data) {
+  
+  var buffer = '', hashTypes, hashContexts;
+  data.buffer.push("\n    <span>\n      ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "label.name", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n    </span>\n  ");
+  return buffer;
+  }
+
+  data.buffer.push("<h5>");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "title", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("</h5>\n\n");
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers.each.call(depth0, "label", "in", "labels", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n");
+  return buffer;
+  
+});
+
+Ember.TEMPLATES['components/hb-label'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   var buffer = '', hashTypes, hashContexts, escapeExpression=this.escapeExpression;
@@ -1695,49 +1740,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   var buffer = '', hashTypes, hashContexts, escapeExpression=this.escapeExpression;
 
 
-  hashTypes = {};
-  hashContexts = {};
-  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "yield", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\n");
-  return buffer;
-  
-});
-
-Ember.TEMPLATES['components/hb-selector-item'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
-this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', hashTypes, hashContexts, escapeExpression=this.escapeExpression;
-
-
-  hashTypes = {};
-  hashContexts = {};
-  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "text", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\n");
-  return buffer;
-  
-});
-
-Ember.TEMPLATES['components/hb-single-selector'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
-this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, hashTypes, hashContexts, escapeExpression=this.escapeExpression, self=this;
-
-function program1(depth0,data) {
-  
-  var buffer = '', hashTypes, hashContexts;
-  data.buffer.push("\n <h5> ");
-  hashTypes = {};
-  hashContexts = {};
-  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "title", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(" </h5>\n");
-  return buffer;
-  }
-
-  hashTypes = {};
-  hashContexts = {};
-  stack1 = helpers['if'].call(depth0, "title", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "yield", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));

@@ -1,0 +1,9 @@
+<h5>{{ title }}</h5>
+
+{{#each label in labels}}
+  {{#hb-label label=label}}
+    <span>
+      {{label.name}}
+    </span>
+  {{/hb-label}}
+{{/each}}

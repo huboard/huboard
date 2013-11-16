@@ -16,14 +16,7 @@
             </li>
         {{/each}}
       </ul>
-      <ul class="labels">
-        <h5>Labels</h5>
-        {{#each label in otherLabels}}
-            <li {{action "selectLabel" label bubbles=false}} class="card-label">
-              <span>{{label.name}}</span>
-            </li>
-        {{/each}}
-      </ul>
+      {{hb-label-selector selectedBinding=labels title="Labels" labels=otherLabels}}
     </div>
   </form>
 </div>
