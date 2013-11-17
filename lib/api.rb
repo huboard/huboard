@@ -59,7 +59,7 @@ class Huboard
     end
 
     post '/v2/:user/:repo/issues/create' do 
-       return json huboard.board(params[:user],params[:repo]).create_issue params
+       return json huboard.board(params[:user],params[:repo]).create_issue JSON.parse(request.body.read)
     end
 
     get '/:user/:repo/board' do 

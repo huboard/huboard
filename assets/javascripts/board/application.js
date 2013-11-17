@@ -53,9 +53,12 @@ var HbLabelSelectorComponent = Ember.Component.extend({
   tagName: "ul",
   classNames: ["labels"],
   selected: [],
+  values: [],
   actions: {
     select : function (label) {
-      this.selected.contains(label) ? this.selected.removeObject(label) : this.selected.pushObject(label);
+      var selected = this.get("selected");
+      selected.contains(label) ? selected.removeObject(label) : selected.pushObject(label);
+      this.set("values", selected)
     }
   }
 });
@@ -630,7 +633,9 @@ function serialize() {
         if(this[key] && this[key].toString()[0] === "<" && this[key].toString()[this[key].toString().length - 1] === ">") {
            result[key] = serialize.call(this[key]);
            
-        }else {
+        }else if (Object.prototype.toString(this[key]) == "[object Array]") {
+           result[key] = this[key].map(function (i){ return serialize.call(i); });
+        } else {
           result[key] = this[key];
         }
     }
@@ -679,7 +684,12 @@ var Serializable = require("../mixins/serializable");
 
 var Issue = Ember.Object.extend(Serializable,{
   saveNew: function () {
-    return Ember.$.post("/api/v2/" + this.get("repo.full_name") + "/issues/create", this.serialize()).then(function(response){
+    return Ember.$.ajax( {
+      url: "/api/v2/" + this.get("repo.full_name") + "/issues/create", 
+      data: JSON.stringify(this.serialize()),
+      dataType: 'json',
+      type: "POST",
+      contentType: "application/json"}).then(function(response){
       return Issue.create(response);
     })
   },
@@ -750,7 +760,8 @@ Issue.reopenClass({
        body: "",
        assignee: null,
        milestone: null,
-       repo: App.get("repo")
+       repo: App.get("repo"),
+       labels: []
      })
   }
 });
@@ -1522,10 +1533,10 @@ function program1(depth0,data) {
   stack2 = helpers.each.call(depth0, "label", "in", "columns", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n      </ul>\n      ");
-  hashContexts = {'selectedBinding': depth0,'title': depth0,'labels': depth0};
-  hashTypes = {'selectedBinding': "ID",'title': "STRING",'labels': "ID"};
+  hashContexts = {'values': depth0,'title': depth0,'labels': depth0};
+  hashTypes = {'values': "ID",'title': "STRING",'labels': "ID"};
   options = {hash:{
-    'selectedBinding': ("labels"),
+    'values': ("model.labels"),
     'title': ("Labels"),
     'labels': ("otherLabels")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};

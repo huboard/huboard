@@ -2,9 +2,12 @@ var HbLabelSelectorComponent = Ember.Component.extend({
   tagName: "ul",
   classNames: ["labels"],
   selected: [],
+  values: [],
   actions: {
     select : function (label) {
-      this.selected.contains(label) ? this.selected.removeObject(label) : this.selected.pushObject(label);
+      var selected = this.get("selected");
+      selected.contains(label) ? selected.removeObject(label) : selected.pushObject(label);
+      this.set("values", selected)
     }
   }
 });

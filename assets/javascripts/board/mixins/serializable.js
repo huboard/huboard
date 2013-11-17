@@ -14,7 +14,9 @@ function serialize() {
         if(this[key] && this[key].toString()[0] === "<" && this[key].toString()[this[key].toString().length - 1] === ">") {
            result[key] = serialize.call(this[key]);
            
-        }else {
+        }else if (Object.prototype.toString(this[key]) == "[object Array]") {
+           result[key] = this[key].map(function (i){ return serialize.call(i); });
+        } else {
           result[key] = this[key];
         }
     }

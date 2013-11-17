@@ -30,9 +30,9 @@ class Huboard
 
     def create_issue(params)
        gh.issues.create({
-         title: params[:title],
-         body: params[:body],
-         labels: [column_labels.first]
+         title: params["title"],
+         body: params["body"],
+         labels: [column_labels.first].concat(params["labels"])
        }).extend(Huboard::Issues::Card).merge!({"repo" => {:owner => {:login => @user}, :name => @repo }})
     end
 
