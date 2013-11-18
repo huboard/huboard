@@ -132,9 +132,30 @@
     .collapsed {
       display: block;
     }
-    > h3 span, > h3 .ui-icon-minus, > h3 small, ul {
+    > h3 span, > h3 .ui-icon-minus, > h3 small {
       display:none;
     }
+
+    .sortable {
+      @include flex(0 1 auto);
+      min-height: 0;
+      border:0;
+      padding: 0;
+      margin: 0;
+      width: 0;
+      height: 0;
+      li {
+        border:0;
+        padding: 0;
+        margin: 0;
+        width: 0;
+        height: 0;
+        > div {
+          display:none;
+        }
+      }
+    }
+
   }
   &.hb-state-collapsed {
     @include flex(0 1 auto);
@@ -143,7 +164,7 @@
     .collapsed {
       display: block;
     }
-    > h3 span, > h3 .ui-icon-minus, > h3 small, ul {
+    > h3 span, > h3 .ui-icon-minus, > h3 small {
       display:none;
     }
   }
