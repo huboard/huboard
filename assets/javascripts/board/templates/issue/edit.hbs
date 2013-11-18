@@ -15,8 +15,8 @@
   </div>
   <div class="fullscreen-card-description card-comment">
    {{! created by avatar }}
-    <a href="https://github.com/rauhryan" target="_blank">
-      <img title="Created by rauhryan" src="https://secure.gravatar.com/avatar/29283ede6c447fdc62f0ceac42df33ea?s=30">
+    <a href="{{unbound user.html_url}}" target="_blank">
+      {{hb-avatar user=user.gravatar_id title=user.login width=30 height=30 }}
     </a>
     <div class="comment-body">
       {{#if body_html }}

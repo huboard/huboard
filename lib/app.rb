@@ -219,6 +219,12 @@ class Huboard
       @parameters = params.merge({ :socket_backend => socket_backend})
 
       @repo = gh.repos(params[:user],params[:repo])
+      if logged_in?
+        is_a_collaborator = gh.connection.get("/repos/#{params[:user]}/#{params[:repo]}/collaborators/#{current_user.login}").status == 204
+        @repo.merge!(is_collaborator: is_a_collaborator)
+      else
+        @repo.merge!(is_collaborator: false)
+      end
 
       erb :ember_board, :layout => :layout_ember
     end

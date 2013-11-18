@@ -15,6 +15,7 @@ var IssuesCreateController = Ember.ObjectController.extend({
       });
     }
   },
+  isCollaboratorBinding: "App.repo.is_collaborator",
   otherLabelsBinding: "controllers.index.model.other_labels",
   columnsBinding: "controllers.index.model.columns",
   disabled: function () {

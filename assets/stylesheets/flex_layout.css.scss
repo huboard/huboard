@@ -114,6 +114,11 @@
     @include flex(1);
 
   }
+  > h3 .ui-icon {
+    color: #999;
+    opacity: 0.5;
+    padding: 0px 2px;
+  }
   > h3 .ui-icon-plus {
     display:none;
   }
@@ -170,6 +175,10 @@
 
       &.hb-state-collapsed {
         width: auto;
+
+        > h3 span,  > h3 small {
+          display:inline;
+        }
        
         &.hovering {
           ul {
