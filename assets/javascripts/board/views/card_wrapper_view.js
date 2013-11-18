@@ -15,7 +15,7 @@ var CardWrapperView = Em.View.extend({
       }.bind(this))
     }.observes("content.isDestroying"),
     isDraggable: function( ){
-      return App.get("loggedIn");
+      return App.get("loggedIn") && App.get("repo.is_collaborator");
     }.property("App.loggedIn","content.state"),
     isFiltered: function() {
       var dimFilters = App.get("dimFilters"),

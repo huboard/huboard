@@ -9,15 +9,6 @@
     </div>
     <div class="flex-form-right">
       {{#if isCollaborator}}
-        <ul class="labels">
-          <h5>Column</h5>
-          {{#each label in columns}}
-              <li {{action "selectColumn" label bubbles=false}} class="card-label">
-                <span>{{label.text}}</span>
-              </li>
-          {{/each}}
-        </ul>
-
         {{hb-label-selector values=model.labels title="Labels" labels=otherLabels}}
       {{/if}}
     </div>
