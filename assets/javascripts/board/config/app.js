@@ -12,6 +12,26 @@ var Spinner = require('../../spin');
 
 var Markdown = require("../vendor/marked")
 
+Ember.EventDispatcher = Ember.EventDispatcher.extend({
+  events: {
+    touchstart  : 'touchStart',
+    touchmove   : 'touchMove',
+    touchend    : 'touchEnd',
+    touchcancel : 'touchCancel',
+    keydown     : 'keyDown',
+    keyup       : 'keyUp',
+    keypress    : 'keyPress',
+    mousedown   : 'mouseDown',
+    mouseup     : 'mouseUp',
+    click       : 'click',
+    focusin     : 'focusIn',
+    focusout    : 'focusOut',
+    submit      : 'submit',
+    input       : 'input',
+    change      : 'change'
+  }
+});
+
 
 var App = Ember.Application.create({
   rootElement: "#application",

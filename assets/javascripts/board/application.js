@@ -151,6 +151,26 @@ var Spinner = require('../../spin');
 
 var Markdown = require("../vendor/marked")
 
+Ember.EventDispatcher = Ember.EventDispatcher.extend({
+  events: {
+    touchstart  : 'touchStart',
+    touchmove   : 'touchMove',
+    touchend    : 'touchEnd',
+    touchcancel : 'touchCancel',
+    keydown     : 'keyDown',
+    keyup       : 'keyUp',
+    keypress    : 'keyPress',
+    mousedown   : 'mouseDown',
+    mouseup     : 'mouseUp',
+    click       : 'click',
+    focusin     : 'focusIn',
+    focusout    : 'focusOut',
+    submit      : 'submit',
+    input       : 'input',
+    change      : 'change'
+  }
+});
+
 
 var App = Ember.Application.create({
   rootElement: "#application",
@@ -57254,18 +57274,6 @@ var ColumnView = Ember.ContainerView.extend({
     classNames:["collapsed"],
     click: function(){
       this.get("controller").toggleProperty('isCollapsed')
-    },
-    didInsertElement: function(){
-      var that = this;
-      this.$().droppable({
-        out: function() {
-         // that.get("controller").set("isHovering",false);
-        },
-        over: function () {
-         // that.get("controller").set("isHovering",true);
-        }
-      })
-      this._super();
     }
   }),
 

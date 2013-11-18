@@ -93,18 +93,6 @@ var ColumnView = Ember.ContainerView.extend({
     classNames:["collapsed"],
     click: function(){
       this.get("controller").toggleProperty('isCollapsed')
-    },
-    didInsertElement: function(){
-      var that = this;
-      this.$().droppable({
-        out: function() {
-         // that.get("controller").set("isHovering",false);
-        },
-        over: function () {
-         // that.get("controller").set("isHovering",true);
-        }
-      })
-      this._super();
     }
   }),
 
