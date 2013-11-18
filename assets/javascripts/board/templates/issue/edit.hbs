@@ -3,7 +3,7 @@
       <h2> <a class="number" href="{{{unbound html_url }}}" target="_blank" {{bind-attr title="title"}}><small>ISSUE #</small>{{number}}</a> </h2>
       <div class="labels-placeholder">
        <div>
-          {{hb-label-selector values=controller.model.other_labels selected=controller.model.other_labels title="Labels" labels=otherLabels}}
+          {{hb-label-selector editable=App.repo.is_collaborator values=controller.model.other_labels selected=controller.model.other_labels title="Labels" labels=otherLabels}}
         </div>
       </div>
   </div>

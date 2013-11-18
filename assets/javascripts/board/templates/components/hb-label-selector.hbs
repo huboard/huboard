@@ -1,8 +1,20 @@
 <h5>{{ title }}</h5>
-{{#each label in labels}}
-  {{#hb-label label=label}}
-    <span>
-      {{label.name}}
-    </span>
-  {{/hb-label}}
-{{/each}}
+
+{{#if editable}}
+  {{#each label in labels}}
+    {{#hb-label label=label}}
+      <span>
+        {{label.name}}
+      </span>
+    {{/hb-label}}
+  {{/each}}
+{{else}}
+  {{#each label in selected}}
+    <li class="card-label active -x{{unbound label.color}}">
+      <span>
+        {{label.name}}
+      </span>
+    </li>
+  {{/each}}
+  
+{{/if}}

@@ -1,6 +1,7 @@
 var HbLabelSelectorComponent = Ember.Component.extend({
   tagName: "ul",
   classNames: ["labels"],
+  editable: true,
   selected: [],
   values: [],
   actions: {
