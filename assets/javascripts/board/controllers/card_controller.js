@@ -23,7 +23,7 @@ var CardController = Ember.ObjectController.extend({
       return this.get("model.other_labels").map(function(l){
         return Ember.Object.create(_.extend(l,{customColor: "-x"+l.color}));
       });
-  }.property("model.other_labels")
+  }.property("model.other_labels.@each")
 });
 
 module.exports = CardController;

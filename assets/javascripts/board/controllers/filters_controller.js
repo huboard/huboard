@@ -79,7 +79,7 @@ var FiltersController = Ember.ObjectController.extend({
         mode:0,
         color: l.color,
         condition:function(i){
-          return i.labels.any(function(label){ 
+          return _.union(i.labels, i.other_labels).any(function(label){ 
              return l.name.toLocaleLowerCase() === label.name.toLocaleLowerCase();
           });
         }

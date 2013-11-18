@@ -29,7 +29,7 @@ var HbLabelComponent = Ember.Component.extend({
   classNameBindings: [":card-label","colorClass", "selected:active"],
   didInsertElement: function () {
      this.$().on("click.label", function () {
-       this.get("parentView.controller").send("select", this.label)
+       this.get("parentView.controller").send("select", this.get("label"))
      }.bind(this))
   },
   willDestroyElement: function () {
@@ -40,7 +40,8 @@ var HbLabelComponent = Ember.Component.extend({
     return "-x" + this.get("label.color");
   }.property(),
   selected: function () {
-    return this.get("parentView.selected").contains(this.label);
+    
+    return this.get("parentView.selected").any(function (l){return l.name == this.get("label.name")}.bind(this))
   }.property("parentView.selected.@each")
 
 });
@@ -57,7 +58,7 @@ var HbLabelSelectorComponent = Ember.Component.extend({
   actions: {
     select : function (label) {
       var selected = this.get("selected");
-      selected.contains(label) ? selected.removeObject(label) : selected.pushObject(label);
+      selected.anyBy("name", label.name) ? selected.removeObject(selected.findBy("name", label.name)) : selected.pushObject(label);
       this.set("values", selected)
     }
   }
@@ -319,7 +320,7 @@ var CardController = Ember.ObjectController.extend({
       return this.get("model.other_labels").map(function(l){
         return Ember.Object.create(_.extend(l,{customColor: "-x"+l.color}));
       });
-  }.property("model.other_labels")
+  }.property("model.other_labels.@each")
 });
 
 module.exports = CardController;
@@ -471,7 +472,7 @@ var FiltersController = Ember.ObjectController.extend({
         mode:0,
         color: l.color,
         condition:function(i){
-          return i.labels.any(function(label){ 
+          return _.union(i.labels, i.other_labels).any(function(label){ 
              return l.name.toLocaleLowerCase() === label.name.toLocaleLowerCase();
           });
         }
@@ -547,7 +548,10 @@ module.exports = IssuesCreateController;
 
 
 },{}],17:[function(require,module,exports){
-var IssuesEditController = Ember.ObjectController.extend();
+var IssuesEditController = Ember.ObjectController.extend({
+  needs: ["index"],
+  otherLabels : Ember.computed.alias("controllers.index.other_labels")
+});
 
 module.exports = IssuesEditController;
 
@@ -1532,7 +1536,7 @@ function program1(depth0,data) {
   hashContexts = {};
   stack2 = helpers.each.call(depth0, "label", "in", "columns", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\n      </ul>\n      ");
+  data.buffer.push("\n      </ul>\n\n      ");
   hashContexts = {'values': depth0,'title': depth0,'labels': depth0};
   hashTypes = {'values': "ID",'title': "STRING",'labels': "ID"};
   options = {hash:{
@@ -1587,8 +1591,17 @@ function program3(depth0,data) {
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "number", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("</a> </h2>\n      <div class=\"labels-placeholder\">\n       <div>\n          <form action=\"/api/rauhryan/skipping_stones_repo/issues/16/update_labels\">\n\n            <ul class=\"labels\"> \n              <h5> Labels </h5>\n              ");
-  data.buffer.push("\n            </ul>\n          </form>\n        </div>\n      </div>\n  </div>\n<div class=\"fullscreen-card-left\">\n  <div class=\"fullscreen-card-preamble\">\n    <div class=\"fullscreen-header\">\n      <h2>");
+  data.buffer.push("</a> </h2>\n      <div class=\"labels-placeholder\">\n       <div>\n          ");
+  hashContexts = {'values': depth0,'selected': depth0,'title': depth0,'labels': depth0};
+  hashTypes = {'values': "ID",'selected': "ID",'title': "STRING",'labels': "ID"};
+  options = {hash:{
+    'values': ("controller.model.other_labels"),
+    'selected': ("controller.model.other_labels"),
+    'title': ("Labels"),
+    'labels': ("otherLabels")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['hb-label-selector'] || depth0['hb-label-selector']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-label-selector", options))));
+  data.buffer.push("\n        </div>\n      </div>\n  </div>\n<div class=\"fullscreen-card-left\">\n  <div class=\"fullscreen-card-preamble\">\n    <div class=\"fullscreen-header\">\n      <h2>");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "title", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
@@ -1652,7 +1665,7 @@ function program2(depth0,data) {
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "title", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("</h5>\n\n");
+  data.buffer.push("</h5>\n");
   hashTypes = {};
   hashContexts = {};
   stack1 = helpers.each.call(depth0, "label", "in", "labels", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});

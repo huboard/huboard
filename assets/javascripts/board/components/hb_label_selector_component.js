@@ -6,7 +6,7 @@ var HbLabelSelectorComponent = Ember.Component.extend({
   actions: {
     select : function (label) {
       var selected = this.get("selected");
-      selected.contains(label) ? selected.removeObject(label) : selected.pushObject(label);
+      selected.anyBy("name", label.name) ? selected.removeObject(selected.findBy("name", label.name)) : selected.pushObject(label);
       this.set("values", selected)
     }
   }
