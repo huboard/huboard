@@ -1,5 +1,4 @@
 var CardController = Ember.ObjectController.extend({
-  needs:["issueEdit"],
   actions : {
     dragged: function (column) {
       return this.get("model").drag(column);
@@ -8,8 +7,6 @@ var CardController = Ember.ObjectController.extend({
        return this.get("model").reorder(index);
     },
     fullscreen: function(){
-      //this.set("controllers.issueEdit.model",this.get("model"));
-      //this.send("openModal","issueEdit")
       this.transitionToRoute("issue", this.get("model"))
     },
     close: function (issue){

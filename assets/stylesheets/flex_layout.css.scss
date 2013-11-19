@@ -15,6 +15,7 @@
 @import "credit_cards";
 @import "assignees";
 @import "flex_form";
+@import "issue";
 
 #application > .ember-view {
    @include display(flex);

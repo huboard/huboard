@@ -31,9 +31,7 @@
       <h4> Activity </h4>
     </div>
     {{! render the activity stream }}
-    {{#each controller.sortedActivities}}
-      Activity!
-    {{/each}}
+    {{view App.IssueActivitiesView contentBinding=sortedActivities}}
   </div>
 </div>
 </div>
