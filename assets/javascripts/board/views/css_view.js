@@ -14,6 +14,21 @@ var CssView = Ember.View.extend({
     var buffer = this.buffer,
         that = this;
 
+    _(that.get("content.other_labels")).each(function(l){
+         var start = _.template(".-x<%= color %>.background",{ color: l.color });
+         buffer.push(start);
+         buffer.push("{")
+         buffer.push("background-color: #" + l.color + ";")
+         buffer.push("color: " + $.Color("#"+l.color).contrastColor() + ";")
+         buffer.push("}");
+
+         var start = _.template(".-x<%= color %>.border",{ color: l.color });
+         buffer.push(start);
+         buffer.push("{")
+         buffer.push("border-color: #" + l.color + ";")
+         buffer.push("}");
+    });
+
     _(["filter","card-label"]).each(function(name){
        _(that.get("content.other_labels")).each(function(l){
        

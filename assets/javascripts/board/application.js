@@ -185,7 +185,7 @@ App.Markdown = Markdown;
 App.LoadingRoute = Ember.Route.extend({
   renderTemplate: function() {
     if(this.router._activeViews.application){
-      return this.render({ "into" : "application", "outlet" : "loading"});
+      return this.render("loading",{ "into" : "application", "outlet" : "loading"});
     }
     this.render("loading");
   }
@@ -194,26 +194,28 @@ App.LoadingRoute = Ember.Route.extend({
 App.LoadingView = Ember.View.extend({
   didInsertElement: function(){
     $("body").addClass("fullscreen-open")
-  var opts = {
-    lines: 13, // The number of lines to draw
-  length: 0, // The length of each line
-  width: 6, // The line thickness
-  radius: 14, // The radius of the inner circle
-  corners: 1, // Corner roundness (0..1)
-  rotate: 19, // The rotation offset
-  direction: 1, // 1: clockwise, -1: counterclockwise
-  color: '#4a3e93', // #rgb or #rrggbb or array of colors
-  speed: 0.3, // Rounds per second
-  trail: 42, // Afterglow percentage
-  shadow: false, // Whether to render a shadow
-  hwaccel: true, // Whether to use hardware acceleration
-  className: 'spinner', // The CSS class to assign to the spinner
-  zIndex: 2e9, // The z-index (defaults to 2000000000)
-  top: '100px', // Top position relative to parent in px
-  left: 'auto' // Left position relative to parent in px
-  };
-new Spinner(opts).spin(this.$().get(0))
-  return this._super();
+    var opts = {
+        lines: 13, // The number of lines to draw
+        length: 0, // The length of each line
+        width: 6, // The line thickness
+        radius: 14, // The radius of the inner circle
+        corners: 1, // Corner roundness (0..1)
+        rotate: 19, // The rotation offset
+        direction: 1, // 1: clockwise, -1: counterclockwise
+        color: '#4a3e93', // #rgb or #rrggbb or array of colors
+        speed: 0.3, // Rounds per second
+        trail: 42, // Afterglow percentage
+        shadow: false, // Whether to render a shadow
+        hwaccel: true, // Whether to use hardware acceleration
+        className: 'spinner', // The CSS class to assign to the spinner
+        zIndex: 2e9, // The z-index (defaults to 2000000000)
+        top: '100px', // Top position relative to parent in px
+        left: 'auto' // Left position relative to parent in px
+      };
+
+    new Spinner(opts).spin(this.$().find("> div").get(0));
+
+    return this._super();
   },
     willDestroyElement: function(){
       $("body").removeClass("fullscreen-open")
@@ -326,9 +328,9 @@ var CardController = Ember.ObjectController.extend({
        return this.get("model").reorder(index);
     },
     fullscreen: function(){
-      this.set("controllers.issueEdit.model",this.get("model"));
-      this.send("openModal","issueEdit")
-      //this.transitionToRoute("issue", this.get("model"))
+      //this.set("controllers.issueEdit.model",this.get("model"));
+      //this.send("openModal","issueEdit")
+      this.transitionToRoute("issue", this.get("model"))
     },
     close: function (issue){
       return this.get("model").close();
@@ -572,7 +574,11 @@ module.exports = IssuesCreateController;
 },{}],17:[function(require,module,exports){
 var IssuesEditController = Ember.ObjectController.extend({
   needs: ["index"],
-  otherLabels : Ember.computed.alias("controllers.index.other_labels")
+  otherLabels : Ember.computed.alias("controllers.index.other_labels"),
+  sortedActivities: function () {
+    debugger
+    return this.get("model.activities.events");
+  }.property("model.activities")
 });
 
 module.exports = IssuesEditController;
@@ -614,9 +620,9 @@ App.ColumnController = require('./controllers/column_controller');
 App.ColumnCountController = require('./controllers/column_count_controller');
 App.FiltersController = require('./controllers/filters_controller');
 App.IndexController = require('./controllers/index_controller');
+App.IssueController = require('./controllers/issue_controller');
 App.SearchController = require('./controllers/search_controller');
 App.IssueCreateController = require('./controllers/issue/create_controller');
-App.IssueEditController = require('./controllers/issue/edit_controller');
 App.Board = require('./models/board');
 App.Issue = require('./models/issue');
 App.Repo = require('./models/repo');
@@ -630,10 +636,10 @@ App.ColumnCountView = require('./views/column_count_view');
 App.ColumnView = require('./views/column_view');
 App.CssView = require('./views/css_view');
 App.FilterView = require('./views/filter_view');
+App.IssueView = require('./views/issue_view');
 App.ModalView = require('./views/modal_view');
 App.SearchView = require('./views/search_view');
 App.IssueCreateView = require('./views/issue/create_view');
-App.IssueEditView = require('./views/issue/edit_view');
 App.Serializable = require('./mixins/serializable');
 App.WipLimit = require('./mixins/wip_limit');
 
@@ -642,7 +648,7 @@ require('./config/routes');
 module.exports = App;
 
 
-},{"./components/hb_avatar_component":1,"./components/hb_label_component":2,"./components/hb_label_selector_component":3,"./components/hb_markdown_editor_component":4,"./components/hb_pane_component":5,"./components/hb_tabs_component":6,"./config/app":7,"./config/routes":8,"./controllers/application_controller":9,"./controllers/assignee_controller":10,"./controllers/card_controller":11,"./controllers/column_controller":12,"./controllers/column_count_controller":13,"./controllers/filters_controller":14,"./controllers/index_controller":15,"./controllers/issue/create_controller":16,"./controllers/issue/edit_controller":17,"./controllers/search_controller":18,"./mixins/serializable":20,"./mixins/wip_limit":21,"./models/board":22,"./models/issue":23,"./models/repo":24,"./routes/application_route":25,"./routes/index_route":26,"./routes/issue_route":27,"./templates":28,"./views/assignee_filter_view":36,"./views/card_view":37,"./views/card_wrapper_view":38,"./views/column_count_view":39,"./views/column_view":40,"./views/css_view":41,"./views/filter_view":42,"./views/issue/create_view":43,"./views/issue/edit_view":44,"./views/modal_view":45,"./views/search_view":46}],20:[function(require,module,exports){
+},{"./components/hb_avatar_component":1,"./components/hb_label_component":2,"./components/hb_label_selector_component":3,"./components/hb_markdown_editor_component":4,"./components/hb_pane_component":5,"./components/hb_tabs_component":6,"./config/app":7,"./config/routes":8,"./controllers/application_controller":9,"./controllers/assignee_controller":10,"./controllers/card_controller":11,"./controllers/column_controller":12,"./controllers/column_count_controller":13,"./controllers/filters_controller":14,"./controllers/index_controller":15,"./controllers/issue/create_controller":16,"./controllers/issue_controller":17,"./controllers/search_controller":18,"./mixins/serializable":20,"./mixins/wip_limit":21,"./models/board":22,"./models/issue":23,"./models/repo":24,"./routes/application_route":25,"./routes/index_route":26,"./routes/issue_route":27,"./templates":28,"./views/assignee_filter_view":36,"./views/card_view":37,"./views/card_wrapper_view":38,"./views/column_count_view":39,"./views/column_view":40,"./views/css_view":41,"./views/filter_view":42,"./views/issue/create_view":43,"./views/issue_view":44,"./views/modal_view":45,"./views/search_view":46}],20:[function(require,module,exports){
 function serialize() {
     var result = {};
     for (var key in $.extend(true, {}, this))
@@ -719,7 +725,18 @@ var Issue = Ember.Object.extend(Serializable,{
       return Issue.create(response);
     })
   },
+  loadDetails: function () {
+     this.set("processing", true);
+      var user = this.get("repo.owner.login"),
+          repo = this.get("repo.name"),
+          full_name = user + "/" + repo;
+     
+     return Ember.$.getJSON("/api/" + full_name + "/issues/" + this.get("number") + "/details").then(function(details){
+       this.set("activities", details.activities);
+     }.bind(this))
+  },
   processing: false,
+  loaded: false,
   archive: function() {
      this.set("processing", true);
       var user = this.get("repo.owner.login"),
@@ -832,6 +849,7 @@ var ApplicationRoute = Ember.Route.extend({
           into: 'application',
           outlet: 'modal'
         });
+        this.transitionTo("index")
       }.bind(this));
     }
   },
@@ -868,38 +886,11 @@ var IndexRoute = Ember.Route.extend({
     this.render('assignee', {into: 'index', outlet: 'sidebarTop'})
   },
   actions :{
-    toggleDrawer : function () {
-      console.log("toggle drawer")
-      var open = $(".toggle-drawer")
-        .hasClass("arrow-left");
-
-      open ? this.animateDrawer("close") : this.animateDrawer("open");
-    },
     createNewIssue : function () {
       this.controllerFor("issue.create").set("model", App.Issue.createNew());
       this.send("openModal","issue.create")
     }
-  },
-    animateDrawer : function (direction) {
-
-    switch(direction) {
-      case "open":
-        $("#drawer")
-          .find(".toggle-drawer").removeClass("arrow-right").addClass("arrow-left")
-          .end()
-          .animate({left: '+=270px'}, 300);
-        $("#content").animate({"margin-left": "+=100px"},300);
-        break;
-      case "close":
-        $("#drawer")
-          .animate({left: '-=270px'}, 300, function(){
-             $(this)
-              .find(".toggle-drawer").removeClass("arrow-left").addClass("arrow-right")
-              .end();
-          });
-        $("#content").animate({"margin-left": "-=100px"},300);
-    }  
-    }
+  }
 
 });
 
@@ -907,11 +898,22 @@ module.exports = IndexRoute;
 
 },{"../views/css_view":41}],27:[function(require,module,exports){
 var IssueRoute = Ember.Route.extend({
-  model : function (params){
-     debugger;
+
+  model : function (params, transition){
+    // hacks!
+    transition.abort()
+    this.transitionTo("index")
   },
-  setupController: function() {
-     debugger;
+  afterModel: function (model) {
+    return model.loadDetails();
+    return Ember.RSVP.Promise(function (resolve, reject){
+      model.loadDetails().then(function (m){
+        resolve(m);
+      });
+    })
+  },
+  setupController: function(controller, model) {
+    controller.set("model", model);
   },
   renderTemplate: function () {
     this.render({into:'application',outlet:'modal'})
@@ -1470,13 +1472,105 @@ function program5(depth0,data) {
   
 });
 
+Ember.TEMPLATES['issue'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', stack1, stack2, hashTypes, hashContexts, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, self=this;
+
+function program1(depth0,data) {
+  
+  var buffer = '', stack1, hashContexts, hashTypes;
+  data.buffer.push("\n        ");
+  hashContexts = {'unescaped': depth0};
+  hashTypes = {'unescaped': "STRING"};
+  stack1 = helpers._triageMustache.call(depth0, "body_html", {hash:{
+    'unescaped': ("true")
+  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n      ");
+  return buffer;
+  }
+
+function program3(depth0,data) {
+  
+  
+  data.buffer.push("\n        <p class=\"empty\"> No description given </p>\n      ");
+  }
+
+function program5(depth0,data) {
+  
+  
+  data.buffer.push("\n      Activity!\n    ");
+  }
+
+  data.buffer.push("<div class=\"fullscreen-card\">\n  <div class=\"fullscreen-card-right\">\n      <h2> <a class=\"number\" href=\"");
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers.unbound.call(depth0, "html_url", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\" target=\"_blank\" ");
+  hashContexts = {'title': depth0};
+  hashTypes = {'title': "STRING"};
+  options = {hash:{
+    'title': ("title")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
+  data.buffer.push("><small>ISSUE #</small>");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "number", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("</a> </h2>\n      <div class=\"labels-placeholder\">\n       <div>\n          ");
+  hashContexts = {'editable': depth0,'values': depth0,'selected': depth0,'title': depth0,'labels': depth0};
+  hashTypes = {'editable': "ID",'values': "ID",'selected': "ID",'title': "STRING",'labels': "ID"};
+  options = {hash:{
+    'editable': ("App.repo.is_collaborator"),
+    'values': ("controller.model.other_labels"),
+    'selected': ("controller.model.other_labels"),
+    'title': ("Labels"),
+    'labels': ("otherLabels")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['hb-label-selector'] || depth0['hb-label-selector']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-label-selector", options))));
+  data.buffer.push("\n        </div>\n      </div>\n  </div>\n<div class=\"fullscreen-card-left\">\n  <div class=\"fullscreen-card-preamble\">\n    <div class=\"fullscreen-header\">\n      <h2>");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "title", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("</h2>\n    </div>\n  </div>\n  <div class=\"fullscreen-card-description card-comment\">\n    <a href=\"");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.unbound.call(depth0, "user.html_url", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\" target=\"_blank\">\n      ");
+  hashContexts = {'user': depth0,'title': depth0,'width': depth0,'height': depth0};
+  hashTypes = {'user': "ID",'title': "ID",'width': "INTEGER",'height': "INTEGER"};
+  options = {hash:{
+    'user': ("user.gravatar_id"),
+    'title': ("user.login"),
+    'width': (30),
+    'height': (30)
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['hb-avatar'] || depth0['hb-avatar']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-avatar", options))));
+  data.buffer.push("\n    </a>\n    <div class=\"comment-body\">\n      ");
+  hashTypes = {};
+  hashContexts = {};
+  stack2 = helpers['if'].call(depth0, "body_html", {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+  data.buffer.push("\n    </div>\n  </div>\n\n  <div class=\"fullscreen-card-activity\">\n    <div class=\"fullscreen-header\">\n      <h4> Activity </h4>\n    </div>\n    ");
+  data.buffer.push("\n    ");
+  hashTypes = {};
+  hashContexts = {};
+  stack2 = helpers.each.call(depth0, "controller.sortedActivities", {hash:{},inverse:self.noop,fn:self.program(5, program5, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+  data.buffer.push("\n  </div>\n</div>\n</div>\n");
+  return buffer;
+  
+});
+
 Ember.TEMPLATES['loading'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   
 
 
-  data.buffer.push("<div class=\"fullscreen-overlay\" ></div>\n");
+  data.buffer.push("<div class=\"fullscreen-overlay fixed\" ></div>\n");
   
 });
 
@@ -1569,88 +1663,6 @@ function program1(depth0,data) {
   stack2 = helpers['if'].call(depth0, "isCollaborator", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n    </div>\n  </form>\n</div>\n\n");
-  return buffer;
-  
-});
-
-Ember.TEMPLATES['issue/edit'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
-this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, stack2, hashTypes, hashContexts, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, self=this;
-
-function program1(depth0,data) {
-  
-  var buffer = '', stack1, hashContexts, hashTypes;
-  data.buffer.push("\n        ");
-  hashContexts = {'unescaped': depth0};
-  hashTypes = {'unescaped': "STRING"};
-  stack1 = helpers._triageMustache.call(depth0, "body_html", {hash:{
-    'unescaped': ("true")
-  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n      ");
-  return buffer;
-  }
-
-function program3(depth0,data) {
-  
-  
-  data.buffer.push("\n        <p class=\"empty\"> No description given </p>\n      ");
-  }
-
-  data.buffer.push("<div class=\"fullscreen-card\">\n  <div class=\"fullscreen-card-right\">\n      <h2> <a class=\"number\" href=\"");
-  hashTypes = {};
-  hashContexts = {};
-  stack1 = helpers.unbound.call(depth0, "html_url", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\" target=\"_blank\" ");
-  hashContexts = {'title': depth0};
-  hashTypes = {'title': "STRING"};
-  options = {hash:{
-    'title': ("title")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
-  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
-  data.buffer.push("><small>ISSUE #</small>");
-  hashTypes = {};
-  hashContexts = {};
-  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "number", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("</a> </h2>\n      <div class=\"labels-placeholder\">\n       <div>\n          ");
-  hashContexts = {'editable': depth0,'values': depth0,'selected': depth0,'title': depth0,'labels': depth0};
-  hashTypes = {'editable': "ID",'values': "ID",'selected': "ID",'title': "STRING",'labels': "ID"};
-  options = {hash:{
-    'editable': ("App.repo.is_collaborator"),
-    'values': ("controller.model.other_labels"),
-    'selected': ("controller.model.other_labels"),
-    'title': ("Labels"),
-    'labels': ("otherLabels")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
-  data.buffer.push(escapeExpression(((stack1 = helpers['hb-label-selector'] || depth0['hb-label-selector']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-label-selector", options))));
-  data.buffer.push("\n        </div>\n      </div>\n  </div>\n<div class=\"fullscreen-card-left\">\n  <div class=\"fullscreen-card-preamble\">\n    <div class=\"fullscreen-header\">\n      <h2>");
-  hashTypes = {};
-  hashContexts = {};
-  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "title", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("</h2>\n    </div>\n  </div>\n  <div class=\"fullscreen-card-description card-comment\">\n   ");
-  data.buffer.push("\n    <a href=\"");
-  hashTypes = {};
-  hashContexts = {};
-  data.buffer.push(escapeExpression(helpers.unbound.call(depth0, "user.html_url", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\" target=\"_blank\">\n      ");
-  hashContexts = {'user': depth0,'title': depth0,'width': depth0,'height': depth0};
-  hashTypes = {'user': "ID",'title': "ID",'width': "INTEGER",'height': "INTEGER"};
-  options = {hash:{
-    'user': ("user.gravatar_id"),
-    'title': ("user.login"),
-    'width': (30),
-    'height': (30)
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
-  data.buffer.push(escapeExpression(((stack1 = helpers['hb-avatar'] || depth0['hb-avatar']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-avatar", options))));
-  data.buffer.push("\n    </a>\n    <div class=\"comment-body\">\n      ");
-  hashTypes = {};
-  hashContexts = {};
-  stack2 = helpers['if'].call(depth0, "body_html", {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
-  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\n    </div>\n  </div>\n\n  <div class=\"fullscreen-card-activity\">\n    <div class=\"fullscreen-header\">\n      <h4> Activity </h4>\n    </div>\n    ");
-  data.buffer.push("\n  </div>\n</div>\n</div>\n");
   return buffer;
   
 });
@@ -57127,7 +57139,6 @@ var CardWrapperView = Em.View.extend({
       }.bind(this))
     }.observes("content.isDestroying"),
     isDraggable: function( ){
-      return true;
       return App.get("loggedIn") && App.get("repo.is_collaborator");
     }.property("App.loggedIn","content.state"),
     isFiltered: function() {
@@ -57299,6 +57310,21 @@ var CssView = Ember.View.extend({
     var buffer = this.buffer,
         that = this;
 
+    _(that.get("content.other_labels")).each(function(l){
+         var start = _.template(".-x<%= color %>.background",{ color: l.color });
+         buffer.push(start);
+         buffer.push("{")
+         buffer.push("background-color: #" + l.color + ";")
+         buffer.push("color: " + $.Color("#"+l.color).contrastColor() + ";")
+         buffer.push("}");
+
+         var start = _.template(".-x<%= color %>.border",{ color: l.color });
+         buffer.push(start);
+         buffer.push("{")
+         buffer.push("border-color: #" + l.color + ";")
+         buffer.push("}");
+    });
+
     _(["filter","card-label"]).each(function(name){
        _(that.get("content.other_labels")).each(function(l){
        
@@ -57384,13 +57410,14 @@ var IssuesCreateView = App.ModalView.extend({
 module.exports = IssuesCreateView;
 
 },{}],44:[function(require,module,exports){
-var IssuesEditView = App.ModalView.extend({
-  templateName: "issue/edit"
+var ModalView = require("./modal_view")
+
+var IssuesView = ModalView.extend({
 });
 
-module.exports = IssuesEditView;
+module.exports = IssuesView;
 
-},{}],45:[function(require,module,exports){
+},{"./modal_view":45}],45:[function(require,module,exports){
 var ModalView = Em.View.extend({
   layoutName: "layouts/modal",
 

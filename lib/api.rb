@@ -77,6 +77,16 @@ class Huboard
 
     end
 
+    get '/:user/:repo/issues/:number/details' do 
+      api = huboard.board(params[:user], params[:repo])
+
+      issue = api.issue(params[:number]).activities
+
+      return json issue
+
+    end
+
+
     post '/:user/:repo/issues/:number/update_labels' do 
       labels = params[:labels] ? params[:labels][:name] : []
       issue = pebble.update_issue_labels(params[:user], params[:repo], params[:number], labels).to_hash

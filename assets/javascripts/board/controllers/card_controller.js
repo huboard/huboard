@@ -8,9 +8,9 @@ var CardController = Ember.ObjectController.extend({
        return this.get("model").reorder(index);
     },
     fullscreen: function(){
-      this.set("controllers.issueEdit.model",this.get("model"));
-      this.send("openModal","issueEdit")
-      //this.transitionToRoute("issue", this.get("model"))
+      //this.set("controllers.issueEdit.model",this.get("model"));
+      //this.send("openModal","issueEdit")
+      this.transitionToRoute("issue", this.get("model"))
     },
     close: function (issue){
       return this.get("model").close();

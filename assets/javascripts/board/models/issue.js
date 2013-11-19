@@ -12,7 +12,18 @@ var Issue = Ember.Object.extend(Serializable,{
       return Issue.create(response);
     })
   },
+  loadDetails: function () {
+     this.set("processing", true);
+      var user = this.get("repo.owner.login"),
+          repo = this.get("repo.name"),
+          full_name = user + "/" + repo;
+     
+     return Ember.$.getJSON("/api/" + full_name + "/issues/" + this.get("number") + "/details").then(function(details){
+       this.set("activities", details.activities);
+     }.bind(this))
+  },
   processing: false,
+  loaded: false,
   archive: function() {
      this.set("processing", true);
       var user = this.get("repo.owner.login"),

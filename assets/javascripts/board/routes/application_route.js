@@ -15,6 +15,7 @@ var ApplicationRoute = Ember.Route.extend({
           into: 'application',
           outlet: 'modal'
         });
+        this.transitionTo("index")
       }.bind(this));
     }
   },

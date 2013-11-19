@@ -103,6 +103,11 @@ class Huboard
         return self.merge! the_feed
       end
 
+      def activities
+        the_feed =  { :comments => self.all_comments, :events => events }
+        return self.merge! :activities => the_feed
+      end
+
       def patch(hash)
         updated = client.patch hash
         updated.extend(Card).merge!(:repo => repo)

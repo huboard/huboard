@@ -14,7 +14,6 @@
     </div>
   </div>
   <div class="fullscreen-card-description card-comment">
-   {{! created by avatar }}
     <a href="{{unbound user.html_url}}" target="_blank">
       {{hb-avatar user=user.gravatar_id title=user.login width=30 height=30 }}
     </a>
@@ -32,6 +31,9 @@
       <h4> Activity </h4>
     </div>
     {{! render the activity stream }}
+    {{#each controller.sortedActivities}}
+      Activity!
+    {{/each}}
   </div>
 </div>
 </div>
