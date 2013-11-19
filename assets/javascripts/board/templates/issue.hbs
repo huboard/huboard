@@ -18,6 +18,9 @@
       {{hb-avatar user=user.gravatar_id title=user.login width=30 height=30 }}
     </a>
     <div class="comment-body">
+      <div class="author">
+        <strong>{{user.login}}</strong> opened this issue {{momentAgo created_at}}
+      </div>
       {{#if body_html }}
         {{{body_html}}}
       {{else}}

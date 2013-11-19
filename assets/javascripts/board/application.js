@@ -1559,7 +1559,16 @@ function program3(depth0,data) {
     'height': (30)
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers['hb-avatar'] || depth0['hb-avatar']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-avatar", options))));
-  data.buffer.push("\n    </a>\n    <div class=\"comment-body\">\n      ");
+  data.buffer.push("\n    </a>\n    <div class=\"comment-body\">\n      <div class=\"author\">\n        <strong>");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "user.login", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("</strong> opened this issue ");
+  hashTypes = {};
+  hashContexts = {};
+  options = {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.momentAgo || depth0.momentAgo),stack1 ? stack1.call(depth0, "created_at", options) : helperMissing.call(depth0, "momentAgo", "created_at", options))));
+  data.buffer.push("\n      </div>\n      ");
   hashTypes = {};
   hashContexts = {};
   stack2 = helpers['if'].call(depth0, "body_html", {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
@@ -1639,7 +1648,16 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
     'width': (30)
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers['hb-avatar'] || depth0['hb-avatar']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-avatar", options))));
-  data.buffer.push("\n</a>\n<div class=\"comment-body\">\n  ");
+  data.buffer.push("\n</a>\n<div class=\"comment-body\">\n  <div class=\"author\">\n    <strong>");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "view.content.user.login", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("</strong> commented ");
+  hashTypes = {};
+  hashContexts = {};
+  options = {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.momentAgo || depth0.momentAgo),stack1 ? stack1.call(depth0, "view.content.created_at", options) : helperMissing.call(depth0, "momentAgo", "view.content.created_at", options))));
+  data.buffer.push("\n  </div>\n  ");
   hashContexts = {'unescaped': depth0};
   hashTypes = {'unescaped': "STRING"};
   stack2 = helpers._triageMustache.call(depth0, "view.content.body_html", {hash:{

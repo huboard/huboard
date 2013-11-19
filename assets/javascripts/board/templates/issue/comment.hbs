@@ -2,5 +2,8 @@
   {{hb-avatar user=view.content.user.gravatar_id height=30 width=30 }}
 </a>
 <div class="comment-body">
+  <div class="author">
+    <strong>{{view.content.user.login}}</strong> commented {{momentAgo view.content.created_at}}
+  </div>
   {{{ view.content.body_html}}}
 </div>
