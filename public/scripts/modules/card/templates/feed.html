@@ -6,7 +6,7 @@
     <% _(issue.comments).each(function(c) { %>
     <div class="card-comment">
       <a href="<%= c.user.html_url %>" target="_blank">
-        <img title="Created by <%= c.user.login %>" src="https://secure.gravatar.com/avatar/<%= c.user.gravatar_id%>?s=30" />
+        <img title="Created by <%= c.user.login %>" src="<%= c.user.avatar_url%>&s=30" width="30" height="30" />
       </a>
       <div class="comment-body">
         <%= c.body_html %>

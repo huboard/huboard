@@ -6,7 +6,7 @@
   <a class="number" href="<%= html_url %>" target="_blank" title="View issue on github.com"><small>#</small><%= number %></a>
 </div>
 <% if(assignee) { %>
- <img data-placement="right" rel="twipsy" title="Assigned to <%= assignee.login %>" src="https://secure.gravatar.com/avatar/<%= assignee.gravatar_id %>?s=24" />
+ <img data-placement="right" rel="twipsy" title="Assigned to <%= assignee.login %>" src="<%= assignee.avatar_url %>&s=24" width="24" height="24" />
 <% } %>
 
 <% if(milestone) { %>
