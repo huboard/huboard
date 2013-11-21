@@ -46,7 +46,7 @@ class Huboard
         :full_name => gh.full_name,
         :columns => columns,
         :milestones => milestones,
-        :other_labels => other_labels.sort_by {|l| l.name },
+        :other_labels => other_labels.sort_by {|l| l.name.downcase },
         :assignees => assignees.to_a,
         :issues => issues
       }
