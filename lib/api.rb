@@ -62,6 +62,16 @@ class Huboard
        return json huboard.board(params[:user],params[:repo]).create_issue JSON.parse(request.body.read)
     end
 
+    post '/:user/:repo/issues/:number/update' do 
+
+      api = huboard.board(params[:user], params[:repo])
+
+      issue = api.issue(params[:number]).update(JSON.parse(request.body.read)).to_hash
+
+      return json issue
+
+    end
+
     get '/:user/:repo/board' do 
       board = pebble.board(params[:user], params[:repo])
       board.merge! :logged_in => logged_in?
@@ -85,6 +95,7 @@ class Huboard
       return json issue
 
     end
+
 
 
     post '/:user/:repo/issues/:number/update_labels' do 

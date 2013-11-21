@@ -12,6 +12,21 @@ var Issue = Ember.Object.extend(Serializable,{
       return Issue.create(response);
     })
   },
+  updateLabels : function () {
+     this.set("processing", true);
+      var user = this.get("repo.owner.login"),
+          repo = this.get("repo.name"),
+          full_name = user + "/" + repo;
+
+    return Ember.$.ajax( {
+      url: "/api/" + full_name + "/issues/" + this.get("number") + "/update", 
+      data: JSON.stringify({labels: this.serialize().other_labels}),
+      dataType: 'json',
+      type: "POST",
+      contentType: "application/json"})
+      .then(function(response){
+      }.bind(this))
+  },
   loadDetails: function () {
      this.set("processing", true);
       var user = this.get("repo.owner.login"),

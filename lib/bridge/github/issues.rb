@@ -22,6 +22,14 @@ class Huboard
        gh.issues(number).patch(labels: labels)
     end
 
+    def create_issue(params)
+       gh.issues.create({
+         title: params["title"],
+         body: params["body"],
+         labels: [column_labels.first].concat(params["labels"])
+       }).extend(Card).merge!({"repo" => {:owner => {:login => @user}, :name => @repo }})
+    end
+
     def closed_issues(label, since = (Time.now - 7*24*60*60).utc.iso8601)
       params = {labels: label, state:"closed",since:since, per_page: 30}
       gh.issues(params).each{|i| i.extend(Card)}.each{ |i| i.merge!({"repo" => {:owner => {:login => user}, :name => repo }}) }.sort_by { |i| i["_data"]["order"] || i["number"].to_f}
@@ -69,6 +77,20 @@ class Huboard
         patch "labels" => update_with
 
       end
+
+      def update(params)
+
+         if params["labels"]
+          keep_labels = self.labels.find_all {|l| Huboard.all_patterns.any? {|p| p.match(l.name)}}
+
+          update_with = params["labels"].concat(keep_labels.map{|l| l.to_hash} ) 
+
+          params["labels"] = update_with
+         end
+
+         patch(params).extend(Card)
+      end
+
 
       def other_labels
         begin

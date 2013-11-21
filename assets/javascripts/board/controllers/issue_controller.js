@@ -1,5 +1,12 @@
 var IssuesEditController = Ember.ObjectController.extend({
   needs: ["index"],
+  actions: {
+    labelsChanged: function () {
+       Ember.run.once(function () {
+         this.get("model").updateLabels()
+       }.bind(this));
+    }
+  },
   otherLabels : Ember.computed.alias("controllers.index.other_labels"),
   _events : function () {
      var events = this.get("model.activities.events");

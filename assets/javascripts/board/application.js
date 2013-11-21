@@ -61,6 +61,7 @@ var HbLabelSelectorComponent = Ember.Component.extend({
       var selected = this.get("selected");
       selected.anyBy("name", label.name) ? selected.removeObject(selected.findBy("name", label.name)) : selected.pushObject(label);
       this.set("values", selected)
+      this.sendAction("labelsChanged")
     }
   }
 });
@@ -571,6 +572,13 @@ module.exports = IssuesCreateController;
 },{}],17:[function(require,module,exports){
 var IssuesEditController = Ember.ObjectController.extend({
   needs: ["index"],
+  actions: {
+    labelsChanged: function () {
+       Ember.run.once(function () {
+         this.get("model").updateLabels()
+       }.bind(this));
+    }
+  },
   otherLabels : Ember.computed.alias("controllers.index.other_labels"),
   _events : function () {
      var events = this.get("model.activities.events");
@@ -741,6 +749,21 @@ var Issue = Ember.Object.extend(Serializable,{
       contentType: "application/json"}).then(function(response){
       return Issue.create(response);
     })
+  },
+  updateLabels : function () {
+     this.set("processing", true);
+      var user = this.get("repo.owner.login"),
+          repo = this.get("repo.name"),
+          full_name = user + "/" + repo;
+
+    return Ember.$.ajax( {
+      url: "/api/" + full_name + "/issues/" + this.get("number") + "/update", 
+      data: JSON.stringify({labels: this.serialize().other_labels}),
+      dataType: 'json',
+      type: "POST",
+      contentType: "application/json"})
+      .then(function(response){
+      }.bind(this))
   },
   loadDetails: function () {
      this.set("processing", true);
@@ -1531,9 +1554,10 @@ function program3(depth0,data) {
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "number", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("</a> </h2>\n      <div class=\"labels-placeholder\">\n       <div>\n          ");
-  hashContexts = {'editable': depth0,'values': depth0,'selected': depth0,'title': depth0,'labels': depth0};
-  hashTypes = {'editable': "ID",'values': "ID",'selected': "ID",'title': "STRING",'labels': "ID"};
+  hashContexts = {'labelsChanged': depth0,'editable': depth0,'values': depth0,'selected': depth0,'title': depth0,'labels': depth0};
+  hashTypes = {'labelsChanged': "STRING",'editable': "ID",'values': "ID",'selected': "ID",'title': "STRING",'labels': "ID"};
   options = {hash:{
+    'labelsChanged': ("labelsChanged"),
     'editable': ("App.repo.is_collaborator"),
     'values': ("controller.model.other_labels"),
     'selected': ("controller.model.other_labels"),
