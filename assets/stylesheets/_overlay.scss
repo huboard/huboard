@@ -42,14 +42,24 @@ body > .fullscreen-overlay {
 
 .fullscreen-credit-card {
   position: relative;
-  max-width: 460px;
   background-color: #fff;
-  margin: 50px auto;
   border-radius: 3px;
   border: 1px solid rgba(0,0,0, 0.5);
   p {
      font-size: 12px; 
   }
+}
+
+.fullscreen-body {
+  max-width: 960px;
+  margin: 50px auto;
+  &.credit-card {
+    max-width: 460px;
+    margin: 50px auto;
+    padding: 0;
+    border: 0;
+  }
+
 }
 
 .fullscreen-card {
@@ -60,11 +70,9 @@ body > .fullscreen-overlay {
   }
 
   position: relative;
-  max-width: 960px;
 
   background-color: #fafafa;
 
-  margin: 50px auto;
 
   border-radius: 2px;
   border: 1px solid rgba(0,0,0, 0.3);

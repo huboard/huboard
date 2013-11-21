@@ -45,6 +45,7 @@
   <div class="fullscreen-overlay" >
 
     <div class="fullscreen-wrapper">
+      <div class="fullscreen-body">
       <script type="text/module" data-module="card/main">
         <% if logged_in? %>
           <%= params.clone.merge!({login: current_user.login }).to_json %>
@@ -53,6 +54,7 @@
         <% end %>
       </script>
       
+    </div>
     </div>
     
   </div>
