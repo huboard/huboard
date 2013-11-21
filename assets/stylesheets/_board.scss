@@ -168,11 +168,20 @@
 
 .column {
   .is-draggable {
-    cursor:move;
+    cursor:pointer;
+  }
+  .ui-sortable-helper {
+    cursor: move;
+    cursor: -webkit-grabbing;
+    cursor: -moz-grabbing;
+    cursor: -ms-grabbing;
+    cursor: grabbing;
+    @include transform(rotate(3deg));
   }
 }
 
 .column li {
+  cursor:pointer;
   list-style: none;
   padding: 5px 5px 34px 5px;
   margin-bottom: 10px;
@@ -280,6 +289,7 @@
     font-size:2em;
   }               
 }
+
 
 
 .column li a.close {
