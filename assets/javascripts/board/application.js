@@ -765,6 +765,7 @@ var Issue = Ember.Object.extend(Serializable,{
       type: "POST",
       contentType: "application/json"})
       .then(function(response){
+        this.set("processing", false);
       }.bind(this))
   },
   loadDetails: function () {
@@ -775,6 +776,7 @@ var Issue = Ember.Object.extend(Serializable,{
      
      return Ember.$.getJSON("/api/" + full_name + "/issues/" + this.get("number") + "/details").then(function(details){
        this.set("activities", details.activities);
+       this.set("processing", false);
      }.bind(this))
   },
   processing: false,
@@ -1252,7 +1254,7 @@ function program7(depth0,data) {
   hashContexts = {};
   stack2 = helpers['if'].call(depth0, "canArchive", {hash:{},inverse:self.noop,fn:self.program(7, program7, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\n\n<div class=\"card-states\">\n   <img src=\"/img/check.png\" class=\"hb-state-closed\"/>\n   <img src=\"/img/arrow.png\" class=\"hb-state-ready\"/>\n   <img src=\"/img/x.png\" class=\"hb-state-blocked\"/>\n</div>\n");
+  data.buffer.push("\n\n<div class=\"card-states\">\n   <img src=\"/img/check.png\" title=\"Issue is closed\" class=\"hb-state-closed\"/>\n   <img src=\"/img/arrow.png\" class=\"hb-state-ready\"/>\n   <img src=\"/img/x.png\" class=\"hb-state-blocked\"/>\n</div>\n");
   return buffer;
   
 });

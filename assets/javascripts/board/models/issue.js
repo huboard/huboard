@@ -25,6 +25,7 @@ var Issue = Ember.Object.extend(Serializable,{
       type: "POST",
       contentType: "application/json"})
       .then(function(response){
+        this.set("processing", false);
       }.bind(this))
   },
   loadDetails: function () {
@@ -35,6 +36,7 @@ var Issue = Ember.Object.extend(Serializable,{
      
      return Ember.$.getJSON("/api/" + full_name + "/issues/" + this.get("number") + "/details").then(function(details){
        this.set("activities", details.activities);
+       this.set("processing", false);
      }.bind(this))
   },
   processing: false,

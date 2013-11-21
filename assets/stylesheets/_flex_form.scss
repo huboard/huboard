@@ -1,32 +1,33 @@
 .flex-form {
   margin: 0;
 
-  display: flex;
-  flex:1;
-  flex-flow: column nowrap;
+  @include display(flex);
+  @include flex(1);
+
+  @include flex-flow(column nowrap);
   &.split-form {
-    flex-flow: row nowrap;
+    @include flex-flow(row nowrap);
     .flex-form-left {
-      display: flex;
-      flex: 1;
-      flex-flow: column nowrap;
+      @include display(flex);
+      @include flex(1);
+      @include flex-flow(column nowrap);
       padding: 0 10px;
       border-right: 1px solid #ccc;
       > div {
-        display: flex;
-        flex: 1;
+        @include display(flex);
+        @include flex(1);
       
       }
     }
     .flex-form-right {
       padding: 0 10px;
-      flex: 0 0 210px;
+      @include flex(0 0 210px);
     }
   }
   label {
-    display: flex;
+    @include display(flex);
     input, textarea {
-      flex:1;
+      @include flex(1);
     }
   }
   input, textarea {
@@ -48,11 +49,11 @@
   }
 
   .markdown-editor {
-    flex:1;
-    display:flex;
+    @include flex(1);
+    @include display(flex);
     > div {
-      flex:1;
-      display:flex;
+      @include flex(1);
+      @include display(flex);
       
     }
     .markdown-composer textarea, .markdown-preview {
@@ -63,15 +64,15 @@
       border-radius: 3px;
     }
     .tabbable {
-      flex:1;
-      display:flex;
-      flex-flow: column nowrap;
+      @include flex(1);
+      @include flex-flow(column nowrap);
+      @include display(flex);
       .tab-content {
-       flex: 1;
-       display:flex;
+       @include flex(1);
+       @include display(flex);
       }
       .tab-content {
-        flex-flow: column nowrap;
+        @include flex-flow(column nowrap);
       }
     }
   }
