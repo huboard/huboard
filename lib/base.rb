@@ -57,9 +57,9 @@ class HuboardApplication < Sinatra::Base
     raise "Configuration information not found: you need to provide a .settings file or ENV variables"
   end
 
-  set :assets_precompile, %w(splash.css marketing.css application.js bootstrap.css application.css ember-accounts.js board/application.js bootstrap.js *.png *.jpg *.svg *.eot *.ttf *.woff *.js).concat([/\w+\.(?!js|css).+/, /application.(css|js)$/])
+  set :assets_precompile, %w(splash.css marketing.css application.js flex_layout.css bootstrap.css application.css ember-accounts.js board/application.js bootstrap.js *.png *.jpg *.svg *.eot *.ttf *.woff *.js).concat([/\w+\.(?!js|css).+/, /application.(css|js)$/])
 
-  configure :production, :test do 
+  configure :production, :test, :staging do 
     set :asset_protocol, :https
   end
 
@@ -67,7 +67,7 @@ class HuboardApplication < Sinatra::Base
   register Sinatra::AssetPipeline
 
 
-  configure :production, :test do 
+  configure :production, :test, :staging do 
     puts "I is in production"
     sprockets.js_compressor = :uglify
     sprockets.css_compressor = :yui
