@@ -62,7 +62,7 @@ class Huboard
       if board.linked? params[:linked_user], params[:linked_repo]
         json board.linked(params[:linked_user], params[:linked_repo])
       else
-        json {}
+        json({failure: true, message: "couldn't link board"})
       end
     end
 

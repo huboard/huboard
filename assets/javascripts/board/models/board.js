@@ -15,6 +15,7 @@ var Board = Ember.Object.extend({
 
     return Ember.RSVP.all(requests).then(function (boards){
       boards.forEach(function (b){
+        if(b.failure) {return;}
          var issues = Ember.A();
          b.issues.forEach(function(i){
            issues.pushObject(App.Issue.create(i));

@@ -14,7 +14,7 @@ var CssView = Ember.View.extend({
     var buffer = this.buffer,
         that = this;
 
-    _(that.get("content.other_labels")).each(function(l){
+    _(_.union(that.get("content.other_labels"), this.get("content.link_labels"))).each(function(l){
          var start = _.template(".-x<%= color %>.background",{ color: l.color });
          buffer.push(start);
          buffer.push("{")

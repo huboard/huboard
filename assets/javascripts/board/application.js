@@ -734,6 +734,7 @@ var Board = Ember.Object.extend({
 
     return Ember.RSVP.all(requests).then(function (boards){
       boards.forEach(function (b){
+        if(b.failure) {return;}
          var issues = Ember.A();
          b.issues.forEach(function(i){
            issues.pushObject(App.Issue.create(i));
@@ -57352,7 +57353,10 @@ module.exports = CardView;
 },{}],40:[function(require,module,exports){
 var CardWrapperView = Em.View.extend({
     templateName: "cardItem",
-    classNameBindings: ["isFiltered","isDraggable:is-draggable", "isClosable:closable"],
+    classNameBindings: ["isFiltered","isDraggable:is-draggable", "isClosable:closable", "colorLabel", "content.color:border"],
+    colorLabel: function () {
+      return "-x" + this.get("content.color");
+    }.property("content.color"),
     isClosable: function () {
      var currentState = this.get("content.current_state");
 
@@ -57538,7 +57542,7 @@ var CssView = Ember.View.extend({
     var buffer = this.buffer,
         that = this;
 
-    _(that.get("content.other_labels")).each(function(l){
+    _(_.union(that.get("content.other_labels"), this.get("content.link_labels"))).each(function(l){
          var start = _.template(".-x<%= color %>.background",{ color: l.color });
          buffer.push(start);
          buffer.push("{")
