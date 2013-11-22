@@ -183,12 +183,18 @@ class Huboard
       erb :backlog, :layout => :layout_fluid
     end
 
-    get '/:user/:repo/ember/?' do 
+    get '/:user/:repo/beta/?' do 
 
       pass if params[:user] == "assets"
       @parameters = params.merge({ :socket_backend => socket_backend})
 
       @repo = gh.repos(params[:user],params[:repo])
+      if logged_in?
+        is_a_collaborator = gh.connection.get("/repos/#{params[:user]}/#{params[:repo]}/collaborators/#{current_user.login}").status == 204
+        @repo.merge!(is_collaborator: is_a_collaborator)
+      else
+        @repo.merge!(is_collaborator: false)
+      end
 
       erb :ember_board, :layout => :layout_ember
     end
@@ -226,7 +232,7 @@ class Huboard
         @repo.merge!(is_collaborator: false)
       end
 
-      erb :ember_board, :layout => :layout_ember
+      erb :board, :layout => :layout_fluid
     end
 
 

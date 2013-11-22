@@ -10,7 +10,7 @@ var Repo = Ember.Object.extend({
      return this.get("repoUrl") + "/backlog";
   }.property("repoUrl"),
   betaUrl: function () {
-     return this.get("repoUrl") + "/ember";
+     return this.get("repoUrl") + "/beta";
   }.property("repoUrl")
 });
 
