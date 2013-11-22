@@ -28,6 +28,20 @@ class Huboard
       gh.raw.status == 200 && column_labels.size > 0
     end
 
+    def linked?(user, repo)
+      linked = Board.new(user, repo, @connection_factory)
+
+      return linked.column_labels.size == column_labels.size
+    rescue
+      return false
+    end
+
+    def linked(user, repo)
+      label = link_labels.find{|l| l[:user] == user && l[:repo] == repo}
+      board = Board.new(user, repo, @connection_factory).meta
+      board[:issues] = board[:issues].map {|i| i.merge({ color: label.color })} 
+      board
+    end
 
     def meta
        settings = self.settings
@@ -47,6 +61,7 @@ class Huboard
         :columns => columns,
         :milestones => milestones,
         :other_labels => other_labels.sort_by {|l| l.name.downcase },
+        :link_labels => link_labels,
         :assignees => assignees.to_a,
         :issues => issues
       }

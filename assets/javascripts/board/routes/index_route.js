@@ -10,6 +10,7 @@ var IndexRoute = Ember.Route.extend({
       content: model
     });
     cssView.appendTo("head")
+    return model.loadLinkedBoards();
   },
   renderTemplate: function() {
     
