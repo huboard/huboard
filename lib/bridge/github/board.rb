@@ -51,7 +51,6 @@ class Huboard
 
        issues = issues().concat(closed_issues(columns.last.name,"")).map do |i|
           i[:current_state] = first_column if i[:current_state]["name"] == "__nil__"
-          i[:current_state] = columns.find { |c| c[:name] == i[:current_state]["name"] }
           i
        end
 
