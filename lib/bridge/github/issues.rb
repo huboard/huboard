@@ -13,7 +13,10 @@ class Huboard
     def issues(label = nil)
       params = {:direction => "asc"}
       params = params.merge({:labels => label}) if label
-      gh.issues(params).all.each{|i| i.extend(Card)}.each{ |i| i.merge!({"repo" => {:owner => {:login => user}, :name => repo }}) }.sort_by { |i| i["_data"]["order"] || i["number"].to_f}
+      gh.issues(params).all
+         .each{|i| i.extend(Card)}
+         .each{ |i| i.merge!({"repo" => {:owner => {:login => user}, :name => repo }}) }
+         .sort_by { |i| i["_data"]["order"] || i["number"].to_f}
     end
 
     def archive_issue(number)
@@ -58,7 +61,7 @@ class Huboard
         r = Huboard.column_pattern
         nil_label = {"name" => "__nil__"}
         begin
-          return self.labels.sort_by {|l| l["name"]}.reverse.find {|x| r.match(x["name"])}  || nil_label
+          return self.labels.sort_by {|l| l["name"]}.reverse.find {|x| r.match(x["name"])}.extend(Huboard::Labels::ColumnLabel)  || nil_label
         rescue
           return nil_label
         end
