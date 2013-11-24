@@ -1,7 +1,7 @@
 var FiltersController = Ember.ObjectController.extend({
   needs: ["index"],
-  milestonesBinding: "controllers.index.model.milestones",
-  otherLabelsBinding: "controllers.index.model.other_labels",
+  milestonesBinding: "controllers.index.model.filterMilestones",
+  otherLabelsBinding: "controllers.index.model.filterLabels",
   lastUserFilterClicked: null,
   lastUserFilterClickedChanged: function(){
     Ember.run.once(function(){

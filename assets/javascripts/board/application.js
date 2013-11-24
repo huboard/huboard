@@ -414,8 +414,8 @@ module.exports = ColumnCountController;
 },{}],14:[function(require,module,exports){
 var FiltersController = Ember.ObjectController.extend({
   needs: ["index"],
-  milestonesBinding: "controllers.index.model.milestones",
-  otherLabelsBinding: "controllers.index.model.other_labels",
+  milestonesBinding: "controllers.index.model.filterMilestones",
+  otherLabelsBinding: "controllers.index.model.filterLabels",
   lastUserFilterClicked: null,
   lastUserFilterClickedChanged: function(){
     Ember.run.once(function(){
@@ -718,10 +718,38 @@ module.exports = WipLimit;
 
 },{}],23:[function(require,module,exports){
 var Board = Ember.Object.extend({
+  allRepos: function () {
+    return _.union([this],this.get("linkedRepos"))
+  }.property("linkedRepos.@each"),
   linkedRepos: [],
-  combinedIssues: function () {
+  combinedIssues: function () {                                                                        
      return _.union.apply(_,[this.issues].concat(this.linkedRepos.map(function (r){return r.issues; })));
   },
+  combinedLabels :function () {
+    return _.union.apply(_,[this.other_labels]
+                    .concat(this.linkedRepos.map(function (r){return r.other_labels; })));
+
+  }.property("linkedRepos.@each"),
+  filterLabels: function () {
+    var labels = this.get("combinedLabels");
+
+    return _.chain(labels)
+            .groupBy(function(l){return l.name.toLocaleLowerCase() })
+            .map(function (g) {
+              return _.first(g);
+            }).value().sort(function (a,b){
+               return a.name.localeCompare(b.name)
+            });
+  }.property(),
+  filterMilestones: function () {
+    var milestones = _.union.apply(_,[this.milestones]
+                    .concat(this.linkedRepos.map(function (r){return r.milestones; })));
+    return _.chain(milestones)
+            .groupBy(function(l){return l.title.toLocaleLowerCase() })
+            .map(function (g) {
+              return _.first(g);
+            }).value();
+  }.property(),
   loadLinkedBoards: function () {
     var model = this;
     var urls = this.get("link_labels").map(function (l) {
@@ -971,7 +999,6 @@ module.exports = IndexRoute;
 
 },{"../views/css_view":43}],28:[function(require,module,exports){
 var IssueRoute = Ember.Route.extend({
-
   model : function (params, transition){
     // hacks!
     transition.abort()
@@ -979,14 +1006,13 @@ var IssueRoute = Ember.Route.extend({
   },
   afterModel: function (model) {
     return model.loadDetails();
-    return Ember.RSVP.Promise(function (resolve, reject){
-      model.loadDetails().then(function (m){
-        resolve(m);
-      });
-    })
   },
   setupController: function(controller, model) {
     controller.set("model", model);
+    var repo = this.modelFor("index").get("allRepos").find(function (r){
+      return r.full_name == model.repo.owner.login + "/" + model.repo.name;
+    })
+    controller.set("repository", {other_labels: repo.other_labels})
   },
   renderTemplate: function () {
     this.render({into:'application',outlet:'modal'})
@@ -1595,7 +1621,7 @@ function program3(depth0,data) {
     'values': ("controller.model.other_labels"),
     'selected': ("controller.model.other_labels"),
     'title': ("Labels"),
-    'labels': ("otherLabels")
+    'labels': ("controller.repository.other_labels")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers['hb-label-selector'] || depth0['hb-label-selector']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-label-selector", options))));
   data.buffer.push("\n        </div>\n      </div>\n  </div>\n<div class=\"fullscreen-card-left\">\n  <div class=\"fullscreen-card-preamble\">\n    <div class=\"fullscreen-header\">\n      <h2>");
@@ -57532,6 +57558,9 @@ var CssView = Ember.View.extend({
   tagName:"style",
   attributeBindings: ["type"],
   type: "text/css",
+  onLabelsChanged: function () {
+    this.rerender()
+  }.observes("content.combinedLabels"),
   render: function () {
     
     jQuery.Color.fn.contrastColor = function() {
@@ -57542,7 +57571,7 @@ var CssView = Ember.View.extend({
     var buffer = this.buffer,
         that = this;
 
-    _(_.union(that.get("content.other_labels"), this.get("content.link_labels"))).each(function(l){
+    _(_.union(that.get("content.combinedLabels"), this.get("content.link_labels"))).each(function(l){
          var start = _.template(".-x<%= color %>.background",{ color: l.color });
          buffer.push(start);
          buffer.push("{")
@@ -57558,7 +57587,7 @@ var CssView = Ember.View.extend({
     });
 
     _(["filter","card-label"]).each(function(name){
-       _(that.get("content.other_labels")).each(function(l){
+       _(that.get("content.combinedLabels")).each(function(l){
        
          _([
            {
