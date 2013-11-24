@@ -18,9 +18,9 @@ var ColumnController = Ember.ObjectController.extend({
   }.property(),
   isHovering: false,
   getIssues: function(){
-    var name = this.get("model.name");
-    var issues = this.get("controllers.index.issues").filter(function(i){
-      return i.current_state.name === name;
+    var index = this.get("model.index");
+    var issues = this.get("controllers.index.model").combinedIssues().filter(function(i){
+      return i.current_state.index === index;
 
     }).sort(function (a, b){
        return a._data.order - b._data.order;

@@ -190,6 +190,13 @@
   border: 1px solid #e5e5e5;
   border-bottom-color: darken(#e5e5e5, 5%); 
 
+  &.border {
+    border-top-color: #e5e5e5;
+    border-right-color: #e5e5e5;
+    border-bottom-color: #e5e5e5;
+    border-left-width: 3px;
+  }
+
   &.closable {
     background-color: #f5f5f5;
     .actions-close {

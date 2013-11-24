@@ -4,6 +4,9 @@ var CssView = Ember.View.extend({
   tagName:"style",
   attributeBindings: ["type"],
   type: "text/css",
+  onLabelsChanged: function () {
+    this.rerender()
+  }.observes("content.combinedLabels"),
   render: function () {
     
     jQuery.Color.fn.contrastColor = function() {
@@ -14,7 +17,7 @@ var CssView = Ember.View.extend({
     var buffer = this.buffer,
         that = this;
 
-    _(that.get("content.other_labels")).each(function(l){
+    _(_.union(that.get("content.combinedLabels"), this.get("content.link_labels"))).each(function(l){
          var start = _.template(".-x<%= color %>.background",{ color: l.color });
          buffer.push(start);
          buffer.push("{")
@@ -30,7 +33,7 @@ var CssView = Ember.View.extend({
     });
 
     _(["filter","card-label"]).each(function(name){
-       _(that.get("content.other_labels")).each(function(l){
+       _(that.get("content.combinedLabels")).each(function(l){
        
          _([
            {

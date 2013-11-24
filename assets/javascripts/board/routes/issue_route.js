@@ -1,5 +1,4 @@
 var IssueRoute = Ember.Route.extend({
-
   model : function (params, transition){
     // hacks!
     transition.abort()
@@ -7,14 +6,13 @@ var IssueRoute = Ember.Route.extend({
   },
   afterModel: function (model) {
     return model.loadDetails();
-    return Ember.RSVP.Promise(function (resolve, reject){
-      model.loadDetails().then(function (m){
-        resolve(m);
-      });
-    })
   },
   setupController: function(controller, model) {
     controller.set("model", model);
+    var repo = this.modelFor("index").get("allRepos").find(function (r){
+      return r.full_name == model.repo.owner.login + "/" + model.repo.name;
+    })
+    controller.set("repository", {other_labels: repo.other_labels})
   },
   renderTemplate: function () {
     this.render({into:'application',outlet:'modal'})
