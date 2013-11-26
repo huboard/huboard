@@ -160,8 +160,8 @@ class Huboard
       end
 
       def embed_data(data = nil)
+        r = /@huboard:(.*)/
         if !data
-          r = /@huboard:(.*)/
           match = r.match(self.body || "")
           return { order: self.number } if match.nil?
 
@@ -172,10 +172,10 @@ class Huboard
           end
         else
           _data = embed_data
-          if _data.empty?
-            self.body = self.body.to_s.concat  "\r\n\r\n<!---\r\n@huboard:#{JSON.dump(data)}\r\n-->\r\n" 
+          if r.match self.body
+            self.body = self.body.to_s.gsub /@huboard:.*/, "@huboard:#{JSON.dump(_data.merge(data))}"
           else
-            self.body = self.body.gsub /@huboard:.*/, "@huboard:#{JSON.dump(_data.merge(data))}"
+            self.body = self.body.to_s.concat  "\r\n\r\n<!---\r\n@huboard:#{JSON.dump(data)}\r\n-->\r\n" 
           end
         end
       end
