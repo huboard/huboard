@@ -121,6 +121,13 @@ class Huboard
       json pebble.reorder_issue user, repo, number, index
     end
 
+    post '/:user/:repo/dragcard' do 
+      user, repo, number, order, column = params[:user], params[:repo], params[:number], params[:order], params[:column]
+      issue = huboard.board(user, repo).issue(number).move(column, order)
+      publish "#{params[:user]}/#{params[:repo]}", "Moved.#{issue.number}", { issue: issue, index: params[:column] }
+      json issue
+    end
+
     post '/:user/:repo/archiveissue' do 
       user, repo, number = params[:user], params[:repo], params[:number]
       json huboard.board(user, repo).archive_issue(number)

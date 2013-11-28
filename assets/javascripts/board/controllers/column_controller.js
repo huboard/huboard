@@ -19,9 +19,13 @@ var ColumnController = Ember.ObjectController.extend({
   isHovering: false,
   getIssues: function(){
     var index = this.get("model.index");
+    var column = this.get("model");
     var issues = this.get("controllers.index.model").combinedIssues().filter(function(i){
       return i.current_state.index === index;
 
+    }).map(function (i){
+       i.set("current_state", column);
+       return i;
     }).sort(function (a, b){
        return a._data.order - b._data.order;
     });
@@ -37,6 +41,9 @@ var ColumnController = Ember.ObjectController.extend({
   cardReceived: function(view) {
     view = Em.View.views[$(view.item).find("> div").attr("id")]
     view.get("controller").send("dragged", this.get("model"));
+  },
+  cardMoved : function (cardController, index){
+    cardController.send("moved", index, this.get("model"))
   }
 })
 

@@ -15,9 +15,6 @@ var CollectionView = Ember.CollectionView.extend({
       connectWith:".sortable",
       placeholder: "ui-sortable-placeholder",
       items: "li.is-draggable",
-      receive: function(ev, ui) {
-        that.get("controller").cardReceived(ui);
-      },
       over: function () {
         that.set("isHovering", true);
       },
@@ -33,7 +30,8 @@ var CollectionView = Ember.CollectionView.extend({
       update: function (ev, ui) {
 
         var findViewData = function (element){
-           return Em.View.views[$(element).find("> div").attr("id")].get("controller");
+           return Em.View.views[$(element).find("> div").attr("id")]
+             .get("controller");
         };
 
         var elements = $("li", that.$()),
@@ -58,16 +56,15 @@ var CollectionView = Ember.CollectionView.extend({
         if(first && last) {return;}
         
         if(first) {
+          that.get("controller").cardMoved(currentData, (after || 1)/2);
           // dragged it to the top
-          currentData.send("moved",(after || 1)/2);
 
         } else if (last) {
           // dragged to the bottom
-          currentData.send("moved",(before + 1));
+          that.get("controller").cardMoved(currentData, (before + 1));
 
         }  else {
-          currentData.send("moved",(((after + before) || 1)/2));
-
+          that.get("controller").cardMoved(currentData, (((after + before) || 1)/2));
         }
       }
     })

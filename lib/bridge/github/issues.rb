@@ -139,13 +139,14 @@ class Huboard
       end
 
       overridable do
-        def move(index)
+        def move(index, order=nil)
           board = Huboard::Board.new(self[:repo][:owner][:login], self[:repo][:name], @connection_factory)
           column_labels = board.column_labels
           self.labels = self.labels.delete_if { |l| Huboard.column_pattern.match l.name }
           new_state = column_labels.find { |l| /#{index}\s*- *.+/.match l.name }
           self.labels << new_state unless new_state.nil?
-          patch "labels" => self.labels
+          embed_data({"order" => order.to_f}) if order
+          patch "labels" => self.labels, "body" => self.body
         end
       end
 

@@ -1,7 +1,9 @@
 
+var correlationId = require("../utilities/correlationId")
 var Serializable = require("../mixins/serializable");
 
 var Issue = Ember.Object.extend(Serializable,{
+  correlationId: correlationId,
   saveNew: function () {
     return Ember.$.ajax( {
       url: "/api/v2/" + this.get("repo.full_name") + "/issues/create", 
@@ -20,7 +22,7 @@ var Issue = Ember.Object.extend(Serializable,{
 
     return Ember.$.ajax( {
       url: "/api/" + full_name + "/issues/" + this.get("number") + "/update", 
-      data: JSON.stringify({labels: this.serialize().other_labels}),
+      data: JSON.stringify({labels: this.serialize().other_labels, correlationId: this.get("correlationId")}),
       dataType: 'json',
       type: "POST",
       contentType: "application/json"})
@@ -48,7 +50,8 @@ var Issue = Ember.Object.extend(Serializable,{
           full_name = user + "/" + repo;
 
       return Ember.$.post("/api/" + full_name + "/archiveissue", {
-        number : this.get("number")
+        number : this.get("number"),
+        correlationId: this.get("correlationId")
       }).then(function () {
         this.set("processing", false);
         this.set("isDestroying", true);
@@ -63,7 +66,8 @@ var Issue = Ember.Object.extend(Serializable,{
 
       return Ember.$.post("/api/" + full_name + "/movecard", {
         index : column.index.toString(),
-        number : this.get("number")
+        number : this.get("number"),
+        correlationId: this.get("correlationId")
       })
   },
   close: function () {
@@ -74,22 +78,26 @@ var Issue = Ember.Object.extend(Serializable,{
           full_name = user + "/" + repo;
 
       Ember.$.post("/api/" + full_name + "/close", {
-        number : this.get("number")
+        number : this.get("number"),
+        correlationId: this.get("correlationId")
       }).then(function() {
         this.set("state","closed")
         this.set("processing", false);
       }.bind(this))
   },
-  reorder: function (index) {
+  reorder: function (index, column) {
+      this.set("current_state", column)
       this.set("_data.order", index);
 
       var user = this.get("repo.owner.login"),
           repo = this.get("repo.name"),
           full_name = user + "/" + repo;
 
-      return Ember.$.post("/api/" + full_name + "/reorderissue", {
+      return Ember.$.post("/api/" + full_name + "/dragcard", {
         number : this.get("number"),
-        index: index.toString()
+        order: index.toString(),
+        column: column.index.toString(),
+        correlationId: this.get("correlationId")
       }).then(function( response ){
          this.set("_data.order", response._data.order);
          return this;
