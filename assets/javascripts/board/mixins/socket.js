@@ -1,13 +1,13 @@
 
 var SocketMixin = Ember.Mixin.create({
   setUpSocketEvents: function () {
-    var channelPath  = this.get("channelPath");
+      channelPath  = this.get("sockets.config.channelPath");
 
     if(!channelPath) {
      throw "You must define a channelPath";
     }
 
-    var messagePath  = this.get("messagePath");
+    var messagePath  = this.get("sockets.config.messagePath");
 
     if(!messagePath) {
      throw "You must define a messagePath";

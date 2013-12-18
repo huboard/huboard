@@ -349,8 +349,11 @@ var SocketMixin = require("../mixins/socket");
 var CardController = Ember.ObjectController.extend(SocketMixin,{
   needs:["index"],
   sockets: {
+    config: {
+      messagePath: "issueNumber",
+      channelPath: "repositoryName"
+    },
     Moved: function (message) {
-       console.log(message);
        this.get("model").set("current_state", message.issue.current_state)
        this.get("model").set("_data", message.issue._data)
        Ember.run.once(function () {
@@ -358,11 +361,9 @@ var CardController = Ember.ObjectController.extend(SocketMixin,{
        }.bind(this));
     }
   },
-  messagePath: "issueNumber",
   issueNumber: function () {
      return this.get("model.number");
   }.property(),
-  channelPath: "repositoryName",
   repositoryName: function () {
      var repo = this.get("model.repo.name"),
         login = this.get("model.repo.owner.login");
@@ -769,13 +770,13 @@ module.exports = Serializable;
 
 var SocketMixin = Ember.Mixin.create({
   setUpSocketEvents: function () {
-    var channelPath  = this.get("channelPath");
+      channelPath  = this.get("sockets.config.channelPath");
 
     if(!channelPath) {
      throw "You must define a channelPath";
     }
 
-    var messagePath  = this.get("messagePath");
+    var messagePath  = this.get("sockets.config.messagePath");
 
     if(!messagePath) {
      throw "You must define a messagePath";
