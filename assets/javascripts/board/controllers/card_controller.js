@@ -1,10 +1,34 @@
-var CardController = Ember.ObjectController.extend({
+var SocketMixin = require("../mixins/socket");
+
+var CardController = Ember.ObjectController.extend(SocketMixin,{
+  needs:["index"],
+  sockets: {
+    Moved: function (message) {
+       console.log(message);
+       this.get("model").set("current_state", message.issue.current_state)
+       this.get("model").set("_data", message.issue._data)
+       Ember.run.once(function () {
+         this.get("controllers.index").incrementProperty("forceRedraw");
+       }.bind(this));
+    }
+  },
+  messagePath: "issueNumber",
+  issueNumber: function () {
+     return this.get("model.number");
+  }.property(),
+  channelPath: "repositoryName",
+  repositoryName: function () {
+     var repo = this.get("model.repo.name"),
+        login = this.get("model.repo.owner.login");
+
+    return login  + "/" + repo;
+  }.property(),
   actions : {
     dragged: function (column) {
       return this.get("model").drag(column);
     },
-    moved: function (index){
-       return this.get("model").reorder(index);
+    moved: function (index, column){
+       return this.get("model").reorder(index, column);
     },
     fullscreen: function(){
       this.transitionToRoute("issue", this.get("model"))

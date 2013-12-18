@@ -12,7 +12,7 @@ var CardWrapperView = Em.View.extend({
     onDestroy: function (){
       Ember.run.once(function () {
         var view = this;
-        this.$().fadeOut(function () {
+        this.$().fadeOut("fast", function () {
           view.destroy();
         })
       }.bind(this))
