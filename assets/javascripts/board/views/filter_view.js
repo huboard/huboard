@@ -9,7 +9,7 @@ var FilterView = Ember.View.extend({
   click: function(ev){
     ev.preventDefault();
     var $target = $(ev.target);
-    this.set("lastClicked",this.get("name"));
+    this.set("lastClicked", this.get("name"));
     if($target.is(".ui-icon")){
       this.set("mode", 0);
       return;
