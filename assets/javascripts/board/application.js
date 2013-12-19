@@ -3,7 +3,7 @@ var HbAvatarComponent = Ember.Component.extend({
    tagName: 'img',
  
   classNames: 'img-responsive',
-  attributeBindings: ["src", "title"],
+  attributeBindings: ["src", "title", "width", "height"],
   
   width: 24,
   
@@ -16,7 +16,9 @@ var HbAvatarComponent = Ember.Component.extend({
   }.property('service', 'user'),
  
   gravatarUrl: function() {
-    return 'https://secure.gravatar.com/avatar/' + this.get("user") + '?s='+ this.get("width") +'&d=retro';
+    return this.get("user.avatar_url") ?
+             this.get("user.avatar_url") + (this.get("user.gravatar_id") ? '&s='+ this.get("width") : '')
+          :  'https://secure.gravatar.com/avatar/' + this.get("user") + '?s='+ this.get("width") +'&d=retro';
   }
 });
 
@@ -349,8 +351,11 @@ var SocketMixin = require("../mixins/socket");
 var CardController = Ember.ObjectController.extend(SocketMixin,{
   needs:["index"],
   sockets: {
+    config: {
+      messagePath: "issueNumber",
+      channelPath: "repositoryName"
+    },
     Moved: function (message) {
-       console.log(message);
        this.get("model").set("current_state", message.issue.current_state)
        this.get("model").set("_data", message.issue._data)
        Ember.run.once(function () {
@@ -358,11 +363,9 @@ var CardController = Ember.ObjectController.extend(SocketMixin,{
        }.bind(this));
     }
   },
-  messagePath: "issueNumber",
   issueNumber: function () {
      return this.get("model.number");
   }.property(),
-  channelPath: "repositoryName",
   repositoryName: function () {
      var repo = this.get("model.repo.name"),
         login = this.get("model.repo.owner.login");
@@ -769,13 +772,13 @@ module.exports = Serializable;
 
 var SocketMixin = Ember.Mixin.create({
   setUpSocketEvents: function () {
-    var channelPath  = this.get("channelPath");
+      channelPath  = this.get("sockets.config.channelPath");
 
     if(!channelPath) {
      throw "You must define a channelPath";
     }
 
-    var messagePath  = this.get("messagePath");
+    var messagePath  = this.get("sockets.config.messagePath");
 
     if(!messagePath) {
      throw "You must define a messagePath";
@@ -1141,7 +1144,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = '', stack1, hashContexts, hashTypes, options;
-  data.buffer.push("\n        <li class=\"dropdown\">\n          <a class=\"dropdown-toggle avatar\" data-toggle=\"dropdown\" href=\"#\">\n          ");
+  data.buffer.push("\n        <li class=\"dropdown\">\n          <a class=\"dropdown-toggle avatar\" data-toggle=\"dropdown\" href=\"#\">\n          \n          ");
   hashContexts = {'user': depth0,'width': depth0};
   hashTypes = {'user': "ID",'width': "STRING"};
   options = {hash:{
@@ -1273,11 +1276,11 @@ function program6(depth0,data) {
   
   var buffer = '', hashContexts, hashTypes;
   data.buffer.push("\n    ");
-  hashContexts = {'lastClickedBinding': depth0,'gravatarIdBinding': depth0,'contentBinding': depth0};
-  hashTypes = {'lastClickedBinding': "ID",'gravatarIdBinding': "STRING",'contentBinding': "STRING"};
+  hashContexts = {'lastClickedBinding': depth0,'gravatarUserBinding': depth0,'contentBinding': depth0};
+  hashTypes = {'lastClickedBinding': "ID",'gravatarUserBinding': "STRING",'contentBinding': "STRING"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.AssigneeFilterView", {hash:{
     'lastClickedBinding': ("controller.lastClicked"),
-    'gravatarIdBinding': ("filter.avatar.gravatar_id"),
+    'gravatarUserBinding': ("filter.avatar"),
     'contentBinding': ("filter")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("\n  ");
@@ -1311,7 +1314,7 @@ function program1(depth0,data) {
   hashContexts = {'user': depth0};
   hashTypes = {'user': "ID"};
   options = {hash:{
-    'user': ("assignee.gravatar_id")
+    'user': ("assignee")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers['hb-avatar'] || depth0['hb-avatar']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-avatar", options))));
   data.buffer.push("\n");
@@ -1752,7 +1755,7 @@ function program3(depth0,data) {
   hashContexts = {'user': depth0,'title': depth0,'width': depth0,'height': depth0};
   hashTypes = {'user': "ID",'title': "ID",'width': "INTEGER",'height': "INTEGER"};
   options = {hash:{
-    'user': ("user.gravatar_id"),
+    'user': ("user"),
     'title': ("user.login"),
     'width': (30),
     'height': (30)
@@ -1842,7 +1845,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   hashContexts = {'user': depth0,'height': depth0,'width': depth0};
   hashTypes = {'user': "ID",'height': "INTEGER",'width': "INTEGER"};
   options = {hash:{
-    'user': ("view.content.user.gravatar_id"),
+    'user': ("view.content.user"),
     'height': (30),
     'width': (30)
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
@@ -1947,7 +1950,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   hashContexts = {'user': depth0};
   hashTypes = {'user': "ID"};
   options = {hash:{
-    'user': ("view.content.actor.gravatar_id")
+    'user': ("view.content.actor")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers['hb-avatar'] || depth0['hb-avatar']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-avatar", options))));
   data.buffer.push("\n<strong>");
@@ -2275,7 +2278,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   hashContexts = {'user': depth0,'height': depth0,'width': depth0,'title': depth0};
   hashTypes = {'user': "ID",'height': "STRING",'width': "STRING",'title': "ID"};
   options = {hash:{
-    'user': ("view.gravatarId"),
+    'user': ("view.gravatarUser"),
     'height': ("32"),
     'width': ("32"),
     'title': ("view.content.avatar.login")
@@ -57759,7 +57762,7 @@ var FilterView = Ember.View.extend({
   click: function(ev){
     ev.preventDefault();
     var $target = $(ev.target);
-    this.set("lastClicked",this.get("name"));
+    this.set("lastClicked", this.get("name"));
     if($target.is(".ui-icon")){
       this.set("mode", 0);
       return;

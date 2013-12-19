@@ -2,7 +2,7 @@ var HbAvatarComponent = Ember.Component.extend({
    tagName: 'img',
  
   classNames: 'img-responsive',
-  attributeBindings: ["src", "title"],
+  attributeBindings: ["src", "title", "width", "height"],
   
   width: 24,
   
@@ -15,7 +15,9 @@ var HbAvatarComponent = Ember.Component.extend({
   }.property('service', 'user'),
  
   gravatarUrl: function() {
-    return 'https://secure.gravatar.com/avatar/' + this.get("user") + '?s='+ this.get("width") +'&d=retro';
+    return this.get("user.avatar_url") ?
+             this.get("user.avatar_url") + (this.get("user.gravatar_id") ? '&s='+ this.get("width") : '')
+          :  'https://secure.gravatar.com/avatar/' + this.get("user") + '?s='+ this.get("width") +'&d=retro';
   }
 });
 

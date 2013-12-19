@@ -3,8 +3,11 @@ var SocketMixin = require("../mixins/socket");
 var CardController = Ember.ObjectController.extend(SocketMixin,{
   needs:["index"],
   sockets: {
+    config: {
+      messagePath: "issueNumber",
+      channelPath: "repositoryName"
+    },
     Moved: function (message) {
-       console.log(message);
        this.get("model").set("current_state", message.issue.current_state)
        this.get("model").set("_data", message.issue._data)
        Ember.run.once(function () {
@@ -12,11 +15,9 @@ var CardController = Ember.ObjectController.extend(SocketMixin,{
        }.bind(this));
     }
   },
-  messagePath: "issueNumber",
   issueNumber: function () {
      return this.get("model.number");
   }.property(),
-  channelPath: "repositoryName",
   repositoryName: function () {
      var repo = this.get("model.repo.name"),
         login = this.get("model.repo.owner.login");
