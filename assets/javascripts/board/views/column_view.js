@@ -53,7 +53,10 @@ var CollectionView = Ember.CollectionView.extend({
         before = beforeData.get("model._data.order") || beforeData.get("model.number"),
         after = afterData.get("model._data.order") || afterData.get("model.number");
 
-        if(first && last) {return;}
+        if(first && last) {
+          that.get("controller").cardMoved(currentData, currentData.get("model.number"))
+          return;
+        }
         
         if(first) {
           that.get("controller").cardMoved(currentData, (after || 1)/2);
