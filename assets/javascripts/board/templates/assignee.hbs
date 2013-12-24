@@ -1,0 +1,16 @@
+<h5>Members
+
+{{#if displayShowMore }}
+  {{#if shouldShowMore }}
+    <a href="#" {{action toggleShowMode "less"}}> (less)</a>
+  {{else}}
+    <a href="#" {{action toggleShowMode "more"}}> (more)</a>
+  {{/if}}
+{{/if}}
+
+</h5>
+<div class="assignees filters">
+  {{#each filter in filters}}
+    {{view App.AssigneeFilterView lastClickedBinding=controller.lastClicked  gravatarUserBinding="filter.avatar" contentBinding="filter" }}
+  {{/each}}
+</div>

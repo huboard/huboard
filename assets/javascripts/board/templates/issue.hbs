@@ -1,0 +1,40 @@
+<div class="fullscreen-card">
+  <div class="fullscreen-card-right">
+      <h2> <a class="number" href="{{{unbound html_url }}}" target="_blank" {{bind-attr title="title"}}><small>ISSUE #</small>{{number}}</a> </h2>
+      <div class="labels-placeholder">
+       <div>
+          {{hb-label-selector labelsChanged="labelsChanged" editable=App.repo.is_collaborator values=controller.model.other_labels selected=controller.model.other_labels title="Labels" labels=controller.repository.other_labels}}
+        </div>
+      </div>
+  </div>
+<div class="fullscreen-card-left">
+  <div class="fullscreen-card-preamble">
+    <div class="fullscreen-header">
+      <h2>{{ title }}</h2>
+    </div>
+  </div>
+  <div class="fullscreen-card-description card-comment">
+    <a href="{{unbound user.html_url}}" target="_blank">
+      {{hb-avatar user=user title=user.login width=30 height=30 }}
+    </a>
+    <div class="comment-body">
+      <div class="author">
+        <strong>{{user.login}}</strong> opened this issue {{momentAgo created_at}}
+      </div>
+      {{#if body_html }}
+        {{{body_html}}}
+      {{else}}
+        <p class="empty"> No description given </p>
+      {{/if}}
+    </div>
+  </div>
+
+  <div class="fullscreen-card-activity">
+    <div class="fullscreen-header">
+      <h4> Activity </h4>
+    </div>
+    {{! render the activity stream }}
+    {{view App.IssueActivitiesView contentBinding=sortedActivities}}
+  </div>
+</div>
+</div>

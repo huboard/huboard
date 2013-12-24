@@ -17,22 +17,39 @@ class Huboard
     module CUD
 
       def escape_docid(doc)
-        CGI.escape("#{class_name}-#{doc[identifier.to_s].to_s}")
+        CGI.escape("#{class_name}-#{doc["_id"] || doc[identifier.to_s].to_s}")
+      end
+
+      def delete!(doc)
+        connection.delete(doc._id) do |req|
+          req.params[:rev] = doc._rev
+        end
+        id = CGI.escape("Deleted-#{doc._id}")
+        connection.put id, meta: { type: "deleted" }, doc: doc
       end
 
       def save(doc)
-        clone = doc.clone.merge "_id" => escape_docid(doc), "meta" => meta, :timestamp => Time.now.utc.iso8601
+        clone = doc.clone.merge "_id" => doc["_id"] || escape_docid(doc), "meta" => meta, :last_updated => Time.now.utc.iso8601
 
         response = connection.get(clone["_id"])
 
         if response.status == 200
           response = connection.put(clone["_id"], clone.merge("_rev" => response.body._rev ))
         else
+          clone = doc.clone.merge "_id" => escape_docid(doc), "meta" => meta, :timestamp => Time.now.utc.iso8601
           response = connection.put(clone["_id"], clone)
         end
 
 
         p response.body.merge clone
+      end
+
+      def query_view(viewname, options = {})
+        puts "Query => _design/#{class_name}/_view/#{viewname} #{options}"
+        result = connection.get("_design/#{class_name}/_view/#{viewname}") do |request|
+          request.params.merge! options
+        end
+        return result.body
       end
 
 
@@ -70,13 +87,16 @@ class Huboard
       # for authenticated access
       #
       def initialize(hash={})
-        super("#{hash[:base_url] || "http://127.0.0.1:5984" }/huboard") do |builder|
+        super("#{hash[:base_url] || "http://127.0.0.1:5984" }/#{hash[:database] || "huboard"}") do |builder|
           yield builder if block_given?
           builder.use     FaradayMiddleware::EncodeJson
           builder.use     FaradayMiddleware::Mashify
           builder.use     FaradayMiddleware::ParseJson
           #  builder.use     Ghee::Middleware::UriEscape
           builder.adapter Faraday.default_adapter
+
+          builder.request :url_encoded
+          builder.response :logger
 
         end
 
@@ -188,20 +208,45 @@ class Huboard
       identify_by :id
     end
 
+    def customers
+      return Customers.new(connection,  :type => "customer" )
+    end
+
+    class Customers < ResourceProxy
+      identify_by :id
+
+      def findPlanById(id)
+        query_view "findPlanById", :key => id
+      end
+    end
+
+    def stats
+      return Stats.new connection, :type => "stats"
+    end
+    class Stats < ResourceProxy
+      identify_by :id
+
+      def dashboard
+        query_view "dashboardStats", :group_level => 1
+      end
+    end
+
+    
+
   end
 
   module Issues
     module Card
       def couch
-        @couch ||= Huboard::Couch.new :base_url => HuboardApplication.couchdb_server
+        @couch ||= Huboard::Couch.new :base_url => ENV["COUCH_URL"], :database => ENV["COUCH_DATABASE"]
       end
 
-      def move(index)
+      def move(index, order=nil)
         old_self = self
-        issue = super(index)
+        issue = super(index, order)
         begin
           couch.connection.post("./",{
-            :github => old_self.merge(issue),
+            :github => {:issue => old_self.merge(issue), :user => gh.user.to_hash},
             :meta => { :type => "event", :name => "card:move" },
             :timestamp => Time.now.utc.iso8601
           }).body
@@ -217,7 +262,7 @@ class Huboard
     board_method = self.instance_method(:board)
 
     def couch
-      @couch ||= Huboard::Couch.new :base_url => HuboardApplication.couchdb_server
+      @couch ||= Huboard::Couch.new :base_url => ENV["COUCH_URL"], :database => ENV["COUCH_DATABASE"]
     end
 
     define_method(:board) do

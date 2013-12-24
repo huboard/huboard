@@ -25,6 +25,7 @@
   <div class="fullscreen-overlay" >
 
     <div class="fullscreen-wrapper">
+      <div class="fullscreen-body">
       <script type="text/module" data-module="card/main">
         <% if logged_in? %>
           <%= params.clone.merge!({login: current_user.login }).to_json %>
@@ -34,20 +35,28 @@
       </script>
       
     </div>
+    </div>
     
   </div>
 
 <% end %>
+
+<% content_for :breadcrumb do %>
+  <li><a href="/<%= h @parameters[:user] %>"><%= h @parameters[:user] %></a></li>
+  <li><a href="/<%= h @parameters[:user] %>/<%= h @parameters[:repo] %>"><%= h @parameters[:repo] %></a></li>
+  <li>
+    <div class="search">
+      <i class="ui-icon ui-icon-search"></i>
+      <input placeholder="search..." />
+    </div>
+  </li>
+<% end %>
+
 <% content_for :header do %>
+
   <ol class="assignees">
 
   </ol>
-  <h1 class="header">
-    <span class="author"><%= h @parameters[:user] %></span>
-    /
-    <span class="repo"><%= h @parameters[:repo] %></span>
-    <input placeholder="search..."/>
-  </h1>
 
 <% end %>
 <% content_for :sidebar do %>

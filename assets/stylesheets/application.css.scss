@@ -1,0 +1,344 @@
+@import "bourbon/bourbon";
+@import "mixins";
+@import "colors";
+@import "font";
+@import "fonts";
+@import "buttons";
+@import "repos";
+@import "milestones";
+@import "board";
+@import "card_states";
+@import "header";
+@import "footer";
+@import "overlay";
+@import "section";
+@import "credit_cards";
+
+form {
+  margin: 0;
+}
+.navbar {
+  &.navbar-fixed-top, &.navbar-static-top {
+    .navbar-inner {
+      @include box-shadow(none);
+    }
+  }
+  .navbar-inner {
+    @include linear-gradient(#F9F9F9, #F3F3F3);
+    border-bottom: 1px solid $hb-grey-light;
+   
+  }
+  .nav {
+    form {
+       padding: 0;
+       margin: 0;
+    }
+
+    .dropdown .avatar, .dropdown.open .avatar {
+      position: relative;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      padding-left: 10px;
+      margin-left: 10px;
+
+      &:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        content: ' ';
+        width: 1px;
+        height: 42px;
+        background-color: $hb-grey-light;
+        border-right: 1px solid #fff;
+      }
+      
+      &:hover {
+        border-top: none;
+      }
+
+      img {
+        border-radius: 50%;
+      }
+
+      .caret {
+        margin-top: 14px;
+      
+      }
+    }
+
+    > li {
+      > a {
+        &:hover {
+          border-top: 3px solid $hb-purple-dark;
+          padding-top: 7px;
+        }
+      }
+      &.active, &.dropdown.open {
+        > a, > a:hover, > .dropdown-toggle, > .dropdown-toggle:hover  {
+            border-top: 3px solid $hb-purple;
+            padding-top: 7px;
+            background:none;
+            @include box-shadow(none);
+            &.avatar {
+              padding-top:2px;
+            }
+        }
+      }
+
+    }
+  }
+
+  .nav.breadcrumbs {
+
+    .search {
+      position:relative;
+      padding: 3px 8px 3px 20px;
+      margin: 4px;
+      margin-left: -5px;
+      background: white;
+      border: 1px solid #ddd;
+      height: 26px;
+      .ui-icon {
+        color: $hb-purple-dark;
+        position: absolute;
+        top: 9px;
+      }
+      &.has-value {
+        input {
+          width: 210px;
+          outline: none;
+          @include transition(width 0.5s);
+        }
+      
+      }
+      input {
+        height: auto;
+        box-shadow: none;
+        width: 0px;
+        padding: 3px;
+        padding-left: 24px;
+        border: none;
+        @include transition(width 0.5s);
+
+        &::-webkit-input-placeholder {
+          text-indent: 1px;
+        }
+        &:-moz-placeholder {
+          text-indent: 2px;
+          color:#fff;
+        }
+        &::-moz-placeholder {
+          text-indent: 2px;
+          color:#fff;
+        }
+        &:-ms-input-placeholder {
+          text-indent: 1px;
+        }
+
+        &:hover, &:focus, &.has-value {
+          width: 210px;
+          outline: none;
+          &:-moz-placeholder {
+            text-indent: 2px;
+            color:#666;
+          }
+          &::-moz-placeholder {
+            text-indent: 2px;
+            color:#666;
+          }
+          @include transition(width 0.5s);
+        }
+      }
+      &:hover input {
+        width: 210px;
+        @include transition(width 0.5s);
+        &:-moz-placeholder {
+          text-indent: 2px;
+          color:#666;
+        }
+        &::-moz-placeholder {
+          text-indent: 2px;
+          color:#666;
+        }
+      }
+    }
+
+    li + li a {
+      padding-left: 25px;
+      &:hover {
+        padding-left: 25px;
+      
+      }
+    }
+
+    li:first-child {
+      > a:before, > a:after {
+        display:none;
+      }
+      + li a {
+        padding-left: 10px;
+      }
+    }
+    li:last-child {
+      > a:before, > a:after {
+        display:none;
+      }
+    }
+
+    > li {
+      > a, > span {
+
+        font-family: $hb-font-headings;
+        font-size-adjust:0.5; 
+        font-weight:500;
+        color: $hb-purple-dark;
+        border: 1px solid #ddd;
+        padding: 6px;
+        padding-right: 15px;
+        margin: 4px;
+        margin-left: -5px;
+        background-color: #fff;
+        &.home {
+          padding: 8px 6px 4px 6px;
+          &:hover {
+          padding: 8px 6px 4px 6px;
+          }
+          .ui-icon {
+            height: auto;
+          }
+        }
+
+        &:hover {
+          border: 1px solid #ddd;
+          padding-top: 6px;
+          padding-bottom: 6px;
+        }
+
+        position: relative;
+
+
+        &:before, &:after {
+          z-index: 5;
+          left: 100%;
+          border: solid transparent;
+          content: " ";
+          height: 0;
+          width: 0;
+          position: absolute;
+          pointer-events: none;
+          border-radius: 2px;
+        }                        
+        &:after {
+          border-left-color: #fff;
+          border-width: 17px;
+          top: 50%;
+          margin-top: -17px;
+        }
+
+        &:before {
+          border-left-color: #ddd;
+          border-width: 18px;
+          top: 50%;
+          margin-top: -18px;
+        }
+
+      }
+      &.active, &.dropdown.open {
+        > a, > a:hover, > .dropdown-toggle, > .dropdown-toggle:hover  {
+            border-top: none;
+            padding-top: 11px;
+            background:none;
+            @include box-shadow(none);
+            &.avatar {
+              padding-top:2px;
+            }
+        }
+      }
+    }
+  }
+}
+
+.nav-list {
+  > li {
+    margin-bottom: 3px;
+    > a {
+      padding: 3px 12px;
+      border-radius: 3px;
+      &.active, &.active:hover {
+        background: $hb-purple;
+        color: white;
+        text-shadow: none;
+      }
+    }
+  }
+    
+
+}
+
+  
+.tab-pane {
+  display: none;
+}
+
+.tab-pane.active {
+  display: block;
+}
+
+
+
+.dropdown-menu {
+  li {
+    > a {
+      &:hover, &:focus {
+           @include linear-gradient(lighten($hb-purple, 5%), $hb-purple);
+      }
+    }
+  }
+}
+
+.hide {display:none;}
+
+.breadcrumb {
+  margin: -43px 0 7px 0; 
+}
+
+#main-stage  { 
+  margin-bottom: 50px;
+  margin-top: 60px;
+}
+
+.container-fluid {
+  position:relative;
+  > .sidebar {
+     width: 230px;
+     position: absolute;
+     border-right: 1px solid #ccc;
+     @include box-sizing(border-box);
+  }
+  > .content {
+     margin-left: 250px;
+     position: relative;
+  }
+}
+
+
+.drop-shadow {
+  position:relative;
+  padding:1em; 
+  background:#fff;
+  border: 1px solid #f2f2f2;
+  border-bottom-color: darken(#f2f2f2, 5%);
+  @include box-shadow( 0 1px 2px rgba(0,0,0, 0.4));
+}
+
+
+.instructions {
+   text-align: center;
+   margin-top: 60px;
+}
+.instructions ol {
+   width: 30px;
+   text-align:left;
+   margin-left: auto;
+   margin-right: auto;
+}

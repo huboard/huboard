@@ -1,32 +1,41 @@
 require 'rdiscount'
 require 'sinatra'
 require 'slim'
-require 'sinatra/content_for'
 require 'encryptor'
 require 'base64'
 require_relative "helpers"
+require_relative "login"
+require_relative "site"
 
 class Huboard
   class App < HuboardApplication
-    #register Sinatra::Auth::Github
 
-    PUBLIC_URLS = ['/', '/logout','/webhook']
-    RESERVED_URLS = %w{ repositories images about site login logout favicon.ico robots.txt }
+    use Login
+    use Site
 
-    before do
-
-    end
+    PUBLIC_URLS = ['/', '/logout','/webhook', '/site/privacy','/site/terms']
+    RESERVED_URLS = %w{ assets repositories images about site login logout favicon.ico robots.txt }
 
     before "/:user/:repo/?*" do 
 
       return if RESERVED_URLS.include? params[:user]
-      
+
       if authenticated? :private
         repo = gh.repos params[:user], params[:repo]
+
         raise Sinatra::NotFound if repo.message == "Not Found"
+
+        if repo.private && settings.production?
+          user = gh.users params[:user]
+          customer = couch.customers.findPlanById user.id
+          session[:github_login] = user.login
+          session[:redirect_to] = user.login == gh.user.login ? "/settings/profile" : "/settings/profile/#/#{user.login}"
+          halt([401, "Access denied"]) if !customer.rows.any? || customer.rows.first.value.stripe.customer.delinquent
+        end
+
       else
         repo = gh.repos params[:user], params[:repo]
-        halt([401, "Repo not found"]) if repo.message == "Not Found"
+        raise Sinatra::NotFound if repo.message == "Not Found"
       end
     end
 
@@ -37,35 +46,6 @@ class Huboard
       end
     end
 
-
-    get '/logout' do
-      logout!
-      redirect '/'
-    end
-
-    get "/site/privacy/?" do
-      return erb :privacy, :layout => :marketing unless authenticated?
-    end
-
-    get "/site/terms/?" do
-      return erb :terms_of_service, :layout => :marketing unless authenticated?
-    end
-
-    get '/login' do
-      @parameters = params
-      erb :login, :layout => :marketing
-    end
-
-    get '/login/private/?' do
-      authenticate! :scope => :private
-      redirect params[:redirect_to] || '/'
-    end
-
-    get '/login/public/?' do
-      authenticate!
-      redirect params[:redirect_to] || '/'
-    end
-
     get '/' do 
       @parameters = params
       return erb :home, :layout => :marketing unless logged_in?
@@ -74,29 +54,10 @@ class Huboard
       erb :index
     end
 
-    get "/favicon.ico" do
-      puts "hello"
-      path = File.expand_path("../../public/img/favicon.ico",__FILE__)
 
-      response = [ ::File.open(path, 'rb') { |file| file.read } ]
-
-      headers["Content-Length"] = response.join.bytesize.to_s
-      headers["Content-Type"]   = "image/vnd.microsoft.icon"
-      [status, headers, response]
-    end
-
-    get "/robots.txt" do
-      puts "hello"
-      path = File.expand_path("../../public/files/robots.txt",__FILE__)
-
-      response = [ ::File.open(path, 'rb') { |file| file.read } ]
-
-      headers["Content-Length"] = response.join.bytesize.to_s
-      headers["Content-Type"]   = "text/plain"
-      [status, headers, response]
-    end
 
     get '/:user/?' do 
+      pass if params[:user] == "assets"
       user =   gh.users(params[:user]).raw
       raise Sinatra::NotFound unless user.status == 200 
       @parameters = params
@@ -146,6 +107,7 @@ class Huboard
     end
 
     get '/:user/:repo/settings/?' do 
+      pass if params[:user] == "assets"
       redirect "/#{params[:user]}/#{params[:repo]}/board/create" unless huboard.board(params[:user], params[:repo]).has_board?
 
       @parameters = params.merge({ :socket_backend => socket_backend})
@@ -162,39 +124,66 @@ class Huboard
       erb :repo
     end
 
-    get '/:user/:repo/backlog' do 
+    get '/:user/:repo/backlog/?' do 
+      pass if params[:user] == "assets"
       @parameters = params.merge({ :socket_backend => socket_backend})
       erb :backlog, :layout => :layout_fluid
     end
+
+    get '/:user/:repo/ember/?' do 
+
+      pass if params[:user] == "assets"
+      @parameters = params.merge({ :socket_backend => socket_backend})
+
+      @repo = gh.repos(params[:user],params[:repo])
+
+      erb :ember_board, :layout => :layout_ember
+    end
+
     get '/:user/:repo/board/?' do 
+      pass if params[:user] == "assets"
       redirect "/#{params[:user]}/#{params[:repo]}"
     end
 
-    get '/:user/:repo/board/create' do
+    get '/:user/:repo/board/create/?' do
+      pass if params[:user] == "assets"
       @parameters = params
       erb :create_board
     end
 
-
     post '/:user/:repo/board/create/?' do
-      pebble.create_board(params[:user],params[:repo],"#{socket_backend}/issues/webhook?token=#{encrypted_token}") unless socket_backend.nil?
+      pass if params[:user] == "assets"
+      puts "creating board"
+      hook_url = "#{socket_backend}/issues/webhook?token=#{encrypted_token}"
+      pebble.create_board(params[:user],params[:repo], socket_backend.nil? ? nil : hook_url)
       redirect "/#{params[:user]}/#{params[:repo]}/board"
     end
 
     get '/:user/:repo/?' do 
+      pass if params[:user] == "assets"
       redirect "/#{params[:user]}/#{params[:repo]}/board/create" unless huboard.board(params[:user], params[:repo]).has_board?
       @parameters = params.merge({ :socket_backend => socket_backend})
-      erb :board, :layout => :layout_fluid
+
+      @repo = gh.repos(params[:user],params[:repo])
+      if logged_in?
+        is_a_collaborator = gh.connection.get("/repos/#{params[:user]}/#{params[:repo]}/collaborators/#{current_user.login}").status == 204
+        @repo.merge!(is_collaborator: is_a_collaborator)
+      else
+        @repo.merge!(is_collaborator: false)
+      end
+
+      erb :ember_board, :layout => :layout_ember
     end
 
 
-    get '/:user/:repo/hook' do 
+    get '/:user/:repo/hook/?' do 
+      pass if params[:user] == "assets"
       raise Sinatra::NotFound unless huboard.board(params[:user], params[:repo]).has_board?
       @parameters = params
       json(pebble.create_hook( params[:user], params[:repo], "#{socket_backend}/issues/webhook?token=#{encrypted_token}")) unless socket_backend.nil?
     end
 
-    post '/webhook' do 
+    post '/webhook/?' do 
       begin
         token =  decrypt_token( params[:token] )
         ghee = gh(token)
@@ -211,9 +200,9 @@ class Huboard
       end
     end
 
-
-
-    helpers Sinatra::ContentFor
+    not_found do
+      erb :"404", :layout => false
+    end
 
   end
 

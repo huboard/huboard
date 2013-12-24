@@ -1,0 +1,64 @@
+@import "compass/reset";
+@import "bourbon/bourbon";
+@import "mixins";
+@import "colors";
+@import "font";
+@import "fonts";
+@import "buttons";
+
+.splash {
+   background: $hb-purple;
+   img {
+     display:block;
+     margin: 0 auto;
+     max-height: 50%;
+    }
+}
+
+body {
+   background:  $hb-grey-dark;
+  text-align: center;
+  color: $hb-grey-light;
+  @extend %font-body;
+}
+h1 {
+ font-size: 2em;
+margin: 0.67em 0;
+  margin-top:0;
+line-height: 2.2em;
+  color: #fff;
+  color: rgba(255, 255, 255, 0.9);
+text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.5);
+
+}
+
+#wrapper {
+   margin: 30px auto; 
+   width: 660px;
+}
+
+.hb-button {
+ font-family: "Din Text Pro Light", "Helvetica Neue", "HelveticaNeue", Arial, Verdana, sans-serif;
+font-size-adjust: 0.5;
+font-weight: 200;
+min-width: 200px;
+padding: 20px;
+font-size: 24px;
+  margin: 20px 0;
+}
+
+.back-link {
+  text-decoration: none;
+  font-size: 1.2em;
+  border: 2px solid $hb-purple;
+  padding: 0.3em 1.3em;
+  line-height: 1.3em;
+}
+
+.font-numbers {
+  font-family: "Clayton", san-serif;
+}
+
+.numbers-big {
+  font-size: 800%;
+}

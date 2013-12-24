@@ -1,0 +1,112 @@
+
+body {
+  font-family: "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+
+.navbar {
+  &.navbar-fixed-top, &.navbar-static-top {
+    .navbar-inner {
+      @include box-shadow(none);
+    }
+  }
+  .navbar-inner {
+    background: $hb-purple;
+    .nav a {
+      background-color:lighten(#000,27%);
+      color:transparent;
+      text-shadow: 0px 1px 0px fade-out($hb-purple-dark, 0.1);
+      -webkit-background-clip: text;
+      -moz-background-clip: text;
+      background-clip: text;
+      &:hover, &.active {
+         color: #fff;
+         text-decoration: none;
+      }
+    }
+  }
+  .nav-btn {
+     color: #fff;
+     background-color: rgba(255,255,255, 0.2);
+     border: 1px solid rgba(255,255,255, 0.3);
+     padding: 7px 25px;
+     border-radius: 3px;
+     &:hover {
+        background-color: rgba(255,255,255, 0.1);
+      }
+  }
+}
+.navbar .brand {
+
+  &.animating {
+    .animate-before {
+       display: none; 
+    }
+    .animate-after {
+       position: static;
+    }
+  }
+  .animate-after {
+       position: absolute;
+       left: -999999px;
+   }
+
+  
+  position: relative;
+  line-height: 90px;
+  padding-top: 0;
+  padding-bottom: 0;
+
+  color: #fff;
+
+  @extend %font-headings;
+  font-size: 40px;
+  img {
+   vertical-align: baseline; 
+  }
+  .stat {
+    position: relative;
+    display: inline-block;
+    span {
+     font-family: "Clayton";
+     color: $hb-purple-dark;
+     text-shadow: none;
+      text-align: center;
+      opacity: 0.5;
+      font-size: 43px;
+    }
+    label {
+     opacity: 0; 
+     position: absolute;
+     top: 64px;
+     width: 100%;
+     text-align: center;
+      white-space: nowrap;
+       @extend %font-sub-headings;
+    }
+  }
+  
+  
+  
+}
+
+.navbar {
+  .nav {
+    float: right;
+    ul {
+      margin: 0;
+      list-style-type: none;
+    }
+  }
+} 
+
+.navbar .nav  li {
+  line-height: 90px;
+  > a {
+    @extend %font-headings;
+    font-size: 21px;
+ 
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+

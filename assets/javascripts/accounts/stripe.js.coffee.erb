@@ -1,0 +1,210 @@
+App.CreditCardForm = Ember.Controller.extend
+  actions: 
+    close: -> 
+      this.send "closeModal"
+
+  key : '<%= ENV["STRIPE_PUBLISHABLE_API"] %>'
+
+  processingCard: false
+  
+  number: null
+  cvc: null
+  exp: null
+  expMonth: (->
+    if @get("exp")
+      return Ember.$.payment.cardExpiryVal(@get("exp")).month || "MM"
+
+    "MM"
+  ).property("exp")
+  expYear: (->
+    if @get("exp")
+      return Ember.$.payment.cardExpiryVal(@get("exp")).year || "YYYY"
+    "YYYY"
+  ).property("exp")
+
+  cardType: (->
+    Ember.$.payment.cardType(@get('number'))
+  ).property('number')
+
+  process:  ->
+    @set('processingCard', true)
+    Stripe.setPublishableKey(@get('key'))
+    
+    Stripe.card.createToken({
+      number: @get('number')
+      cvc: @get('cvc')
+      exp_month: @get('expMonth')
+      exp_year: @get('expYear')
+    }, @didProcessToken.bind(this))
+  
+
+App.UpdateCardController = App.CreditCardForm.extend
+  didProcessToken: (status, response) ->
+    if response.error
+      @set('processingCard', false)
+      @set('errors', response.error.message)
+    else
+      @set('errors', "")
+      @postUpdate(response)
+
+  postUpdate: (token) ->
+    this.ajax("/settings/profile/" + @get("model.org.login") + "/card", {
+      email:@get("model.org.billing_email"),
+      card: token
+    }).then(@didUpdate.bind(this))
+
+  didUpdate: (response) ->
+    @set('processingCard', false)
+    @set('model.card.details.card',response.card)
+    @send "close"
+
+  ajax: (url, data) ->
+    controller = this
+
+    new Ember.RSVP.Promise (resolve, reject) ->
+      hash = {}
+      hash.url = url
+      hash.type = 'PUT'
+      hash.context = controller
+      hash.data = data
+      
+      hash.success = (json) ->
+        resolve(json)
+
+      hash.error = (jqXHR, textStatus, errorThrown) ->
+        reject(jqXHR)
+
+      Ember.$.ajax(hash)
+
+App.UpdateCardView = App.ModalView.extend 
+  processingCard: Ember.computed.alias('controller.processingCard')
+
+App.PurchaseFormController = App.CreditCardForm.extend
+
+  coupon: null,
+  
+  price: (->
+    @get("model.amount")
+  ).property("plan.amount")
+  
+
+  didProcessToken: (status, response) ->
+    if response.error
+      @set('processingCard', false)
+      @set('errors', response.error.message)
+    else
+      @postCharge(response)
+  
+  postCharge: (token) ->
+    this.ajax("/settings/charge/" + @get("model.org.login"), {
+      email:@get("model.org.billing_email"),
+      card: token,
+      plan: @get("model.plan")
+    }).then(@didPurchase.bind(this), @purchaseDidError.bind(this))
+
+  didPurchase: (response) ->
+    @set('processingCard', false)
+    @set("model.plan.purchased", true)
+    @set("model.details.card", response.card)
+    this.send("close")
+    
+  purchaseDidError: (error) ->
+    @set('errors', error.responseJSON.error.message)
+    @set('processingCard', false)
+       
+  ajax: (url, data) ->
+    controller = this
+
+    new Ember.RSVP.Promise (resolve, reject) ->
+      hash = {}
+      hash.url = url
+      hash.type = 'POST'
+      hash.context = controller
+      hash.data = data
+      
+      hash.success = (json) ->
+        resolve(json)
+
+      hash.error = (jqXHR, textStatus, errorThrown) ->
+        reject(jqXHR)
+
+      Ember.$.ajax(hash)
+
+  
+App.PurchaseFormView = App.ModalView.extend 
+  processingPurchase: Ember.computed.alias('controller.processingCard')
+
+App.CancelFormController = Ember.Controller.extend
+  processingAction: false
+  actions: 
+    close: -> 
+      this.send "closeModal"
+    cancel:  ->
+      @set('processingAction', true)
+      this.ajax("/settings/profile/" + @get("model.org.login") + "/plans/" + @get('model.plan.id'),{})
+        .then(@didCancel.bind(this), @cancelDidError.bind(this))
+  didCancel: ->
+    @set('processingAction', false)
+    @set("model.plan.purchased", false)
+    @set("model.details.card", null)
+    this.send "closeModal"
+  cancelDidError: (error) ->
+    @set('errors', error.responseJSON.error.message)
+    @set('processingAction', false)
+
+
+
+  ajax: (url, data) ->
+    controller = this
+
+    new Ember.RSVP.Promise (resolve, reject) ->
+      hash = {}
+      hash.url = url
+      hash.type = 'DELETE'
+      hash.context = controller
+      hash.data = data
+      
+      hash.success = (json) ->
+        resolve(json)
+
+      hash.error = (jqXHR, textStatus, errorThrown) ->
+        reject(jqXHR)
+
+      Ember.$.ajax(hash)
+
+App.CancelFormView = App.ModalView.extend 
+  processingAction: Ember.computed.alias('controller.processingAction')
+
+
+  
+
+Ember.TextSupport.reopen
+ attributeBindings: ["data-stripe", "autocomplete", "autocompletetype", "required"]
+
+App.CvcField = Ember.TextField.extend
+  required: true
+  #pattern: "\d*"
+  autocompletetype: "cc-csc"
+  format: "123"
+  placeholder: Ember.computed.alias("format")
+  autocomplete: "off"
+  didInsertElement: ->
+    @$().payment("formatCardCVC")
+
+App.CardNumberField = Ember.TextField.extend
+  required: true
+  #pattern: "\d*"
+  autocompletetype: "cc-number"
+  format: "1234 5678 9012 3456"
+  placeholder: Ember.computed.alias("format")
+  didInsertElement: ->
+    @$().payment("formatCardNumber")
+
+App.CardExpiryField = Ember.TextField.extend
+  required: true
+  autocompletetype: "cc-exp"
+  format: "MM / YY"
+  placeholder: Ember.computed.alias("format")
+  didInsertElement: ->
+    @$().payment("formatCardExpiry")
+

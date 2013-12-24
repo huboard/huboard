@@ -1,0 +1,9 @@
+<a href="{{unbound view.content.html_url}}" target="_blank">
+  {{hb-avatar user=view.content.user height=30 width=30 }}
+</a>
+<div class="comment-body">
+  <div class="author">
+    <strong>{{view.content.user.login}}</strong> commented {{momentAgo view.content.created_at}}
+  </div>
+  {{{ view.content.body_html}}}
+</div>

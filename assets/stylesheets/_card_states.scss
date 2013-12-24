@@ -1,0 +1,63 @@
+   .hb-state-closed {
+    .card-states {
+      display: block;
+      .hb-state-closed {
+        display: inline;
+      }
+       background-color: #8274d6;
+       &:after {
+        border-top-color: #4b3d96;
+       
+       }
+     }
+   }
+   .hb-state-ready {
+    .card-states {
+      display: block;
+      .hb-state-ready {
+        display: inline;
+      }
+       background-color: #22d186;
+       &:after {
+        border-top-color: #20a568;
+       
+       }
+     }
+   }
+   .hb-state-blocked {
+    .card-states {
+      display: block;
+      .hb-state-blocked {
+        display: inline;
+      }
+       background-color: #f9646e;
+       &:after {
+        border-top-color: #a83848;
+       
+       }
+     }
+   }
+  .card-states {
+    display: none;
+    img {
+      display:none;
+    }
+     
+     position:absolute;
+     top: 10px;
+     right: -12px;
+     height: 20px;
+     width: 30px;
+     background-color: #8274d6;
+     &:after {
+      position: absolute;
+      right: 0px;
+      bottom: -11px;
+      content: '  ';
+      height: 0;
+      width: 0;
+      border-right: 11px solid transparent;
+      border-top: 11px solid #4b3d96;
+     }
+  }
+

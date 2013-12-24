@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><% yield_content :title %>Huboard</title>
+    <link rel="shortcut icon" href="/img/favicon.ico" />
+    
+     <%= stylesheet_tag 'bootstrap' %>
+     <%= stylesheet_tag 'application' %>
+
+
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-28313898-1']);
+      _gaq.push(['_setDomainName', 'huboard.com']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+       var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+       ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+       })();
+
+     </script>
+   </head>
+   <body>
+     <div id="wrapper">
+       <div class="navbar navbar-static-top">
+         <div class="navbar-inner">
+           <div class="container">
+            <ul class="nav breadcrumbs">
+              <li><a href="/" class="home"><i class="ui-icon ui-icon-menu"></i></a></li>
+              <% yield_content :breadcrumb %>
+            </ul>
+             <ul class="nav pull-right">
+               <% yield_content :navigation %>
+               <% if logged_in? %>
+                 <%= partial :logged_in %>
+               <% else %>
+                   <li>
+                   <form action="/login" method="GET">
+                    <button class="hb-button"> Sign in </button>
+                  </form>
+                   </li>
+               <% end %>
+             </ul>
+           </div>
+         </div>
+       </div>
+       <div class="container" id="main-application">
+         <% yield_content :header %>
+         <%= yield %>
+
+       </div>
+       <div id="footer-pusher"></div>
+     </div>
+        <div id="footer">
+      <div class="container">
+        <div class="row">
+          <div class="span6">
+            <img class="animate-before" src="<%=image_path 'LogoFullPurpleLight.png' %>"/>
+          </div>
+          <div class="links span6">
+            <a href="/site/terms">terms</a>
+            <a href="/site/privacy">privacy</a>
+            <a href="https://github.com/rauhryan/huboard">github</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <% yield_content :overlay %>
+
+    <%= partial :fontdeck %>
+    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+    <script src="<%= javascript_path "ember-accounts"%>" type="text/javascript"></script>
+    <script src="/scripts/bootstrap/bootstrap.js"></script>
+
+   </body>
+ </html>
+

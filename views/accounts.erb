@@ -1,0 +1,335 @@
+<% content_for :header do %>
+  <h1> Accounts </h1>
+<% end %>
+
+<script type="text/x-handlebars" id="loading">
+  <div class="fullscreen-overlay"></div>
+</script>
+
+<script type="text/x-handlebars" >
+  {{outlet modal}}
+  {{outlet loading}}
+  <div class="row">
+   
+    <div class="span3">
+
+      <ul class="nav nav-list">
+        <li>
+        {{#linkTo "index" }} 
+        <img {{bindAttr src=model.user.gravatar_url  }} /> 
+        {{ model.user.login }}
+        {{/linkTo}}
+        </li>
+
+        {{#each model.orgs}}
+        <li>
+        {{#linkTo "profile" this}} 
+        <img {{bindAttr src=gravatar_url  }} /> 
+          {{ login }} 
+        {{/linkTo}}
+        </li>
+        {{/each}}
+      </ul>
+    </div> 
+    <div class="span9">
+      {{ outlet }}
+      <div>
+        <strong>Have questions?</strong> Email us anytime at huboard@huboard.com
+      </div>
+    </div> 
+  </div> 
+
+
+</script>
+
+<script type="text/x-handlebars" id="index">
+{{#x-tabs}}
+    {{#x-pane title="Plans"}}
+    <div class="nav-section">
+      <div class="widget-body">
+          {{ render account model }}
+      </div>
+    </div>
+    {{/x-pane}}
+{{/x-tabs}}
+
+</script>
+
+<script type="text/x-handlebars" id="account">
+  <div class="alert alert-success">
+    <p>
+      <strong>All plans</strong> receive a <strong>15 day free trial</strong>.
+    </p>
+    <p>
+      Risk free, cancel at anytime before the trial ends and receive no charges.
+    </p>
+  </div>
+
+  <div class='credit-card'>
+    {{#if model.details.card }}
+     <img src="<%= image_path 'Plain.png' %>" /> <strong>Credit card on file.</strong> Ending in {{ model.details.card.last4 }}
+     <button {{action updateCard this }} class="hb-button small">Update card</button>
+    {{else}}
+     <img src="<%= image_path 'Plain.png' %>" /> <strong>No Credit card on file.</strong>
+
+    {{/if}}
+  </div>
+
+   <div class="table-wrapper">
+    <table class="table">
+      <thead>
+        <th>Plan</th>
+        <th>Price</th>
+        <th>Private repositories</th>
+        <th>Collaborators</th>
+        <th></th>
+      </head>
+      <tbody>
+
+        {{#each model.details.plans }}
+          <td>{{ name }}</td>
+          <td>{{stripe-money amount }}/month</td>
+          <td>unlimited</td>
+          <td>unlimited</td>
+          <td class="text-right">    
+           {{#if purchased }} 
+              Your plan
+              <button class="hb-button small"
+                 {{action cancel this }}>Cancel plan</button>
+            {{else}}
+              <button class="hb-button small"
+               {{action purchase this }}>Upgrade</button>
+            {{/if}}
+
+          </td>
+
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</script>   
+
+<script type="text/x-handlebars" data-template-name="cancel_form">
+<div class="fullscreen-credit-card">
+  <form {{action cancel on=submit}}>
+    <div class="modal-header">
+      <button type="button" class="close" {{action close}} data-dismiss="modal" aria-hidden="true">×</button>
+      Cancel plan
+    </div>
+    <div class="modal-body">
+      <p>
+        By cancelling your subscription you will not be billed again and your account will be suspended immediately.
+      </p>
+      <p> 
+        We'd hate to see you go, are you sure you want to cancel?
+      </p>
+
+      <p>
+        If you have any questions, <a href="mailto:huboard@huboard.com?subject=Cancel subscription">contact us</a> anytime.
+      </p>
+
+      {{#if processingAction }}
+        <div class="fullscreen-overlay">
+        </div>
+      {{/if}}
+    </div>
+    <div class="modal-footer">
+      <button href="#" class="hb-button danger full" type="submit" {{bindAttr disabled="processingAction"}}><span>Cancel my plan</span></button>
+    </div>
+  </form>
+</div>
+
+</script>   
+
+<script type="text/x-handlebars" data-template-name="update_card">
+<div class="fullscreen-credit-card">
+  <form {{action process on=submit}}>
+  <div class="modal-header">
+    <button type="button" class="close" {{action close}} data-dismiss="modal" aria-hidden="true">×</button>
+    Update credit card infomation 
+  </div>
+  <div class="modal-body">
+    <fieldset>
+
+      {{#if errors}}
+        <div class="alert alert-error">{{errors}}</div>
+      {{/if}}
+
+      <div class="form-row full">
+        <label>
+          <span>Card Number</span>
+        </label>
+        {{view App.CardNumberField valueBinding="number" size=20}}
+      </div>
+
+      <ul class="credit-cards">
+        <li {{bind-attr class=":card :card-visa cardType"}} >
+        </li>
+        <li {{bind-attr class=":card :card-master cardType"}} >
+        </li>
+        <li {{bind-attr class=":card :card-discover cardType"}} >
+        </li>
+        <li {{bind-attr class=":card :card-express cardType"}}>
+        </li>
+      </ul>
+
+      <div class="form-row">
+        <label>
+          <span>CVC</span>
+        </label>
+        {{view App.CvcField valueBinding="cvc" size="4" data-stripe="cvc"}}
+      </div>
+
+      <div class="form-row">
+        <label>
+          <span>Expiration ({{ expMonth }} / {{ expYear }})</span>
+        </label>
+        {{view App.CardExpiryField valueBinding="exp" }}
+      </div>
+
+
+    </fieldset>
+
+    <p>
+      Please review the <a href="/site/terms" target="_blank">terms of service</a>, and <a href="/site/privacy" target="_blank">privacy policy</a>.
+    </p>
+
+    {{#if processingCard }}
+      <div class="fullscreen-overlay">
+      </div>
+    {{/if}}
+  </div>
+  <div class="modal-footer">
+      <button href="#" class="stripe-connect light-blue" type="submit" {{bindAttr disabled="processingCard"}}><span>Update card</span></button>
+  </div>
+  </form>
+  </div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="purchase_form">
+<div class="fullscreen-credit-card">
+  <form {{action process on=submit}}>
+  <div class="modal-header">
+    <button type="button" class="close" {{action close}} data-dismiss="modal" aria-hidden="true">×</button>
+    Credit card infomation 
+  </div>
+  <div class="modal-body">
+    <p>
+      Thanks for choosing to become a paying customer! Once we successfully charge your credit card, we'll immediately upgrade your account to the <strong>{{model.plan.name}}</strong> plan.
+    </p>
+    <fieldset>
+
+      {{#if errors}}
+        <div class="alert alert-error">{{errors}}</div>
+      {{/if}}
+
+      <div class="form-row full">
+        <label>
+          <span>Card Number</span>
+        </label>
+        {{view App.CardNumberField valueBinding="number" size=20}}
+      </div>
+
+      <ul class="credit-cards">
+        <li {{bind-attr class=":card :card-visa cardType"}} >
+        </li>
+        <li {{bind-attr class=":card :card-master cardType"}} >
+        </li>
+        <li {{bind-attr class=":card :card-discover cardType"}} >
+        </li>
+        <li {{bind-attr class=":card :card-express cardType"}}>
+        </li>
+      </ul>
+
+      <div class="form-row">
+        <label>
+          <span>CVC</span>
+        </label>
+        {{view App.CvcField valueBinding="cvc" size="4" data-stripe="cvc"}}
+      </div>
+
+      <div class="form-row">
+        <label>
+          <span>Expiration ({{ expMonth }} / {{ expYear }})</span>
+        </label>
+        {{view App.CardExpiryField valueBinding="exp" }}
+      </div>
+
+      <div class="form-row">
+        <label>
+          <span>Billing email</span>
+        </label>
+        {{log model.org }}
+        {{input valueBinding="model.org.billing_email" type=text required=true }}
+      </div>
+
+    </fieldset>
+
+    <p>
+      Please review the <a href="/site/terms" target="_blank">terms of service</a>, and <a href="/site/privacy" target="_blank">privacy policy</a>.
+    </p>
+
+    {{#if processingCard }}
+      <div class="fullscreen-overlay">
+      </div>
+    {{/if}}
+  </div>
+  <div class="modal-footer">
+      <button href="#" class="stripe-connect light-blue" type="submit" {{bindAttr disabled="processingCard"}}><span>Pay with stripe</span></button>
+  </div>
+  </form>
+  </div>
+</script>
+
+<script type="text/x-handlebars" id="profile">
+
+{{#x-tabs}}
+      {{#x-pane title="Plans"}}
+      <div class="nav-section">
+
+      <div class="widget-body">
+        {{#if model.details.org.is_owner }}
+
+          {{ render account model }}
+
+        {{else}}
+          <div class="alert">
+            <h5>You must be an owner to purchase</h5>
+            It appears like you are not a member of the owners team for {{ model.login }}. 
+            We strongly encourage that only members of the &quot;Owners&quot; team have access to subscription
+            information. If you have any questions feel free to email customer support at
+            <a href="mailto:huboard@huboard.com">huboard@huboard.com</a>. 
+          </div>
+        {{/if}}
+      </div>
+    </div>
+    {{/x-pane}}
+    {{/x-tabs}}
+
+</script>
+
+<script type="text/x-handlebars" id="components/x-tabs">
+<div class="tabbable">
+    <ul class="nav nav-tabs">
+      {{#each pane in panes}}
+      <li {{bindAttr class="pane.selected:active"}}>
+        <a href="#" {{action select pane}}>{{pane.title}}</a>
+      </li>
+      {{/each}}
+    </ul>
+    <div class="tab-content">
+      {{yield}}
+    </div>
+  </div>
+</script>
+
+<script type="text/x-handlebars" id="components/x-pane">
+<div class="tab-pane" {{bindAttr class="selected:active"}}>
+      {{yield}}
+    </div>
+</script>
+
+<script type="text/x-handlebars" id="empty">
+
+</script>
+

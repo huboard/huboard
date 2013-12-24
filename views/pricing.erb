@@ -1,0 +1,126 @@
+
+<div class="pricing">
+  <div class="page-header preamble">
+    <div class="container">
+      <div class="row">
+        <div class="span12">
+          <h1>Plans & Pricing <small>Join today and make your GitHub issues awesome</small></h1>
+        </div>
+      </div>                                                  
+    </div>
+  </div>
+  <div class="container">
+    <div class="plans">
+      <div class="row">
+        <div class="span12 plan-intro">               
+          <p><a href="/login" class="hb-button small right">Create a free account</a>
+          Accounts are <strong>free</strong> for open source projects and include <strong>unlimited</strong>
+          public repositories and <strong>unlimited</strong> public collaborators.</p>
+
+        </div>
+      </div>
+       <div class="row">
+        <div class="span12">
+          <p>
+            <form class="plan-picker">
+            <div class=" input-append right">
+              <span>https://github.com/</span>
+              <input placeholder="username" class="plan-help inputAppendButton" type="text" />
+                <button class="hb-button small">Find plan</button>
+              </div>
+            </form>
+  
+            <strong>Need help?</strong> Tell us the username of the private repository you want to create a HuBoard for.
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="span6">
+          <div class="plan organization">
+            <h2>Organization<span class="price">$24/month</span></h2>
+            <ul class="unstyled">
+              <li><strong>unlimited</strong> public repositories *</li>
+              <li><strong>unlimited</strong> private repositories</li>
+              <li><strong>unlimited</strong> teams</li>
+            </ul>
+            <div class="subscribe">
+              <a href='settings/profile' class="hb-button">Subscribe</a>
+            </div>
+          </div>
+        </div>
+        <div class="span6">
+          <div class="plan user">
+            <h2>User<span class="price">$7/month</span></h2>
+            <ul class="unstyled">
+              <li><strong>unlimited</strong> public repositories *</li>
+              <li><strong>unlimited</strong> private repositories</li>
+              <li><strong>unlimited</strong> users</li>
+            </ul>
+            <div class="subscribe">
+              <a href='settings/profile' class="hb-button">Subscribe</a>
+            </div>
+          </div>
+        </div>
+        <div class="span12">
+          <h3 class="free"><strong>* unlimited</strong> public repositories will always be <span class="price">Free</span></h3>
+        </div>
+      </div>
+     
+    </div>
+    <div class="features">
+      <div class="container" >
+        <div class="row" style="margin-bottom: 40px;">
+          <div class="span4 feature">
+            <h3>No contracts</h3>
+            <p>HuBoard is pay-as-you-go. Upgrade, downgrade, or cancel anytime. You will only be responsible for charges incurred during your active billing period.</p>
+          </div>
+          <div class="span4 feature">
+            <h3>256-bit SSL Security</h3>
+            <p>HuBoard uses secure 256-bit SSL encryption by default and all data is stored securely. For more on privacy, see our <a href="/site/privacy">privacy policy</a>.</p>
+          </div>
+          <div class="span4 feature">
+            <h3>Who sees my repositories?</h3>
+            <p>You control who can see repositories. We respect the same permissions you have setup with your GitHub repositories</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="span4 feature">
+            <h3>Is my access token secure?</h3>
+            <p>HuBoard never stores your OAuth token on our servers and your token is <strong>never</strong> exposed to the browser unencrypted. You can rest easy knowing that your GitHub repositories are safe and secure, for more information feel free to <a href="mailto:huboard@huboard.com?subject=OAuth Inquiry">Email us</a> anytime.</p>
+          </div>
+          <div class="span4 feature">
+            <h3>Forms of payment</h3>
+            <p>We accept all major credit cards: Visa, Mastercard, American Express, Discover. Our payments are processed by <a href="https://stripe.com" >Stripe</a>.</p>
+          </div>
+          <div class="span4 feature">
+            <h3>Educational institution?</h3>
+            <p>We proudly offer our best plan free to educational institutions. To get started, <a href="mailto:huboard@huboard.com?subject=Non-profit Inquiry">Contact us</a>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $(".plan-picker").on("submit", function(ev){
+    ev.preventDefault();
+    $(".plan").removeClass("featured")
+    var val = $(".plan-picker input").val();
+    if(!val) {
+      $(".plan-picker input").focus();
+      return; 
+    }
+
+    $.getJSON("https://api.github.com/users/"+ val +"?callback=?",function(response){
+      var plans = {
+        Organization : ".plan.organization",
+        User : ".plan.user"
+      }
+      if(response.data && response.data.type) {
+        $(plans[response.data.type]).addClass("featured")
+        .find(":input").val(val)
+      }
+    });
+  })
+
+</script>

@@ -1,4 +1,11 @@
 
+
+<% content_for :breadcrumb do %>
+  <% unless params[:user].nil? %>
+    <li><a href="/<%= h @parameters[:user] %>"><%= h @parameters[:user] %></a></li>
+  <% end %>
+<% end %>
+
 <div class="row no-header">
   <div class="span3">
     <%= partial :vcard, :locals => {:user => @user || current_user } %>

@@ -9,12 +9,8 @@
  <img data-placement="right" rel="twipsy" title="Assigned to <%= assignee.login %>" src="https://secure.gravatar.com/avatar/<%= assignee.gravatar_id %>?s=24" />
 <% } %>
 
-<% if(milestone) { %>
-<div class="milestone">
-   Milestone: <%- milestone.title %>
-</div>
-<% } %>
-<% if (pull_request.html_url) { %><span class="label label-info">Pull request</span> <%}%>
+<% if(pull_request && (pull_request.html_url)) { %>
+<span class="label label-info">Pull request</span> <%}%>
 <div class="card-labels">
 <% _(other_labels).each(function(l) { %>
 <div class="card-label-wrapper"> 

@@ -1,27 +1,42 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><% yield_content :title %>Huboard</title>
-    <link rel="shortcut icon" type="image/png" href="/img/favicon.png" />
+    <title><% yield_content :title %>HuBoard</title>
+    <link rel="shortcut icon" href="/img/favicon.ico?v=2" />
     <!-- This is a special version of jQuery with RequireJS built-in -->
     <script src="/scripts/firebugx.js" type="text/javascript" charset="utf-8"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="/scripts/bootstrap/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/marketing.min.css">
+    <%= partial :fontdeck %>
+   
+     <%= stylesheet_tag 'bootstrap' %>
+     <%= stylesheet_tag 'marketing' %>
   </head>
   <body>        
     <div id="wrapper">
-     <a href="https://github.com/rauhryan/huboard"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a> 
       <div class="navbar navbar-static-top">
         <div class="navbar-inner">
           <div class="container">
-            <a class="brand" href="/">huboard</a>
+            
+            <a class="brand" href="/">
+              <img class="animate-before" src="<%=image_path 'LogoWhiteFull.png' %>"/>
+              <img class="animate-after" src="<%=image_path 'Hu.png' %>"/><div class="stat" data-label=".brand label"><span></span><label></label></div><img class="animate-after" src="<%=image_path 'Board.png' %>"/>
+            </a>
+            <div class="nav">
+              <ul class="nav">
+                <li>
+                  <a href="/pricing"> Plans & Pricing</a>
+                </li>
+                <li>
+                   <a href="/login"><span class="nav-btn">Sign in</span></a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
-
+      
       <%= yield %>
       <div id="footer-pusher"></div>
 
@@ -29,20 +44,17 @@
     <div id="footer">
       <div class="container">
         <div class="row">
-          <div class="span12">
-            <h2>
-              huboard, Huboard LLC
-              <a href="/site/terms">Terms</a>
-              <a href="/site/privacy">Privacy</a>
-            <a href="https://twitter.com/intent/tweet?button_hashtag=huboard" class="twitter-hashtag-button" data-related="rauhryan" data-url="http://huboard.com">Tweet #huboard</a>
-            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-            </h2>
+          <div class="span6">
+            <img src="<%=image_path 'LogoFullPurpleLight.png' %>"/>
           </div>
-
+          <div class="links span6">
+            <a href="/site/terms">terms</a>
+            <a href="/site/privacy">privacy</a>
+            <a href="https://github.com/rauhryan/huboard">github</a>
+          </div>
         </div>
 
       </div>
-
     </div>
     <script type="text/javascript">
 
@@ -56,8 +68,71 @@
        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
        })();
+   (function($){
+      function animateNumber($input, end, duration, easing) {
+        
+        if($input.data("label")){
+          $($input.data("label"))
+            .delay(duration - (duration-(duration-500)))
+            .animate({ opacity : 1}, { duration: duration - (duration-(duration-500)), easing: easing == undefined ? "linear" : easing });
+        }
+        
+        $input
+          .data("start", 0)
+        
+        .find("span")
+        .animate({ width:(addCommas(parseInt(end).toString()).length*17) + "px" },{easing: "easeInOutBack",duration: 900, complete: function () {
+          //$(this).width("auto")
+        }})
+        .animate({"val": Math.ceil(end), opacity: 1 }, {
+            easing: easing == undefined ? "linear" : easing,
+            duration: duration == undefined ? 500 : parseInt(duration),
+            step: function(fin, obj) {
+              
+              if(obj.prop === "val"){
+                console.log(fin)
+                var $this = jQuery(this);
+                var start = parseInt($this.data("start"));
+                var number = addCommas(parseInt(fin).toString());
+                $this
+                  .css({"min-width": (number.length*17) + "px" })
+                  .text(number); 
+              }
+            }
+        });
+      }
 
-     </script>
+      $(window).on("load", function () {
+        var stats = <%= couch.stats.dashboard.rows.to_json %>;
+        if(stats && stats.length) {
+          var stat = stats[Math.floor(Math.random() * stats.length)]
+
+          $(".navbar .brand label").text(stat.key);
+
+          setTimeout(function() {
+            $(".navbar .brand").addClass("animating")
+            animateNumber($(".brand .stat"), stat.value, 1600, "easeInOutCubic");
+          }, 3500);
+        }
+      });
+      
+      
+      function addCommas(nStr) {
+        
+        nStr += '';
+        x = nStr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+        x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        }
+        return x1 + x2;
+      }
+   })(jQuery);
+  
+
+</script>
    </body>
  </html>
 

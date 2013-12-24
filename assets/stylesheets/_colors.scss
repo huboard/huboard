@@ -1,0 +1,62 @@
+$lighterGrey: #CCC;
+$lightGrey: #999;
+$grey: #666;
+$darkGrey: #444;
+
+$red: red;
+
+$borderColor: $lighterGrey;
+
+$linkColor: #0088cc;
+$linkColorHover: #005580;
+
+$hb-purple: #7965cc;
+$hb-purple-dark: #4a3e93;
+$hb-grey-dark: #3d3d3d;
+$hb-grey-light: #e2e2e2;
+$hb-red: #f9646e;
+$hb-red-dark: #a83848;
+
+$hb-font-headings: "Din Text Pro Medium", "Helvetica Neue", "HelveticaNeue", Arial, Verdana, sans-serif;
+$hb-font-sub-headings: "Din Text Pro Light", "Helvetica Neue", "HelveticaNeue", Arial, Verdana, sans-serif; 
+$hb-font-body: "Helvetica Neue", "HelveticaNeue", Arial, Verdana, sans-serif; 
+
+
+html {
+   color: $hb-grey-dark;
+}
+
+%font-headings {
+  font-family: $hb-font-headings;
+  font-size-adjust:0.5; 
+  font-weight:500;
+  @include prefixer(background-clip, text);
+}
+
+%font-sub-headings {
+  font-family: $hb-font-sub-headings;
+  font-size-adjust:0.5; 
+  font-weight:200;
+  @include prefixer(background-clip, text);
+}
+
+%font-body {
+  font-family: $hb-font-body;
+}
+
+h1, h2 {
+  @extend %font-headings;
+  color: $hb-purple-dark;
+}
+
+h3,h4,h5,h6 {
+  @extend %font-sub-headings;
+  color: $hb-purple;
+}
+a {
+    color: $hb-purple;
+    &:hover {
+      color: $hb-purple-dark;
+    }
+}
+

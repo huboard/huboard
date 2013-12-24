@@ -11,7 +11,10 @@ require_relative "middleware"
 require "addressable/uri"
 
 class Huboard
-
+  def self.wip_pattern
+    return /(?<all>\s{1}<=\s+(?<wip>\d+)$)/
+  end
+       
   def self.column_pattern
     return /(^|\:\s{1})(?<id>\d+) *- *(?<name>.+)/
   end
@@ -31,7 +34,10 @@ class Huboard
   class Client
 
     def initialize(access_token, params={})
+      
 
+      
+      
       @connection_factory = ->(token = nil) {
         options = { :access_token => token || access_token }
         options = {} if(token.nil? && access_token.nil?)

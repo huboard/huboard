@@ -1,0 +1,41 @@
+<div class="card-header">
+  <div class="title" {{bind-attr title=title }}>
+    {{title}}
+  </div>
+  <a class="number" {{bind-attr href=html_url}} target="_blank" title="View issue on github.com"><small>#</small>{{number}}</a>
+</div>
+
+{{#if assignee }}
+  {{hb-avatar user=assignee }}
+{{/if}}
+
+<div class="card-labels">
+    {{#each cardLabels }}
+      <div class="card-label-wrapper"> 
+         <div {{bind-attr class=":card-label :active :small customColor"}} ></div>
+         <div {{bind-attr class=":card-label :active :large customColor"}} >
+          <span>{{name}}</span>
+         </div>
+      </div>
+    {{/each}}
+</div>
+
+{{#if current_state.is_last}}
+
+<div class="hb-action actions-close">
+  <button class="hb-button" {{bind-attr disabled=processing}} {{action close this bubbles=false}}>Close</button>
+</div>                                                      
+{{/if}}
+
+{{#if canArchive}}
+
+<div class="hb-action actions-archive">
+  <button class="hb-button-icon hb-button hb-button-grey" {{bind-attr disabled=processing}} {{action archive this bubbles=false}}><i class="ui-icon ui-icon-box-add"></i>Archive</button>
+</div>                                                      
+{{/if}}
+
+<div class="card-states">
+   <img src="/img/check.png" title="Issue is closed" class="hb-state-closed"/>
+   <img src="/img/arrow.png" class="hb-state-ready"/>
+   <img src="/img/x.png" class="hb-state-blocked"/>
+</div>

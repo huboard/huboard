@@ -1,5 +1,9 @@
+require "hashie" 
 require "hashie"
+require 'sinatra/content_for'
+require "hashie" 
 require_relative "auth/github"
+require "sinatra/asset_pipeline"
 
 # stolen from http://github.com/cschneid/irclogger/blob/master/lib/partials.rb
 #   and made a lot more robust by me
@@ -28,41 +32,45 @@ class HuboardApplication < Sinatra::Base
   enable  :sessions
   enable :raise_exceptions
 
-  if File.exists? "#{File.dirname(__FILE__)}/../.settings"
-    token_file =  File.new("#{File.dirname(__FILE__)}/../.settings")
-    # TODO: read this from a yaml
-    eval(token_file.read)
-    GITHUB_CONFIG = {
-      :client_id     => settings.github_options[:client_id],
-      :client_secret => settings.github_options[:secret],
-      :scope => settings.github_options[:scope]
-    }
-    ENV["CACHE_SERVERS"] = ENV["MEMCACHIER_SERVERS"]
-    ENV["CACHE_USERNAME"] = ENV["MEMCACHIER_USERNAME"]
-    ENV["CACHE_PASSWORD"] = ENV["MEMCACHIER_PASSWORD"]
-  elsif ENV['GITHUB_CLIENT_ID']
-    set :secret_key, ENV['SECRET_KEY']
-    set :team_id, ENV["TEAM_ID"]
-    set :user_name, ENV["USER_NAME"]
-    set :password, ENV["PASSWORD"]
-    GITHUB_CONFIG = {
-      :client_id     => ENV['GITHUB_CLIENT_ID'],
-      :client_secret => ENV['GITHUB_SECRET'],
-      :scope => "public_repo"
-    }
-    set :session_secret, ENV["SESSION_SECRET"]
-    set :socket_backend, ENV["SOCKET_BACKEND"]
-    set :socket_secret, ENV["SOCKET_SECRET"]
-    set :couchdb_server, ENV["COUCHDB_SERVER"] = ENV["CLOUDANT_URL"]
+  helpers Sinatra::ContentFor
 
-    set :cache_config, {
-      servers: ENV["CACHE_SERVERS"] = ENV["MEMCACHIER_SERVERS"],
-      username: ENV["CACHE_USERNAME"] = ENV["MEMCACHIER_USERNAME"],
-      password: ENV["CACHE_PASSWORD"] = ENV["MEMCACHIER_PASSWORD"]
-    }
+  # required configuration
+  
+  raise "Configuration information not found: you need to provide a .settings file or ENV variables" unless ENV['GITHUB_CLIENT_ID']
 
-  else
-    raise "Configuration information not found: you need to provide a .settings file or ENV variables"
+  set :secret_key, ENV['SECRET_KEY']
+
+  GITHUB_CONFIG = {
+    :client_id     => ENV['GITHUB_CLIENT_ID'],
+    :client_secret => ENV['GITHUB_SECRET'],
+    :scope => "public_repo"
+  }
+  set :session_secret, ENV["SESSION_SECRET"]
+  set :socket_backend, ENV["SOCKET_BACKEND"]
+  set :socket_secret, ENV["SOCKET_SECRET"]
+
+  set :cache_config, {
+    servers: ENV["CACHE_SERVERS"] = ENV["MEMCACHIER_SERVERS"],
+    username: ENV["CACHE_USERNAME"] = ENV["MEMCACHIER_USERNAME"],
+    password: ENV["CACHE_PASSWORD"] = ENV["MEMCACHIER_PASSWORD"]
+  }
+
+  # end configuration
+
+  set :assets_precompile, %w(splash.css marketing.css application.js bootstrap.css application.css ember-accounts.js board/application.js bootstrap.js *.png *.jpg *.svg *.eot *.ttf *.woff *.js).concat([/\w+\.(?!js|css).+/, /application.(css|js)$/])
+
+  configure :production, :test do 
+    set :asset_protocol, :https
+  end
+
+
+  register Sinatra::AssetPipeline
+
+
+  configure :production, :test do 
+    puts "I is in production"
+    sprockets.js_compressor = :uglify
+    sprockets.css_compressor = :yui
   end
 
 
@@ -112,7 +120,6 @@ class HuboardApplication < Sinatra::Base
   configure :development do
     enable :logging
   end
-
 
   set :raise_errors, true
 

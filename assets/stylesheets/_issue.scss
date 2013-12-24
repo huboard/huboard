@@ -1,0 +1,33 @@
+.card-comment {
+  .author {
+    padding-bottom: 6px;
+    color: #999;
+  }
+}
+
+
+.card-event {
+   line-height: 40px;
+   .label {
+      display: inline-block;
+      width: 75px;
+      text-align: center;
+      padding: 6px;
+   }
+   
+   &.card-event-reopened {
+     .label {
+       background-color: $hb-red;
+     }
+   }
+
+   img {
+    border-radius: 3px;
+    margin: 0 3px;
+   }
+
+   & + .card-comment {
+     margin-top: 10px;
+   }
+
+}

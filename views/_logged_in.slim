@@ -1,9 +1,11 @@
-ul.nav.pull-right
-  li.dropdown
-    a.dropdown-toggle data-toggle="dropdown" href="#"
-      | #{current_user.login } <b class="caret"></b>
-    ul.dropdown-menu
-      li
-        a href="/logout" Logout
+li.dropdown
+  a.dropdown-toggle.avatar data-toggle="dropdown" href="#"
+     img src="https://secure.gravatar.com/avatar/#{current_user.gravatar_id}?s=30&d=retro" <b class="caret"></b>
+
+  ul.dropdown-menu
+    li 
+      a href="/settings/profile" Account
+    li
+      a href="/logout" Logout
 
 

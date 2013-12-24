@@ -25,6 +25,7 @@ define(["text!../templates/card.html","../models/card", "../../common/events/pos
       "click" : "fullscreen"
     },
     tagName:"li",
+    className: "is-draggable",
     onMoved: function(data){
       postal.publish("Moved.Socket." + data.index,{card: this});
     },

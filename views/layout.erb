@@ -2,7 +2,7 @@
 <html>
   <head>
     <title><% yield_content :title %>Huboard</title>
-    <link rel="shortcut icon" type="image/png" href="/img/favicon.png" />
+       <link rel="shortcut icon" href="/img/favicon.ico?v=2" />
     <% if @parameters[:socket_backend] && logged_in? %>
       <script src="<%= @parameters[:socket_backend] %>/socket.io/socket.io.js"></script>
       <script src="/scripts/modules/require.js"></script>
@@ -36,12 +36,12 @@
 
     <script src="/scripts/bootstrap/bootstrap.min.js"></script>
     <% else %>
-    <script src="/scripts/application.min.js"></script>
+    <script src="/scripts/application.v1.min.js"></script>
 
     <% end %>
-
-    <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css" media="screen" charset="utf-8">
-    <link rel="stylesheet" href="/css/application.v1.min.css" type="text/css" media="screen" charset="utf-8">
+     <%= partial :fontdeck %>
+     <%= stylesheet_tag 'bootstrap' %>
+     <%= stylesheet_tag 'application' %>
     <script type="text/javascript">
 
       var _gaq = _gaq || [];
@@ -62,21 +62,22 @@
        <div class="navbar navbar-static-top">
          <div class="navbar-inner">
            <div class="container">
-             <a class="brand" href="/">huboard</a>
-             <ul class="nav">
+            <ul class="nav breadcrumbs">
+              <li><a href="/" class="home"><i class="ui-icon ui-icon-menu"></i></a></li>
+              <% yield_content :breadcrumb %>
+            </ul>
+             <ul class="nav pull-right">
                <% yield_content :navigation %>
+               <% if logged_in? %>
+                 <%= partial :logged_in %>
+               <% else %>
+                   <li>
+                   <form action="/login" method="GET">
+                    <button class="hb-button"> Sign in </button>
+                  </form>
+                   </li>
+               <% end %>
              </ul>
-             <% if logged_in? %>
-               <%= partial :logged_in %>
-             <% else %>
-                <ul class="nav pull-right">
-                 <li>
-                 <form action="/login" method="GET">
-                  <button class="hb-button"> Sign in </button>
-                </form>
-                 </li>
-                </ul>
-             <% end %>
            </div>
          </div>
        </div>
@@ -87,19 +88,21 @@
        </div>
        <div id="footer-pusher"></div>
      </div>
-     <div id="footer">
-       <div class="container">
-         <div class="row">
-           <div class="span12">
-             <h2>huboard</h2>
+      <div id="footer">
+      <div class="container">
+        <div class="row">
+          <div class="span6">
+            <img class="animate-before" src="<%=image_path 'LogoFullPurpleLight.png' %>"/>
+          </div>
+          <div class="links span6">
+            <a href="/site/terms">terms</a>
+            <a href="/site/privacy">privacy</a>
+            <a href="https://github.com/rauhryan/huboard">github</a>
+          </div>
+        </div>
 
-           </div>
-
-         </div>
-
-       </div>
-
-     </div>
+      </div>
+    </div>
 
     <% yield_content :overlay %>
    </body>

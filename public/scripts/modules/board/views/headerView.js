@@ -1,9 +1,10 @@
 define(["../../common/events/postal"], function(postal){
 
   return Backbone.View.extend({
-     el: $(".page-header-wrapper"),
+     el: $(".nav.breadcrumbs"),
      events: {
-       "keyup input" : "onkeyup"
+       "keyup input" : "onkeyup",
+       "click .search" : "onClick"
      },
      initialize: function(options){
        var self = this,
@@ -11,8 +12,9 @@ define(["../../common/events/postal"], function(postal){
 
        this.publish = _.debounce(function() {
           var val = input.val();
+          val ? input.addClass("has-value") : input.removeClass("has-value");
           postal.publish("Filter.Simple",{id: "search", condition: function(issue){
-               return issue.title.toLocaleLowerCase().indexOf(val.toLocaleLowerCase()) !== -1;
+               return [issue.number, issue.title, issue.number].join(" ").toLocaleLowerCase().indexOf(val.toLocaleLowerCase()) !== -1;
           }, state:2});
 
        }, 300);
@@ -21,6 +23,9 @@ define(["../../common/events/postal"], function(postal){
      },
      onkeyup : function(ev){
        this.publish();
+     },
+     onClick: function () {
+        $(this.el).find("input").focus();
      }
 
   });

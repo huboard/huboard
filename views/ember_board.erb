@@ -1,0 +1,27 @@
+<% content_for :javascripts do %>
+
+  <% if HuboardApplication.socket_backend %>
+    <script src="<%= HuboardApplication.socket_backend %>/socket.io/socket.io.js"></script>
+  <% end %>
+
+  <%= javascript_tag 'board/application' %>
+  <%= javascript_tag 'bootstrap' %>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+  <script>
+    App.set("repo", Ember.Object.create(<%= @repo.to_hash.to_json %>));
+    <% if logged_in? %>
+      App.set("loggedIn", true);
+      App.set("currentUser",<%= current_user.attribs.to_json %>);
+    <% else %>
+      App.set("loggedIn", false);
+    <% end %>
+
+    <% if HuboardApplication.socket_backend %>
+
+      App.set("socketBackend", "<%= HuboardApplication.socket_backend %>?token=<%= encrypted_token %>");
+
+    <% end %>
+
+    App.advanceReadiness();
+  </script>
+<% end %>
