@@ -87,14 +87,14 @@ Go to https://github.com/settings/applications and register your
 application to get the application keys needed for OAuth.
 
 - URL: Pow: `http://huboard.dev`, Rack: `http://localhost:9292`
-- Callback: Pow: `http://huboard.dev/auth/github/callback`, Rack:
-  `http://localhost:9292/auth/github/callback`
+- Callback: Pow: `http://huboard.dev/`, Rack:
+  `http://localhost:9292/`
 
 ## Configure Your App
 
-    cp .settings.sample .settings
+    cp .env.sample .env
 
-Edit `.settings` to set the Client ID and Client Secret provided by
+Edit `.env` to set the Client ID and Client Secret provided by
 Github when you registered the application.
 
 ### Using Pow
@@ -112,19 +112,20 @@ Sinatra doesn't automatically reload changes to your app, so tell Pow to restart
     mkdir tmp
     touch tmp/always_restart.txt
 
-### Using RVM
 
-    cp .rvmrc.sample .rvmrc
+### Foreman
 
-Edit `.rvmrc` to specify your ruby version/gemset
+`foreman start -f Procfile.dev`
 
-### Using Rack (shotgun, thin, etc.)
+# Developing Javascript locally
 
-`bundle exec shotgun -p 9292`
+The new HuBoard UI is built using emberjs and using ember-tools to build the
+UI's javascript files. In order to develop locally you will need to have
+ember-tools watch the files and build it automatically
 
-or
-
-`bundle exec rackup config.ru`
+`cd ember`
+`npm install ember-tools`
+`ember build -w`
 
 # Deploy To Heroku
 
@@ -180,8 +181,7 @@ Customize your values and run the following from your project root:
       GITHUB_CLIENT_ID='<your-github-oauth-client>' \
       GITHUB_SECRET='<your-github-oauth-secret>' \
       SECRET_KEY='<your-random-secret-key>' \
-      SESSION_SECRET='<your-complex-session-secret>' \
-      TEAM_ID='<your-github-team-id>'
+      SESSION_SECRET='<your-complex-session-secret>' 
 
 ## 4. Deploy
 
