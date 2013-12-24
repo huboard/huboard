@@ -147,9 +147,7 @@ ember-tools watch the files and build it automatically
 please use the latest stable tag. The master branch doesn't always reflect the deployed version on huboard.com and
 very difficult to support and troubleshoot if you run into any issues.
 
-[Sign up](https://api.heroku.com/signup) on [Heroku](http://www.heroku.com/) if you don't have an account, and install the heroku gem:
-
-    gem install heroku
+[Sign up](https://api.heroku.com/signup) on [Heroku](http://www.heroku.com/) if you don't have an account, and install the [heroku toolbelt](https://toolbelt.heroku.com/)
 
 ## 1. Create The Heroku App
 
