@@ -17,4 +17,6 @@ vendor/
 node_modules
 
 !assets/javascripts/board/vendor/
+!assets/javascripts/vendor/
+
 
