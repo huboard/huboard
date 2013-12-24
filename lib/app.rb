@@ -1,20 +1,20 @@
 require 'rdiscount'
 require 'sinatra'
 require 'slim'
-require 'sinatra/content_for'
 require 'encryptor'
 require 'base64'
 require_relative "helpers"
+require_relative "login"
+require_relative "site"
 
 class Huboard
   class App < HuboardApplication
 
+    use Login
+    use Site
+
     PUBLIC_URLS = ['/', '/logout','/webhook', '/site/privacy','/site/terms']
     RESERVED_URLS = %w{ assets repositories images about site login logout favicon.ico robots.txt }
-
-    before do
-
-    end
 
     before "/:user/:repo/?*" do 
 
@@ -46,35 +46,6 @@ class Huboard
       end
     end
 
-
-    get '/logout' do
-      logout!
-      redirect '/'
-    end
-
-    get "/site/privacy/?" do
-      return erb :privacy, :layout => :marketing unless authenticated?
-    end
-
-    get "/site/terms/?" do
-      return erb :terms_of_service, :layout => :marketing unless authenticated?
-    end
-
-    get '/login/?' do
-      @parameters = params
-      erb :login, :layout => :marketing
-    end
-
-    get '/login/private/?' do
-      authenticate! :scope => :private
-      redirect params[:redirect_to] || '/'
-    end
-
-    get '/login/public/?' do
-      authenticate!
-      redirect params[:redirect_to] || '/'
-    end
-
     get '/' do 
       @parameters = params
       return erb :home, :layout => :marketing unless logged_in?
@@ -83,31 +54,7 @@ class Huboard
       erb :index
     end
 
-    get '/pricing/?' do 
-      erb :pricing, :layout => :marketing
-    end
 
-    get "/favicon.ico" do
-     
-      path = File.expand_path("../../public/img/favicon.ico",__FILE__)
-
-      response = [ ::File.open(path, 'rb') { |file| file.read } ]
-
-      headers["Content-Length"] = response.join.bytesize.to_s
-      headers["Content-Type"]   = "image/vnd.microsoft.icon"
-      [status, headers, response]
-    end
-
-    get "/robots.txt" do
-      puts "hello"
-      path = File.expand_path("../../public/files/robots.txt",__FILE__)
-
-      response = [ ::File.open(path, 'rb') { |file| file.read } ]
-
-      headers["Content-Length"] = response.join.bytesize.to_s
-      headers["Content-Type"]   = "text/plain"
-      [status, headers, response]
-    end
 
     get '/:user/?' do 
       pass if params[:user] == "assets"
@@ -204,7 +151,6 @@ class Huboard
       erb :create_board
     end
 
-
     post '/:user/:repo/board/create/?' do
       pass if params[:user] == "assets"
       puts "creating board"
@@ -257,10 +203,6 @@ class Huboard
     not_found do
       erb :"404", :layout => false
     end
-
-
-
-    helpers Sinatra::ContentFor
 
   end
 

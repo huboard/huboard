@@ -1,3 +1,4 @@
+require 'sinatra/content_for'
 require "hashie" 
 require_relative "auth/github"
 require "sinatra/asset_pipeline"
@@ -28,6 +29,8 @@ class HuboardApplication < Sinatra::Base
 
   enable  :sessions
   enable :raise_exceptions
+
+  helpers Sinatra::ContentFor
 
   if File.exists? "#{File.dirname(__FILE__)}/../.settings"
     token_file =  File.new("#{File.dirname(__FILE__)}/../.settings")
