@@ -10,7 +10,7 @@
   </div>
   <div class="fullscreen-card-description card-comment">
     <a href="<%= user.html_url %>" target="_blank">
-      <img title="Created by <%= user.login %>" src="https://secure.gravatar.com/avatar/<%= user.gravatar_id%>?s=30" />
+      <img title="Created by <%= user.login %>" src="<%= user.avatar_url%>?s=30" width="30" height="30" />
     </a>
     <div class="comment-body">
       <%= body_html || "<p class='empty'> No description given </p>" %>
