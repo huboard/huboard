@@ -636,22 +636,48 @@ var IssuesEditController = Ember.ObjectController.extend({
        Ember.run.once(function () {
          this.get("model").updateLabels()
        }.bind(this));
+    },
+    submitComment: function () {
+      var comments = this.get("model.activities.comments");
+
+      this.set("processing", true);
+
+      this.get("model").submitComment(this.get("commentBody"))
+        .then(function(comment){
+          comments.pushObject(comment);
+
+         Ember.run.once(function () {
+            this.set("commentBody", "")
+            this.set("processing", false);
+         }.bind(this));
+
+          return comment;
+         }.bind(this))
     }
   },
-  otherLabels : Ember.computed.alias("controllers.index.other_labels"),
+  commentBody: null,
+  isValid: function () {
+    return this.get("commentBody");
+  }.property("commentBody"),
+  disabled: function () {
+      return this.get("processing") || !this.get("isValid");
+  }.property("processing","isValid"),
   _events : function () {
      var events = this.get("model.activities.events");
      return events.map(function (e){return _.extend(e, {type: "event" }) })
-  }.property("model.activities.events"),
+  }.property("model.activities.events.@each"),
   _comments : function () {
      var comments = this.get("model.activities.comments");
      return comments.map(function (e){ return _.extend(e, {type: "comment" }) })
-  }.property("model.activities.comments"),
+  }.property("model.activities.comments.@each"),
   sortedActivities: function () {
     var events = this.get("_events"),
         comments = this.get("_comments");
     
-    return _.union(events,comments).sort(function (a, b){return a.created_at.localeCompare(b.created_at); });
+    return _.union(events,comments)
+      .sort(function (a, b) {
+        return a.created_at.localeCompare(b.created_at); 
+      });
   }.property("_events", "_comments")
 });
 
@@ -914,6 +940,23 @@ var Issue = Ember.Object.extend(Serializable,{
       contentType: "application/json"}).then(function(response){
       return Issue.create(response);
     })
+  },
+  submitComment : function (markdown) {
+     this.set("processing", true);
+      var user = this.get("repo.owner.login"),
+          repo = this.get("repo.name"),
+          full_name = user + "/" + repo;
+
+    return Ember.$.ajax( {
+      url: "/api/" + full_name + "/issues/" + this.get("number") + "/comment", 
+      data: JSON.stringify({ markdown: markdown, correlationId: this.get("correlationId")}),
+      dataType: 'json',
+      type: "POST",
+      contentType: "application/json"})
+      .then(function(response){
+        this.set("processing", false);
+        return response;
+      }.bind(this))
   },
   updateLabels : function () {
      this.set("processing", true);
@@ -1687,7 +1730,7 @@ function program5(depth0,data) {
 Ember.TEMPLATES['issue'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, stack2, hashTypes, hashContexts, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, self=this;
+  var buffer = '', stack1, stack2, hashTypes, hashContexts, options, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, self=this;
 
 function program1(depth0,data) {
   
@@ -1707,6 +1750,33 @@ function program3(depth0,data) {
   
   
   data.buffer.push("\n        <p class=\"empty\"> No description given </p>\n      ");
+  }
+
+function program5(depth0,data) {
+  
+  var buffer = '', stack1, hashContexts, hashTypes, options;
+  data.buffer.push("\n  <hr></hr>\n  <form ");
+  hashContexts = {'on': depth0};
+  hashTypes = {'on': "STRING"};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "submitComment", {hash:{
+    'on': ("submit")
+  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" class=\"flex-form\">\n    ");
+  hashContexts = {'markdown': depth0};
+  hashTypes = {'markdown': "ID"};
+  options = {hash:{
+    'markdown': ("controller.commentBody")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['hb-markdown-editor'] || depth0['hb-markdown-editor']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-markdown-editor", options))));
+  data.buffer.push("\n    <button ");
+  hashContexts = {'disabled': depth0};
+  hashTypes = {'disabled': "ID"};
+  options = {hash:{
+    'disabled': ("disabled")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
+  data.buffer.push(" class=\"hb-button\">Submit comment</button>\n  </form>\n  ");
+  return buffer;
   }
 
   data.buffer.push("<div class=\"fullscreen-card\">\n  <div class=\"fullscreen-card-right\">\n      <h2> <a class=\"number\" href=\"");
@@ -1771,12 +1841,17 @@ function program3(depth0,data) {
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n    </div>\n  </div>\n\n  <div class=\"fullscreen-card-activity\">\n    <div class=\"fullscreen-header\">\n      <h4> Activity </h4>\n    </div>\n    ");
   data.buffer.push("\n    ");
-  hashContexts = {'contentBinding': depth0};
-  hashTypes = {'contentBinding': "ID"};
+  hashContexts = {'activitiesBinding': depth0};
+  hashTypes = {'activitiesBinding': "ID"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.IssueActivitiesView", {hash:{
-    'contentBinding': ("sortedActivities")
+    'activitiesBinding': ("sortedActivities")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\n  </div>\n</div>\n</div>\n");
+  data.buffer.push("\n  </div>\n  ");
+  hashTypes = {};
+  hashContexts = {};
+  stack2 = helpers['if'].call(depth0, "App.loggedIn", {hash:{},inverse:self.noop,fn:self.program(5, program5, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+  data.buffer.push("\n</div>\n</div>\n");
   return buffer;
   
 });
@@ -57801,6 +57876,7 @@ var EventView = Ember.View.extend({
 
 
 var ActivitiesView = Ember.CollectionView.extend({
+  content: Ember.computed.alias("activities"),
   createChildView: function(viewClass, attrs) {
     if(attrs.content.type == "comment") {
        viewClass = CommentView;
