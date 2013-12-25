@@ -131,8 +131,9 @@ class Huboard
     end
 
     get '/:user/:repo/beta/?' do 
-
       pass if params[:user] == "assets"
+      redirect "/#{params[:user]}/#{params[:repo]}/board/create" unless huboard.board(params[:user], params[:repo]).has_board?
+      
       @parameters = params.merge({ :socket_backend => socket_backend})
 
       @repo = gh.repos(params[:user],params[:repo])
