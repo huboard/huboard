@@ -10,6 +10,7 @@ var EventView = Ember.View.extend({
 
 
 var ActivitiesView = Ember.CollectionView.extend({
+  content: Ember.computed.alias("activities"),
   createChildView: function(viewClass, attrs) {
     if(attrs.content.type == "comment") {
        viewClass = CommentView;

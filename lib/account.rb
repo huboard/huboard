@@ -10,17 +10,10 @@ class Huboard
       @parameters = {}
     end
 
-    if File.exists? "#{File.dirname(__FILE__)}/../.settings"
-      puts "settings file"
-      token_file =  File.new("#{File.dirname(__FILE__)}/../.settings")
-      # TODO: read this from a yaml
-      eval(token_file.read) 
-    elsif ENV['STRIPE_API']
-      set :stripe_key, ENV['STRIPE_API']
-      set :stripe_publishable_key, ENV['STRIPE_PUBLISHABLE_API']
-    else
-      raise "Configuration information not found: you need to provide a .settings file or ENV variables"
-    end
+    raise "Configuration information not found: you need to provide a .env file or ENV variables" unless ENV['STRIPE_API']
+
+    set :stripe_key, ENV['STRIPE_API']
+    set :stripe_publishable_key, ENV['STRIPE_PUBLISHABLE_API']
 
     Stripe.api_key = settings.stripe_key
 

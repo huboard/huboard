@@ -1,11 +1,14 @@
 require "hashie" 
+require "hashie"
+require 'sinatra/content_for'
+require "hashie" 
 require_relative "auth/github"
 require "sinatra/asset_pipeline"
 
 # stolen from http://github.com/cschneid/irclogger/blob/master/lib/partials.rb
 #   and made a lot more robust by me
 # this implementation uses erb by default. if you want to use any other template mechanism
-#   then replace `erb` on line 13 and line 17 with `haml` or whatever 
+#   then replace `erb` on line 13 and line 17 with `haml` or whatever
 module Sinatra::Partials
   def partial(template, *args)
     template_array = template.to_s.split('/')
@@ -29,33 +32,30 @@ class HuboardApplication < Sinatra::Base
   enable  :sessions
   enable :raise_exceptions
 
-  if File.exists? "#{File.dirname(__FILE__)}/../.settings"
-    token_file =  File.new("#{File.dirname(__FILE__)}/../.settings")
-    # TODO: read this from a yaml
-    eval(token_file.read) 
-  elsif ENV['GITHUB_CLIENT_ID']
-    set :secret_key, ENV['SECRET_KEY']
-    set :team_id, ENV["TEAM_ID"]
-    set :user_name, ENV["USER_NAME"]
-    set :password, ENV["PASSWORD"]
-    GITHUB_CONFIG = {
-      :client_id     => ENV['GITHUB_CLIENT_ID'],
-      :client_secret => ENV['GITHUB_SECRET'],
-      :scope => "public_repo"
-    }
-    set :session_secret, ENV["SESSION_SECRET"]
-    set :socket_backend, ENV["SOCKET_BACKEND"]
-    set :socket_secret, ENV["SOCKET_SECRET"]
+  helpers Sinatra::ContentFor
 
-    set :cache_config, {
-      servers: ENV["CACHE_SERVERS"] = ENV["MEMCACHIER_SERVERS"],
-      username: ENV["CACHE_USERNAME"] = ENV["MEMCACHIER_USERNAME"],
-      password: ENV["CACHE_PASSWORD"] = ENV["MEMCACHIER_PASSWORD"]
-    }
+  # required configuration
+  
+  raise "Configuration information not found: you need to provide a .env file or ENV variables" unless ENV['GITHUB_CLIENT_ID']
 
-  else
-    raise "Configuration information not found: you need to provide a .settings file or ENV variables"
-  end
+  set :secret_key, ENV['SECRET_KEY']
+
+  GITHUB_CONFIG = {
+    :client_id     => ENV['GITHUB_CLIENT_ID'],
+    :client_secret => ENV['GITHUB_SECRET'],
+    :scope => "public_repo"
+  }
+  set :session_secret, ENV["SESSION_SECRET"]
+  set :socket_backend, ENV["SOCKET_BACKEND"]
+  set :socket_secret, ENV["SOCKET_SECRET"]
+
+  set :cache_config, {
+    servers: ENV["CACHE_SERVERS"] = ENV["MEMCACHIER_SERVERS"],
+    username: ENV["CACHE_USERNAME"] = ENV["MEMCACHIER_USERNAME"],
+    password: ENV["CACHE_PASSWORD"] = ENV["MEMCACHIER_PASSWORD"]
+  }
+
+  # end configuration
 
   set :assets_precompile, %w(splash.css marketing.css application.js flex_layout.css bootstrap.css application.css ember-accounts.js board/application.js bootstrap.js *.png *.jpg *.svg *.eot *.ttf *.woff *.js).concat([/\w+\.(?!js|css).+/, /application.(css|js)$/])
 
@@ -111,8 +111,8 @@ class HuboardApplication < Sinatra::Base
       return authenticated?(:private) || authenticated?
     end
 
-    def github_config 
-      return :client_id => GITHUB_CONFIG[:client_id], :client_secret => GITHUB_CONFIG[:client_secret] 
+    def github_config
+      return :client_id => GITHUB_CONFIG[:client_id], :client_secret => GITHUB_CONFIG[:client_secret]
     end
 
   end
@@ -131,7 +131,7 @@ class HuboardApplication < Sinatra::Base
     g.body 'A fatal error occured.'
     g.headers "Location" => "/logout"
 
-    g.on(Ghee::Error) 
+    g.on(Ghee::Error)
 
   end
 

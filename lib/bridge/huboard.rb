@@ -16,7 +16,7 @@ class Huboard
   end
        
   def self.column_pattern
-    return /(^|\:\s{1})(?<id>\d+) *- *(?<name>.+)/ 
+    return /(^|\:\s{1})(?<id>\d+) *- *(?<name>.+)/
   end
 
   def self.link_pattern
@@ -34,6 +34,8 @@ class Huboard
   class Client
 
     def initialize(access_token, params={})
+      
+
       
       
       @connection_factory = ->(token = nil) {

@@ -1,8 +1,0 @@
-# TODO: read this from a yaml
-set :session_secret, "herpderp"
-set :secret_key, 'iam a secret key'
-set :github_options, {
-                            :secret    => '12351463161',
-                            :client_id => '213414514636134631731364',
-                            :scopes => "user,repo"
-                     }

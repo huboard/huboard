@@ -70,6 +70,15 @@ class Huboard
        return json huboard.board(params[:user],params[:repo]).create_issue JSON.parse(request.body.read)
     end
 
+    post '/:user/:repo/issues/:number/comment' do 
+
+      comment = gh.repos(params[:user], params[:repo]).issues(params[:number])
+              .comments.create :body => JSON.parse(request.body.read)["markdown"]
+
+      return json comment.to_hash
+
+    end
+
     post '/:user/:repo/issues/:number/update' do 
 
       api = huboard.board(params[:user], params[:repo])

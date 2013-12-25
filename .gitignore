@@ -1,4 +1,5 @@
 .settings
+.env
 .token
 .rvmrc
 tmp/
@@ -7,7 +8,6 @@ log/
 .sass-cache
 #*.min.css
 app.build.js
-.powenv
 .idea/
 *.orig
 .bundle/
@@ -15,4 +15,8 @@ app.build.js
 .rbenv-version
 vendor/
 node_modules
+
+!assets/javascripts/board/vendor/
+!assets/javascripts/vendor/
+
 

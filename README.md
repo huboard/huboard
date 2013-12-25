@@ -7,14 +7,14 @@ Before contributing to Huboard, please:
 Ways to contribute:
 
   * The easiest way you can contribute by simply using huboard and adding issues. Find bugs or think of cool features, let me know by submitting issues
-  * Take a look at the open issues. Anything is fair game, pick one and send me a pull request. 
+  * Take a look at the open issues. Anything is fair game, pick one and send me a pull request.
   * I've added a label called `Please contribute`, these are features/defects that are lower priority but would still be a great addition to the product
 
 # How To Set Up Your Repo
 
 Add labels to your repository with the following pattern
 
->  # - Title  
+>  # - Title
 
 Where:
 
@@ -64,6 +64,9 @@ Example:
 
 > Link <=> rauhryan/ghee
 
+Reciprocal links must be present in any two repositories that are to
+be linked together.
+
 For help distiguishing cards add a custom color to label and huboard
 will add a border to issues belonging to the linked board
 
@@ -81,20 +84,24 @@ labels **name and color** must match in order to work.
     gem install bundler
     bundle install
 
+Also install memcached and couch, e.g.
+
+    apt-get install couchdb memcached
+
 ## Register App For Github OAuth
 
 Go to https://github.com/settings/applications and register your
 application to get the application keys needed for OAuth.
 
 - URL: Pow: `http://huboard.dev`, Rack: `http://localhost:9292`
-- Callback: Pow: `http://huboard.dev/auth/github/callback`, Rack:
-  `http://localhost:9292/auth/github/callback`
+- Callback: Pow: `http://huboard.dev/`, Rack:
+  `http://localhost:9292/`
 
 ## Configure Your App
 
-    cp .settings.sample .settings
+    cp .env.sample .env
 
-Edit `.settings` to set the Client ID and Client Secret provided by
+Edit `.env` to set the Client ID and Client Secret provided by
 Github when you registered the application.
 
 ### Using Pow
@@ -112,25 +119,26 @@ Sinatra doesn't automatically reload changes to your app, so tell Pow to restart
     mkdir tmp
     touch tmp/always_restart.txt
 
-### Using RVM
 
-    cp .rvmrc.sample .rvmrc
+### Foreman
 
-Edit `.rvmrc` to specify your ruby version/gemset
+`foreman start -f Procfile.dev`
 
-### Using Rack (shotgun, thin, etc.)
+# Developing Javascript locally
 
-`bundle exec shotgun -p 9292`
+The new HuBoard UI is built using emberjs and using ember-tools to build the
+UI's javascript files. In order to develop locally you will need to have
+ember-tools watch the files and build it automatically
 
-or
-
-`bundle exec rackup config.ru`
+`cd ember`
+`npm install ember-tools`
+`ember build -w`
 
 # Deploy To Heroku
 
 **Please use the latest stable tag if you are hosting your own instance of huboard.**
 
-# Warning - the deployment instructions are out of date. 
+# Warning - the deployment instructions are out of date.
 # Huboard now requires memcached and couchdb. Please help me update the
 # documentation
 
@@ -168,7 +176,7 @@ Go to https://github.com/settings/applications and register your
 application to get the application keys needed for OAuth.
 
 - URL: `http://<your-app-name>.herokuapp.com`
-- Callback: `http://<your-app-name>.herokuapp.com/auth/github/callback`
+- Callback: `http://<your-app-name>.herokuapp.com`
 
 ## 3. Configure Heroku Environment
 
@@ -180,8 +188,7 @@ Customize your values and run the following from your project root:
       GITHUB_CLIENT_ID='<your-github-oauth-client>' \
       GITHUB_SECRET='<your-github-oauth-secret>' \
       SECRET_KEY='<your-random-secret-key>' \
-      SESSION_SECRET='<your-complex-session-secret>' \
-      TEAM_ID='<your-github-team-id>'
+      SESSION_SECRET='<your-complex-session-secret>' 
 
 ## 4. Deploy
 
@@ -197,13 +204,13 @@ Predeployment (if you've changed any js or css files) run the following rake tas
     rake rjs
     rake js
     rake css
-    
+
 Commit the changes and
 
     git push heroku master
-    
-    
-    
+
+
+
 
 # License
 
