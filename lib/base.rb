@@ -70,7 +70,7 @@ class HuboardApplication < Sinatra::Base
   configure :production, :test, :staging do 
     puts "I is in production"
     sprockets.js_compressor = :uglify
-    sprockets.css_compressor = :yui
+    sprockets.css_compressor = :scss
   end
 
 
