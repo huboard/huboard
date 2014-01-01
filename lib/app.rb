@@ -160,7 +160,6 @@ class Huboard
 
     post '/:user/:repo/board/create/?' do
       pass if params[:user] == "assets"
-      puts "creating board"
       hook_url = "#{socket_backend}/issues/webhook?token=#{encrypted_token}"
       pebble.create_board(params[:user],params[:repo], socket_backend.nil? ? nil : hook_url)
       redirect "/#{params[:user]}/#{params[:repo]}/board"

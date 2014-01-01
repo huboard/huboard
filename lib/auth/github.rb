@@ -21,13 +21,13 @@ module Sinatra
         enable :raise_errors 
         disable :show_exceptions
 
-        set :assets_precompile, %w(splash.css marketing.css application.js bootstrap.css application.css ember-accounts.js *.png *.jpg *.svg *.eot *.ttf *.woff).concat([/\w+\.(?!js|css).+/, /application.(css|js)$/])
+        set :assets_precompile, %w(splash.css marketing.css application.js flex_layout.css bootstrap.css application.css ember-accounts.js board/application.js bootstrap.js *.png *.jpg *.svg *.eot *.ttf *.woff *.js).concat([/\w+\.(?!js|css).+/, /application.(css|js)$/])
 
         register Sinatra::AssetPipeline
 
-        configure :production do 
+        configure :production, :staging do 
           sprockets.js_compressor = :uglify
-          sprockets.css_compressor = :yui
+          sprockets.css_compressor = :scss
         end
 
         get '/unauthenticated' do

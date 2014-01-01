@@ -45,7 +45,6 @@ class Huboard
       end
 
       def query_view(viewname, options = {})
-        puts "Query => _design/#{class_name}/_view/#{viewname} #{options}"
         result = connection.get("_design/#{class_name}/_view/#{viewname}") do |request|
           request.params.merge! options
         end
@@ -272,13 +271,11 @@ class Huboard
       theuser = api.users(user)
 
       begin
-        puts "saving to couch"
         couch.user.get_or_create api.user
         couch.users.get_or_create theuser if theuser.type == "User"
         couch.orgs.get_or_create theuser if theuser.type == "Organization"
         couch.repos.get_or_create therepo
       rescue Exception => e
-        puts "error with couch"
         puts e.message
         return board_method.bind(self).call
       end

@@ -23,8 +23,6 @@ class Huboard
 
         env[:url] = URI::parse(uri.to_s)
 
-        puts "adding client id"
-
         @app.call env
       end
 

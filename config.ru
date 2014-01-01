@@ -3,6 +3,14 @@ require 'bundler'
 
 Bundler.require
 
+if File.exists?("./.env") 
+  require 'dotenv'
+  Dotenv.load
+end
+
+Octokit.api_endpoint = ENV["GITHUB_API_ENDPOINT"] if ENV["GITHUB_API_ENDPOINT"]
+Octokit.web_endpoint = ENV["GITHUB_WEB_ENDPOINT"] if ENV["GITHUB_WEB_ENDPOINT"]
+
 require 'rack/no-www'
 require 'rack/ssl'
 require 'rack/robustness'
@@ -35,12 +43,4 @@ end
 map "/settings" do 
     run Huboard::Accounts
 end
-
-#map "/assets" do
-#  environment.append_path 'assets/javascripts'
-#  environment.append_path 'assets/stylesheets'
-#  environment.append_path 'assets/images'
-#  Compass.sass_engine_options[:load_paths].each { |d| environment.append_path d.to_s }
-#  run environment
-#end
 
