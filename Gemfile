@@ -42,6 +42,7 @@ group :development do
   gem 'thin'
   gem 'heroku'
   gem 'pry'
+  gem 'librarian-chef'
 end
 
 group :production do

@@ -20,3 +20,5 @@ node_modules
 !assets/javascripts/vendor/
 
 
+/cookbooks
+/bin
