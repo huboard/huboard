@@ -84,18 +84,26 @@ labels **name and color** must match in order to work.
     gem install bundler
     bundle install
 
-Also install memcached and couch, e.g.
+## Install vagrant
 
-    apt-get install couchdb memcached
+[Download](http://www.vagrantup.com/downloads.html) vagrant and install it along with vmware or 
+virtualbox
+
+    `librarian-chef install`
+    `vagrant up couch`
+
+`vagrant up couch` will create and provision a vm with couchdb and memcached installed and configured properly
+
+Note: vagrant's performance is unusable when developing and running the application from the vm,
+but its awesome and completely acceptable to run couchdb and memcached from a vagrant vm.
 
 ## Register App For Github OAuth
 
 Go to https://github.com/settings/applications and register your
 application to get the application keys needed for OAuth.
 
-- URL: Pow: `http://huboard.dev`, Rack: `http://localhost:9292`
-- Callback: Pow: `http://huboard.dev/`, Rack:
-  `http://localhost:9292/`
+- Homepage URL: Rack: `http://localhost:9393`
+- Callback: Rack: `http://localhost:9292/`
 
 ## Configure Your App
 
@@ -104,25 +112,9 @@ application to get the application keys needed for OAuth.
 Edit `.env` to set the Client ID and Client Secret provided by
 Github when you registered the application.
 
-### Using Pow
+## Spin up a rack server (flavor of your choice)
 
-Install Pow from [pow.cx](http://pow.cx)
-
-Configure your app for pow:
-
-    cd ~/.pow
-    ln -s /path/to/huboard
-
-Sinatra doesn't automatically reload changes to your app, so tell Pow to restart on every request:
-
-    cd /path/to/huboard
-    mkdir tmp
-    touch tmp/always_restart.txt
-
-
-### Foreman
-
-`foreman start -f Procfile.dev`
+    bundle exec shotgun
 
 # Developing Javascript locally
 
