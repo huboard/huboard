@@ -14,15 +14,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box_url = "http://files.vagrantup.com/precise32.box"
 
 
-  config.vm.provider :virtualbox do |v|
-    # Use VBoxManage to customize the VM. For example to change memory:
-    v.customize ["modifyvm", :id, "--memory", MEMORY.to_i]
-    v.customize ["modifyvm", :id, "--cpus", CORES.to_i]
-
-    if CORES.to_i > 1
-      v.customize ["modifyvm", :id, "--ioapic", "on"]
-    end
-  end
 
   #config.vm.synced_folder Pathname.pwd, Pathname("/srv/huboard")
   config.vm.provision :chef_solo do |chef|
@@ -33,12 +24,23 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.define "theworks", :primary => true do |web| 
+    web.vm.network "private_network", ip: "192.168.50.4"
     web.vm.network :forwarded_port, guest: 9292, host: 9292
+    web.vm.synced_folder ".", "/vagrant", type: "nfs"
+
+    web.vm.provider :virtualbox do |v|
+      # Use VBoxManage to customize the VM. For example to change memory:
+      v.customize ["modifyvm", :id, "--memory", MEMORY.to_i]
+      v.customize ["modifyvm", :id, "--cpus", CORES.to_i]
+
+      if CORES.to_i > 1
+        v.customize ["modifyvm", :id, "--ioapic", "on"]
+      end
+    end
+
     web.vm.provision :chef_solo do |chef|
       chef.cookbooks_path = "cookbooks"
-      chef.add_recipe 'apt'
-      chef.add_recipe 'git'
-      chef.add_recipe "build-essential"
+
       chef.add_recipe "ruby_build"
       chef.add_recipe "rbenv::system"
       chef.add_recipe "rbenv::vagrant"
@@ -65,6 +67,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         }
       }
     end
+
+    web.vm.provision "shell" do |s|
+      s.path = "provisioning/couchdb.sh"
+      s.privileged = false
+    end
+
     web.vm.provision "shell" do |s|
       s.path = "provisioning/huboard.sh"
       s.privileged = false

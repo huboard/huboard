@@ -89,13 +89,13 @@ labels **name and color** must match in order to work.
 [Download](http://www.vagrantup.com/downloads.html) vagrant and install it along with vmware or 
 virtualbox
 
-    `librarian-chef install`
-    `vagrant up couch`
+    librarian-chef install
+    vagrant up 
+    vagrant ssh
+    cd /vagrant
+    bundle exec shotgun -o 0.0.0.0
 
 `vagrant up couch` will create and provision a vm with couchdb and memcached installed and configured properly
-
-Note: vagrant's performance is unusable when developing and running the application from the vm,
-but its awesome and completely acceptable to run couchdb and memcached from a vagrant vm.
 
 ## Register App For Github OAuth
 
@@ -103,7 +103,7 @@ Go to https://github.com/settings/applications and register your
 application to get the application keys needed for OAuth.
 
 - Homepage URL: Rack: `http://localhost:9393`
-- Callback: Rack: `http://localhost:9292/`
+- Callback: Rack: `http://localhost:9393/`
 
 ## Configure Your App
 
@@ -113,6 +113,9 @@ Edit `.env` to set the Client ID and Client Secret provided by
 Github when you registered the application.
 
 ## Spin up a rack server (flavor of your choice)
+
+Note:
+  only if you prefer to work locally
 
     bundle exec shotgun
 
