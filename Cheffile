@@ -30,3 +30,8 @@ cookbook 'erlang'
 cookbook 'couchdb',
   git: 'https://github.com/wohali/couchdb-cookbook'
 cookbook 'memcached'
+
+
+cookbook 'nginx'
+cookbook 'runit'
+cookbook 'unicorn'

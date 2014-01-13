@@ -13,6 +13,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.box_url = "http://files.vagrantup.com/precise32.box"
 
+  config.omnibus.chef_version = :latest
+
 
 
   #config.vm.synced_folder Pathname.pwd, Pathname("/srv/huboard")
@@ -47,8 +49,21 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       chef.add_recipe "couchdb::source"
       chef.add_recipe "memcached"
       chef.add_recipe "nodejs"
+      chef.add_recipe "runit"
+      chef.add_recipe "nginx::source"
+      chef.add_recipe "unicorn"
 
       chef.json = { 
+        "nginx" => {
+          "source" => {
+            "modules" => ["nginx::http_gzip_static_module", "nginx::http_ssl_module"]
+          }
+        },
+
+        "unicorn" => {
+          "config_file" => "/vagrant/config/unicorn.rb"
+        },
+
         "rbenv" => {
           "rubies" => [ "2.0.0-p353" ],
           "global" => "2.0.0-p353",
@@ -56,13 +71,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             "2.0.0-p353" => [
               { "name" => "bundler" }
             ]
-          }
-        },
-        "couch_db" => {
-          "config" => {
-            "httpd" => {
-              "bind_address" => "0.0.0.0"
-            }
           }
         }
       }
