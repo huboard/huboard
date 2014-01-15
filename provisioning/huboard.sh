@@ -18,6 +18,16 @@ echo RACK_ENV= >> .env
 
 echo STRIPE_API=sk_test >> .env
 
-echo GITHUB_API_ENDPOINT= >> .env 
-echo GITHUB_WEB_ENDPOINT= >> .env 
+echo GITHUB_API_ENDPOINT=https://api.github.com/ >> .env 
+echo GITHUB_WEB_ENDPOINT=https://github.com/ >> .env 
 
+# setup nginx
+sudo apt-get -y -q install nginx
+sudo service nginx start
+sudo rm /etc/nginx/sites-enabled/default
+sudo ln -s /vagrant/config/nginx.conf /etc/nginx/sites-enabled/huboard
+sudo service nginx restart
+
+# setup unicorn
+sudo ln -s /vagrant/config/unicorn_init.sh /etc/init.d/unicorn
+sudo service unicorn start 

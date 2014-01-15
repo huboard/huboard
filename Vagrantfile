@@ -15,9 +15,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.omnibus.chef_version = :latest
 
-
-
-  #config.vm.synced_folder Pathname.pwd, Pathname("/srv/huboard")
   config.vm.provision :chef_solo do |chef|
     chef.cookbooks_path = "cookbooks"
     chef.add_recipe 'apt'
@@ -49,21 +46,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       chef.add_recipe "couchdb::source"
       chef.add_recipe "memcached"
       chef.add_recipe "nodejs"
-      chef.add_recipe "runit"
-      chef.add_recipe "nginx::source"
-      chef.add_recipe "unicorn"
 
       chef.json = { 
-        "nginx" => {
-          "source" => {
-            "modules" => ["nginx::http_gzip_static_module", "nginx::http_ssl_module"]
-          }
-        },
-
-        "unicorn" => {
-          "config_file" => "/vagrant/config/unicorn.rb"
-        },
-
         "rbenv" => {
           "rubies" => [ "2.0.0-p353" ],
           "global" => "2.0.0-p353",
@@ -75,6 +59,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         }
       }
     end
+
 
     web.vm.provision "shell" do |s|
       s.path = "provisioning/couchdb.sh"
