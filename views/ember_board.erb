@@ -12,15 +12,13 @@
     <% if logged_in? %>
       App.set("loggedIn", true);
       App.set("currentUser",<%= current_user.attribs.to_json %>);
+      <% if HuboardApplication.socket_backend %>
+        App.set("socketBackend", "<%= HuboardApplication.socket_backend %>?token=<%= encrypted_token %>");
+      <% end %>
     <% else %>
       App.set("loggedIn", false);
     <% end %>
 
-    <% if HuboardApplication.socket_backend %>
-
-      App.set("socketBackend", "<%= HuboardApplication.socket_backend %>?token=<%= encrypted_token %>");
-
-    <% end %>
 
     App.advanceReadiness();
   </script>

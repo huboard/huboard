@@ -390,7 +390,8 @@ var CardController = Ember.ObjectController.extend(SocketMixin,{
     }
   },
   canArchive: function () {
-    return this.get("model.state") === "closed";
+    return this.get("model.state") === "closed"
+      && App.get("loggedIn") && App.get("repo.is_collaborator");
   }.property("model.state"),
   cardLabels: function () {
       return this.get("model.other_labels").map(function(l){
