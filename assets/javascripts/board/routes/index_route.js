@@ -6,11 +6,16 @@ var IndexRoute = Ember.Route.extend({
     return App.Board.fetch(repo);
   },
   afterModel: function (model){
+    if(this._loaded) {
+      return;
+    }
     var cssView = CssView.create({
       content: model
     });
     cssView.appendTo("head")
-    return model.loadLinkedBoards();
+    return model.loadLinkedBoards().then(function() {
+     this._loaded = true; 
+    }.bind(this));
   },
   renderTemplate: function() {
     

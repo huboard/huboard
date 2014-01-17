@@ -285,6 +285,9 @@ App.Router.map(function() {
    })
 });
 
+App.Router.reopen({
+  //location: "history"
+});
 
 },{"./app":7}],9:[function(require,module,exports){
 var ApplicationController = Ember.ObjectController.extend({
@@ -798,7 +801,10 @@ module.exports = Serializable;
 
 var SocketMixin = Ember.Mixin.create({
   setUpSocketEvents: function () {
-      channelPath  = this.get("sockets.config.channelPath");
+    if(!this.get("socket.socket")){
+      return;
+    }
+    var channelPath  = this.get("sockets.config.channelPath");
 
     if(!channelPath) {
      throw "You must define a channelPath";
@@ -1130,11 +1136,16 @@ var IndexRoute = Ember.Route.extend({
     return App.Board.fetch(repo);
   },
   afterModel: function (model){
+    if(this._loaded) {
+      return;
+    }
     var cssView = CssView.create({
       content: model
     });
     cssView.appendTo("head")
-    return model.loadLinkedBoards();
+    return model.loadLinkedBoards().then(function() {
+     this._loaded = true; 
+    }.bind(this));
   },
   renderTemplate: function() {
     
