@@ -11,6 +11,6 @@
 </h5>
 <div class="assignees filters">
   {{#each filter in filters}}
-    {{view App.AssigneeFilterView lastClickedBinding=controller.lastClicked  gravatarUserBinding="filter.avatar" contentBinding="filter" }}
+    {{view App.AssigneeFilterView lastClicked=controller.lastClicked  gravatarUserBinding="filter.avatar" contentBinding="filter" }}
   {{/each}}
 </div>
