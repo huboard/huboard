@@ -1,5 +1,6 @@
 
-var Repo = Ember.Object.extend({
+var Serializable = require("../mixins/serializable");
+var Repo = Ember.Object.extend(Serializable,{
   userUrl :function () {
     return "/" + this.get("owner.login");
   }.property("owner.login"),

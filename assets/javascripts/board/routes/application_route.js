@@ -1,3 +1,4 @@
+var Serializable = require("../mixins/serializable");
 var ApplicationRoute = Ember.Route.extend({
   actions: {
     toggleSidebar: function(){
@@ -15,14 +16,14 @@ var ApplicationRoute = Ember.Route.extend({
           into: 'application',
           outlet: 'modal'
         });
-        this.transitionTo("index")
       }.bind(this));
     }
   },
   model: function () {
     return Em.Deferred.promise(function(p){
        Ember.run.once(function(){
-        p.resolve(App.Repo.create(App.get("repo")));
+        var repo = App.get("repo");
+        p.resolve(App.Repo.create(repo.serialize()));
        })
     });
   }
