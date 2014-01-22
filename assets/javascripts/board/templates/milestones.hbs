@@ -14,6 +14,10 @@
   
   <div id="content" class="content">
     <div class="board">
+      {{ render 'milestone_column' left_column}}
+      {{#each column in milestone_columns}}
+        {{ render 'milestone_column' column}}
+      {{/each}}
     </div>
   </div>
 </div>

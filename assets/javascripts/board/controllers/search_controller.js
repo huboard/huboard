@@ -1,5 +1,4 @@
 var SearchController = Ember.Controller.extend({
-  hideFilterBinding: "App.hideFilters",
   term: "",
   termChanged : Ember.debouncedObserver(function(){
     var term = this.get("term");

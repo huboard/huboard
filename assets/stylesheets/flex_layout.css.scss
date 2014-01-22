@@ -93,6 +93,33 @@
   }
 }
 
+.column.no-milestone {
+  @include flex(0 1 25%);
+}
+
+.milestones {
+  @include flex(1);
+  @include flex-direction(column);
+  .column {
+    @include flex(1);
+    @include display(flex);
+    padding: 0;
+    ul {
+      min-height: 72px;
+      @include display(flex);
+      @include flex-flow(row wrap);
+      @include justify-content(flex-start);
+      @include align-items(flex-start);
+      @include align-content(flex-start);
+      
+      li {
+        margin-right: 5px;
+        max-width: 400px;
+      }
+
+    }
+  }
+}
 .column {
   float:none;
   @include flex(1);
