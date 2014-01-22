@@ -10,9 +10,17 @@
       </li>
     </ul>
      <ul class="nav pull-right">
-      <li><a {{bind-attr href="backlogUrl"}} >Backlog</a></li>
+      {{#link-to 'milestones' tagName="li" href=false}}
+        {{#link-to 'milestones' bubbles=false}}
+          Milestones
+        {{/link-to}}
+      {{/link-to}}
       <li ><a class="active" {{bind-attr href="repoUrl"}}>Tasks</a></li>
-      <li class="active"><a {{bind-attr href="betaUrl"}}>Beta</a></li>
+      {{#link-to 'index' tagName="li" href=false}}
+        {{#link-to 'index' bubbles=false}}
+          Beta
+        {{/link-to}}
+      {{/link-to}}
       {{#if App.loggedIn}}
         <li class="dropdown">
           <a class="dropdown-toggle avatar" data-toggle="dropdown" href="#">

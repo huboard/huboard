@@ -2,7 +2,6 @@ var Serializable = require("../mixins/serializable");
 var ApplicationRoute = Ember.Route.extend({
   actions: {
     loading: function(){
-      debugger;
       if(this.router._activeViews.application){
         this.render("loading",{ "into" : "application", "outlet" : "loading"});
         this.router.one('didTransition', function() {

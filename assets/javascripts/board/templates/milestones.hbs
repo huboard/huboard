@@ -1,0 +1,20 @@
+<div class="main-toolbar">
+ {{#if App.repo.is_collaborator}}
+    <div class="create-button">
+      <button {{action createNewIssue }} class="hb-button small">Create new issue</button>
+    </div>
+  {{else}}
+    <div class="create-button">
+      <a target="_blank" href="{{unbound App.repo.html_url}}/issues/new" class="hb-button small">Create new issue</a>
+    </div>
+  {{/if}}
+
+</div>
+<div id="main-stage" {{bind-attr class=":main-content isSidebarOpen:sidebar-open"}}>
+  
+  <div id="content" class="content">
+    <div class="board">
+    </div>
+  </div>
+</div>
+
