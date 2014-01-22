@@ -150,7 +150,6 @@ require('../vendor/ember');
 require("../vendor/autoresize");
 var color = require('../../vendor/jquery.color');
 require('../utilities/observers');
-var Spinner = require('../../spin');
 
 var Markdown = require("../vendor/marked")
 
@@ -210,47 +209,6 @@ var App = Ember.Application.create({
 
 App.Markdown = Markdown;
 
-App.LoadingRoute = Ember.Route.extend({
-  renderTemplate: function() {
-    if(this.router._activeViews.application){
-      return this.render("loading",{ "into" : "application", "outlet" : "loading"});
-    }
-    this.render("loading");
-  }
-});
-
-App.LoadingView = Ember.View.extend({
-  didInsertElement: function(){
-    $("body").addClass("fullscreen-open")
-    var opts = {
-        lines: 13, // The number of lines to draw
-        length: 0, // The length of each line
-        width: 6, // The line thickness
-        radius: 14, // The radius of the inner circle
-        corners: 1, // Corner roundness (0..1)
-        rotate: 19, // The rotation offset
-        direction: 1, // 1: clockwise, -1: counterclockwise
-        color: '#4a3e93', // #rgb or #rrggbb or array of colors
-        speed: 0.3, // Rounds per second
-        trail: 42, // Afterglow percentage
-        shadow: false, // Whether to render a shadow
-        hwaccel: true, // Whether to use hardware acceleration
-        className: 'spinner', // The CSS class to assign to the spinner
-        zIndex: 2e9, // The z-index (defaults to 2000000000)
-        top: '100px', // Top position relative to parent in px
-        left: 'auto' // Left position relative to parent in px
-      };
-
-    new Spinner(opts).spin(this.$().find("> div").get(0));
-
-    return this._super();
-  },
-    willDestroyElement: function(){
-      $("body").removeClass("fullscreen-open")
-        return this._super();
-    }
-});
-
 App.animateModalClose = function() {
   var promise = new Ember.RSVP.defer();
 
@@ -276,7 +234,7 @@ App.deferReadiness();
 module.exports = App;
 
 
-},{"../../spin":52,"../../vendor/jquery.color":53,"../utilities/correlationId":31,"../utilities/observers":32,"../vendor/autoresize":33,"../vendor/ember":34,"../vendor/handlebars":35,"../vendor/jquery":36,"../vendor/lodash":37,"../vendor/marked":38}],8:[function(require,module,exports){
+},{"../../vendor/jquery.color":54,"../utilities/correlationId":31,"../utilities/observers":32,"../vendor/autoresize":33,"../vendor/ember":34,"../vendor/handlebars":35,"../vendor/jquery":36,"../vendor/lodash":37,"../vendor/marked":38}],8:[function(require,module,exports){
 var App = require('./app');
 
 App.Router.map(function() {
@@ -753,6 +711,7 @@ App.ColumnView = require('./views/column_view');
 App.CssView = require('./views/css_view');
 App.FilterView = require('./views/filter_view');
 App.IssueView = require('./views/issue_view');
+App.LoadingView = require('./views/loading_view');
 App.ModalView = require('./views/modal_view');
 App.SearchView = require('./views/search_view');
 App.IssueActivitiesView = require('./views/issue/activities_view');
@@ -766,7 +725,7 @@ require('./config/routes');
 module.exports = App;
 
 
-},{"./components/hb_avatar_component":1,"./components/hb_label_component":2,"./components/hb_label_selector_component":3,"./components/hb_markdown_editor_component":4,"./components/hb_pane_component":5,"./components/hb_tabs_component":6,"./config/app":7,"./config/routes":8,"./controllers/application_controller":9,"./controllers/assignee_controller":10,"./controllers/card_controller":11,"./controllers/column_controller":12,"./controllers/column_count_controller":13,"./controllers/filters_controller":14,"./controllers/index_controller":15,"./controllers/issue/create_controller":16,"./controllers/issue_controller":17,"./controllers/search_controller":18,"./helpers/moment_ago":19,"./mixins/serializable":21,"./mixins/socket":22,"./mixins/wip_limit":23,"./models/board":24,"./models/issue":25,"./models/repo":26,"./routes/application_route":27,"./routes/index_route":28,"./routes/issue_route":29,"./templates":30,"./views/assignee_filter_view":40,"./views/card_view":41,"./views/card_wrapper_view":42,"./views/column_count_view":43,"./views/column_view":44,"./views/css_view":45,"./views/filter_view":46,"./views/issue/activities_view":47,"./views/issue/create_view":48,"./views/issue_view":49,"./views/modal_view":50,"./views/search_view":51}],21:[function(require,module,exports){
+},{"./components/hb_avatar_component":1,"./components/hb_label_component":2,"./components/hb_label_selector_component":3,"./components/hb_markdown_editor_component":4,"./components/hb_pane_component":5,"./components/hb_tabs_component":6,"./config/app":7,"./config/routes":8,"./controllers/application_controller":9,"./controllers/assignee_controller":10,"./controllers/card_controller":11,"./controllers/column_controller":12,"./controllers/column_count_controller":13,"./controllers/filters_controller":14,"./controllers/index_controller":15,"./controllers/issue/create_controller":16,"./controllers/issue_controller":17,"./controllers/search_controller":18,"./helpers/moment_ago":19,"./mixins/serializable":21,"./mixins/socket":22,"./mixins/wip_limit":23,"./models/board":24,"./models/issue":25,"./models/repo":26,"./routes/application_route":27,"./routes/index_route":28,"./routes/issue_route":29,"./templates":30,"./views/assignee_filter_view":40,"./views/card_view":41,"./views/card_wrapper_view":42,"./views/column_count_view":43,"./views/column_view":44,"./views/css_view":45,"./views/filter_view":46,"./views/issue/activities_view":47,"./views/issue/create_view":48,"./views/issue_view":49,"./views/loading_view":50,"./views/modal_view":51,"./views/search_view":52}],21:[function(require,module,exports){
 function serialize() {
     var result = {};
     for (var key in $.extend(true, {}, this))
@@ -1102,6 +1061,17 @@ module.exports = Repo;
 var Serializable = require("../mixins/serializable");
 var ApplicationRoute = Ember.Route.extend({
   actions: {
+    loading: function(){
+      debugger;
+      if(this.router._activeViews.application){
+        this.render("loading",{ "into" : "application", "outlet" : "loading"});
+        this.router.one('didTransition', function() {
+          this.render("empty",{ "into" : "application", "outlet" : "loading"});
+        }.bind(this));
+        return true;
+      }
+      this.render("loading");
+    },
     toggleSidebar: function(){
       this.controllerFor("application").toggleProperty("isSidebarOpen");
     },
@@ -64410,7 +64380,43 @@ var IssuesView = ModalView.extend({
 
 module.exports = IssuesView;
 
-},{"./modal_view":50}],50:[function(require,module,exports){
+},{"./modal_view":51}],50:[function(require,module,exports){
+var Spinner = require('../../spin');
+var LoadingView = Ember.View.extend({
+  didInsertElement: function(){
+    $("body").addClass("fullscreen-open")
+    var opts = {
+        lines: 13, // The number of lines to draw
+        length: 0, // The length of each line
+        width: 6, // The line thickness
+        radius: 14, // The radius of the inner circle
+        corners: 1, // Corner roundness (0..1)
+        rotate: 19, // The rotation offset
+        direction: 1, // 1: clockwise, -1: counterclockwise
+        color: '#4a3e93', // #rgb or #rrggbb or array of colors
+        speed: 0.3, // Rounds per second
+        trail: 42, // Afterglow percentage
+        shadow: false, // Whether to render a shadow
+        hwaccel: true, // Whether to use hardware acceleration
+        className: 'spinner', // The CSS class to assign to the spinner
+        zIndex: 2e9, // The z-index (defaults to 2000000000)
+        top: '100px', // Top position relative to parent in px
+        left: 'auto' // Left position relative to parent in px
+      };
+
+    new Spinner(opts).spin(this.$().find("> div").get(0));
+
+    return this._super();
+  },
+    willDestroyElement: function(){
+      $("body").removeClass("fullscreen-open")
+        return this._super();
+    }
+});
+
+module.exports = LoadingView;
+
+},{"../../spin":53}],51:[function(require,module,exports){
 var ModalView = Em.View.extend({
   layoutName: "layouts/modal",
 
@@ -64445,7 +64451,7 @@ var ModalView = Em.View.extend({
 
 module.exports = ModalView;
 
-},{}],51:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 var SearchView = Ember.View.extend({
   classNames: ["search"],
   classNameBindings: ["hasValue:has-value"],
@@ -64467,7 +64473,7 @@ var SearchView = Ember.View.extend({
 
 module.exports = SearchView;
 
-},{}],52:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 //fgnass.github.com/spin.js#v1.3
 
 /**
@@ -64818,7 +64824,7 @@ module.exports = SearchView;
 
 }));
 
-},{}],53:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 /*!
  * jQuery Color Animations v@VERSION
  * https://github.com/jquery/jquery-color
