@@ -6,9 +6,6 @@ var IssuesEditController = Ember.ObjectController.extend({
          this.get("model").updateLabels()
        }.bind(this));
     },
-    closeModal: function () {
-        this.transitionToRoute("index")
-    },
     submitComment: function () {
       var comments = this.get("model.activities.comments");
 

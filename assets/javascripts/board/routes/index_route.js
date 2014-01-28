@@ -23,13 +23,16 @@ var IndexRoute = Ember.Route.extend({
     this.render('filters', {into: 'index', outlet: 'sidebarMiddle'})
     this.render('assignee', {into: 'index', outlet: 'sidebarTop'})
   },
-  actions :{
+  actions : {
     createNewIssue : function () {
       this.controllerFor("issue.create").set("model", App.Issue.createNew());
       this.send("openModal","issue.create")
+    },
+
+    openIssueFullscreen: function(model){
+      this.transitionTo("index.issue", model)
     }
   }
-
 });
 
 module.exports = IndexRoute;

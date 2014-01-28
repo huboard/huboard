@@ -22,6 +22,9 @@ module.exports = MilestonesRoute =  Ember.Route.extend({
     createNewIssue : function () {
       this.controllerFor("issue.create").set("model", App.Issue.createNew());
       this.send("openModal","issue.create")
+    },
+    openIssueFullscreen: function(model){
+      this.transitionTo("milestones.issue", model)
     }
   }
 
