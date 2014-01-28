@@ -161,25 +161,20 @@ class Huboard
         patch :body => self.body
       end
 
-      def block
-        embed_data({"custom_state" => "blocked"})
-        patch :body => self.body
+      %w{ blocked ready }.each do |method|
+
+        define_method method do
+          embed_data({"custom_state" => method})
+          patch :body => self.body
+        end
+
+        define_method "un#{method}" do
+          embed_data({"custom_state" => ""})
+          patch :body => self.body
+        end
+
       end
 
-      def unblock
-        embed_data({"custom_state" => ""})
-        patch :body => self.body
-      end
-
-      def ready
-        embed_data({"custom_state" => "ready"})
-        patch :body => self.body
-      end
-
-      def unready
-        embed_data({"custom_state" => ""})
-        patch :body => self.body
-      end
 
       def embed_data(data = nil)
         r = /@huboard:(.*)/

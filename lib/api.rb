@@ -92,7 +92,7 @@ class Huboard
     put '/:user/:repo/issues/:number/blocked' do 
 
       api = huboard.board(params[:user], params[:repo])
-      issue = api.issue(params[:number]).block
+      issue = api.issue(params[:number]).blocked
 
       return json issue 
     end
@@ -100,7 +100,7 @@ class Huboard
     delete '/:user/:repo/issues/:number/blocked' do 
 
       api = huboard.board(params[:user], params[:repo])
-      issue = api.issue(params[:number]).unblock
+      issue = api.issue(params[:number]).unblocked
 
       return json issue 
     end
