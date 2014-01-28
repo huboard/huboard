@@ -596,6 +596,33 @@ module.exports = IssuesCreateController;
 },{}],17:[function(require,module,exports){
 var IssuesEditController = Ember.ObjectController.extend({
   needs: ["index"],
+  isReady: function(key, value){
+    if(value !== undefined) {
+      if(value) {
+        this.set("model.customState", "ready");
+        return true; 
+      } else {
+        this.set("model.customState", "");
+        return false;
+      }
+    } else {
+      return this.get("model.customState") == "ready";
+    }
+  }.property("model.customState", "model._data.custom_state"),
+  isBlocked: function(key, value){
+    if(value !== undefined) {
+      if(value) {
+        this.set("model.customState", "blocked");
+        return true;
+      } else {
+        this.set("model.customState", "");
+        return false;
+      }
+      return;
+    } else {
+      return this.get("model.customState") == "blocked";
+    }
+  }.property("model.customState", "model._data.custom_state"),
   actions: {
     labelsChanged: function () {
        Ember.run.once(function () {
@@ -947,6 +974,49 @@ var Serializable = require("../mixins/serializable");
 
 var Issue = Ember.Object.extend(Serializable,{
   correlationId: correlationId,
+  customState: function (key, value) {
+    if(value !== undefined) {
+        var user = this.get("repo.owner.login"),
+            repo = this.get("repo.name"),
+            full_name = user + "/" + repo,
+            previousState = this.get("_data.custom_state"),
+            options = {dataType: "json"};
+
+        this.set("_data.custom_state", value);
+        this.set("processing", true);
+
+        switch(value){
+          case "ready": 
+            Ember.$.extend(options, {
+              url: "/api/" + full_name + "/issues/" + this.get("number") + "/ready",
+              type: "PUT"
+            })
+            break;
+          case "blocked":
+            Ember.$.extend(options, {
+              url: "/api/" + full_name + "/issues/" + this.get("number") + "/blocked",
+              type: "PUT"
+            })
+            break;
+          case "":
+            Ember.$.extend(options, {
+              url: "/api/" + full_name + "/issues/" + this.get("number") + "/" + previousState,
+              type: "DELETE"
+            })
+            break;
+
+
+        }
+
+        Ember.$.ajax(options)
+        .then(function(){
+          this.set("processing", false);
+
+        }.bind(this));
+        return value;
+    }
+    return this.get("_data.custom_state");
+  }.property("_data.custom_state"),
   saveNew: function () {
     return Ember.$.ajax( {
       url: "/api/v2/" + this.get("repo.full_name") + "/issues/create", 
@@ -1046,6 +1116,9 @@ var Issue = Ember.Object.extend(Serializable,{
       }.bind(this))
   },
   reorder: function (index, column) {
+      var changedColumns = this.get("current_state") !== column;
+      changedColumns && this.set("_data.custom_state", "");
+        
       this.set("current_state", column)
       this.set("_data.order", index);
 
@@ -1057,6 +1130,7 @@ var Issue = Ember.Object.extend(Serializable,{
         number : this.get("number"),
         order: index.toString(),
         column: column.index.toString(),
+        moved_columns: changedColumns,
         correlationId: this.get("correlationId")
       }).then(function( response ){
          this.set("_data.order", response._data.order);
@@ -1801,38 +1875,38 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = '', hashTypes, hashContexts;
-  data.buffer.push("\n    <div class=\"create-button\">\n      <button ");
+  data.buffer.push("\n  <div class=\"create-button\">\n    <button ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "createNewIssue", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(" class=\"hb-button small\">Create new issue</button>\n    </div>\n  ");
+  data.buffer.push(" class=\"hb-button small\">Create new issue</button>\n  </div>\n  ");
   return buffer;
   }
 
 function program3(depth0,data) {
   
   var buffer = '', hashTypes, hashContexts;
-  data.buffer.push("\n    <div class=\"create-button\">\n      <a target=\"_blank\" href=\"");
+  data.buffer.push("\n  <div class=\"create-button\">\n    <a target=\"_blank\" href=\"");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.unbound.call(depth0, "App.repo.html_url", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("/issues/new\" class=\"hb-button small\">Create new issue</a>\n    </div>\n  ");
+  data.buffer.push("/issues/new\" class=\"hb-button small\">Create new issue</a>\n  </div>\n  ");
   return buffer;
   }
 
 function program5(depth0,data) {
   
   var buffer = '', stack1, hashTypes, hashContexts, options;
-  data.buffer.push("\n          ");
+  data.buffer.push("\n      ");
   hashTypes = {};
   hashContexts = {};
   options = {hash:{},contexts:[depth0,depth0],types:["ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.render || depth0.render),stack1 ? stack1.call(depth0, "column", "column", options) : helperMissing.call(depth0, "render", "column", "column", options))));
-  data.buffer.push("\n        ");
+  data.buffer.push("\n      ");
   return buffer;
   }
 
-  data.buffer.push("<div class=\"main-toolbar\">\n ");
+  data.buffer.push("<div class=\"main-toolbar\">\n  ");
   hashTypes = {};
   hashContexts = {};
   stack1 = helpers['if'].call(depth0, "App.repo.is_collaborator", {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
@@ -1863,7 +1937,7 @@ function program5(depth0,data) {
   hashContexts = {};
   options = {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.outlet || depth0.outlet),stack1 ? stack1.call(depth0, "sidebarMiddle", options) : helperMissing.call(depth0, "outlet", "sidebarMiddle", options))));
-  data.buffer.push("\n    </div>\n  </div>\n  \n  <div id=\"content\" class=\"content\">\n    <div class=\"board\">\n        ");
+  data.buffer.push("\n    </div>\n  </div>\n\n  <div id=\"content\" class=\"content\">\n    <div class=\"board\">\n      ");
   hashTypes = {};
   hashContexts = {};
   stack2 = helpers.each.call(depth0, "column", "in", "board_columns", {hash:{},inverse:self.noop,fn:self.program(5, program5, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
@@ -1939,7 +2013,25 @@ function program5(depth0,data) {
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "number", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("</a> </h2>\n      <div class=\"labels-placeholder\">\n       <div>\n          ");
+  data.buffer.push("</a> </h2>\n      <div>\n        <label>\n          ");
+  hashContexts = {'type': depth0,'name': depth0,'checked': depth0};
+  hashTypes = {'type': "STRING",'name': "STRING",'checked': "ID"};
+  options = {hash:{
+    'type': ("checkbox"),
+    'name': ("isReady"),
+    'checked': ("isReady")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
+  data.buffer.push(" Ready for next stage\n        </label>\n        <label>\n          ");
+  hashContexts = {'type': depth0,'name': depth0,'checked': depth0};
+  hashTypes = {'type': "STRING",'name': "STRING",'checked': "ID"};
+  options = {hash:{
+    'type': ("checkbox"),
+    'name': ("isBlock"),
+    'checked': ("isBlocked")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
+  data.buffer.push(" Mark as blocked\n        </label>\n      </div>\n      <div class=\"labels-placeholder\">\n       <div>\n          ");
   hashContexts = {'labelsChanged': depth0,'editable': depth0,'values': depth0,'selected': depth0,'title': depth0,'labels': depth0};
   hashTypes = {'labelsChanged': "STRING",'editable': "ID",'values': "ID",'selected': "ID",'title': "STRING",'labels': "ID"};
   options = {hash:{
@@ -64277,8 +64369,16 @@ module.exports = AssigneeFilterView;
 var CardView = Ember.View.extend({
   classNameBindings:["stateClass"],
   stateClass: function(){
-     return "hb-state-" + this.get("controller.model.state");
-  }.property("controller.model.current_state", "controller.model.state"),
+     var github_state = this.get("controller.model.state");
+     if(github_state === "closed"){
+       return "hb-state-" + "closed";
+     }
+     var custom_state = this.get("controller.model.customState");
+     if(custom_state){
+       return "hb-state-" + custom_state;
+     }
+     return "hb-state-open";
+  }.property("controller.model.current_state", "controller.model.customState", "controller.model.state"),
   didInsertElement: function () {
     this._super();
     this.$("a, .clickable").on("click.hbcard", function (ev){ console.log(arguments); ev.stopPropagation(); } )

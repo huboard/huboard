@@ -1,5 +1,32 @@
 var IssuesEditController = Ember.ObjectController.extend({
   needs: ["index"],
+  isReady: function(key, value){
+    if(value !== undefined) {
+      if(value) {
+        this.set("model.customState", "ready");
+        return true; 
+      } else {
+        this.set("model.customState", "");
+        return false;
+      }
+    } else {
+      return this.get("model.customState") == "ready";
+    }
+  }.property("model.customState", "model._data.custom_state"),
+  isBlocked: function(key, value){
+    if(value !== undefined) {
+      if(value) {
+        this.set("model.customState", "blocked");
+        return true;
+      } else {
+        this.set("model.customState", "");
+        return false;
+      }
+      return;
+    } else {
+      return this.get("model.customState") == "blocked";
+    }
+  }.property("model.customState", "model._data.custom_state"),
   actions: {
     labelsChanged: function () {
        Ember.run.once(function () {

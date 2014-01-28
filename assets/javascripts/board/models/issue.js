@@ -4,6 +4,49 @@ var Serializable = require("../mixins/serializable");
 
 var Issue = Ember.Object.extend(Serializable,{
   correlationId: correlationId,
+  customState: function (key, value) {
+    if(value !== undefined) {
+        var user = this.get("repo.owner.login"),
+            repo = this.get("repo.name"),
+            full_name = user + "/" + repo,
+            previousState = this.get("_data.custom_state"),
+            options = {dataType: "json"};
+
+        this.set("_data.custom_state", value);
+        this.set("processing", true);
+
+        switch(value){
+          case "ready": 
+            Ember.$.extend(options, {
+              url: "/api/" + full_name + "/issues/" + this.get("number") + "/ready",
+              type: "PUT"
+            })
+            break;
+          case "blocked":
+            Ember.$.extend(options, {
+              url: "/api/" + full_name + "/issues/" + this.get("number") + "/blocked",
+              type: "PUT"
+            })
+            break;
+          case "":
+            Ember.$.extend(options, {
+              url: "/api/" + full_name + "/issues/" + this.get("number") + "/" + previousState,
+              type: "DELETE"
+            })
+            break;
+
+
+        }
+
+        Ember.$.ajax(options)
+        .then(function(){
+          this.set("processing", false);
+
+        }.bind(this));
+        return value;
+    }
+    return this.get("_data.custom_state");
+  }.property("_data.custom_state"),
   saveNew: function () {
     return Ember.$.ajax( {
       url: "/api/v2/" + this.get("repo.full_name") + "/issues/create", 
@@ -103,6 +146,9 @@ var Issue = Ember.Object.extend(Serializable,{
       }.bind(this))
   },
   reorder: function (index, column) {
+      var changedColumns = this.get("current_state") !== column;
+      changedColumns && this.set("_data.custom_state", "");
+        
       this.set("current_state", column)
       this.set("_data.order", index);
 
@@ -114,6 +160,7 @@ var Issue = Ember.Object.extend(Serializable,{
         number : this.get("number"),
         order: index.toString(),
         column: column.index.toString(),
+        moved_columns: changedColumns,
         correlationId: this.get("correlationId")
       }).then(function( response ){
          this.set("_data.order", response._data.order);

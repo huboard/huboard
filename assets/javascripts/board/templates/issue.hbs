@@ -1,6 +1,14 @@
 <div class="fullscreen-card">
   <div class="fullscreen-card-right">
       <h2> <a class="number" href="{{{unbound html_url }}}" target="_blank" {{bind-attr title="title"}}><small>ISSUE #</small>{{number}}</a> </h2>
+      <div>
+        <label>
+          {{input type="checkbox" name="isReady" checked=isReady }} Ready for next stage
+        </label>
+        <label>
+          {{input type="checkbox" name="isBlock" checked=isBlocked }} Mark as blocked
+        </label>
+      </div>
       <div class="labels-placeholder">
        <div>
           {{hb-label-selector labelsChanged="labelsChanged" editable=App.repo.is_collaborator values=controller.model.other_labels selected=controller.model.other_labels title="Labels" labels=controller.repository.other_labels}}

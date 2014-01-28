@@ -89,6 +89,38 @@ class Huboard
 
     end
 
+    put '/:user/:repo/issues/:number/blocked' do 
+
+      api = huboard.board(params[:user], params[:repo])
+      issue = api.issue(params[:number]).blocked
+
+      return json issue 
+    end
+
+    delete '/:user/:repo/issues/:number/blocked' do 
+
+      api = huboard.board(params[:user], params[:repo])
+      issue = api.issue(params[:number]).unblocked
+
+      return json issue 
+    end
+
+    put '/:user/:repo/issues/:number/ready' do 
+
+      api = huboard.board(params[:user], params[:repo])
+      issue = api.issue(params[:number]).ready
+
+      return json issue 
+    end
+
+    delete '/:user/:repo/issues/:number/ready' do 
+
+      api = huboard.board(params[:user], params[:repo])
+      issue = api.issue(params[:number]).unready
+
+      return json issue 
+    end
+
     get '/:user/:repo/board' do 
       board = pebble.board(params[:user], params[:repo])
       board.merge! :logged_in => logged_in?
@@ -132,7 +164,7 @@ class Huboard
 
     post '/:user/:repo/dragcard' do 
       user, repo, number, order, column = params[:user], params[:repo], params[:number], params[:order], params[:column]
-      issue = huboard.board(user, repo).issue(number).move(column, order)
+      issue = huboard.board(user, repo).issue(number).move(column, order, params[:moved_columns])
       publish "#{params[:user]}/#{params[:repo]}", "Moved.#{issue.number}", { issue: issue, index: params[:column] }
       json issue
     end
