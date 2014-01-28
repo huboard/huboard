@@ -2,9 +2,11 @@ var App = require('./app');
 
 App.Router.map(function() {
    this.resource("index",{path: "/"},function(){
-    this.resource("issue",{path:"/issues/:issue_id"});
+    this.resource("index.issue",{path:"/issues/:issue_id"});
    })
-   this.resource("milestones")
+   this.resource("milestones", function(){
+    this.resource("milstones.issue",{path:"/issues/:issue_id"});
+   })
 });
 
 App.Router.reopen({

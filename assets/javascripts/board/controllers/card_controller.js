@@ -32,7 +32,7 @@ var CardController = Ember.ObjectController.extend(SocketMixin,{
        return this.get("model").reorder(index, column);
     },
     fullscreen: function(){
-      this.transitionToRoute("issue", this.get("model"))
+      this.transitionToRoute("index.issue", this.get("model"))
     },
     close: function (issue){
       return this.get("model").close();
