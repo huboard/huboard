@@ -240,9 +240,9 @@ class Huboard
         @couch ||= Huboard::Couch.new :base_url => ENV["COUCH_URL"], :database => ENV["COUCH_DATABASE"]
       end
 
-      def move(index, order=nil)
+      def move(index, order=nil, moved=false)
         old_self = self
-        issue = super(index, order)
+        issue = super(index, order, moved)
         begin
           couch.connection.post("./",{
             :github => {:issue => old_self.merge(issue), :user => gh.user.to_hash},
