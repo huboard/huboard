@@ -1,12 +1,12 @@
 var AssigneeController = Ember.ObjectController.extend({
-  needs: ["index"],
+  needs: ["application"],
   actions: {
     toggleShowMode: function(mode){
       this.set("showMode", mode);
     }
   },
   showMode: "less",
-  assigneesBinding: "controllers.index.model.assignees",
+  assigneesBinding: "controllers.application.model.board.assignees",
   memberFilterBinding: "App.memberFilter",
   lastClicked: null,
   filterChanged : function(){

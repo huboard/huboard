@@ -1,3 +1,5 @@
+var Board = require("./board");
+var Issue = require("./issue");
 
 var Serializable = require("../mixins/serializable");
 var Repo = Ember.Object.extend(Serializable,{
@@ -12,7 +14,20 @@ var Repo = Ember.Object.extend(Serializable,{
   }.property("repoUrl"),
   betaUrl: function () {
      return this.get("repoUrl") + "/beta";
-  }.property("repoUrl")
+  }.property("repoUrl"),
+  fetchBoard: function(){
+
+    if(this._board) {return this._board;}
+    return Ember.$.getJSON("/api/v2/" + this.get("full_name") + "/board").then(function(board){
+       var issues = Ember.A();
+       board.issues.forEach(function(i){
+         issues.pushObject(Issue.create(i));
+       })
+       this._board =  Board.create(_.extend(board, {issues: issues}));
+       this.set("board", this._board);
+       return this._board;
+    }.bind(this));
+  }
 });
 
 module.exports = Repo;

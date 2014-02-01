@@ -3,10 +3,10 @@ var CssView = require("../views/css_view");
 var IndexRoute = Ember.Route.extend({
   model: function(){
     var repo = this.modelFor("application");
-    return App.Board.fetch(repo);
+    return repo.fetchBoard(repo);
   },
   afterModel: function (model){
-    if(this._loaded) {
+    if(App.get("isLoaded")) {
       return;
     }
     var cssView = CssView.create({
@@ -14,7 +14,7 @@ var IndexRoute = Ember.Route.extend({
     });
     cssView.appendTo("head")
     return model.loadLinkedBoards().then(function() {
-     this._loaded = true; 
+      App.set("isLoaded", true); 
     }.bind(this));
   },
   renderTemplate: function() {

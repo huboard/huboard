@@ -259,14 +259,14 @@ module.exports = ApplicationController;
 
 },{}],10:[function(require,module,exports){
 var AssigneeController = Ember.ObjectController.extend({
-  needs: ["index"],
+  needs: ["application"],
   actions: {
     toggleShowMode: function(mode){
       this.set("showMode", mode);
     }
   },
   showMode: "less",
-  assigneesBinding: "controllers.index.model.assignees",
+  assigneesBinding: "controllers.application.model.board.assignees",
   memberFilterBinding: "App.memberFilter",
   lastClicked: null,
   filterChanged : function(){
@@ -437,9 +437,9 @@ module.exports = ColumnCountController;
 
 },{}],14:[function(require,module,exports){
 var FiltersController = Ember.ObjectController.extend({
-  needs: ["index"],
-  milestonesBinding: "controllers.index.model.filterMilestones",
-  otherLabelsBinding: "controllers.index.model.filterLabels",
+  needs: ["application"],
+  milestonesBinding: "controllers.application.model.board.filterMilestones",
+  otherLabelsBinding: "controllers.application.model.board.filterLabels",
   lastUserFilterClicked: null,
   lastUserFilterClickedChanged: function(){
     Ember.run.once(function(){
@@ -1159,6 +1159,8 @@ module.exports = Issue;
 
 
 },{"../mixins/serializable":23,"../utilities/correlationId":36}],28:[function(require,module,exports){
+var Board = require("./board");
+var Issue = require("./issue");
 
 var Serializable = require("../mixins/serializable");
 var Repo = Ember.Object.extend(Serializable,{
@@ -1173,12 +1175,25 @@ var Repo = Ember.Object.extend(Serializable,{
   }.property("repoUrl"),
   betaUrl: function () {
      return this.get("repoUrl") + "/beta";
-  }.property("repoUrl")
+  }.property("repoUrl"),
+  fetchBoard: function(){
+
+    if(this._board) {return this._board;}
+    return Ember.$.getJSON("/api/v2/" + this.get("full_name") + "/board").then(function(board){
+       var issues = Ember.A();
+       board.issues.forEach(function(i){
+         issues.pushObject(Issue.create(i));
+       })
+       this._board =  Board.create(_.extend(board, {issues: issues}));
+       this.set("board", this._board);
+       return this._board;
+    }.bind(this));
+  }
 });
 
 module.exports = Repo;
 
-},{"../mixins/serializable":23}],29:[function(require,module,exports){
+},{"../mixins/serializable":23,"./board":26,"./issue":27}],29:[function(require,module,exports){
 var Serializable = require("../mixins/serializable");
 var ApplicationRoute = Ember.Route.extend({
   actions: {
@@ -1253,10 +1268,10 @@ var CssView = require("../views/css_view");
 var IndexRoute = Ember.Route.extend({
   model: function(){
     var repo = this.modelFor("application");
-    return App.Board.fetch(repo);
+    return repo.fetchBoard(repo);
   },
   afterModel: function (model){
-    if(this._loaded) {
+    if(App.get("isLoaded")) {
       return;
     }
     var cssView = CssView.create({
@@ -1264,7 +1279,7 @@ var IndexRoute = Ember.Route.extend({
     });
     cssView.appendTo("head")
     return model.loadLinkedBoards().then(function() {
-     this._loaded = true; 
+      App.set("isLoaded", true); 
     }.bind(this));
   },
   renderTemplate: function() {
@@ -1331,21 +1346,25 @@ var CssView = require("../views/css_view");
 module.exports = MilestonesRoute =  Ember.Route.extend({
   model: function () {
     var repo = this.modelFor("application");
-    return App.Board.fetch(repo);
+    return repo.fetchBoard(repo);
   },
   afterModel: function (model){
-    if(this._loaded) {
+    if(App.get("isLoaded")) {
       return;
     }
     var cssView = CssView.create({
       content: model
     });
     cssView.appendTo("head")
-    this._loaded = true; 
+    return model.loadLinkedBoards().then(function() {
+     App.set("isLoaded", true); 
+    }.bind(this));
   },
 
   renderTemplate: function() {
     this._super.apply(this, arguments);
+    //this.render('assignee', {into: 'milestones', outlet: 'sidebarTop'})
+    this.render('filters', {into: 'milestones', outlet: 'sidebarMiddle'})
   },
   actions :{
     createNewIssue : function () {
@@ -1403,7 +1422,7 @@ function program4(depth0,data) {
 function program5(depth0,data) {
   
   
-  data.buffer.push("\n          Beta\n        ");
+  data.buffer.push("\n          Tasks\n        ");
   }
 
 function program7(depth0,data) {
@@ -1461,13 +1480,7 @@ function program9(depth0,data) {
   },inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   stack2 = ((stack1 = helpers['link-to'] || depth0['link-to']),stack1 ? stack1.call(depth0, "milestones", options) : helperMissing.call(depth0, "link-to", "milestones", options));
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\n      <li ><a class=\"active\" ");
-  hashContexts = {'href': depth0};
-  hashTypes = {'href': "STRING"};
-  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
-    'href': ("repoUrl")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(">Tasks</a></li>\n      ");
+  data.buffer.push("\n      ");
   hashContexts = {'tagName': depth0,'href': depth0};
   hashTypes = {'tagName': "STRING",'href': "BOOLEAN"};
   options = {hash:{
@@ -2161,13 +2174,33 @@ function program5(depth0,data) {
   hashContexts = {};
   stack1 = helpers['if'].call(depth0, "App.repo.is_collaborator", {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n\n</div>\n<div id=\"main-stage\" ");
+  data.buffer.push("\n  <div class=\"sidebar-toggle\">\n    <a href=\"#\" ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "toggleSidebar", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">Filters <i ");
+  hashContexts = {'class': depth0};
+  hashTypes = {'class': "STRING"};
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'class': (":ui-icon isSidebarOpen:ui-icon-triangle-1-w:ui-icon-triangle-1-e")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" class=\"ui-icon ui-icon-triangle-1-e\"></i></a>\n  </div>\n\n</div>\n<div id=\"main-stage\" ");
   hashContexts = {'class': depth0};
   hashTypes = {'class': "STRING"};
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
     'class': (":main-content isSidebarOpen:sidebar-open")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(">\n  \n  <div id=\"content\" class=\"content\">\n    <div class=\"board\">\n      ");
+  data.buffer.push(">\n  <div class=\"sidebar left\">\n    <div class=\"sidebar-wrapper\">\n      ");
+  hashTypes = {};
+  hashContexts = {};
+  options = {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.outlet || depth0.outlet),stack1 ? stack1.call(depth0, "sidebarTop", options) : helperMissing.call(depth0, "outlet", "sidebarTop", options))));
+  data.buffer.push("\n      ");
+  hashTypes = {};
+  hashContexts = {};
+  options = {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.outlet || depth0.outlet),stack1 ? stack1.call(depth0, "sidebarMiddle", options) : helperMissing.call(depth0, "outlet", "sidebarMiddle", options))));
+  data.buffer.push("\n    </div>\n  </div>\n  \n  <div id=\"content\" class=\"content\">\n    <div class=\"board\">\n      ");
   hashTypes = {};
   hashContexts = {};
   options = {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
