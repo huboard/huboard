@@ -29,6 +29,15 @@ module.exports = MilestonesRoute =  Ember.Route.extend({
     },
     openIssueFullscreen: function(model){
       this.transitionTo("milestones.issue", model)
+    },
+    issueCreated: function(issue){
+      var controller = this.controllerFor("milestones");
+      var issues = controller.get("model.issues")
+      issues.pushObject(issue);
+      Ember.run.schedule('afterRender', controller, function () {
+        controller.incrementProperty("forceRedraw");
+        this.send("closeModal")
+      }.bind(this))
     }
   }
 

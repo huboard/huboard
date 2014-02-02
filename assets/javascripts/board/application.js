@@ -548,32 +548,27 @@ var IndexController = Ember.ObjectController.extend({
   board_columns: function(){
      return this.get("columns");
   }.property("columns"),
-  forceRedraw: 0,
+  forceRedraw: 0
 });
 
 module.exports = IndexController;
 
 },{}],16:[function(require,module,exports){
 var IssuesCreateController = Ember.ObjectController.extend({
-  needs: ["index"],
+  needs: ["application"],
   actions: {
     submit: function() {
       var controller = this;
       this.set("processing",true)
       this.get("model").saveNew().then(function(issue){
-         var issues = controller.get("controllers.index.model.issues")
-         issues.pushObject(issue);
-         Ember.run.schedule('afterRender', controller, function () {
-           this.get("controllers.index").incrementProperty("forceRedraw");
-           this.send("closeModal")
-           this.set("processing",false)
-         })
+         controller.send("issueCreated", issue)
+         controller.set("processing",false)
       });
     }
   },
   isCollaboratorBinding: "App.repo.is_collaborator",
-  otherLabelsBinding: "controllers.index.model.other_labels",
-  columnsBinding: "controllers.index.model.columns",
+  otherLabelsBinding: "controllers.application.model.board.other_labels",
+  columnsBinding: "controllers.application.model.board.columns",
   disabled: function () {
       return this.get("processing") || !this.get("isValid");
   }.property("processing","isValid"),
@@ -680,7 +675,7 @@ var MilestoneColumnController = Ember.ObjectController.extend({
   },
   issues: function() {
     return this.getIssues();
-  }.property(),
+  }.property("controllers.milestones.forceRedraw"),
   cardMoved : function (cardController, index){
     cardController.send("assignMilestone",index,  this.get("model.milestone"));
 
@@ -713,7 +708,8 @@ module.exports = MilestonesController = Ember.ObjectController.extend({
       });
     });
 
-  }.property()
+  }.property(),
+  forceRedraw: 0
 });
 
 },{}],20:[function(require,module,exports){
@@ -1310,6 +1306,15 @@ var IndexRoute = Ember.Route.extend({
 
     openIssueFullscreen: function(model){
       this.transitionTo("index.issue", model)
+    },
+    issueCreated: function(issue){
+      var controller = this.controllerFor("index");
+      var issues = controller.get("model.issues")
+      issues.pushObject(issue);
+      Ember.run.schedule('afterRender', controller, function () {
+        controller.incrementProperty("forceRedraw");
+        this.send("closeModal")
+      }.bind(this))
     }
   }
 });
@@ -1387,6 +1392,15 @@ module.exports = MilestonesRoute =  Ember.Route.extend({
     },
     openIssueFullscreen: function(model){
       this.transitionTo("milestones.issue", model)
+    },
+    issueCreated: function(issue){
+      var controller = this.controllerFor("milestones");
+      var issues = controller.get("model.issues")
+      issues.pushObject(issue);
+      Ember.run.schedule('afterRender', controller, function () {
+        controller.incrementProperty("forceRedraw");
+        this.send("closeModal")
+      }.bind(this))
     }
   }
 

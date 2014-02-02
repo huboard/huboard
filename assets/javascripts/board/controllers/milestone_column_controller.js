@@ -8,7 +8,7 @@ var MilestoneColumnController = Ember.ObjectController.extend({
   },
   issues: function() {
     return this.getIssues();
-  }.property(),
+  }.property("controllers.milestones.forceRedraw"),
   cardMoved : function (cardController, index){
     cardController.send("assignMilestone",index,  this.get("model.milestone"));
 
