@@ -8,6 +8,10 @@ var MilestoneColumnController = Ember.ObjectController.extend({
   },
   issues: function() {
     return this.getIssues();
-  }.property()
+  }.property(),
+  cardMoved : function (cardController, index){
+    cardController.send("assignMilestone",index,  this.get("model.milestone"));
+
+  }
 })
 module.exports = MilestoneColumnController;

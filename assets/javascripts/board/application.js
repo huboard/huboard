@@ -337,11 +337,11 @@ var CardController = Ember.ObjectController.extend(SocketMixin,{
     return login  + "/" + repo;
   }.property(),
   actions : {
-    dragged: function (column) {
-      return this.get("model").drag(column);
-    },
     moved: function (index, column){
        return this.get("model").reorder(index, column);
+    },
+    assignMilestone: function(order, milestone) {
+      return this.get("model").assignMilestone(order, milestone);
     },
     fullscreen: function () {
       this.send("openIssueFullscreen", this.get("model"));
@@ -400,14 +400,7 @@ var ColumnController = Ember.ObjectController.extend({
   issues: function(){
     return this.getIssues();
   }.property("controllers.index.forceRedraw"),
-  issuesObserver : function () {
-    console.log("dragginObserver")
-  }.observes("controllers.index.issues.@each.current_state"),
   dragging: false,
-  cardReceived: function(view) {
-    view = Em.View.views[$(view.item).find("> div").attr("id")]
-    view.get("controller").send("dragged", this.get("model"));
-  },
   cardMoved : function (cardController, index){
     cardController.send("moved", index, this.get("model"))
   }
@@ -687,7 +680,11 @@ var MilestoneColumnController = Ember.ObjectController.extend({
   },
   issues: function() {
     return this.getIssues();
-  }.property()
+  }.property(),
+  cardMoved : function (cardController, index){
+    cardController.send("assignMilestone",index,  this.get("model.milestone"));
+
+  }
 })
 module.exports = MilestoneColumnController;
 
@@ -711,7 +708,8 @@ module.exports = MilestonesController = Ember.ObjectController.extend({
         title: m.title,
         filterBy: function (i){
           return i.milestone && i.milestone.number == m.number;
-        }
+        },
+        milestone: m
       });
     });
 
@@ -1087,19 +1085,6 @@ var Issue = Ember.Object.extend(Serializable,{
         this.set("isDestroying", true);
       }.bind(this))
   },
-  drag: function (column) {
-      this.set("current_state", column)
-      // this is weird
-      var user = this.get("repo.owner.login"),
-          repo = this.get("repo.name"),
-          full_name = user + "/" + repo;
-
-      return Ember.$.post("/api/" + full_name + "/movecard", {
-        index : column.index.toString(),
-        number : this.get("number"),
-        correlationId: this.get("correlationId")
-      })
-  },
   close: function () {
      this.set("processing", true);
 
@@ -1114,6 +1099,35 @@ var Issue = Ember.Object.extend(Serializable,{
         this.set("state","closed")
         this.set("processing", false);
       }.bind(this))
+  },
+  assignMilestone: function(index, milestone){
+    var changedMilestones = false;
+    if(milestone && !this.get("milestone")){
+      changedMilestones = true;
+    } else if(!milestone && this.get("milestone")){
+      changedMilestones = true;
+    } else if (milestone) {
+      changedMilestones = this.get("milestone.number") != milestone.number;
+    }
+    this.set("milestone", milestone);
+    if(changedMilestones){
+
+      var user = this.get("repo.owner.login"),
+          repo = this.get("repo.name"),
+          full_name = user + "/" + repo;
+
+      return Ember.$.post("/api/" + full_name + "/assignmilestone", {
+        issue : this.get("number"),
+        order: index.toString(),
+        milestone: milestone ? milestone.number : null,
+        changed_milestones: changedMilestones,
+        correlationId: this.get("correlationId")
+      }).then(function( response ){
+          this.set("_data.order", response._data.order);
+          return this;
+      }.bind(this))
+    }
+      
   },
   reorder: function (index, column) {
       var changedColumns = this.get("current_state") !== column;
@@ -2121,7 +2135,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   var buffer = '', hashTypes, hashContexts, escapeExpression=this.escapeExpression;
 
 
-  data.buffer.push("<span class=\"text\">");
+  data.buffer.push("<i class=\"ui-icon ui-icon-plus\"></i>\n<i class=\"ui-icon ui-icon-minus\"></i>\n<span class=\"text\">");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "title", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));

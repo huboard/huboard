@@ -25,11 +25,11 @@ var CardController = Ember.ObjectController.extend(SocketMixin,{
     return login  + "/" + repo;
   }.property(),
   actions : {
-    dragged: function (column) {
-      return this.get("model").drag(column);
-    },
     moved: function (index, column){
        return this.get("model").reorder(index, column);
+    },
+    assignMilestone: function(order, milestone) {
+      return this.get("model").assignMilestone(order, milestone);
     },
     fullscreen: function () {
       this.send("openIssueFullscreen", this.get("model"));

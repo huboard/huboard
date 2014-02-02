@@ -17,7 +17,8 @@ module.exports = MilestonesController = Ember.ObjectController.extend({
         title: m.title,
         filterBy: function (i){
           return i.milestone && i.milestone.number == m.number;
-        }
+        },
+        milestone: m
       });
     });
 

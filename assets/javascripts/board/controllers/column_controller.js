@@ -34,14 +34,7 @@ var ColumnController = Ember.ObjectController.extend({
   issues: function(){
     return this.getIssues();
   }.property("controllers.index.forceRedraw"),
-  issuesObserver : function () {
-    console.log("dragginObserver")
-  }.observes("controllers.index.issues.@each.current_state"),
   dragging: false,
-  cardReceived: function(view) {
-    view = Em.View.views[$(view.item).find("> div").attr("id")]
-    view.get("controller").send("dragged", this.get("model"));
-  },
   cardMoved : function (cardController, index){
     cardController.send("moved", index, this.get("model"))
   }
