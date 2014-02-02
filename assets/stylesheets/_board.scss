@@ -4,80 +4,9 @@
    padding-left: 25px;
 }
 
-.toggle-drawer {
-  position:absolute;
-  z-index:5;
-
-  margin: 0px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 50%;
-
-  @include box-sizing(border-box);
-  width:40px;
-  line-height: 20px;
-
-  background: #fff;
-  background: rgba(255,255,255,0.8);
-  text-align: center;
-
-	font-family: 'ui-icon-font-0-1';
-
-  &.arrow-right {
-    right: -35px;
-    &:before {
-	    content: "\e052";
-    }
-
-    background-color: $hb-purple; 
-    border-color: $hb-purple-dark;
-
-    color: #fff;
-
-    &:hover {
-      right: -40px;
-      color: #fff;
-    }
-  }
-
-  &.arrow-left {
-    right: -25px;
-    &:before {
-	    content: "\e053";
-    }
-  }
-
-  &:hover {
-    text-decoration: none;
-  }
-}
-#drawer {
-    position:absolute;
-    width:352px;
-    top:0;
-    left:-640px;
-
-   .board, .backlog, .filters {
-     background: #fff;
-     border-right: 1px solid #ccc;
-   }
-   .column {
-     float: none;
-     padding: 0 20px;
-     @include box-sizing(border-box);
-   }
-}
-
 .column {
-  float: left;
   vertical-align: top;
   padding: 0px 10px;
-  &:first-child {
-    padding-left: 0;
-  }
-  &:last-child {
-    padding-right: 0;
-  }
   @include box-sizing(border-box);
 }
 
@@ -117,7 +46,7 @@
   }
 }
 
-.board .column h3 {
+.hb-task-column h3 {
   @extend .arrow;
 }
 
