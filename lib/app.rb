@@ -106,31 +106,16 @@ class Huboard
 
     end
 
-    get '/:user/:repo/settings/?' do 
-      pass if params[:user] == "assets"
-      redirect "/#{params[:user]}/#{params[:repo]}/board/create" unless huboard.board(params[:user], params[:repo]).has_board?
-
-      @parameters = params.merge({ :socket_backend => socket_backend})
-
-      adapter = huboard.board(params[:user], params[:repo])
-
-      @actions = Hashie::Mash.new({
-        :linked => {
-          :labels => adapter.link_labels
-        },
-        :settings => adapter.settings
-      })
-
-      erb :repo
-    end
-
     get '/:user/:repo/backlog/?' do 
       pass if params[:user] == "assets"
-      @parameters = params.merge({ :socket_backend => socket_backend})
-      erb :backlog, :layout => :layout_fluid
+      redirect "/#{params[:user]}/#{params[:repo]}/#/milestones"
+    end
+    get '/:user/:repo/beta/?' do 
+      pass if params[:user] == "assets"
+      redirect "/#{params[:user]}/#{params[:repo]}/#/"
     end
 
-    get '/:user/:repo/beta/?' do 
+    get '/:user/:repo/?' do 
       pass if params[:user] == "assets"
       redirect "/#{params[:user]}/#{params[:repo]}/board/create" unless huboard.board(params[:user], params[:repo]).has_board?
       
@@ -162,25 +147,8 @@ class Huboard
       pass if params[:user] == "assets"
       hook_url = "#{socket_backend}/issues/webhook?token=#{encrypted_token}"
       pebble.create_board(params[:user],params[:repo], socket_backend.nil? ? nil : hook_url)
-      redirect "/#{params[:user]}/#{params[:repo]}/board"
+      redirect "/#{params[:user]}/#{params[:repo]}/"
     end
-
-    get '/:user/:repo/?' do 
-      pass if params[:user] == "assets"
-      redirect "/#{params[:user]}/#{params[:repo]}/board/create" unless huboard.board(params[:user], params[:repo]).has_board?
-      @parameters = params.merge({ :socket_backend => socket_backend})
-
-      @repo = gh.repos(params[:user],params[:repo])
-      if logged_in?
-        is_a_collaborator = gh.connection.get("/repos/#{params[:user]}/#{params[:repo]}/collaborators/#{current_user.login}").status == 204
-        @repo.merge!(is_collaborator: is_a_collaborator)
-      else
-        @repo.merge!(is_collaborator: false)
-      end
-
-      erb :board, :layout => :layout_fluid
-    end
-
 
     get '/:user/:repo/hook/?' do 
       pass if params[:user] == "assets"

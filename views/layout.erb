@@ -3,42 +3,10 @@
   <head>
     <title><% yield_content :title %>Huboard</title>
        <link rel="shortcut icon" href="/img/favicon.ico?v=2" />
-    <% if @parameters[:socket_backend] && logged_in? %>
-      <script src="<%= @parameters[:socket_backend] %>/socket.io/socket.io.js"></script>
-      <script src="/scripts/modules/require.js"></script>
-        <script>
-          define("socket",function() {
-            return window.io ? io.connect("<%= @parameters[:socket_backend] %>?token=<%= encrypted_token %>") : null;
-          });
 
-        </script>
-    <% else %>
-      <script src="/scripts/modules/require.js"></script>
-      <script>
-        define("socket",function() {
-          return null;
-        });
-      </script>
-    <% end %>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
-
-    <!-- This is a special version of jQuery with RequireJS built-in -->
-    <% if settings.environment.to_sym == :development  %>
-    <!-- I know this is really bad to do -->
-    <script src="/scripts/firebugx.js" type="text/javascript" charset="utf-8"></script>
-    <script src="/scripts/jquery.ui.touch-punch.min.js"></script>
-    <script src="/scripts/jquery.color.js" type="text/javascript" charset="utf-8"></script>
-    <script src="/scripts/underscore.js" type="text/javascript" charset="utf-8"></script>
-    <script src="/scripts/backbone.js" type="text/javascript" charset="utf-8"></script>
-    <script src="/scripts/postal.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="/scripts/module-loader.js"></script>
-
     <script src="/scripts/bootstrap/bootstrap.min.js"></script>
-    <% else %>
-    <script src="/scripts/application.v1.min.js"></script>
 
-    <% end %>
      <%= partial :fontdeck %>
      <%= stylesheet_tag 'bootstrap' %>
      <%= stylesheet_tag 'application' %>
