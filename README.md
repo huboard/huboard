@@ -1,4 +1,4 @@
-![HuBoard logo](https://raw.github.com/rauhryan/huboard/master/assets/images/HuBoardSplash.png)
+![HuBoard logo](https://raw.github.com/rauhryan/huboard/master/assets/images/HuBoardSplash960.png)
 #FAQ
 
   1. [How to customize column titles](https://github.com/rauhryan/huboard/wiki#wiki-labels-explained)
