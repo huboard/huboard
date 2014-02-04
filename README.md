@@ -1,6 +1,6 @@
 #FAQ
 
-  1. [How to customized column titles](https://github.com/rauhryan/huboard/wiki#wiki-labels-explained)
+  1. [How to customize column titles](https://github.com/rauhryan/huboard/wiki#wiki-labels-explained)
   1. [How to customize column order](https://github.com/rauhryan/huboard/wiki#wiki-labels-explained)
   1. [How to configure work in progress limits](https://github.com/rauhryan/huboard/wiki#wiki-labels-explained)
   1. [How link repositories together](https://github.com/rauhryan/huboard/wiki#wiki-linking-repositories)
