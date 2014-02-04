@@ -1,5 +1,8 @@
+# GitHub issue made awesome
+
 ![HuBoard logo](https://raw.github.com/rauhryan/huboard/master/assets/images/HuBoardSplash960.png)
-#FAQ
+
+## FAQ
 
   1. [How to customize column titles](https://github.com/rauhryan/huboard/wiki#wiki-labels-explained)
   1. [How to customize column order](https://github.com/rauhryan/huboard/wiki#wiki-labels-explained)
@@ -8,7 +11,7 @@
   1. [How deploy HuBoard to heroku](https://github.com/rauhryan/huboard/wiki/Deploying)
 
 
-#How to contribute
+## How to contribute
 
 Before contributing to Huboard, please:
 
@@ -20,7 +23,7 @@ Ways to contribute:
   * Take a look at the open issues. Anything is fair game, pick one and send me a pull request.
   * I've added a label called `Please contribute`, these are features/defects that are lower priority but would still be a great addition to the product
 
-# License
+## License
 
 The MIT License (MIT)
 Copyright (c) 2012-2014 Ryan Rauh
