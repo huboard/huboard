@@ -38,7 +38,7 @@ class Huboard
       @connection_factory = ->(token = nil) {
         options = { :access_token => token || access_token }
         options = {} if(token.nil? && access_token.nil?)
-        #options[:api_url] = ENV["GITHUB_API_ENDPOINT"] if ENV["GITHUB_API_ENDPOINT"]
+        options[:api_url] = ENV["GITHUB_API_ENDPOINT"] if ENV["GITHUB_API_ENDPOINT"]
         
         Ghee.new(options) do |conn|
           conn.use Faraday::Response::RaiseGheeError
