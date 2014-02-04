@@ -54,7 +54,18 @@ var CardWrapperView = Em.View.extend({
     click: function(){
       var view = Em.View.views[this.$().find("> div").attr("id")];
       view.get("controller").send("fullscreen")
-    }                                                                      
+    },
+    setupDroppable: function() {
+      var self = this;
+      this.$().droppable({ scope: "assignee", 
+        hoverClass: "assignee-accept",
+        drop: function(ev, ui) {
+          var view = Em.View.views[self.$().find("> div").attr("id")];
+          view.get("controller").send("assignUser", $(ui.draggable).data("assignee"));
+        }
+      })
+    }.on("didInsertElement")
+
 });
 
 module.exports = CardWrapperView;

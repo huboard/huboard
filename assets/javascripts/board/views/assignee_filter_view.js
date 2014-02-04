@@ -2,6 +2,7 @@ var AssigneeFilterView = Ember.View.extend({
   templateName : "assignee/filter",
   classNames: ["assignee"],
   classNameBindings: ["modeClass"],
+  attributeBindings: ["data-assignee"],
   click: function (){
     var previous = this.get("lastClicked");
 
@@ -47,7 +48,10 @@ var AssigneeFilterView = Ember.View.extend({
   }.property("lastClicked.mode"),
   mode: 0,
   modes:[0,1,2,0],
-  gravatarId: null
+  gravatarId: null,
+  setupDraggable: function(){
+    this.$().draggable({helper:"clone", appendTo: "body", zIndex: 100, scope: "assignee"})
+  }.on("didInsertElement")
 });
 
 module.exports = AssigneeFilterView;

@@ -343,6 +343,9 @@ var CardController = Ember.ObjectController.extend(SocketMixin,{
     assignMilestone: function(order, milestone) {
       return this.get("model").assignMilestone(order, milestone);
     },
+    assignUser: function(login){
+      return this.get("model").assignUser(login);
+    },
     fullscreen: function () {
       this.send("openIssueFullscreen", this.get("model"));
     },
@@ -1096,6 +1099,23 @@ var Issue = Ember.Object.extend(Serializable,{
         this.set("processing", false);
       }.bind(this))
   },
+  assignUser: function(login){
+
+      var user = this.get("repo.owner.login"),
+          repo = this.get("repo.name"),
+          full_name = user + "/" + repo;
+
+      return Ember.$.post("/api/" + full_name + "/assigncard", {
+        number : this.get("number"),
+        assignee: login, 
+        correlationId: this.get("correlationId")
+      }).then(function( response ){
+          this.set("assignee", response.assignee);
+          return this;
+      }.bind(this))
+    
+      
+  },
   assignMilestone: function(index, milestone){
     var changedMilestones = false;
     if(milestone && !this.get("milestone")){
@@ -1583,10 +1603,11 @@ function program6(depth0,data) {
   
   var buffer = '', hashContexts, hashTypes;
   data.buffer.push("\n    ");
-  hashContexts = {'lastClicked': depth0,'gravatarUser': depth0,'content': depth0};
-  hashTypes = {'lastClicked': "ID",'gravatarUser': "ID",'content': "ID"};
+  hashContexts = {'lastClicked': depth0,'data-assignee': depth0,'gravatarUser': depth0,'content': depth0};
+  hashTypes = {'lastClicked': "ID",'data-assignee': "ID",'gravatarUser': "ID",'content': "ID"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.AssigneeFilterView", {hash:{
     'lastClicked': ("controller.lastClicked"),
+    'data-assignee': ("filter.avatar.login"),
     'gravatarUser': ("filter.avatar"),
     'content': ("filter")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
@@ -64399,6 +64420,7 @@ var AssigneeFilterView = Ember.View.extend({
   templateName : "assignee/filter",
   classNames: ["assignee"],
   classNameBindings: ["modeClass"],
+  attributeBindings: ["data-assignee"],
   click: function (){
     var previous = this.get("lastClicked");
 
@@ -64444,7 +64466,10 @@ var AssigneeFilterView = Ember.View.extend({
   }.property("lastClicked.mode"),
   mode: 0,
   modes:[0,1,2,0],
-  gravatarId: null
+  gravatarId: null,
+  setupDraggable: function(){
+    this.$().draggable({helper:"clone", appendTo: "body", zIndex: 100, scope: "assignee"})
+  }.on("didInsertElement")
 });
 
 module.exports = AssigneeFilterView;
@@ -64535,7 +64560,18 @@ var CardWrapperView = Em.View.extend({
     click: function(){
       var view = Em.View.views[this.$().find("> div").attr("id")];
       view.get("controller").send("fullscreen")
-    }                                                                      
+    },
+    setupDroppable: function() {
+      var self = this;
+      this.$().droppable({ scope: "assignee", 
+        hoverClass: "assignee-accept",
+        drop: function(ev, ui) {
+          var view = Em.View.views[self.$().find("> div").attr("id")];
+          view.get("controller").send("assignUser", $(ui.draggable).data("assignee"));
+        }
+      })
+    }.on("didInsertElement")
+
 });
 
 module.exports = CardWrapperView;

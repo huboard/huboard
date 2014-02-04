@@ -132,6 +132,23 @@ var Issue = Ember.Object.extend(Serializable,{
         this.set("processing", false);
       }.bind(this))
   },
+  assignUser: function(login){
+
+      var user = this.get("repo.owner.login"),
+          repo = this.get("repo.name"),
+          full_name = user + "/" + repo;
+
+      return Ember.$.post("/api/" + full_name + "/assigncard", {
+        number : this.get("number"),
+        assignee: login, 
+        correlationId: this.get("correlationId")
+      }).then(function( response ){
+          this.set("assignee", response.assignee);
+          return this;
+      }.bind(this))
+    
+      
+  },
   assignMilestone: function(index, milestone){
     var changedMilestones = false;
     if(milestone && !this.get("milestone")){
