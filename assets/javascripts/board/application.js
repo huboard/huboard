@@ -1991,9 +1991,45 @@ function program5(depth0,data) {
 Ember.TEMPLATES['issue'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, stack2, hashTypes, hashContexts, options, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, self=this;
+  var buffer = '', stack1, stack2, hashTypes, hashContexts, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
+  
+  var buffer = '', stack1, hashTypes, hashContexts;
+  data.buffer.push("\n      ");
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers['if'].call(depth0, "App.repo.is_collaborator", {hash:{},inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n    ");
+  return buffer;
+  }
+function program2(depth0,data) {
+  
+  var buffer = '', stack1, hashContexts, hashTypes, options;
+  data.buffer.push("\n      <div>\n        <label>\n          ");
+  hashContexts = {'type': depth0,'name': depth0,'checked': depth0};
+  hashTypes = {'type': "STRING",'name': "STRING",'checked': "ID"};
+  options = {hash:{
+    'type': ("checkbox"),
+    'name': ("isReady"),
+    'checked': ("isReady")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
+  data.buffer.push(" Ready for next stage\n        </label>\n        <label>\n          ");
+  hashContexts = {'type': depth0,'name': depth0,'checked': depth0};
+  hashTypes = {'type': "STRING",'name': "STRING",'checked': "ID"};
+  options = {hash:{
+    'type': ("checkbox"),
+    'name': ("isBlock"),
+    'checked': ("isBlocked")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
+  data.buffer.push(" Mark as blocked\n        </label>\n      </div>\n      ");
+  return buffer;
+  }
+
+function program4(depth0,data) {
   
   var buffer = '', stack1, hashContexts, hashTypes;
   data.buffer.push("\n        ");
@@ -2007,13 +2043,13 @@ function program1(depth0,data) {
   return buffer;
   }
 
-function program3(depth0,data) {
+function program6(depth0,data) {
   
   
   data.buffer.push("\n        <p class=\"empty\"> No description given </p>\n      ");
   }
 
-function program5(depth0,data) {
+function program8(depth0,data) {
   
   var buffer = '', stack1, hashContexts, hashTypes, options;
   data.buffer.push("\n  <hr></hr>\n  <form ");
@@ -2054,25 +2090,12 @@ function program5(depth0,data) {
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "number", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("</a> </h2>\n      <div>\n        <label>\n          ");
-  hashContexts = {'type': depth0,'name': depth0,'checked': depth0};
-  hashTypes = {'type': "STRING",'name': "STRING",'checked': "ID"};
-  options = {hash:{
-    'type': ("checkbox"),
-    'name': ("isReady"),
-    'checked': ("isReady")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
-  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
-  data.buffer.push(" Ready for next stage\n        </label>\n        <label>\n          ");
-  hashContexts = {'type': depth0,'name': depth0,'checked': depth0};
-  hashTypes = {'type': "STRING",'name': "STRING",'checked': "ID"};
-  options = {hash:{
-    'type': ("checkbox"),
-    'name': ("isBlock"),
-    'checked': ("isBlocked")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
-  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
-  data.buffer.push(" Mark as blocked\n        </label>\n      </div>\n      <div class=\"labels-placeholder\">\n       <div>\n          ");
+  data.buffer.push("</a> </h2>\n    ");
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers['if'].call(depth0, "App.loggedIn", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n      <div class=\"labels-placeholder\">\n       <div>\n          ");
   hashContexts = {'labelsChanged': depth0,'editable': depth0,'values': depth0,'selected': depth0,'title': depth0,'labels': depth0};
   hashTypes = {'labelsChanged': "STRING",'editable': "ID",'values': "ID",'selected': "ID",'title': "STRING",'labels': "ID"};
   options = {hash:{
@@ -2114,7 +2137,7 @@ function program5(depth0,data) {
   data.buffer.push("\n      </div>\n      ");
   hashTypes = {};
   hashContexts = {};
-  stack2 = helpers['if'].call(depth0, "body_html", {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack2 = helpers['if'].call(depth0, "body_html", {hash:{},inverse:self.program(6, program6, data),fn:self.program(4, program4, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n    </div>\n  </div>\n\n  <div class=\"fullscreen-card-activity\">\n    <div class=\"fullscreen-header\">\n      <h4> Activity </h4>\n    </div>\n    ");
   data.buffer.push("\n    ");
@@ -2126,7 +2149,7 @@ function program5(depth0,data) {
   data.buffer.push("\n  </div>\n  ");
   hashTypes = {};
   hashContexts = {};
-  stack2 = helpers['if'].call(depth0, "App.loggedIn", {hash:{},inverse:self.noop,fn:self.program(5, program5, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack2 = helpers['if'].call(depth0, "App.loggedIn", {hash:{},inverse:self.noop,fn:self.program(8, program8, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n</div>\n</div>\n");
   return buffer;
