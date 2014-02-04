@@ -1,4 +1,4 @@
-# GitHub issue made awesome
+# GitHub issues made awesome
 
 ![HuBoard logo](https://raw.github.com/rauhryan/huboard/master/assets/images/HuBoardSplash960.png)
 
