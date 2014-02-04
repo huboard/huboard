@@ -109,7 +109,8 @@
     ul {
       min-height: 72px;
       @include display(flex);
-      @include flex-flow(row wrap);
+      @include flex-direction(row);
+      @include flex-wrap(wrap);
       @include justify-content(flex-start);
       @include align-items(flex-start);
       @include align-content(flex-start);

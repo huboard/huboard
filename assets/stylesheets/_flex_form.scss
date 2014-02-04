@@ -4,13 +4,17 @@
   @include display(flex);
   @include flex(1);
 
-  @include flex-flow(column nowrap);
+  @include flex-direction(column);
+  @include flex-wrap(nowrap);
   &.split-form {
-    @include flex-flow(row nowrap);
+    @include flex-direction(row);
+    @include flex-wrap(nowrap);
     .flex-form-left {
       @include display(flex);
       @include flex(1);
-      @include flex-flow(column nowrap);
+      @include flex-direction(column);
+      @include flex-wrap(nowrap);
+
       padding: 0 10px;
       border-right: 1px solid #ccc;
       > div {
@@ -35,7 +39,7 @@
   }
   .tabbable {
     textarea {
-     box-sizing: border-box;
+     @include box-sizing(border-box);
      width: 100%;
      resize:none;
      border: none;
@@ -65,14 +69,16 @@
     }
     .tabbable {
       @include flex(1);
-      @include flex-flow(column nowrap);
+      @include flex-direction(column);
+      @include flex-wrap(nowrap);
       @include display(flex);
       .tab-content {
        @include flex(1);
        @include display(flex);
       }
       .tab-content {
-        @include flex-flow(column nowrap);
+        @include flex-direction(column);
+        @include flex-wrap(nowrap);
       }
     }
   }
