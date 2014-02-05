@@ -46,7 +46,7 @@ class Huboard
           conn.use Mimetype
           conn.request :retry, 3
           # disable cache because github api is broken
-          conn.use Caching
+          # conn.use Caching
         end
       }
     end
