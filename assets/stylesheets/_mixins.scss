@@ -40,10 +40,15 @@
     $stop-gradient: grayscale($stop-gradient);
     $text-shadow:   grayscale($text-shadow);
   }
+
+  &.small {
+     padding-top:5px;
+     padding-bottom: 4px;     
+  }
                         
   outline: none;
   border:none;
-  @include box-shadow(0 1px $border);
+  @include box-shadow(0 2px $border);
   border-radius: 3px;
   color: $color;
   display: inline-block;
@@ -70,7 +75,7 @@
     //@include linear-gradient ($base-color-hover, $stop-gradient-hover);
   }
 
-  &:active:not(:disabled) {
+  &:active:not(:disabled), &.active:not(:disabled) {
     $border-active:       adjust-color($base-color, $saturation: 9%, $lightness: -14%);
     $inset-shadow-active: adjust-color($base-color, $saturation: 7%, $lightness: -17%);
 
@@ -78,11 +83,11 @@
       $border-active:       grayscale($border-active);
       $inset-shadow-active: grayscale($inset-shadow-active);
     }
-    @include box-shadow (0 -1px 0px 0 $border-active);
+    @include box-shadow (0 -1px 0px 0 $border-active, inset 0px 0px 0px 1px $inset-shadow-active);
                                           
-    -webkit-transform: translate(0, 1px);
-    -moz-transform: translate(0, 1px);
-    -o-transform: translate(0, 1px);
-    transform: translate(0, 1px);
+    -webkit-transform: translate(0, 2px);
+    -moz-transform: translate(0, 2px);
+    -o-transform: translate(0, 2px);
+    transform: translate(0, 2px);
   }
 }

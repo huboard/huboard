@@ -15,17 +15,13 @@
      color:#FFF;
      text-decoration: none;
   }
-  &.small {
-     padding-top:5px;
-     padding-bottom: 4px;     
-  }
   
   &.hb-button-white {
       @include button(#fff);
   }
 
   &.hb-button-grey {
-      @include button(hsl(0, 0%, 92%));
+      @include button(hsl(0, 0%, 85%));
   }
 
   &.hb-button-icon {
@@ -37,6 +33,24 @@
     }
   }
     
+}
+
+.hb-button-group {
+  &.flexy {
+    @include display(flex);
+    
+    .hb-button {
+      margin:auto;
+      border-radius: 0;
+      &:first-child {
+        border-radius: 3px 0 0 3px;
+      }
+      &:last-child {
+        border-radius:0 3px 3px 0;
+      }
+    }
+
+  }
 }
                                   
 .input-append {

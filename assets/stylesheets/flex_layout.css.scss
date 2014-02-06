@@ -24,8 +24,10 @@
 
 
 .main-toolbar {
+  @include display(flex);
+  @include justify-content(space-between);
+
   .create-button {
-    float:right;
     a{
       line-height: 20px;
     }

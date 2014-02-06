@@ -1,4 +1,8 @@
 <div class="main-toolbar">
+  <div class="sidebar-toggle">
+    <a href="#" {{action "toggleSidebar" }}>Filters <i {{bind-attr class=":ui-icon isSidebarOpen:ui-icon-triangle-1-w:ui-icon-triangle-1-e"}} class="ui-icon ui-icon-triangle-1-e"></i></a>
+  </div>
+
   {{#if App.repo.is_collaborator}}
   <div class="create-button">
     <button {{action createNewIssue }} class="hb-button small">Create new issue</button>
@@ -8,9 +12,6 @@
     <a target="_blank" href="{{unbound App.repo.html_url}}/issues/new" class="hb-button small">Create new issue</a>
   </div>
   {{/if}}
-  <div class="sidebar-toggle">
-    <a href="#" {{action "toggleSidebar" }}>Filters <i {{bind-attr class=":ui-icon isSidebarOpen:ui-icon-triangle-1-w:ui-icon-triangle-1-e"}} class="ui-icon ui-icon-triangle-1-e"></i></a>
-  </div>
 
 </div>
 <div id="main-stage" {{bind-attr class=":main-content isSidebarOpen:sidebar-open"}}>
