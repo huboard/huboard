@@ -33,7 +33,7 @@ class Huboard
        }).extend(Card).merge!({"repo" => {:owner => {:login => @user}, :name => @repo }})
     end
 
-    def closed_issues(label, since = (Time.now - 7*24*60*60).utc.iso8601)
+    def closed_issues(label, since = (Time.now - 2*7*24*60*60).utc.iso8601)
       params = {labels: label, state:"closed",since:since, per_page: 30}
       gh.issues(params).each{|i| i.extend(Card)}.each{ |i| i.merge!({"repo" => {:owner => {:login => user}, :name => repo }}) }.sort_by { |i| i["_data"]["order"] || i["number"].to_f}
     end
