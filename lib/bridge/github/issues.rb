@@ -1,4 +1,5 @@
 require "time"
+require "hashie"
 
 class Module
   def overridable(&blk)
@@ -26,10 +27,12 @@ class Huboard
     end
 
     def create_issue(params)
+       issue = Hashie::Mash.new params["issue"]
+       issue.extend(Card).embed_data "order" => params["order"].to_f if params["order"].to_f > 0
        gh.issues.create({
-         title: params["title"],
-         body: params["body"],
-         labels: [column_labels.first].concat(params["labels"])
+         title: issue.title,
+         body: issue.body,
+         labels: [column_labels.first].concat(issue.labels)
        }).extend(Card).merge!({"repo" => {:owner => {:login => @user}, :name => @repo }})
     end
 

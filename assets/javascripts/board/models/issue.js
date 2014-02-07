@@ -47,10 +47,10 @@ var Issue = Ember.Object.extend(Serializable,{
     }
     return this.get("_data.custom_state");
   }.property("_data.custom_state"),
-  saveNew: function () {
+  saveNew: function (order) {
     return Ember.$.ajax( {
       url: "/api/v2/" + this.get("repo.full_name") + "/issues/create", 
-      data: JSON.stringify(this.serialize()),
+      data: JSON.stringify({issue: this.serialize(), order: order}),
       dataType: 'json',
       type: "POST",
       contentType: "application/json"}).then(function(response){

@@ -563,7 +563,12 @@ var IssuesCreateController = Ember.ObjectController.extend({
     submit: function() {
       var controller = this;
       this.set("processing",true)
-      this.get("model").saveNew().then(function(issue){
+      var first = this.get("controllers.application.model.board").topIssue();
+      var order = null;
+      if(first) {
+        order = first._data.order / 2;
+      }
+      this.get("model").saveNew(order).then(function(issue){
          controller.send("issueCreated", issue)
          controller.set("processing",false)
       });
@@ -893,6 +898,17 @@ var Board = Ember.Object.extend({
     return _.union([this],this.get("linkedRepos"))
   }.property("linkedRepos.@each"),
   linkedRepos: [],
+  topIssue: function() {
+    var firstColumn = this.get("columns.firstObject");
+    var firstIssue = this.combinedIssues().filter(function(i){
+      return i.current_state.index === firstColumn.index;
+    }).sort(function (a, b){
+       return a._data.order - b._data.order;
+    })[0];
+
+    return firstIssue;
+
+  },
   combinedIssues: function () {                                                                        
      return _.union.apply(_,[this.issues].concat(this.linkedRepos.map(function (r){return r.issues; })));
   },
@@ -900,7 +916,7 @@ var Board = Ember.Object.extend({
     return _.union.apply(_,[this.other_labels]
                     .concat(this.linkedRepos.map(function (r){return r.other_labels; })));
 
-  }.property("linkedRepos.@each"),
+  }.property("linkedRepos.@each", "issues"),
   filterLabels: function () {
     var labels = this.get("combinedLabels");
 
@@ -1014,10 +1030,10 @@ var Issue = Ember.Object.extend(Serializable,{
     }
     return this.get("_data.custom_state");
   }.property("_data.custom_state"),
-  saveNew: function () {
+  saveNew: function (order) {
     return Ember.$.ajax( {
       url: "/api/v2/" + this.get("repo.full_name") + "/issues/create", 
-      data: JSON.stringify(this.serialize()),
+      data: JSON.stringify({issue: this.serialize(), order: order}),
       dataType: 'json',
       type: "POST",
       contentType: "application/json"}).then(function(response){

@@ -4,7 +4,12 @@ var IssuesCreateController = Ember.ObjectController.extend({
     submit: function() {
       var controller = this;
       this.set("processing",true)
-      this.get("model").saveNew().then(function(issue){
+      var first = this.get("controllers.application.model.board").topIssue();
+      var order = null;
+      if(first) {
+        order = first._data.order / 2;
+      }
+      this.get("model").saveNew(order).then(function(issue){
          controller.send("issueCreated", issue)
          controller.set("processing",false)
       });

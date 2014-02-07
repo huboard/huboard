@@ -3,6 +3,17 @@ var Board = Ember.Object.extend({
     return _.union([this],this.get("linkedRepos"))
   }.property("linkedRepos.@each"),
   linkedRepos: [],
+  topIssue: function() {
+    var firstColumn = this.get("columns.firstObject");
+    var firstIssue = this.combinedIssues().filter(function(i){
+      return i.current_state.index === firstColumn.index;
+    }).sort(function (a, b){
+       return a._data.order - b._data.order;
+    })[0];
+
+    return firstIssue;
+
+  },
   combinedIssues: function () {                                                                        
      return _.union.apply(_,[this.issues].concat(this.linkedRepos.map(function (r){return r.issues; })));
   },
@@ -10,7 +21,7 @@ var Board = Ember.Object.extend({
     return _.union.apply(_,[this.other_labels]
                     .concat(this.linkedRepos.map(function (r){return r.other_labels; })));
 
-  }.property("linkedRepos.@each"),
+  }.property("linkedRepos.@each", "issues"),
   filterLabels: function () {
     var labels = this.get("combinedLabels");
 
