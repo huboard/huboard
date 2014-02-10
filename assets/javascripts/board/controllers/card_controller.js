@@ -1,17 +1,28 @@
 var SocketMixin = require("../mixins/socket");
 
 var CardController = Ember.ObjectController.extend(SocketMixin,{
-  needs:["index"],
   sockets: {
     config: {
       messagePath: "issueNumber",
       channelPath: "repositoryName"
     },
-    Moved: function (message) {
+    milestone_changed: function(message) {
+       this.get("model").set("milestone", message.issue.milestone)
+       Ember.run.once(function () {
+         this.send("forceRepaint", "milestones");
+       }.bind(this));
+    },
+    issue_closed: function(message) {
+       this.get("model").set("state", message.issue.state)
+    },
+    assigned: function(message) {
+       this.get("model").set("assignee", message.issue.assignee)
+    },
+    moved: function (message) {
        this.get("model").set("current_state", message.issue.current_state)
        this.get("model").set("_data", message.issue._data)
        Ember.run.once(function () {
-         this.get("controllers.index").incrementProperty("forceRedraw");
+         this.send("forceRepaint", "index");
        }.bind(this));
     }
   },

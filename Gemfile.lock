@@ -17,6 +17,8 @@ GEM
     bourbon (3.0.1)
       sass (>= 3.2.0)
       thor
+    celluloid (0.15.2)
+      timers (~> 1.1.0)
     chef (11.6.2)
       erubis (~> 2.7)
       highline (~> 1.6, >= 1.6.9)
@@ -189,6 +191,8 @@ GEM
     sprockets-sass (1.0.2)
       sprockets (~> 2.0)
       tilt (~> 1.1)
+    sucker_punch (1.0.2)
+      celluloid (~> 0.15.1)
     systemu (2.5.2)
     temple (0.6.6)
     thin (1.5.0)
@@ -197,6 +201,7 @@ GEM
       rack (>= 1.0.0)
     thor (0.16.0)
     tilt (1.4.1)
+    timers (1.1.0)
     uglifier (2.2.1)
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
@@ -249,6 +254,7 @@ DEPENDENCIES
   sprockets
   sprockets-helpers
   stripe!
+  sucker_punch (~> 1.0)
   thin
   uglifier
   unicorn

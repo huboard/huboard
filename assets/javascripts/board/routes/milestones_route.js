@@ -30,6 +30,13 @@ module.exports = MilestonesRoute =  Ember.Route.extend({
     openIssueFullscreen: function(model){
       this.transitionTo("milestones.issue", model)
     },
+    forceRepaint: function(target){
+      if(target === "index") {
+        return;
+      }
+      var controller = this.controllerFor("milestones");
+      controller.incrementProperty("forceRedraw")
+    },
     issueCreated: function(issue){
       var controller = this.controllerFor("milestones");
       var issues = controller.get("model.issues")

@@ -48,16 +48,11 @@ class Huboard
       "Authorized yo!"
     end
 
-    get '/:user/:repo/backlog' do 
-      backlog =  pebble.build_backlog(params[:user], params[:repo])
-      backlog.merge! :logged_in => logged_in?
-      return json backlog
-    end
-
-    get '/v2/:user/:repo/board' do 
+    get '/:user/:repo/board' do 
        return json huboard.board(params[:user],params[:repo]).meta
     end
-    get '/v2/:user/:repo/linked/:linked_user/:linked_repo' do 
+
+    get '/:user/:repo/linked/:linked_user/:linked_repo' do 
       board = huboard.board(params[:user], params[:repo])
       if board.linked? params[:linked_user], params[:linked_repo]
         json board.linked(params[:linked_user], params[:linked_repo])
@@ -66,7 +61,7 @@ class Huboard
       end
     end
 
-    post '/v2/:user/:repo/issues/create' do 
+    post '/:user/:repo/issues' do 
        return json huboard.board(params[:user],params[:repo]).create_issue JSON.parse(request.body.read)
     end
 
@@ -79,7 +74,7 @@ class Huboard
 
     end
 
-    post '/:user/:repo/issues/:number/update' do 
+    put '/:user/:repo/issues/:number' do 
 
       api = huboard.board(params[:user], params[:repo])
 
@@ -121,51 +116,21 @@ class Huboard
       return json issue 
     end
 
-    get '/:user/:repo/board' do 
-      board = pebble.board(params[:user], params[:repo])
-      board.merge! :logged_in => logged_in?
-      return json board
-    end
-
-    get '/:user/:repo/column' do 
-      return json pebble.backlog_column(params[:user], params[:repo])
-    end
-
-    get '/:user/:repo/issues/:number/feed' do 
-      return json pebble.feed_for_issue(params[:user], params[:repo], params[:number])
-
-    end
-
     get '/:user/:repo/issues/:number/details' do 
       api = huboard.board(params[:user], params[:repo])
 
       issue = api.issue(params[:number]).activities
 
       return json issue
-
-    end
-
-
-
-    post '/:user/:repo/issues/:number/update_labels' do 
-      labels = params[:labels] ? params[:labels][:name] : []
-      issue = pebble.update_issue_labels(params[:user], params[:repo], params[:number], labels).to_hash
-
-      publish "#{params[:user]}/#{params[:repo]}", "Updated.#{params[:number]}", { issue: issue }
-
-      return json  issue
-
-    end
-
-    post '/:user/:repo/reorderissue' do 
-      user, repo, number, index = params[:user], params[:repo], params[:number], params[:index]
-      json pebble.reorder_issue user, repo, number, index
     end
 
     post '/:user/:repo/dragcard' do 
       user, repo, number, order, column = params[:user], params[:repo], params[:number], params[:order], params[:column]
       issue = huboard.board(user, repo).issue(number).move(column, order, params[:moved_columns])
-      publish "#{params[:user]}/#{params[:repo]}", "Moved.#{issue.number}", { issue: issue, index: params[:column] }
+
+
+      IssueMovedEvent.new.publish issue, current_user, params[:correlationId] if params[:moved_columns]
+
       json issue
     end
 
@@ -181,28 +146,25 @@ class Huboard
 
     post '/:user/:repo/assigncard' do 
       issue = pebble.assign_card params[:user], params[:repo], params[:number], params[:assignee]
-      publish "#{params[:user]}/#{params[:repo]}", "Assigned.#{params[:number]}", issue
+
+      IssueAssignedEvent.new.publish issue, current_user, params[:correlationId]
+
       json issue
     end
 
     post '/:user/:repo/assignmilestone' do 
       issue = pebble.assign_milestone params[:user], params[:repo], params[:issue], params[:milestone]
-      publish "#{params[:user]}/#{params[:repo]}", "Milestone.#{issue.number}", issue
+
+      IssueMilestoneChangedEvent.new.publish issue, current_user, params[:correlationId]
       json issue
     end
     
-
-    post '/:user/:repo/movecard' do 
-      user, repo, number, index = params[:user], params[:repo], params[:number], params[:index]
-      issue = pebble.move_card :user => user, :repo => repo, :number => number, :index => index
-      publish "#{params[:user]}/#{params[:repo]}", "Moved.#{issue.number}", { issue: issue, index: params[:index] }
-      json issue
-    end
-
     post '/:user/:repo/close' do
       user, repo, number = params[:user], params[:repo], params[:number]
       issue = pebble.close_card user, repo, number
-      publish "#{params[:user]}/#{params[:repo]}", "Closed.#{ number }", issue
+
+      IssueClosedEvent.new.publish issue, current_user, params[:correlationId]
+
       json(issue)
     end
 

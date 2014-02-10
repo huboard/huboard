@@ -32,6 +32,13 @@ var IndexRoute = Ember.Route.extend({
     openIssueFullscreen: function(model){
       this.transitionTo("index.issue", model)
     },
+    forceRepaint: function(target) {
+      if(target === "milestones") {
+        return;
+      }
+      var controller = this.controllerFor("index");
+      controller.incrementProperty("forceRedraw")
+    },
     issueCreated: function(issue){
       var controller = this.controllerFor("index");
       var issues = controller.get("model.issues")

@@ -72,15 +72,7 @@ class Huboard
       end
 
       def publish(channel,event,payload)
-        return if socket_backend.nil?
-        begin
-          conn = Faraday.post do |req|
-            req.url "#{socket_backend}/hook"
-            req.headers['Content-Type'] = 'application/json'
-            req.body =  json({channel:channel, payload:{ payload:payload, event:event, correlationId: params[:correlationId] || "herpderp"},secret:settings.socket_secret})
-          end
-        rescue
-        end
+        # no op
       end
 
       def json(obj)

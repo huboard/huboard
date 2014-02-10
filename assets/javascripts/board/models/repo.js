@@ -18,7 +18,7 @@ var Repo = Ember.Object.extend(Serializable,{
   fetchBoard: function(){
 
     if(this._board) {return this._board;}
-    return Ember.$.getJSON("/api/v2/" + this.get("full_name") + "/board").then(function(board){
+    return Ember.$.getJSON("/api/" + this.get("full_name") + "/board").then(function(board){
        var issues = Ember.A();
        board.issues.forEach(function(i){
          issues.pushObject(Issue.create(i));

@@ -74,15 +74,6 @@ class Huboard
          self["_data"]["order"] || self.number.to_f
       end
 
-      def update_labels(labels)
-
-        keep_labels = self.labels.find_all {|l| Huboard.all_patterns.any? {|p| p.match(l.name)}}
-
-        update_with = labels.concat(keep_labels.map{ |l| l["name"] }) 
-
-        patch "labels" => update_with
-
-      end
 
       def update(params)
 

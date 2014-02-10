@@ -5,6 +5,9 @@ require "hashie"
 require_relative "auth/github"
 require "sinatra/asset_pipeline"
 
+path = File.expand_path "../jobs/*.rb", __FILE__
+Dir[path].each { |job| require(job) }
+
 # stolen from http://github.com/cschneid/irclogger/blob/master/lib/partials.rb
 #   and made a lot more robust by me
 # this implementation uses erb by default. if you want to use any other template mechanism
@@ -31,6 +34,7 @@ class HuboardApplication < Sinatra::Base
 
   enable  :sessions
   enable :raise_exceptions
+  set :protection, except: :session_hijacking 
 
   helpers Sinatra::ContentFor
 

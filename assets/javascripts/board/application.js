@@ -313,17 +313,28 @@ module.exports = AssigneeController;
 var SocketMixin = require("../mixins/socket");
 
 var CardController = Ember.ObjectController.extend(SocketMixin,{
-  needs:["index"],
   sockets: {
     config: {
       messagePath: "issueNumber",
       channelPath: "repositoryName"
     },
-    Moved: function (message) {
+    milestone_changed: function(message) {
+       this.get("model").set("milestone", message.issue.milestone)
+       Ember.run.once(function () {
+         this.send("forceRepaint", "milestones");
+       }.bind(this));
+    },
+    issue_closed: function(message) {
+       this.get("model").set("state", message.issue.state)
+    },
+    assigned: function(message) {
+       this.get("model").set("assignee", message.issue.assignee)
+    },
+    moved: function (message) {
        this.get("model").set("current_state", message.issue.current_state)
        this.get("model").set("_data", message.issue._data)
        Ember.run.once(function () {
-         this.get("controllers.index").incrementProperty("forceRedraw");
+         this.send("forceRepaint", "index");
        }.bind(this));
     }
   },
@@ -862,16 +873,13 @@ var SocketMixin = Ember.Mixin.create({
           controller = this;
       
       this.get("socket.socket").on(channel, function (message){
-          var parts = message.event.split("."),
-              event = parts[0],
-              id = parts[1];
 
-          if(messageId != "*" && id != messageId) { return; }
+          if(messageId != "*" && message.meta.identifier != messageId) { return; }
 
-          if(message.correlationId == controller.get("socket.correlationId")) { return; }
+          if(message.meta.correlationId == controller.get("socket.correlationId")) { return; }
 
-          if(eventNames.hasOwnProperty(event)){
-            eventNames[event].call(controller, message.payload);
+          if(eventNames.hasOwnProperty(message.meta.action)){
+            eventNames[message.meta.action].call(controller, message.payload);
           }
       });
     });
@@ -940,7 +948,7 @@ var Board = Ember.Object.extend({
   loadLinkedBoards: function () {
     var model = this;
     var urls = this.get("link_labels").map(function (l) {
-      return "/api/v2/" + model.full_name + "/linked/" + l.user + "/" + l.repo  
+      return "/api/" + model.full_name + "/linked/" + l.user + "/" + l.repo  
     })
 
     var requests = urls.map(function (url){
@@ -1032,7 +1040,7 @@ var Issue = Ember.Object.extend(Serializable,{
   }.property("_data.custom_state"),
   saveNew: function (order) {
     return Ember.$.ajax( {
-      url: "/api/v2/" + this.get("repo.full_name") + "/issues/create", 
+      url: "/api/" + this.get("repo.full_name") + "/issues", 
       data: JSON.stringify({issue: this.serialize(), order: order}),
       dataType: 'json',
       type: "POST",
@@ -1064,10 +1072,10 @@ var Issue = Ember.Object.extend(Serializable,{
           full_name = user + "/" + repo;
 
     return Ember.$.ajax( {
-      url: "/api/" + full_name + "/issues/" + this.get("number") + "/update", 
+      url: "/api/" + full_name + "/issues/" + this.get("number"), 
       data: JSON.stringify({labels: this.serialize().other_labels, correlationId: this.get("correlationId")}),
       dataType: 'json',
-      type: "POST",
+      type: "PUT",
       contentType: "application/json"})
       .then(function(response){
         this.set("processing", false);
@@ -1225,7 +1233,7 @@ var Repo = Ember.Object.extend(Serializable,{
   fetchBoard: function(){
 
     if(this._board) {return this._board;}
-    return Ember.$.getJSON("/api/v2/" + this.get("full_name") + "/board").then(function(board){
+    return Ember.$.getJSON("/api/" + this.get("full_name") + "/board").then(function(board){
        var issues = Ember.A();
        board.issues.forEach(function(i){
          issues.pushObject(Issue.create(i));
@@ -1343,6 +1351,13 @@ var IndexRoute = Ember.Route.extend({
     openIssueFullscreen: function(model){
       this.transitionTo("index.issue", model)
     },
+    forceRepaint: function(target) {
+      if(target === "milestones") {
+        return;
+      }
+      var controller = this.controllerFor("index");
+      controller.incrementProperty("forceRedraw")
+    },
     issueCreated: function(issue){
       var controller = this.controllerFor("index");
       var issues = controller.get("model.issues")
@@ -1428,6 +1443,13 @@ module.exports = MilestonesRoute =  Ember.Route.extend({
     },
     openIssueFullscreen: function(model){
       this.transitionTo("milestones.issue", model)
+    },
+    forceRepaint: function(target){
+      if(target === "index") {
+        return;
+      }
+      var controller = this.controllerFor("milestones");
+      controller.incrementProperty("forceRedraw")
     },
     issueCreated: function(issue){
       var controller = this.controllerFor("milestones");

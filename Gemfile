@@ -28,6 +28,7 @@ gem 'sprockets-helpers'
 gem 'sinatra-asset-pipeline'
 gem 'execjs', "~> 1.4"
 gem 'guard-sprockets2'
+gem 'sucker_punch', '~> 1.0'
 
 
 gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'

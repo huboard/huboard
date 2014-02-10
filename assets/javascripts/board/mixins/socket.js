@@ -23,16 +23,13 @@ var SocketMixin = Ember.Mixin.create({
           controller = this;
       
       this.get("socket.socket").on(channel, function (message){
-          var parts = message.event.split("."),
-              event = parts[0],
-              id = parts[1];
 
-          if(messageId != "*" && id != messageId) { return; }
+          if(messageId != "*" && message.meta.identifier != messageId) { return; }
 
-          if(message.correlationId == controller.get("socket.correlationId")) { return; }
+          if(message.meta.correlationId == controller.get("socket.correlationId")) { return; }
 
-          if(eventNames.hasOwnProperty(event)){
-            eventNames[event].call(controller, message.payload);
+          if(eventNames.hasOwnProperty(message.meta.action)){
+            eventNames[message.meta.action].call(controller, message.payload);
           }
       });
     });

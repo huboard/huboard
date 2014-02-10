@@ -45,7 +45,7 @@ var Board = Ember.Object.extend({
   loadLinkedBoards: function () {
     var model = this;
     var urls = this.get("link_labels").map(function (l) {
-      return "/api/v2/" + model.full_name + "/linked/" + l.user + "/" + l.repo  
+      return "/api/" + model.full_name + "/linked/" + l.user + "/" + l.repo  
     })
 
     var requests = urls.map(function (url){
