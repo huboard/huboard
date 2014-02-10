@@ -12,12 +12,6 @@ class IssueEventJob
         req.body = payload.merge({secret: ENV["SOCKET_SECRET"]}).to_json
       end
     end
-    Faraday.post do |req|
-      #req.url "#{ENV["SOCKET_BACKEND"]}/hook"
-      req.url "http://requestb.in/1d0hd3s1"
-      req.headers['Content-Type'] = 'application/json'
-      req.body = payload.to_json
-    end
   rescue
   end
 
