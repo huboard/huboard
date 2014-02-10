@@ -336,6 +336,13 @@ var CardController = Ember.ObjectController.extend(SocketMixin,{
        Ember.run.once(function () {
          this.send("forceRepaint", "index");
        }.bind(this));
+    },
+    reordered: function (message) {
+       this.get("model").set("current_state", message.issue.current_state)
+       this.get("model").set("_data", message.issue._data)
+       Ember.run.once(function () {
+         this.send("forceRepaint", "index");
+       }.bind(this));
     }
   },
   issueNumber: function () {

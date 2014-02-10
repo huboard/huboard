@@ -49,6 +49,27 @@ class IssueMovedEvent < IssueEventJob
   end
 end
 
+class IssueReorderedEvent < IssueEventJob
+  def publish(issue, user, correlationId = "")
+    payload = {
+      meta: {
+        action: "reordered",
+        identifier: issue.number,
+        timestamp: Time.now.utc.iso8601,
+        user: user.attribs,
+        correlationId: correlationId,
+        repo_full_name: "#{issue.repo.owner.login}/#{issue.repo.name}"
+      },
+      payload: {
+        issue: issue,
+        column: issue.current_state
+      }
+    }
+
+    execute payload
+  end
+end
+
 class IssueAssignedEvent < IssueEventJob
   def publish(issue, user, correlationId = "")
     payload = {

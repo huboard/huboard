@@ -126,9 +126,14 @@ class Huboard
 
     post '/:user/:repo/dragcard' do 
       user, repo, number, order, column = params[:user], params[:repo], params[:number], params[:order], params[:column]
-      issue = huboard.board(user, repo).issue(number).move(column, order, params[:moved_columns])
+      moved = params[:moved_columns] == "true"
+      issue = huboard.board(user, repo).issue(number).move(column, order, moved)
 
-      IssueMovedEvent.new.publish issue, current_user, params[:correlationId] 
+      if moved
+        IssueMovedEvent.new.publish issue, current_user, params[:correlationId]
+      else
+        IssueReorderedEvent.new.publish issue, current_user, params[:correlationId]
+      end
 
       json issue
     end
