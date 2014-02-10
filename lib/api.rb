@@ -161,7 +161,7 @@ class Huboard
     
     post '/:user/:repo/close' do
       user, repo, number = params[:user], params[:repo], params[:number]
-      issue = pebble.close_card user, repo, number
+      issue = huboard.board(user, repo).issue(number).close
 
       IssueClosedEvent.new.publish issue, current_user, params[:correlationId]
 

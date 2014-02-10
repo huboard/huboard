@@ -146,8 +146,7 @@ class Huboard
       end
 
       def close
-        status = client.close
-        return :success => status
+        patch :state => "closed"
       end
 
       def reorder(index)
