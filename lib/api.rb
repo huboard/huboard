@@ -128,8 +128,7 @@ class Huboard
       user, repo, number, order, column = params[:user], params[:repo], params[:number], params[:order], params[:column]
       issue = huboard.board(user, repo).issue(number).move(column, order, params[:moved_columns])
 
-
-      IssueMovedEvent.new.publish issue, current_user, params[:correlationId] if params[:moved_columns]
+      IssueMovedEvent.new.publish issue, current_user, params[:correlationId] 
 
       json issue
     end
