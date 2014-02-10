@@ -6,7 +6,7 @@ class Huboard
 
 
     PUBLIC_URLS = ['/authorized']
-    RESERVED_URLS = %w{ settings profiles v2 webhook }
+    RESERVED_URLS = %w{ settings profiles v2 site }
 
 
     before "/:user/:repo/?*" do 
@@ -176,12 +176,12 @@ class Huboard
       json :hooks => gh.repos(params[:user],params[:repo]).hooks
     end
 
-    post '/webhook/issue' do
+    post '/site/webhook/issue' do
       LogWebhookJob.new.log params
       json :message => "Webhook received"
     end
 
-    post '/webhook/comment' do
+    post '/site/webhook/comment' do
       LogWebhookJob.new.log params
       json :message => "Webhook received"
     end
