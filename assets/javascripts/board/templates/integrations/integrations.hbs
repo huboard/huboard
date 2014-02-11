@@ -1,0 +1,22 @@
+<div class="fullscreen-card">
+    <h2> Integrations </h2>
+    <div class="flex-form-top"> 
+      <ul>
+        {{#each integration in integrations}}
+          <li>
+            {{ integration.integration.webhook_url }}
+            <button {{action "removeWebhook" integration}} type="button" class="hb-button">Delete webhook</button>
+          </li>
+        {{/each}}
+      </ul>
+    </div>
+    <div class="flex-form-bottom">
+      <form {{action submit on="submit"}} class="flex-form">
+        <label>
+          {{input value=webhookUrl placeholder="Webhook url" }}
+        </label>
+        <button {{bind-attr disabled=disabled}} class="hb-button">Submit webhook</button>
+      </form>
+    </div>
+</div>
+

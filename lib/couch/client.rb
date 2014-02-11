@@ -230,6 +230,21 @@ class Huboard
       end
     end
 
+    def integrations
+      return Integrations.new connection, :type => "integrations"
+    end
+
+    class Integrations < ResourceProxy
+      identify_by :id
+
+      def by_repo(id)
+        query_view "by_repo", :key => id
+      end
+      def by_full_name(name)
+        query_view "by_full_name", :key => name
+      end
+    end
+
     
 
   end

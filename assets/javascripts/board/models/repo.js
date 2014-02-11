@@ -27,6 +27,21 @@ var Repo = Ember.Object.extend(Serializable,{
        this.set("board", this._board);
        return this._board;
     }.bind(this));
+  },
+  fetchIntegrations: function() {
+    if(this._integrations) {return this._integrations;}
+    return Ember.$.getJSON("/api/" + this.get("full_name") + "/integrations")
+      .then(function(integrations){
+        var results = Ember.A();
+        integrations.rows.forEach(function(i){
+          results.pushObject(App.Integration.create(i.value));
+        })
+        this._integrations = Ember.Object.create({ 
+          integrations: results 
+        })
+        return this._integrations;
+      }.bind(this));
+
   }
 });
 

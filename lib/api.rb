@@ -172,6 +172,30 @@ class Huboard
       json(issue)
     end
 
+    get '/:user/:repo/integrations' do
+      repo = gh.repos(params[:user],params[:repo])
+      json couch.integrations.by_repo(repo.id)
+    end
+
+    post '/:user/:repo/integrations' do
+      repo = gh.repos(params[:user],params[:repo])
+      result = couch.connection.post("./",{
+            github: {repo: repo.to_hash, user: current_user.attribs},
+            :meta => { :type => "integrations" },
+            integration: params[:integration],
+            :timestamp => Time.now.utc.iso8601
+          })
+      if result.status == 201
+        json couch.connection.get("./#{result.body.id}").body
+      else
+        json result.body
+      end
+    end
+
+    delete '/:user/:repo/integrations/:id' do
+      json couch.connection.delete("./#{params[:id]}",{rev: params[:rev]}).body
+    end
+
     get '/:user/:repo/hooks' do
       json :hooks => gh.repos(params[:user],params[:repo]).hooks
     end
