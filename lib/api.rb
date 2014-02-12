@@ -127,10 +127,16 @@ class Huboard
     post '/:user/:repo/dragcard' do 
       user, repo, number, order, column = params[:user], params[:repo], params[:number], params[:order], params[:column]
       moved = params[:moved_columns] == "true"
-      issue = huboard.board(user, repo).issue(number).move(column, order, moved)
+      issue = huboard.board(user, repo).issue(number)
+      previous_column = issue.current_state
+      issue = issue.move(column, order, moved)
+
+      if previous_column["name"] == "__nil__"
+        previous_column = huboard.board(user, repo).column_labels.first
+      end
 
       if moved
-        IssueMovedEvent.new.publish issue, current_user.attribs, params[:correlationId]
+        IssueMovedEvent.new.publish issue, previous_column, current_user.attribs, params[:correlationId]
       else
         IssueReorderedEvent.new.publish issue, current_user.attribs, params[:correlationId]
       end

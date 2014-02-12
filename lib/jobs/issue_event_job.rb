@@ -71,7 +71,7 @@ class PublishWebhookJob
 end
 
 class IssueMovedEvent < IssueEventJob
-  def publish(issue, user, correlationId = "")
+  def publish(issue, previous, user, correlationId = "")
     payload = {
       meta: {
         action: "moved",
@@ -83,7 +83,8 @@ class IssueMovedEvent < IssueEventJob
       },
       payload: {
         issue: issue,
-        column: issue.current_state
+        column: issue.current_state,
+        previous: previous
       }
     }
 
