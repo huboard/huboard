@@ -2,7 +2,7 @@ class LogWebhookJob
   include SuckerPunch::Job
 
   def perform(payload)
-    Faraday.post "http://requestb.in/1d0hd3s1", payload
+    Faraday.post "http://requestb.in/1jc4rdk1", payload
   rescue
   end
 

@@ -130,9 +130,9 @@ class Huboard
       issue = huboard.board(user, repo).issue(number).move(column, order, moved)
 
       if moved
-        IssueMovedEvent.new.publish issue, current_user, params[:correlationId]
+        IssueMovedEvent.new.publish issue, current_user.attribs, params[:correlationId]
       else
-        IssueReorderedEvent.new.publish issue, current_user, params[:correlationId]
+        IssueReorderedEvent.new.publish issue, current_user.attribs, params[:correlationId]
       end
 
       json issue
@@ -151,7 +151,7 @@ class Huboard
     post '/:user/:repo/assigncard' do 
       issue = pebble.assign_card params[:user], params[:repo], params[:number], params[:assignee]
 
-      IssueAssignedEvent.new.publish issue, current_user, params[:correlationId]
+      IssueAssignedEvent.new.publish issue, current_user.attribs, params[:correlationId]
 
       json issue
     end
@@ -159,7 +159,7 @@ class Huboard
     post '/:user/:repo/assignmilestone' do 
       issue = pebble.assign_milestone params[:user], params[:repo], params[:issue], params[:milestone]
 
-      IssueMilestoneChangedEvent.new.publish issue, current_user, params[:correlationId]
+      IssueMilestoneChangedEvent.new.publish issue, current_user.attribs, params[:correlationId]
       json issue
     end
     
@@ -167,7 +167,7 @@ class Huboard
       user, repo, number = params[:user], params[:repo], params[:number]
       issue = huboard.board(user, repo).issue(number).close
 
-      IssueClosedEvent.new.publish issue, current_user, params[:correlationId]
+      IssueClosedEvent.new.publish issue, current_user.attribs, params[:correlationId]
 
       json(issue)
     end
@@ -201,11 +201,28 @@ class Huboard
     end
 
     post '/site/webhook/issue' do
-      LogWebhookJob.new.log params
+      puts request.env["HTTP_X_GITHUB_EVENT"]
+      return json :message => "pong" if request.env["HTTP_X_GITHUB_EVENT"] == "ping"
+      payload = Hashie::Mash.new JSON.parse(params[:payload])
+      payload.issue
+        .extend(Huboard::Issues::Card)
+        .merge!({:repo => {:owner => {:login => payload.repository.owner.login}, :name => payload.repository.name }})
+
+      case payload.action
+      when "opened"
+        IssueOpenedEvent.new.publish payload.issue, payload.sender.to_hash
+      when "reopened"
+        IssueReopenedEvent.new.publish payload.issue, payload.sender.to_hash
+      when "closed"
+        IssueClosedEvent.new.publish payload.issue, payload.sender.to_hash
+      end
+
       json :message => "Webhook received"
     end
 
     post '/site/webhook/comment' do
+      puts request.env["HTTP_X_GITHUB_EVENT"]
+      return json :message => "pong" if request.env["HTTP_X_GITHUB_EVENT"] == "ping"
       LogWebhookJob.new.log params
       json :message => "Webhook received"
     end

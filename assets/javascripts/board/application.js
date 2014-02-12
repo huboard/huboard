@@ -253,13 +253,57 @@ App.Router.reopen({
 });
 
 },{"./app":7}],9:[function(require,module,exports){
-var ApplicationController = Ember.ObjectController.extend({
-  isSidebarOpen: false
+var SocketMixin = require("../mixins/socket");
+var ApplicationController = Ember.ObjectController.extend(SocketMixin,{
+  isSidebarOpen: false,
+  sockets: {
+    config: {
+      messagePath: "issueNumber",
+      channelPath: "repositoryName"
+    },
+    issue_closed: function(message) {
+      var issue = this.get("model.board.issues").findBy('number', message.issue.number);
+
+      if(issue) {
+        issue.set("state", "closed");
+      } else {
+        this.get("model.board.issues").pushObject(App.Issue.create(message.issue));
+        this.send("forceRepaint");
+      }
+    },
+    issue_opened: function(message) {
+      var issue = this.get("model.board.issues").findBy('number', message.issue.number);
+
+      if(issue) {
+        issue.set("state", "open");
+      } else {
+        this.get("model.board.issues").pushObject(App.Issue.create(message.issue));
+        this.send("forceRepaint");
+      }
+    },
+    issue_reopened: function(message) {
+      var issue = this.get("model.board.issues").findBy('number', message.issue.number);
+
+      if(issue) {
+        issue.set("state", "open");
+      } else {
+        this.get("model.board.issues").pushObject(App.Issue.create(message.issue));
+        this.send("forceRepaint");
+      }
+    }
+  },
+  issueNumber: function () {
+     return "*";
+  }.property(),
+  repositoryName: function () {
+    // FIXME: file a bug report about the model not being set here
+    return this.target.router.activeTransition.resolvedModels.application.get("full_name")
+  }.property(),
 })
 
 module.exports = ApplicationController;
 
-},{}],10:[function(require,module,exports){
+},{"../mixins/socket":25}],10:[function(require,module,exports){
 var AssigneeController = Ember.ObjectController.extend({
   needs: ["application"],
   actions: {
@@ -923,21 +967,23 @@ var SocketMixin = Ember.Mixin.create({
     }
 
     Ember.run.schedule("afterRender", this, function(){
-      var channel = this.get(channelPath),
-          messageId = this.get(messagePath),
-          eventNames = this.get("sockets") || {},
-          controller = this;
-      
-      this.get("socket.socket").on(channel, function (message){
+      Ember.run(function(){
+        var channel = this.get(channelPath),
+            messageId = this.get(messagePath),
+            eventNames = this.get("sockets") || {},
+            controller = this;
+        
+        this.get("socket.socket").on(channel, function (message){
 
-          if(messageId != "*" && message.meta.identifier != messageId) { return; }
+            if(messageId != "*" && message.meta.identifier != messageId) { return; }
 
-          if(message.meta.correlationId == controller.get("socket.correlationId")) { return; }
+            if(message.meta.correlationId == controller.get("socket.correlationId")) { return; }
 
-          if(eventNames.hasOwnProperty(message.meta.action)){
-            eventNames[message.meta.action].call(controller, message.payload);
-          }
-      });
+            if(eventNames.hasOwnProperty(message.meta.action)){
+              eventNames[message.meta.action].call(controller, message.payload);
+            }
+        });
+      }.bind(this));
     });
   },
   init: function () {
@@ -2683,7 +2729,7 @@ function program1(depth0,data) {
   return buffer;
   }
 
-  data.buffer.push("<div class=\"fullscreen-card\">\n    <h2> Integrations </h2>\n    <div class=\"flex-form-top\"> \n      <ul>\n        ");
+  data.buffer.push("<div class=\"fullscreen-card\" style=\"padding:20px;\">\n    <h2> Integrations </h2>\n    <div class=\"flex-form-top\"> \n      <ul>\n        ");
   hashTypes = {};
   hashContexts = {};
   stack1 = helpers.each.call(depth0, "integration", "in", "integrations", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});

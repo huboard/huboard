@@ -17,21 +17,23 @@ var SocketMixin = Ember.Mixin.create({
     }
 
     Ember.run.schedule("afterRender", this, function(){
-      var channel = this.get(channelPath),
-          messageId = this.get(messagePath),
-          eventNames = this.get("sockets") || {},
-          controller = this;
-      
-      this.get("socket.socket").on(channel, function (message){
+      Ember.run(function(){
+        var channel = this.get(channelPath),
+            messageId = this.get(messagePath),
+            eventNames = this.get("sockets") || {},
+            controller = this;
+        
+        this.get("socket.socket").on(channel, function (message){
 
-          if(messageId != "*" && message.meta.identifier != messageId) { return; }
+            if(messageId != "*" && message.meta.identifier != messageId) { return; }
 
-          if(message.meta.correlationId == controller.get("socket.correlationId")) { return; }
+            if(message.meta.correlationId == controller.get("socket.correlationId")) { return; }
 
-          if(eventNames.hasOwnProperty(message.meta.action)){
-            eventNames[message.meta.action].call(controller, message.payload);
-          }
-      });
+            if(eventNames.hasOwnProperty(message.meta.action)){
+              eventNames[message.meta.action].call(controller, message.payload);
+            }
+        });
+      }.bind(this));
     });
   },
   init: function () {

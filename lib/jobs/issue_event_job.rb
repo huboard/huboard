@@ -77,7 +77,7 @@ class IssueMovedEvent < IssueEventJob
         action: "moved",
         identifier: issue.number,
         timestamp: Time.now.utc.iso8601,
-        user: user.attribs,
+        user: user,
         correlationId: correlationId,
         repo_full_name: "#{issue.repo.owner.login}/#{issue.repo.name}"
       },
@@ -98,7 +98,7 @@ class IssueReorderedEvent < IssueEventJob
         action: "reordered",
         identifier: issue.number,
         timestamp: Time.now.utc.iso8601,
-        user: user.attribs,
+        user: user,
         correlationId: correlationId,
         repo_full_name: "#{issue.repo.owner.login}/#{issue.repo.name}"
       },
@@ -119,7 +119,7 @@ class IssueAssignedEvent < IssueEventJob
         action: "assigned",
         identifier: issue.number,
         timestamp: Time.now.utc.iso8601,
-        user: user.attribs,
+        user: user,
         correlationId: correlationId,
         repo_full_name: "#{issue.repo.owner.login}/#{issue.repo.name}"
       },
@@ -140,7 +140,7 @@ class IssueMilestoneChangedEvent < IssueEventJob
         action: "milestone_changed",
         identifier: issue.number,
         timestamp: Time.now.utc.iso8601,
-        user: user.attribs,
+        user: user,
         correlationId: correlationId,
         repo_full_name: "#{issue.repo.owner.login}/#{issue.repo.name}"
       },
@@ -161,7 +161,7 @@ class IssueClosedEvent < IssueEventJob
         action: "issue_closed",
         identifier: issue.number,
         timestamp: Time.now.utc.iso8601,
-        user: user.attribs,
+        user: user,
         correlationId: correlationId,
         repo_full_name: "#{issue.repo.owner.login}/#{issue.repo.name}"
       },
@@ -173,5 +173,47 @@ class IssueClosedEvent < IssueEventJob
     execute payload
   end
 end
+
+class IssueOpenedEvent < IssueEventJob
+  def publish(issue, user, correlationId = "")
+    payload = {
+      meta: {
+        action: "issue_opened",
+        identifier: issue.number,
+        timestamp: Time.now.utc.iso8601,
+        user: user,
+        correlationId: correlationId,
+        repo_full_name: "#{issue.repo.owner.login}/#{issue.repo.name}"
+      },
+      payload: {
+        issue: issue
+      }
+    }
+
+    execute payload
+  end
+end
+
+class IssueReopenedEvent < IssueEventJob
+  def publish(issue, user, correlationId = "")
+    payload = {
+      meta: {
+        action: "issue_reopened",
+        identifier: issue.number,
+        timestamp: Time.now.utc.iso8601,
+        user: user,
+        correlationId: correlationId,
+        repo_full_name: "#{issue.repo.owner.login}/#{issue.repo.name}"
+      },
+      payload: {
+        issue: issue
+      }
+    }
+
+    execute payload
+  end
+end
+
+
 
 
