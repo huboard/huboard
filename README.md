@@ -13,7 +13,7 @@
 
 ## How to contribute
 
-Before contributing to Huboard, please:
+Before contributing to HuBoard, please:
 
   1. Read and sign the [Contributor License Agreement](https://docs.google.com/forms/d/1hapbhON_AdtwVPgRFQqf5d600ayptoYcVfgcSQO0FQg/viewform)
 
