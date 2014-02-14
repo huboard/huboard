@@ -3,7 +3,7 @@ ddoc =
     _id:'plans',
     meta: {
       type: "plans",
-      mode: "test"
+      mode: "live"
     },
     stripe: {
       live: {
