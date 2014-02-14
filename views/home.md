@@ -1,4 +1,4 @@
-# Welcome to Huboard
+# Welcome to HuBoard
 
 How to set up YOUR repo
 --------------------------
