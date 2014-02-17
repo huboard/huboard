@@ -210,6 +210,7 @@ class Huboard
       puts request.env["HTTP_X_GITHUB_EVENT"]
       return json :message => "pong" if request.env["HTTP_X_GITHUB_EVENT"] == "ping"
       payload = Hashie::Mash.new JSON.parse(params[:payload])
+      return json :message => "Fail to parse message" if payload.issue.nil?
       payload.issue
         .extend(Huboard::Issues::Card)
         .merge!({:repo => {:owner => {:login => payload.repository.owner.login}, :name => payload.repository.name }})
