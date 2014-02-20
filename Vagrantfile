@@ -75,7 +75,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "couch" do |couch|
     couch.vm.box = "precise32"
     couch.vm.network :forwarded_port, guest: 5984, host: 5984
-    couch.vm.network :forwarded_port, guest: 11211, host: 11211
+    couch.vm.network :forwarded_port, guest: 11211, host: 11212
     couch.vm.provision :chef_solo do |chef|
       chef.cookbooks_path = "cookbooks"
       chef.add_recipe "couchdb::source"
