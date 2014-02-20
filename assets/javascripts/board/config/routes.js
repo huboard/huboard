@@ -8,6 +8,7 @@ App.Router.map(function() {
 
    this.resource("milestones", function(){
     this.resource("milestones.issue",{path:"/issues/:issue_id"});
+    this.route('integrations');
    })
 });
 

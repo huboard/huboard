@@ -28,8 +28,21 @@
   @include justify-content(space-between);
 
   .create-button {
+    .hb-icon-link {
+      padding: 6px;
+      color: #999;
+      @include transition(all .5s);
+      .ui-icon {
+        position: relative;
+        top: 3px;
+      }
+      &:hover {
+        color: #666;
+      }
+    }
     a{
       line-height: 20px;
+      vertical-align: middle;
     }
   }
    height: 40px;
