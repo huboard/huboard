@@ -15,7 +15,7 @@ class Huboard
 
       def call(env)
 
-        env[:request_headers].merge!('Accept' => "application/vnd.github.beta.full+json" )
+        env[:request_headers].merge!('Accept' => "application/vnd.github.v3.full+json" )
         env[:request][:timeout] = 2 
         env[:request][:open_timeout] = 0.5
 

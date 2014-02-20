@@ -2,7 +2,13 @@
   <div class="title" {{bind-attr title=title }}>
     {{title}}
   </div>
-  <a class="number" {{bind-attr href=html_url}} target="_blank" title="View issue on github.com"><small>#</small>{{number}}</a>
+  <div class="number">
+    <small>#</small>
+    <a class="xnumber" {{bind-attr href=html_url}} target="_blank" title="View issue on github.com">
+      {{number}}
+    </a>
+    {{#if pull_request}} <i class="ui-icon ui-icon-21 ui-icon-branch-merge"></i> {{/if}}
+  </div>
 </div>
 
 {{#if assignee }}
