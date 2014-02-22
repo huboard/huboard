@@ -3,7 +3,7 @@ var App = require('./app');
 App.Router.map(function() {
    this.resource("index",{path: "/"},function(){
     this.resource("index.issue",{path:"/issues/:issue_id"});
-    this.route('integrations');
+    this.resource('index.integrations', {path:"/integrations"});
    })
 
    this.resource("milestones", function(){
@@ -15,3 +15,6 @@ App.Router.map(function() {
 App.Router.reopen({
   //location: "history"
 });
+
+
+

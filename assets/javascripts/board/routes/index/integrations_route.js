@@ -10,6 +10,7 @@ var IntegrationsRoute = Ember.Route.extend({
   },
   renderTemplate: function () {
     this.render("integrations.integrations",{into:'application',outlet:'modal'})
+    //this.render("integrations.index",{into:'integrations.integrations'})
   },
   actions: {
     closeModal: function () {

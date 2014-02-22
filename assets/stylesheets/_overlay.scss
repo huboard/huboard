@@ -60,6 +60,10 @@ body > .fullscreen-overlay {
     border: 0;
   }
 
+  &.slim {
+    max-width: 460px;
+  }
+
 }
 
 .fullscreen-card {

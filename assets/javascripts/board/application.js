@@ -153,6 +153,17 @@ require('../utilities/observers');
 
 var Markdown = require("../vendor/marked")
 
+Ember.LinkView.reopen({
+  init: function(){
+    this._super.apply(this, arguments);
+
+    this.on("click", this, this._closeDropdown);
+  },
+  _closeDropdown : function(ev) {
+    this.$().parents(".dropdown").removeClass("open")
+  }
+})
+
 Ember.EventDispatcher = Ember.EventDispatcher.extend({
   events: {
     touchstart  : 'touchStart',
@@ -240,7 +251,7 @@ var App = require('./app');
 App.Router.map(function() {
    this.resource("index",{path: "/"},function(){
     this.resource("index.issue",{path:"/issues/:issue_id"});
-    this.route('integrations');
+    this.resource('index.integrations', {path:"/integrations"});
    })
 
    this.resource("milestones", function(){
@@ -252,6 +263,9 @@ App.Router.map(function() {
 App.Router.reopen({
   //location: "history"
 });
+
+
+
 
 },{"./app":7}],9:[function(require,module,exports){
 var SocketMixin = require("../mixins/socket");
@@ -630,7 +644,38 @@ var IntegrationsController = Ember.ObjectController.extend({
   disabled: function () {
       return this.get("processing") || !this.get("isValid");
   }.property("processing","isValid"),
+  possibleIntegrations: [
+    Ember.Object.extend({
+      name: "Gitter",
+      attrs: {
+        webhookURL: ""
+      },
+      disabled: function(){
+        return !this.get("attrs.webhookURL")
+
+      }.property("attrs.webhookURL")
+    }).create()
+
+  ],
   actions: {
+    transitionTo: function(integration) {
+      Ember.Route.prototype.render
+        .call({
+            router:this.container.lookup("router:main"), 
+            container: this.container
+          }, 
+          "integrations." + integration.name.toLowerCase(), {
+            into:"integrations.integrations",
+            controller: this
+          }
+        )
+
+      this.set("editing", integration);
+    },
+    cancel: function() {
+      this.send("transitionTo", {name: "index"})
+
+    },
     submit: function(){
       var controller = this,
         endpoint = "/api/" + this.get("controllers.application.model.full_name") + "/integrations";
@@ -1431,6 +1476,7 @@ var IntegrationsRoute = Ember.Route.extend({
   },
   renderTemplate: function () {
     this.render("integrations.integrations",{into:'application',outlet:'modal'})
+    //this.render("integrations.index",{into:'integrations.integrations'})
   },
   actions: {
     closeModal: function () {
@@ -2164,22 +2210,22 @@ function program1(depth0,data) {
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "createNewIssue", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(" class=\"hb-button small\">Create new issue</button>\n\n    ");
-  hashContexts = {'title': depth0,'class': depth0};
-  hashTypes = {'title': "STRING",'class': "STRING"};
+  data.buffer.push(" class=\"hb-button small\">Create new issue</button>\n\n    <span class=\"dropdown\">\n      <a data-toggle=\"dropdown\" class=\"dropdown-toggle hb-icon-link\" href=\"#\">\n        <i class=\"ui-icon ui-icon-18 ui-icon-gear\"></i>\n      </a>\n      <ul class=\"dropdown-menu dropdown-menu-right\">\n        <li>\n            ");
+  hashContexts = {'title': depth0,'bubbles': depth0};
+  hashTypes = {'title': "STRING",'bubbles': "BOOLEAN"};
   options = {hash:{
     'title': ("Settings"),
-    'class': ("hb-icon-link")
+    'bubbles': (true)
   },inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   stack2 = ((stack1 = helpers['link-to'] || depth0['link-to']),stack1 ? stack1.call(depth0, "index.integrations", options) : helperMissing.call(depth0, "link-to", "index.integrations", options));
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\n  </div>\n  ");
+  data.buffer.push("\n        </li>\n      </ul>\n    </span>\n\n  </div>\n  ");
   return buffer;
   }
 function program2(depth0,data) {
   
   
-  data.buffer.push("\n      <i class=\"ui-icon ui-icon-18 ui-icon-gear\"></i>\n    ");
+  data.buffer.push("\n             Integrations\n            ");
   }
 
 function program4(depth0,data) {
@@ -2560,10 +2606,16 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 Ember.TEMPLATES['layouts/modal'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', hashTypes, hashContexts, escapeExpression=this.escapeExpression;
+  var buffer = '', hashContexts, hashTypes, escapeExpression=this.escapeExpression;
 
 
-  data.buffer.push("<div class=\"fullscreen-overlay fixed\">\n  <div class=\"fullscreen-wrapper\">\n    <div class=\"fullscreen-body\" >\n      ");
+  data.buffer.push("<div class=\"fullscreen-overlay fixed\">\n  <div class=\"fullscreen-wrapper\">\n    <div ");
+  hashContexts = {'class': depth0};
+  hashTypes = {'class': "STRING"};
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'class': (":fullscreen-body view.modalSize")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" >\n      ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "yield", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
@@ -2774,10 +2826,78 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   
 });
 
+Ember.TEMPLATES['integrations/gitter'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', stack1, hashContexts, hashTypes, options, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
+
+
+  data.buffer.push("\n    <div class=\"flex-form-bottom\">\n      <form ");
+  hashContexts = {'on': depth0};
+  hashTypes = {'on': "STRING"};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "submit", {hash:{
+    'on': ("submit")
+  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" class=\"flex-form\">\n        <h3>Instructions</h3>\n        <p>\n          Navigate to your <a href=\"https://gitter.im/");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.unbound.call(depth0, "controllers.application.model.full_name", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\" target=\"_blank\">Gitter chatroom</a>. Click the gear icon at the top right of your chat log and then select Integrations.\n\n        </p>\n        <p>\n          Create a HuBoard integration and paste the webhook url below.\n        </p>\n        <p>\n\n          Click the Submit webhook button to create the integration.\n        </p>\n        <label>\n          ");
+  hashContexts = {'value': depth0,'placeholder': depth0};
+  hashTypes = {'value': "ID",'placeholder': "STRING"};
+  options = {hash:{
+    'value': ("editing.attrs.webhookURL"),
+    'placeholder': ("Gitter webhook url")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
+  data.buffer.push("\n        </label>\n        <button ");
+  hashContexts = {'disabled': depth0};
+  hashTypes = {'disabled': "ID"};
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'disabled': ("editing.disabled")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" class=\"hb-button\">Submit webhook</button>\n        <div class=\"with-line\"><span>or</span></div>\n        <div class=\"cancel\"> <a href=\"#\" ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "cancel", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">Cancel</a> </div>\n      </form>\n    </div>\n\n");
+  return buffer;
+  
+});
+
+Ember.TEMPLATES['integrations/index'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', stack1, hashTypes, hashContexts, escapeExpression=this.escapeExpression, self=this;
+
+function program1(depth0,data) {
+  
+  var buffer = '', hashTypes, hashContexts;
+  data.buffer.push("\n<button type=\"button\" ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "transitionTo", "integration", {hash:{},contexts:[depth0,depth0],types:["ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" >");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "integration.name", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("</button>\n");
+  return buffer;
+  }
+
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers.each.call(depth0, "integration", "in", "possibleIntegrations", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n");
+  return buffer;
+  
+});
+
 Ember.TEMPLATES['integrations/integrations'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, hashTypes, hashContexts, options, escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
+  var buffer = '', stack1, hashTypes, hashContexts, escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
@@ -2799,27 +2919,11 @@ function program1(depth0,data) {
   hashContexts = {};
   stack1 = helpers.each.call(depth0, "integration", "in", "integrations", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n      </ul>\n    </div>\n    <div class=\"flex-form-bottom\">\n      <form ");
-  hashContexts = {'on': depth0};
-  hashTypes = {'on': "STRING"};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "submit", {hash:{
-    'on': ("submit")
-  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(" class=\"flex-form\">\n        <label>\n          ");
-  hashContexts = {'value': depth0,'placeholder': depth0};
-  hashTypes = {'value': "ID",'placeholder': "STRING"};
-  options = {hash:{
-    'value': ("webhookUrl"),
-    'placeholder': ("Webhook url")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
-  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
-  data.buffer.push("\n        </label>\n        <button ");
-  hashContexts = {'disabled': depth0};
-  hashTypes = {'disabled': "ID"};
-  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
-    'disabled': ("disabled")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(" class=\"hb-button\">Submit webhook</button>\n      </form>\n    </div>\n</div>\n\n");
+  data.buffer.push("\n      </ul>\n    </div>\n    <hr></hr>\n    ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "outlet", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n</div>\n\n");
   return buffer;
   
 });
@@ -65105,6 +65209,10 @@ module.exports = FilterView;
 
 },{}],56:[function(require,module,exports){
 var IntegrationsView = App.ModalView.extend({
+  modalSize: "slim",
+  setupIndex: function(){
+    this.get("controller").send("transitionTo",{name:"index"})
+  }.on("didInsertElement")
 });
 
 module.exports = IntegrationsView;
@@ -65296,6 +65404,7 @@ module.exports = ColumnView;
 },{"./card_wrapper_view":51}],62:[function(require,module,exports){
 var ModalView = Em.View.extend({
   layoutName: "layouts/modal",
+  modalSize: "",
 
   didInsertElement: function() {
     App.animateModalOpen();
@@ -65313,9 +65422,6 @@ var ModalView = Em.View.extend({
      if($(event.target).is("[data-ember-action]")){return;}
      this.get('controller').send('closeModal');        
     }.bind(this))
-    
-   
-
 
     this.$(':input:not(.close)').first().focus();
   },

@@ -2,6 +2,16 @@
    margin-top: -30px;
 }
 
+.dropdown-menu {
+  &.dropdown-menu-right {
+    right: 0;
+    left: auto;
+
+  }
+
+
+}
+
 %grow {
    @include transform(scale(1.25));
    @include transition (all 0.2s ease-in 0.1s);

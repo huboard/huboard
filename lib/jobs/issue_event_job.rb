@@ -15,7 +15,7 @@ class IssueEventJob
       rescue
       end
     end
-    #PublishWebhookJob.new.publish payload
+    PublishWebhookJob.new.publish payload if payload[:meta][:correlationId]
   rescue
   end
 

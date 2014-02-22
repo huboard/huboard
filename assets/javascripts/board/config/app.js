@@ -11,6 +11,17 @@ require('../utilities/observers');
 
 var Markdown = require("../vendor/marked")
 
+Ember.LinkView.reopen({
+  init: function(){
+    this._super.apply(this, arguments);
+
+    this.on("click", this, this._closeDropdown);
+  },
+  _closeDropdown : function(ev) {
+    this.$().parents(".dropdown").removeClass("open")
+  }
+})
+
 Ember.EventDispatcher = Ember.EventDispatcher.extend({
   events: {
     touchstart  : 'touchStart',

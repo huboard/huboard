@@ -6,7 +6,38 @@ var IntegrationsController = Ember.ObjectController.extend({
   disabled: function () {
       return this.get("processing") || !this.get("isValid");
   }.property("processing","isValid"),
+  possibleIntegrations: [
+    Ember.Object.extend({
+      name: "Gitter",
+      attrs: {
+        webhookURL: ""
+      },
+      disabled: function(){
+        return !this.get("attrs.webhookURL")
+
+      }.property("attrs.webhookURL")
+    }).create()
+
+  ],
   actions: {
+    transitionTo: function(integration) {
+      Ember.Route.prototype.render
+        .call({
+            router:this.container.lookup("router:main"), 
+            container: this.container
+          }, 
+          "integrations." + integration.name.toLowerCase(), {
+            into:"integrations.integrations",
+            controller: this
+          }
+        )
+
+      this.set("editing", integration);
+    },
+    cancel: function() {
+      this.send("transitionTo", {name: "index"})
+
+    },
     submit: function(){
       var controller = this,
         endpoint = "/api/" + this.get("controllers.application.model.full_name") + "/integrations";

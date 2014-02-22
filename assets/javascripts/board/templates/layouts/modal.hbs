@@ -1,6 +1,6 @@
 <div class="fullscreen-overlay fixed">
   <div class="fullscreen-wrapper">
-    <div class="fullscreen-body" >
+    <div {{bind-attr class=":fullscreen-body view.modalSize"}} >
       {{yield}}
     </div>
   </div>

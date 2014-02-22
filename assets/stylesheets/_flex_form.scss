@@ -1,4 +1,41 @@
 .flex-form {
+
+  .with-line {
+    position: relative;
+    text-align: center;
+    margin: 6px 0;
+    margin-top:12px;
+    &:before {
+      content: "";
+      display:block;
+      border-top: 1px solid #ccc;
+      width: 40%;
+      height: 1px;
+      position: absolute;
+      top: 50%;
+    }
+    &:after {
+      content: "";
+      display:block;
+      border-top: 1px solid #ccc;
+      width: 40%;
+      right:0;
+      height: 1px;
+      position: absolute;
+      top: 50%;
+    }
+
+    span {
+      margin: auto;
+      padding: 0 20px;
+      color: #CCC;
+    }
+
+  }
+  .cancel {
+    margin: auto;
+  }
+
   margin: 0;
 
   @include display(flex);

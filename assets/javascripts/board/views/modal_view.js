@@ -1,5 +1,6 @@
 var ModalView = Em.View.extend({
   layoutName: "layouts/modal",
+  modalSize: "",
 
   didInsertElement: function() {
     App.animateModalOpen();
@@ -17,9 +18,6 @@ var ModalView = Em.View.extend({
      if($(event.target).is("[data-ember-action]")){return;}
      this.get('controller').send('closeModal');        
     }.bind(this))
-    
-   
-
 
     this.$(':input:not(.close)').first().focus();
   },
