@@ -1,12 +1,15 @@
 var IntegrationsController = Ember.ObjectController.extend({
   needs: ['application'],
-  isValid: function () {
-    return this.get("model.webhookUrl");
-  }.property("model.webhookUrl"),
-  disabled: function () {
-      return this.get("processing") || !this.get("isValid");
-  }.property("processing","isValid"),
   possibleIntegrations: [
+    Ember.Object.extend({
+      name: "Webhook",
+      attrs: {
+        webhookURL: ""
+      },
+      disabled: function(){
+        return !this.get("attrs.webhookURL")
+      }.property("attrs.webhookURL")
+    }).create(),
     Ember.Object.extend({
       name: "Gitter",
       attrs: {
@@ -19,6 +22,9 @@ var IntegrationsController = Ember.ObjectController.extend({
     }).create()
 
   ],
+  disabled: function(){
+    return this.get("processing") || this.get("editing.disabled");
+  }.property("processing","editing.disabled"),
   actions: {
     transitionTo: function(integration) {
       Ember.Route.prototype.render
@@ -42,17 +48,19 @@ var IntegrationsController = Ember.ObjectController.extend({
       var controller = this,
         endpoint = "/api/" + this.get("controllers.application.model.full_name") + "/integrations";
 
+        this.set("processing", true);
+
         Ember.$.post(endpoint,{
           integration: {
-            webhook_url: controller.get("model.webhookUrl")
+            name: this.get("editing.name"),
+            data: Ember.merge({},this.get("editing.attrs"))
           }
         }, "json").then(function(result) {
           controller.get("model.integrations")
             .pushObject(App.Integration.create(result));
+          controller.send("transitionTo", {name: "index"})
+          controller.set("processing", false);
         });
-
-      
-      controller.set("model.webhookUrl", "")
     },
     removeWebhook: function(hook){
       this.get("model.integrations").removeObject(hook)

@@ -46,12 +46,11 @@ class PublishWebhookJob
 
     result.rows.each do |r| 
       begin
-        Faraday.post do |req|
-          req.url r.value.integration.webhook_url
-          req.headers['Content-Type'] = 'application/json'
-          req.body = payload.to_json
-        end
-      rescue
+        service = Huboard::Service.services.detect { |srv| srv.to_s == r.value.integration.name }
+        srv = service.new payload[:meta][:action], r.value.integration.data, payload
+        srv.receive_event()
+      rescue => e
+        puts e
       end
     end
 

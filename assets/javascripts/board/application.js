@@ -638,13 +638,16 @@ module.exports = IndexController;
 },{}],16:[function(require,module,exports){
 var IntegrationsController = Ember.ObjectController.extend({
   needs: ['application'],
-  isValid: function () {
-    return this.get("model.webhookUrl");
-  }.property("model.webhookUrl"),
-  disabled: function () {
-      return this.get("processing") || !this.get("isValid");
-  }.property("processing","isValid"),
   possibleIntegrations: [
+    Ember.Object.extend({
+      name: "Webhook",
+      attrs: {
+        webhookURL: ""
+      },
+      disabled: function(){
+        return !this.get("attrs.webhookURL")
+      }.property("attrs.webhookURL")
+    }).create(),
     Ember.Object.extend({
       name: "Gitter",
       attrs: {
@@ -657,6 +660,9 @@ var IntegrationsController = Ember.ObjectController.extend({
     }).create()
 
   ],
+  disabled: function(){
+    return this.get("processing") || this.get("editing.disabled");
+  }.property("processing","editing.disabled"),
   actions: {
     transitionTo: function(integration) {
       Ember.Route.prototype.render
@@ -680,17 +686,19 @@ var IntegrationsController = Ember.ObjectController.extend({
       var controller = this,
         endpoint = "/api/" + this.get("controllers.application.model.full_name") + "/integrations";
 
+        this.set("processing", true);
+
         Ember.$.post(endpoint,{
           integration: {
-            webhook_url: controller.get("model.webhookUrl")
+            name: this.get("editing.name"),
+            data: Ember.merge({},this.get("editing.attrs"))
           }
         }, "json").then(function(result) {
           controller.get("model.integrations")
             .pushObject(App.Integration.create(result));
+          controller.send("transitionTo", {name: "index"})
+          controller.set("processing", false);
         });
-
-      
-      controller.set("model.webhookUrl", "")
     },
     removeWebhook: function(hook){
       this.get("model.integrations").removeObject(hook)
@@ -1139,6 +1147,14 @@ module.exports = Board;
 
 },{}],28:[function(require,module,exports){
 var Integration = Ember.Object.extend({
+  keys: function() {
+    return Ember.keys(this.get("integration.data")).map(function(key){
+      return {
+        key: key,
+        value: this.get("integration.data."+key)
+      };
+    }.bind(this));
+  }.property("integration.data")
 
 });
 
@@ -2854,7 +2870,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   hashContexts = {'disabled': depth0};
   hashTypes = {'disabled': "ID"};
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
-    'disabled': ("editing.disabled")
+    'disabled': ("disabled")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(" class=\"hb-button\">Submit webhook</button>\n        <div class=\"with-line\"><span>or</span></div>\n        <div class=\"cancel\"> <a href=\"#\" ");
   hashTypes = {};
@@ -2873,7 +2889,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = '', hashTypes, hashContexts;
-  data.buffer.push("\n<button type=\"button\" ");
+  data.buffer.push("\n<button type=\"button\" class=\"hb-button hb-button-grey\" ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "transitionTo", "integration", {hash:{},contexts:[depth0,depth0],types:["ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
@@ -2901,29 +2917,89 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
 function program1(depth0,data) {
   
-  var buffer = '', hashTypes, hashContexts;
-  data.buffer.push("\n          <li>\n            ");
+  var buffer = '', stack1, hashTypes, hashContexts;
+  data.buffer.push("\n          <li>\n            <div class=\"integration\">\n              <div class=\"title\">\n                ");
   hashTypes = {};
   hashContexts = {};
-  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "integration.integration.webhook_url", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\n            <button ");
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "integration.integration.name", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n              </div>\n              <dl>\n              ");
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers.each.call(depth0, "integration.keys", {hash:{},inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n            </div>\n            <button ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "removeWebhook", "integration", {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(" type=\"button\" class=\"hb-button\">Delete webhook</button>\n          </li>\n        ");
+  data.buffer.push(" type=\"button\" class=\"hb-button hb-button-grey\">Delete webhook</button>\n          </li>\n        ");
+  return buffer;
+  }
+function program2(depth0,data) {
+  
+  var buffer = '', hashTypes, hashContexts;
+  data.buffer.push("\n              <em>");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "key", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("</em>: ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "value", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n              ");
   return buffer;
   }
 
-  data.buffer.push("<div class=\"fullscreen-card\" style=\"padding:20px;\">\n    <h2> Integrations </h2>\n    <div class=\"flex-form-top\"> \n      <ul>\n        ");
+function program4(depth0,data) {
+  
+  
+  data.buffer.push("\n          <li>\n            <em> Integrations are totally rad, you should add one </em>\n          </li>\n        ");
+  }
+
+  data.buffer.push("<div class=\"fullscreen-card\" style=\"padding:20px;\">\n    <h2> Integrations </h2>\n    <div class=\"flex-form-top\"> \n      <ul class=\"unstyled\">\n        ");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers.each.call(depth0, "integration", "in", "integrations", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack1 = helpers.each.call(depth0, "integration", "in", "integrations", {hash:{},inverse:self.program(4, program4, data),fn:self.program(1, program1, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n      </ul>\n    </div>\n    <hr></hr>\n    ");
+  data.buffer.push("\n      </ul>\n    </div>\n    <hr></hr>\n    <h3> Add an integration </h3>\n    ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "outlet", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("\n</div>\n\n");
+  return buffer;
+  
+});
+
+Ember.TEMPLATES['integrations/webhook'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', stack1, hashContexts, hashTypes, options, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
+
+
+  data.buffer.push("\n    <div class=\"flex-form-bottom\">\n      <form ");
+  hashContexts = {'on': depth0};
+  hashTypes = {'on': "STRING"};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "submit", {hash:{
+    'on': ("submit")
+  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" class=\"flex-form\">\n        <h3>Instructions</h3>\n        <p>\n          Paste the webhook url below\n        </p>\n        <p>\n          Click the Submit webhook button to create the integration.\n        </p>\n        <label>\n          ");
+  hashContexts = {'value': depth0,'placeholder': depth0};
+  hashTypes = {'value': "ID",'placeholder': "STRING"};
+  options = {hash:{
+    'value': ("editing.attrs.webhookURL"),
+    'placeholder': ("Webhook url")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
+  data.buffer.push("\n        </label>\n        <button ");
+  hashContexts = {'disabled': depth0};
+  hashTypes = {'disabled': "ID"};
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'disabled': ("disabled")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" class=\"hb-button\">Submit webhook</button>\n        <div class=\"with-line\"><span>or</span></div>\n        <div class=\"cancel\"> <a href=\"#\" ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "cancel", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">Cancel</a> </div>\n      </form>\n    </div>\n\n\n");
   return buffer;
   
 });
