@@ -5,15 +5,14 @@
         {{#each integration in integrations}}
           <li>
             <div class="integration">
+              <button {{action "removeWebhook" integration}} type="button" class="hb-button hb-button-danger pull-right">Delete</button>
               <div class="title">
                 {{ integration.integration.name }}
               </div>
-              <dl>
               {{#each integration.keys }}
               <em>{{key}}</em>: {{value}}
               {{/each}}
             </div>
-            <button {{action "removeWebhook" integration}} type="button" class="hb-button hb-button-grey">Delete webhook</button>
           </li>
         {{else}}
           <li>

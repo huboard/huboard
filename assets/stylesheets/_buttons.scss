@@ -24,6 +24,11 @@
       @include button(hsl(0, 0%, 85%));
   }
 
+  &.hb-button-danger {
+    @include button(#f9646e);
+
+  }
+
   &.hb-button-icon {
     position:relative;
     padding-left: 36px;

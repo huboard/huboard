@@ -2513,22 +2513,22 @@ function program1(depth0,data) {
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "createNewIssue", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(" class=\"hb-button small\">Create new issue</button>\n      ");
-  hashContexts = {'title': depth0,'class': depth0};
-  hashTypes = {'title': "STRING",'class': "STRING"};
+  data.buffer.push(" class=\"hb-button small\">Create new issue</button>\n      <span class=\"dropdown\">\n        <a data-toggle=\"dropdown\" class=\"dropdown-toggle hb-icon-link\" href=\"#\">\n          <i class=\"ui-icon ui-icon-18 ui-icon-gear\"></i>\n        </a>\n        <ul class=\"dropdown-menu dropdown-menu-right\">\n          <li>\n              ");
+  hashContexts = {'title': depth0,'bubbles': depth0};
+  hashTypes = {'title': "STRING",'bubbles': "BOOLEAN"};
   options = {hash:{
     'title': ("Settings"),
-    'class': ("hb-icon-link")
+    'bubbles': (true)
   },inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   stack2 = ((stack1 = helpers['link-to'] || depth0['link-to']),stack1 ? stack1.call(depth0, "milestones.integrations", options) : helperMissing.call(depth0, "link-to", "milestones.integrations", options));
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\n    </div>\n  ");
+  data.buffer.push("\n          </li>\n        </ul>\n      </span>\n    </div>\n  ");
   return buffer;
   }
 function program2(depth0,data) {
   
   
-  data.buffer.push("\n        <i class=\"ui-icon ui-icon-18 ui-icon-gear\"></i>\n      ");
+  data.buffer.push("\n              Integrations\n              ");
   }
 
 function program4(depth0,data) {
@@ -2918,20 +2918,20 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = '', stack1, hashTypes, hashContexts;
-  data.buffer.push("\n          <li>\n            <div class=\"integration\">\n              <div class=\"title\">\n                ");
+  data.buffer.push("\n          <li>\n            <div class=\"integration\">\n              <button ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "removeWebhook", "integration", {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" type=\"button\" class=\"hb-button hb-button-danger pull-right\">Delete</button>\n              <div class=\"title\">\n                ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "integration.integration.name", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\n              </div>\n              <dl>\n              ");
+  data.buffer.push("\n              </div>\n              ");
   hashTypes = {};
   hashContexts = {};
   stack1 = helpers.each.call(depth0, "integration.keys", {hash:{},inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n            </div>\n            <button ");
-  hashTypes = {};
-  hashContexts = {};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "removeWebhook", "integration", {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(" type=\"button\" class=\"hb-button hb-button-grey\">Delete webhook</button>\n          </li>\n        ");
+  data.buffer.push("\n            </div>\n          </li>\n        ");
   return buffer;
   }
 function program2(depth0,data) {
