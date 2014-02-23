@@ -23,7 +23,7 @@ class Huboard
     def archive_issue(number)
        issue = gh.issues(number)
        labels = issue.labels.reject {|l| Huboard.all_patterns.any? {|p| p.match l.name }}.sort_by {|l| l.name}
-       gh.issues(number).patch(labels: labels)
+       gh.issues(number).patch(labels: labels).extend(Card).merge!({"repo" => {:owner => {:login => @user}, :name => @repo }})
     end
 
     def create_issue(params)
