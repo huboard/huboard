@@ -80,7 +80,26 @@ class Huboard
     end
 
     class Connection < Faraday::Connection
+      
+      class Timeout < Faraday::Middleware
+        begin
 
+        rescue LoadError, NameError => e
+          self.load_error = e
+        end
+
+        def initialize(app, *args)
+          @app = app
+        end
+
+
+
+        def call(env)
+          env[:request][:timeout] = 3 
+          env[:request][:open_timeout] = 0.5
+          @app.call env
+        end
+      end
 
       # Instantiates connection, accepts an options hash
       # for authenticated access
@@ -91,10 +110,12 @@ class Huboard
           builder.use     FaradayMiddleware::EncodeJson
           builder.use     FaradayMiddleware::Mashify
           builder.use     FaradayMiddleware::ParseJson
+          builder.use     Timeout
           #  builder.use     Ghee::Middleware::UriEscape
           builder.adapter Faraday.default_adapter
 
           builder.request :url_encoded
+          builder.request :retry, 3
           builder.response :logger
 
         end
