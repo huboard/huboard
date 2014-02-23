@@ -43,6 +43,9 @@ group :development do
   gem 'thin'
   gem 'heroku'
   gem 'pry'
+  gem 'pry-rescue'
+  gem 'pry-stack_explorer'
+  gem 'better_errors'
   gem 'librarian-chef'
 end
 
