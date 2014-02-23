@@ -1,5 +1,5 @@
-require "hashie" 
-require "hashie"
+
+require "better_errors" 
 require 'sinatra/content_for'
 require "hashie" 
 require_relative "auth/github"
@@ -70,6 +70,11 @@ class HuboardApplication < Sinatra::Base
 
   configure :production, :test, :staging do 
     set :asset_protocol, :https
+  end
+
+  configure :development do
+    use BetterErrors::Middleware
+    BetterErrors.application_root = __dir__
   end
 
 
