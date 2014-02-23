@@ -385,6 +385,12 @@ var CardController = Ember.ObjectController.extend(SocketMixin,{
          this.send("forceRepaint", "milestones");
        }.bind(this));
     },
+    issue_status_changed: function(message){
+       this.get("model").set("_data", message.issue._data)
+    },
+    issue_archived: function(){
+      this.send('handle_archive', this.get('model'));
+    },
     issue_closed: function(message) {
        this.get("model").set("state", message.issue.state)
     },
@@ -448,6 +454,10 @@ module.exports = CardController;
 },{"../mixins/socket":25}],12:[function(require,module,exports){
 var ColumnController = Ember.ObjectController.extend({
   actions: {
+    handle_archive: function(issue) {
+      this.get("controllers.index.issues").removeObject(issue);
+      issue.set('isDestroying', true)
+    },
     archive: function (issue) {
       this.get("controllers.index.issues").removeObject(issue);
       issue.archive();
@@ -1173,7 +1183,7 @@ var Issue = Ember.Object.extend(Serializable,{
             repo = this.get("repo.name"),
             full_name = user + "/" + repo,
             previousState = this.get("_data.custom_state"),
-            options = {dataType: "json"};
+            options = {dataType: "json", data:{correlationId: this.get("correlationId")}};
 
         this.set("_data.custom_state", value);
         this.set("processing", true);
@@ -1213,7 +1223,7 @@ var Issue = Ember.Object.extend(Serializable,{
   saveNew: function (order) {
     return Ember.$.ajax( {
       url: "/api/" + this.get("repo.full_name") + "/issues", 
-      data: JSON.stringify({issue: this.serialize(), order: order}),
+      data: JSON.stringify({issue: this.serialize(), order: order, correlationId: this.get("correlationId") }),
       dataType: 'json',
       type: "POST",
       contentType: "application/json"}).then(function(response){
@@ -2960,7 +2970,7 @@ function program4(depth0,data) {
   hashContexts = {};
   stack1 = helpers.each.call(depth0, "integration", "in", "integrations", {hash:{},inverse:self.program(4, program4, data),fn:self.program(1, program1, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n      </ul>\n    </div>\n    <hr></hr>\n    <h3> Add an integration </h3>\n    ");
+  data.buffer.push("\n      </ul>\n    </div>\n    <hr></hr>\n    <h2> Add an integration </h2>\n    ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "outlet", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));

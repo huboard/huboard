@@ -12,6 +12,12 @@ var CardController = Ember.ObjectController.extend(SocketMixin,{
          this.send("forceRepaint", "milestones");
        }.bind(this));
     },
+    issue_status_changed: function(message){
+       this.get("model").set("_data", message.issue._data)
+    },
+    issue_archived: function(){
+      this.send('handle_archive', this.get('model'));
+    },
     issue_closed: function(message) {
        this.get("model").set("state", message.issue.state)
     },

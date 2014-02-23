@@ -10,7 +10,7 @@ var Issue = Ember.Object.extend(Serializable,{
             repo = this.get("repo.name"),
             full_name = user + "/" + repo,
             previousState = this.get("_data.custom_state"),
-            options = {dataType: "json"};
+            options = {dataType: "json", data:{correlationId: this.get("correlationId")}};
 
         this.set("_data.custom_state", value);
         this.set("processing", true);
@@ -50,7 +50,7 @@ var Issue = Ember.Object.extend(Serializable,{
   saveNew: function (order) {
     return Ember.$.ajax( {
       url: "/api/" + this.get("repo.full_name") + "/issues", 
-      data: JSON.stringify({issue: this.serialize(), order: order}),
+      data: JSON.stringify({issue: this.serialize(), order: order, correlationId: this.get("correlationId") }),
       dataType: 'json',
       type: "POST",
       contentType: "application/json"}).then(function(response){

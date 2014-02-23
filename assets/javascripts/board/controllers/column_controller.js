@@ -1,5 +1,9 @@
 var ColumnController = Ember.ObjectController.extend({
   actions: {
+    handle_archive: function(issue) {
+      this.get("controllers.index.issues").removeObject(issue);
+      issue.set('isDestroying', true)
+    },
     archive: function (issue) {
       this.get("controllers.index.issues").removeObject(issue);
       issue.archive();
