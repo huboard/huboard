@@ -45,6 +45,7 @@ class PublishWebhookJob
   def perform payload
     full_name = payload[:meta][:repo_full_name]
 
+
     result = couch.integrations.by_full_name "\"#{CGI.escape(full_name.gsub("/","-"))}\""
 
     result.rows.each do |r| 
@@ -72,7 +73,31 @@ class PublishWebhookJob
   end
 end
 
+class IssueStatusChangedEvent < IssueEventJob
+  include IsPublishable
+  def publish(issue, action, user, correlationId = "")
+    payload = {
+      meta: {
+        action: "issue_status_changed",
+        identifier: issue.number,
+        timestamp: Time.now.utc.iso8601,
+        user: user,
+        correlationId: correlationId,
+        repo_full_name: "#{issue.repo.owner.login}/#{issue.repo.name}"
+      },
+      payload: {
+        issue: issue,
+        action: action
+      }
+    }
+
+    execute payload
+  end
+
+end
+
 class IssueMovedEvent < IssueEventJob
+  include IsPublishable
   def publish(issue, previous, user, correlationId = "")
     payload = {
       meta: {
@@ -95,6 +120,7 @@ class IssueMovedEvent < IssueEventJob
 end
 
 class IssueReorderedEvent < IssueEventJob
+  include IsPublishable
   def publish(issue, user, correlationId = "")
     payload = {
       meta: {
@@ -116,6 +142,7 @@ class IssueReorderedEvent < IssueEventJob
 end
 
 class IssueAssignedEvent < IssueEventJob
+  include IsPublishable
   def publish(issue, user, correlationId = "")
     payload = {
       meta: {
@@ -137,6 +164,7 @@ class IssueAssignedEvent < IssueEventJob
 end
 
 class IssueMilestoneChangedEvent < IssueEventJob
+  include IsPublishable
   def publish(issue, user, correlationId = "")
     payload = {
       meta: {
@@ -158,12 +186,13 @@ class IssueMilestoneChangedEvent < IssueEventJob
 end
 
 class IssueClosedEvent < IssueEventJob
+  include IsPublishable
   def publish(issue, user, correlationId = "")
     payload = {
       meta: {
         action: "issue_closed",
         identifier: issue.number,
-        timestamp: Time.now.utc.iso8601,
+        timestamp: issue.closed_at,
         user: user,
         correlationId: correlationId,
         repo_full_name: "#{issue.repo.owner.login}/#{issue.repo.name}"
@@ -178,12 +207,13 @@ class IssueClosedEvent < IssueEventJob
 end
 
 class IssueOpenedEvent < IssueEventJob
+  include IsPublishable
   def publish(issue, user, correlationId = "")
     payload = {
       meta: {
         action: "issue_opened",
         identifier: issue.number,
-        timestamp: Time.now.utc.iso8601,
+        timestamp: issue.created_at,
         user: user,
         correlationId: correlationId,
         repo_full_name: "#{issue.repo.owner.login}/#{issue.repo.name}"
@@ -197,13 +227,35 @@ class IssueOpenedEvent < IssueEventJob
   end
 end
 
+class IssueArchivedEvent < IssueEventJob
+  def publish(issue, user, correlationId = "")
+    payload = {
+      meta: {
+        action: "issue_archived",
+        identifier: issue.number,
+        timestamp: issue.created_at,
+        user: user,
+        correlationId: correlationId,
+        repo_full_name: "#{issue.repo.owner.login}/#{issue.repo.name}"
+      },
+      payload: {
+        issue: issue
+      }
+    }
+
+    execute payload
+  end
+end
+
+
 class IssueReopenedEvent < IssueEventJob
+  include IsPublishable
   def publish(issue, user, correlationId = "")
     payload = {
       meta: {
         action: "issue_reopened",
         identifier: issue.number,
-        timestamp: Time.now.utc.iso8601,
+        timestamp: issue.updated_at,
         user: user,
         correlationId: correlationId,
         repo_full_name: "#{issue.repo.owner.login}/#{issue.repo.name}"
