@@ -1,21 +1,22 @@
 require 'time'
 
+
 class IssueEventJob
   include SuckerPunch::Job
 
   def perform(payload)
+    payload[:meta].merge! :origin => HuboardApplication.settings.server_origin
     if ENV["SOCKET_BACKEND"]
       begin
         Faraday.post do |req|
           req.url "#{ENV["SOCKET_BACKEND"]}/hook"
-          #req.url "http://requestb.in/1d0hd3s1"
           req.headers['Content-Type'] = 'application/json'
           req.body = payload.merge({secret: ENV["SOCKET_SECRET"]}).to_json
         end
       rescue
       end
     end
-    PublishWebhookJob.new.publish payload if payload[:meta][:correlationId]
+    PublishWebhookJob.new.publish payload if self.class.included_modules.include? IsPublishable
   rescue
   end
 
@@ -31,6 +32,8 @@ class IssueEventJob
     end
   end
 end
+
+module IsPublishable; end
 
 class PublishWebhookJob
   include SuckerPunch::Job

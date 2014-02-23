@@ -59,6 +59,11 @@ class HuboardApplication < Sinatra::Base
     password: ENV["CACHE_PASSWORD"] = ENV["MEMCACHIER_PASSWORD"]
   }
 
+  set :server_origin, {
+    scheme: ENV["HTTP_URL_SCHEME"] || "https",
+    host: ENV["HTTP_HOST"] || "huboard.com"
+  }
+
   # end configuration
 
   set :assets_precompile, %w(splash.css marketing.css application.js flex_layout.css bootstrap.css application.css ember-accounts.js board/application.js bootstrap.js *.png *.jpg *.svg *.eot *.ttf *.woff *.js).concat([/\w+\.(?!js|css).+/, /application.(css|js)$/])
