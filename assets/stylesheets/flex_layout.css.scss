@@ -15,6 +15,7 @@
 @import "assignees";
 @import "flex_form";
 @import "issue";
+@import "integrations";
 
 #application > .ember-view {
    @include display(flex);

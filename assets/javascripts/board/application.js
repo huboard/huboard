@@ -2965,7 +2965,7 @@ function program4(depth0,data) {
   data.buffer.push("\n          <li>\n            <em> Integrations are totally rad, you should add one </em>\n          </li>\n        ");
   }
 
-  data.buffer.push("<div class=\"fullscreen-card\" style=\"padding:20px;\">\n    <h2> Integrations </h2>\n    <div class=\"flex-form-top\"> \n      <ul class=\"unstyled\">\n        ");
+  data.buffer.push("<div class=\"fullscreen-card\" style=\"padding:20px;\">\n    <h2> Integrations </h2>\n    <div class=\"flex-form-top\"> \n      <ul class=\"unstyled integrations\">\n        ");
   hashTypes = {};
   hashContexts = {};
   stack1 = helpers.each.call(depth0, "integration", "in", "integrations", {hash:{},inverse:self.program(4, program4, data),fn:self.program(1, program1, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
