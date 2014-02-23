@@ -23,7 +23,7 @@ require 'compass'
 
 require './lib/bootstrap'
 
-configure :production do 
+configure :production, :staging do 
   require "newrelic_rpm"
   use Rack::SSL
 end
