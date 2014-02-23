@@ -1,5 +1,4 @@
 
-require "better_errors" 
 require 'sinatra/content_for'
 require "hashie" 
 require_relative "auth/github"
@@ -73,6 +72,7 @@ class HuboardApplication < Sinatra::Base
   end
 
   configure :development do
+    require "better_errors" 
     use BetterErrors::Middleware
     BetterErrors.application_root = __dir__
   end
