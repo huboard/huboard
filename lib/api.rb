@@ -62,7 +62,13 @@ class Huboard
     end
 
     post '/:user/:repo/issues' do 
-       return json huboard.board(params[:user],params[:repo]).create_issue JSON.parse(request.body.read)
+      client_data = JSON.parse(request.body.read)
+       issue = huboard.board(params[:user],params[:repo])
+          .create_issue client_data 
+
+       IssueOpenedEvent.new.publish issue, current_user.attribs, client_data["correlationId"]
+
+       return json issue
     end
 
     post '/:user/:repo/issues/:number/comment' do 
@@ -89,6 +95,8 @@ class Huboard
       api = huboard.board(params[:user], params[:repo])
       issue = api.issue(params[:number]).blocked
 
+      IssueStatusChangedEvent.new.publish issue, "blocked", current_user.attribs, params[:correlationId]
+
       return json issue 
     end
 
@@ -96,6 +104,8 @@ class Huboard
 
       api = huboard.board(params[:user], params[:repo])
       issue = api.issue(params[:number]).unblocked
+
+      IssueStatusChangedEvent.new.publish issue, "unblocked", current_user.attribs, params[:correlationId]
 
       return json issue 
     end
@@ -105,6 +115,8 @@ class Huboard
       api = huboard.board(params[:user], params[:repo])
       issue = api.issue(params[:number]).ready
 
+      IssueStatusChangedEvent.new.publish issue, "ready", current_user.attribs, params[:correlationId]
+
       return json issue 
     end
 
@@ -112,6 +124,8 @@ class Huboard
 
       api = huboard.board(params[:user], params[:repo])
       issue = api.issue(params[:number]).unready
+
+      IssueStatusChangedEvent.new.publish issue, "unready", current_user.attribs, params[:correlationId]
 
       return json issue 
     end
@@ -146,7 +160,9 @@ class Huboard
 
     post '/:user/:repo/archiveissue' do 
       user, repo, number = params[:user], params[:repo], params[:number]
-      json huboard.board(user, repo).archive_issue(number)
+      issue = huboard.board(user, repo).archive_issue(number)
+      IssueArchivedEvent.new.publish issue, current_user.attribs, params[:correlationId]
+      json issue
     end
 
     post '/:user/:repo/reordermilestone' do 
