@@ -9,7 +9,7 @@ class IssueEventJob
     # guard clause for double events
 
     Huboard::Caching::ConnectionPool.connection_pool.with do |dalli|
-      key = "#{payload[:meta][:action]}.#{payload[:meta][:timestamp]}"
+      key = "#{payload[:meta][:action]}.#{payload[:meta][:user][:id]}.#{payload[:meta][:identifier]}.#{payload[:meta][:timestamp]}"
       return if dalli.get(key)
       dalli.set(key, payload.to_s)
     end
