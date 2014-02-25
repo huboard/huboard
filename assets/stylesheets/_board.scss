@@ -71,6 +71,7 @@
     }
 }
 .board {
+  @include user-select(none);
     .dim {
       opacity: 0.4;
       @include transition (opacity 0.6s, ease-out);
