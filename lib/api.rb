@@ -195,11 +195,13 @@ class Huboard
     end
 
     get '/:user/:repo/integrations' do
+      raise Sinatra::NotFound unless gh.connection.get("/repos/#{params[:user]}/#{params[:repo]}/collaborators/#{current_user.login}").status == 204
       repo = gh.repos(params[:user],params[:repo])
       json couch.integrations.by_repo(repo.id)
     end
 
     post '/:user/:repo/integrations' do
+      raise Sinatra::NotFound unless gh.connection.get("/repos/#{params[:user]}/#{params[:repo]}/collaborators/#{current_user.login}").status == 204
       repo = gh.repos(params[:user],params[:repo])
       result = couch.connection.post("./",{
             github: {repo: repo.to_hash, user: current_user.attribs},
