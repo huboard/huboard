@@ -2,9 +2,31 @@ require 'dalli'
 require 'forwardable'
 require 'faraday_middleware/addressable_patch'
 require 'digest/md5'
+require 'connection_pool'
 
 class Huboard
   class Client
+    class ConnectionPool
+
+      def self.options
+        @options ||= {
+          namespace: "huboard_v1",
+          compress: true,
+          expires_in: 1.day,
+          username: HuboardApplication.cache_config[:username],
+          password: HuboardApplication.cache_config[:password]
+        }
+      end
+
+      def self.connection_pool
+        @connection_pool = ::ConnectionPool.new(:size => 20, :timeout => 10) {
+          Dalli::Client.new(HuboardApplication.cache_config[:servers].split(","), options)
+        }
+      end
+
+    end
+
+
     class SimpleCache
 
       def initialize(app, options)
@@ -12,16 +34,19 @@ class Huboard
         @app = app
       end
 
-      def dalli
-        @dalli ||= Dalli::Client.new(HuboardApplication.cache_config[:servers].split(","), @options)
+      def cache
+        @dalli ||= ConnectionPool.connection_pool
       end
 
       def clear(key)
-        dalli.delete(key)
+        cache.with do |dalli|
+          dalli.delete(key)
+        end
       end
 
       def read(key, app, env)
-        if cached = dalli.get(key)
+
+        if cached = get(key)
           cached = Marshal.load(cached)
           etag =  cached.headers[:etag]
 
@@ -45,9 +70,17 @@ class Huboard
         end
       end
 
+      def get(key)
+        cache.with do |dalli|
+          dalli.get(key)
+        end
+      end
+
       def write(key, data)
-        dalli.set(key, Marshal.dump(data))
-        data
+        cache.with do |dalli|
+          dalli.set(key, Marshal.dump(data))
+          data
+        end
       end
 
       def fetch(key, app, env)
