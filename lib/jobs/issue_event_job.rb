@@ -5,7 +5,17 @@ class IssueEventJob
   include SuckerPunch::Job
 
   def perform(payload)
+    
+    # guard clause for double events
+
+    Huboard::Caching::ConnectionPool.connection_pool.with do |dalli|
+      key = "#{payload[:meta][:action]}.#{payload[:meta][:timestamp]}"
+      return if dalli.get(key)
+      dalli.set(key, payload.to_s)
+    end
+
     payload[:meta].merge! :origin => HuboardApplication.settings.server_origin
+
     if ENV["SOCKET_BACKEND"]
       begin
         Faraday.post do |req|
