@@ -97,7 +97,7 @@
   App.User = Ember.Object.extend({
 
     gravatar_url : function() {
-      return this.get("avatar_url") + "&s=24&d=retro"
+      return this.get("avatar_url")
 
     }.property("avatar_url"),
 
@@ -116,7 +116,7 @@
   App.Org = Ember.Object.extend({
 
     gravatar_url : function() {
-      return this.get("avatar_url") + "&s=24&d=retro"
+      return this.get("avatar_url") 
 
     }.property("avatar_url"),
 

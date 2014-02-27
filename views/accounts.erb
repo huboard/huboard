@@ -16,7 +16,7 @@
       <ul class="nav nav-list">
         <li>
         {{#linkTo "index" }} 
-        <img {{bindAttr src=model.user.gravatar_url  }} /> 
+        <img height="24" width="24"  {{bindAttr src=model.user.gravatar_url  }} /> 
         {{ model.user.login }}
         {{/linkTo}}
         </li>
@@ -24,7 +24,7 @@
         {{#each model.orgs}}
         <li>
         {{#linkTo "profile" this}} 
-        <img {{bindAttr src=gravatar_url  }} /> 
+        <img  height="24" width="24" {{bindAttr src=gravatar_url  }} /> 
           {{ login }} 
         {{/linkTo}}
         </li>

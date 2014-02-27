@@ -17,7 +17,7 @@ var HbAvatarComponent = Ember.Component.extend({
  
   gravatarUrl: function() {
     return this.get("user.avatar_url") ?
-             this.get("user.avatar_url") + (this.get("user.gravatar_id") ? '&s='+ this.get("width") : '')
+             this.get("user.avatar_url")
           :  'https://secure.gravatar.com/avatar/' + this.get("user") + '?s='+ this.get("width") +'&d=retro';
   }
 });
