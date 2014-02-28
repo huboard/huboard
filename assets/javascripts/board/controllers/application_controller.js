@@ -22,7 +22,16 @@ var ApplicationController = Ember.ObjectController.extend(SocketMixin,{
       if(issue) {
         issue.set("state", "open");
       } else {
-        this.get("model.board.issues").pushObject(App.Issue.create(message.issue));
+        var model = App.Issue.create(message.issue);
+        if(message.issue.current_state.name === "__nil__") {
+          model.set("current_state", this.get("model.board.columns.firstObject"));
+        }else {
+          var column = this.get("model.board.columns").find(function(c) {
+            return c.name == message.issue.current_state.name;
+          });
+          model.set("current_state", column);
+        }
+        this.get("model.board.issues").pushObject(model);
         this.send("forceRepaint");
       }
     },
