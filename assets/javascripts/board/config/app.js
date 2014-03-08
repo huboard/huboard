@@ -66,6 +66,16 @@ Ember.onLoad("Ember.Application", function ($app) {
       }
     }
   })
+  $app.initializer({
+    name: "settings",
+    initialize: function(container, application) {
+      application.register('repo:main', application.get("repo"), {instantiate: false});
+      application.register('settings:main', application.Settings);
+      application.inject('settings:main', 'repo', 'repo:main');
+      application.inject('controller', 'settings', 'settings:main');
+      application.inject('view', 'settings', 'settings:main');
+    }
+  })
 })
 
 var App = Ember.Application.create({

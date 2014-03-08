@@ -15,7 +15,14 @@
               Integrations
               {{/link-to}}
           </li>
-        </ul>
+          <li class="divider"></li>
+          {{#view "settings.showCounts" }}
+            <a href="#">
+              <i class="ui-icon ui-icon-checkmark"></i>
+              Show counts
+            </a>
+          {{/view}}
+          </ul>
       </span>
     </div>
   {{else}}
