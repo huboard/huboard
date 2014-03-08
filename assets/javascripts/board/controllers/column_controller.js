@@ -17,8 +17,15 @@ var ColumnController = Ember.ObjectController.extend({
   isFirstColumn: function(){
     return this.get("controllers.index.columns.firstObject.name") === this.get("model.name");
   }.property("controllers.index.columns.firstObject"),
-  isCollapsed: function() {
-    return this.get("isFirstColumn");
+  isCollapsed: function(key, value) {
+    if(arguments.length > 1) {
+      debugger
+      this.set("settings.taskColumn" + this.get("model.index") + "Collapsed", value);
+      return value;
+    } else {
+      debugger
+      return this.get("settings.taskColumn" + this.get("model.index") + "Collapsed");
+    }
   }.property(),
   isHovering: false,
   getIssues: function(){

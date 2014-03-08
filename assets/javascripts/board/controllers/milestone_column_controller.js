@@ -6,6 +6,16 @@ var MilestoneColumnController = Ember.ObjectController.extend({
     return issues;
 
   },
+  isCollapsed: function(key, value) {
+    if(arguments.length > 1) {
+      debugger
+      this.set("settings.milestoneColumn" + this.get("model.milestone.number") + "Collapsed", value);
+      return value;
+    } else {
+      debugger
+      return this.get("settings.milestoneColumn" + this.get("model.milestone.number") + "Collapsed");
+    }
+  }.property(),
   issues: function() {
     return this.getIssues();
   }.property("controllers.milestones.forceRedraw"),
