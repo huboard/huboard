@@ -19,11 +19,9 @@ var ColumnController = Ember.ObjectController.extend({
   }.property("controllers.index.columns.firstObject"),
   isCollapsed: function(key, value) {
     if(arguments.length > 1) {
-      debugger
       this.set("settings.taskColumn" + this.get("model.index") + "Collapsed", value);
       return value;
     } else {
-      debugger
       return this.get("settings.taskColumn" + this.get("model.index") + "Collapsed");
     }
   }.property(),
