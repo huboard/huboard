@@ -16,7 +16,7 @@ var CardController = Ember.ObjectController.extend(SocketMixin,{
        this.get("model").set("_data", message.issue._data)
     },
     issue_archived: function(){
-      this.send('handle_archive', this.get('model'));
+      this.get('model').set('isArchived', true);
     },
     issue_closed: function(message) {
        this.get("model").set("state", message.issue.state)

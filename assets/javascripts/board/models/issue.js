@@ -114,7 +114,7 @@ var Issue = Ember.Object.extend(Serializable,{
         correlationId: this.get("correlationId")
       }).then(function () {
         this.set("processing", false);
-        this.set("isDestroying", true);
+        this.set("isArchived", true);
       }.bind(this))
   },
   close: function () {

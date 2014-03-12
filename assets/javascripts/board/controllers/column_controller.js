@@ -1,14 +1,4 @@
 var ColumnController = Ember.ObjectController.extend({
-  actions: {
-    handle_archive: function(issue) {
-      this.get("controllers.index.issues").removeObject(issue);
-      issue.set('isDestroying', true)
-    },
-    archive: function (issue) {
-      this.get("controllers.index.issues").removeObject(issue);
-      issue.archive();
-    }
-  },
   needs: ["index"],
   style: Ember.computed.alias("controllers.index.column_style"),
   isLastColumn: function(){
@@ -31,8 +21,12 @@ var ColumnController = Ember.ObjectController.extend({
     var column = this.get("model");
     var issues = this.get("controllers.index.model").combinedIssues().filter(function(i){
       return i.current_state.index === index;
-
-    }).map(function (i){
+    })
+    .filter(function(i) {
+      // FIXME: this flag is for archived issue left on the board.
+      return !i.get("isArchived");
+    })
+    .map(function (i){
        i.set("current_state", column);
        return i;
     }).sort(function (a, b){

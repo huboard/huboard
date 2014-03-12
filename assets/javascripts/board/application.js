@@ -408,7 +408,7 @@ var CardController = Ember.ObjectController.extend(SocketMixin,{
        this.get("model").set("_data", message.issue._data)
     },
     issue_archived: function(){
-      this.send('handle_archive', this.get('model'));
+      this.get('model').set('isArchived', true);
     },
     issue_closed: function(message) {
        this.get("model").set("state", message.issue.state)
@@ -472,16 +472,6 @@ module.exports = CardController;
 
 },{"../mixins/socket":25}],12:[function(require,module,exports){
 var ColumnController = Ember.ObjectController.extend({
-  actions: {
-    handle_archive: function(issue) {
-      this.get("controllers.index.issues").removeObject(issue);
-      issue.set('isDestroying', true)
-    },
-    archive: function (issue) {
-      this.get("controllers.index.issues").removeObject(issue);
-      issue.archive();
-    }
-  },
   needs: ["index"],
   style: Ember.computed.alias("controllers.index.column_style"),
   isLastColumn: function(){
@@ -504,8 +494,12 @@ var ColumnController = Ember.ObjectController.extend({
     var column = this.get("model");
     var issues = this.get("controllers.index.model").combinedIssues().filter(function(i){
       return i.current_state.index === index;
-
-    }).map(function (i){
+    })
+    .filter(function(i) {
+      // FIXME: this flag is for archived issue left on the board.
+      return !i.get("isArchived");
+    })
+    .map(function (i){
        i.set("current_state", column);
        return i;
     }).sort(function (a, b){
@@ -871,8 +865,12 @@ module.exports = IssuesEditController;
 var MilestoneColumnController = Ember.ObjectController.extend({
   needs: ["milestones"],
   getIssues: function () {
-    var issues = this.get("controllers.milestones.model.issues").
-      filter(this.get("filterBy"));
+    var issues = this.get("controllers.milestones.model.issues")
+      .filter(function(i) {
+        // FIXME: this flag is for archived issue left on the board.
+        return !i.get("isArchived");
+      })
+      .filter(this.get("filterBy"));
     return issues;
 
   },
@@ -1325,7 +1323,7 @@ var Issue = Ember.Object.extend(Serializable,{
         correlationId: this.get("correlationId")
       }).then(function () {
         this.set("processing", false);
-        this.set("isDestroying", true);
+        this.set("isArchived", true);
       }.bind(this))
   },
   close: function () {
@@ -1651,7 +1649,9 @@ var IndexRoute = Ember.Route.extend({
       this.controllerFor("issue.create").set("model", App.Issue.createNew());
       this.send("openModal","issue.create")
     },
-
+    archive: function (issue) {
+      issue.archive();
+    },
     openIssueFullscreen: function(model){
       this.transitionTo("index.issue", model)
     },
@@ -1768,6 +1768,9 @@ module.exports = MilestonesRoute =  Ember.Route.extend({
     createNewIssue : function () {
       this.controllerFor("issue.create").set("model", App.Issue.createNew());
       this.send("openModal","issue.create")
+    },
+    archive: function (issue) {
+      issue.archive();
     },
     openIssueFullscreen: function(model){
       this.transitionTo("milestones.issue", model)
@@ -2974,6 +2977,16 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 });
 
 Ember.TEMPLATES['issue/events/subscribed'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '';
+
+
+  return buffer;
+  
+});
+
+Ember.TEMPLATES['issue/events/unsubscribed'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   var buffer = '';
@@ -66377,10 +66390,17 @@ var CardWrapperView = Em.View.extend({
       Ember.run.once(function () {
         var view = this;
         this.$().fadeOut("fast", function () {
-          view.destroy();
+          var parentView = view.get("parentView"),
+              issues = parentView.get("content"),
+              issue = issues.find(function(i) {
+                return i.id === view.get("content.id");
+              });
+
+          issues.removeObject(issue);
+
         })
       }.bind(this))
-    }.observes("content.isDestroying"),
+    }.observes("content.isArchived"),
     isDraggable: function( ){
       return App.get("loggedIn") && App.get("repo.is_collaborator");
     }.property("App.loggedIn","content.state"),

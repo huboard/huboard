@@ -1,8 +1,12 @@
 var MilestoneColumnController = Ember.ObjectController.extend({
   needs: ["milestones"],
   getIssues: function () {
-    var issues = this.get("controllers.milestones.model.issues").
-      filter(this.get("filterBy"));
+    var issues = this.get("controllers.milestones.model.issues")
+      .filter(function(i) {
+        // FIXME: this flag is for archived issue left on the board.
+        return !i.get("isArchived");
+      })
+      .filter(this.get("filterBy"));
     return issues;
 
   },

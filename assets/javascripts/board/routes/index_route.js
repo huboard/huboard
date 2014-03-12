@@ -28,7 +28,9 @@ var IndexRoute = Ember.Route.extend({
       this.controllerFor("issue.create").set("model", App.Issue.createNew());
       this.send("openModal","issue.create")
     },
-
+    archive: function (issue) {
+      issue.archive();
+    },
     openIssueFullscreen: function(model){
       this.transitionTo("index.issue", model)
     },

@@ -13,10 +13,17 @@ var CardWrapperView = Em.View.extend({
       Ember.run.once(function () {
         var view = this;
         this.$().fadeOut("fast", function () {
-          view.destroy();
+          var parentView = view.get("parentView"),
+              issues = parentView.get("content"),
+              issue = issues.find(function(i) {
+                return i.id === view.get("content.id");
+              });
+
+          issues.removeObject(issue);
+
         })
       }.bind(this))
-    }.observes("content.isDestroying"),
+    }.observes("content.isArchived"),
     isDraggable: function( ){
       return App.get("loggedIn") && App.get("repo.is_collaborator");
     }.property("App.loggedIn","content.state"),
