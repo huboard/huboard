@@ -23,6 +23,12 @@
    min-height: 100vh;
 }
 
+[draggable] {
+  -khtml-user-drag: element;
+  -webkit-user-drag: element;
+  user-drag: element;
+}
+
 
 .main-toolbar {
   @include display(flex);

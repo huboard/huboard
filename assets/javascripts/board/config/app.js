@@ -22,26 +22,6 @@ Ember.LinkView.reopen({
   }
 })
 
-Ember.EventDispatcher = Ember.EventDispatcher.extend({
-  events: {
-    touchstart  : 'touchStart',
-    touchmove   : 'touchMove',
-    touchend    : 'touchEnd',
-    touchcancel : 'touchCancel',
-    keydown     : 'keyDown',
-    keyup       : 'keyUp',
-    keypress    : 'keyPress',
-    mousedown   : 'mouseDown',
-    mouseup     : 'mouseUp',
-    click       : 'click',
-    focusin     : 'focusIn',
-    focusout    : 'focusOut',
-    submit      : 'submit',
-    input       : 'input',
-    change      : 'change'
-  }
-});
-
 var correlationId = require("../utilities/correlationId")
 
 Ember.onLoad("Ember.Application", function ($app) {

@@ -164,26 +164,6 @@ Ember.LinkView.reopen({
   }
 })
 
-Ember.EventDispatcher = Ember.EventDispatcher.extend({
-  events: {
-    touchstart  : 'touchStart',
-    touchmove   : 'touchMove',
-    touchend    : 'touchEnd',
-    touchcancel : 'touchCancel',
-    keydown     : 'keyDown',
-    keyup       : 'keyUp',
-    keypress    : 'keyPress',
-    mousedown   : 'mouseDown',
-    mouseup     : 'mouseUp',
-    click       : 'click',
-    focusin     : 'focusIn',
-    focusout    : 'focusOut',
-    submit      : 'submit',
-    input       : 'input',
-    change      : 'change'
-  }
-});
-
 var correlationId = require("../utilities/correlationId")
 
 Ember.onLoad("Ember.Application", function ($app) {
@@ -1972,10 +1952,11 @@ function program6(depth0,data) {
   
   var buffer = '', hashContexts, hashTypes;
   data.buffer.push("\n    ");
-  hashContexts = {'lastClicked': depth0,'data-assignee': depth0,'gravatarUser': depth0,'content': depth0};
-  hashTypes = {'lastClicked': "ID",'data-assignee': "ID",'gravatarUser': "ID",'content': "ID"};
+  hashContexts = {'lastClicked': depth0,'assignee': depth0,'data-assignee': depth0,'gravatarUser': depth0,'content': depth0};
+  hashTypes = {'lastClicked': "ID",'assignee': "ID",'data-assignee': "ID",'gravatarUser': "ID",'content': "ID"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.AssigneeFilterView", {hash:{
     'lastClicked': ("controller.lastClicked"),
+    'assignee': ("filter.avatar.login"),
     'data-assignee': ("filter.avatar.login"),
     'gravatarUser': ("filter.avatar"),
     'content': ("filter")
@@ -66291,7 +66272,12 @@ var AssigneeFilterView = Ember.View.extend({
   templateName : "assignee/filter",
   classNames: ["assignee"],
   classNameBindings: ["modeClass"],
-  attributeBindings: ["data-assignee"],
+  attributeBindings: ["draggable"],
+  draggable: true,
+  dragStart: function(ev){
+    ev.dataTransfer.effectAllowed = "copy";
+    ev.dataTransfer.setData("text/plain", this.get("assignee"));
+  },
   click: function (){
     var previous = this.get("lastClicked");
 
@@ -66337,10 +66323,7 @@ var AssigneeFilterView = Ember.View.extend({
   }.property("lastClicked.mode"),
   mode: 0,
   modes:[0,1,2,0],
-  gravatarId: null,
-  setupDraggable: function(){
-    this.$().draggable({helper:"clone", appendTo: "body", zIndex: 100, scope: "assignee"})
-  }.on("didInsertElement")
+  gravatarId: null
 });
 
 module.exports = AssigneeFilterView;
@@ -66439,17 +66422,37 @@ var CardWrapperView = Em.View.extend({
       var view = Em.View.views[this.$().find("> div").attr("id")];
       view.get("controller").send("fullscreen")
     },
-    setupDroppable: function() {
-      var self = this;
-      this.$().droppable({ scope: "assignee", 
-        hoverClass: "assignee-accept",
-        drop: function(ev, ui) {
-          var view = Em.View.views[self.$().find("> div").attr("id")];
-          view.get("controller").send("assignUser", $(ui.draggable).data("assignee"));
-        }
-      })
-    }.on("didInsertElement")
+    dragEnter: function(ev) {
+      ev.preventDefault();
+      if(ev.dataTransfer.types.contains("text/plain")){
+        this.$().addClass("assignee-accept");
+      }
+    },
+    dragOver: function(ev) {
+      ev.preventDefault();
+      if(ev.dataTransfer.types.contains("text/plain")){
+        this.$().addClass("assignee-accept");
+      }
+    },
+    dragLeave: function(ev) {
+      ev.preventDefault();
+      if(ev.dataTransfer.types.contains("text/plain")){
+        this.$().removeClass("assignee-accept");
+      }
+    },
+    drop: function(ev){
+      if(ev.stopPropagation) {
+        ev.stopPropagation();
+      }
 
+      if(ev.dataTransfer.types.contains("text/plain")){
+        var view = Em.View.views[this.$().find("> div").attr("id")];
+        view.get("controller").send("assignUser", ev.dataTransfer.getData("text/plain"));
+
+        ev.preventDefault();
+        this.$().removeClass("assignee-accept");
+      }
+    }
 });
 
 module.exports = CardWrapperView;
