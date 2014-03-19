@@ -136,17 +136,17 @@ class HuboardApplication < Sinatra::Base
 
   set :raise_errors, true
 
-  use Rack::Robustness do |g|
+  #use Rack::Robustness do |g|
+#
+ #   g.no_catch_all
+  #  g.status 302
+  #  g.content_type 'text/html'
+  #  g.body 'A fatal error occured.'
+  #  g.headers "Location" => "/logout"
 
-    g.no_catch_all
-    g.status 302
-    g.content_type 'text/html'
-    g.body 'A fatal error occured.'
-    g.headers "Location" => "/logout"
+  #  g.on(Ghee::Error)
 
-    g.on(Ghee::Error)
-
-  end
+  #end
 
 
 end
