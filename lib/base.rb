@@ -42,6 +42,7 @@ class HuboardApplication < Sinatra::Base
   raise "Configuration information not found: you need to provide a .env file or ENV variables" unless ENV['SECRET_KEY']
 
   set :secret_key, ENV['SECRET_KEY']
+  def self.oss?; false end
 
   GITHUB_CONFIG = {
     :client_id     => ENV['GITHUB_CLIENT_ID'],
@@ -72,6 +73,7 @@ class HuboardApplication < Sinatra::Base
   end
 
   configure :development do
+    enable :logging
     require "better_errors" 
     use BetterErrors::Middleware
     BetterErrors.application_root = __dir__
@@ -136,9 +138,6 @@ class HuboardApplication < Sinatra::Base
 
   end
 
-  configure :development do
-    enable :logging
-  end
 
   set :raise_errors, true
 
