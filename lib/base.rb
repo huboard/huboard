@@ -90,7 +90,13 @@ class HuboardApplication < Sinatra::Base
   helpers Huboard::Common::Helpers
   helpers Sinatra::Partials
 
-  use Rack::Session::Cookie, :key => 'rack.session', :path => '/', :secret => settings.session_secret, :expire_after => 2592000
+  use Rack::Session::Cookie, 
+    :key => 'rack.session',
+    :path => '/',
+    :secret => settings.session_secret,
+    :expire_after => 2592000,
+    :secure => production?
+
   set :views, File.expand_path("../views",File.dirname(__FILE__))
 
   use Sinatra::Auth::Github::BadAuthentication
