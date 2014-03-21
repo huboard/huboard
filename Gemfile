@@ -33,6 +33,7 @@ gem 'guard-sprockets2'
 gem 'sucker_punch', '~> 1.0'
 gem 'sinatra-pubsub'
 gem 'eventmachine'
+gem 'puma'
 
 
 gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'

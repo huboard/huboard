@@ -23,7 +23,8 @@ class Huboard
 
     end
 
-    register Sinatra::PubSub
+    use Sinatra::PubSub::App
+    helpers Sinatra::PubSub::Helpers
     Sinatra::PubSub.set(cors:false)
 #   Sinatra::PubSub::App.helpers Huboard::Common::Helpers
 #
