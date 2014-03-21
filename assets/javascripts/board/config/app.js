@@ -31,23 +31,41 @@ Ember.onLoad("Ember.Application", function ($app) {
       if(application.get("socketBackend")){
         var socket = Ember.Object.extend({
           correlationId : correlationId,
-          socket: null,
+          sockets: {},
+          subscribe: function (channel, callback) {
+            this.get("sockets")[channel].callbacks.add(callback);
+          },
+          subscribeTo: function(channel) {
+            var source = new EventSource("/api/subscribe/" + channel),
+              callbacks = Ember.$.Callbacks();
+            source.addEventListener("message", function(event){
+              callbacks.fire(JSON.parse(event.data));
+            });
+            this.get("sockets")[channel] = {
+              source: source,
+              callbacks: callbacks
+            };
+
+          },
           init: function () {
-            this.set("socket", window.io.connect(application.get("socketBackend")));
+            this.subscribeTo(this.get("repo.full_name"));
           }
         });
 
         application.set("Socket", socket);
 
         application.register('socket:main',application.Socket, {singleton: true});
+        application.inject('socket:main', 'repo', 'repo:main');
 
         application.inject("controller","socket", "socket:main");
         application.inject("model", "socket", "socket:main");
+        application.inject("route", "socket", "socket:main");
       }
     }
   })
   $app.initializer({
     name: "settings",
+    before: "sockets",
     initialize: function(container, application) {
       application.register('repo:main', application.get("repo"), {instantiate: false});
       application.register('settings:main', application.Settings);

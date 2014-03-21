@@ -1,3 +1,4 @@
+require 'sinatra/pubsub'
 require 'time'
 
 
@@ -15,6 +16,8 @@ class IssueEventJob
     end
 
     payload[:meta].merge! :origin => HuboardApplication.settings.server_origin
+
+    Sinatra::PubSub.publish payload[:meta][:repo_full_name], payload
 
     if ENV["SOCKET_BACKEND"]
       begin

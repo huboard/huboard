@@ -75,12 +75,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "couch" do |couch|
     couch.vm.box = "precise32"
     couch.vm.network :forwarded_port, guest: 5984, host: 5984
+    couch.vm.network :forwarded_port, guest: 6379, host: 6379
     couch.vm.network :forwarded_port, guest: 11211, host: 11212
+
     couch.vm.provision :chef_solo do |chef|
       chef.cookbooks_path = "cookbooks"
       chef.add_recipe "couchdb::source"
       chef.add_recipe "nodejs"
       chef.add_recipe "memcached"
+      chef.add_recipe "redisio::install"
+      chef.add_recipe "redisio::enable"
 
       chef.json = { 
         "couch_db" => {
@@ -88,6 +92,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             "httpd" => {
               "bind_address" => "0.0.0.0"
             }
+          }
+        },
+        "redisio" => {
+          "default_settings" => {
+            "address" => "0.0.0.0"
           }
         }
       }

@@ -1,7 +1,7 @@
 
 var SocketMixin = Ember.Mixin.create({
   setUpSocketEvents: function () {
-    if(!this.get("socket.socket")){
+    if(!this.get("socket")){
       return;
     }
     var channelPath  = this.get("sockets.config.channelPath");
@@ -22,7 +22,7 @@ var SocketMixin = Ember.Mixin.create({
           eventNames = this.get("sockets") || {},
           controller = this;
       
-      this.get("socket.socket").on(channel, function (message){
+      this.get("socket").subscribe(channel, function (message){
 
           if(messageId != "*" && message.meta.identifier != messageId) { return; }
 

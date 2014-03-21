@@ -173,23 +173,41 @@ Ember.onLoad("Ember.Application", function ($app) {
       if(application.get("socketBackend")){
         var socket = Ember.Object.extend({
           correlationId : correlationId,
-          socket: null,
+          sockets: {},
+          subscribe: function (channel, callback) {
+            this.get("sockets")[channel].callbacks.add(callback);
+          },
+          subscribeTo: function(channel) {
+            var source = new EventSource("/api/subscribe/" + channel),
+              callbacks = Ember.$.Callbacks();
+            source.addEventListener("message", function(event){
+              callbacks.fire(JSON.parse(event.data));
+            });
+            this.get("sockets")[channel] = {
+              source: source,
+              callbacks: callbacks
+            };
+
+          },
           init: function () {
-            this.set("socket", window.io.connect(application.get("socketBackend")));
+            this.subscribeTo(this.get("repo.full_name"));
           }
         });
 
         application.set("Socket", socket);
 
         application.register('socket:main',application.Socket, {singleton: true});
+        application.inject('socket:main', 'repo', 'repo:main');
 
         application.inject("controller","socket", "socket:main");
         application.inject("model", "socket", "socket:main");
+        application.inject("route", "socket", "socket:main");
       }
     }
   })
   $app.initializer({
     name: "settings",
+    before: "sockets",
     initialize: function(container, application) {
       application.register('repo:main', application.get("repo"), {instantiate: false});
       application.register('settings:main', application.Settings);
@@ -1033,7 +1051,7 @@ module.exports = Serializable;
 
 var SocketMixin = Ember.Mixin.create({
   setUpSocketEvents: function () {
-    if(!this.get("socket.socket")){
+    if(!this.get("socket")){
       return;
     }
     var channelPath  = this.get("sockets.config.channelPath");
@@ -1054,7 +1072,7 @@ var SocketMixin = Ember.Mixin.create({
           eventNames = this.get("sockets") || {},
           controller = this;
       
-      this.get("socket.socket").on(channel, function (message){
+      this.get("socket").subscribe(channel, function (message){
 
           if(messageId != "*" && message.meta.identifier != messageId) { return; }
 
@@ -1150,6 +1168,7 @@ var Board = Ember.Object.extend({
 
          model.linkedRepos.pushObject(b)
       })
+      return boards;
     })
   }
 });
@@ -1614,8 +1633,12 @@ var IndexRoute = Ember.Route.extend({
       content: model
     });
     cssView.appendTo("head")
-    return model.loadLinkedBoards().then(function() {
-      App.set("isLoaded", true); 
+    return model.loadLinkedBoards().then(function(boards) {
+     App.set("isLoaded", true); 
+     var socket = this.get("socket");
+     boards.forEach(function(b) {
+       socket.subscribeTo(b.full_name);
+     });
     }.bind(this));
   },
   renderTemplate: function() {
@@ -1734,8 +1757,12 @@ module.exports = MilestonesRoute =  Ember.Route.extend({
       content: model
     });
     cssView.appendTo("head")
-    return model.loadLinkedBoards().then(function() {
+    return model.loadLinkedBoards().then(function(boards) {
      App.set("isLoaded", true); 
+     var socket = this.get("socket");
+     boards.forEach(function(b) {
+       socket.subscribeTo(b.full_name);
+     });
     }.bind(this));
   },
 
