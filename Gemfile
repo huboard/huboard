@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 ruby "2.0.0"
 
+
 gem 'encryptor'
 gem 'rack-no-www'
 gem 'rdiscount'
@@ -31,6 +32,7 @@ gem 'execjs', "~> 1.4"
 gem 'guard-sprockets2'
 gem 'sucker_punch', '~> 1.0'
 gem 'sinatra-pubsub'
+gem 'eventmachine'
 
 
 gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'

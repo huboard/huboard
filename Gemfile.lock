@@ -250,6 +250,7 @@ DEPENDENCIES
   dalli
   dotenv
   encryptor
+  eventmachine
   execjs (~> 1.4)
   foreman
   ghee
