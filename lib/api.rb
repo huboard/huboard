@@ -24,16 +24,17 @@ class Huboard
     end
 
     register Sinatra::PubSub
-    Sinatra::PubSub::App.helpers Huboard::Common::Helpers
-
-    Sinatra::PubSub::App.before do
-      if authenticated? :private
-        return
-      elsif authenticated?
-        return
-      end
-      halt [403, "Access denied"]
-    end
+    Sinatra::PubSub.set(cors:false)
+#   Sinatra::PubSub::App.helpers Huboard::Common::Helpers
+#
+#   Sinatra::PubSub::App.before do
+#     if authenticated? :private
+#       return
+#     elsif authenticated?
+#       return
+#     end
+#     halt [403, "Access denied"]
+#   end
 
     helpers do
       def protected! 
