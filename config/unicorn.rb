@@ -1,6 +1,13 @@
-worker_processes 4
-timeout 60
-preload_app true
+Rainbows! do
+  worker_processes 4
+  timeout 60
+  preload_app true
+  use :EventMachine
+end
+
+
+
+__END__
 
 after_fork do |server, worker|
    thread = nil

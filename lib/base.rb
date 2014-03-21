@@ -34,6 +34,7 @@ class HuboardApplication < Sinatra::Base
   enable  :sessions
   enable :raise_exceptions
   set :protection, except: :session_hijacking 
+  #set :server, 'puma'
 
   helpers Sinatra::ContentFor
 

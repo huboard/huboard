@@ -31,7 +31,7 @@ gem 'sinatra-asset-pipeline'
 gem 'execjs', "~> 1.4"
 gem 'guard-sprockets2'
 gem 'sucker_punch', '~> 1.0'
-gem 'sinatra-pubsub'
+gem 'sinatra-pubsub', :git => "https://github.com/huboard/sinatra-pubsub"
 gem 'eventmachine'
 gem 'puma'
 
@@ -57,4 +57,5 @@ end
 group :production do
   gem 'newrelic_rpm'
   gem 'unicorn'
+  gem 'rainbows'
 end

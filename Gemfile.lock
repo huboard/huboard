@@ -1,4 +1,12 @@
 GIT
+  remote: https://github.com/huboard/sinatra-pubsub
+  revision: 8e1b1bd6a44868959160e6a33a4a75771407df5d
+  specs:
+    sinatra-pubsub (0.0.7)
+      redis (~> 3.0.4)
+      sinatra (~> 1.4.3)
+
+GIT
   remote: https://github.com/stripe/stripe-ruby
   revision: 06c860aeeac012f251807322e49eb5eeb0380a58
   specs:
@@ -162,6 +170,10 @@ GEM
     rack-robustness (1.1.0)
     rack-ssl (1.3.3)
       rack
+    rainbows (4.4.3)
+      kgio (~> 2.5)
+      rack (~> 1.1)
+      unicorn (~> 4.1)
     raindrops (0.10.0)
     rake (10.1.0)
     rb-fsevent (0.9.3)
@@ -194,9 +206,6 @@ GEM
       sprockets-sass
     sinatra-content-for (0.1)
       sinatra
-    sinatra-pubsub (0.0.7)
-      redis (~> 3.0.4)
-      sinatra (~> 1.4.3)
     slim (2.0.1)
       temple (~> 0.6.6)
       tilt (>= 1.3.3, < 2.1)
@@ -270,13 +279,14 @@ DEPENDENCIES
   rack-no-www
   rack-robustness
   rack-ssl
+  rainbows
   rdiscount
   sass
   shotgun
   sinatra (~> 1.4.0)
   sinatra-asset-pipeline
   sinatra-content-for (~> 0.1.0)
-  sinatra-pubsub
+  sinatra-pubsub!
   slim
   sprockets
   sprockets-helpers
