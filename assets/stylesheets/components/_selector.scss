@@ -78,6 +78,8 @@
   .hb-menu-items {
     margin: -6px;
     margin-top: 0px;
+    max-height: 400px;
+    overflow-y: auto;
     .hb-menu-item {
       padding: 6px 12px;
 
@@ -109,6 +111,8 @@
   .hb-label-items {
     margin: -6px;
     margin-top: 0px;
+    max-height: 400px;
+    overflow-y: auto;
     .hb-menu-item {
       padding: 6px 12px;
 

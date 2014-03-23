@@ -6,6 +6,13 @@ var HbLabelSelectorComponent = Ember.Component.extend({
   editable: true,
   selected: [],
   values: [],
+  listItems: function() {
+    return this.get("labels")
+    .filter(function(item) {
+      return item.name.indexOf(this.get("filterLabels")|| item.name) != -1;
+    }.bind(this));
+
+  }.property("filterLabels","labels"),
   actions: {
     toggleSelector: function(){
       this.set("isOpen", !!!this.$().is(".open"))
@@ -13,6 +20,7 @@ var HbLabelSelectorComponent = Ember.Component.extend({
         $(".open").removeClass("open")
         this.$().addClass("open")
         this.$(':input:not(.close):not([type="checkbox"])').first().focus();
+        this.set("filterLabels", "")
 
       } else {
         this.$().removeClass("open")

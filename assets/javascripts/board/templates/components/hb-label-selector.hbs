@@ -1,7 +1,13 @@
+{{#if editable}}
 <h5 {{action "toggleSelector"}}> 
   <i  class="pull-right ui-icon ui-icon-gear"></i>
   {{ title }}
 </h5>
+{{else}}
+<h5> 
+  {{ title }}
+</h5>
+{{/if}}
 
 <div class="hb-display-items">
   {{#each label in selected}}
@@ -22,10 +28,10 @@
     Assign someone to this issue
   </div>
   <div class="hb-text-filter">
-    {{input placeholder="Filter people" value=filterPeople}}
+    {{input placeholder="Filter labels" value=filterLabels}}
   </div>
   <div class="hb-label-items">
-    {{#each label in labels}}
+    {{#each label in listItems}}
     {{#hb-label label=label}}
     <span>
       {{label.name}}

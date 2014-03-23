@@ -1,7 +1,13 @@
+{{#if editable}}
 <h5 {{action "toggleSelector"}}> 
   <i  class="pull-right ui-icon ui-icon-gear"></i>
   Milestone
 </h5>
+{{else}}
+<h5> 
+  Milestone
+</h5>
+{{/if}}
 {{#if selected}}
 <div class="hb-selected">
   {{selected.title }}

@@ -1,7 +1,14 @@
+{{#if editable}}
 <h5 {{action "toggleSelector"}}> 
   <i  class="pull-right ui-icon ui-icon-gear"></i>
   Assignee
 </h5>
+{{else}}
+<h5> 
+  Assignee
+</h5>
+{{/if}}
+
 {{#if selected}}
 <div class="hb-selected">
   {{hb-avatar user=selected}} {{selected.login}}

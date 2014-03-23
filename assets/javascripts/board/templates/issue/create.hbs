@@ -10,8 +10,8 @@
     <div class="flex-form-right">
       {{#if isCollaborator}}
         {{hb-label-selector values=model.labels selected=model.labels title="Labels" labels=otherLabels}}
-        {{hb-assignee  selected=model.assignee assignees=controller.assignees}}
-        {{hb-milestone  selected=model.milestone milestones=controller.milestones}}
+        {{hb-assignee editable=true  selected=model.assignee assignees=controller.assignees}}
+        {{hb-milestone editable=true selected=model.milestone milestones=controller.milestones}}
       {{/if}}
     </div>
   </form>

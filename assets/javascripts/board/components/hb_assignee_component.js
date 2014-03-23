@@ -4,9 +4,14 @@ var HbAssigneeComponent = Ember.Component.extend({
     return false;
   }.property(),
 
+
   listItems: function () {
 
-    return this.get("assignees").map(function(item) {
+    return this.get("assignees")
+    .filter(function(item) {
+      return item.login.indexOf(this.get("filterPeople")|| item.login) != -1;
+    }.bind(this))
+    .map(function(item) {
 
       return this.ListItem.create({
         selected: item.id == this.get("selected.id"),
@@ -15,7 +20,7 @@ var HbAssigneeComponent = Ember.Component.extend({
 
     }.bind(this));
 
-  }.property("assignees","selected"),
+  }.property("assignees","selected","filterPeople"),
 
   ListItem: Ember.Object.extend({
     selected: false,
@@ -28,6 +33,7 @@ var HbAssigneeComponent = Ember.Component.extend({
       if(this.get("isOpen")) {
         this.$().addClass("open")
         this.$(':input:not(.close):not([type="checkbox"])').first().focus();
+        this.set("filterPeople", "")
 
       } else {
         this.$().removeClass("open")

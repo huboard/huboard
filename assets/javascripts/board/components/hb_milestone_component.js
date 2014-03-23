@@ -6,7 +6,11 @@ var HbMilestoneComponent = Ember.Component.extend({
 
   listItems: function () {
 
-    return this.get("milestones").map(function(item) {
+    return this.get("milestones")
+    .filter(function(item) {
+      return item.title.indexOf(this.get("filterMilestones")|| item.title) != -1;
+    }.bind(this))
+    .map(function(item) {
 
       return this.ListItem.create({
         selected: item.id == this.get("selected.id"),
@@ -15,7 +19,7 @@ var HbMilestoneComponent = Ember.Component.extend({
 
     }.bind(this));
 
-  }.property("milestones","selected"),
+  }.property("milestones","selected", "filterMilestones"),
 
   ListItem: Ember.Object.extend({
     selected: false,
@@ -29,6 +33,7 @@ var HbMilestoneComponent = Ember.Component.extend({
         $(".open").removeClass("open")
         this.$().addClass("open")
         this.$(':input:not(.close):not([type="checkbox"])').first().focus();
+        this.set("filterMilestones", "")
 
       } else {
         this.$().removeClass("open")
