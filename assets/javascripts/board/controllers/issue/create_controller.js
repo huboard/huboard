@@ -16,7 +16,11 @@ var IssuesCreateController = Ember.ObjectController.extend({
     }
   },
   isCollaboratorBinding: "App.repo.is_collaborator",
-  otherLabelsBinding: "controllers.application.model.board.other_labels",
+  otherLabels: function(){
+    return Ember.copy(this.get("controllers.application.model.board.other_labels"));
+  }.property("model","controllers.application.model.board.other_labels"),
+  milestonesBinding: "controllers.application.model.board.milestones",
+  assigneesBinding: "controllers.application.model.board.assignees",
   columnsBinding: "controllers.application.model.board.columns",
   disabled: function () {
       return this.get("processing") || !this.get("isValid");

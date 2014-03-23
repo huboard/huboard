@@ -5,7 +5,7 @@ gem 'encryptor'
 gem 'rack-no-www'
 gem 'rdiscount'
 gem 'slim'
-gem 'sinatra', "~> 1.3.0"
+gem 'sinatra', "~> 1.4.0"
 gem 'warden-github'
 gem 'sinatra-content-for', "~> 0.1.0"
 gem 'ghee'

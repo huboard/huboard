@@ -3,15 +3,13 @@ var Route = require("../issue_route");
 module.exports = Route.extend({
   model : function (params, transition){
     // hacks!
+    var issue = this.modelFor("application")
+                  .get("board.issues")
+                  .findBy('id', parseInt(params.issue_id));
+    if(issue) { return issue; }
+
     transition.abort()
     this.transitionTo("index")
-  },
-  setupController: function(controller, model) {
-    controller.set("model", model);
-    var repo = this.modelFor("index").get("allRepos").find(function (r){
-      return r.full_name == model.repo.owner.login + "/" + model.repo.name;
-    })
-    controller.set("repository", {other_labels: repo.other_labels})
   },
   actions: {
     closeModal: function () {

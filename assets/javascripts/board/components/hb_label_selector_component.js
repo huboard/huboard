@@ -1,10 +1,31 @@
 var HbLabelSelectorComponent = Ember.Component.extend({
-  tagName: "ul",
-  classNames: ["labels"],
+  classNames: ["hb-selector-component", "dropdown"],
+  isOpen: function(){
+    return false;
+  }.property(),
   editable: true,
   selected: [],
   values: [],
+  listItems: function() {
+    return this.get("labels")
+    .filter(function(item) {
+      return item.name.indexOf(this.get("filterLabels")|| item.name) != -1;
+    }.bind(this));
+
+  }.property("filterLabels","labels"),
   actions: {
+    toggleSelector: function(){
+      this.set("isOpen", !!!this.$().is(".open"))
+      if(this.get("isOpen")) {
+        $(".open").removeClass("open")
+        this.$().addClass("open")
+        this.$(':input:not(.close):not([type="checkbox"])').first().focus();
+        this.set("filterLabels", "")
+
+      } else {
+        this.$().removeClass("open")
+      }
+    },
     select : function (label) {
       var selected = this.get("selected");
       selected.anyBy("name", label.name) ? selected.removeObject(selected.findBy("name", label.name)) : selected.pushObject(label);

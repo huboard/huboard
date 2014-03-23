@@ -1,4 +1,19 @@
 var IssueRoute = Ember.Route.extend({
+  setupController: function(controller, model) {
+    controller.set("model", model);
+
+    var appModel = this.modelFor("application"),
+      board = appModel.fetchBoard(appModel);
+
+    var repo = board.get("allRepos").find(function (r){
+      return r.full_name == model.repo.owner.login + "/" + model.repo.name;
+    })
+    controller.set("repository", { 
+      other_labels: repo.other_labels, 
+      assignees: Ember.get(repo,"assignees"), 
+      milestones: Ember.get(repo,"milestones")
+    })
+  },
   controllerFor: function(name, _skipAssert) {
     return this._super("issue", _skipAssert);
   },

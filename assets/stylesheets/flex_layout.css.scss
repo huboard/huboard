@@ -16,6 +16,7 @@
 @import "flex_form";
 @import "issue";
 @import "integrations";
+@import "components/selector";
 
 #application > .ember-view {
    @include display(flex);

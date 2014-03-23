@@ -83,7 +83,6 @@ body > .fullscreen-overlay {
 
   padding: 20px 0px;
 
-  overflow:hidden;
   h2{
     margin: 0;
     font-size: 20px;
@@ -138,7 +137,6 @@ body > .fullscreen-overlay {
    margin-right: 200px;
    padding-right: 10px;
    @include prefixer(box-sizing, border-box);
-   overflow: hidden;
 }
 
 %card-shadow {
@@ -148,6 +146,7 @@ body > .fullscreen-overlay {
 }
 
 .fullscreen-card {
+  @include clearfix;
   .card-label {
     @extend %card-shadow;
     &.active {
