@@ -1,20 +1,38 @@
-<h5>{{ title }}</h5>
+<h5 {{action "toggleSelector"}}> 
+  <i  class="pull-right ui-icon ui-icon-gear"></i>
+  {{ title }}
+</h5>
 
-{{#if editable}}
-  {{#each label in labels}}
-    {{#hb-label label=label}}
-      <span>
-        {{label.name}}
-      </span>
-    {{/hb-label}}
-  {{/each}}
-{{else}}
+<div class="hb-display-items">
   {{#each label in selected}}
-    <li class="card-label active -x{{unbound label.color}}">
-      <span>
-        {{label.name}}
-      </span>
-    </li>
+  <div class="hb-display-item background -x{{unbound label.color}}">
+  <span>
+    {{label.name}}
+  </span>
+  </div>
+  {{else}}
+  <div class="hb-selected empty">
+    None yet
+  </div>
   {{/each}}
-  
+</div>
+{{#if editable}}
+<div class="hb-flyout">
+  <div class="hb-header">
+    Assign someone to this issue
+  </div>
+  <div class="hb-text-filter">
+    {{input placeholder="Filter people" value=filterPeople}}
+  </div>
+  <div class="hb-label-items">
+    {{#each label in labels}}
+    {{#hb-label label=label}}
+    <span>
+      {{label.name}}
+    </span>
+    {{/hb-label}}
+    {{/each}}
+  </div>
+</div>
 {{/if}}
+

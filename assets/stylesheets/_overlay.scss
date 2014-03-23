@@ -146,6 +146,7 @@ body > .fullscreen-overlay {
 }
 
 .fullscreen-card {
+  @include clearfix;
   .card-label {
     @extend %card-shadow;
     &.active {

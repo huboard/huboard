@@ -1,9 +1,14 @@
+.flex-form {
+  .hb-selector-component:first-of-type {
+    margin-top: 0;
+  }
+
+}
 .hb-selector-component {
   
   margin-top: 12px;
   padding-top: 12px;
   border-top: 1px solid #ccc;
-
 
   &.open {
     .hb-flyout {
@@ -59,17 +64,81 @@
       }
     }
 
+  }
 
-    ul {
-      margin: -6px;
-      margin-top: 0px;
-      list-style: none;
-      li {
-        padding: 6px;
-      }
+  ul {
+    margin: -6px;
+    margin-top: 0px;
+    list-style: none;
+    li {
+      padding: 6px;
     }
+  }
 
+  .hb-menu-items {
+    margin: -6px;
+    margin-top: 0px;
+    .hb-menu-item {
+      padding: 6px 12px;
 
+      &:hover {
+        cursor: pointer;
+        background: $hb-purple;
+        color: #fff;
+        .ui-icon-checkmark {
+          opacity: 1;
+          color: #fff;
+        }
+      }
+
+    }
+  }
+
+  .hb-display-items {
+    .hb-display-item {
+      padding: 3px 12px;
+      margin: 3px 0px;
+      border-radius: 3px;
+    }
+  }
+
+  img {
+    border-radius: 3px;
+  }
+
+  .hb-label-items {
+    margin: -6px;
+    margin-top: 0px;
+    .hb-menu-item {
+      padding: 6px 12px;
+
+      .color {
+        display: inline-block;
+        height: 12px;
+        width: 12px;
+        position: relative;
+        top: 1px;
+        margin: 0px 3px;
+        border-radius: 3px;
+      }
+
+      &:hover {
+        cursor: pointer;
+        .ui-icon-checkmark {
+          opacity: 1;
+        }
+      }
+
+    }
+  }
+
+  .ui-icon-checkmark {
+    opacity: 0;
+  }
+  .checked, .active {
+    .ui-icon-checkmark {
+      opacity: 1;
+    }
   }
 
 }

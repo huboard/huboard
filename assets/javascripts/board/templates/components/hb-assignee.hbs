@@ -19,22 +19,22 @@
     {{input placeholder="Filter people" value=filterPeople}}
   </div>
 
-  <ul>
+  <div class="hb-menu-items">
     {{#if selected}}
-    <li>
-      <a {{action "clearAssignee" }} >
+    <div class="hb-menu-item">
+      <div {{action "clearAssignee" }} >
         <i class="ui-icon ui-icon-x-thin"></i>
         Clear assignee
-      </a>
-    </li>
+      </div>
+    </div>
     {{/if}}
-    {{#each assignees}}
-    <li>
-    <a {{action "assignTo" this}} >
-      <i class="ui-icon ui-icon-checkmark"></i>
-      {{hb-avatar user=this}} {{login}}
-    </a>
-    </li>
+    {{#each listItems}}
+    <div {{bind-attr class=":hb-menu-item selected:checked"}} >
+      <div {{action "assignTo" item}} >
+        <i class="ui-icon ui-icon-checkmark"></i>
+        {{hb-avatar user=item}} {{item.login}}
+      </div>
+    </div>
     {{/each}}
-  </ul>
+  </div>
 </div>

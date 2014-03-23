@@ -30,6 +30,21 @@ var CssView = Ember.View.extend({
          buffer.push("{")
          buffer.push("border-color: #" + l.color + ";")
          buffer.push("}");
+
+         var start = _.template(".-x<%= color %>.font-color",{ color: l.color });
+         buffer.push(start);
+         buffer.push("{")
+         buffer.push("color: #" + l.color + ";")
+         buffer.push("}");
+
+         var start = _.template(".-x<%= color %>.active",{ color: l.color });
+
+         var color =  $.Color("#"+ l.color).alpha(0.3);
+         buffer.push(start);
+         buffer.push("{")
+         buffer.push("background-color: " + $.Color(color).toString() + ";")
+         buffer.push("color: " + $.Color("#"+l.color).contrastColor() + ";")
+         buffer.push("}");
     });
 
     _(["filter","card-label"]).each(function(name){

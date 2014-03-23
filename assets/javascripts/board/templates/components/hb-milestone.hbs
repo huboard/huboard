@@ -8,7 +8,7 @@
 </div>
 {{else}}
 <div class="hb-selected empty">
- No milestone
+  No milestone
 </div>
 {{/if}}
 <div class="hb-flyout">
@@ -19,21 +19,22 @@
     {{input placeholder="Filter milestones" value=filterMilestones}}
   </div>
 
-  <ul>
+  <div class="hb-menu-items">
     {{#if selected}}
-    <li>
-      <a {{action "clearMilestone" }} >
+    <div class="hb-menu-item">
+      <div {{action "clearMilestone" }} >
+        <i class="ui-icon ui-icon-x-thin"></i>
         Clear milestone
-      </a>
-    </li>
+      </div>
+    </div>
     {{/if}}
-    {{#each milestones}}
-    <li>
-    <a {{action "assignTo" this}} >
-      <i class="ui-icon ui-icon-checkmark"></i>
-      {{title}}
-    </a>
-    </li>
+    {{#each listItems}}
+    <div {{bind-attr class=":hb-menu-item selected:checked"}} >
+      <div {{action "assignTo" item}} >
+        <i class="ui-icon ui-icon-checkmark"></i>
+        {{item.title}}
+      </div>
+    </div>
     {{/each}}
-  </ul>
+  </div>
 </div>

@@ -5,6 +5,24 @@ var HbAssigneeComponent = Ember.Component.extend({
     return false;
   }.property(),
 
+  listItems: function () {
+
+    return this.get("assignees").map(function(item) {
+
+      return this.ListItem.create({
+        selected: item.id == this.get("selected.id"),
+        item: item
+      })
+
+    }.bind(this));
+
+  }.property("assignees","selected"),
+
+  ListItem: Ember.Object.extend({
+    selected: false,
+    item: null
+  }),
+
   actions: {
     toggleSelector: function(){
       this.set("isOpen", !!!this.$().is(".open"))
@@ -89,8 +107,8 @@ module.exports = HbAvatarComponent;
 
 },{}],3:[function(require,module,exports){
 var HbLabelComponent = Ember.Component.extend({
-  tagName: "li",
-  classNameBindings: [":card-label","colorClass", "selected:active"],
+  tagName: "div",
+  classNameBindings: [":hb-menu-item", "colorClass", "selected:active"],
   didInsertElement: function () {
      this.$().on("click.label", function () {
        this.get("parentView.controller").send("select", this.get("label"))
@@ -115,12 +133,25 @@ module.exports = HbLabelComponent;
 
 },{}],4:[function(require,module,exports){
 var HbLabelSelectorComponent = Ember.Component.extend({
-  tagName: "ul",
-  classNames: ["labels"],
+  classNames: ["hb-selector-component", "dropdown"],
+  isOpen: function(){
+    return false;
+  }.property(),
   editable: true,
   selected: [],
   values: [],
   actions: {
+    toggleSelector: function(){
+      this.set("isOpen", !!!this.$().is(".open"))
+      if(this.get("isOpen")) {
+        $(".open").removeClass("open")
+        this.$().addClass("open")
+        this.$(':input:not(.close):not([type="checkbox"])').first().focus();
+
+      } else {
+        this.$().removeClass("open")
+      }
+    },
     select : function (label) {
       var selected = this.get("selected");
       selected.anyBy("name", label.name) ? selected.removeObject(selected.findBy("name", label.name)) : selected.pushObject(label);
@@ -169,6 +200,24 @@ var HbMilestoneComponent = Ember.Component.extend({
   isOpen: function(){
     return false;
   }.property(),
+
+  listItems: function () {
+
+    return this.get("milestones").map(function(item) {
+
+      return this.ListItem.create({
+        selected: item.id == this.get("selected.id"),
+        item: item
+      })
+
+    }.bind(this));
+
+  }.property("milestones","selected"),
+
+  ListItem: Ember.Object.extend({
+    selected: false,
+    item: null
+  }),
 
   actions: {
     toggleSelector: function(){
@@ -869,7 +918,11 @@ var IssuesCreateController = Ember.ObjectController.extend({
     }
   },
   isCollaboratorBinding: "App.repo.is_collaborator",
-  otherLabelsBinding: "controllers.application.model.board.other_labels",
+  otherLabels: function(){
+    return Ember.copy(this.get("controllers.application.model.board.other_labels"));
+  }.property("model","controllers.application.model.board.other_labels"),
+  milestonesBinding: "controllers.application.model.board.milestones",
+  assigneesBinding: "controllers.application.model.board.assignees",
   columnsBinding: "controllers.application.model.board.columns",
   disabled: function () {
       return this.get("processing") || !this.get("isValid");
@@ -2673,6 +2726,18 @@ function program8(depth0,data) {
   hashContexts = {};
   stack1 = helpers['if'].call(depth0, "App.loggedIn", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n          ");
+  hashContexts = {'labelsChanged': depth0,'editable': depth0,'values': depth0,'selected': depth0,'title': depth0,'labels': depth0};
+  hashTypes = {'labelsChanged': "STRING",'editable': "ID",'values': "ID",'selected': "ID",'title': "STRING",'labels': "ID"};
+  options = {hash:{
+    'labelsChanged': ("labelsChanged"),
+    'editable': ("App.repo.is_collaborator"),
+    'values': ("controller.model.other_labels"),
+    'selected': ("controller.model.other_labels"),
+    'title': ("Labels"),
+    'labels': ("controller.repository.other_labels")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['hb-label-selector'] || depth0['hb-label-selector']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-label-selector", options))));
   data.buffer.push("\n      ");
   hashContexts = {'assign': depth0,'selected': depth0,'assignees': depth0};
   hashTypes = {'assign': "STRING",'selected': "ID",'assignees': "ID"};
@@ -2691,19 +2756,7 @@ function program8(depth0,data) {
     'milestones': ("controller.repository.milestones")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers['hb-milestone'] || depth0['hb-milestone']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-milestone", options))));
-  data.buffer.push("\n      <div class=\"labels-placeholder\">\n       <div>\n          ");
-  hashContexts = {'labelsChanged': depth0,'editable': depth0,'values': depth0,'selected': depth0,'title': depth0,'labels': depth0};
-  hashTypes = {'labelsChanged': "STRING",'editable': "ID",'values': "ID",'selected': "ID",'title': "STRING",'labels': "ID"};
-  options = {hash:{
-    'labelsChanged': ("labelsChanged"),
-    'editable': ("App.repo.is_collaborator"),
-    'values': ("controller.model.other_labels"),
-    'selected': ("controller.model.other_labels"),
-    'title': ("Labels"),
-    'labels': ("controller.repository.other_labels")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
-  data.buffer.push(escapeExpression(((stack1 = helpers['hb-label-selector'] || depth0['hb-label-selector']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-label-selector", options))));
-  data.buffer.push("\n        </div>\n      </div>\n  </div>\n<div class=\"fullscreen-card-left\">\n  <div class=\"fullscreen-card-preamble\">\n    <div class=\"fullscreen-header\">\n      <h2>");
+  data.buffer.push("\n  </div>\n<div class=\"fullscreen-card-left\">\n  <div class=\"fullscreen-card-preamble\">\n    <div class=\"fullscreen-header\">\n      <h2>");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "title", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
@@ -2976,14 +3029,31 @@ function program1(depth0,data) {
   
   var buffer = '', stack1, hashContexts, hashTypes, options;
   data.buffer.push("\n        ");
-  hashContexts = {'values': depth0,'title': depth0,'labels': depth0};
-  hashTypes = {'values': "ID",'title': "STRING",'labels': "ID"};
+  hashContexts = {'values': depth0,'selected': depth0,'title': depth0,'labels': depth0};
+  hashTypes = {'values': "ID",'selected': "ID",'title': "STRING",'labels': "ID"};
   options = {hash:{
     'values': ("model.labels"),
+    'selected': ("model.labels"),
     'title': ("Labels"),
     'labels': ("otherLabels")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers['hb-label-selector'] || depth0['hb-label-selector']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-label-selector", options))));
+  data.buffer.push("\n        ");
+  hashContexts = {'selected': depth0,'assignees': depth0};
+  hashTypes = {'selected': "ID",'assignees': "ID"};
+  options = {hash:{
+    'selected': ("model.assignee"),
+    'assignees': ("controller.assignees")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['hb-assignee'] || depth0['hb-assignee']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-assignee", options))));
+  data.buffer.push("\n        ");
+  hashContexts = {'selected': depth0,'milestones': depth0};
+  hashTypes = {'selected': "ID",'milestones': "ID"};
+  options = {hash:{
+    'selected': ("model.milestone"),
+    'milestones': ("controller.milestones")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['hb-milestone'] || depth0['hb-milestone']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-milestone", options))));
   data.buffer.push("\n      ");
   return buffer;
   }
@@ -3333,33 +3403,39 @@ function program3(depth0,data) {
 function program5(depth0,data) {
   
   var buffer = '', hashTypes, hashContexts;
-  data.buffer.push("\n    <li>\n      <a ");
+  data.buffer.push("\n    <div class=\"hb-menu-item\">\n      <div ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "clearAssignee", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(" >\n        <i class=\"ui-icon ui-icon-x-thin\"></i>\n        Clear assignee\n      </a>\n    </li>\n    ");
+  data.buffer.push(" >\n        <i class=\"ui-icon ui-icon-x-thin\"></i>\n        Clear assignee\n      </div>\n    </div>\n    ");
   return buffer;
   }
 
 function program7(depth0,data) {
   
-  var buffer = '', stack1, hashTypes, hashContexts, options;
-  data.buffer.push("\n    <li>\n    <a ");
+  var buffer = '', stack1, hashContexts, hashTypes, options;
+  data.buffer.push("\n    <div ");
+  hashContexts = {'class': depth0};
+  hashTypes = {'class': "STRING"};
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'class': (":hb-menu-item selected:checked")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" >\n      <div ");
   hashTypes = {};
   hashContexts = {};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "assignTo", "", {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(" >\n      <i class=\"ui-icon ui-icon-checkmark\"></i>\n      ");
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "assignTo", "item", {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" >\n        <i class=\"ui-icon ui-icon-checkmark\"></i>\n        ");
   hashContexts = {'user': depth0};
   hashTypes = {'user': "ID"};
   options = {hash:{
-    'user': ("")
+    'user': ("item")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers['hb-avatar'] || depth0['hb-avatar']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-avatar", options))));
   data.buffer.push(" ");
   hashTypes = {};
   hashContexts = {};
-  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "login", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\n    </a>\n    </li>\n    ");
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "item.login", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n      </div>\n    </div>\n    ");
   return buffer;
   }
 
@@ -3380,7 +3456,7 @@ function program7(depth0,data) {
     'value': ("filterPeople")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
-  data.buffer.push("\n  </div>\n\n  <ul>\n    ");
+  data.buffer.push("\n  </div>\n\n  <div class=\"hb-menu-items\">\n    ");
   hashTypes = {};
   hashContexts = {};
   stack2 = helpers['if'].call(depth0, "selected", {hash:{},inverse:self.noop,fn:self.program(5, program5, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
@@ -3388,9 +3464,9 @@ function program7(depth0,data) {
   data.buffer.push("\n    ");
   hashTypes = {};
   hashContexts = {};
-  stack2 = helpers.each.call(depth0, "assignees", {hash:{},inverse:self.noop,fn:self.program(7, program7, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack2 = helpers.each.call(depth0, "listItems", {hash:{},inverse:self.noop,fn:self.program(7, program7, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\n  </ul>\n</div>\n");
+  data.buffer.push("\n  </div>\n</div>\n");
   return buffer;
   
 });
@@ -3416,16 +3492,45 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
 function program1(depth0,data) {
   
-  var buffer = '', stack1, hashTypes, hashContexts;
-  data.buffer.push("\n  ");
+  var buffer = '', hashTypes, hashContexts;
+  data.buffer.push("\n  <div class=\"hb-display-item background -x");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers.each.call(depth0, "label", "in", "labels", {hash:{},inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n");
+  data.buffer.push(escapeExpression(helpers.unbound.call(depth0, "label.color", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\">\n  <span>\n    ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "label.name", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n  </span>\n  </div>\n  ");
   return buffer;
   }
-function program2(depth0,data) {
+
+function program3(depth0,data) {
+  
+  
+  data.buffer.push("\n  <div class=\"hb-selected empty\">\n    None yet\n  </div>\n  ");
+  }
+
+function program5(depth0,data) {
+  
+  var buffer = '', stack1, stack2, hashContexts, hashTypes, options;
+  data.buffer.push("\n<div class=\"hb-flyout\">\n  <div class=\"hb-header\">\n    Assign someone to this issue\n  </div>\n  <div class=\"hb-text-filter\">\n    ");
+  hashContexts = {'placeholder': depth0,'value': depth0};
+  hashTypes = {'placeholder': "STRING",'value': "ID"};
+  options = {hash:{
+    'placeholder': ("Filter people"),
+    'value': ("filterPeople")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
+  data.buffer.push("\n  </div>\n  <div class=\"hb-label-items\">\n    ");
+  hashTypes = {};
+  hashContexts = {};
+  stack2 = helpers.each.call(depth0, "label", "in", "labels", {hash:{},inverse:self.noop,fn:self.program(6, program6, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+  data.buffer.push("\n  </div>\n</div>\n");
+  return buffer;
+  }
+function program6(depth0,data) {
   
   var buffer = '', stack1, stack2, hashContexts, hashTypes, options;
   data.buffer.push("\n    ");
@@ -3433,59 +3538,42 @@ function program2(depth0,data) {
   hashTypes = {'label': "ID"};
   options = {hash:{
     'label': ("label")
-  },inverse:self.noop,fn:self.program(3, program3, data),contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  },inverse:self.noop,fn:self.program(7, program7, data),contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   stack2 = ((stack1 = helpers['hb-label'] || depth0['hb-label']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-label", options));
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\n  ");
+  data.buffer.push("\n    ");
   return buffer;
   }
-function program3(depth0,data) {
+function program7(depth0,data) {
   
   var buffer = '', hashTypes, hashContexts;
-  data.buffer.push("\n      <span>\n        ");
+  data.buffer.push("\n    <span>\n      ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "label.name", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\n      </span>\n    ");
+  data.buffer.push("\n    </span>\n    ");
   return buffer;
   }
 
-function program5(depth0,data) {
-  
-  var buffer = '', stack1, hashTypes, hashContexts;
-  data.buffer.push("\n  ");
+  data.buffer.push("<h5 ");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers.each.call(depth0, "label", "in", "selected", {hash:{},inverse:self.noop,fn:self.program(6, program6, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n  \n");
-  return buffer;
-  }
-function program6(depth0,data) {
-  
-  var buffer = '', hashTypes, hashContexts;
-  data.buffer.push("\n    <li class=\"card-label active -x");
-  hashTypes = {};
-  hashContexts = {};
-  data.buffer.push(escapeExpression(helpers.unbound.call(depth0, "label.color", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\">\n      <span>\n        ");
-  hashTypes = {};
-  hashContexts = {};
-  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "label.name", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\n      </span>\n    </li>\n  ");
-  return buffer;
-  }
-
-  data.buffer.push("<h5>");
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "toggleSelector", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("> \n  <i  class=\"pull-right ui-icon ui-icon-gear\"></i>\n  ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "title", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("</h5>\n\n");
+  data.buffer.push("\n</h5>\n\n<div class=\"hb-display-items\">\n  ");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers['if'].call(depth0, "editable", {hash:{},inverse:self.program(5, program5, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack1 = helpers.each.call(depth0, "label", "in", "selected", {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n");
+  data.buffer.push("\n</div>\n");
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers['if'].call(depth0, "editable", {hash:{},inverse:self.noop,fn:self.program(5, program5, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n\n");
   return buffer;
   
 });
@@ -3493,9 +3581,22 @@ function program6(depth0,data) {
 Ember.TEMPLATES['components/hb-label'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', hashTypes, hashContexts, escapeExpression=this.escapeExpression;
+  var buffer = '', hashContexts, hashTypes, escapeExpression=this.escapeExpression;
 
 
+  data.buffer.push("<i ");
+  hashContexts = {'class': depth0};
+  hashTypes = {'class': "STRING"};
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'class': ("colorClass :font-color :ui-icon :ui-icon-checkmark")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("></i> \n<span ");
+  hashContexts = {'class': depth0};
+  hashTypes = {'class': "STRING"};
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'class': ("colorClass :color :background")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("></span> \n");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "yield", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
@@ -3592,32 +3693,38 @@ function program1(depth0,data) {
 function program3(depth0,data) {
   
   
-  data.buffer.push("\n<div class=\"hb-selected empty\">\n No milestone\n</div>\n");
+  data.buffer.push("\n<div class=\"hb-selected empty\">\n  No milestone\n</div>\n");
   }
 
 function program5(depth0,data) {
   
   var buffer = '', hashTypes, hashContexts;
-  data.buffer.push("\n    <li>\n      <a ");
+  data.buffer.push("\n    <div class=\"hb-menu-item\">\n      <div ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "clearMilestone", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(" >\n        Clear milestone\n      </a>\n    </li>\n    ");
+  data.buffer.push(" >\n        <i class=\"ui-icon ui-icon-x-thin\"></i>\n        Clear milestone\n      </div>\n    </div>\n    ");
   return buffer;
   }
 
 function program7(depth0,data) {
   
-  var buffer = '', hashTypes, hashContexts;
-  data.buffer.push("\n    <li>\n    <a ");
+  var buffer = '', hashContexts, hashTypes;
+  data.buffer.push("\n    <div ");
+  hashContexts = {'class': depth0};
+  hashTypes = {'class': "STRING"};
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'class': (":hb-menu-item selected:checked")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" >\n      <div ");
   hashTypes = {};
   hashContexts = {};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "assignTo", "", {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(" >\n      <i class=\"ui-icon ui-icon-checkmark\"></i>\n      ");
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "assignTo", "item", {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" >\n        <i class=\"ui-icon ui-icon-checkmark\"></i>\n        ");
   hashTypes = {};
   hashContexts = {};
-  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "title", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\n    </a>\n    </li>\n    ");
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "item.title", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n      </div>\n    </div>\n    ");
   return buffer;
   }
 
@@ -3638,7 +3745,7 @@ function program7(depth0,data) {
     'value': ("filterMilestones")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
-  data.buffer.push("\n  </div>\n\n  <ul>\n    ");
+  data.buffer.push("\n  </div>\n\n  <div class=\"hb-menu-items\">\n    ");
   hashTypes = {};
   hashContexts = {};
   stack2 = helpers['if'].call(depth0, "selected", {hash:{},inverse:self.noop,fn:self.program(5, program5, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
@@ -3646,9 +3753,9 @@ function program7(depth0,data) {
   data.buffer.push("\n    ");
   hashTypes = {};
   hashContexts = {};
-  stack2 = helpers.each.call(depth0, "milestones", {hash:{},inverse:self.noop,fn:self.program(7, program7, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack2 = helpers.each.call(depth0, "listItems", {hash:{},inverse:self.noop,fn:self.program(7, program7, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\n  </ul>\n</div>\n");
+  data.buffer.push("\n  </div>\n</div>\n");
   return buffer;
   
 });
@@ -66938,6 +67045,21 @@ var CssView = Ember.View.extend({
          buffer.push(start);
          buffer.push("{")
          buffer.push("border-color: #" + l.color + ";")
+         buffer.push("}");
+
+         var start = _.template(".-x<%= color %>.font-color",{ color: l.color });
+         buffer.push(start);
+         buffer.push("{")
+         buffer.push("color: #" + l.color + ";")
+         buffer.push("}");
+
+         var start = _.template(".-x<%= color %>.active",{ color: l.color });
+
+         var color =  $.Color("#"+ l.color).alpha(0.3);
+         buffer.push(start);
+         buffer.push("{")
+         buffer.push("background-color: " + $.Color(color).toString() + ";")
+         buffer.push("color: " + $.Color("#"+l.color).contrastColor() + ";")
          buffer.push("}");
     });
 

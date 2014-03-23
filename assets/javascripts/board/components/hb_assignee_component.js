@@ -4,6 +4,24 @@ var HbAssigneeComponent = Ember.Component.extend({
     return false;
   }.property(),
 
+  listItems: function () {
+
+    return this.get("assignees").map(function(item) {
+
+      return this.ListItem.create({
+        selected: item.id == this.get("selected.id"),
+        item: item
+      })
+
+    }.bind(this));
+
+  }.property("assignees","selected"),
+
+  ListItem: Ember.Object.extend({
+    selected: false,
+    item: null
+  }),
+
   actions: {
     toggleSelector: function(){
       this.set("isOpen", !!!this.$().is(".open"))
