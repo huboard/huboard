@@ -1,0 +1,39 @@
+<h5 {{action "toggleSelector"}}> 
+  <i  class="pull-right ui-icon ui-icon-gear"></i>
+  Milestone
+</h5>
+{{#if selected}}
+<div class="hb-selected">
+  {{selected.title }}
+</div>
+{{else}}
+<div class="hb-selected empty">
+ No milestone
+</div>
+{{/if}}
+<div class="hb-flyout">
+  <div class="hb-header">
+    Assign a milestone to this issue
+  </div>
+  <div class="hb-text-filter">
+    {{input placeholder="Filter milestones" value=filterMilestones}}
+  </div>
+
+  <ul>
+    {{#if selected}}
+    <li>
+      <a {{action "clearMilestone" }} >
+        Clear milestone
+      </a>
+    </li>
+    {{/if}}
+    {{#each milestones}}
+    <li>
+    <a {{action "assignTo" this}} >
+      <i class="ui-icon ui-icon-checkmark"></i>
+      {{title}}
+    </a>
+    </li>
+    {{/each}}
+  </ul>
+</div>

@@ -33,6 +33,12 @@ var IssuesEditController = Ember.ObjectController.extend({
          this.get("model").updateLabels()
        }.bind(this));
     },
+    assignUser: function(login){
+      return this.get("model").assignUser(login);
+    },
+    assignMilestone: function(milestone) {
+      return this.get("model").assignMilestone(this.get("model.number"), milestone);
+    },
     submitComment: function () {
       var comments = this.get("model.activities.comments");
 

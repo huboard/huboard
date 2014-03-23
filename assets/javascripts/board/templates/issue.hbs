@@ -13,6 +13,8 @@
       </div>
       {{/if}}
     {{/if}}
+      {{hb-assignee assign="assignUser" selected=controller.model.assignee assignees=controller.repository.assignees}}
+      {{hb-milestone assign="assignMilestone" selected=controller.model.milestone milestones=controller.repository.milestones}}
       <div class="labels-placeholder">
        <div>
           {{hb-label-selector labelsChanged="labelsChanged" editable=App.repo.is_collaborator values=controller.model.other_labels selected=controller.model.other_labels title="Labels" labels=controller.repository.other_labels}}

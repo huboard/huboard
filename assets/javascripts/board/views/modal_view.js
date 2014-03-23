@@ -10,16 +10,23 @@ var ModalView = Em.View.extend({
     }.bind(this));
     
     this.$(".fullscreen-body").on('click.modal', function(event){
-       if($(event.target).is("[data-ember-action]")){return;}
+       if(!$(event.target).parents(".hb-selector-component").length) {
+        this.$(".open")
+          .not($(event.target).parents(".hb-selector-component"))
+          .removeClass("open")
+       }
+       if($(event.target).is("[data-ember-action],[data-toggle]")){return;}
+       if($(event.target).parents("[data-ember-action],[data-toggle]").length){return;}
        event.stopPropagation();    
     }.bind(this))
      
     this.$(".fullscreen-overlay, .close").on('click.modal', function(event){
-     if($(event.target).is("[data-ember-action]")){return;}
+     if($(event.target).is("[data-ember-action],[data-toggle]")){return;}
+     if($(event.target).parents("[data-ember-action],[data-toggle]").length){return;}
      this.get('controller').send('closeModal');        
     }.bind(this))
 
-    this.$(':input:not(.close)').first().focus();
+    this.$(':input:not(.close):not([type="checkbox"])').first().focus();
   },
 
   willDestroyElement: function() {
