@@ -29,10 +29,14 @@ class Huboard
     def create_issue(params)
        issue = Hashie::Mash.new params["issue"]
        issue.extend(Card).embed_data "order" => params["order"].to_f if params["order"].to_f > 0
+       milestone = issue["milestone"].nil? ? nil : issue.milestone.number
+       assignee = issue["assignee"].nil? ? nil : issue.assignee.login
        gh.issues.create({
          title: issue.title,
          body: issue.body,
-         labels: [column_labels.first].concat(issue.labels)
+         labels: [column_labels.first].concat(issue.labels),
+         assignee: assignee,
+         milestone: milestone
        }).extend(Card).merge!({"repo" => {:owner => {:login => @user}, :name => @repo }})
     end
 

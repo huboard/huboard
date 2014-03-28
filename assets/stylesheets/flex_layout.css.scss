@@ -16,6 +16,7 @@
 @import "flex_form";
 @import "issue";
 @import "integrations";
+@import "components/selector";
 
 #application > .ember-view {
    @include display(flex);
@@ -77,6 +78,7 @@
      @include transition(width,flex 0.2s ease-out);
   }
   > .content {
+     overflow-x: auto;
      padding: 6px 25px;
      @include flex(1);
      @include display(flex);
@@ -118,7 +120,13 @@
   margin: -6px 6px -6px 0;
   padding: 6px 16px 6px 10px;
   border-right: 1px solid #ddd;
-  @include flex(0 1 25%);
+  @include flex(0 0 230px);
+}
+.column.milestone {
+  @include flex(0 0 230px);
+  &.hb-state-collapsed {
+    @include flex(1 0 90px);
+  }
 }
 
 .milestones {
@@ -178,8 +186,7 @@
     display:none;
   }
   &.hb-state-collapsed {
-    @include flex(0 1 auto);
-    width: 80px;
+    @include flex(1 0 80px);
     > h3 .ui-icon-plus { display:inline; }
     .collapsed {
       display: block;

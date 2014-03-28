@@ -119,6 +119,7 @@
   background-color: #fff;
   border: 1px solid #e5e5e5;
   border-bottom-color: darken(#e5e5e5, 5%); 
+  @include transform(translateZ(0));
 
   &.border {
     border-top-color: #e5e5e5;
