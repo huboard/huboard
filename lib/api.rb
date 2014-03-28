@@ -1,4 +1,3 @@
-require 'sinatra/pubsub'
 require_relative "helpers"
 
 class Huboard
@@ -22,24 +21,6 @@ class Huboard
       raise Sinatra::NotFound if repo.status == 404
 
     end
-
-    #use Sinatra::PubSub::App
-    #helpers Sinatra::PubSub::Helpers
-    register Sinatra::PubSub
-    Sinatra::PubSub.set(cors: false)
-
-
-
-#   Sinatra::PubSub::App.helpers Huboard::Common::Helpers
-#
-#   Sinatra::PubSub::App.before do
-#     if authenticated? :private
-#       return
-#     elsif authenticated?
-#       return
-#     end
-#     halt [403, "Access denied"]
-#   end
 
     helpers do
       def protected! 
