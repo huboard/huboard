@@ -34,6 +34,7 @@ class HuboardApplication < Sinatra::Base
   enable  :sessions
   enable :raise_exceptions
   set :protection, except: :session_hijacking 
+  #set :server, 'puma'
 
   helpers Sinatra::ContentFor
 
@@ -110,25 +111,6 @@ class HuboardApplication < Sinatra::Base
   end
 
   helpers do
-    def warden
-      env['warden']
-    end
-
-    def authenticate!(*args)
-      warden.authenticate!(*args)
-    end
-
-    def authenticated?(*args)
-      warden.authenticated?(*args)
-    end
-
-    def logout!
-      warden.logout
-    end
-
-    def logged_in?
-      return authenticated?(:private) || authenticated?
-    end
 
     def github_config
       return :client_id => GITHUB_CONFIG[:client_id], :client_secret => GITHUB_CONFIG[:client_secret]

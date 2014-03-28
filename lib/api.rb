@@ -6,12 +6,11 @@ class Huboard
 
 
     PUBLIC_URLS = ['/authorized']
-    RESERVED_URLS = %w{ settings profiles v2 site }
-
+    RESERVED_URLS = %w{ subscribe settings profiles v2 site }
 
     before "/:user/:repo/?*" do 
       
-      return if RESERVED_URLS.include? params[:user]
+      return protected! if RESERVED_URLS.include? params[:user]
 
       if authenticated? :private
         repo = gh.repos(params[:user], params[:repo]).raw
@@ -30,7 +29,7 @@ class Huboard
         elsif authenticated?
           return
         end
-        authenticate! 
+        halt [403, "Access denied"]
       end
     end
 

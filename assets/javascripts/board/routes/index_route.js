@@ -13,8 +13,12 @@ var IndexRoute = Ember.Route.extend({
       content: model
     });
     cssView.appendTo("head")
-    return model.loadLinkedBoards().then(function() {
-      App.set("isLoaded", true); 
+    return model.loadLinkedBoards().then(function(boards) {
+     App.set("isLoaded", true); 
+     var socket = this.get("socket");
+     boards.forEach(function(b) {
+       socket.subscribeTo(b.full_name);
+     });
     }.bind(this));
   },
   renderTemplate: function() {

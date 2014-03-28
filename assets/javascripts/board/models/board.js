@@ -64,6 +64,7 @@ var Board = Ember.Object.extend({
 
          model.linkedRepos.pushObject(b)
       })
+      return boards;
     })
   }
 });

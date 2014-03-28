@@ -9,6 +9,26 @@ class Huboard
   module Common
     module Helpers
 
+      def warden
+        env['warden']
+      end
+
+      def authenticate!(*args)
+        warden.authenticate!(*args)
+      end
+
+      def authenticated?(*args)
+        warden.authenticated?(*args)
+      end
+
+      def logout!
+        warden.logout
+      end
+
+      def logged_in?
+        return authenticated?(:private) || authenticated?
+      end
+
       def couch
         @couch ||= Huboard::Couch.new :base_url => ENV["COUCH_URL"], :database => ENV["COUCH_DATABASE"]
       end
