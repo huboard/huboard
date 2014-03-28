@@ -8,7 +8,8 @@ var HbMilestoneComponent = Ember.Component.extend({
 
     return this.get("milestones")
     .filter(function(item) {
-      return item.title.indexOf(this.get("filterMilestones")|| item.title) != -1;
+      var term = this.get("filterMilestones") || ""
+      return item.title.toLowerCase().indexOf(term.toLowerCase() || item.title.toLowerCase()) != -1;
     }.bind(this))
     .map(function(item) {
 
