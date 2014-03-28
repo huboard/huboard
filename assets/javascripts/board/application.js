@@ -10,7 +10,8 @@ var HbAssigneeComponent = Ember.Component.extend({
 
     return this.get("assignees")
     .filter(function(item) {
-      return item.login.indexOf(this.get("filterPeople")|| item.login) != -1;
+      var term = this.get("filterPeople") || ""
+      return item.login.toLowerCase().indexOf(term.toLowerCase()|| item.login.toLowerCase()) != -1;
     }.bind(this))
     .map(function(item) {
 
@@ -149,7 +150,8 @@ var HbLabelSelectorComponent = Ember.Component.extend({
   listItems: function() {
     return this.get("labels")
     .filter(function(item) {
-      return item.name.indexOf(this.get("filterLabels")|| item.name) != -1;
+      var term = this.get("filterLabels") || ""
+      return item.name.toLowerCase().indexOf(term.toLowerCase()|| item.name.toLowerCase()) != -1;
     }.bind(this));
 
   }.property("filterLabels","labels"),
@@ -219,7 +221,8 @@ var HbMilestoneComponent = Ember.Component.extend({
 
     return this.get("milestones")
     .filter(function(item) {
-      return item.title.indexOf(this.get("filterMilestones")|| item.title) != -1;
+      var term = this.get("filterMilestones") || ""
+      return item.title.toLowerCase().indexOf(term.toLowerCase() || item.title.toLowerCase()) != -1;
     }.bind(this))
     .map(function(item) {
 
@@ -3580,7 +3583,7 @@ function program7(depth0,data) {
 function program9(depth0,data) {
   
   var buffer = '', stack1, stack2, hashContexts, hashTypes, options;
-  data.buffer.push("\n<div class=\"hb-flyout\">\n  <div class=\"hb-header\">\n    Assign someone to this issue\n  </div>\n  <div class=\"hb-text-filter\">\n    ");
+  data.buffer.push("\n<div class=\"hb-flyout\">\n  <div class=\"hb-header\">\n    Assign labels to this issue\n  </div>\n  <div class=\"hb-text-filter\">\n    ");
   hashContexts = {'placeholder': depth0,'value': depth0};
   hashTypes = {'placeholder': "STRING",'value': "ID"};
   options = {hash:{

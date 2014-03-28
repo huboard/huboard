@@ -9,7 +9,8 @@ var HbLabelSelectorComponent = Ember.Component.extend({
   listItems: function() {
     return this.get("labels")
     .filter(function(item) {
-      return item.name.indexOf(this.get("filterLabels")|| item.name) != -1;
+      var term = this.get("filterLabels") || ""
+      return item.name.toLowerCase().indexOf(term.toLowerCase()|| item.name.toLowerCase()) != -1;
     }.bind(this));
 
   }.property("filterLabels","labels"),

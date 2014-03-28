@@ -9,7 +9,8 @@ var HbAssigneeComponent = Ember.Component.extend({
 
     return this.get("assignees")
     .filter(function(item) {
-      return item.login.indexOf(this.get("filterPeople")|| item.login) != -1;
+      var term = this.get("filterPeople") || ""
+      return item.login.toLowerCase().indexOf(term.toLowerCase()|| item.login.toLowerCase()) != -1;
     }.bind(this))
     .map(function(item) {
 
