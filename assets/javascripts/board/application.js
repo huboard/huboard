@@ -389,6 +389,14 @@ Ember.onLoad("Ember.Application", function ($app) {
             this.subscribeTo(this.get("repo.full_name"));
           }
         });
+      } else {
+        var socket = Ember.Object.extend({
+          correlationId : correlationId,
+          sockets: {},
+          subscribe: Ember.K,
+          subscribeTo: Ember.K
+        })
+      }
 
         application.set("Socket", socket);
 
@@ -398,7 +406,6 @@ Ember.onLoad("Ember.Application", function ($app) {
         application.inject("controller","socket", "socket:main");
         application.inject("model", "socket", "socket:main");
         application.inject("route", "socket", "socket:main");
-      }
     }
   })
   $app.initializer({
