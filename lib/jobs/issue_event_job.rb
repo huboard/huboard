@@ -19,16 +19,6 @@ class IssueEventJob
 
     Sinatra::PubSub.publish payload[:meta][:repo_full_name], payload
 
-    if ENV["SOCKET_BACKEND"]
-      begin
-        Faraday.post do |req|
-          req.url "#{ENV["SOCKET_BACKEND"]}/hook"
-          req.headers['Content-Type'] = 'application/json'
-          req.body = payload.merge({secret: ENV["SOCKET_SECRET"]}).to_json
-        end
-      rescue
-      end
-    end
     PublishWebhookJob.new.publish payload if self.class.included_modules.include? IsPublishable
   rescue
   end
