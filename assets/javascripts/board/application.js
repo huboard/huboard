@@ -374,7 +374,7 @@ Ember.onLoad("Ember.Application", function ($app) {
             this.get("sockets")[channel].callbacks.add(callback);
           },
           subscribeTo: function(channel) {
-            var source = new EventSource(App.get("socketBackend") + "/subscribe/" + channel),
+            var source = new EventSource(App.get("socketBackend") + "/subscribe/" + channel, {withCredentials: true}),
               callbacks = Ember.$.Callbacks();
             source.addEventListener("message", function(event){
               callbacks.fire(JSON.parse(event.data));
