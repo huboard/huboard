@@ -10,7 +10,7 @@ class Huboard
 
     before "/:user/:repo/?*" do 
       
-      return protected! if RESERVED_URLS.include? params[:user]
+      return if RESERVED_URLS.include? params[:user]
 
       if authenticated? :private
         repo = gh.repos(params[:user], params[:repo]).raw
