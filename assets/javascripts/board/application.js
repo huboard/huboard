@@ -355,6 +355,9 @@ Ember.LinkView.reopen({
 
     this.on("click", this, this._closeDropdown);
   },
+  tearDownEvent: function(){
+    this.off("click");
+  }.on("willDestroyElement"),
   _closeDropdown : function(ev) {
     this.$().parents(".dropdown").removeClass("open")
   }
@@ -450,6 +453,7 @@ App.animateModalOpen = function() {
 
   return promise.promise;
 };
+
 
 App.deferReadiness();
 

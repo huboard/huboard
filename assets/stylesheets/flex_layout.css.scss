@@ -125,7 +125,7 @@
 .column.milestone {
   @include flex(0 0 230px);
   &.hb-state-collapsed {
-    @include flex(1 0 90px);
+    @include flex(0 0 90px);
   }
 }
 

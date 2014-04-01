@@ -167,8 +167,9 @@
      border-color: #0069D6;
   }
   .card-labels {
+    padding: 5px 0px;
     position: absolute;
-    bottom: -3px;
+    bottom: -8px;
     .card-label-wrapper {
       float:left;
       margin-right: 5px;
@@ -182,10 +183,11 @@
       }
       .card-label.active.large {
         position: relative;
-        top: 22px;
+        top: 6px;
 
         display: none;
-        padding: 3px 10px;
+        padding: 2px 10px;
+        font-size: 12px;
       }
     }
       &:hover {
