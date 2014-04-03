@@ -15,13 +15,12 @@ require 'rack/no-www'
 require 'rack/ssl'
 require 'rack/robustness'
 
-
 require 'sprockets'
 require 'sprockets-helpers'
 require 'bourbon'
 require 'compass'
 
-require './lib/bootstrap'
+require './initializers/bootstrap'
 
 configure :production, :staging do 
   require "newrelic_rpm"
