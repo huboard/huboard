@@ -20,7 +20,15 @@ require 'sprockets-helpers'
 require 'bourbon'
 require 'compass'
 
-require './initializers/bootstrap'
+case ENV["HUBOARD_ENV"]
+when "oss"
+when "standalone"
+when "production", "staging"
+  require './initializers/production'
+else
+  require './initializers/production'
+end
+
 
 configure :production, :staging do 
   require "newrelic_rpm"
