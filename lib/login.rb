@@ -1,6 +1,11 @@
 require 'sinatra/base'
 
 class Login < HuboardApplication
+
+    unless oss?
+      set :views, File.expand_path("../marketing/views",File.dirname(__FILE__))
+    end
+
     get '/logout' do
       logout!
       redirect '/'

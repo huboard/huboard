@@ -6,12 +6,17 @@ require 'base64'
 require_relative "helpers"
 require_relative "login"
 require_relative "site"
+require_relative "marketing/marketing"
 
 class Huboard
   class App < HuboardApplication
 
     use Login
-    use Site
+    if oss?
+      use OSS
+    else
+      use Marketing
+    end
 
     PUBLIC_URLS = ['/', '/logout','/webhook', '/site/privacy','/site/terms']
     RESERVED_URLS = %w{ assets repositories images about site login logout favicon.ico robots.txt }
@@ -44,11 +49,15 @@ class Huboard
         return current_user if authenticated?(*args)
         authenticate!(*args)
       end
+      set(:is_logged_in) do |enabled| 
+        condition do
+          enabled == logged_in?
+        end
+      end
     end
 
-    get '/' do 
+    get '/', :is_logged_in => true do 
       @parameters = params
-      return erb :home, :layout => :marketing unless logged_in?
       @repos = huboard.all_repos
       @private = nil
       erb :index
@@ -155,6 +164,27 @@ class Huboard
       raise Sinatra::NotFound unless huboard.board(params[:user], params[:repo]).has_board?
       @parameters = params
       json(pebble.create_hook( params[:user], params[:repo], "#{socket_backend}/issues/webhook?token=#{encrypted_token}")) unless socket_backend.nil?
+    end
+
+    get "/favicon.ico" do
+     
+      path = File.expand_path("../../public/img/favicon.ico",__FILE__)
+
+      response = [ ::File.open(path, 'rb') { |file| file.read } ]
+
+      headers["Content-Length"] = response.join.bytesize.to_s
+      headers["Content-Type"]   = "image/vnd.microsoft.icon"
+      [status, headers, response]
+    end
+
+    get "/robots.txt" do
+      path = File.expand_path("../../public/files/robots.txt",__FILE__)
+
+      response = [ ::File.open(path, 'rb') { |file| file.read } ]
+
+      headers["Content-Length"] = response.join.bytesize.to_s
+      headers["Content-Type"]   = "text/plain"
+      [status, headers, response]
     end
 
     post '/webhook/?' do 
