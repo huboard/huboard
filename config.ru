@@ -22,6 +22,7 @@ require 'compass'
 
 case ENV["HUBOARD_ENV"]
 when "oss"
+  require './initializers/oss'
 when "standalone"
 when "production", "staging"
   require './initializers/production'

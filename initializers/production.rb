@@ -9,6 +9,7 @@ require_relative '../lib/github'
 require_relative '../lib/pebble'
 
 require_relative '../lib/environments/production/helpers'
+require_relative '../lib/environments/production/app'
+require_relative '../lib/environments/production/login'
 require_relative '../lib/environments/production/before_filters'
-
 

@@ -8,11 +8,6 @@ class Huboard
   class App < HuboardApplication
 
     use Login
-    if oss?
-      use OSS
-    else
-      use Marketing
-    end
 
     helpers do
       set(:is_logged_in) do |enabled| 
