@@ -3,10 +3,6 @@ require 'sinatra'
 require 'slim'
 require 'encryptor'
 require 'base64'
-require_relative "helpers"
-require_relative "login"
-require_relative "site"
-require_relative "marketing/marketing"
 
 class Huboard
   class App < HuboardApplication
@@ -45,10 +41,6 @@ class Huboard
     end
 
     helpers do
-      def protected!(*args)
-        return current_user if authenticated?(*args)
-        authenticate!(*args)
-      end
       set(:is_logged_in) do |enabled| 
         condition do
           enabled == logged_in?
