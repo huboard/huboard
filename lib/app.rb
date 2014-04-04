@@ -14,32 +14,6 @@ class Huboard
       use Marketing
     end
 
-    PUBLIC_URLS = ['/', '/logout','/webhook', '/site/privacy','/site/terms']
-    RESERVED_URLS = %w{ assets repositories images about site login logout favicon.ico robots.txt }
-
-    before "/:user/:repo/?*" do 
-
-      return if RESERVED_URLS.include? params[:user]
-
-      if authenticated? :private
-        repo = gh.repos params[:user], params[:repo]
-
-        raise Sinatra::NotFound if repo.message == "Not Found"
-
-        if repo.private && settings.production?
-          user = gh.users params[:user]
-          customer = couch.customers.findPlanById user.id
-          session[:github_login] = user.login
-          session[:redirect_to] = user.login == gh.user.login ? "/settings/profile" : "/settings/profile/#/#{user.login}"
-          halt([401, "Access denied"]) if !customer.rows.any? || customer.rows.first.value.stripe.customer.delinquent
-        end
-
-      else
-        repo = gh.repos params[:user], params[:repo]
-        raise Sinatra::NotFound if repo.message == "Not Found"
-      end
-    end
-
     helpers do
       set(:is_logged_in) do |enabled| 
         condition do
@@ -54,8 +28,6 @@ class Huboard
       @private = nil
       erb :index
     end
-
-
 
     get '/:user/?' do 
       pass if params[:user] == "assets"
