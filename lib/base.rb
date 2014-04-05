@@ -20,8 +20,6 @@ class HuboardApplication < Sinatra::Base
 
   # required configuration
   
-  raise "Configuration information not found: you need to provide a .env file or ENV variables" unless ENV['SECRET_KEY']
-
   set :secret_key, ENV['SECRET_KEY']
 
   GITHUB_CONFIG = {

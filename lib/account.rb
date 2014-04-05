@@ -10,8 +10,6 @@ class Huboard
       @parameters = {}
     end
 
-    raise "Configuration information not found: you need to provide a .env file or ENV variables" unless ENV['STRIPE_API']
-
     set :stripe_key, ENV['STRIPE_API']
     set :stripe_publishable_key, ENV['STRIPE_PUBLISHABLE_API']
 
