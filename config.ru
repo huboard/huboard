@@ -24,17 +24,17 @@ case ENV["HUBOARD_ENV"]
 when "oss"
   require './initializers/oss'
 when "standalone"
+  require './initializers/oss'
 when "production", "staging"
   require './initializers/production'
+  require "newrelic_rpm"
+  use Rack::SSL
 else
   require './initializers/production'
-end
-
-
-configure :production, :staging do 
   require "newrelic_rpm"
   use Rack::SSL
 end
+
 
 use Rack::NoWWW
 use Rack::Static, :urls => ["/files", "/font","/img", "/scripts","/css"], :root => "public"
