@@ -1,8 +1,31 @@
 <% content_for :javascripts do %>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.js" type="text/javascript" charset="utf-8"></script>
   <%= javascript_tag 'board/application' %>
   <%= javascript_tag 'bootstrap' %>
-  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
   <script>
+    (function($) {
+     var _mouseDrag = $.ui.sortable.prototype._mouseDrag;
+     $.ui.sortable.prototype._mouseDrag = function(event) {
+          var i, item, itemElement, intersection,
+            o = this.options,
+            scrolled = false;
+
+          //Do scrolling
+
+          if(event.pageY - $(document).scrollTop() < o.scrollSensitivity) {
+            scrolled = $(document).scrollTop($(document).scrollTop() - o.scrollSpeed);
+          } else if($(window).height() - (event.pageY - $(document).scrollTop()) < o.scrollSensitivity) {
+            scrolled = $(document).scrollTop($(document).scrollTop() + o.scrollSpeed);
+          }
+
+
+          if(scrolled !== false && $.ui.ddmanager && !o.dropBehaviour) {
+            $.ui.ddmanager.prepareOffsets(this, event);
+          }
+          return _mouseDrag.apply(this, arguments);
+     };
+
+    })(jQuery);
     App.set("repo", Ember.Object.createWithMixins(App.Serializable,<%= @repo.to_hash.to_json %>));
     <% if logged_in? %>
       App.set("loggedIn", true);
