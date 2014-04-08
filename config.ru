@@ -24,15 +24,21 @@ case ENV["HUBOARD_ENV"]
 when "oss"
   require './initializers/oss'
 when "standalone"
-  require './initializers/oss'
+  require './initializers/stand_alone'
 when "production", "staging"
   require './initializers/production'
   require "newrelic_rpm"
   use Rack::SSL
+  map "/settings" do 
+      run Huboard::Accounts
+  end
 else
   require './initializers/production'
   require "newrelic_rpm"
   use Rack::SSL
+  map "/settings" do 
+      run Huboard::Accounts
+  end
 end
 
 
@@ -46,9 +52,5 @@ end
 
 map "/" do 
   run Huboard::App
-end
-
-map "/settings" do 
-    run Huboard::Accounts
 end
 

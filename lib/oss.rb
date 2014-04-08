@@ -7,7 +7,7 @@ class OSS < HuboardApplication
     end
 
     get "/", :is_logged_in => false do
-      erb :home, :layout => :marketing 
+      redirect to("/login/")
     end
 
     get "/site/privacy/?" do
@@ -16,6 +16,24 @@ class OSS < HuboardApplication
 
     get "/site/terms/?" do
       return erb :terms_of_service, :layout => :marketing 
+    end
+
+    helpers do
+      def protected! 
+        return current_user if authenticated? :private
+        authenticate!
+      end
+
+    end
+
+
+    get "/settings/profile/?" do
+      if logged_in?
+        redirect to("/#{gh.user.login}")
+      else
+        session[:redirect_to] = "/settings/profile/"
+        redirect to("/login/")
+      end
     end
 
 end

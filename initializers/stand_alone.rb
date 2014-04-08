@@ -7,5 +7,6 @@ require_relative '../lib/api'
 require_relative '../lib/github'
 require_relative '../lib/pebble'
 
-require_relative '../lib/environments/oss/app'
-require_relative '../lib/environments/oss/before_filters'
+require_relative '../lib/environments/stand_alone/app'
+require_relative '../lib/environments/stand_alone/before_filters'
+
