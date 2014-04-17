@@ -21,7 +21,7 @@ class Huboard
     end
 
     def labels
-      labels = gh.labels
+      labels = gh.labels.all
       labels.is_a?(Array) ? labels : []
     end
 
