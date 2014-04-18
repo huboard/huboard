@@ -890,6 +890,17 @@ var IntegrationsController = Ember.ObjectController.extend({
         return !this.get("attrs.webhookURL")
 
       }.property("attrs.webhookURL")
+    }).create(),
+
+    Ember.Object.extend({
+      name: "Slack",
+      attrs: {
+        webhookURL: "",
+        channel: ""
+      },
+      disabled: function(){
+        return !this.get("attrs.webhookURL")
+      }.property("attrs.webhookURL")
     }).create()
 
   ],
@@ -3396,6 +3407,49 @@ function program4(depth0,data) {
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "outlet", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("\n</div>\n\n");
+  return buffer;
+  
+});
+
+Ember.TEMPLATES['integrations/slack'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', stack1, hashContexts, hashTypes, options, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
+
+
+  data.buffer.push("\n    <div class=\"flex-form-bottom\">\n      <form ");
+  hashContexts = {'on': depth0};
+  hashTypes = {'on': "STRING"};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "submit", {hash:{
+    'on': ("submit")
+  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" class=\"flex-form\">\n        <h3>Instructions</h3>\n        <p>\n          Paste the incoming webhook url from Slack below\n        </p>\n        <label>\n          ");
+  hashContexts = {'value': depth0,'placeholder': depth0};
+  hashTypes = {'value': "ID",'placeholder': "STRING"};
+  options = {hash:{
+    'value': ("editing.attrs.webhookURL"),
+    'placeholder': ("Slack webhook url")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
+  data.buffer.push("\n        </label>\n        <p>\n          Enter the slack room channel that want the HuBoard bot to post into, you can leave this \n          blank and HuBoard will post into the default room that you configured. If you need to override \n          channel enter the channel name prefixed with a pound sign # i.e. #development\n        </p>\n        <p>\n          HuBoard can only post into one channel at a time, if you need to post into multiple rooms, create another \n          incoming webhook for that room\n        </p>\n        <label>\n          ");
+  hashContexts = {'value': depth0,'placeholder': depth0};
+  hashTypes = {'value': "ID",'placeholder': "STRING"};
+  options = {hash:{
+    'value': ("editing.attrs.channel"),
+    'placeholder': ("Optional: #channel_name")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
+  data.buffer.push("\n        </label>\n        <p>\n          Click the Submit webhook button to create the integration.\n        </p>\n        <button ");
+  hashContexts = {'disabled': depth0};
+  hashTypes = {'disabled': "ID"};
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'disabled': ("disabled")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" class=\"hb-button\">Submit webhook</button>\n        <div class=\"with-line\"><span>or</span></div>\n        <div class=\"cancel\"> <a href=\"#\" ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "cancel", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">Cancel</a> </div>\n      </form>\n    </div>\n\n");
   return buffer;
   
 });
