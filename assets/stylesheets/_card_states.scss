@@ -1,4 +1,7 @@
    .hb-state-closed {
+     .title {
+        padding-right: 13px;
+     }
     .card-states {
       display: block;
       .hb-state-closed {
@@ -12,6 +15,9 @@
      }
    }
    .hb-state-ready {
+     .title {
+        padding-right: 13px;
+     }
     .card-states {
       display: block;
       .hb-state-ready {
@@ -25,6 +31,9 @@
      }
    }
    .hb-state-blocked {
+     .title {
+        padding-right: 13px;
+     }
     .card-states {
       display: block;
       .hb-state-blocked {
