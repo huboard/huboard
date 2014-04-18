@@ -19,6 +19,17 @@ var IntegrationsController = Ember.ObjectController.extend({
         return !this.get("attrs.webhookURL")
 
       }.property("attrs.webhookURL")
+    }).create(),
+
+    Ember.Object.extend({
+      name: "Slack",
+      attrs: {
+        webhookURL: "",
+        channel: ""
+      },
+      disabled: function(){
+        return !this.get("attrs.webhookURL")
+      }.property("attrs.webhookURL")
     }).create()
 
   ],
