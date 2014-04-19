@@ -26,16 +26,20 @@ when "oss"
 when "standalone"
   require './initializers/stand_alone'
 when "production", "staging"
+  configure :production, :staging do 
+    require "newrelic_rpm"
+    use Rack::SSL
+  end
   require './initializers/production'
-  require "newrelic_rpm"
-  use Rack::SSL
   map "/settings" do 
       run Huboard::Accounts
   end
 else
+  configure :production, :staging do 
+    require "newrelic_rpm"
+    use Rack::SSL
+  end
   require './initializers/production'
-  require "newrelic_rpm"
-  use Rack::SSL
   map "/settings" do 
       run Huboard::Accounts
   end
