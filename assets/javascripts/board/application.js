@@ -1036,6 +1036,9 @@ var IssuesEditController = Ember.ObjectController.extend({
        }.bind(this));
     },
     moveToColumn: function(column) {
+      if(!App.get("repo.is_collaborator")) {
+        return false;
+      }
       this.get("model").reorder(this.get("model._data.order"),column).then(function() {
         this.send("forceRepaint","index");
       }.bind(this));
@@ -67401,7 +67404,10 @@ module.exports = IssuesCreateView;
 var IssueSelectedColumnView = Ember.CollectionView.extend({
   tagName: "ul",
   classNames: ["nav","breadcrumbs"],
-  classNameBindings: ["stateClass"],
+  classNameBindings: ["stateClass", "isEnabled:enabled:disabled"],
+  isEnabled: function() {
+    return App.get("repo.is_collaborator");
+  }.property("App.repo.is_collaborator"),
   stateClass: function(){
     var github_state = this.get("controller.model.state");
     if(github_state === "closed"){

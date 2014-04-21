@@ -35,6 +35,9 @@ var IssuesEditController = Ember.ObjectController.extend({
        }.bind(this));
     },
     moveToColumn: function(column) {
+      if(!App.get("repo.is_collaborator")) {
+        return false;
+      }
       this.get("model").reorder(this.get("model._data.order"),column).then(function() {
         this.send("forceRepaint","index");
       }.bind(this));

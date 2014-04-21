@@ -1,7 +1,10 @@
 var IssueSelectedColumnView = Ember.CollectionView.extend({
   tagName: "ul",
   classNames: ["nav","breadcrumbs"],
-  classNameBindings: ["stateClass"],
+  classNameBindings: ["stateClass", "isEnabled:enabled:disabled"],
+  isEnabled: function() {
+    return App.get("repo.is_collaborator");
+  }.property("App.repo.is_collaborator"),
   stateClass: function(){
     var github_state = this.get("controller.model.state");
     if(github_state === "closed"){

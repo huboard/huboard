@@ -120,6 +120,14 @@ ul.nav.breadcrumbs {
       display:none;
     }
   }
+  &.disabled {
+    > li {
+      > a, > span {
+        cursor: default;
+        cursor: not-allowed;
+      }
+    }
+  }
 
   > li {
     > a, > span {
