@@ -1,6 +1,16 @@
 <div class="fullscreen-card">
+  <div class="fullscreen-card-preamble clearfix">
+    <div class="fullscreen-header">
+      {{!-- <button class="hb-button hb-button-grey">Edit</button> --}}
+      <h2>{{ title }}
+      <a class="number" href="{{{unbound html_url }}}" target="_blank" {{bind-attr title="title"}}><small>#{{number}}</small></a>
+      </h2>
+    </div>
+    <div class="flex-crumbs">
+      {{view App.IssueSelectedColumnView content=columns}}
+    </div>
+  </div>
   <div class="fullscreen-card-right">
-      <h2> <a class="number" href="{{{unbound html_url }}}" target="_blank" {{bind-attr title="title"}}><small>ISSUE #</small>{{number}}</a> </h2>
     {{#if App.loggedIn }}
       {{#if App.repo.is_collaborator }}
       <div>
@@ -18,11 +28,6 @@
       {{hb-milestone editable=App.repo.is_collaborator assign="assignMilestone" selected=controller.model.milestone milestones=controller.repository.milestones}}
   </div>
 <div class="fullscreen-card-left">
-  <div class="fullscreen-card-preamble">
-    <div class="fullscreen-header">
-      <h2>{{ title }}</h2>
-    </div>
-  </div>
   <div class="fullscreen-card-description card-comment">
     <a href="{{unbound user.html_url}}" target="_blank">
       {{hb-avatar user=user title=user.login width=30 height=30 }}

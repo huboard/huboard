@@ -1,5 +1,6 @@
 var IssuesEditController = Ember.ObjectController.extend({
-  needs: ["index"],
+  needs: ["application"],
+  columns: Ember.computed.alias("controllers.application.model.board.columns"),
   isReady: function(key, value){
     if(value !== undefined) {
       if(value) {
@@ -33,11 +34,18 @@ var IssuesEditController = Ember.ObjectController.extend({
          this.get("model").updateLabels()
        }.bind(this));
     },
+    moveToColumn: function(column) {
+      this.get("model").reorder(this.get("model._data.order"),column).then(function() {
+        this.send("forceRepaint","index");
+      }.bind(this));
+      Ember.run.next(this, "send", "forceRepaint", "index")
+    },
     assignUser: function(login){
       return this.get("model").assignUser(login);
     },
     assignMilestone: function(milestone) {
-      return this.get("model").assignMilestone(this.get("model.number"), milestone);
+      this.get("model").assignMilestone(this.get("model.number"), milestone);
+      Ember.run.next(this, "send", "forceRepaint", "milestones")
     },
     submitComment: function () {
       var comments = this.get("model.activities.comments");
