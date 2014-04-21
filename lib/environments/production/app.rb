@@ -1,0 +1,1 @@
+Huboard::App.use Marketing

@@ -1,6 +1,7 @@
 require 'sinatra/base'
 
 class Login < HuboardApplication
+
     get '/logout' do
       logout!
       redirect '/'

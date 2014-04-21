@@ -10,8 +10,8 @@
     <script src="/scripts/bootstrap/bootstrap.min.js"></script>
     <%= partial :fontdeck %>
    
-     <%= stylesheet_tag 'bootstrap' %>
-     <%= stylesheet_tag 'marketing' %>
+    <%= stylesheet_tag 'bootstrap' %>
+    <%= stylesheet_tag 'marketing' %>
   </head>
   <body>        
     <div id="wrapper">
@@ -25,9 +25,6 @@
             </a>
             <div class="nav">
               <ul class="nav">
-                <li>
-                  <a href="/pricing"> Plans & Pricing</a>
-                </li>
                 <li>
                    <a href="/login"><span class="nav-btn">Sign in</span></a>
                 </li>
@@ -48,91 +45,12 @@
             <img src="<%=image_path 'LogoFullPurpleLight.png' %>"/>
           </div>
           <div class="links span6">
-            <a href="/site/terms">terms</a>
-            <a href="/site/privacy">privacy</a>
             <a href="https://github.com/rauhryan/huboard">github</a>
           </div>
         </div>
 
       </div>
     </div>
-    <script type="text/javascript">
-
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-28313898-1']);
-      _gaq.push(['_setDomainName', 'huboard.com']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-       var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-       ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-       })();
-   (function($){
-      function animateNumber($input, end, duration, easing) {
-        
-        if($input.data("label")){
-          $($input.data("label"))
-            .delay(duration - (duration-(duration-500)))
-            .animate({ opacity : 1}, { duration: duration - (duration-(duration-500)), easing: easing == undefined ? "linear" : easing });
-        }
-        
-        $input
-          .data("start", 0)
-        
-        .find("span")
-        .animate({ width:(addCommas(parseInt(end).toString()).length*17) + "px" },{easing: "easeInOutBack",duration: 900, complete: function () {
-          //$(this).width("auto")
-        }})
-        .animate({"val": Math.ceil(end), opacity: 1 }, {
-            easing: easing == undefined ? "linear" : easing,
-            duration: duration == undefined ? 500 : parseInt(duration),
-            step: function(fin, obj) {
-              
-              if(obj.prop === "val"){
-                console.log(fin)
-                var $this = jQuery(this);
-                var start = parseInt($this.data("start"));
-                var number = addCommas(parseInt(fin).toString());
-                $this
-                  .css({"min-width": (number.length*17) + "px" })
-                  .text(number); 
-              }
-            }
-        });
-      }
-
-      $(window).on("load", function () {
-        var stats = <%= couch.stats.dashboard.rows.to_json %>;
-        if(stats && stats.length) {
-          var stat = stats[Math.floor(Math.random() * stats.length)]
-
-          $(".navbar .brand label").text(stat.key);
-
-          setTimeout(function() {
-            $(".navbar .brand").addClass("animating")
-            animateNumber($(".brand .stat"), stat.value, 1600, "easeInOutCubic");
-          }, 3500);
-        }
-      });
-      
-      
-      function addCommas(nStr) {
-        
-        nStr += '';
-        x = nStr.split('.');
-        x1 = x[0];
-        x2 = x.length > 1 ? '.' + x[1] : '';
-        var rgx = /(\d+)(\d{3})/;
-        while (rgx.test(x1)) {
-        x1 = x1.replace(rgx, '$1' + ',' + '$2');
-        }
-        return x1 + x2;
-      }
-   })(jQuery);
-  
-
-</script>
    </body>
  </html>
 

@@ -1,3 +1,6 @@
+<% content_for :title do %>
+  <%= @repo.full_name %>
+<% end %>
 <% content_for :javascripts do %>
   <%= javascript_tag 'board/application' %>
   <%= javascript_tag 'bootstrap' %>

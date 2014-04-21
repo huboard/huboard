@@ -3,58 +3,26 @@ require 'sinatra'
 require 'slim'
 require 'encryptor'
 require 'base64'
-require_relative "helpers"
-require_relative "login"
-require_relative "site"
 
 class Huboard
   class App < HuboardApplication
 
     use Login
-    use Site
-
-    PUBLIC_URLS = ['/', '/logout','/webhook', '/site/privacy','/site/terms']
-    RESERVED_URLS = %w{ assets repositories images about site login logout favicon.ico robots.txt }
-
-    before "/:user/:repo/?*" do 
-
-      return if RESERVED_URLS.include? params[:user]
-
-      if authenticated? :private
-        repo = gh.repos params[:user], params[:repo]
-
-        raise Sinatra::NotFound if repo.message == "Not Found"
-
-        if repo.private && settings.production?
-          user = gh.users params[:user]
-          customer = couch.customers.findPlanById user.id
-          session[:github_login] = user.login
-          session[:redirect_to] = user.login == gh.user.login ? "/settings/profile" : "/settings/profile/#/#{user.login}"
-          halt([401, "Access denied"]) if !customer.rows.any? || customer.rows.first.value.stripe.customer.delinquent
-        end
-
-      else
-        repo = gh.repos params[:user], params[:repo]
-        raise Sinatra::NotFound if repo.message == "Not Found"
-      end
-    end
 
     helpers do
-      def protected!(*args)
-        return current_user if authenticated?(*args)
-        authenticate!(*args)
+      set(:is_logged_in) do |enabled| 
+        condition do
+          enabled == logged_in?
+        end
       end
     end
 
-    get '/' do 
+    get '/', :is_logged_in => true do 
       @parameters = params
-      return erb :home, :layout => :marketing unless logged_in?
       @repos = huboard.all_repos
       @private = nil
       erb :index
     end
-
-
 
     get '/:user/?' do 
       pass if params[:user] == "assets"
@@ -123,7 +91,7 @@ class Huboard
 
       @repo = gh.repos(params[:user],params[:repo])
       if logged_in?
-        is_a_collaborator = gh.connection.get("/repos/#{params[:user]}/#{params[:repo]}/collaborators/#{current_user.login}").status == 204
+        is_a_collaborator = gh.connection.get("./repos/#{params[:user]}/#{params[:repo]}/collaborators/#{current_user.login}").status == 204
         @repo.merge!(is_collaborator: is_a_collaborator)
       else
         @repo.merge!(is_collaborator: false)
@@ -155,6 +123,27 @@ class Huboard
       raise Sinatra::NotFound unless huboard.board(params[:user], params[:repo]).has_board?
       @parameters = params
       json(pebble.create_hook( params[:user], params[:repo], "#{socket_backend}/issues/webhook?token=#{encrypted_token}")) unless socket_backend.nil?
+    end
+
+    get "/favicon.ico" do
+     
+      path = File.expand_path("../../public/img/favicon.ico",__FILE__)
+
+      response = [ ::File.open(path, 'rb') { |file| file.read } ]
+
+      headers["Content-Length"] = response.join.bytesize.to_s
+      headers["Content-Type"]   = "image/vnd.microsoft.icon"
+      [status, headers, response]
+    end
+
+    get "/robots.txt" do
+      path = File.expand_path("../../public/files/robots.txt",__FILE__)
+
+      response = [ ::File.open(path, 'rb') { |file| file.read } ]
+
+      headers["Content-Length"] = response.join.bytesize.to_s
+      headers["Content-Type"]   = "text/plain"
+      [status, headers, response]
     end
 
     post '/webhook/?' do 

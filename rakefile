@@ -5,8 +5,10 @@ require 'sass'
 require 'bourbon'
 
 require 'sinatra/asset_pipeline/task.rb'
-require './lib/bootstrap'
-Sinatra::AssetPipeline::Task.define! Huboard::App
+require "#{File.dirname(__FILE__)}/lib/helpers"
+require "#{File.dirname(__FILE__)}/lib/base"
+
+Sinatra::AssetPipeline::Task.define! HuboardApplication
 
 namespace :couch do 
   desc "push development documents"

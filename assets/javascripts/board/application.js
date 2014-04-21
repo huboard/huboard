@@ -460,7 +460,7 @@ App.deferReadiness();
 module.exports = App;
 
 
-},{"../../vendor/jquery.color":71,"../utilities/correlationId":43,"../utilities/observers":44,"../vendor/autoresize":46,"../vendor/ember":47,"../vendor/handlebars":49,"../vendor/jquery":50,"../vendor/lodash":51,"../vendor/marked":52}],10:[function(require,module,exports){
+},{"../../vendor/jquery.color":72,"../utilities/correlationId":43,"../utilities/observers":44,"../vendor/autoresize":46,"../vendor/ember":47,"../vendor/handlebars":49,"../vendor/jquery":50,"../vendor/lodash":51,"../vendor/marked":52}],10:[function(require,module,exports){
 var App = require('./app');
 
 App.Router.map(function() {
@@ -1000,7 +1000,8 @@ module.exports = IssuesCreateController;
 
 },{}],20:[function(require,module,exports){
 var IssuesEditController = Ember.ObjectController.extend({
-  needs: ["index"],
+  needs: ["application"],
+  columns: Ember.computed.alias("controllers.application.model.board.columns"),
   isReady: function(key, value){
     if(value !== undefined) {
       if(value) {
@@ -1034,11 +1035,18 @@ var IssuesEditController = Ember.ObjectController.extend({
          this.get("model").updateLabels()
        }.bind(this));
     },
+    moveToColumn: function(column) {
+      this.get("model").reorder(this.get("model._data.order"),column).then(function() {
+        this.send("forceRepaint","index");
+      }.bind(this));
+      Ember.run.next(this, "send", "forceRepaint", "index")
+    },
     assignUser: function(login){
       return this.get("model").assignUser(login);
     },
     assignMilestone: function(milestone) {
-      return this.get("model").assignMilestone(this.get("model.number"), milestone);
+      this.get("model").assignMilestone(this.get("model.number"), milestone);
+      Ember.run.next(this, "send", "forceRepaint", "milestones")
     },
     submitComment: function () {
       var comments = this.get("model.activities.comments");
@@ -1232,6 +1240,7 @@ App.SearchView = require('./views/search_view');
 App.SettingsShowCountsView = require('./views/settings/show_counts_view');
 App.IssueActivitiesView = require('./views/issue/activities_view');
 App.IssueCreateView = require('./views/issue/create_view');
+App.IssueSelectedColumnView = require('./views/issue/selected_column_view');
 App.IntegrationsIntegrationsView = require('./views/integrations/integrations_view');
 App.Serializable = require('./mixins/serializable');
 App.Socket = require('./mixins/socket');
@@ -1242,7 +1251,7 @@ require('./config/routes');
 module.exports = App;
 
 
-},{"./components/hb_assignee_component":1,"./components/hb_avatar_component":2,"./components/hb_label_component":3,"./components/hb_label_selector_component":4,"./components/hb_markdown_editor_component":5,"./components/hb_milestone_component":6,"./components/hb_pane_component":7,"./components/hb_tabs_component":8,"./config/app":9,"./config/routes":10,"./controllers/application_controller":11,"./controllers/assignee_controller":12,"./controllers/card_controller":13,"./controllers/column_controller":14,"./controllers/column_count_controller":15,"./controllers/filters_controller":16,"./controllers/index_controller":17,"./controllers/integrations/integrations_controller":18,"./controllers/issue/create_controller":19,"./controllers/issue_controller":20,"./controllers/milestone_column_controller":21,"./controllers/milestones_controller":22,"./controllers/search_controller":23,"./helpers/moment_ago":24,"./mixins/serializable":26,"./mixins/socket":27,"./mixins/wip_limit":28,"./models/board":29,"./models/integration":30,"./models/issue":31,"./models/repo":32,"./models/settings":33,"./routes/application_route":34,"./routes/index/integrations_route":35,"./routes/index/issue_route":36,"./routes/index_route":37,"./routes/issue_route":38,"./routes/milestones/integrations_route":39,"./routes/milestones/issue_route":40,"./routes/milestones_route":41,"./templates":42,"./views/assignee_filter_view":54,"./views/card_view":55,"./views/card_wrapper_view":56,"./views/column_count_view":57,"./views/column_view":58,"./views/css_view":59,"./views/filter_view":60,"./views/integrations/integrations_view":61,"./views/issue/activities_view":62,"./views/issue/create_view":63,"./views/issue_view":64,"./views/loading_view":65,"./views/milestone_column_view":66,"./views/modal_view":67,"./views/search_view":68,"./views/settings/show_counts_view":69}],26:[function(require,module,exports){
+},{"./components/hb_assignee_component":1,"./components/hb_avatar_component":2,"./components/hb_label_component":3,"./components/hb_label_selector_component":4,"./components/hb_markdown_editor_component":5,"./components/hb_milestone_component":6,"./components/hb_pane_component":7,"./components/hb_tabs_component":8,"./config/app":9,"./config/routes":10,"./controllers/application_controller":11,"./controllers/assignee_controller":12,"./controllers/card_controller":13,"./controllers/column_controller":14,"./controllers/column_count_controller":15,"./controllers/filters_controller":16,"./controllers/index_controller":17,"./controllers/integrations/integrations_controller":18,"./controllers/issue/create_controller":19,"./controllers/issue_controller":20,"./controllers/milestone_column_controller":21,"./controllers/milestones_controller":22,"./controllers/search_controller":23,"./helpers/moment_ago":24,"./mixins/serializable":26,"./mixins/socket":27,"./mixins/wip_limit":28,"./models/board":29,"./models/integration":30,"./models/issue":31,"./models/repo":32,"./models/settings":33,"./routes/application_route":34,"./routes/index/integrations_route":35,"./routes/index/issue_route":36,"./routes/index_route":37,"./routes/issue_route":38,"./routes/milestones/integrations_route":39,"./routes/milestones/issue_route":40,"./routes/milestones_route":41,"./templates":42,"./views/assignee_filter_view":54,"./views/card_view":55,"./views/card_wrapper_view":56,"./views/column_count_view":57,"./views/column_view":58,"./views/css_view":59,"./views/filter_view":60,"./views/integrations/integrations_view":61,"./views/issue/activities_view":62,"./views/issue/create_view":63,"./views/issue/selected_column_view":64,"./views/issue_view":65,"./views/loading_view":66,"./views/milestone_column_view":67,"./views/modal_view":68,"./views/search_view":69,"./views/settings/show_counts_view":70}],26:[function(require,module,exports){
 function serialize() {
     var result = {};
     for (var key in $.extend(true, {}, this))
@@ -2777,7 +2786,12 @@ function program8(depth0,data) {
   return buffer;
   }
 
-  data.buffer.push("<div class=\"fullscreen-card\">\n  <div class=\"fullscreen-card-right\">\n      <h2> <a class=\"number\" href=\"");
+  data.buffer.push("<div class=\"fullscreen-card\">\n  <div class=\"fullscreen-card-preamble clearfix\">\n    <div class=\"fullscreen-header\">\n      ");
+  data.buffer.push("\n      <h2>");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "title", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n      <a class=\"number\" href=\"");
   hashTypes = {};
   hashContexts = {};
   stack1 = helpers.unbound.call(depth0, "html_url", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
@@ -2788,11 +2802,17 @@ function program8(depth0,data) {
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
     'title': ("title")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("><small>ISSUE #</small>");
+  data.buffer.push("><small>#");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "number", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("</a> </h2>\n    ");
+  data.buffer.push("</small></a>\n      </h2>\n    </div>\n    <div class=\"flex-crumbs\">\n      ");
+  hashContexts = {'content': depth0};
+  hashTypes = {'content': "ID"};
+  data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.IssueSelectedColumnView", {hash:{
+    'content': ("columns")
+  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n    </div>\n  </div>\n  <div class=\"fullscreen-card-right\">\n    ");
   hashTypes = {};
   hashContexts = {};
   stack1 = helpers['if'].call(depth0, "App.loggedIn", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
@@ -2829,11 +2849,7 @@ function program8(depth0,data) {
     'milestones': ("controller.repository.milestones")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers['hb-milestone'] || depth0['hb-milestone']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-milestone", options))));
-  data.buffer.push("\n  </div>\n<div class=\"fullscreen-card-left\">\n  <div class=\"fullscreen-card-preamble\">\n    <div class=\"fullscreen-header\">\n      <h2>");
-  hashTypes = {};
-  hashContexts = {};
-  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "title", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("</h2>\n    </div>\n  </div>\n  <div class=\"fullscreen-card-description card-comment\">\n    <a href=\"");
+  data.buffer.push("\n  </div>\n<div class=\"fullscreen-card-left\">\n  <div class=\"fullscreen-card-description card-comment\">\n    <a href=\"");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.unbound.call(depth0, "user.html_url", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
@@ -3166,6 +3182,25 @@ function program1(depth0,data) {
   stack2 = helpers['if'].call(depth0, "isCollaborator", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n    </div>\n  </form>\n</div>\n\n");
+  return buffer;
+  
+});
+
+Ember.TEMPLATES['issue/selected_column'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', hashTypes, hashContexts, escapeExpression=this.escapeExpression;
+
+
+  data.buffer.push("<a ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "moveToColumn", "view.content", {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" href=\"#\"><span>");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "view.content.text", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("</span>\n\n<div class=\"card-states\">\n   <img src=\"/img/check.png\" title=\"Issue is closed\" class=\"hb-state-closed\"/>\n   <img src=\"/img/arrow.png\" class=\"hb-state-ready\"/>\n   <img src=\"/img/x.png\" class=\"hb-state-blocked\"/>\n</div>\n</a>\n\n");
   return buffer;
   
 });
@@ -63679,6 +63714,35 @@ var IssuesCreateView = App.ModalView.extend({
 module.exports = IssuesCreateView;
 
 },{}],64:[function(require,module,exports){
+var IssueSelectedColumnView = Ember.CollectionView.extend({
+  tagName: "ul",
+  classNames: ["nav","breadcrumbs"],
+  classNameBindings: ["stateClass"],
+  stateClass: function(){
+    var github_state = this.get("controller.model.state");
+    if(github_state === "closed"){
+      return "hb-state-" + "closed";
+    }
+    var custom_state = this.get("controller.model.customState");
+    if(custom_state){
+      return "hb-state-" + custom_state;
+    }
+    return "hb-state-open";
+  }.property("controller.model.current_state", "controller.model.customState", "controller.model.state"),
+  itemViewClass: Ember.View.extend({
+    tagName: "li",
+    templateName: "issue/selected_column",
+    classNameBindings: ["isSelected:active", "stateClass"],
+    isSelected: function(){
+      return this.get("controller.model.current_state.name") === this.get("content.name");
+    }.property("controller.model.current_state")
+  })
+
+});
+
+module.exports = IssueSelectedColumnView;
+
+},{}],65:[function(require,module,exports){
 var ModalView = require("./modal_view")
 
 var IssuesView = ModalView.extend({
@@ -63686,7 +63750,7 @@ var IssuesView = ModalView.extend({
 
 module.exports = IssuesView;
 
-},{"./modal_view":67}],65:[function(require,module,exports){
+},{"./modal_view":68}],66:[function(require,module,exports){
 var Spinner = require('../../spin');
 var LoadingView = Ember.View.extend({
   didInsertElement: function(){
@@ -63722,7 +63786,7 @@ var LoadingView = Ember.View.extend({
 
 module.exports = LoadingView;
 
-},{"../../spin":70}],66:[function(require,module,exports){
+},{"../../spin":71}],67:[function(require,module,exports){
 var WrapperView = require("./card_wrapper_view");
 
 var CollectionView = Ember.CollectionView.extend({
@@ -63825,7 +63889,7 @@ var ColumnView = Ember.ContainerView.extend({
 
 module.exports = ColumnView;
 
-},{"./card_wrapper_view":56}],67:[function(require,module,exports){
+},{"./card_wrapper_view":56}],68:[function(require,module,exports){
 var ModalView = Em.View.extend({
   layoutName: "layouts/modal",
   modalSize: "",
@@ -63865,7 +63929,7 @@ var ModalView = Em.View.extend({
 
 module.exports = ModalView;
 
-},{}],68:[function(require,module,exports){
+},{}],69:[function(require,module,exports){
 var SearchView = Ember.View.extend({
   classNames: ["search"],
   classNameBindings: ["hasValue:has-value"],
@@ -63887,7 +63951,7 @@ var SearchView = Ember.View.extend({
 
 module.exports = SearchView;
 
-},{}],69:[function(require,module,exports){
+},{}],70:[function(require,module,exports){
 var ShowCountsView = Ember.View.extend({
   classNameBindings: ["showColumnCounts:checked"],
   showColumnCounts: Ember.computed.alias("settings.showColumnCounts"),
@@ -63908,7 +63972,7 @@ var ShowCountsView = Ember.View.extend({
 
 module.exports = ShowCountsView;
 
-},{}],70:[function(require,module,exports){
+},{}],71:[function(require,module,exports){
 //fgnass.github.com/spin.js#v1.3
 
 /**
@@ -64259,7 +64323,7 @@ module.exports = ShowCountsView;
 
 }));
 
-},{}],71:[function(require,module,exports){
+},{}],72:[function(require,module,exports){
 /*!
  * jQuery Color Animations v@VERSION
  * https://github.com/jquery/jquery-color

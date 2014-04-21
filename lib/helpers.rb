@@ -53,7 +53,7 @@ class Huboard
 
       def check_token(token)
         ghee = gh token
-        ghee.connection.get('/').status == 200
+        ghee.connection.get('./').status == 200
       end
 
       def current_user

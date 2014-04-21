@@ -13,10 +13,16 @@
   <div id="wrapper">
   
     <div class="header">
-        <a href="<%= session.delete(:redirect_to) || '/settings/profile' %>" class="hb-button"> Upgrade access </a>
+      <% if session.has_key? :message %>
+        <p>
+          <%= session[:message] %>
+        </p>
+      <% else %>
+      <a href="<%= session.delete(:redirect_to) || '/settings/profile' %>" class="hb-button"> Upgrade access </a>
       <p>
         Upgrade your account to gain access to unlimited private repositories for <%= session.delete(:github_login) %>
       </p>
+      <% end %>
 
     </div>
   </div>

@@ -15,18 +15,36 @@ require 'rack/no-www'
 require 'rack/ssl'
 require 'rack/robustness'
 
-
 require 'sprockets'
 require 'sprockets-helpers'
 require 'bourbon'
 require 'compass'
 
-require './lib/bootstrap'
-
-configure :production, :staging do 
-  require "newrelic_rpm"
-  use Rack::SSL
+case ENV["HUBOARD_ENV"]
+when "oss"
+  require './initializers/oss'
+when "standalone"
+  require './initializers/stand_alone'
+when "production", "staging"
+  configure :production, :staging do 
+    require "newrelic_rpm"
+    use Rack::SSL
+  end
+  require './initializers/production'
+  map "/settings" do 
+      run Huboard::Accounts
+  end
+else
+  configure :production, :staging do 
+    require "newrelic_rpm"
+    use Rack::SSL
+  end
+  require './initializers/production'
+  map "/settings" do 
+      run Huboard::Accounts
+  end
 end
+
 
 use Rack::NoWWW
 use Rack::Static, :urls => ["/files", "/font","/img", "/scripts","/css"], :root => "public"
@@ -38,9 +56,5 @@ end
 
 map "/" do 
   run Huboard::App
-end
-
-map "/settings" do 
-    run Huboard::Accounts
 end
 

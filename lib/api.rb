@@ -5,22 +5,6 @@ class Huboard
     #register Sinatra::Auth::Github
 
 
-    PUBLIC_URLS = ['/authorized']
-    RESERVED_URLS = %w{ subscribe settings profiles v2 site }
-
-    before "/:user/:repo/?*" do 
-      
-      return if RESERVED_URLS.include? params[:user]
-
-      if authenticated? :private
-        repo = gh.repos(params[:user], params[:repo]).raw
-      else
-        repo = gh.repos(params[:user], params[:repo]).raw
-      end
-
-      raise Sinatra::NotFound if repo.status == 404
-
-    end
 
     helpers do
       def protected! 
@@ -32,8 +16,6 @@ class Huboard
         halt [403, "Access denied"]
       end
     end
-
-    # json api
 
     get '/authorized' do
       token = params[:token]
@@ -301,9 +283,6 @@ class Huboard
         :has_plan => customer.rows.size > 0
     end
 
-    get "/token" do
-      return "Encrypted: #{encrypted_token}"
-    end
 
   end
 end
