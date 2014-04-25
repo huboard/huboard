@@ -23,3 +23,5 @@ node_modules
 /cookbooks
 /bin
 .vagrant
+.kansorc
+couch/kanso/packages
