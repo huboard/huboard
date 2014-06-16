@@ -4,106 +4,29 @@
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
 
-MEMORY=2048
-CORES=2
-
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-  config.vm.box = "precise32"
+  # Every Vagrant virtual environment requires a box to build off of.
+  config.vm.box = "puppetlabs/debian-7.4-64-puppet"
 
-  config.vm.box_url = "http://files.vagrantup.com/precise32.box"
+  config.vm.network "forwarded_port", guest: 9393, host: 9393
 
-  config.omnibus.chef_version = :latest
+  # Create a private network, which allows host-only access to the machine
+  # using a specific IP.
+  config.vm.network "private_network", ip: "192.168.33.22"
 
-  config.vm.provision :chef_solo do |chef|
-    chef.cookbooks_path = "cookbooks"
-    chef.add_recipe 'apt'
-    chef.add_recipe 'git'
-    chef.add_recipe "build-essential"
+
+  # Share an additional folder to the guest VM. The first argument is
+  # the path on the host to the actual folder. The second argument is
+  # the path on the guest to mount the folder. And the optional third
+  # argument is a set of non-required options.
+  config.vm.synced_folder ".", "/opt/huboard", type: "nfs"
+
+  config.vm.provision "puppet", :facter => { "osfamily" => "debian" }, :module_path => [ "modules"] do |puppet|
+    puppet.manifests_path = "puppet/manifests"
+    puppet.manifest_file  = "base.pp"
+    puppet.options        = %w[ --libdir=\\$manifestdir/../modules-0/rbenv/lib/puppet ]
   end
 
-  config.vm.define "theworks", :primary => true do |web| 
-    web.vm.network "private_network", ip: "192.168.50.4"
-    web.vm.network :forwarded_port, guest: 9292, host: 9292
-    web.vm.synced_folder ".", "/vagrant", type: "nfs"
-
-    web.vm.provider :virtualbox do |v|
-      # Use VBoxManage to customize the VM. For example to change memory:
-      v.customize ["modifyvm", :id, "--memory", MEMORY.to_i]
-      v.customize ["modifyvm", :id, "--cpus", CORES.to_i]
-
-      if CORES.to_i > 1
-        v.customize ["modifyvm", :id, "--ioapic", "on"]
-      end
-    end
-
-    web.vm.provision :chef_solo do |chef|
-      chef.cookbooks_path = "cookbooks"
-
-      chef.add_recipe "ruby_build"
-      chef.add_recipe "rbenv::system"
-      chef.add_recipe "rbenv::vagrant"
-      chef.add_recipe "couchdb::source"
-      chef.add_recipe "memcached"
-      chef.add_recipe "nodejs"
-
-      chef.json = { 
-        "rbenv" => {
-          "rubies" => [ "2.0.0-p353" ],
-          "global" => "2.0.0-p353",
-          "gems" => {
-            "2.0.0-p353" => [
-              { "name" => "bundler" }
-            ]
-          }
-        }
-      }
-    end
-
-
-    web.vm.provision "shell" do |s|
-      s.path = "provisioning/couchdb.sh"
-      s.privileged = false
-    end
-
-    web.vm.provision "shell" do |s|
-      s.path = "provisioning/huboard.sh"
-      s.privileged = false
-    end
-  end
-  
-  config.vm.define "couch" do |couch|
-    couch.vm.box = "precise32"
-    couch.vm.network :forwarded_port, guest: 5984, host: 5984
-    couch.vm.network :forwarded_port, guest: 6379, host: 6379
-    couch.vm.network :forwarded_port, guest: 11211, host: 11212
-
-    couch.vm.provision :chef_solo do |chef|
-      chef.cookbooks_path = "cookbooks"
-      chef.add_recipe "couchdb::source"
-      chef.add_recipe "nodejs"
-      chef.add_recipe "memcached"
-      chef.add_recipe "redisio::install"
-      chef.add_recipe "redisio::enable"
-
-      chef.json = { 
-        "couch_db" => {
-          "config" => {
-            "httpd" => {
-              "bind_address" => "0.0.0.0"
-            }
-          }
-        },
-        "redisio" => {
-          "default_settings" => {
-            "address" => "0.0.0.0"
-          }
-        }
-      }
-    end
-    couch.vm.provision "shell" do |s|
-      s.path = "provisioning/couchdb.sh"
-      s.privileged = false
-    end
-  end
 end
+
