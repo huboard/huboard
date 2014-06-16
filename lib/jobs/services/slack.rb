@@ -1,10 +1,19 @@
 class Slack < Huboard::Service
+  def connection
+    @connection ||= Faraday.new do |builder|
+      builder.response :logger
+      builder.request :url_encoded
+      builder.adapter Faraday.default_adapter
+    end
+  end
   def receive_event
     if self.respond_to? "transform_#{event.to_s}"
-      Faraday.post do |req|
+      mash = Hashie::Mash.new payload
+      mash.payload.issue.body_text = mash.payload.issue.body if mash.payload.issue.body_text.nil?
+      connection.post do |req|
         req.url data.webhookURL
         req.headers['Content-Type'] = 'application/json'
-        slack = self.send("transform_#{event.to_s}", payload)
+        slack = self.send("transform_#{event.to_s}", mash)
         slack.merge! :channel => data.channel unless data.channel.empty?
         req.body = slack.to_json
       end
@@ -15,8 +24,7 @@ class Slack < Huboard::Service
     ENV["GITHUB_WEB_ENDPOINT"] || "https://github.com/"
   end
 
-  def transform_moved(message)
-    mash = Hashie::Mash.new message
+  def transform_moved(mash)
     return {
       username: "#{mash.meta.user.login} via HuBoard",
       icon_url: "https://avatars.githubusercontent.com/u/#{mash.meta.user.id}?s=64",
@@ -30,8 +38,7 @@ class Slack < Huboard::Service
     }
   end
 
-  def transform_assigned(message)
-    mash = Hashie::Mash.new message
+  def transform_assigned(mash)
     if mash.payload.assignee.nil?
       return {
         username: "#{mash.meta.user.login} via HuBoard",
@@ -59,8 +66,7 @@ class Slack < Huboard::Service
     end
   end
 
-  def transform_milestone_changed(message)
-    mash = Hashie::Mash.new message
+  def transform_milestone_changed(mash)
     if mash.payload.milestone.nil?
     return {
       username: "#{mash.meta.user.login} via HuBoard",
@@ -88,7 +94,7 @@ class Slack < Huboard::Service
     end
   end
 
-  def transform_issue_status_changed(message)
+  def transform_issue_status_changed(mash)
     icon = {
       unready: "",
       ready: ":point_right: ",
@@ -101,7 +107,6 @@ class Slack < Huboard::Service
       blocked: "#f9646e",
       unblocked: "#e3e4e6"
     }
-    mash = Hashie::Mash.new message
     return {
       username: "#{mash.meta.user.login} via HuBoard",
       icon_url: "https://avatars.githubusercontent.com/u/#{mash.meta.user.id}?s=64",
@@ -115,8 +120,7 @@ class Slack < Huboard::Service
     }
   end
 
-  def transform_issue_opened(message)
-    mash = Hashie::Mash.new message
+  def transform_issue_opened(mash)
     return {
       username: "#{mash.meta.user.login} via HuBoard",
       icon_url: "https://avatars.githubusercontent.com/u/#{mash.meta.user.id}?s=64",
@@ -124,8 +128,7 @@ class Slack < Huboard::Service
         fallback: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> opened a new issue <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}>",
         pretext: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> opened a new issue <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}>",
         fields: [
-          {title: "Title", value: "#{mash.payload.issue.title}", short: false},
-          {title: "Description", value: "#{mash.payload.issue.body_text.split("\n").take(3).join("\n")}", short: false},
+          {title: "#{mash.payload.issue.title}", value: "#{mash.payload.issue.body_text.split("\n").take(3).join("\n")}", short: false},
         ],
         color: "#6cc644",
         mrkdwn_in: ["text","fields"],
@@ -134,8 +137,7 @@ class Slack < Huboard::Service
     }
   end
 
-  def transform_issue_closed(message)
-    mash = Hashie::Mash.new message
+  def transform_issue_closed(mash)
     return {
       username: "#{mash.meta.user.login} via HuBoard",
       icon_url: "https://avatars.githubusercontent.com/u/#{mash.meta.user.id}?s=64",
@@ -143,8 +145,7 @@ class Slack < Huboard::Service
         fallback: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> closed <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}>",
         pretext: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> closed <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}>",
         fields: [
-          {title: "Title", value: "#{mash.payload.issue.title}", short: false},
-          {title: "Description", value: "#{mash.payload.issue.body_text.split("\n").take(3).join("\n")}", short: false},
+          {title: "#{mash.payload.issue.title}", value: "#{mash.payload.issue.body_text.split("\n").take(3).join("\n")}", short: false},
         ],
         color: "#8274d6",
         mrkdwn_in: ["text","fields"],
@@ -153,8 +154,7 @@ class Slack < Huboard::Service
     }
   end
 
-  def transform_issue_reopened(message)
-    mash = Hashie::Mash.new message
+  def transform_issue_reopened(mash)
     return {
       username: "#{mash.meta.user.login} via HuBoard",
       icon_url: "https://avatars.githubusercontent.com/u/#{mash.meta.user.id}?s=64",
@@ -162,8 +162,7 @@ class Slack < Huboard::Service
         fallback: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> reopened <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}>",
         pretext: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> reopened <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}>",
         fields: [
-          {title: "Title", value: "#{mash.payload.issue.title}", short: false},
-          {title: "Description", value: "#{mash.payload.issue.body_text.split("\n").take(3).join("\n")}", short: false},
+          {title: "#{mash.payload.issue.title}", value: "#{mash.payload.issue.body_text.split("\n").take(3).join("\n")}", short: false},
         ],
         color: "#6cc644",
         mrkdwn_in: ["text","fields"],

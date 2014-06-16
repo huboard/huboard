@@ -1,0 +1,48 @@
+FORGE
+  remote: http://forge.puppetlabs.com
+  specs:
+    maestrodev/wget (1.4.3)
+    puppetlabs/firewall (1.1.2)
+    puppetlabs/gcc (0.1.0)
+    puppetlabs/stdlib (4.2.2)
+    saz/memcached (2.4.0)
+      puppetlabs/firewall (>= 0.1.0)
+      puppetlabs/stdlib (>= 3.2.0)
+    thomasvandoren/redis (0.0.9)
+      maestrodev/wget (>= 0.0.0)
+      puppetlabs/gcc (>= 0.0.0)
+    willdurand/nodejs (1.6.4)
+      maestrodev/wget (>= 0.0.0)
+      puppetlabs/stdlib (>= 0.0.0)
+
+GIT
+  remote: https://github.com/alup/puppet-rbenv.git
+  ref: master
+  sha: f06c3aee6831237201b0f1975978a1c7ddad9497
+  specs:
+    alup/rbenv (1.2.0)
+
+GIT
+  remote: https://github.com/huboard/puppet-module-couchdb.git
+  ref: master
+  sha: f355afaf6346d8a29635c8b00eebb0df4eae4c49
+  specs:
+    benjamin/couchdb (0.0.2)
+
+GIT
+  remote: https://github.com/puppetlabs/puppetlabs-apt.git
+  ref: master
+  sha: 4929de0d4211bf4c0a43334b140eb72044c893f6
+  specs:
+    puppetlabs/apt (1.4.2)
+      puppetlabs/stdlib (>= 2.2.1)
+
+DEPENDENCIES
+  alup/rbenv (>= 0)
+  benjamin/couchdb (>= 0)
+  puppetlabs/apt (>= 0)
+  puppetlabs/stdlib (>= 0)
+  saz/memcached (>= 0)
+  thomasvandoren/redis (>= 0)
+  willdurand/nodejs (>= 0)
+
