@@ -53,7 +53,7 @@ exec { "vagrant::rbenv::rehash":
 exec { 'install-vagrant':
   environment => "HOME=/home/vagrant RACK_ENV=production",
   command     => 'bundle install --path vendor/bundler',
-  cwd         => '/opt/enterprise.huboard.com',
+  cwd         => '/opt/huboard',
   user        => 'vagrant',
   provider    => 'shell',
   path        => ["/home/vagrant/.rbenv/shims","/home/vagrant/.rbenv/bin","/bin", "/usr/bin"],
@@ -61,6 +61,44 @@ exec { 'install-vagrant':
     Rbenv::Compile['vagrant/2.1.1'],
     Rbenv::Gem['rbenv::bundler vagrant 2.1.1'],
     Exec['rbenv::rehash vagrant 2.1.1'],
-    ],
+  ],
 }
 
+class { 'redis':
+  version            => '2.6.5',
+}
+
+package { 'couchdb':
+  ensure => installed,
+}
+
+service { 'couchdb':
+  ensure      => running,
+  enable      => true,
+  hasstatus   => true,
+  hasrestart  => true,
+  require     => Package[ 'couchdb' ]
+}
+
+class { 'nodejs':
+  version => 'v0.10.25',
+}
+
+package { 'couchapp':
+  provider => npm,
+}
+
+exec { 'create_db':
+  command => '/bin/sleep 5 && /usr/bin/curl -X PUT http://127.0.0.1:5984/huboard',
+  require => Package['couchdb'],
+}
+
+
+exec { 'run-couchapp':
+  command => '/bin/sleep 5 && /usr/local/node/node-default/bin/couchapp -dc push /opt/huboard/couch/app http://127.0.0.1:5984/huboard',
+  path    => ["/bin", "/usr/bin", "/usr/local/node/node-default/bin"],
+  require => [
+    Package['couchapp'],
+    Exec['create_db'],
+  ],
+}

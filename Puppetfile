@@ -19,6 +19,12 @@ mod 'puppetlabs/apt',
 mod 'alup/rbenv',
   :git  => "https://github.com/alup/puppet-rbenv.git"
 
-mod 'thomavandoren/redis'
 
-mod 'benjamin/couchdb'
+mod 'thomasvandoren/redis'
+
+mod 'benjamin/couchdb',
+  :git => 'https://github.com/huboard/puppet-module-couchdb.git'
+
+mod 'willdurand/nodejs'
+
+mod 'saz/memcached'
