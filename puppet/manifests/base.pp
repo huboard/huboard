@@ -102,3 +102,7 @@ exec { 'run-couchapp':
     Exec['create_db'],
   ],
 }
+
+class { 'memcached':
+  max_memory => '12%'
+}
