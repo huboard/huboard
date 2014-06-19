@@ -34,7 +34,7 @@ class Huboard
        gh.issues.create({
          title: issue.title,
          body: issue.body,
-         labels: [column_labels.first].concat(issue.labels),
+         labels: [column_labels.first.name].concat(issue.labels.map{|l| l["name"]}),
          assignee: assignee,
          milestone: milestone
        }).extend(Card).merge!({"repo" => {:owner => {:login => @user}, :name => @repo }})
@@ -132,6 +132,7 @@ class Huboard
       end
 
       def patch(hash)
+        hash["labels"] = hash["labels"].map {|l| l["name"] } if hash["labels"]
         updated = client.patch hash
         updated.extend(Card).merge!(:repo => repo)
       end

@@ -36,7 +36,7 @@ class Ghee
       errors = unless message.empty?
                  response_body[:errors] ?  ": #{response_body[:errors].map{|e|e[:message]}.join(', ')}" : ''
                end
-      "#{@response[:method].to_s.upcase} #{@response[:url].to_s}: #{@response[:status]}#{message}#{errors}"
+      "#{@response[:method].to_s.upcase} #{@response[:url].to_s}: #{@response[:status]}#{message}#{errors} #{response_body}"
     end
   end
 
