@@ -58,4 +58,5 @@ group :production do
   gem 'newrelic_rpm'
   gem 'unicorn'
   gem 'rainbows'
+  gem 'raygun4ruby'
 end
