@@ -18,7 +18,9 @@ class Huboard
           customer = couch.customers.findPlanById user.id
           session[:github_login] = user.login
           session[:redirect_to] = user.login == gh.user.login ? "/settings/profile" : "/settings/profile/#/#{user.login}"
-          halt([401, "Access denied"]) if !customer.rows.any? #|| customer.rows.first.value.stripe.customer.delinquent
+          if ENV['RACK_ENV'] == "production"
+            halt([401, "Access denied"]) if !customer.rows.any? #|| customer.rows.first.value.stripe.customer.delinquent
+          end
         end
 
       else
