@@ -118,13 +118,6 @@ class Huboard
       redirect "/#{params[:user]}/#{params[:repo]}/"
     end
 
-    get '/:user/:repo/hook/?' do 
-      pass if params[:user] == "assets"
-      raise Sinatra::NotFound unless huboard.board(params[:user], params[:repo]).has_board?
-      @parameters = params
-      json(pebble.create_hook( params[:user], params[:repo], "#{socket_backend}/issues/webhook?token=#{encrypted_token}")) unless socket_backend.nil?
-    end
-
     get "/favicon.ico" do
      
       path = File.expand_path("../../public/img/favicon.ico",__FILE__)
