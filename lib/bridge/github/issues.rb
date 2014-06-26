@@ -141,6 +141,7 @@ class Huboard
         def move(index, order=nil, moved = false)
           board = Huboard::Board.new(self[:repo][:owner][:login], self[:repo][:name], @connection_factory)
           column_labels = board.column_labels
+          self.labels = [] if self.labels.nil?
           self.labels = self.labels.delete_if { |l| Huboard.column_pattern.match l.name }
           new_state = column_labels.find { |l| /#{index}\s*- *.+/.match l.name }
           self.labels << new_state unless new_state.nil?
