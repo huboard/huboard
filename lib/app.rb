@@ -146,23 +146,6 @@ class Huboard
       [status, headers, response]
     end
 
-    post '/webhook/?' do 
-      begin
-        token =  decrypt_token( params[:token] )
-        ghee = gh(token)
-        hub = Stint::Pebble.new(Stint::Github.new(ghee))
-
-        payload = JSON.parse(params[:payload])
-        user = payload["repository"]["owner"]["login"]
-        repo = payload["repository"]["name"]
-        hooks = ghee.repos(payload["repository"]["full_name"]).hooks.reject {|x| x["name"] != "web" }.find_all {|x| x["config"]["url"].start_with? base_url}
-        hub.fix_hooks user, repo, hooks
-        return json(hub.create_hook(user, repo, "#{socket_backend}/issues/webhook?token=#{params[:token]}")) unless socket_backend.nil?
-      rescue
-        return json({:message => "something go wrong?"})
-      end
-    end
-
     not_found do
       erb :"404", :layout => false
     end
