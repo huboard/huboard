@@ -5,7 +5,6 @@ require_relative '../lib/marketing/marketing'
 require_relative '../lib/app'
 require_relative '../lib/api'
 require_relative '../lib/account.rb'
-require_relative '../lib/github'
 require_relative '../lib/pebble'
 
 require_relative '../lib/environments/production/helpers'

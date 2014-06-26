@@ -108,5 +108,13 @@ class Huboard
        return target
     end
 
+    def create_board
+      create_label :name => "0 - Backlog", :color => "CCCCCC"
+      create_label :name => "1 - Ready", :color => "CCCCCC"
+      create_label :name => "2 - Working", :color => "CCCCCC"
+      create_label :name => "3 - Done", :color => "CCCCCC"
+      create_hook
+    end
+
   end
 end

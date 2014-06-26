@@ -20,6 +20,10 @@ class Huboard
       end
     end
 
+    def create_label(params)
+      gh.labels.create params
+    end
+
     def labels
       labels = gh.labels.all
       labels.is_a?(Array) ? labels : []

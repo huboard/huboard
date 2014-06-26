@@ -93,50 +93,6 @@ module Stint
       issue.reorder(index)
     end
 
-    def create_board(user_name, repo, hook)
-      github.create_label user_name, repo, :name => "0 - Backlog", :color => "CCCCCC"
-      github.create_label user_name, repo, :name => "1 - Ready", :color => "CCCCCC"
-      github.create_label user_name, repo, :name => "2 - Working", :color => "CCCCCC"
-      github.create_label user_name, repo, :name => "3 - Done", :color => "CCCCCC"
-      create_hook user_name, repo, hook if hook
-    end
-
-
-    def hook_exists(user_name, repo, token)
-      hooks = github.hooks user_name, repo
-
-      uri = URI.parse(token)
-
-      hook_url = uri.to_s.gsub(uri.query,"")
-
-      hooks.reject{ |x| x["name"] != "web" }.find_all{ |x| x["config"]["url"].start_with? hook_url}.size > 0
-
-    end
-
-    def fix_hooks(user_name, repo, hooks)
-      hooks.each { |h| delete_hook user_name, repo, h }
-    end
-
-    def delete_hook(user_name, repo, hook)
-      github.delete_hook(user_name, repo, hook["id"])
-    end
-
-    def create_hook(user_name, repo, token)
-
-      return { message: "hook already exists", success: false  } if hook_exists user_name, repo, token
-
-      params = {
-        name:"web",
-        config: {
-        url: token
-      },
-        events: ["issues"],
-        active: true
-      }
-      github.create_hook( user_name, repo, params).merge( { success: true, message: "hook created successfully"})
-    end
-
-
     def assign_card(user_name, repo, the_issue, assignee)
       issue = huboard.board(user_name, repo).issue(the_issue)
       issue.patch "assignee" => assignee

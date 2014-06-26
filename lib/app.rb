@@ -113,13 +113,12 @@ class Huboard
 
     post '/:user/:repo/board/create/?' do
       pass if params[:user] == "assets"
-      hook_url = "#{socket_backend}/issues/webhook?token=#{encrypted_token}"
-      pebble.create_board(params[:user],params[:repo], socket_backend.nil? ? nil : hook_url)
+      huboard.board(params[:user], params[:repo]).create_board
       redirect "/#{params[:user]}/#{params[:repo]}/"
     end
 
     get "/favicon.ico" do
-     
+
       path = File.expand_path("../../public/img/favicon.ico",__FILE__)
 
       response = [ ::File.open(path, 'rb') { |file| file.read } ]
