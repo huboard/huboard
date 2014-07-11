@@ -1,106 +1,158 @@
+<% content_for :marketing_hero do %>
+	<!-- hero -->
+	<section class="hero"><div class="container">
+		<h2 class="hero__title">Plans &amp; Pricing</h2>
+		<p class="hero__copy">
+			Accounts are <strong>free</strong> for open source projects and include <strong>unlimited</strong> public repositories and <strong>unlimited</strong> public collaborators.
+		</p>
+		<a href="#" class="btn hero__btn">Create a free account <i class="icon icon--lt"></i></a>
+	</div></section>
+	<!-- / hero -->
+<% end %>
 
-<div class="pricing">
-  <div class="page-header preamble">
-    <div class="container">
-      <div class="row">
-        <div class="span12">
-          <h1>Plans & Pricing <small>Join today and make your GitHub issues awesome</small></h1>
-        </div>
-      </div>                                                  
-    </div>
-  </div>
-  <div class="container">
-    <div class="plans">
-      <div class="row">
-        <div class="span12 plan-intro">               
-          <p><a href="/login" class="hb-button small right">Create a free account</a>
-          Accounts are <strong>free</strong> for open source projects and include <strong>unlimited</strong>
-          public repositories and <strong>unlimited</strong> public collaborators.</p>
+<!-- main content area -->
+<div class="main"><div class="container">
+	<!-- page intro -->
+	<header class="page-intro">
+		<h1 class="page-intro__heading heading">Simple pricing</h1>
+		<p>Signing up for HuBoard will make all your GitHub issues vanish.<br />Just like that.</p>
+	</header>
+	
+	<!-- plans & pricing page -->
+	<div class="plans">
+		<!-- plans help form -->
+		<section class="plans-help">
+			<p class="plans-help__copy"><strong>Need help?</strong> Tell us the username of the private repository you want to create a HuBoard for.</p>
 
-        </div>
-      </div>
-       <div class="row">
-        <div class="span12">
-          <p>
-            <form class="plan-picker">
-            <div class=" input-append right">
-              <span>https://github.com/</span>
-              <input placeholder="username" class="plan-help inputAppendButton" type="text" />
-                <button class="hb-button small">Find plan</button>
-              </div>
-            </form>
-  
-            <strong>Need help?</strong> Tell us the username of the private repository you want to create a HuBoard for.
-          </p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="span6">
-          <div class="plan organization">
-            <h2>Organization<span class="price">$24/month</span></h2>
-            <ul class="unstyled">
-              <li><strong>unlimited</strong> public repositories *</li>
-              <li><strong>unlimited</strong> private repositories</li>
-              <li><strong>unlimited</strong> teams</li>
-            </ul>
-            <div class="subscribe">
-              <a href='settings/profile' class="hb-button">Subscribe</a>
-            </div>
-          </div>
-        </div>
-        <div class="span6">
-          <div class="plan user">
-            <h2>User<span class="price">$7/month</span></h2>
-            <ul class="unstyled">
-              <li><strong>unlimited</strong> public repositories *</li>
-              <li><strong>unlimited</strong> private repositories</li>
-              <li><strong>unlimited</strong> users</li>
-            </ul>
-            <div class="subscribe">
-              <a href='settings/profile' class="hb-button">Subscribe</a>
-            </div>
-          </div>
-        </div>
-        <div class="span12">
-          <h3 class="free"><strong>* unlimited</strong> public repositories will always be <span class="price">Free</span></h3>
-        </div>
-      </div>
-     
-    </div>
-    <div class="features">
-      <div class="container" >
-        <div class="row" style="margin-bottom: 40px;">
-          <div class="span4 feature">
-            <h3>No contracts</h3>
-            <p>HuBoard is pay-as-you-go. Upgrade, downgrade, or cancel anytime. You will only be responsible for charges incurred during your active billing period.</p>
-          </div>
-          <div class="span4 feature">
-            <h3>256-bit SSL Security</h3>
-            <p>HuBoard uses secure 256-bit SSL encryption by default and all data is stored securely. For more on privacy, see our <a href="/site/privacy">privacy policy</a>.</p>
-          </div>
-          <div class="span4 feature">
-            <h3>Who sees my repositories?</h3>
-            <p>You control who can see repositories. We respect the same permissions you have setup with your GitHub repositories</p>
-          </div>
-        </div>
-        <div class="row">
-          <div class="span4 feature">
-            <h3>Is my access token secure?</h3>
-            <p>HuBoard never stores your OAuth token on our servers and your token is <strong>never</strong> exposed to the browser unencrypted. You can rest easy knowing that your GitHub repositories are safe and secure, for more information feel free to <a href="mailto:support@huboard.com?subject=OAuth Inquiry">Email us</a> anytime.</p>
-          </div>
-          <div class="span4 feature">
-            <h3>Forms of payment</h3>
-            <p>We accept all major credit cards: Visa, Mastercard, American Express, Discover. Our payments are processed by <a href="https://stripe.com" >Stripe</a>.</p>
-          </div>
-          <div class="span4 feature">
-            <h3>Educational institution?</h3>
-            <p>We proudly offer our best plan free to educational institutions. To get started, <a href="mailto:support@huboard.com?subject=Non-profit Inquiry">Contact us</a>.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+			<form class="plans-help-form" action="">
+				<label for="repo" class="plans-help-form__label">http://github.com/</label>
+				<input type="text" name="repo" id="repo" class="plans-help-form__input">
+			</form>
+		</section>
+		<!-- / plans help form -->
+
+		<!-- plan -->
+		<section class="plan">
+			<header class="plan__header">
+				<h3 class="plan__title">Organization</h3>
+				<p class="plan__price">$24/mo</p>
+			</header>
+			<ul class="plan__features">
+				<li class="plan__feature">
+        <img src="<%= image_path 'marketing/plan-icon-1.png' %>" alt="Icon">
+					<p><strong>*Unlimited</strong> Public Respositories</p>
+				</li>
+				<li class="plan__feature">
+        <img src="<%= image_path 'marketing/plan-icon-2.png' %>" alt="Icon">
+					<p><strong>*Unlimited</strong> Private Respositories</p>
+				</li>
+				<li class="plan__feature">
+          <img src="<%= image_path 'marketing/plan-icon-3.png' %>" alt="Icon">
+					<p><strong>Unlimited</strong> Teams</p>
+				</li>
+			</ul>
+			<div class="plan__action">
+				<a href="#" class="btn--beta">Subscribe to this plan</a>
+			</div>
+		</section>
+
+		<!-- plan separator -->
+		<div class="plan-separator">
+			<p><strong>* Unlimited</strong> Public Repositories will always be free</p>
+		</div>
+
+		<!-- plan -->
+		<section class="plan plan--grey">
+			<header class="plan__header">
+				<h3 class="plan__title">User</h3>
+				<p class="plan__price">$5/mo</p>
+			</header>
+			<ul class="plan__features">
+				<li class="plan__feature">
+          <img src="<%= image_path 'marketing/plan-icon-1.png' %>" alt="Icon">
+					<p><strong>*Unlimited</strong> Public Respositories</p>
+				</li>
+				<li class="plan__feature">
+          <img src="<%= image_path 'marketing/plan-icon-2.png' %>" alt="Icon">
+					<p><strong>*Unlimited</strong> Private Respositories</p>
+				</li>
+				<li class="plan__feature">
+          <img src="<%= image_path 'marketing/plan-icon-3.png' %>" alt="Icon">
+					<p><strong>Unlimited</strong> Teams</p>
+				</li>
+			</ul>
+			<div class="plan__action">
+				<a href="#" class="btn--beta">Subscribe to this plan</a>
+			</div>
+		</section>
+	</div>
+	<!-- / plans & pricing page -->
+
+	<!-- faq -->
+	<div class="faq">
+		<!-- question -->
+		<div class="faq__col">
+      <img src="<%= image_path 'marketing/faq-1.png' %>" alt="icon">
+			<h4 class="faq__question">No contracts</h4>
+			<div class="faq__answer">
+				<p>HuBoard is pay-as-you-go. Upgrade, downgrade, or cancel anytime. You will only be responsible for charges incurred during your active billing period.</p>
+			</div>
+		</div>
+		<!-- question -->
+		<div class="faq__col">
+      <img src="<%= image_path 'marketing/faq-2.png' %>" alt="icon">
+			<h4 class="faq__question">256-bit SSL Security</h4>
+			<div class="faq__answer">
+				<p>HuBoard uses secure 256-bit SSL encryption by default and all data is stored securely. For more on privacy, see our privacy policy.</p>
+			</div>
+		</div>
+		<!-- question -->
+		<div class="faq__col">
+      <img src="<%= image_path 'marketing/faq-3.png' %>" alt="icon">
+			<h4 class="faq__question">Forms of payment</h4>
+			<div class="faq__answer">
+				<p>We accept all major credit cards: Visa, Mastercard, American Express, Discover. Our payments are processed by Stripe.</p>
+			</div>
+		</div>
+		<!-- question -->
+		<div class="faq__col">
+      <img src="<%= image_path 'marketing/faq-4.png' %>" alt="icon">
+			<h4 class="faq__question">Who see my repositories?</h4>
+			<div class="faq__answer">
+				<p>You control who can see repositories. We respect the same permissions you have setup with your GitHub repositories</p>
+			</div>
+		</div>
+		<!-- question -->
+		<div class="faq__col">
+      <img src="<%= image_path 'marketing/faq-5.png' %>" alt="icon">
+			<h4 class="faq__question">Is my access token secure?</h4>
+			<div class="faq__answer">
+				<p>HuBoard never stores your OAuth token on our servers and your token is never exposed to the browser unencrypted. You can rest easy knowing that your GitHub repositories are safe and secure, for more information feel free to Email us anytime.</p>
+			</div>
+		</div>
+		<!-- question -->
+		<div class="faq__col">
+      <img src="<%= image_path 'marketing/faq-6.png' %>" alt="icon">
+			<h4 class="faq__question">Educational institution?</h4>
+			<div class="faq__answer">
+				<p>We proudly offer our best plan free to educational institutions. To get started, Contact us.</p>
+			</div>
+		</div>
+	</div>
+	<!-- / faq -->
+</div></div>
+<!-- / main content area -->
+<!-- bottom call to action -->
+<div class="cta"><div class="container">
+	<h3 class="cta__heading">Run Huboard on your own servers. <a href="#"><span>Go Enterprise</span>.</a></h3>
+	<div class="cta__copy">
+		<p>With <a href="#">HuBoard Enterprise</a>, you have complete control over project management for GitHub repositories. <strong>Try it today!</strong></p>
+	</div>
+	<a href="#" class="btn">Learn more about HuBoard Enterprise <i class="icon icon--lt"></i></a>
+</div></div>
+
+
+
 <script>
   $(".plan-picker").on("submit", function(ev){
     ev.preventDefault();

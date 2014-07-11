@@ -1,205 +1,163 @@
-<div class="preamble">
-  <header class="container ">
-  <div class="row">
-    <div class="span12">
+<% content_for :marketing_hero do %>
+	<!-- hero -->
+	<section class="hero"><div class="container">
+		<h2 class="hero__title">Iron out your GitHub issues</h2>
+		<p class="hero__copy">
+			HuBoard is built from the ground up using the GitHub public API. HuBoard issues are GitHub issues, you will never have to deal with syncronization problems. Keep issues where they belong, in the repository with your code!
+		</p>
+		<a href="#" class="btn hero__btn">Sign up for a 14 day free trial <i class="icon icon--lt"></i></a>
+	</div></section>
+	<!-- / hero -->
+<% end %>
+<!-- main content area -->
+<div class="main"><div class="container">
+	<!-- page intro -->
+	<header class="page-intro">
+		<h1 class="page-intro__heading heading">Features</h1>
+	</header>
+	
+	<!-- features -->
+	<section id="features" class="features">
+		<!-- feature -->
+		<div class="feature feature--row">
+			<div class="feature__image">
+        <img src="<%= image_path 'marketing/feature-1.png' %>" alt="Feature thumbnail">
+			</div>
+			<div class="feature__copy">
+				<h3 class="heading feature__title">Lightweight Kanban Board</h3>
+				<p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Aenean lacinia bibendum nulla sed consectetur. Donec ullamcorper nulla non metus auctor fringilla.</p>
+			</div>
+		</div>
+		<!-- feature -->
+		<div class="feature feature--row feature--row--alt">
+			<div class="feature__image">
+        <img src="<%= image_path 'marketing/feature-blank.png'%>" alt="Feature thumbnail">
+			</div>
+			<div class="feature__copy">
+				<h3 class="heading feature__title">Three state multi faceted filtering</h3>
+				<p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Aenean lacinia bibendum nulla sed consectetur. Donec ullamcorper nulla non metus auctor fringilla.</p>
+			</div>
+		</div>
+		<!-- feature -->
+		<div class="feature feature--row">
+			<div class="feature__image">
+        <img src="<%= image_path 'marketing/feature-blank.png' %>" alt="Feature thumbnail">
+			</div>
+			<div class="feature__copy">
+				<h3 class="heading feature__title">Drag to assign issues</h3>
+				<p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Aenean lacinia bibendum nulla sed consectetur. Donec ullamcorper nulla non metus auctor fringilla.</p>
+			</div>
+		</div>
 
-      <h1>
-        GitHub issues made awesome
-        <small>Instant project management for GitHub repositories</small>
-      </h1>
-     
-        <div class="span12 sign-up">
-          <a class="hb-button" href="/pricing">Sign up</a>
-        </div>
-    </div>
-   
-  </div>
-  </header>
-</div>
+		<!-- feature columns -->
+		<div class="feature__columns">
+			<!-- feature -->
+			<div class="feature feature--column">
+				<div class="feature__image">
+          <img src="<%= image_path 'marketing/feature-blank-small.png' %>" alt="Feature title">
+				</div>
+				<div class="feature__copy">
+					<h3 class="heading feature__title">Prioritize</h3>
+					<p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo.</p>
+				</div>
+			</div>
 
-<div class="features">
-  <div class="container">
-    <div class="row">
-      <div class="span12">
-        
-      <h2> What people are saying </h2>
-      </div>
-      <div class="span4">
-        <blockquote>
-          <div>
-            <img src="https://secure.gravatar.com/avatar/7b496f4e0e18279ffeb75ab1a3edea7c?s=24"/> Chris McAvoy, Mozilla Open Badges
-          </div>
-          <span>
-We're a distributed team that loves markers and paper. When we can't all
-be in the same place, HuBoard is the best alternative we've found to a nice
-sharpie and some index cards. Plus, Github. HuBoard is the animated gifs of
-kanban style Github issue management.
-          </span>
-          <br />
-        </blockquote>
-      </div>
-      <div class="span4">
-        <blockquote>
-          <div>
-            <img src="https://secure.gravatar.com/avatar/b077605f4799abe20de52b6ded458e99?s=24"/> Adron Hall
-          </div>
-          <span>
-            HuBoard brought together the two key features I needed for projects I was leading.
-            It's open source, integrates with GitHub issues, and has an extremely simple and clean approach to the UX.
-            This has made it my go to for kanban with a remote, fast moving, and high caliber team.
-            Oh, and forgot to mention, the drag and drop for those that don't want to dig around the issues on GitHub is a life saver!
-          </span>
-          <br />
-        </blockquote>
-      </div>
-      <div class="span4">
-        <blockquote>
-          <div>
-          <img src="https://secure.gravatar.com/avatar/9844aef6963e88fdbeef1acb97df5604?s=24"/> Chad Myers, Dovetail Software
-          </div>
-          <span>
-            I love that HuBoard enables us to keep our development tasks AND our project management tasks in a single repository (GitHub Issues).
-            HuBoard provides the best fusion between development and product management I've ever seen.
-            It lets us stay light and nimble while providing the same level of accountability and trace-ability of a big ALM tool.
-            HuBoard blows the heavy 'enterprisey' ALM tools out of the water AND keeps my developers happy!
-          </span>
-          <br />
-        </blockquote>
-      </div>
-    </div>
-  </div>
-</div>
+			<!-- feature -->
+			<div class="feature feature--column">
+				<div class="feature__image">
+          <img src="<%= image_path 'marketing/feature-blank-small.png' %>" alt="Feature title">
+				</div>
+				<div class="feature__copy">
+					<h3 class="heading feature__title">Prioritize</h3>
+					<p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo.</p>
+				</div>
+			</div>
 
-<div class="features gutter">
-  <div class="container">
+			<!-- feature -->
+			<div class="feature feature--column">
+				<div class="feature__image">
+          <img src="<%= image_path 'marketing/feature-blank-small.png' %>" alt="Feature title">
+				</div>
+				<div class="feature__copy">
+					<h3 class="heading feature__title">Prioritize</h3>
+					<p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- / features -->
+</div></div>
+<!-- / main content area -->
+<!-- testimonials -->
+<div class="testimonials"><div class="container">
+	<h3 class="heading testimonials__heading">Loved by&hellip;</h3>
+	<div class="slider">
+		<ul>
+			<li class="testimonial">
+				<blockquote>
+					<p>&ldquo;We're a distributed team that loves markers and paper. When we can't all be in the same place, HuBoard is the best alternative we've found to a nice sharpie and some index cards. Plus, Github. HuBoard is the animated gifs of kanban style Github issue management.&rdquo;</p>
+				</blockquote>
+				<cite>
+					<div class="testimonial__avatar">
+            <img src="<%= image_path 'marketing/avatar.png' %>" alt="Iain Poulson (avatar)">
+					</div>
+					<strong class="testimonial__name">Iain Poulson</strong>
+					<em class="testimonial__title">CTO at Mozilla Open Badges</em>
+				</cite>
+			</li>
+			<li class="testimonial">
+				<blockquote>
+					<p>&ldquo;We're a distributed team that loves markers and paper. When we can't all be in the same place, HuBoard is the best alternative we've found to a nice sharpie and some index cards. Plus, Github. HuBoard is the animated gifs of kanban style Github issue management.&rdquo;</p>
+				</blockquote>
+				<cite>
+					<div class="testimonial__avatar">
+            <img src="<%= image_path 'marketing/avatar.png' %>" alt="Iain Poulson (avatar)">
+					</div>
+					<strong class="testimonial__name">Iain Poulson</strong>
+					<em class="testimonial__title">CTO at Mozilla Open Badges</em>
+				</cite>
+			</li>
+			<li class="testimonial">
+				<blockquote>
+					<p>&ldquo;We're a distributed team that loves markers and paper. When we can't all be in the same place, HuBoard is the best alternative we've found to a nice sharpie and some index cards. Plus, Github. HuBoard is the animated gifs of kanban style Github issue management.&rdquo;</p>
+				</blockquote>
+				<cite>
+					<div class="testimonial__avatar">
+            <img src="<%= image_path 'marketing/avatar.png' %>" alt="Iain Poulson (avatar)">
+					</div>
+					<strong class="testimonial__name">Iain Poulson</strong>
+					<em class="testimonial__title">CTO at Mozilla Open Badges</em>
+				</cite>
+			</li>
+		</ul>
+	</div>
+	<!-- <ol class="testimonials__controls">
+		<li class="active">1</li>
+		<li>2</li>
+		<li>3</li>
+		<li>4</li>
+		<li>5</li>
+	</ol> -->
+</div></div>
+<!-- / testimonials -->
+<!-- customers -->
+<div id='customers' class="customers"><div class="container">
+	<h3 class="heading customers__heading">Trusted by&hellip;</h3>
+	<div class="customers__copy">
+		<p>Nullam id dolor id nibh ultricies vehicula ut id elit. Sed posuere consectetur est at lobortis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id dolor id nibh ultricies vehicula ut id elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam porta sem malesuada magna mollis euismod. Curabitur blandit tempus porttitor.</p>
+	</div>
 
-    <div class="row">
-      <div class="span4">
-        <img width="241px" height="107px" src="/img/github_logo.png" />
-      </div>
-      <div class="span8">
-        <h2>Built using GitHub </h2>
-        <p>
-        HuBoard is built from the ground up using the GitHub public API. HuBoard issues <strong>are</strong> GitHub issues, you will 
-        never have to deal with syncronization problems. Keep issues where they belong, in the repository with your code!
-        </p>
-      </div>
-
-
-    </div>
-  </div>
-</div>
-
-
-<div class="features">
-  <div class="container">
-    <div class="row">
-        <div class="span12">
-          <h2> Features </h2>
-        </div>
-    </div>
-    <div class="row">
-      <div class="span6">
-        <h3>Lightweight Kanban Board </h3>
-        <p>
-        Fully customizable task board gives developers instant feedback into the 
-        status of tasks thoughout your progress.
-        </p>
-      </div>
-      <div class="span6">
-        <div class="feature-well">
-            <div class="feature-well-inner">
-              <img src='http://f.cl.ly/items/201A161R0l2m161L3x2p/drag_and_drop.gif' />
-            </div>
-            
-        </div>
-      </div>
-      <div class="span6">
-        <h3>Three state multi faceted filtering</h3>
-        <p>
-Clicking a filter once will dim out issues that don’t match, click again and they disappear. Filters can be mixed and matched to help you narrow down exactly what you need to work on.
-        </p>
-      </div>
-      <div class="span6">
-         <div class="feature-well">
-            <div class="feature-well-inner">
-               <img src='http://f.cl.ly/items/232H2o3H0Z1c1c2k0o3T/advanced_filtering.gif' />
-            </div>
-            
-        </div>
-      
-      </div>
-      <div class="span6">
-        <h3>Super fast text search on the title</h3>
-        <p>
-          Quickly narrow down the issues you are looking for by typing anything in the title.
-        </p>
-      </div>
-      <div class="span6">
-          <div class="feature-well">
-             <div class="feature-well-inner">
-                <img src='http://f.cl.ly/items/2N1U131v2k0c1T110Y0O/type_search.gif' />
-            </div>
-            
-           
-        </div>
-      
-       
-      </div>
-      <div class="span6">
-        <h3>Drag to assign issues</h3>
-        <p>
-        Quickly assign issues by dragging your avatar onto the card
-        </p>
-      </div>
-      <div class="span6">
-            <div class="feature-well">
-               <div class="feature-well-inner">
-                  <img src='http://f.cl.ly/items/1Q071r1j1Z0S1L1y3w2O/assign_issue.gif' />
-            </div>
-            
-
-                  
-        </div>
-
-      </div>
-      <div class="span6">
-        <h3>Drag issues between milestones</h3>
-        <p>
-        Dragging issues between milestones provides a MUCH needed complement to an amazing feature from GitHub. No more spending hours checking checkboxes and paging through
-        GitHub's awkward grid view. 
-        </p>
-      </div>
-      <div class="span6">
-              <div class="feature-well">
-                   <div class="feature-well-inner">
-                                   <img src='http://cl.ly/image/2H1t1y3s2F14/backlog_drag_and_drop.gif' />
-            </div>
-            
-
-
-        </div>
-      
-      </div>
-      <div class="span6">
-        <h3>Prioritize milestones</h3>
-        <p>
-        Ordering milestones using drag and drop makes it quick and easy to prioritize your backlog.
-        </p>
-      </div>
-      <div class="span6">
-         <div class="feature-well">
-            <div class="feature-well-inner">
-              
-              <img src='http://f.cl.ly/items/0A3f2C2K0B263N2p3I3L/milestone_reorder.gif' />
-            </div>
-        </div>
-       
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-
+	<div class="customers__logos">
+		<div class="customers__logos__row">
+      <span><img src="<%= image_path 'marketing/trusted--twitter.png' %>" alt="Logo"></span>
+      <span><img src="<%= image_path 'marketing/trusted--facebook.png' %>" alt="Logo"></span>
+      <span><img src="<%= image_path 'marketing/trusted--apple.png' %>" alt="Logo"></span>
+		</div>
+		<div class="customers__logos__row">
+      <span><img src="<%= image_path 'marketing/trusted--rdio.png' %>" alt="Logo"></span>
+      <span><img src="<%= image_path 'marketing/trusted--google.png' %>" alt="Logo"></span>
+      <span><img src="<%= image_path 'marketing/trusted--att.png' %>" alt="Logo"></span>
+		</div>
+	</div>
+</div></div>
+<!-- / customers -->

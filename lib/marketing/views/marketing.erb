@@ -1,135 +1,62 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title><% yield_content :title %>HuBoard</title>
-    <link rel="shortcut icon" href="/img/favicon.ico?v=2" />
-    <!-- This is a special version of jQuery with RequireJS built-in -->
-    <%= javascript_tag 'marketing' %>
-    <%= partial :fontdeck %>
-   
-     <%= stylesheet_tag 'bootstrap' %>
-     <%= stylesheet_tag 'marketing' %>
-  </head>
-  <body>        
-    <div id="wrapper">
-      <div class="navbar navbar-static-top">
-        <div class="navbar-inner">
-          <div class="container">
-            
-            <a class="brand" href="/">
-              <img class="animate-before" src="<%=image_path 'LogoWhiteFull.png' %>"/>
-              <img class="animate-after" src="<%=image_path 'Hu.png' %>"/><div class="stat" data-label=".brand label"><span></span><label></label></div><img class="animate-after" src="<%=image_path 'Board.png' %>"/>
-            </a>
-            <div class="nav">
-              <ul class="nav">
-                <li>
-                  <a href="/pricing"> Plans & Pricing</a>
-                </li>
-                <li>
-                   <a href="/login"><span class="nav-btn">Sign in</span></a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <%= yield %>
-      <div id="footer-pusher"></div>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Huboard</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    </div>
-    <div id="footer">
-      <div class="container">
-        <div class="row">
-          <div class="span6">
-            <img src="<%=image_path 'LogoFullPurpleLight.png' %>"/>
-          </div>
-          <div class="links span6">
-            <a href="/site/terms">terms</a>
-            <a href="/site/privacy">privacy</a>
-            <a href="https://github.com/rauhryan/huboard">github</a>
-          </div>
-        </div>
+	<!-- Stylesheets -->
+	<link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700" rel="stylesheet" type="text/css">
+  <%= stylesheet_tag 'marketing/main' %>
 
-      </div>
-    </div>
-    <script type="text/javascript">
+	<!-- Javascript -->
+	<!--[if lt IE 9]>
+	<script src="assets/js/vendor/html5shiv.js"></script>
+	<script src="assets/js/vendor/respond.js"></script>
+	<script src="assets/js/vendor/selectivizr-min.js"></script>
+	<![endif]-->
 
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-28313898-1']);
-      _gaq.push(['_setDomainName', 'huboard.com']);
-      _gaq.push(['_trackPageview']);
+</head>
+<body>
+<!-- top container -->
+<div class="top"><div class="top-inner">
+  <%= partial_erb 'header' %>
+  <% yield_content :marketing_hero %>
 
-      (function() {
-       var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-       ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-       })();
-   (function($){
-      function animateNumber($input, end, duration, easing) {
-        
-        if($input.data("label")){
-          $($input.data("label"))
-            .delay(duration - (duration-(duration-500)))
-            .animate({ opacity : 1}, { duration: duration - (duration-(duration-500)), easing: easing == undefined ? "linear" : easing });
-        }
-        
-        $input
-          .data("start", 0)
-        
-        .find("span")
-        .animate({ width:(addCommas(parseInt(end).toString()).length*17) + "px" },{easing: "easeInOutBack",duration: 900, complete: function () {
-          //$(this).width("auto")
-        }})
-        .animate({"val": Math.ceil(end), opacity: 1 }, {
-            easing: easing == undefined ? "linear" : easing,
-            duration: duration == undefined ? 500 : parseInt(duration),
-            step: function(fin, obj) {
-              
-              if(obj.prop === "val"){
-                console.log(fin)
-                var $this = jQuery(this);
-                var start = parseInt($this.data("start"));
-                var number = addCommas(parseInt(fin).toString());
-                $this
-                  .css({"min-width": (number.length*17) + "px" })
-                  .text(number); 
-              }
-            }
-        });
-      }
+</div></div>
+<!-- / top container -->
 
-      $(window).on("load", function () {
-        var stats = <%= couch.stats.dashboard.rows.to_json %>;
-        if(stats && stats.length) {
-          var stat = stats[Math.floor(Math.random() * stats.length)]
 
-          $(".navbar .brand label").text(stat.key);
+  <%= yield %>
 
-          setTimeout(function() {
-            $(".navbar .brand").addClass("animating")
-            animateNumber($(".brand .stat"), stat.value, 1600, "easeInOutCubic");
-          }, 3500);
-        }
-      });
-      
-      
-      function addCommas(nStr) {
-        
-        nStr += '';
-        x = nStr.split('.');
-        x1 = x[0];
-        x2 = x.length > 1 ? '.' + x[1] : '';
-        var rgx = /(\d+)(\d{3})/;
-        while (rgx.test(x1)) {
-        x1 = x1.replace(rgx, '$1' + ',' + '$2');
-        }
-        return x1 + x2;
-      }
-   })(jQuery);
-  
+<!-- footer -->
+<footer class="footer" id="footer"><div class="container">
+	<!-- call to action -->
+	<div class="footer__signup">
+		<p>Sign up for our 14-day free trial &rsaquo;</p>
+		<div class="footer__signup__btn">
+			<a href="#" class="btn">Get it now!</a>
+		</div>
+	</div>
 
-</script>
-   </body>
- </html>
+  <%= partial_erb 'footer_nav' %>
 
+	<!-- copyright -->
+	<p class="copyright">
+		Copyright &copy; 2014 Huboard, Inc.
+		<a href="#">Terms of Service</a>
+		<a href="#">Privacy Policy</a>
+	</p>
+</div></footer>
+<!-- / footer -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="assets/js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+<script src="//unslider.com/unslider.min.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

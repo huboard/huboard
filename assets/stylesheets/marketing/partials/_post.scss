@@ -1,0 +1,29 @@
+/**
+ * Posts
+ * News / Blog
+ */
+
+.post {
+	@include row();
+}
+
+.entry {
+
+	h1, h2, h3, h4 {
+		@extend %h3;
+		color: #2E2D31;
+		font-weight: bold;
+		@include rem((
+			margin-bottom: 10px
+		));
+	}
+
+	p {
+		margin: 0;
+		padding: 0;
+		@include rem((
+			margin-bottom: 20px
+		));
+	}
+
+}

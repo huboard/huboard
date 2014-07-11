@@ -18,7 +18,6 @@ require 'rack/robustness'
 require 'sprockets'
 require 'sprockets-helpers'
 require 'bourbon'
-require 'compass'
 
 case ENV["HUBOARD_ENV"]
 when "oss"

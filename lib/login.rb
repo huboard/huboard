@@ -9,7 +9,7 @@ class Login < HuboardApplication
 
     get '/login/?' do
       @parameters = params
-      erb :login, :layout => :marketing
+      erb :login, :layout => false
     end
 
     get '/login/private/?' do

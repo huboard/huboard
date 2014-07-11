@@ -1,0 +1,287 @@
+/**
+ * Plans & Pricing page
+ */
+.plans {
+	@include slimContainer();
+	@include rem((
+		margin-bottom: 100px
+	));
+
+	// Breakpoints
+	@include media($tall) {
+		@include rem((
+			margin-bottom: 60px
+		));
+	}
+}
+
+/**
+ * Help form
+ */
+.plans-help {
+	@include row();
+	@include rem((
+		margin-bottom: 35px
+	));
+	
+	/**
+	 * Copy
+	 */
+	@include e(copy) {
+		@include span-columns(5);
+		color: #7B7B86;
+		margin: 0;
+		padding: 0;
+
+		strong {
+			color: #3B3B43;
+		}
+
+		// Breakpoints
+		@include media($tall) {
+			@include span-columns(12);
+			@include shift(0);
+			@include rem((
+				margin-bottom: 15px
+			));
+		}
+	}
+
+
+	/**
+	 * Form
+	 */
+	@at-root .plans-help-form {
+		@include span-columns(6);
+		@include shift(1);
+		text-align: right;
+
+		// Breakpoints
+		@include media($tall) {
+			@include span-columns(12);
+			@include shift(0);
+			text-align: left;
+		}
+
+		/**
+		 * Label
+		 */
+		@include e(label) {
+			color: #7B7B86;
+			@include rem((
+				margin-right: 15px
+			));
+		}
+
+		/**
+		 * Input field
+		 */
+		@include e(input) {
+			background: #FFFFFF;
+			border: 0;
+			border-radius: 3px;
+			@include box-shadow(0px -1px 0px 0px rgba(0,0,0,0.10), 0px 0px 0px 1px rgba(0,0,0,0.10));
+			color: #3B3B43;
+			display: inline-block;
+			width: 50%;
+			@include rem((
+				padding: 8px
+			));
+		}
+	}
+}
+
+
+/**
+ * Plan container
+ */
+.plan {
+	@include linear-gradient(46deg, #6683CC 0%, #41358D 100%);
+	border-radius: 4px;
+	@include box-shadow(0px 1px 5px 0px rgba(0,0,0,0.30), inset 0px 0px 0px 1px rgba(0,0,0,0.10));
+	color: white;
+	@include rem((
+		padding: 45px 60px 50px
+	));
+
+	// Breakpoints
+	@include media($tall) {
+		@include rem((
+			padding: 25px 30px 30px
+		));
+	}
+
+
+	/**
+	 * Header
+	 */
+	@include e(header) {
+		border-bottom: 1px solid rgba(white, 0.1);
+		font-family: $alt-font-family;
+		font-weight: 300;
+		line-height: 1;
+		text-align: center;
+		@include rem((
+			font-size: 29px,
+			margin-bottom: 31px,
+			padding-bottom: 23px
+		));
+
+		// Breakpoints
+		@include media($tall) {
+			margin-bottom: 15px
+		}
+	}
+	.plan__title,
+	.plan__price {
+		display: inline-block;
+		font-weight: 300;
+		margin: 0;
+		padding: 0;
+
+		// Breakpoints
+		@include media($tall) {
+			display: block;
+		}
+	}
+	@include e(price) {
+
+		&:before {
+			background: rgba(white, 0.1);
+			border-radius: 100%;
+			content: " ";
+			display: inline-block;
+			height: 7px;
+			width: 7px;
+			vertical-align: middle;
+			@include rem((
+				margin: 0 30px 0 25px
+			));
+
+			// Breakpoints
+			@include media($tall) {
+				display: none;
+			}
+		}
+	}
+
+
+	/**
+	 * Features
+	 */
+	@include e(features) {
+		@include row(table);
+		margin: 0;
+		padding: 0;
+
+		// Breakpoints
+		@include media($tall) {
+			@include row();
+		}
+	}
+	@include e(feature) {
+		@include span-columns(4);
+		@include pad();
+		border-right: 1px solid rgba(white, 0.1);
+		font-family: $alt-font-family;
+		font-weight: 300;
+		line-height: 1.4;
+		text-align: center;
+		@include rem((
+			font-size: 20px
+		));
+
+		@at-root .plan &:last-of-type {
+			border-right: 0;
+		}
+
+		p {
+			padding: 0;
+			@include rem((
+				margin: 5px 0 0
+			));
+		}
+
+		strong {
+			display: block;
+			font-weight: normal;
+		}
+
+		// Breakpoints
+		@include media($tall) {
+			@include span-columns(12);
+			border: 0;
+			@include rem((
+				margin-top: 10px
+			));
+		}
+	}
+
+
+	/**
+	 * Call to action
+	 */
+	@include e(action) {
+		text-align: center;
+		@include rem((
+			margin-top: 45px
+		));
+
+		// Breakpoints
+		@include media($tall) {
+			@include rem((
+				margin-top: 25px
+			));
+		}
+	}
+
+}
+/**
+ * Plan colour variations
+ */
+.plan--grey {
+	@include linear-gradient(46deg, #A4ABBE 0%, #716E85 100%);
+	border-radius: 4px;
+	@include box-shadow(0px 1px 5px 0px rgba(0,0,0,0.30), inset 0px 0px 0px 1px rgba(0,0,0,0.10));
+}
+
+
+/**
+ * Plans separator
+ */
+.plan-separator {
+	color: #606069;
+	font-family: $alt-font-family;
+	font-weight: 300;
+	line-height: 1.3;
+	position: relative;
+	text-align: center;
+	@include rem((
+		font-size: 22px,
+		margin: 40px 0
+	));
+
+	&:after {
+		background: #D9D9D9;
+		content: "";
+		display: block;
+		height: 1px;
+		width: 100%;
+		position: absolute; left: 0; top: 50%; margin-top: -1px;
+	}
+
+	p {
+		background: #F2F2F2;
+		display: inline-block;
+		margin: 0;
+		padding: 0;
+		position: relative; z-index: 101;
+		@include rem((
+			padding: 0 23px
+		));
+	}
+
+	strong {
+		font-weight: normal;
+	}
+}

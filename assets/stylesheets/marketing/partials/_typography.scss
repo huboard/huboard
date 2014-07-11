@@ -1,0 +1,84 @@
+/**
+ * Typography
+ */
+
+h1, h2, h3, h4 {
+	font-family: $alt-font-family;
+	font-weight: normal;
+	line-height: 1.2;
+	margin: 0;
+	padding: 0;
+	@include rem((
+		margin-bottom: 25px
+	));
+}
+
+%h1 {
+	@include rem((
+		font-size: 30px
+	));
+}
+
+%h2 {
+	@include rem((
+		font-size: 21px
+	));
+}
+
+%h3 {
+	@include rem((
+		font-size: 18px
+	));
+}
+
+%h4 {
+	@include rem((
+		font-size: 18px
+	));
+}
+
+
+/**
+ * Page intro
+ */
+.page-intro {
+	@include slimContainer();
+	color: #7B7B86;
+	font-family: $alt-font-family;
+	font-weight: 300;
+	text-align: center;
+	@include rem((
+		font-size: 30px,
+		margin-bottom: 50px
+	));
+
+	// Breakpoints
+	@include media($tall) {
+		@include rem((
+			font-size: 24px
+		));
+	}
+
+	@include e(heading) {
+		color: #181819;
+		font-weight: 300;
+		line-height: 1.2;
+		@include rem((
+			font-size: 52px,
+			margin-bottom: 15px
+		));
+
+		// Breakpoints
+		@include media($tall) {
+			@include rem((
+				font-size: 46px
+			));
+		}
+	}
+
+	p {
+		line-height: 1.4;
+		margin: 0;
+		padding: 0;
+	}
+}

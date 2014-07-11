@@ -1,148 +1,178 @@
-<div class="preamble">
-  <div class="container">
-    <div class="row">
-      <div class="span12" style="padding-bottom: 40px;">
-        <h1> HuBoard needs third-party access to your GitHub account </h1>
-      </div>
-    </div>
-  </div>
-</div>
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Huboard</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
+	<!-- Stylesheets -->
+	<link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700" rel="stylesheet" type="text/css">
+  <%= stylesheet_tag 'marketing/main' %>
 
-<div class="container " style=" margin-top: 20px">
-  <div class="row no-header">
-    <div class="span12">
-      <h2> Please choose which permissions you want to allow HuBoard </h2>
+	<!-- Javascript -->
+	<!--[if lt IE 9]>
+	<script src="assets/js/vendor/html5shiv.js"></script>
+	<script src="assets/js/vendor/respond.js"></script>
+	<script src="assets/js/vendor/selectivizr-min.js"></script>
+	<![endif]-->
 
-    </div>
+</head>
+<body class="login-page">
+<!-- top container -->
+<div class="top"><div class="top-inner">
 
-    <div class="permissions">
+  <%= partial_erb 'header' %>
+	<!-- hero -->
+	<section class="hero"><div class="container">
+		<h2 class="hero__title">HuBoard needs third-party access to your GitHub account</h2>
+	</div></section>
+	<!-- / hero -->
+</div></div>
+<!-- / top container -->
+<!-- main content area -->
+<div class="main"><div class="container">
 
-      <div class="span6">
-        <div class="well">
-          <h5> Public access </h5>
-          <div class="body">
-          <div class="group">
-            <div class="permission">
-              <span class="label read on">Read</span>
-              <span class="label write off">Write</span>
-              <strong> Your user profile </strong>
-            </div>
-            <div class="permission">
-              <span class="label read on">Read</span>
-              <span class="label write off">Write</span>
-              Your followers
+	<!-- permissions -->
+	<div class="permissions">
+		<p class="permissions__copy">
+			Please choose which permissions you want to allow HuBoard
+		</p>
+		<div class="permissions__col">
+			<h3 class="permissions__heading">
+				<img src="<%= image_path 'marketing/permissions-icon--public.png' %>" alt="">
+				Public Access
+			</h3>
+			<div class="permissions__list">
+				<dl>
+					<dd>
+						<img src="<%= image_path 'marketing/permissions-read.png' %>" alt="Read" title="Read">
+						<img src="<%= image_path 'marketing/permissions-write--false.png' %>" alt="">
+					</dd>
+					<dt>Your user profile</dt>
+					<dd>
+						<img src="<%= image_path 'marketing/permissions-read.png' %>" alt="Read" title="Read">
+						<img src="<%= image_path 'marketing/permissions-write--false.png' %>" alt="">
+					</dd>
+					<dt>Your followers</dt>
+				</dl>
+				<dl>
+					<dd>
+						<img src="<%= image_path 'marketing/permissions-read--false.png' %>" alt="">
+						<img src="<%= image_path 'marketing/permissions-write--false.png' %>" alt="">
+					</dd>
+					<dt>Your private repositories and organizations</dt>
+					<dd>
+						<img src="<%= image_path 'marketing/permissions-read--false.png' %>" alt="">
+						<img src="<%= image_path 'marketing/permissions-write--false.png' %>" alt="">
+					</dd>
+					<dt>Commit status</dt>
+					<dd>
+						<img src="<%= image_path 'marketing/permissions-read--false.png' %>" alt="">
+						<img src="<%= image_path 'marketing/permissions-write--false.png' %>" alt="">
+					</dd>
+					<dt>Notifications</dt>
+				</dl>
+				<dl>
+					<dd>
+						<img src="<%= image_path 'marketing/permissions-read.png' %>" alt="Read" title="Read">
+						<img src="<%= image_path 'marketing/permissions-write.png' %>" alt="Write" title="Write">
+					</dd>
+					<dt>Your public repositories and organizations</dt>
+					<dd>
+						<img src="<%= image_path 'marketing/permissions-read.png' %>" alt="Read" title="Read">
+						<img src="<%= image_path 'marketing/permissions-write.png' %>" alt="Write" title="Write">
+					</dd>
+					<dt>Commit status</dt>
+					<dd>
+						<img src="<%= image_path 'marketing/permissions-read.png' %>" alt="Read" title="Read">
+						<img src="<%= image_path 'marketing/permissions-write.png' %>" alt="Write" title="Write">
+					</dd>
+					<dt>Notifications</dt>
+				</dl>
+				<a href="#" class="btn btn--flat">Allow Public Access</a>
+			</div>
+		</div>
+		<div class="permissions__col">
+			<h3 class="permissions__heading">
+				<img src="<%= image_path 'marketing/permissions-icon--private.png' %>" alt="">
+				Private Access
+			</h3>
+			<div class="permissions__list">
+				<dl>
+					<dd>
+						<img src="<%= image_path 'marketing/permissions-read.png' %>" alt="Read" title="Read">
+						<img src="<%= image_path 'marketing/permissions-write--false.png' %>" alt="">
+					</dd>
+					<dt>Your user profile</dt>
+					<dd>
+						<img src="<%= image_path 'marketing/permissions-read.png' %>" alt="Read" title="Read">
+						<img src="<%= image_path 'marketing/permissions-write--false.png' %>" alt="">
+					</dd>
+					<dt>Your followers</dt>
+				</dl>
+				<dl>
+					<dd>
+						<img src="<%= image_path 'marketing/permissions-read.png' %>" alt="Read" title="Read">
+						<img src="<%= image_path 'marketing/permissions-write.png' %>" alt="Write" title="Write">
+					</dd>
+					<dt>Your private repositories and organizations</dt>
+					<dd>
+						<img src="<%= image_path 'marketing/permissions-read.png' %>" alt="Read" title="Read">
+						<img src="<%= image_path 'marketing/permissions-write.png' %>" alt="Write" title="Write">
+					</dd>
+					<dt>Commit status</dt>
+					<dd>
+						<img src="<%= image_path 'marketing/permissions-read.png' %>" alt="Read" title="Read">
+						<img src="<%= image_path 'marketing/permissions-write.png' %>" alt="Write" title="Write">
+					</dd>
+					<dt>Notifications</dt>
+				</dl>
+				<dl>
+					<dd>
+						<img src="<%= image_path 'marketing/permissions-read.png' %>" alt="Read" title="Read">
+						<img src="<%= image_path 'marketing/permissions-write.png' %>" alt="Write" title="Write">
+					</dd>
+					<dt>Your public repositories and organizations</dt>
+					<dd>
+						<img src="<%= image_path 'marketing/permissions-read.png' %>" alt="Read" title="Read">
+						<img src="<%= image_path 'marketing/permissions-write.png' %>" alt="Write" title="Write">
+					</dd>
+					<dt>Commit status</dt>
+					<dd>
+						<img src="<%= image_path 'marketing/permissions-read.png' %>" alt="Read" title="Read">
+						<img src="<%= image_path 'marketing/permissions-write.png' %>" alt="Write" title="Write">
+					</dd>
+					<dt>Notifications</dt>
+				</dl>
+				<a href="#" class="btn btn--flat">Allow Private Access</a>
+			</div>
+		</div>
+	</div>
+	
+</div></div>
+<!-- / main content area -->
+<!-- footer -->
+<footer class="footer" id="footer"><div class="container">
+	<!-- footer navigation -->
+  <%= partial_erb 'footer_nav' %>
 
-            </div>
-          </div>
-          <div class="group">
+	<!-- copyright -->
+	<p class="copyright">
+		Copyright &copy; 2014 Huboard, Inc.
+		<a href="#">Terms of Service</a>
+		<a href="#">Privacy Policy</a>
+	</p>
+</div></footer>
+<!-- / footer -->
 
-            <div class="permission">
-              <span class="label read off">Read</span>
-              <span class="label write off">Write</span>
-              <strong> Your private repositories and organizations </strong>
-            </div>
-            <div class="permission">
-              <span class="label read off">Read</span>
-              <span class="label write off">Write</span>
-              Commit status
-            </div>
-            <div class="permission">
-              <span class="label read off">Read</span>
-              <span class="label write off">Write</span>
-              Notifications
-            </div>
-          </div>
-          <div class="group">
-
-            <div class="permission">
-              <span class="label read on">Read</span>
-              <span class="label write on">Write</span>
-              <strong> Your public repositories and organizations </strong>
-            </div>
-            <div class="permission">
-              <span class="label read on">Read</span>
-              <span class="label write on">Write</span>
-              Commit status
-            </div>
-            <div class="permission">
-              <span class="label read on">Read</span>
-              <span class="label write on">Write</span>
-              Notifications
-            </div>
-          </div>
-          <div class="group">
-
-            <a class="hb-button" href="/login/public">Allow public access</a>
-          </div>
-
-        </div>
-        </div>
-      </div>
-      <div class="span6">
-        <div class="well">
-          <h5> Private access </h5>
-          <div class="body">
-          <div class="group">
-            <div class="permission">
-              <span class="label read on">Read</span>
-              <span class="label write off">Write</span>
-              <strong> Your user profile </strong>
-            </div>
-            <div class="permission">
-              <span class="label read on">Read</span>
-              <span class="label write off">Write</span>
-              Your followers
-
-            </div>
-          </div>
-          <div class="group">
-
-            <div class="permission">
-              <span class="label read on">Read</span>
-              <span class="label write on">Write</span>
-              <strong> Your private repositories and organizations </strong>
-            </div>
-            <div class="permission">
-              <span class="label read on">Read</span>
-              <span class="label write on">Write</span>
-              Commit status
-            </div>
-            <div class="permission">
-              <span class="label read on">Read</span>
-              <span class="label write on">Write</span>
-              Notifications
-            </div>
-          </div>
-          <div class="group">
-
-            <div class="permission">
-              <span class="label read on">Read</span>
-              <span class="label write on">Write</span>
-              <strong> Your public repositories and organizations </strong>
-            </div>
-            <div class="permission">
-              <span class="label read on">Read</span>
-              <span class="label write on">Write</span>
-              Commit status
-            </div>
-            <div class="permission">
-              <span class="label read on">Read</span>
-              <span class="label write on">Write</span>
-              Notifications
-            </div>
-          </div>
-          <div class="group">
-
-            <a class="hb-button" href="/login/private">Allow private access</a>
-          </div>
-
-        </div>
-        </div>
-      </div>
-
-
-    </div>
-  </div>
-</div>
-
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="assets/js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+<script src="//unslider.com/unslider.min.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
