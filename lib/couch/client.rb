@@ -96,7 +96,7 @@ class Huboard
 
         def call(env)
           env[:request][:timeout] = 3 
-          env[:request][:open_timeout] = 0.5
+          env[:request][:open_timeout] = 1.5
           @app.call env
         end
       end
