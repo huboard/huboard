@@ -26,4 +26,8 @@ class Marketing < HuboardApplication
     erb :pricing, :layout => :marketing
   end
 
+  get '/integrations/?' do 
+    erb :integrations, :layout => :marketing
+  end
+
 end

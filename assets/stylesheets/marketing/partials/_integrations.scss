@@ -67,7 +67,7 @@
 	 * HuBoard API service
 	 */
 	@include m(huboard) {
-		background: #5B648C url(../images/integration-huboard.png) no-repeat center center;
+		background: #5B648C url(asset-path('marketing/integration-huboard.png')) no-repeat center center;
 		color: white;
 		text-align: center;
 

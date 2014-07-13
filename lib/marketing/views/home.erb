@@ -5,7 +5,7 @@
 		<p class="hero__copy">
 			HuBoard is built from the ground up using the GitHub public API. HuBoard issues are GitHub issues, you will never have to deal with syncronization problems. Keep issues where they belong, in the repository with your code!
 		</p>
-		<a href="#" class="btn hero__btn">Sign up for a 14 day free trial <i class="icon icon--lt"></i></a>
+		<a href="/login" class="btn hero__btn">Sign up for a 14 day free trial <i class="icon icon--lt"></i></a>
 	</div></section>
 	<!-- / hero -->
 <% end %>
@@ -13,15 +13,17 @@
 <div class="main"><div class="container">
 	<!-- page intro -->
 	<header class="page-intro">
-		<h1 class="page-intro__heading heading">Features</h1>
+		<h1 id="features" class="page-intro__heading heading">Features</h1>
 	</header>
 	
 	<!-- features -->
-	<section id="features" class="features">
+	<section  class="features">
 		<!-- feature -->
 		<div class="feature feature--row">
 			<div class="feature__image">
-        <img src="<%= image_path 'marketing/feature-1.png' %>" alt="Feature thumbnail">
+        <a href="<%= image_path 'marketing/feature--dnd-columns--small.gif' %>" class="feature__image--popup">
+          <img width="275px" src="<%= image_path 'marketing/feature--dnd-columns--small.gif' %>" alt="Feature thumbnail">
+        </a>
 			</div>
 			<div class="feature__copy">
 				<h3 class="heading feature__title">Lightweight Kanban Board</h3>
@@ -31,7 +33,9 @@
 		<!-- feature -->
 		<div class="feature feature--row feature--row--alt">
 			<div class="feature__image">
-        <img src="<%= image_path 'marketing/feature-blank.png'%>" alt="Feature thumbnail">
+        <a href="<%= image_path 'marketing/feature--filters--small.gif' %>" class="feature__image--popup">
+          <img width="275px" src="<%= image_path 'marketing/feature--filters--small.gif'%>" alt="Feature thumbnail">
+        </a>
 			</div>
 			<div class="feature__copy">
 				<h3 class="heading feature__title">Three state multi faceted filtering</h3>
