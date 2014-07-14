@@ -95,8 +95,8 @@ class Huboard
 
 
         def call(env)
-          env[:request][:timeout] = 3 
-          env[:request][:open_timeout] = 1.5
+          env[:request][:timeout] = 6 
+          env[:request][:open_timeout] = 3
           @app.call env
         end
       end
@@ -115,8 +115,6 @@ class Huboard
           builder.adapter Faraday.default_adapter
 
           builder.request :url_encoded
-          builder.request :retry, 3
-          builder.response :logger
 
         end
 
