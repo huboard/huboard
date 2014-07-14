@@ -46,7 +46,7 @@ else
         config.api_key = raygun_api_key
         config.silence_reporting = !raygun_api_key
       end
-      use Raygun::RackExceptionInterceptor
+      use Raygun::Middleware::RackExceptionInterceptor
     end
   end
   require './initializers/production'
