@@ -152,27 +152,3 @@
 </div></div>
 
 
-
-<script>
-  $(".plan-picker").on("submit", function(ev){
-    ev.preventDefault();
-    $(".plan").removeClass("featured")
-    var val = $(".plan-picker input").val();
-    if(!val) {
-      $(".plan-picker input").focus();
-      return; 
-    }
-
-    $.getJSON("https://api.github.com/users/"+ val +"?callback=?",function(response){
-      var plans = {
-        Organization : ".plan.organization",
-        User : ".plan.user"
-      }
-      if(response.data && response.data.type) {
-        $(plans[response.data.type]).addClass("featured")
-        .find(":input").val(val)
-      }
-    });
-  })
-
-</script>
