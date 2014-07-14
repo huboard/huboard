@@ -38,7 +38,7 @@ else
     require "newrelic_rpm"
     use Rack::SSL
 
-    if ENV["RAYGUN_APIKEY"]
+    if false
       require 'raygun4ruby'
       raygun_api_key = ENV["RAYGUN_APIKEY"]
 
