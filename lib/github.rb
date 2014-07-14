@@ -32,6 +32,10 @@ module Stint
       gh.repos(user_name, repo).milestones number
     end
 
+    def milestones(user_name, repo)
+      gh.repos(user_name, repo).milestones
+    end
+
     def update_milestone(user_name, repo, milestone)
       gh.repos(user_name, repo).milestones(milestone[:number]).patch(milestone)
     end

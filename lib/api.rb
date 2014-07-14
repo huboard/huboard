@@ -151,7 +151,15 @@ class Huboard
       json pebble.reorder_milestone user, repo, number, index
     end
 
-    post '/:user/:repo/assigncard' do 
+    post '/:user/:repo/milestones' do
+      client_data = JSON.parse(request.body.read)
+       milestone = huboard.board(params[:user],params[:repo])
+          .create_milestone client_data
+
+       return json milestone
+    end
+
+    post '/:user/:repo/assigncard' do
       issue = pebble.assign_card params[:user], params[:repo], params[:number], params[:assignee]
 
       IssueAssignedEvent.new.publish issue, current_user.attribs, params[:correlationId]

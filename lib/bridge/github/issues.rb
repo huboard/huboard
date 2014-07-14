@@ -62,6 +62,14 @@ class Huboard
       milestone
     end
 
+    def create_milestone(params)
+       milestone = Hashie::Mash.new params["milestone"]
+
+       gh.milestones.create({
+         title: milestone.title
+       })
+    end
+
     module Card
 
       def current_state
