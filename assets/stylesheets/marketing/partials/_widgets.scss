@@ -44,7 +44,7 @@
 			}
 
 			li {
-				background: url(../images/tick.png) no-repeat center left;
+				background: url(asset-path('marketing/tick.png')) no-repeat center left;
 				@include rem((
 					margin-top: 20px,
 					padding-left: 29px
@@ -76,7 +76,7 @@
 			));
 
 			@include m(twitter) {
-				background-image: url(../images/twitter-icon.png);
+				background-image: url(asset-path('marketing/twitter-icon.png'));
 			}
 		}
 	}

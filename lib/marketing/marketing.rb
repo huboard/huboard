@@ -10,6 +10,12 @@ class Marketing < HuboardApplication
     end
   end
 
+  helpers do
+    def cloudfront_path(image)
+      URI::join(ENV["CLOUDFRONT_URL"],image)
+    end
+  end
+
   get "/", :is_logged_in => false do
     erb :home, :layout => :marketing 
   end

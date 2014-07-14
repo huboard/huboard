@@ -34,13 +34,21 @@
 			background: white;
 			border-radius: 6px;
 			display: inline-block;
+      max-width: 275px;
 			@include rem((
 				padding: 17px
 			));
+      cursor: -webkit-zoom-in;
+      cursor: -moz-zoom-in;
+      cursor: zoom-in;
 		}
 
 		// Breakpoints
 		@include media($tall) {
+      img {
+        max-width: 100%;
+
+      }
 
 			&,
 			.feature__copy + & {
@@ -182,6 +190,10 @@
 		));
 	}
 
+  img {
+    max-width: 240px;
+  }
+
 	// Breakpoints
 	@include media($tall) {
 		@include span-columns(12);
@@ -194,5 +206,8 @@
 				margin-bottom: 30px
 			));
 		}
+    img {
+      max-width: 100%;
+    }
 	}
 }

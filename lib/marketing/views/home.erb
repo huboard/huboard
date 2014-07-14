@@ -21,70 +21,79 @@
 		<!-- feature -->
 		<div class="feature feature--row">
 			<div class="feature__image">
-        <a href="<%= image_path 'marketing/feature--dnd-columns--small.gif' %>" class="feature__image--popup">
-          <img width="275px" src="<%= image_path 'marketing/feature--dnd-columns--small.gif' %>" alt="Feature thumbnail">
+        <a href="<%= cloudfront_path 'marketing/feature--dnd-columns--small.gif' %>" class="feature__image--popup">
+          <img  src="<%= cloudfront_path 'marketing/feature--dnd-columns--small.gif' %>" alt="Feature thumbnail">
         </a>
 			</div>
 			<div class="feature__copy">
 				<h3 class="heading feature__title">Lightweight Kanban Board</h3>
-				<p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Aenean lacinia bibendum nulla sed consectetur. Donec ullamcorper nulla non metus auctor fringilla.</p>
+				<p>Fully customizable task board gives developers instant feedback into the status of tasks thoughout your progress.</p>
 			</div>
 		</div>
 		<!-- feature -->
 		<div class="feature feature--row feature--row--alt">
 			<div class="feature__image">
-        <a href="<%= image_path 'marketing/feature--filters--small.gif' %>" class="feature__image--popup">
-          <img width="275px" src="<%= image_path 'marketing/feature--filters--small.gif'%>" alt="Feature thumbnail">
+        <a href="<%= cloudfront_path 'marketing/feature--filters--small.gif' %>" class="feature__image--popup">
+          <img src="<%= cloudfront_path 'marketing/feature--filters--small.gif'%>" alt="Feature thumbnail">
         </a>
 			</div>
 			<div class="feature__copy">
 				<h3 class="heading feature__title">Three state multi faceted filtering</h3>
-				<p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Aenean lacinia bibendum nulla sed consectetur. Donec ullamcorper nulla non metus auctor fringilla.</p>
+				<p>Clicking a filter once will dim out issues that don’t match, click again and they disappear. Filters can be mixed and matched to help you narrow down exactly what you need to work on.</p>
 			</div>
 		</div>
 		<!-- feature -->
 		<div class="feature feature--row">
 			<div class="feature__image">
-        <img src="<%= image_path 'marketing/feature-blank.png' %>" alt="Feature thumbnail">
+        <a href="<%= cloudfront_path 'marketing/feature--dnd-assign--small.gif' %>" class="feature__image--popup">
+        <img src="<%= cloudfront_path 'marketing/feature--dnd-assign--small.gif' %>" alt="Feature thumbnail">
+      </a>
 			</div>
 			<div class="feature__copy">
 				<h3 class="heading feature__title">Drag to assign issues</h3>
-				<p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Aenean lacinia bibendum nulla sed consectetur. Donec ullamcorper nulla non metus auctor fringilla.</p>
+				<p>Quickly assign issues by dragging your avatar onto the card.</p>
 			</div>
 		</div>
 
 		<!-- feature columns -->
 		<div class="feature__columns">
+
 			<!-- feature -->
 			<div class="feature feature--column">
 				<div class="feature__image">
-          <img src="<%= image_path 'marketing/feature-blank-small.png' %>" alt="Feature title">
+        <a href="<%= cloudfront_path 'marketing/feature--reorder--small.gif' %>" class="feature__image--popup">
+          <img src="<%= cloudfront_path 'marketing/feature--reorder--small.gif' %>" alt="Feature title">
+        </a>
 				</div>
 				<div class="feature__copy">
-					<h3 class="heading feature__title">Prioritize</h3>
-					<p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo.</p>
+					<h3 class="heading feature__title">Prioritize your work</h3>
+					<p>Drag your most important issues to the top, HuBoard will remember what needs to be worked on next.</p>
 				</div>
 			</div>
 
 			<!-- feature -->
 			<div class="feature feature--column">
 				<div class="feature__image">
-          <img src="<%= image_path 'marketing/feature-blank-small.png' %>" alt="Feature title">
+        <a href="<%= cloudfront_path 'marketing/feature--dnd-milestones--small.gif' %>" class="feature__image--popup">
+          <img src="<%= cloudfront_path 'marketing/feature--dnd-milestones--small.gif' %>" alt="Feature title">
+        </a>
 				</div>
 				<div class="feature__copy">
-					<h3 class="heading feature__title">Prioritize</h3>
-					<p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo.</p>
+					<h3 class="heading feature__title">Drag issues between milestones</h3>
+					<p>Dragging issues between milestones provides a MUCH needed complement to an amazing feature from GitHub. No more spending hours checking checkboxes and paging through GitHub's awkward grid view.</p>
 				</div>
 			</div>
 
 			<!-- feature -->
 			<div class="feature feature--column">
 				<div class="feature__image">
-          <img src="<%= image_path 'marketing/feature-blank-small.png' %>" alt="Feature title">
+        <a href="<%= cloudfront_path 'marketing/feature--slack-integration--small.gif' %>" class="feature__image--popup">
+          <img src="<%= cloudfront_path 'marketing/feature--slack-integration--small.gif' %>" alt="Feature title">
+        </a>
 				</div>
 				<div class="feature__copy">
-					<h3 class="heading feature__title">Prioritize</h3>
-					<p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo.</p>
+					<h3 class="heading feature__title">Powerful integrations</h3>
+          <p>Keep your entire team informed on your work, with HuBoard's powerful integrations with amazing applications like <a href='https://slack.com'>Slack</a> and <a href='https://gitter.im'>Gitter</a></p>
 				</div>
 			</div>
 		</div>
@@ -103,34 +112,34 @@
 				</blockquote>
 				<cite>
 					<div class="testimonial__avatar">
-            <img src="<%= image_path 'marketing/avatar.png' %>" alt="Iain Poulson (avatar)">
+            <img src="https://secure.gravatar.com/avatar/7b496f4e0e18279ffeb75ab1a3edea7c" alt="Chris McAvoy (avatar)">
 					</div>
-					<strong class="testimonial__name">Iain Poulson</strong>
+					<strong class="testimonial__name">Chris McAvoy</strong>
 					<em class="testimonial__title">CTO at Mozilla Open Badges</em>
 				</cite>
 			</li>
 			<li class="testimonial">
 				<blockquote>
-					<p>&ldquo;We're a distributed team that loves markers and paper. When we can't all be in the same place, HuBoard is the best alternative we've found to a nice sharpie and some index cards. Plus, Github. HuBoard is the animated gifs of kanban style Github issue management.&rdquo;</p>
+					<p>&ldquo;HuBoard brought together the two key features I needed for projects I was leading. It's open source, integrates with GitHub issues, and has an extremely simple and clean approach to the UX. This has made it my go to for kanban with a remote, fast moving, and high caliber team. Oh, and forgot to mention, the drag and drop for those that don't want to dig around the issues on GitHub is a life saver! &rdquo;</p>
 				</blockquote>
 				<cite>
 					<div class="testimonial__avatar">
-            <img src="<%= image_path 'marketing/avatar.png' %>" alt="Iain Poulson (avatar)">
+            <img src="https://secure.gravatar.com/avatar/b077605f4799abe20de52b6ded458e99" alt="Adron Hall (avatar)">
 					</div>
-					<strong class="testimonial__name">Iain Poulson</strong>
-					<em class="testimonial__title">CTO at Mozilla Open Badges</em>
+					<strong class="testimonial__name">Adron Hall</strong>
+					<em class="testimonial__title">CTO at deconstructed.io</em>
 				</cite>
 			</li>
 			<li class="testimonial">
 				<blockquote>
-					<p>&ldquo;We're a distributed team that loves markers and paper. When we can't all be in the same place, HuBoard is the best alternative we've found to a nice sharpie and some index cards. Plus, Github. HuBoard is the animated gifs of kanban style Github issue management.&rdquo;</p>
+					<p>&ldquo;I love that HuBoard enables us to keep our development tasks AND our project management tasks in a single repository (GitHub Issues). HuBoard provides the best fusion between development and product management I've ever seen. It lets us stay light and nimble while providing the same level of accountability and trace-ability of a big ALM tool. HuBoard blows the heavy 'enterprisey' ALM tools out of the water AND keeps my developers happy! &rdquo;</p>
 				</blockquote>
 				<cite>
 					<div class="testimonial__avatar">
-            <img src="<%= image_path 'marketing/avatar.png' %>" alt="Iain Poulson (avatar)">
+            <img src="https://secure.gravatar.com/avatar/9844aef6963e88fdbeef1acb97df5604" alt="Chad Myers (avatar)">
 					</div>
-					<strong class="testimonial__name">Iain Poulson</strong>
-					<em class="testimonial__title">CTO at Mozilla Open Badges</em>
+					<strong class="testimonial__name">Chad Myers</strong>
+					<em class="testimonial__title">Director of Development at Dovetail Software</em>
 				</cite>
 			</li>
 		</ul>
@@ -148,7 +157,7 @@
 <div id='customers' class="customers"><div class="container">
 	<h3 class="heading customers__heading">Trusted by&hellip;</h3>
 	<div class="customers__copy">
-		<p>Nullam id dolor id nibh ultricies vehicula ut id elit. Sed posuere consectetur est at lobortis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id dolor id nibh ultricies vehicula ut id elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam porta sem malesuada magna mollis euismod. Curabitur blandit tempus porttitor.</p>
+		<p></p>
 	</div>
 
 	<div class="customers__logos">
