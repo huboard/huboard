@@ -2,6 +2,10 @@ require 'sinatra/base'
 
 class Login < HuboardApplication
 
+    def controller?(*controller)
+      controller.include?(@controller) ? "nav__btn--active nav__item--current" : ""
+    end
+
     get '/logout' do
       logout!
       redirect '/'
@@ -9,6 +13,7 @@ class Login < HuboardApplication
 
     get '/login/?' do
       @parameters = params
+      @controller = "login"
       erb :login, :layout => false
     end
 
