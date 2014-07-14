@@ -154,7 +154,7 @@ GEM
       rack
     raindrops (0.10.0)
     rake (10.1.0)
-    raygun4ruby (1.1.2)
+    raygun4ruby (1.1.3)
       httparty (~> 0.11)
       json
       rack
