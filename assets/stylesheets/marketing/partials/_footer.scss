@@ -82,9 +82,6 @@
 	@include e(logos) {
 		margin: 0 auto;
 		text-align: center;
-		@include rem((
-			max-width: 594px
-		));
 
 		img {
 			display: inline-block;
