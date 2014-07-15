@@ -1,0 +1,83 @@
+/**
+ * Widgets
+ */
+
+.sidebox {
+	@include rem((
+		margin-bottom: 30px
+	));
+
+	@include e(title) {
+		color: #2B2F32;
+		border-bottom: 1px solid #d9e0e6;
+		font-family: $base-font-family;
+		font-weight: bold;
+		@include rem((
+			font-size: 16px,
+			margin: 0 0 12px,
+			padding: 0 0 12px
+		));
+	}
+
+	@include e(copy) {
+		padding: 0;
+		@include rem((
+			margin: 0 0 20px
+		));
+	}
+
+
+	/**
+	 * Ticks
+	 */
+	@include m(ticks) {
+
+		@at-root .tick-list {
+			color: #858F98;
+			line-height: 1.6;
+
+			&,
+			li {
+				list-style: none;
+				margin: 0;
+				padding: 0;
+			}
+
+			li {
+				background: url(asset-path('marketing/tick.png')) no-repeat center left;
+				@include rem((
+					margin-top: 20px,
+					padding-left: 29px
+				));
+			}
+		}
+	}
+
+
+	/**
+	 * Follow
+	 */
+	@include m(follow) {
+		border-top: 1px solid #d9e0e6;
+		text-align: center;
+		@include rem((
+			padding-top: 30px
+		));
+
+		@at-root .social-link {
+			background: none no-repeat center left;
+			display: inline-block;
+			font-weight: bold;
+			line-height: 1.4;
+			text-align: left;
+			@include rem((
+				height: 30px,
+				padding: 3px 0 3px 45px
+			));
+
+			@include m(twitter) {
+				background-image: url(asset-path('marketing/twitter-icon.png'));
+			}
+		}
+	}
+}

@@ -1,0 +1,465 @@
+/**
+ * Footer
+ */
+.footer {
+	background: #232323;
+	color: white;
+	text-align: center;
+	@include rem((
+		padding: 70px 0
+	));
+
+	.container {
+		@include rem((
+			max-width: 600px
+		));
+	}
+
+	// Breakpoints
+	@include media($grande) {
+		.container {
+			margin: 0 auto;
+		}
+	}
+	@include media($tall) {
+		@include rem((
+			padding: 50px 20px
+		));
+	}
+}
+
+/**
+ * Customers logos
+ */
+.customers {
+	background: #464646 url(asset-path('marketing/separator.png')) no-repeat top center;
+	color: #BFBFBF;
+	text-align: center;
+	@include rem((
+		padding: 80px 0
+	));
+
+	// Breakpoints
+	@include media($tall) {
+		@include rem((
+			padding: 70px 20px
+		));
+	}
+
+	.container {
+		@include slimContainer();
+	}
+	
+	/**
+	 * Text
+	 */
+	@include e(heading) {
+		@extend .testimonials__heading;
+		color: white;
+		@include rem((
+			margin-bottom: 25px
+		));
+
+		// Breakpoints
+		@include media($tall) {
+			line-height: 1.4;
+			@include rem((
+				font-size: 42px
+			));
+		}
+	}
+
+	@include e(copy) {
+		@include rem((
+			margin-bottom: 65px
+		));
+	}
+
+
+	/**
+	 * Company logos
+	 */
+	@include e(logos) {
+		margin: 0 auto;
+		text-align: center;
+
+		img {
+			display: inline-block;
+			@include rem((
+				margin: 0 25px
+			));
+		}
+
+		// Breakpoints
+		@include media($tall) {
+
+			img {
+				display: inline-block;
+			}
+
+			span {
+				display: block;
+			}
+		}
+
+		@include e(row) {
+			vertical-align: middle;
+
+			&:first-of-type {
+				@include rem((
+					margin-bottom: 40px
+				));
+			}
+		}
+	}
+
+	/**
+	 * Top border
+	 */
+	@include e(separator) {
+		background: #79777a;
+		border: 0;
+		@include rem((
+			height: 2px,
+			margin-top: 80px,
+			max-width: 200px
+		));
+
+		// Breakpoints
+		@include media($tall) {
+			margin-top: 50px
+		}
+	}
+}
+
+
+/**
+ * Signup call to action
+ */
+.footer__signup {
+	background: url(assset-path('marketing/separator.png')) no-repeat bottom center;
+	@include row();
+	max-width: 430px;
+	margin: 0 auto;
+	position: relative;
+	@include rem((
+		padding-bottom: 50px,
+		margin-bottom: 60px
+	));
+
+	p {
+		@include span-columns(5);
+		font-family: $alt-font-family;
+		line-height: 1.4;
+		margin: 0;
+		padding: 0;
+		@include rem((
+			font-size: 32px
+		));
+	}
+
+	@include e(btn) {
+		@include span-columns(7);
+		margin-top: 10%;
+		text-align: center;
+	}
+
+
+	// Breakpoints
+	@include media($tall) {
+		@include rem((
+			margin-bottom: 50px
+		));
+
+		p {
+			@include span-columns(12);
+		}
+		@include e(btn) {
+			@include span-columns(12);
+		}
+	}
+}
+
+
+
+/**
+ * Footer navigation
+ */
+.footer-nav {
+	background: url(asset-path('marketing/separator.png')) no-repeat bottom center;
+	margin: 0 auto;
+	text-align: left;
+	@include row();
+	@include rem((
+		max-width: 500px,
+		padding-bottom: 80px,
+		margin-bottom: 60px
+	));
+
+	@include e(col) {
+		@include span-columns(4);
+
+		// Breakpoints
+		@include media($tall) {
+			@include span-columns(12);
+			text-align: center;
+			@include rem((
+				margin-bottom: 30px
+			));
+
+			&:last-of-type {
+				margin-bottom: 0
+			}
+		}
+	}
+
+	@include e(heading) {
+		@extend %h2;
+
+		// Breakpoints
+		@include media($tall) {
+			@include rem((
+				margin-bottom: 10px
+			));
+		}
+	}
+
+	ul,
+	li {
+		list-style: none outside;
+		margin: 0;
+		padding: 0;
+	}
+
+	li {
+		@include rem((
+			margin-bottom: 3px
+		));
+	}
+
+	a {
+		border-bottom: 1px solid transparent;
+		color: #C6C6C6;
+		padding-bottom: 2px;
+
+		&:hover {
+			border-color: rgba(white, 0.3);
+			color: white;
+			text-decoration: none;
+		}
+	}
+
+	// Breakpoints
+	@include media($grande) {
+		max-width: 100%;
+	}
+	@include media($tall) {
+		@include rem((
+			margin-bottom: 50px,
+			padding-bottom: 40px
+		));
+
+		li {
+			display: block;
+			@include rem((
+				margin-bottom: 0
+			));
+		}
+
+		a {
+			border: 0;
+			display: block;
+
+			&:hover,
+			&.cur {
+			}
+		}
+	}
+}
+
+
+/**
+ * Copyright notice
+ */
+.copyright {
+	color: #484848;
+	padding: 0;
+	margin: 0;
+
+	a {
+		color: #818181;
+		text-decoration: none;
+
+		&:before {
+			color: #818181;
+			content: "•";
+			@include rem((
+				margin-left: 10px,
+				margin-right: 12px
+			));
+		}
+
+		&:hover {
+			color: white;
+		}
+	}
+
+	// Breakpoints
+	@include media($tall) {
+
+		a {
+			display: block;
+
+			&:before {
+				display: none;
+			}
+		}
+	}
+}
+
+
+/**
+ * Light footer
+ */
+.footer--light {
+	background: #F2F2F2;
+	color: #454547;
+
+	a {
+		color: #8D8D95;
+	}
+
+	.footer-nav {
+		background: none;
+		padding-bottom: 0;
+
+		a:hover {
+			border-color: #c9c9cb;
+			color: #454547;
+		}
+	}
+
+	.copyright {
+
+		a:hover {
+			color: #454547;
+		}
+	}
+}
+
+
+/**
+ * Footer call to action
+ */
+.cta {
+	background: url(asset-path('marketing/footer-bg--lighthouse.png')) no-repeat bottom center;
+	background-size: cover;
+	text-align: center;
+	@include rem((
+		padding: 90px 0 422px
+	));
+
+	// Breakpoints
+	@include media($tall) {
+		background: transparent;
+		@include rem((
+			padding: 40px 0
+		));
+	}
+
+	.container {
+		@include slimContainer();
+
+		// Breakpoints
+		@include media($grande) {
+			@include rem((
+				padding: 0 20px
+			));
+		}
+	}
+
+	/**
+	 * Title
+	 */
+	@include e(heading) {
+		font-weight: 300;
+		@include rem((
+			font-size: 46px,
+			margin: 0 auto 25px,
+			max-width: 554px
+		));
+
+		a {
+			text-decoration: none;
+
+			span {
+				border-bottom: 1px solid transparent;
+				display: inline-block;
+			}
+
+			&:hover {
+
+				span {
+					border-bottom-color: #66666E;
+				}
+			}
+		}
+
+		// Breakpoints
+		@include media($tall) {
+			@include rem((
+				font-size: 34px
+			));
+		}
+	}
+
+	/**
+	 * Copy
+	 */
+	@include e(copy) {
+		color: #A9A9B2;
+		font-weight: 300;
+		line-height: 1.6;
+		margin: 0 auto;
+		@include rem((
+			font-size: 28px,
+			max-width: 719px
+		));
+
+		p {
+			margin: 0;
+			padding: 0;
+		}
+
+		a {
+			border-bottom: 1px solid #D4D4D7;
+			text-decoration: none;
+
+			&:hover {
+				border-bottom-color: #66666E;
+			}
+		}
+
+		strong {
+			color: #7D6ACE;
+			font-weight: 300;
+		}
+
+		// Breakpoints
+		@include media($tall) {
+			@include rem((
+				font-size: 22px
+			));
+		}
+	}
+
+
+	/**
+	 * Button
+	 */
+	.btn {
+		@include rem((
+			margin-top: 50px
+		)); 
+	}
+}

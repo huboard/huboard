@@ -1,0 +1,93 @@
+/**
+ * Integrations
+ */
+.integrations {
+	@include slimContainer();
+	@include rem((
+		margin-top: 70px
+	));
+
+	@include e(row) {
+		@include row();
+	}
+}
+
+
+/**
+ * Service bit
+ */
+.service {
+	@include span-columns(6);
+	background: white;
+	border-radius: 5px;
+	@include rem((
+		height: 144px,
+		margin-bottom: 20px,
+		padding: 26px 34px
+	));
+
+	img {
+		float: left;
+		@include rem((
+			margin-right: 35px
+		));
+	}
+
+	// Breakpoints
+	@include media($tall) {
+		@include span-columns(12);
+		height: auto;
+		text-align: center;
+
+		img {
+			clear: both;
+			float: none;
+			margin-right: 0;
+		}
+	}
+
+	@include e(heading) {
+		color: #181819;
+		font-family: $base-font-family;
+		white-space: nowrap;
+		@include rem((
+			font-size: 22px,
+			margin-bottom: 8px
+		));
+	}
+
+	@include e(description) {
+		line-height: 1.6;
+		margin: 0;
+		padding: 0;
+	}
+
+
+	/**
+	 * HuBoard API service
+	 */
+	@include m(huboard) {
+		background: #5B648C url(asset-path('marketing/integration-huboard.png')) no-repeat center center;
+		color: white;
+		text-align: center;
+
+		.service__heading {
+			color: white;
+			font-family: $alt-font-family;
+			font-weight: 300;
+			@include rem((
+				font-size: 30px
+			));
+		}
+
+		.service__description {
+			color: #B9BFE0;
+			font-family: $alt-font-family;
+			font-weight: 300;
+			line-height: 1.3;
+			@include rem((
+				font-size: 20px
+			));
+		}
+	}
+}

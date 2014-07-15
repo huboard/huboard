@@ -51,8 +51,8 @@ exec { "vagrant::rbenv::rehash":
 }
 
 exec { 'install-vagrant':
-  environment => "HOME=/home/vagrant RACK_ENV=production",
-  command     => 'bundle install --path vendor/bundler',
+  environment => "HOME=/home/vagrant ",
+  command     => 'bundle install',
   cwd         => '/opt/huboard',
   user        => 'vagrant',
   provider    => 'shell',

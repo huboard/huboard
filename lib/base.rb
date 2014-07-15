@@ -44,7 +44,7 @@ class HuboardApplication < Sinatra::Base
 
   # end configuration
 
-  set :assets_precompile, %w(vendor/jquery.js vendor/jquery-ui.js splash.css marketing.css marketing.js application.js flex_layout.css bootstrap.css application.css ember-accounts.js board/application.js bootstrap.js *.png *.jpg *.svg *.eot *.ttf *.woff *.js).concat([/\w+\.(?!js|css).+/, /application.(css|js)$/])
+  set :assets_precompile, %w(vendor/jquery.js vendor/jquery-ui.js splash.css marketing.css marketing/main.css marketing.js application.js flex_layout.css bootstrap.css application.css ember-accounts.js board/application.js bootstrap.js *.png *.jpg *.svg *.eot *.ttf *.woff *.js).concat([/\w+\.(?!js|css).+/, /application.(css|js)$/])
 
   configure :production, :test, :staging do 
     set :asset_protocol, :https

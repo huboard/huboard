@@ -1,0 +1,356 @@
+/**
+ * Login page
+ */
+
+/**
+ * Login page background
+ */
+.login-page {
+	background: #282320 url(asset-path('marketing/header-bg--github--full.png')) no-repeat top center;
+	background-size: 100% auto;
+	color: white;
+
+	.top {
+		background: none;
+	}
+
+	.hero {
+		margin-bottom: 0;
+
+		.container {
+			padding-bottom: 0;
+		}
+	}
+
+	.footer {
+		background: none;
+	}
+}
+
+
+/**
+ * Modal login form
+ */
+.modal-overlay {
+	background: rgba(black, 0.8);
+	display: none;
+	height: 100%;
+	width: 100%;
+	position: fixed; top: 0; left: 0;
+
+	// Breakpoints
+	@include media($tall) {
+	}
+}
+.modal {
+	display: none;
+	position: absolute; top: 50%; left: 50%;
+	@include transform(translateY(-50%));
+	@include rem((
+		margin-left: -194px,
+		width: 388px
+	));
+
+	// Breakpoints
+	@include media($tall) {
+		@include transform(translateY(0));
+		@include rem((
+			margin-left: 0,
+			left: 0,
+			top: 40px,
+			padding: 0 20px
+		));
+		width: 100%;
+	}
+}
+
+
+/**
+ * Form
+ */
+.login-form {
+	background: #f7f7f7;
+	border-radius: 7px;
+	margin: 0 auto;
+	@include rem((
+		max-width: 388px
+	));
+
+	// Breakpoints
+	@include media($tall) {
+		max-width: 100%;
+		@include rem((
+			margin-top: 40px
+		));
+	}
+
+	@include e(title) {
+		background: white url(asset-path('marketing/login-form-title.png')) no-repeat bottom center;
+		border-radius: 7px 7px 0 0;
+		color: #4E4E4E;
+		font-family: $base-font-family;
+		margin-bottom: 0;
+		text-align: center;
+		@include rem((
+			font-size: 18px,
+			padding: 22px 22px 26px
+		));
+
+		// Breakpoints
+		@include media($tall) {
+		}
+	}
+
+
+	/**
+	 * Form fields wrapper
+	 */
+	@include e(fields) {
+		@include rem((
+			padding: 25px 23px 1px
+		));
+	}
+
+	/**
+	 * Form footer
+	 */
+	@include e(footer) {
+		border-top: 1px solid #e2e2e2;
+		@include rem((
+			padding: 25px 23px
+		));
+
+		a {
+		}
+
+		@include e(utility-link) {
+			float: right;
+			margin: 0;
+			@include rem((
+				padding: 16px 0
+			));
+
+			// Breakpoints
+			@include media($tall) {
+				float: none;
+				@include rem((
+					padding: 0,
+					margin-bottom: 20px
+				));
+			}
+		}
+	}
+}
+.login {
+
+	/**
+	 * Field container
+	 */
+	@include e(field) {
+		clear: both;
+		@include rem((
+			margin-bottom: 25px
+		));
+	}
+
+	/**
+	 * Labels
+	 */
+	@include e(label) {
+		display: none;
+		font-weight: bold;
+		line-height: 1;
+		@include rem((
+			margin-bottom: 18px
+		));
+	}
+
+
+	/**
+	 * Text inputs
+	 */
+	@include e(input) {
+		@extend .form__input;
+		background: white;
+		border-top: 1px solid #a8a8a8;
+		border-radius: 3px;
+		color: #232226;
+
+		&:focus {
+			background: white;
+		}
+		@at-root input:-webkit-autofill {
+			background: white !important;
+		}
+	}
+}
+
+
+/**
+ * Links after form
+ */
+.login-after {
+	text-align: center;
+	@include rem((
+		margin-top: 24px
+	));
+
+	a {
+		border-bottom: 1px solid rgba(white, 0.3);
+		color: white;
+		display: inline-block;
+		text-decoration: none;
+		@include rem((
+			margin: 10px 10px 0
+		));
+
+		&:hover {
+			border-color: white;
+		}
+	}
+}
+
+
+/**
+ * Permissions
+ */
+.permissions {
+	@include row();
+	@include rem((
+		margin: 0 auto 20px,
+		max-width: 900px,
+	));
+
+	.btn {
+		display: block;
+		text-align: center;
+	}
+
+	/**
+	 * Opening copy
+	 */
+	@include e(copy) {
+		text-align: center;
+		position: relative;
+		@include rem((
+			font-size: 20px,
+			margin-bottom: 100px
+		));
+
+		&:before {
+			background: rgba(white, 0.1);
+			content: " ";
+			display: block;
+			height: 3px;
+			width: 30%;
+			@include rem((
+				margin: 32px auto
+			));
+		}
+
+		// Breakpoints
+		@include media($tall) {
+			@include rem((
+				margin-bottom: 40px
+			));
+		}
+	}
+
+	/**
+	 * Column containers
+	 */
+	@include e(col) {
+		@include span-columns(6);
+		@include rem((
+			margin-bottom: 40px
+		));
+
+		// Breakpoints
+		@include media($tall) {
+			@include span-columns(12);
+		}
+	}
+	@include e(heading) {
+		line-height: 1;
+		text-align: center;
+		@include rem((
+			font-size: 32px
+		));
+
+		img {
+			display: inline-block;
+			vertical-align: middle;
+			@include rem((
+				margin-right: 10px
+			));
+		}
+	}
+
+	/**
+	 * Permissions details
+	 */
+	@include e(list) {
+		background: white;
+		border-radius: 5px;
+		color: #3C3C3C;
+		@include rem((
+			padding: 30px
+		));
+
+		dl, dt, dd {
+			margin: 0;
+			padding: 0;
+		}
+		dl {
+			border-bottom: 1px solid #E8E8E8;
+			@include rem((
+				padding-bottom: 12px,
+				margin-bottom: 24px
+			));
+		}
+		dt {
+			@include rem((
+				line-height: 18px,
+				margin-bottom: 12px
+			));
+		}
+		dd {
+			float: left;
+			@include rem((
+				margin-right: 10px
+			));
+		}
+		img {
+			display: inline-block;
+			@include rem((
+				margin-right: 10px
+			));
+		}
+
+		// Breakpoints
+		@include media($tall) {
+			dl {
+				text-align: center;
+				@include rem((
+					padding-bottom: 1px
+				));
+			}
+			dt {
+				line-height: 1.5;
+				@include rem((
+					margin-bottom: 24px
+				));
+			}
+			dd {
+				float: none;
+				margin-right: 0;
+			}
+			img {
+				@include rem((
+					margin: 0 10px
+				));
+			}
+		}
+	}
+
+}

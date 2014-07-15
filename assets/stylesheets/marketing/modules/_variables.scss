@@ -1,0 +1,36 @@
+/*
+ * Variables
+ */
+
+/**
+ * Neat config
+ */
+$grid-columns: 				12;
+$gutter: 					40px;
+$slim-container-width: 		799px;
+$max-width: 				1001px;
+
+
+/**
+ * Breakpoints
+ */
+$short: 					new-breakpoint(max-width 22.5em 4);     // 360px
+$tall: 						new-breakpoint(max-width 47.8em 12);      // 768px
+$grande: 					new-breakpoint(max-width 65.06em 12);    // 1041px
+$venti: 					new-breakpoint(min-width 65.06em 12);   // 1260px
+
+
+/**
+ * Colours
+ */
+
+
+/**
+ * Typography
+ */
+$base-font-size: 			1.4;
+$base-line-height: 			1.8;
+$base-font-family: 			"Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+$light-font-family: 		"HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+$thin-font-family: 		"HelveticaNeue-Thin", "Helvetica Neue Thin", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+$alt-font-family: 			"Source Sans Pro", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
