@@ -4,7 +4,8 @@
   </div>
  {{#if App.repo.is_collaborator}}
     <div class="create-button">
-      <button {{action createNewIssue }} class="hb-button small">Create new issue</button>
+      <button {{action "createNewIssue" }} class="hb-button small">Create new issue</button>
+      <button {{action "createNewMilestone" }} class="hb-button small">Create new milestone</button>
       <span class="dropdown">
         <a data-toggle="dropdown" class="dropdown-toggle hb-icon-link" href="#">
           <i class="ui-icon ui-icon-18 ui-icon-gear"></i>
