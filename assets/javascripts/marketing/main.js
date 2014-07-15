@@ -8,7 +8,11 @@ $(document).ready(function() {
 
 	// Testimonials slider
 	$('.slider').unslider({
-		dots: true
+		dots: true,
+    delay: 5000,
+    speed: 500,
+    loop: false,
+    pause: true
 	});
 
 
