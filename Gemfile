@@ -1,12 +1,18 @@
 source 'https://rubygems.org'
-ruby "2.1.2"
+#ruby "2.1.2"
+gem 'sinatra', "~> 1.4.0"
+gem 'sinatra-contrib', github: 'maccman/sinatra-contrib'
+gem 'rack-standards'
+gem 'thin'
+gem 'erubis'
+gem 'i18n'
+gem 'activesupport'
 
 
 gem 'encryptor'
 gem 'rack-no-www'
 gem 'rdiscount'
 gem 'slim'
-gem 'sinatra', "~> 1.4.0"
 gem 'warden-github'
 gem 'sinatra-content-for', "~> 0.1.0"
 gem 'ghee'

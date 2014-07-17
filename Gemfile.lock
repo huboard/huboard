@@ -1,4 +1,15 @@
 GIT
+  remote: git://github.com/maccman/sinatra-contrib.git
+  revision: 3dde2819a31791a9124d916c4449df0741af45f9
+  specs:
+    sinatra-contrib (1.4.1)
+      multi_json
+      rack-protection
+      rack-test
+      sinatra (~> 1.4.0)
+      tilt (~> 1.3)
+
+GIT
   remote: https://github.com/huboard/sinatra-pubsub
   revision: 8e1b1bd6a44868959160e6a33a4a75771407df5d
   specs:
@@ -152,6 +163,9 @@ GEM
     rack-robustness (1.1.0)
     rack-ssl (1.3.3)
       rack
+    rack-standards (0.0.1)
+    rack-test (0.6.2)
+      rack (>= 1.0)
     raindrops (0.10.0)
     rake (10.1.0)
     raygun4ruby (1.1.3)
@@ -237,11 +251,13 @@ DEPENDENCIES
   dalli
   dotenv
   encryptor
+  erubis
   eventmachine
   execjs (~> 1.4)
   foreman
   ghee
   heroku
+  i18n
   kgio
   librarian-chef
   newrelic_rpm
@@ -254,6 +270,7 @@ DEPENDENCIES
   rack-no-www
   rack-robustness
   rack-ssl
+  rack-standards
   raygun4ruby
   rdiscount
   sass (~> 3.3.9)
@@ -261,6 +278,7 @@ DEPENDENCIES
   sinatra (~> 1.4.0)
   sinatra-asset-pipeline
   sinatra-content-for (~> 0.1.0)
+  sinatra-contrib!
   sinatra-pubsub!
   slim
   sprockets
