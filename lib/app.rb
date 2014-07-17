@@ -42,7 +42,7 @@ class Huboard
     end
 
     get "/repositories/public/:user/?" do
-      user =   gh.users(params[:user]).raw
+      user = gh.users(params[:user]).raw
       raise Sinatra::NotFound unless user.status == 200 
 
       @parameters = params

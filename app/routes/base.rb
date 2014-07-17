@@ -15,6 +15,14 @@ module HuBoard
         enable :use_code
       end
 
+      helpers do 
+        set(:is_logged_in) do |enabled| 
+          condition do
+            enabled == logged_in?
+          end
+        end
+      end
+
       register Extensions::Assets
       helpers Helpers
       helpers Sinatra::ContentFor

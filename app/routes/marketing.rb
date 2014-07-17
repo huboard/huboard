@@ -1,5 +1,19 @@
 module HuBoard
   module Routes
+
+    class SassLogin < Base
+      helpers do
+        def controller?(*controller)
+          controller.include?(@controller) ? "nav__btn--active nav__item--current" : ""
+        end
+      end
+
+      get "/login/?" do
+        @controller = "login"
+        erb :login_sass, layout: false
+      end
+    end
+
     class Marketing < Base
 
       helpers do
@@ -12,9 +26,31 @@ module HuBoard
         end
       end
 
-      get "/" do
+      get "/", :is_logged_in => false do
+        @controller = params[:controller] || "home"
         erb :marketing, layout: :marketing
       end
+
+      get "/site/privacy/?" do
+        @controller = "privacy"
+        return erb :privacy, :layout => :marketing 
+      end
+
+      get "/site/terms/?" do
+        @controller = "terms"
+        return erb :terms_of_service, :layout => :marketing 
+      end
+
+      get '/pricing/?' do 
+        @controller = "pricing"
+        erb :pricing, :layout => :marketing
+      end
+
+      get '/integrations/?' do 
+        @controller = "integrations"
+        erb :integrations, :layout => :marketing
+      end
+      use SassLogin
     end
   end
 end

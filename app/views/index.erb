@@ -1,0 +1,41 @@
+
+
+<% content_for :breadcrumb do %>
+  <% unless params[:user].nil? %>
+    <li><a href="/<%= h @parameters[:user] %>"><%= h @parameters[:user] %></a></li>
+  <% end %>
+<% end %>
+
+<div class="row no-header">
+  <div class="span3">
+    <%= partial :vcard, :locals => {:user => @user || current_user } %>
+  </div>
+  <div class="span9">
+    <div>
+      <%= partial :repo_filters, :locals => { :user => @user || current_user, :is_current_user => (params[:user].nil? or @user.login == current_user.login ) } %>
+      <ul class="repos drop-shadow ">
+        <% if @repos.empty? %>
+          <li class="empty">
+            No repositories match your current filters
+          </li>
+        <% end %>
+        <% @repos.each do |repo| %>
+          <li class="repo">
+        <a href="<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/backlog" %>"><span>backlog</span></a> 
+        <a class="board" href="<%= "/#{repo["owner"]["login"]}/#{repo["name"]}" %>"><span>open issues</span><strong><%=repo["open_issues"]%></strong></a> 
+        <span>
+          <% if repo.private %>
+            <i class="ui-icon-lock icon private"></i>
+          <% else %>
+            <i class="ui-icon-note icon public"></i>
+            <%end%>
+        <a href='<%= "/#{repo["owner"]["login"]}" %>'><%= repo["owner"]["login"] %></a> / <a href='<%= "/#{repo["owner"]["login"]}/#{repo["name"]}" %>'><%= repo["name"] %></a></span>
+        </li>
+      <% end %>
+      </ul>
+    </div>
+
+  </div>
+
+</div>
+
