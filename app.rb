@@ -22,6 +22,7 @@ libraries.each do |path_name|
 end
 
 require 'app/extensions'
+require 'app/helpers'
 require 'app/routes'
 
 module HuBoard
@@ -49,6 +50,7 @@ module HuBoard
       use Routes::Assets
     end
 
+    use Routes::Marketing
 
   end
 end

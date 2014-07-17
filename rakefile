@@ -1,20 +1,9 @@
-require "bundler"
-Bundler.require
+#!/usr/bin/env rake
 
-require 'sass'
-require 'bourbon'
+task :app do
+  require './app'
+end
 
-require 'sinatra/asset_pipeline/task.rb'
-require "#{File.dirname(__FILE__)}/lib/helpers"
-require "#{File.dirname(__FILE__)}/lib/base"
-
-Sinatra::AssetPipeline::Task.define! HuboardApplication
-
-namespace :couch do 
-  desc "push development documents"
-  task "dev:push" do
-    Dir.chdir "couch" do
-      `couch-docs push http://127.0.0.1:5984/huboard -d`
-    end
-  end
+Dir[File.dirname(__FILE__) + "/lib/tasks/*.rb"].sort.each do |path|
+  require path
 end
