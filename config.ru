@@ -1,24 +1,19 @@
+require 'rubygems'
+require 'bundler'
+
+require 'dotenv'
+Dotenv.load
+
+# Setup load paths
+Bundler.require
+$: << File.expand_path('../', __FILE__)
+$: << File.expand_path('../lib', __FILE__)
+
+environment = ENV["HUBOARD_ENV"] || "development"
+require "config/environments/#{environment}.rb"
 require './app'
+require "config/initializers/#{environment}.rb"
 
-case ENV["HUBOARD_ENV"]
-when "oss"
-when "standalone"
-when "production", "staging"
-  configure :production, :staging do 
-    require "newrelic_rpm"
-    use Rack::SSL
-
-    require 'raygun4ruby'
-    raygun_api_key = ENV["RAYGUN_APIKEY"]
-
-    Raygun.setup do |config|
-      config.api_key = raygun_api_key
-      config.silence_reporting = !raygun_api_key
-    end
-
-    use Raygun::Middleware::RackExceptionInterceptor
-  end
-end
 
 use Rack::NoWWW
 

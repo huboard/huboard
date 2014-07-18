@@ -1,6 +1,7 @@
 module HuBoard
   module Routes
     autoload :Base, 'app/routes/base'
+    autoload :Failure, 'app/routes/failure'
     autoload :Assets, 'app/routes/assets'
     autoload :Static, 'app/routes/static'
 

@@ -1,13 +1,3 @@
-require 'rubygems'
-require 'bundler'
-
-require 'dotenv'
-Dotenv.load
-
-# Setup load paths
-Bundler.require
-$: << File.expand_path('../', __FILE__)
-$: << File.expand_path('../lib', __FILE__)
 
 # Require base
 require 'sinatra/base'
@@ -23,8 +13,6 @@ require 'active_support/json'
   end
 end
 require 'jobs'
-
-require 'lib/auth/github'
 
 require 'app/extensions'
 require 'app/helpers'
@@ -69,7 +57,7 @@ module HuBoard
     end
 
     use Warden::Manager do |config|
-      config.failure_app = Sinatra::Auth::Github::BadAuthentication
+      config.failure_app = HuBoard::Routes::Failure
       config.default_strategies :github
       config.scope_defaults :default, :config => GITHUB_CONFIG
       config.scope_defaults :private, :config => GITHUB_CONFIG.merge(:scope => 'repo')
@@ -84,7 +72,9 @@ module HuBoard
       use Routes::Assets
     end
 
-    use Routes::Marketing
+    if HuBoard.sass?
+      use Routes::Marketing
+    end
     use Routes::Login
 
     # API routes
@@ -92,10 +82,12 @@ module HuBoard
     use Routes::Api::Issues
     use Routes::Api::Integrations
     use Routes::Api::Webhooks
-    use Routes::Api::Profiles
 
-    # App routes
-    use Routes::Profiles
+    if HuBoard.sass?
+      use Routes::Api::Profiles
+      use Routes::Profiles
+    end
+
     use Routes::Repositories
 
   end

@@ -26,7 +26,6 @@ module HuBoard
 
 
         app.configure :production, :staging do
-          puts "Production"
           assets.js_compressor  = :uglify
           assets.css_compressor = :scss
 
@@ -38,7 +37,6 @@ module HuBoard
         end
 
         app.configure do
-          puts "Configure"
           assets.cache = Sprockets::Cache::FileStore.new('/tmp')
           Sprockets::Helpers.configure do |config|
             config.environment = app.assets
