@@ -16,12 +16,13 @@ require 'active_support/core_ext/array'
 require 'active_support/core_ext/hash'
 require 'active_support/json'
 
-%w{ bridge couch jobs }.each do |folder|
+%w{ bridge couch }.each do |folder|
   libraries = Dir[File.expand_path("../lib/#{folder}/**/*.rb", __FILE__)]
   libraries.each do |path_name|
     require path_name
   end
 end
+require 'jobs'
 
 require 'lib/auth/github'
 
