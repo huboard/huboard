@@ -2,6 +2,23 @@ module HuBoard
   module Routes
     class Repositories < Base
 
+      RESERVED_URLS = %w{ repositories }
+
+      before '/:user/:repo/?*' do
+        return if RESERVED_URLS.include? params[:user]
+
+        if authenticated? :private
+          repo = gh.repos params[:user], params[:repo]
+
+          raise Sinatra::NotFound if repo.message == "Not Found"
+
+        else
+          repo = gh.repos params[:user], params[:repo]
+          raise Sinatra::NotFound if repo.message == "Not Found"
+        end
+      end
+
+
       get '/', :is_logged_in => true do
         @parameters = params
         @repos = huboard.all_repos
@@ -9,24 +26,8 @@ module HuBoard
         erb :index
       end
 
-      get '/:user/?' do
-        user =   gh.users(params[:user]).raw
-        raise Sinatra::NotFound unless user.status == 200 
-        @parameters = params
-
-        if logged_in? && current_user.login == params[:user]
-          @repos = huboard.repos
-        else
-          @repos = huboard.repos_by_user(params[:user])
-        end
-
-        @user = user.body
-        @private = nil
-        erb :index
-      end
-
       get "/repositories/public/:user/?" do
-        user = gh.users(params[:user]).raw
+        user =   gh.users(params[:user]).raw
         raise Sinatra::NotFound unless user.status == 200 
 
         @parameters = params
@@ -57,6 +58,24 @@ module HuBoard
         erb :index
 
       end
+
+      get '/:user/?' do
+        user =   gh.users(params[:user]).raw
+        raise Sinatra::NotFound unless user.status == 200 
+
+        @parameters = params
+
+        if logged_in? && current_user.login == params[:user]
+          @repos = huboard.repos
+        else
+          @repos = huboard.repos_by_user(params[:user])
+        end
+
+        @user = user.body
+        @private = nil
+        erb :index
+      end
+
 
       get '/:user/:repo/backlog/?' do 
         redirect "/#{params[:user]}/#{params[:repo]}/#/milestones"

@@ -27,6 +27,10 @@ module HuBoard
       helpers Helpers
       helpers Sinatra::ContentFor
       helpers Sinatra::Partials
+
+      not_found do
+        erb :"404", :layout => false
+      end
     end
   end
 end
