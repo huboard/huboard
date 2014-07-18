@@ -7,10 +7,15 @@ module HuBoard
     autoload :Marketing, 'app/routes/marketing'
     autoload :Login, 'app/routes/login'
     autoload :Repositories, 'app/routes/repositories'
+    autoload :Profiles, 'app/routes/profiles'
 
     module Api
       autoload :Base, 'app/routes/api/base'
       autoload :Board, 'app/routes/api/board'
+      autoload :Issues, 'app/routes/api/issues'
+      autoload :Integrations, 'app/routes/api/integrations'
+      autoload :Webhooks, 'app/routes/api/webhooks'
+      autoload :Profiles, 'app/routes/api/profiles'
     end
   end
 end

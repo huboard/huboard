@@ -16,9 +16,11 @@ require 'active_support/core_ext/array'
 require 'active_support/core_ext/hash'
 require 'active_support/json'
 
-libraries = Dir[File.expand_path('../lib/bridge/**/*.rb', __FILE__)]
-libraries.each do |path_name|
-  require path_name
+%w{ bridge couch jobs }.each do |folder|
+  libraries = Dir[File.expand_path("../lib/#{folder}/**/*.rb", __FILE__)]
+  libraries.each do |path_name|
+    require path_name
+  end
 end
 
 require 'lib/auth/github'
@@ -86,10 +88,16 @@ module HuBoard
 
     # API routes
     use Routes::Api::Board
+    use Routes::Api::Issues
+    use Routes::Api::Integrations
+    use Routes::Api::Webhooks
+    use Routes::Api::Profiles
 
     # App routes
+    use Routes::Profiles
     use Routes::Repositories
 
   end
 end
+
 class HuboardApplication < HuBoard::App; end

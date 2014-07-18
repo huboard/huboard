@@ -13,12 +13,7 @@ app.build.js
 .bundle/
 .powconfig
 .rbenv-version
-vendor/
 node_modules
-
-!assets/javascripts/board/vendor/
-!assets/javascripts/vendor/
-
 
 /cookbooks
 /bin
@@ -26,3 +21,7 @@ node_modules
 .tmp/
 .librarian/
 modules/
+
+public/assets
+vendor/bundle
+vendor/bundler

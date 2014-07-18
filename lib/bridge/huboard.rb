@@ -5,6 +5,7 @@ require_relative "github/labels"
 require_relative "github/settings"
 require_relative "github/issues"
 require_relative "github/backlog"
+require_relative "github/hooks"
 require_relative "github/board"
 require_relative "middleware"
 
@@ -67,6 +68,7 @@ class Huboard
     include Settings
     include Issues
     include Backlog
+    include Hooks
   end
 
 end

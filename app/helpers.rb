@@ -71,6 +71,10 @@ module HuBoard
       huboard(token).connection
     end
 
+    def couch
+      @couch ||= Huboard::Couch.new :base_url => ENV["COUCH_URL"], :database => ENV["COUCH_DATABASE"]
+    end
+
     def base_url
       @base_url ||= "#{request.env['rack.url_scheme']}://#{request.env['HTTP_HOST']}"
     end

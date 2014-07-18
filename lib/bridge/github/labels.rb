@@ -48,6 +48,10 @@ class Huboard
       columns
     end
 
+    def create_label(params)
+      gh.labels.create params
+    end
+
     def link_labels
       labels.select{|l| Huboard.link_pattern.match l.name }.map do |l|
         match = Huboard.link_pattern.match l.name
