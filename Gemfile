@@ -9,6 +9,7 @@ gem 'erubis'
 gem 'i18n'
 gem 'activesupport'
 gem 'dotenv'
+gem 'rake'
 
 gem 'sinatra-pubsub'
 gem 'encryptor'
