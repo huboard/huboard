@@ -10,11 +10,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "puppetlabs/debian-7.4-64-puppet"
 
   config.vm.network "forwarded_port", guest: 9393, host: 9393
-  config.vm.network "forwarded_port", guest: 6000, host: 6000
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  config.vm.network "private_network", ip: "192.168.33.22"
+  config.vm.network "private_network", ip: "192.168.50.5"
 
 
   # Share an additional folder to the guest VM. The first argument is
