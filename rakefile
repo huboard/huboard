@@ -1,7 +1,17 @@
 #!/usr/bin/env rake
 
 task :app do
-  require './app'
+  require 'dotenv'
+  Dotenv.load
+
+  Bundler.require
+  $: << File.expand_path('../', __FILE__)
+  $: << File.expand_path('../lib', __FILE__)
+
+  environment = ENV["HUBOARD_ENV"] || "development"
+  require "config/environments/#{environment}.rb"
+  require 'app'
+  require "config/initializers/#{environment}.rb"
 end
 
 Dir[File.dirname(__FILE__) + "/lib/tasks/*.rb"].sort.each do |path|
