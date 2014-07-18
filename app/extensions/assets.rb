@@ -29,8 +29,8 @@ module HuBoard
           puts "Production"
           assets.js_compressor  = :uglify
           assets.css_compressor = :scss
-          assets.js_compressor  = Closure::Compiler.new
-          assets.css_compressor = YUI::CssCompressor.new
+          assets.js_compressor  = ::Closure::Compiler.new
+          assets.css_compressor = ::YUI::CssCompressor.new
 
           Sprockets::Helpers.configure do |config|
             config.digest = true
