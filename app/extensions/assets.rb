@@ -1,4 +1,5 @@
 require 'sprockets'
+require 'sprockets_memcache_store'
 
 module HuBoard
   module Extensions
@@ -8,12 +9,6 @@ module HuBoard
       module Helpers
         include Sprockets::Helpers
 
-        def asset_pathx(name)
-          asset = settings.assets[name]
-          raise UnknownAsset, "Unknown asset: #{name}" unless asset
-          "#{settings.asset_host}/assets/#{asset.digest_path}"
-        end
-
         def assets_environment
           settings.assets
         end
@@ -22,7 +17,7 @@ module HuBoard
       def registered(app)
         # Assets
         app.set :assets, assets = Sprockets::Environment.new(app.settings.root)
-        app.set :precompile, precompile = %w{ bootstrap.js marketing.js board/application.js marketing.css flex_layout.css application.css splash.css *.png }
+        app.set :precompile, precompile = %w{ vendor/jquery-ui.js bootstrap.js marketing.js board/application.js marketing.css flex_layout.css application.css splash.css bootstrap.css *.png }
 
         assets.append_path('app/assets/javascripts')
         assets.append_path('app/assets/stylesheets')
@@ -33,15 +28,20 @@ module HuBoard
         app.set :asset_host, ''
 
         app.configure do
-
+          puts "Configure #{app.environment}"
+          puts ENV['RACK_ENV']
         end
 
         app.configure :development do
+          puts "Development "
           assets.cache = Sprockets::Cache::FileStore.new('/tmp')
         end
 
         app.configure :production, :staging do
+          puts "Production"
           assets.cache = Sprockets::Cache::FileStore.new('/tmp')
+          assets.js_compressor  = :uglify
+          assets.css_compressor = :scss
         end
 
         app.helpers Helpers

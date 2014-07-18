@@ -1,8 +1,8 @@
 namespace :assets do
   desc 'Precompile assets'
   task :precompile => :app do
-    assets = HuBoard::Routes::Assets.assets
-    precompile = HuBoard::Routes::Assets.precompile
+    assets = HuBoard::Routes::Base.assets
+    precompile = HuBoard::Routes::Base.precompile
     target = Pathname(HuBoard::App.root) + 'public/assets'
 
     assets.each_logical_path do |logical_path|

@@ -1,13 +1,13 @@
 require 'rubygems'
 require 'bundler'
 
+require 'dotenv'
+Dotenv.load
+
 # Setup load paths
 Bundler.require
 $: << File.expand_path('../', __FILE__)
 $: << File.expand_path('../lib', __FILE__)
-
-require 'dotenv'
-Dotenv.load
 
 # Require base
 require 'sinatra/base'
