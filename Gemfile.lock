@@ -31,6 +31,7 @@ GEM
       debug_inspector (>= 0.0.1)
     celluloid (0.15.2)
       timers (~> 1.1.0)
+    closure-compiler (1.1.10)
     coderay (1.0.9)
     connection_pool (1.2.0)
     daemons (1.1.9)
@@ -167,6 +168,7 @@ GEM
     warden-github (1.0.0)
       octokit (> 2.1.0)
       warden (> 1.0)
+    yui-compressor (0.12.0)
 
 PLATFORMS
   ruby
@@ -175,6 +177,7 @@ DEPENDENCIES
   activesupport
   addressable
   better_errors
+  closure-compiler
   connection_pool
   dalli
   dotenv
@@ -215,3 +218,4 @@ DEPENDENCIES
   uglifier
   unicorn
   warden-github
+  yui-compressor

@@ -8,10 +8,6 @@ module HuBoard
 
       module Helpers
         include Sprockets::Helpers
-
-        def assets_environment
-          settings.assets
-        end
       end
 
       def registered(app)
@@ -26,22 +22,29 @@ module HuBoard
         assets.append_path('vendor/assets/stylesheets')
 
         app.set :asset_host, ''
+        app.set :asset_path, -> { File.join(public_folder, "assets") } 
 
-        app.configure do
-          puts "Configure #{app.environment}"
-          puts ENV['RACK_ENV']
-        end
-
-        app.configure :development do
-          puts "Development "
-          assets.cache = Sprockets::Cache::FileStore.new('/tmp')
-        end
 
         app.configure :production, :staging do
           puts "Production"
-          assets.cache = Sprockets::Cache::FileStore.new('/tmp')
           assets.js_compressor  = :uglify
           assets.css_compressor = :scss
+          assets.js_compressor  = Closure::Compiler.new
+          assets.css_compressor = YUI::CssCompressor.new
+
+          Sprockets::Helpers.configure do |config|
+            config.digest = true
+            config.manifest = Sprockets::Manifest.new(app.assets, app.asset_path)
+          end
+
+        end
+
+        app.configure do
+          puts "Configure"
+          assets.cache = Sprockets::Cache::FileStore.new('/tmp')
+          Sprockets::Helpers.configure do |config|
+            config.environment = app.assets
+          end
         end
 
         app.helpers Helpers
