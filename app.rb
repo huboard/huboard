@@ -37,6 +37,7 @@ module HuBoard
       set :sessions,
           key: 'rack.session',
           path: '/',
+          secure: HuBoard.sass?,
           httponly: true,
           expire_after: 5.years,
           secret: ENV['SESSION_SECRET']
