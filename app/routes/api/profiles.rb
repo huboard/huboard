@@ -2,6 +2,11 @@ module HuBoard
   module Routes
     module Api
       class Profiles < Base
+
+        before '/api/profiles/?*' do
+          raise Sinatra::NotFound unless authenticated? :private
+        end
+
         get '/api/profiles/?' do
           user = gh.user.to_hash
           orgs = gh.orgs.to_a

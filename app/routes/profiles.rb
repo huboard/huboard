@@ -8,7 +8,7 @@ module HuBoard
 
       Stripe.api_key = settings.stripe_key
 
-      before do
+      before '/settings/?*' do
         protected!
       end
 
