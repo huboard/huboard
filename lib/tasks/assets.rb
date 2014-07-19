@@ -4,19 +4,15 @@ namespace :assets do
     assets = HuBoard::Routes::Base.assets
     precompile = HuBoard::Routes::Base.precompile
     target = Pathname(HuBoard::App.root) + 'public/assets'
+    manifest = Sprockets::Manifest.new assets.index, target
+    manifest.compile precompile
 
-    assets.each_logical_path do |logical_path|
-      next unless precompile.any? { |pattern| File.fnmatch pattern, logical_path }
-      if asset = assets.find_asset(logical_path) 
-        filename = target.join(asset.digest_path)
-        FileUtils.mkpath(filename.dirname)
-        asset.write_to(filename)
+  end
 
-        filename = target.join(logical_path)
-        FileUtils.mkpath(filename.dirname)
-        asset.write_to(filename)
-      end
-    end
+  desc "Clean assets"
+  task :clean => :app do
+    target = Pathname(HuBoard::App.root) + 'public/assets'
+    FileUtils.rm_rf(target)
   end
 end
 
