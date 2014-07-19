@@ -14,6 +14,7 @@ gem 'rake'
 gem 'uglifier'
 gem 'closure-compiler'
 gem 'yui-compressor'
+gem 'coffee-script'
 
 gem 'sinatra-pubsub'
 gem 'encryptor'
@@ -52,6 +53,6 @@ end
 
 group :production do
   gem 'newrelic_rpm'
-  gem 'unicorn'
+  gem 'puma'
   gem 'raygun4ruby'
 end

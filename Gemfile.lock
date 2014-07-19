@@ -33,6 +33,10 @@ GEM
       timers (~> 1.1.0)
     closure-compiler (1.1.10)
     coderay (1.0.9)
+    coffee-script (2.3.0)
+      coffee-script-source
+      execjs
+    coffee-script-source (1.7.1)
     connection_pool (1.2.0)
     daemons (1.1.9)
     dalli (2.6.4)
@@ -97,6 +101,8 @@ GEM
     pry-stack_explorer (0.4.9.1)
       binding_of_caller (>= 0.7)
       pry (>= 0.9.11)
+    puma (2.9.0)
+      rack (>= 1.1, < 2.0)
     rack (1.5.2)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -109,7 +115,6 @@ GEM
     rack-standards (0.0.1)
     rack-test (0.6.2)
       rack (>= 1.0)
-    raindrops (0.13.0)
     rake (10.1.0)
     raygun4ruby (1.1.3)
       httparty (~> 0.11)
@@ -159,10 +164,6 @@ GEM
     uglifier (2.2.1)
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
-    unicorn (4.8.3)
-      kgio (~> 2.6)
-      rack
-      raindrops (~> 0.7)
     warden (1.2.3)
       rack (>= 1.0)
     warden-github (1.0.0)
@@ -178,6 +179,7 @@ DEPENDENCIES
   addressable
   better_errors
   closure-compiler
+  coffee-script
   connection_pool
   dalli
   dotenv
@@ -195,6 +197,7 @@ DEPENDENCIES
   pry
   pry-rescue
   pry-stack_explorer
+  puma
   rack-cache
   rack-no-www
   rack-robustness
@@ -216,6 +219,5 @@ DEPENDENCIES
   sucker_punch (~> 1.0)
   thin
   uglifier
-  unicorn
   warden-github
   yui-compressor

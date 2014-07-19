@@ -13,7 +13,7 @@ module HuBoard
       def registered(app)
         # Assets
         app.set :assets, assets = Sprockets::Environment.new(app.settings.root)
-        app.set :precompile, precompile = %w{ vendor/jquery.js vendor/jquery-ui.js bootstrap.js marketing.js board/application.js marketing.css flex_layout.css application.css splash.css marketing/main.css bootstrap.css *.png }
+        app.set :precompile, precompile = %w{ ember-accounts.js vendor/jquery.js vendor/jquery-ui.js bootstrap.js marketing.js board/application.js marketing.css flex_layout.css application.css splash.css marketing/main.css bootstrap.css *.png }
 
         assets.append_path('app/assets/javascripts')
         assets.append_path('app/assets/stylesheets')

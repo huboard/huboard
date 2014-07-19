@@ -88,6 +88,7 @@ module HuBoard
       use Routes::Profiles
     end
 
+    use Routes::Fallback
     use Routes::Repositories
 
   end

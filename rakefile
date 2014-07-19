@@ -1,8 +1,9 @@
 #!/usr/bin/env rake
 
 task :app do
-  require 'dotenv'
-  Dotenv.load
+  require 'bundler'
+  #require 'dotenv'
+  #Dotenv.load
 
   Bundler.require
   $: << File.expand_path('../', __FILE__)
