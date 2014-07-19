@@ -1,0 +1,9 @@
+User-agent: *
+Crawl-delay: 1
+Allow: /
+
+sitemap: https://huboard.com/sitemap.xml
+
+User-Agent: YandexImages
+Disallow: /
+
