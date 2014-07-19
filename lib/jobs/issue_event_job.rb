@@ -9,7 +9,7 @@ class IssueEventJob
     
     # guard clause for double events
 
-    Huboard::Caching::ConnectionPool.connection_pool.with do |dalli|
+    HuBoard.cache.with do |dalli|
       key = "#{payload[:meta][:action]}.#{payload[:meta][:user]["login"]}.#{payload[:meta][:identifier]}.#{payload[:meta][:timestamp]}"
       puts "SEARCHING FOR KEY: #{key}"
       return if dalli.get(key)

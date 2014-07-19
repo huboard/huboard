@@ -6,27 +6,6 @@ require 'connection_pool'
 
 class Huboard
   class Client
-    class ConnectionPool
-
-      def self.options
-        @options ||= {
-          namespace: "huboard_v1",
-          compress: true,
-          expires_in: 1.day,
-          username: HuboardApplication.cache_config[:username],
-          password: HuboardApplication.cache_config[:password]
-        }
-      end
-
-      def self.connection_pool
-        @connection_pool = ::ConnectionPool.new(:size => 20, :timeout => 10) {
-          Dalli::Client.new(HuboardApplication.cache_config[:servers].split(","), options)
-        }
-      end
-
-    end
-
-
     class SimpleCache
 
       def initialize(app, options)
@@ -35,7 +14,7 @@ class Huboard
       end
 
       def cache
-        @dalli ||= ConnectionPool.connection_pool
+        @dalli ||= HuBoard.cache
       end
 
       def clear(key)

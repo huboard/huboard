@@ -1,10 +1,13 @@
+require 'memcachier'
 
 # Require base
 require 'sinatra/base'
+require 'active_support/all'
 require 'active_support/core_ext/string'
 require 'active_support/core_ext/array'
 require 'active_support/core_ext/hash'
 require 'active_support/json'
+require 'active_support/cache/dalli_store'
 
 %w{ bridge couch }.each do |folder|
   libraries = Dir[File.expand_path("../lib/#{folder}/**/*.rb", __FILE__)]
@@ -19,6 +22,23 @@ require 'app/helpers'
 require 'app/routes'
 
 module HuBoard
+  class << self
+    attr_accessor :cache
+
+  end
+  unless HuBoard.cache
+    HuBoard.cache = ActiveSupport::Cache.lookup_store(:dalli_store,
+                                                      (ENV["CACHE_SERVERS"] || "").split(","),
+                                                      {:username              => ENV["MEMCACHE_USERNAME"],
+                                                        :password             => ENV["MEMCACHE_PASSWORD"],
+                                                        :pool_size                 => 5,
+                                                        :failover             => true,
+                                                        :socket_timeout       => 1.5,
+                                                        :socket_failure_delay => 0.2
+                                                      })
+  end
+
+
   class App < Sinatra::Application
 
     GITHUB_CONFIG = {
@@ -43,9 +63,9 @@ module HuBoard
           secret: ENV['SESSION_SECRET']
 
       set :cache_config, {
-        servers: ENV["CACHE_SERVERS"] = ENV["MEMCACHIER_SERVERS"],
-        username: ENV["CACHE_USERNAME"] = ENV["MEMCACHIER_USERNAME"],
-        password: ENV["CACHE_PASSWORD"] = ENV["MEMCACHIER_PASSWORD"]
+        servers: ENV["MEMCACHE_SERVERS"],
+        username: ENV["MEMCACHE_USERNAME"],
+        password: ENV["MEMCACHE_PASSWORD"]
       }
 
       set :socket_backend, ENV["SOCKET_BACKEND"]

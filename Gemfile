@@ -23,7 +23,6 @@ gem 'rdiscount'
 gem 'slim'
 gem 'warden-github'
 gem 'ghee'
-gem 'rack-cache'
 gem 'rack-ssl'
 gem 'addressable'
 gem 'kgio'
@@ -37,6 +36,8 @@ gem 'sprockets-helpers'
 gem 'execjs', "~> 1.4"
 gem 'sucker_punch', '~> 1.0'
 gem 'eventmachine'
+
+gem 'memcachier'
 
 gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 
