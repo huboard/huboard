@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><% yield_content :title %>HuBoard</title>
+    <title><%= yield_content :title %>HuBoard</title>
 
     <%= javascript_tag 'vendor/jquery' %>
     <%= javascript_tag 'bootstrap' %>
@@ -31,10 +31,10 @@
            <div class="container">
             <ul class="nav breadcrumbs">
               <li><a href="/" class="home"><i class="ui-icon ui-icon-menu"></i></a></li>
-              <% yield_content :breadcrumb %>
+              <%= yield_content :breadcrumb %>
             </ul>
              <ul class="nav pull-right">
-               <% yield_content :navigation %>
+               <%= yield_content :navigation %>
                <% if logged_in? %>
                  <%= partial :logged_in %>
                <% else %>
@@ -49,7 +49,7 @@
          </div>
        </div>
        <div class="container" id="main-stage">
-         <% yield_content :header %>
+         <%= yield_content :header %>
          <%= yield %>
 
        </div>
@@ -71,6 +71,6 @@
       </div>
     </div>
 
-    <% yield_content :overlay %>
+    <%= yield_content :overlay %>
    </body>
  </html>
