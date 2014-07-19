@@ -8,6 +8,7 @@ end
 
 configure :production, :staging do 
   require "newrelic_rpm"
+  use Rack::SSL
 
   require 'raygun4ruby'
   raygun_api_key = ENV["RAYGUN_APIKEY"]
