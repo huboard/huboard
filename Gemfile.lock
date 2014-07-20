@@ -89,7 +89,7 @@ GEM
     multi_xml (0.5.5)
     multipart-post (1.2.0)
     netrc (0.7.7)
-    newrelic_rpm (3.5.6.55)
+    newrelic_rpm (3.9.0.229)
     octokit (2.7.0)
       sawyer (~> 0.5.2)
     pry (0.9.12.2)
