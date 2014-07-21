@@ -20,6 +20,16 @@ module HuBoard
           return json issue
         end
 
+        post '/api/:user/:repo/issues/:number/comment' do 
+
+          comment = gh.repos(params[:user], params[:repo]).issues(params[:number])
+          .comments.create :body => JSON.parse(request.body.read)["markdown"]
+
+          return json comment.to_hash
+
+        end
+
+
         put '/api/:user/:repo/issues/:number' do 
 
           api = huboard.board(params[:user], params[:repo])
@@ -115,7 +125,7 @@ module HuBoard
 
         post '/api/:user/:repo/assignmilestone' do 
           user, repo, number, milestone = params[:user], params[:repo], params[:issue], params[:milestone]
-          
+
           issue = huboard.board(user, repo).issue(number)
           issue = issue.patch "milestone" => milestone
 
