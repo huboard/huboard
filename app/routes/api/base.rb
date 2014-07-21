@@ -10,8 +10,7 @@ module HuBoard
           disable :protection
           disable :static
 
-          set :erb, 
-                    layout_options: {views: 'app/views/layouts'}
+          set :erb, layout_options: {views: 'app/views/layouts'}
 
           set :raise_errors, true
         end
@@ -25,22 +24,18 @@ module HuBoard
             repo = gh.repos params[:user], params[:repo]
 
             raise Sinatra::NotFound if repo.message == "Not Found"
-
           else
             repo = gh.repos params[:user], params[:repo]
             raise Sinatra::NotFound if repo.message == "Not Found"
           end
         end
 
-
         helpers Helpers
 
         not_found do
           json(message: "Not found")
         end
-
       end
     end
   end
 end
-

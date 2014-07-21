@@ -1,5 +1,3 @@
-require 'stripe'
-
 module HuBoard
   module Routes
     class Profiles < Base
@@ -13,19 +11,17 @@ module HuBoard
       end
 
       helpers do
-        def protected! 
+        def protected!
           return current_user if authenticated? :private
           authenticate! :scope => :private
         end
-
       end
 
       get "/settings/profile/?" do
-
         @user = gh.user
         @orgs = gh.orgs
 
-        erb :accounts, :layout => :ember_layout
+        erb :accounts, layout: :ember_layout
       end
 
       put "/settings/profile/:name/card/?" do
@@ -49,7 +45,6 @@ module HuBoard
         else
           json success: false, message: "Unable to find plan"
         end
-
       end
 
       delete "/settings/profile/:name/plans/:plan_id/?" do
@@ -73,23 +68,22 @@ module HuBoard
         end
       end
 
-      post "/settings/charge/:id/?" do 
-
+      post "/settings/charge/:id/?" do
         customer = Stripe::Customer.create(
-          :email => params[:email],
-          :card  => params[:card][:id],
-          :plan =>  params[:plan][:id],
-          :trial_end => (Time.now.utc + (params[:plan][:trial_period].to_i * 60 * 60 * 24)).to_i
+          email: params[:email],
+          card: params[:card][:id],
+          plan:  params[:plan][:id],
+          trial_end: (Time.now.utc + (params[:plan][:trial_period].to_i * 60 * 60 * 24)).to_i
         )
 
         user = gh.user
         account = gh.users(params[:id])
 
-        couch.customers.save({
+        attributes = {
           "id" => customer.id,
           github: {
-            :user => user.to_hash,
-            :account => account.to_hash
+            user: user.to_hash,
+            account: account.to_hash
           },
           stripe: {
             customer: customer,
@@ -97,11 +91,11 @@ module HuBoard
               plan_id: params[:plan][:plan_id]
             }
           }
-        })
+        }
+        couch.customers.save(attributes)
 
-        json :success => true, card: customer["cards"]["data"].first
+        json success: true, card: customer["cards"]["data"].first
       end
-
     end
   end
 end

@@ -1,15 +1,11 @@
 require 'sinatra/pubsub'
 require 'time'
 
-
 class IssueEventJob
   include SuckerPunch::Job
 
   def perform(payload)
-    
-    # guard clause for double events
-
-    HuBoard.cache.with do |dalli|
+    HuBoard.cache.with do |dalli| # guard clause for double events
       key = "#{payload[:meta][:action]}.#{payload[:meta][:user]["login"]}.#{payload[:meta][:identifier]}.#{payload[:meta][:timestamp]}"
       puts "SEARCHING FOR KEY: #{key}"
       return if dalli.get(key)
@@ -26,12 +22,12 @@ class IssueEventJob
   end
 
   def production?
-    ENV["RACK_ENV"] == "production" || ENV["RACK_ENV"] == "staging" 
+    ENV["RACK_ENV"] == "production" || ENV["RACK_ENV"] == "staging"
   end
 
   def execute payload
     if production?
-      async.perform payload 
+      async.perform payload
     else
       perform payload
     end
@@ -50,10 +46,9 @@ class PublishWebhookJob
   def perform payload
     full_name = payload[:meta][:repo_full_name]
 
-
     result = couch.integrations.by_full_name "\"#{CGI.escape(full_name.gsub("/","-"))}\""
 
-    result.rows.each do |r| 
+    result.rows.each do |r|
       begin
         service = Huboard::Service.services.detect { |srv| srv.to_s == r.value.integration.name }
         srv = service.new payload[:meta][:action], r.value.integration.data, payload
@@ -62,16 +57,15 @@ class PublishWebhookJob
         puts e
       end
     end
-
   end
 
   def production?
-    ENV["RACK_ENV"] == "production" || ENV["RACK_ENV"] == "staging" 
+    ENV["RACK_ENV"] == "production" || ENV["RACK_ENV"] == "staging"
   end
 
   def publish payload
     if production?
-      async.perform payload 
+      async.perform payload
     else
       perform payload
     end
@@ -80,6 +74,7 @@ end
 
 class IssueStatusChangedEvent < IssueEventJob
   include IsPublishable
+
   def publish(issue, action, user, correlationId = "")
     payload = {
       meta: {
@@ -98,11 +93,11 @@ class IssueStatusChangedEvent < IssueEventJob
 
     execute payload
   end
-
 end
 
 class IssueMovedEvent < IssueEventJob
   include IsPublishable
+
   def publish(issue, previous, user, correlationId = "")
     payload = {
       meta: {
@@ -126,6 +121,7 @@ end
 
 class IssueReorderedEvent < IssueEventJob
   include IsPublishable
+
   def publish(issue, user, correlationId = "")
     payload = {
       meta: {
@@ -148,6 +144,7 @@ end
 
 class IssueAssignedEvent < IssueEventJob
   include IsPublishable
+
   def publish(issue, user, correlationId = "")
     payload = {
       meta: {
@@ -170,6 +167,7 @@ end
 
 class IssueMilestoneChangedEvent < IssueEventJob
   include IsPublishable
+
   def publish(issue, user, correlationId = "")
     payload = {
       meta: {
@@ -192,6 +190,7 @@ end
 
 class IssueClosedEvent < IssueEventJob
   include IsPublishable
+
   def publish(issue, user, correlationId = "")
     payload = {
       meta: {
@@ -213,6 +212,7 @@ end
 
 class IssueOpenedEvent < IssueEventJob
   include IsPublishable
+
   def publish(issue, user, correlationId = "")
     payload = {
       meta: {
@@ -255,6 +255,7 @@ end
 
 class IssueReopenedEvent < IssueEventJob
   include IsPublishable
+
   def publish(issue, user, correlationId = "")
     payload = {
       meta: {
@@ -273,7 +274,3 @@ class IssueReopenedEvent < IssueEventJob
     execute payload
   end
 end
-
-
-
-
