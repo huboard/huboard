@@ -37,7 +37,7 @@ module HuBoard
         end
 
         app.configure do
-          assets.cache = Sprockets::Cache::FileStore.new('/tmp')
+          assets.cache = Sprockets::Cache::FileStore.new('./tmp')
           Sprockets::Helpers.configure do |config|
             config.environment = app.assets
           end
