@@ -13,7 +13,7 @@ module HuBoard
           set :erb, 
                     layout_options: {views: 'app/views/layouts'}
 
-          enable :use_code
+          set :raise_errors, true
         end
 
         RESERVED_URLS = %w{ site profiles }

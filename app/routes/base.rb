@@ -13,6 +13,7 @@ module HuBoard
                   layout_options: {views: 'app/views/layouts'}
 
         enable :use_code
+        set :raise_errors, true
       end
 
       helpers do 
