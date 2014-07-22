@@ -114,7 +114,7 @@ class Huboard
           builder.request :retry, 3
           builder.use     Timeout
           #  builder.use     Ghee::Middleware::UriEscape
-          builder.use Faraday::HttpCache, store: HuBoard.cache, logger: Logger.new(STDOUT)
+          builder.use Faraday::HttpCache, store: HuBoard.cache, logger: Logger.new(STDOUT), serializer: Marshal
           builder.adapter Faraday.default_adapter
 
           builder.request :url_encoded
