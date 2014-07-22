@@ -14,7 +14,7 @@ require "config/environments/#{environment}.rb"
 require './app'
 require "config/initializers/#{environment}.rb"
 
-
-use Rack::NoWWW
+Octokit.api_endpoint = ENV["GITHUB_API_ENDPOINT"] if ENV["GITHUB_API_ENDPOINT"]
+Octokit.web_endpoint = ENV["GITHUB_WEB_ENDPOINT"] if ENV["GITHUB_WEB_ENDPOINT"]
 
 run HuBoard::App
