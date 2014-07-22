@@ -107,6 +107,7 @@ class Huboard
       def initialize(hash={})
         super("#{hash[:base_url] || "http://127.0.0.1:5984" }/#{hash[:database] || "huboard"}") do |builder|
           yield builder if block_given?
+          builder.use Faraday::HttpCache, store: HuBoard.cache, logger: Logger.new(STDOUT)
           builder.use     FaradayMiddleware::EncodeJson
           builder.use     FaradayMiddleware::Mashify
           builder.use     FaradayMiddleware::ParseJson
@@ -115,6 +116,8 @@ class Huboard
           builder.adapter Faraday.default_adapter
 
           builder.request :url_encoded
+
+
 
         end
 
