@@ -50,7 +50,7 @@
   @extend .arrow;
 }
 
-.column ul {
+.column > ul {
   margin:0;
   padding: 0;
 }
@@ -110,7 +110,7 @@
   }
 }
 
-.column li {
+.card {
   cursor:pointer;
   list-style: none;
   padding: 5px 5px 34px 5px;
@@ -120,6 +120,11 @@
   border: 1px solid #e5e5e5;
   border-bottom-color: darken(#e5e5e5, 5%); 
   @include transform(translateZ(0));
+
+  &.card--milestone {
+    padding-bottom: 5px;
+
+  }
 
   &.border {
     border-top-color: #e5e5e5;
@@ -235,21 +240,21 @@
 
 
 
-.column li a.close {
+.card a.close {
   position: absolute;
   top: 12px;
   right: 6px;
   width: 16px;
   opacity:0.0;
 }
-.column li:hover a.close {
+.card:hover a.close {
   opacity:0.3;
 }
-.column li a.close:hover {
+.card a.close:hover {
   opacity:0.5;
 }
 
-.column li a small {
+.card a small {
   color: $lightGrey;
   padding-right:2px;
 }

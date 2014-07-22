@@ -1,5 +1,6 @@
 var CardWrapperView = Em.View.extend({
     templateName: "cardItem",
+    classNames: ["card"],
     classNameBindings: ["isFiltered","isDraggable:is-draggable", "isClosable:closable", "colorLabel", "content.color:border"],
     colorLabel: function () {
       return "-x" + this.get("content.color");

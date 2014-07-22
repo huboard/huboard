@@ -1,5 +1,10 @@
 var WrapperView = require("./card_wrapper_view");
 
+WrapperView = WrapperView.extend({
+  templateName: "milestoneItem",
+  classNames: ["card", "card--milestone"]
+})
+
 var CollectionView = Ember.CollectionView.extend({
   tagName:"ul",
   classNames: ["sortable"],

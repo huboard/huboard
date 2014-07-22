@@ -460,7 +460,7 @@ App.deferReadiness();
 module.exports = App;
 
 
-},{"../../vendor/jquery.color":72,"../utilities/correlationId":43,"../utilities/observers":44,"../vendor/autoresize":46,"../vendor/ember":47,"../vendor/handlebars":49,"../vendor/jquery":50,"../vendor/lodash":51,"../vendor/marked":52}],10:[function(require,module,exports){
+},{"../../vendor/jquery.color":73,"../utilities/correlationId":43,"../utilities/observers":44,"../vendor/autoresize":46,"../vendor/ember":47,"../vendor/handlebars":49,"../vendor/jquery":50,"../vendor/lodash":51,"../vendor/marked":52}],10:[function(require,module,exports){
 var App = require('./app');
 
 App.Router.map(function() {
@@ -598,6 +598,10 @@ module.exports = AssigneeController;
 var SocketMixin = require("../mixins/socket");
 
 var CardController = Ember.ObjectController.extend(SocketMixin,{
+  needs: ["application"],
+  columns: function() {
+    return this.get("controllers.application.model.board.columns").slice(0,3)
+  }.property("controllers.application.model.board.columns"),
   sockets: {
     config: {
       messagePath: "issueNumber",
@@ -1229,6 +1233,7 @@ App.MilestonesIssueRoute = require('./routes/milestones/issue_route');
 App.IndexIntegrationsRoute = require('./routes/index/integrations_route');
 App.IndexIssueRoute = require('./routes/index/issue_route');
 App.AssigneeFilterView = require('./views/assignee_filter_view');
+App.CardMilestoneView = require('./views/card_milestone_view');
 App.CardView = require('./views/card_view');
 App.CardWrapperView = require('./views/card_wrapper_view');
 App.ColumnCountView = require('./views/column_count_view');
@@ -1254,7 +1259,7 @@ require('./config/routes');
 module.exports = App;
 
 
-},{"./components/hb_assignee_component":1,"./components/hb_avatar_component":2,"./components/hb_label_component":3,"./components/hb_label_selector_component":4,"./components/hb_markdown_editor_component":5,"./components/hb_milestone_component":6,"./components/hb_pane_component":7,"./components/hb_tabs_component":8,"./config/app":9,"./config/routes":10,"./controllers/application_controller":11,"./controllers/assignee_controller":12,"./controllers/card_controller":13,"./controllers/column_controller":14,"./controllers/column_count_controller":15,"./controllers/filters_controller":16,"./controllers/index_controller":17,"./controllers/integrations/integrations_controller":18,"./controllers/issue/create_controller":19,"./controllers/issue_controller":20,"./controllers/milestone_column_controller":21,"./controllers/milestones_controller":22,"./controllers/search_controller":23,"./helpers/moment_ago":24,"./mixins/serializable":26,"./mixins/socket":27,"./mixins/wip_limit":28,"./models/board":29,"./models/integration":30,"./models/issue":31,"./models/repo":32,"./models/settings":33,"./routes/application_route":34,"./routes/index/integrations_route":35,"./routes/index/issue_route":36,"./routes/index_route":37,"./routes/issue_route":38,"./routes/milestones/integrations_route":39,"./routes/milestones/issue_route":40,"./routes/milestones_route":41,"./templates":42,"./views/assignee_filter_view":54,"./views/card_view":55,"./views/card_wrapper_view":56,"./views/column_count_view":57,"./views/column_view":58,"./views/css_view":59,"./views/filter_view":60,"./views/integrations/integrations_view":61,"./views/issue/activities_view":62,"./views/issue/create_view":63,"./views/issue/selected_column_view":64,"./views/issue_view":65,"./views/loading_view":66,"./views/milestone_column_view":67,"./views/modal_view":68,"./views/search_view":69,"./views/settings/show_counts_view":70}],26:[function(require,module,exports){
+},{"./components/hb_assignee_component":1,"./components/hb_avatar_component":2,"./components/hb_label_component":3,"./components/hb_label_selector_component":4,"./components/hb_markdown_editor_component":5,"./components/hb_milestone_component":6,"./components/hb_pane_component":7,"./components/hb_tabs_component":8,"./config/app":9,"./config/routes":10,"./controllers/application_controller":11,"./controllers/assignee_controller":12,"./controllers/card_controller":13,"./controllers/column_controller":14,"./controllers/column_count_controller":15,"./controllers/filters_controller":16,"./controllers/index_controller":17,"./controllers/integrations/integrations_controller":18,"./controllers/issue/create_controller":19,"./controllers/issue_controller":20,"./controllers/milestone_column_controller":21,"./controllers/milestones_controller":22,"./controllers/search_controller":23,"./helpers/moment_ago":24,"./mixins/serializable":26,"./mixins/socket":27,"./mixins/wip_limit":28,"./models/board":29,"./models/integration":30,"./models/issue":31,"./models/repo":32,"./models/settings":33,"./routes/application_route":34,"./routes/index/integrations_route":35,"./routes/index/issue_route":36,"./routes/index_route":37,"./routes/issue_route":38,"./routes/milestones/integrations_route":39,"./routes/milestones/issue_route":40,"./routes/milestones_route":41,"./templates":42,"./views/assignee_filter_view":54,"./views/card_milestone_view":55,"./views/card_view":56,"./views/card_wrapper_view":57,"./views/column_count_view":58,"./views/column_view":59,"./views/css_view":60,"./views/filter_view":61,"./views/integrations/integrations_view":62,"./views/issue/activities_view":63,"./views/issue/create_view":64,"./views/issue/selected_column_view":65,"./views/issue_view":66,"./views/loading_view":67,"./views/milestone_column_view":68,"./views/modal_view":69,"./views/search_view":70,"./views/settings/show_counts_view":71}],26:[function(require,module,exports){
 function serialize() {
     var result = {};
     for (var key in $.extend(true, {}, this))
@@ -1919,7 +1924,7 @@ var IndexRoute = Ember.Route.extend({
 
 module.exports = IndexRoute;
 
-},{"../views/css_view":59}],38:[function(require,module,exports){
+},{"../views/css_view":60}],38:[function(require,module,exports){
 var IssueRoute = Ember.Route.extend({
   setupController: function(controller, model) {
     controller.set("model", model);
@@ -2055,7 +2060,7 @@ module.exports = MilestonesRoute =  Ember.Route.extend({
 
 })
 
-},{"../views/css_view":59}],42:[function(require,module,exports){
+},{"../views/css_view":60}],42:[function(require,module,exports){
 
 Ember.TEMPLATES['application'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
@@ -2418,6 +2423,64 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   options = {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.render || depth0.render),stack1 ? stack1.call(depth0, "card", "view.content", options) : helperMissing.call(depth0, "render", "card", "view.content", options))));
   data.buffer.push("\n");
+  return buffer;
+  
+});
+
+Ember.TEMPLATES['card_milestone'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', stack1, hashContexts, hashTypes, escapeExpression=this.escapeExpression, self=this;
+
+function program1(depth0,data) {
+  
+  var buffer = '', hashContexts, hashTypes;
+  data.buffer.push("\n      <div class=\"card-label-wrapper\"> \n         <div ");
+  hashContexts = {'class': depth0};
+  hashTypes = {'class': "STRING"};
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'class': (":card-label :active :small customColor")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" ></div>\n         <div ");
+  hashContexts = {'class': depth0};
+  hashTypes = {'class': "STRING"};
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'class': (":card-label :active :large customColor")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" >\n          <span>");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "name", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("</span>\n         </div>\n      </div>\n    ");
+  return buffer;
+  }
+
+  data.buffer.push("<div class=\"card-header\">\n  <div class=\"title\" ");
+  hashContexts = {'title': depth0};
+  hashTypes = {'title': "ID"};
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'title': ("title")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">\n    ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "title", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" \n    <small>#");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "number", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("</small>\n  </div>\n</div>\n    <div class=\"flex-crumbs\">\n      ");
+  hashContexts = {'content': depth0};
+  hashTypes = {'content': "ID"};
+  data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.IssueSelectedColumnView", {hash:{
+    'content': ("columns")
+  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n    </div>\n\n\n<div class=\"card-labels\">\n    ");
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers.each.call(depth0, "cardLabels", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n</div>\n\n");
   return buffer;
   
 });
@@ -2918,6 +2981,23 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "title", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("</span>\n\n");
+  return buffer;
+  
+});
+
+Ember.TEMPLATES['milestone_item'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', stack1, hashContexts, hashTypes, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+
+
+  hashContexts = {'controller': depth0};
+  hashTypes = {'controller': "STRING"};
+  options = {hash:{
+    'controller': ("card")
+  },contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.render || depth0.render),stack1 ? stack1.call(depth0, "cardMilestone", "view.content", options) : helperMissing.call(depth0, "render", "cardMilestone", "view.content", options))));
+  data.buffer.push("\n\n");
   return buffer;
   
 });
@@ -66984,6 +67064,17 @@ var AssigneeFilterView = Ember.View.extend({
 module.exports = AssigneeFilterView;
 
 },{}],55:[function(require,module,exports){
+var CardView = require("./card_view");
+
+CardView = CardView.extend({
+  templateName: 'cardMilestone'
+})
+
+module.exports = CardView;
+
+
+
+},{"./card_view":56}],56:[function(require,module,exports){
 var CardView = Ember.View.extend({
   classNameBindings:["stateClass"],
   stateClass: function(){
@@ -67012,9 +67103,10 @@ var CardView = Ember.View.extend({
 module.exports = CardView;
 
 
-},{}],56:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
 var CardWrapperView = Em.View.extend({
     templateName: "cardItem",
+    classNames: ["card"],
     classNameBindings: ["isFiltered","isDraggable:is-draggable", "isClosable:closable", "colorLabel", "content.color:border"],
     colorLabel: function () {
       return "-x" + this.get("content.color");
@@ -67112,7 +67204,7 @@ var CardWrapperView = Em.View.extend({
 
 module.exports = CardWrapperView;
 
-},{}],57:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 var ColumnCountView = Ember.View.extend({
   tagName: "span",
   templateName: "column_count",
@@ -67122,7 +67214,7 @@ var ColumnCountView = Ember.View.extend({
 
 module.exports = ColumnCountView;
 
-},{}],58:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 var WrapperView = require("./card_wrapper_view");
 
 var CollectionView = Ember.CollectionView.extend({
@@ -67225,7 +67317,7 @@ var ColumnView = Ember.ContainerView.extend({
 
 module.exports = ColumnView;
 
-},{"./card_wrapper_view":56}],59:[function(require,module,exports){
+},{"./card_wrapper_view":57}],60:[function(require,module,exports){
 
 
 var CssView = Ember.View.extend({
@@ -67312,7 +67404,7 @@ var CssView = Ember.View.extend({
 
 module.exports = CssView;
 
-},{}],60:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 var FilterView = Ember.View.extend({
   tagName: "li",
   templateName: "filter",
@@ -67353,7 +67445,7 @@ var FilterView = Ember.View.extend({
 
 module.exports = FilterView;
 
-},{}],61:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 var IntegrationsView = App.ModalView.extend({
   modalSize: "slim",
   setupIndex: function(){
@@ -67363,7 +67455,7 @@ var IntegrationsView = App.ModalView.extend({
 
 module.exports = IntegrationsView;
 
-},{}],62:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
 var CommentView = Ember.View.extend({
   templateName: "issue/comment",
   classNames: ["card-comment"]
@@ -67394,13 +67486,13 @@ var ActivitiesView = Ember.CollectionView.extend({
 
 module.exports = ActivitiesView;
 
-},{}],63:[function(require,module,exports){
+},{}],64:[function(require,module,exports){
 var IssuesCreateView = App.ModalView.extend({
 });
 
 module.exports = IssuesCreateView;
 
-},{}],64:[function(require,module,exports){
+},{}],65:[function(require,module,exports){
 var IssueSelectedColumnView = Ember.CollectionView.extend({
   tagName: "ul",
   classNames: ["nav","breadcrumbs"],
@@ -67432,7 +67524,7 @@ var IssueSelectedColumnView = Ember.CollectionView.extend({
 
 module.exports = IssueSelectedColumnView;
 
-},{}],65:[function(require,module,exports){
+},{}],66:[function(require,module,exports){
 var ModalView = require("./modal_view")
 
 var IssuesView = ModalView.extend({
@@ -67440,7 +67532,7 @@ var IssuesView = ModalView.extend({
 
 module.exports = IssuesView;
 
-},{"./modal_view":68}],66:[function(require,module,exports){
+},{"./modal_view":69}],67:[function(require,module,exports){
 var Spinner = require('../../spin');
 var LoadingView = Ember.View.extend({
   didInsertElement: function(){
@@ -67476,8 +67568,13 @@ var LoadingView = Ember.View.extend({
 
 module.exports = LoadingView;
 
-},{"../../spin":71}],67:[function(require,module,exports){
+},{"../../spin":72}],68:[function(require,module,exports){
 var WrapperView = require("./card_wrapper_view");
+
+WrapperView = WrapperView.extend({
+  templateName: "milestoneItem",
+  classNames: ["card", "card--milestone"]
+})
 
 var CollectionView = Ember.CollectionView.extend({
   tagName:"ul",
@@ -67579,7 +67676,7 @@ var ColumnView = Ember.ContainerView.extend({
 
 module.exports = ColumnView;
 
-},{"./card_wrapper_view":56}],68:[function(require,module,exports){
+},{"./card_wrapper_view":57}],69:[function(require,module,exports){
 var ModalView = Em.View.extend({
   layoutName: "layouts/modal",
   modalSize: "",
@@ -67619,7 +67716,7 @@ var ModalView = Em.View.extend({
 
 module.exports = ModalView;
 
-},{}],69:[function(require,module,exports){
+},{}],70:[function(require,module,exports){
 var SearchView = Ember.View.extend({
   classNames: ["search"],
   classNameBindings: ["hasValue:has-value"],
@@ -67641,7 +67738,7 @@ var SearchView = Ember.View.extend({
 
 module.exports = SearchView;
 
-},{}],70:[function(require,module,exports){
+},{}],71:[function(require,module,exports){
 var ShowCountsView = Ember.View.extend({
   classNameBindings: ["showColumnCounts:checked"],
   showColumnCounts: Ember.computed.alias("settings.showColumnCounts"),
@@ -67662,7 +67759,7 @@ var ShowCountsView = Ember.View.extend({
 
 module.exports = ShowCountsView;
 
-},{}],71:[function(require,module,exports){
+},{}],72:[function(require,module,exports){
 //fgnass.github.com/spin.js#v1.3
 
 /**
@@ -68013,7 +68110,7 @@ module.exports = ShowCountsView;
 
 }));
 
-},{}],72:[function(require,module,exports){
+},{}],73:[function(require,module,exports){
 /*!
  * jQuery Color Animations v@VERSION
  * https://github.com/jquery/jquery-color
