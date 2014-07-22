@@ -107,7 +107,7 @@ ul.nav.breadcrumbs {
     }
   }
 
-  li + li a {
+  li + li a, .crumb--middle a, .crumb--last a {
     padding-left: 25px;
     &:hover {
       padding-left: 25px;
@@ -115,7 +115,7 @@ ul.nav.breadcrumbs {
     }
   }
 
-  li:last-child {
+  li:last-child, .crumb--last {
     > a:before, > a:after {
       display:none;
     }
@@ -127,6 +127,9 @@ ul.nav.breadcrumbs {
         cursor: not-allowed;
       }
     }
+  }
+  .crumb a {
+
   }
 
   > li {

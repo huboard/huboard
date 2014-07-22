@@ -121,10 +121,6 @@
   border-bottom-color: darken(#e5e5e5, 5%); 
   @include transform(translateZ(0));
 
-  &.card--milestone {
-    padding-bottom: 5px;
-
-  }
 
   &.border {
     border-top-color: #e5e5e5;
@@ -144,8 +140,9 @@
   }
   
   .hb-action {
-      position: absolute;
-      width: 100%;
+    position: absolute;
+    width: 100%;
+
     button {
       opacity: 0.3;
       position: absolute;
@@ -236,6 +233,23 @@
       margin-right: -7px;
     }
   }               
+
+  &.card--milestone {
+    padding-bottom: 5px;
+    .card-labels {
+      bottom: auto;
+      top: -8px;
+
+    }
+    .flex-crumbs {
+      > ul {
+        margin: -1px -6px -8px;
+
+      }
+
+    }
+
+  }
 }
 
 
