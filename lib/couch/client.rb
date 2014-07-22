@@ -95,8 +95,8 @@ class Huboard
 
 
         def call(env)
-          env[:request][:timeout] = 6 
-          env[:request][:open_timeout] = 3
+          env[:request][:timeout] = 12
+          env[:request][:open_timeout] = 10
           @app.call env
         end
       end
@@ -107,12 +107,13 @@ class Huboard
       def initialize(hash={})
         super("#{hash[:base_url] || "http://127.0.0.1:5984" }/#{hash[:database] || "huboard"}") do |builder|
           yield builder if block_given?
-          builder.use Faraday::HttpCache, store: HuBoard.cache, logger: Logger.new(STDOUT)
           builder.use     FaradayMiddleware::EncodeJson
           builder.use     FaradayMiddleware::Mashify
           builder.use     FaradayMiddleware::ParseJson
+          builder.request :retry, 3
           builder.use     Timeout
           #  builder.use     Ghee::Middleware::UriEscape
+          builder.use Faraday::HttpCache, store: HuBoard.cache, logger: Logger.new(STDOUT)
           builder.adapter Faraday.default_adapter
 
           builder.request :url_encoded
