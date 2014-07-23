@@ -47,6 +47,7 @@ class Huboard
       def query_view(viewname, options = {})
         result = connection.get("_design/#{class_name}/_view/#{viewname}") do |request|
           request.params.merge! options
+          request.params.merge! stale: "ok"
         end
         return result.body
       end
@@ -95,8 +96,8 @@ class Huboard
 
 
         def call(env)
-          env[:request][:timeout] = 6 
-          env[:request][:open_timeout] = 3
+          env[:request][:timeout] = 12
+          env[:request][:open_timeout] = 10
           @app.call env
         end
       end
@@ -110,11 +111,15 @@ class Huboard
           builder.use     FaradayMiddleware::EncodeJson
           builder.use     FaradayMiddleware::Mashify
           builder.use     FaradayMiddleware::ParseJson
+          builder.request :retry, 3
           builder.use     Timeout
           #  builder.use     Ghee::Middleware::UriEscape
+          builder.use Faraday::HttpCache, store: HuBoard.cache, logger: Logger.new(STDOUT), serializer: Marshal
           builder.adapter Faraday.default_adapter
 
           builder.request :url_encoded
+
+
 
         end
 
@@ -265,61 +270,6 @@ class Huboard
     end
 
     
-
-  end
-
-  module Issues
-    module Card
-      def couch
-        @couch ||= Huboard::Couch.new :base_url => ENV["COUCH_URL"], :database => ENV["COUCH_DATABASE"]
-      end
-
-      def move(index, order=nil, moved=false)
-        old_self = self
-        issue = super(index, order, moved)
-        begin
-          couch.connection.post("./",{
-            :github => {:issue => old_self.merge(issue), :user => gh.user.to_hash},
-            :meta => { :type => "event", :name => "card:move" },
-            :timestamp => Time.now.utc.iso8601
-          }).body
-        rescue
-
-        end
-        issue
-      end
-    end
-  end
-
-  class Board
-    board_method = self.instance_method(:board)
-
-    def couch
-      @couch ||= Huboard::Couch.new :base_url => ENV["COUCH_URL"], :database => ENV["COUCH_DATABASE"]
-    end
-
-    define_method(:board) do
-
-      api = connection_factory.call
-      therepo = api.repos(user, repo)
-      theuser = api.users(user)
-
-      begin
-        couch.user.get_or_create api.user
-        couch.users.get_or_create theuser if theuser.type == "User"
-        couch.orgs.get_or_create theuser if theuser.type == "Organization"
-        couch.repos.get_or_create therepo
-      rescue Exception => e
-        puts e.message
-        return board_method.bind(self).call
-      end
-
-      theboard = board_method.bind(self).call
-
-      #couch.boards.save theboard
-
-      theboard
-    end
 
   end
 

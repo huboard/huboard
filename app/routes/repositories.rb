@@ -107,6 +107,7 @@ module HuBoard
 
       get '/:user/:repo/board/create/?' do
         @parameters = params
+        @repo = gh.repos(params[:user],params[:repo])
         erb :create_board
       end
 
