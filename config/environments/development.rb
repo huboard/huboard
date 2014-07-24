@@ -2,7 +2,7 @@ module HuBoard
   extend self
 
   def sass?
-    false
+    true
   end
 end
 
