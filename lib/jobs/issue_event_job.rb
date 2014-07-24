@@ -22,7 +22,8 @@ class IssueEventJob
     Sinatra::PubSub.publish payload[:meta][:repo_full_name], payload
 
     PublishWebhookJob.new.publish payload if self.class.included_modules.include? IsPublishable
-  rescue
+  rescue => e
+    puts "ERROR: IssueEventJob: error publishing event #{e}"
   end
 
   def production?
@@ -59,7 +60,7 @@ class PublishWebhookJob
         srv = service.new payload[:meta][:action], r.value.integration.data, payload
         srv.receive_event()
       rescue => e
-        puts e
+        puts "ERROR: PublishWebHookJob: #{e}"
       end
     end
 
