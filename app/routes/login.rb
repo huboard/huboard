@@ -1,14 +1,13 @@
 module HuBoard
   module Routes
     class Login < Base
-
       helpers do
         def controller?(*controller)
           controller.include?(@controller) ? "nav__btn--active nav__item--current" : ""
         end
       end
 
-      get '/', :is_logged_in => false do 
+      get '/', is_logged_in: false do
         redirect url('/login')
       end
 
@@ -31,7 +30,6 @@ module HuBoard
         logout!
         redirect '/'
       end
-
     end
   end
 end

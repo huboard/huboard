@@ -6,6 +6,7 @@ class Slack < Huboard::Service
       builder.adapter Faraday.default_adapter
     end
   end
+
   def receive_event
     if self.respond_to? "transform_#{event.to_s}"
       mash = Hashie::Mash.new payload
@@ -25,72 +26,82 @@ class Slack < Huboard::Service
   end
 
   def transform_moved(mash)
-    return {
+    {
       username: "#{mash.meta.user.login} via HuBoard",
       icon_url: "https://avatars.githubusercontent.com/u/#{mash.meta.user.id}?s=64",
-      attachments: [{
-        fallback: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> moved <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}> from #{mash.payload.previous.text} to #{mash.payload.column.text }",
-        pretext: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> moved <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}> from #{mash.payload.previous.text} to #{mash.payload.column.text }",
-        text: "*Title*: #{mash.payload.issue.title}",
-        mrkdwn_in: ["text","fields"],
-        unfurl_links: true
-      }]
+      attachments: [
+        {
+          fallback: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> moved <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}> from #{mash.payload.previous.text} to #{mash.payload.column.text }",
+          pretext: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> moved <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}> from #{mash.payload.previous.text} to #{mash.payload.column.text }",
+          text: "*Title*: #{mash.payload.issue.title}",
+          mrkdwn_in: ["text","fields"],
+          unfurl_links: true
+        }
+      ]
     }
   end
 
   def transform_assigned(mash)
     if mash.payload.assignee.nil?
-      return {
+      {
         username: "#{mash.meta.user.login} via HuBoard",
         icon_url: "https://avatars.githubusercontent.com/u/#{mash.meta.user.id}?s=64",
-        attachments: [{
-          fallback: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> unassigned <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}>",
-          pretext: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> unassigned <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}>",
-          text: "*Title*: #{mash.payload.issue.title}",
-          mrkdwn_in: ["text","fields"],
+        attachments: [
+          {
+            fallback: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> unassigned <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}>",
+            pretext: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> unassigned <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}>",
+            text: "*Title*: #{mash.payload.issue.title}",
+            mrkdwn_in: ["text","fields"],
             unfurl_links: true
-        }]
+          }
+        ]
       }
     else
-      return {
+      {
         username: "#{mash.meta.user.login} via HuBoard",
         icon_url: "https://avatars.githubusercontent.com/u/#{mash.meta.user.id}?s=64",
-        attachments: [{
-          fallback: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> assigned <#{mash.payload.assignee.html_url}|#{mash.payload.assignee.login}> to <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}>",
-          pretext: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> assigned <#{mash.payload.assignee.html_url}|#{mash.payload.assignee.login}> to <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}>",
-          text: "*Title*: #{mash.payload.issue.title}",
-          mrkdwn_in: ["text","fields"],
+        attachments: [
+          {
+            fallback: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> assigned <#{mash.payload.assignee.html_url}|#{mash.payload.assignee.login}> to <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}>",
+            pretext: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> assigned <#{mash.payload.assignee.html_url}|#{mash.payload.assignee.login}> to <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}>",
+            text: "*Title*: #{mash.payload.issue.title}",
+            mrkdwn_in: ["text","fields"],
             unfurl_links: true
-        }]
+          }
+        ]
       }
     end
   end
 
   def transform_milestone_changed(mash)
     if mash.payload.milestone.nil?
-    return {
-      username: "#{mash.meta.user.login} via HuBoard",
-      icon_url: "https://avatars.githubusercontent.com/u/#{mash.meta.user.id}?s=64",
-      attachments: [{
-        fallback: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> changed milestone of <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}> to _nil_",
-        pretext: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> changed milestone of <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}> to _nil_",
-        text: "*Title*: #{mash.payload.issue.title}",
-        mrkdwn_in: ["text","fields","pretext"],
-        unfurl_links: true
-      }]
-    }
+      {
+        username: "#{mash.meta.user.login} via HuBoard",
+        icon_url: "https://avatars.githubusercontent.com/u/#{mash.meta.user.id}?s=64",
+        attachments: [
+          {
+            fallback: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> changed milestone of <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}> to _nil_",
+            pretext: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> changed milestone of <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}> to _nil_",
+            text: "*Title*: #{mash.payload.issue.title}",
+            mrkdwn_in: ["text","fields","pretext"],
+            unfurl_links: true
+          }
+        ]
+      }
     else
-    return {
-      username: "#{mash.meta.user.login} via HuBoard",
-      icon_url: "https://avatars.githubusercontent.com/u/#{mash.meta.user.id}?s=64",
-      attachments: [{
-        fallback: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> changed milestone of <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}> to *#{mash.payload.milestone.title}*",
-        pretext: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> changed milestone of <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}> to *#{mash.payload.milestone.title}*",
-        text: "*Title*: #{mash.payload.issue.title}",
-        mrkdwn_in: ["text","fields","pretext"],
-        unfurl_links: true
-      }]
-    }
+      {
+        username: "#{mash.meta.user.login} via HuBoard",
+        icon_url: "https://avatars.githubusercontent.com/u/#{mash.meta.user.id}?s=64",
+        attachments: [
+          {
+            fallback: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> changed milestone of <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}> to *#{mash.payload.milestone.title}*",
+            pretext: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> changed milestone of <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}> to *#{mash.payload.milestone.title}*",
+            text: "*Title*: #{mash.payload.issue.title}",
+            mrkdwn_in: ["text","fields","pretext"],
+            unfurl_links: true
+          }
+        ]
+      }
     end
   end
 
@@ -107,68 +118,75 @@ class Slack < Huboard::Service
       blocked: "#f9646e",
       unblocked: "#e3e4e6"
     }
-    return {
+    {
       username: "#{mash.meta.user.login} via HuBoard",
       icon_url: "https://avatars.githubusercontent.com/u/#{mash.meta.user.id}?s=64",
-      attachments: [{
-        fallback: "#{icon[mash.payload.action.to_sym]}<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> changed the status of <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}> to #{mash.payload.action}",
-        text: "#{icon[mash.payload.action.to_sym]}<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> changed the status of <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}> to #{mash.payload.action} \n*Title*: #{mash.payload.issue.title}",
-        color: "#{color[mash.payload.action.to_sym]}",
-        mrkdwn_in: ["text","fields"],
-        unfurl_links: true
-      }]
+      attachments: [
+        {
+          fallback: "#{icon[mash.payload.action.to_sym]}<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> changed the status of <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}> to #{mash.payload.action}",
+          text: "#{icon[mash.payload.action.to_sym]}<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> changed the status of <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}> to #{mash.payload.action} \n*Title*: #{mash.payload.issue.title}",
+          color: "#{color[mash.payload.action.to_sym]}",
+          mrkdwn_in: ["text","fields"],
+          unfurl_links: true
+        }
+      ]
     }
   end
 
   def transform_issue_opened(mash)
-    return {
+    {
       username: "#{mash.meta.user.login} via HuBoard",
       icon_url: "https://avatars.githubusercontent.com/u/#{mash.meta.user.id}?s=64",
-      attachments: [{
-        fallback: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> opened a new issue <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}>",
-        pretext: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> opened a new issue <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}>",
-        fields: [
-          {title: "#{mash.payload.issue.title}", value: "#{mash.payload.issue.body_text.split("\n").take(3).join("\n")}", short: false},
-        ],
-        color: "#6cc644",
-        mrkdwn_in: ["text","fields"],
-        unfurl_links: true
-      }]
+      attachments: [
+        {
+          fallback: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> opened a new issue <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}>",
+          pretext: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> opened a new issue <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}>",
+          fields: [
+            {title: "#{mash.payload.issue.title}", value: "#{mash.payload.issue.body_text.split("\n").take(3).join("\n")}", short: false},
+          ],
+          color: "#6cc644",
+          mrkdwn_in: ["text","fields"],
+          unfurl_links: true
+        }
+      ]
     }
   end
 
   def transform_issue_closed(mash)
-    return {
+    {
       username: "#{mash.meta.user.login} via HuBoard",
       icon_url: "https://avatars.githubusercontent.com/u/#{mash.meta.user.id}?s=64",
-      attachments: [{
-        fallback: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> closed <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}>",
-        pretext: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> closed <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}>",
-        fields: [
-          {title: "#{mash.payload.issue.title}", value: "#{mash.payload.issue.body_text.split("\n").take(3).join("\n")}", short: false},
-        ],
-        color: "#8274d6",
-        mrkdwn_in: ["text","fields"],
-        unfurl_links: true
-      }]
+      attachments: [
+        {
+          fallback: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> closed <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}>",
+          pretext: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> closed <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}>",
+          fields: [
+            {title: "#{mash.payload.issue.title}", value: "#{mash.payload.issue.body_text.split("\n").take(3).join("\n")}", short: false},
+          ],
+          color: "#8274d6",
+          mrkdwn_in: ["text","fields"],
+          unfurl_links: true
+        }
+      ]
     }
   end
 
   def transform_issue_reopened(mash)
-    return {
+    {
       username: "#{mash.meta.user.login} via HuBoard",
       icon_url: "https://avatars.githubusercontent.com/u/#{mash.meta.user.id}?s=64",
-      attachments: [{
-        fallback: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> reopened <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}>",
-        pretext: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> reopened <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}>",
-        fields: [
-          {title: "#{mash.payload.issue.title}", value: "#{mash.payload.issue.body_text.split("\n").take(3).join("\n")}", short: false},
-        ],
-        color: "#6cc644",
-        mrkdwn_in: ["text","fields"],
-        unfurl_links: true
-      }]
+      attachments: [
+        {
+          fallback: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> reopened <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}>",
+          pretext: "<#{URI.join(github_url,mash.meta.user.login)}|@#{mash.meta.user.login}> reopened <#{mash.payload.issue.html_url}|#{mash.meta.repo_full_name}##{mash.payload.issue.number}>",
+          fields: [
+            {title: "#{mash.payload.issue.title}", value: "#{mash.payload.issue.body_text.split("\n").take(3).join("\n")}", short: false},
+          ],
+          color: "#6cc644",
+          mrkdwn_in: ["text","fields"],
+          unfurl_links: true
+        }
+      ]
     }
   end
-
 end

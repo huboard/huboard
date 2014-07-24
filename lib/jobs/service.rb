@@ -1,8 +1,6 @@
-
 class Huboard
   module Caching
     class ConnectionPool
-
       def self.options
         @options ||= {
           namespace: "huboard_v1",
@@ -14,13 +12,13 @@ class Huboard
       end
 
       def self.connection_pool
-        @connection_pool = ::ConnectionPool.new(:size => 20, :timeout => 3) {
+        @connection_pool = ::ConnectionPool.new(size: 20, timeout: 3) {
           Dalli::Client.new(HuboardApplication.cache_config[:servers].split(","), options)
         }
       end
-
     end
   end
+
   class Service
     attr_accessor :event, :data, :payload
 
@@ -40,5 +38,6 @@ class Huboard
     end
   end
 end
+
 path = File.expand_path "../services/*.rb", __FILE__
 Dir[path].each { |srv| require(srv) }

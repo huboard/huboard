@@ -6,7 +6,6 @@ namespace :assets do
     target = Pathname(HuBoard::App.root) + 'public/assets'
     manifest = Sprockets::Manifest.new assets.index, target
     manifest.compile precompile
-
   end
 
   desc "Clean assets"
@@ -15,4 +14,3 @@ namespace :assets do
     FileUtils.rm_rf(target)
   end
 end
-

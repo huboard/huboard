@@ -1,7 +1,5 @@
 class Huboard
-
   module Labels
-
     module ColumnLabel
       def self.extended(l)
         match = Huboard.column_pattern.match l.name
@@ -34,17 +32,15 @@ class Huboard
     end
 
     def column_labels
-      columns = labels.select{|l| Huboard.column_pattern.match l.name }.map do |l| 
-          l.extend(ColumnLabel)
+      columns = labels.select{|l| Huboard.column_pattern.match l.name }.map do |l|
+        l.extend(ColumnLabel)
       end
 
       columns = columns.sort_by {|i| i[:index] }
-
       if columns.any?
         columns.first[:is_first] = true
         columns.last[:is_last] = true
       end
-
       columns
     end
 
@@ -60,7 +56,5 @@ class Huboard
         l
       end
     end
-
   end
-  
 end

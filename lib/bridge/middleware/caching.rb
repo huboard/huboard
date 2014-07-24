@@ -24,7 +24,6 @@ class Huboard
       end
 
       def read(key, app, env)
-
         if cached = get(key)
           cached = Marshal.load(cached)
           etag =  cached.headers[:etag]
@@ -83,7 +82,7 @@ class Huboard
       #
       # Yields if no cache is given. The block should return a cache object.
       def initialize(app, options = {:namespace => "huboard_v1", :compress => true, :expires_in => 1.day,
-                     :username => HuboardApplication.cache_config[:username], :password => HuboardApplication.cache_config[:password]})
+                                     :username => HuboardApplication.cache_config[:username], :password => HuboardApplication.cache_config[:password]})
         super(app)
         @cache = SimpleCache.new app, options
         @options = options
@@ -143,6 +142,5 @@ class Huboard
         response
       end
     end
-
   end
 end
