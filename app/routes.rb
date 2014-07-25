@@ -15,6 +15,7 @@ module HuBoard
       autoload :Base, 'app/routes/api/base'
       autoload :Board, 'app/routes/api/board'
       autoload :Issues, 'app/routes/api/issues'
+      autoload :Milestones, 'app/routes/api/milestones'
       autoload :Integrations, 'app/routes/api/integrations'
       autoload :Webhooks, 'app/routes/api/webhooks'
       autoload :Profiles, 'app/routes/api/profiles'

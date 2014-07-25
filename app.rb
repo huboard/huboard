@@ -101,6 +101,7 @@ module HuBoard
     # API routes
     use Routes::Api::Board
     use Routes::Api::Issues
+    use Routes::Api::Milestones
     use Routes::Api::Integrations
     use Routes::Api::Webhooks
 
