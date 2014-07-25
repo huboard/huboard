@@ -191,7 +191,7 @@ class Huboard
             data = MultiJson.load(match[1])
             data["order"] = self.number unless data["order"]
             data["milestone_order"] = self.number unless data["milestone_order"]
-            return 
+            return data
           rescue
             return { order: self.number, milestone_order: self.number }
           end

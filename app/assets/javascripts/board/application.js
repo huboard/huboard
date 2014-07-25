@@ -67777,9 +67777,9 @@ var CollectionView = Ember.CollectionView.extend({
         afterElement = elements.get(elements.size() - 1 > index ? index + 1 : index),
         afterIndex = elements.index(afterElement),
         afterData = findViewData(afterElement),
-        current = currentData.get("model._data.order") || currentData.get("model.number"),
-        before = beforeData.get("model._data.order") || beforeData.get("model.number"),
-        after = afterData.get("model._data.order") || afterData.get("model.number");
+        current = currentData.get("model._data.milestone_order") || currentData.get("model.number"),
+        before = beforeData.get("model._data.milestone_order") || beforeData.get("model.number"),
+        after = afterData.get("model._data.milestone_order") || afterData.get("model.number");
 
         if(first && last) {
           that.get("controller").cardMoved(currentData, currentData.get("model.number"))
