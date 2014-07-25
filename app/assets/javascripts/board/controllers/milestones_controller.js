@@ -22,6 +22,6 @@ module.exports = MilestonesController = Ember.ObjectController.extend({
       });
     });
 
-  }.property(),
+  }.property("forceRedraw"),
   forceRedraw: 0
 });
