@@ -1,7 +1,10 @@
 var HbSelectedColumnComponent = Ember.Component.extend({
   tagName: "ul",
   classNames: ["nav","breadcrumbs"],
-  classNameBindings: ["stateClass", "isEnabled:enabled:disabled"],
+  classNameBindings: ["isCustomState:hb-state","stateClass"],
+  isCustomState: function(){
+    return this.get("stateClass") !== "hb-state-open";
+  }.property("stateClass"),
   isEnabled: function() {
     return App.get("repo.is_collaborator");
   }.property("App.repo.is_collaborator"),

@@ -236,15 +236,54 @@
 
   &.card--milestone {
     padding-bottom: 5px;
+    margin-bottom: 15px;
+    .card-avatar {
+      display: inline;
+      img {
+        position: static;
+      }
+    }
+    .card-header {
+      border-bottom: none;
+    }
     .card-labels {
       bottom: auto;
       top: -8px;
-
     }
     .flex-crumbs {
-      > ul {
-        margin: -1px -6px -8px;
+      .card-states {
+        opacity: 0.5;
 
+      }
+      img {
+        bottom: auto;
+      }
+      .crumb {
+        &:before {
+          bottom: -2px;
+        }
+      }
+      .hb-state {
+        .active {
+          @include flex(0 0 44%);
+        }
+        .inactive {
+          @include flex(0 0 28%);
+        }
+      }
+      .crumb--last {
+        .card-states {
+          right: 0px;
+        }
+      }
+      > ul.nav.breadcrumbs {
+        margin: 0px -6px -8px;
+
+        .crumb--middle, .crumb--last {
+          a {
+            padding-left: 18px;
+          }
+        }
       }
 
     }

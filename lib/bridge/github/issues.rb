@@ -179,19 +179,22 @@ class Huboard
         r = /@huboard:(.*)/
         if !data
           match = r.match(self.body || "")
-          return { order: self.number } if match.nil?
+          return { order: self.number, milestone_order: self.number } if match.nil?
 
           begin
-            return JSON.load(match[1])
+            data = MultiJson.load(match[1])
+            data["order"] = self.number unless data["order"]
+            data["milestone_order"] = self.number unless data["milestone_order"]
+            return 
           rescue
-            return { order: self.number }
+            return { order: self.number, milestone_order: self.number }
           end
         else
           _data = embed_data
           if r.match self.body
-            self.body = self.body.to_s.gsub /@huboard:.*/, "@huboard:#{JSON.dump(_data.merge(data))}"
+            self.body = self.body.to_s.gsub /@huboard:.*/, "@huboard:#{MultiJson.dump(_data.merge(data))}"
           else
-            self.body = self.body.to_s.concat  "\r\n\r\n<!---\r\n@huboard:#{JSON.dump(data)}\r\n-->\r\n" 
+            self.body = self.body.to_s.concat  "\r\n\r\n<!---\r\n@huboard:#{MultiJson.dump(data)}\r\n-->\r\n" 
           end
         end
       end
@@ -233,19 +236,19 @@ class Huboard
         if !data
           r = /@huboard:(.*)/
           match = r.match self.description
-          return { } if match.nil?
+          return { "order" => self.number } if match.nil?
 
           begin
-            return JSON.load(match[1])
+            return MultiJson.load(match[1])
           rescue
-            return {}
+            return { "order" => self.number}
           end
         else
           _data = embed_data
           if _data.empty?
-            self.description = self.description.concat  "\r\n\r\n<!---\r\n@huboard:#{JSON.dump(data)}\r\n-->\r\n" 
+            self.description = self.description.concat  "\r\n\r\n<!---\r\n@huboard:#{MultiJson.dump(data)}\r\n-->\r\n" 
           else
-            self.description = self.description.gsub /@huboard:.*/, "@huboard:#{JSON.dump(_data.merge(data))}"
+            self.description = self.description.gsub /@huboard:.*/, "@huboard:#{MultiJson.dump(_data.merge(data))}"
           end
         end
       end

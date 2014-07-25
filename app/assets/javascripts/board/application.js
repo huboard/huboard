@@ -116,7 +116,7 @@ module.exports = HbAvatarComponent;
 var HbColumnCrumbComponent = Ember.Component.extend({
   tagName: "li",
   classNames: ['crumb'],
-  classNameBindings: ["stateClass", "isSelected:active", "indexClass"],
+  classNameBindings: ["stateClass", "isSelected:active:inactive", "indexClass"],
   isSelected: function(){
     return this.get("issue.current_state.name") === this.get("column.name");
   }.property("issue.current_state"),
@@ -353,7 +353,10 @@ module.exports = HbPaneComponent;
 var HbSelectedColumnComponent = Ember.Component.extend({
   tagName: "ul",
   classNames: ["nav","breadcrumbs"],
-  classNameBindings: ["stateClass", "isEnabled:enabled:disabled"],
+  classNameBindings: ["isCustomState:hb-state","stateClass"],
+  isCustomState: function(){
+    return this.get("stateClass") !== "hb-state-open";
+  }.property("stateClass"),
   isEnabled: function() {
     return App.get("repo.is_collaborator");
   }.property("App.repo.is_collaborator"),
@@ -1188,6 +1191,8 @@ var MilestoneColumnController = Ember.ObjectController.extend({
       .filter(function(i) {
         // FIXME: this flag is for archived issue left on the board.
         return !i.get("isArchived");
+      }).sort(function (a, b){
+        return a._data.milestone_order - b._data.milestone_order;
       })
       .filter(this.get("filterBy"));
     return issues;
@@ -1694,23 +1699,23 @@ var Issue = Ember.Object.extend(Serializable,{
       changedMilestones = this.get("milestone.number") != milestone.number;
     }
     this.set("milestone", milestone);
-    if(changedMilestones){
 
-      var user = this.get("repo.owner.login"),
-          repo = this.get("repo.name"),
-          full_name = user + "/" + repo;
+    var user = this.get("repo.owner.login"),
+        repo = this.get("repo.name"),
+        full_name = user + "/" + repo;
 
-      return Ember.$.post("/api/" + full_name + "/assignmilestone", {
-        issue : this.get("number"),
-        order: index.toString(),
-        milestone: milestone ? milestone.number : null,
-        changed_milestones: changedMilestones,
-        correlationId: this.get("correlationId")
-      }).then(function( response ){
-          this.set("_data.order", response._data.order);
-          return this;
-      }.bind(this))
-    }
+    return Ember.$.post("/api/" + full_name + "/assignmilestone", {
+      issue : this.get("number"),
+      order: index.toString(),
+      changed_milestones: changedMilestones,
+      milestone: milestone ? milestone.number : null,
+      changed_milestones: changedMilestones,
+      correlationId: this.get("correlationId")
+    }).then(function( response ){
+        this.set("_data.order", response._data.order);
+        this.set("_data.milestone_order", response._data.milestone_order);
+        return this;
+    }.bind(this))
       
   },
   reorder: function (index, column) {
@@ -2510,9 +2515,23 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 Ember.TEMPLATES['card_milestone'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, stack2, hashContexts, hashTypes, options, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, self=this;
+  var buffer = '', stack1, stack2, hashContexts, hashTypes, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
+  
+  var buffer = '', stack1, hashContexts, hashTypes, options;
+  data.buffer.push("\n    <div class=\"card-avatar\">\n      ");
+  hashContexts = {'user': depth0};
+  hashTypes = {'user': "ID"};
+  options = {hash:{
+    'user': ("assignee")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['hb-avatar'] || depth0['hb-avatar']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-avatar", options))));
+  data.buffer.push("\n    </div>\n    ");
+  return buffer;
+  }
+
+function program3(depth0,data) {
   
   var buffer = '', hashContexts, hashTypes;
   data.buffer.push("\n      <div class=\"card-label-wrapper\"> \n         <div ");
@@ -2544,6 +2563,11 @@ function program1(depth0,data) {
   data.buffer.push(">\n    ");
   hashTypes = {};
   hashContexts = {};
+  stack1 = helpers['if'].call(depth0, "assignee", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n    ");
+  hashTypes = {};
+  hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "title", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(" \n    <small>#");
   hashTypes = {};
@@ -2560,7 +2584,7 @@ function program1(depth0,data) {
   data.buffer.push("\n</div>\n\n\n<div class=\"card-labels\">\n    ");
   hashTypes = {};
   hashContexts = {};
-  stack2 = helpers.each.call(depth0, "cardLabels", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack2 = helpers.each.call(depth0, "cardLabels", {hash:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n</div>\n\n");
   return buffer;

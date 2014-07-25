@@ -1,7 +1,7 @@
 var HbColumnCrumbComponent = Ember.Component.extend({
   tagName: "li",
   classNames: ['crumb'],
-  classNameBindings: ["stateClass", "isSelected:active", "indexClass"],
+  classNameBindings: ["stateClass", "isSelected:active:inactive", "indexClass"],
   isSelected: function(){
     return this.get("issue.current_state.name") === this.get("column.name");
   }.property("issue.current_state"),

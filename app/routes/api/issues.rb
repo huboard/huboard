@@ -127,9 +127,12 @@ module HuBoard
           user, repo, number, milestone = params[:user], params[:repo], params[:issue], params[:milestone]
 
           issue = huboard.board(user, repo).issue(number)
-          issue = issue.patch "milestone" => milestone
+          issue.embed_data("milestone_order" => params[:order].to_f) if params[:order].to_f > 0
+          issue = issue.patch "milestone"    => milestone, "body" => issue.body
 
-          IssueMilestoneChangedEvent.new.publish issue, current_user.attribs, params[:correlationId]
+          if params[:changed_milestones] == "true"
+            IssueMilestoneChangedEvent.new.publish issue, current_user.attribs, params[:correlationId]
+          end
 
           json issue
         end
