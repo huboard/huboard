@@ -251,6 +251,10 @@
       top: -8px;
     }
     .flex-crumbs {
+      .bread-crumbs {
+        overflow:hidden;
+        padding-bottom: 2px;
+      }
       .card-states {
         opacity: 0.5;
 
