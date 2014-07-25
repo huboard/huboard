@@ -41,7 +41,6 @@ class Huboard
       def query_view(viewname, options = {})
         result = connection.get("_design/#{class_name}/_view/#{viewname}") do |request|
           request.params.merge! options
-          request.params.merge! stale: "ok"
         end
         result.body
       end
