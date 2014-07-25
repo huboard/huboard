@@ -202,8 +202,13 @@ class Huboard
         end
       end
 
+      def number_searchable
+        number.to_s
+      end
+
       def self.extended(klass)
         klass[:current_state] = klass.current_state
+        klass[:number_searchable] = klass.number_searchable
         klass[:other_labels] = klass.other_labels
         klass["_data"] = klass.embed_data
       end
