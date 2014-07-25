@@ -2,85 +2,75 @@ module HuBoard
   module Routes
     module Api
       class Issues < Base
-        get '/api/:user/:repo/issues/:number/details' do 
+        get '/api/:user/:repo/issues/:number/details' do
           api = huboard.board(params[:user], params[:repo])
 
           issue = api.issue(params[:number]).activities
 
-          return json issue
+          json issue
         end
 
-        post '/api/:user/:repo/issues' do 
+        post '/api/:user/:repo/issues' do
           client_data = JSON.parse(request.body.read)
-          issue = huboard.board(params[:user],params[:repo])
-          .create_issue client_data 
+          issue = huboard.board(params[:user],params[:repo]).create_issue client_data
 
           IssueOpenedEvent.new.publish issue, current_user.attribs, client_data["correlationId"]
 
-          return json issue
+          json issue
         end
 
-        post '/api/:user/:repo/issues/:number/comment' do 
+        post '/api/:user/:repo/issues/:number/comment' do
+          data = {body: JSON.parse(request.body.read)["markdown"]}
+          comment = gh.repos(params[:user], params[:repo]).issues(params[:number]).comments.create data
 
-          comment = gh.repos(params[:user], params[:repo]).issues(params[:number])
-          .comments.create :body => JSON.parse(request.body.read)["markdown"]
-
-          return json comment.to_hash
-
+          json comment.to_hash
         end
 
-
-        put '/api/:user/:repo/issues/:number' do 
-
+        put '/api/:user/:repo/issues/:number' do
           api = huboard.board(params[:user], params[:repo])
 
           issue = api.issue(params[:number]).update(JSON.parse(request.body.read)).to_hash
 
-          return json issue
-
+          json issue
         end
 
-        put '/api/:user/:repo/issues/:number/blocked' do 
-
+        put '/api/:user/:repo/issues/:number/blocked' do
           api = huboard.board(params[:user], params[:repo])
           issue = api.issue(params[:number]).blocked
 
           IssueStatusChangedEvent.new.publish issue, "blocked", current_user.attribs, params[:correlationId]
 
-          return json issue 
+          json issue
         end
 
-        delete '/api/:user/:repo/issues/:number/blocked' do 
-
+        delete '/api/:user/:repo/issues/:number/blocked' do
           api = huboard.board(params[:user], params[:repo])
           issue = api.issue(params[:number]).unblocked
 
           IssueStatusChangedEvent.new.publish issue, "unblocked", current_user.attribs, params[:correlationId]
 
-          return json issue 
+          json issue
         end
 
-        put '/api/:user/:repo/issues/:number/ready' do 
-
+        put '/api/:user/:repo/issues/:number/ready' do
           api = huboard.board(params[:user], params[:repo])
           issue = api.issue(params[:number]).ready
 
           IssueStatusChangedEvent.new.publish issue, "ready", current_user.attribs, params[:correlationId]
 
-          return json issue 
+          json issue
         end
 
-        delete '/api/:user/:repo/issues/:number/ready' do 
-
+        delete '/api/:user/:repo/issues/:number/ready' do
           api = huboard.board(params[:user], params[:repo])
           issue = api.issue(params[:number]).unready
 
           IssueStatusChangedEvent.new.publish issue, "unready", current_user.attribs, params[:correlationId]
 
-          return json issue 
+          json issue
         end
 
-        post '/api/:user/:repo/dragcard' do 
+        post '/api/:user/:repo/dragcard' do
           user, repo, number, order, column = params[:user], params[:repo], params[:number], params[:order], params[:column]
           moved = params[:moved_columns] == "true"
           issue = huboard.board(user, repo).issue(number)
@@ -100,20 +90,20 @@ module HuBoard
           json issue
         end
 
-        post '/api/:user/:repo/archiveissue' do 
+        post '/api/:user/:repo/archiveissue' do
           user, repo, number = params[:user], params[:repo], params[:number]
           issue = huboard.board(user, repo).archive_issue(number)
           IssueArchivedEvent.new.publish issue, current_user.attribs, params[:correlationId]
           json issue
         end
 
-        post '/api/:user/:repo/reordermilestone' do 
+        post '/api/:user/:repo/reordermilestone' do
           user, repo, number, index = params[:user], params[:repo], params[:number], params[:index]
           milestone =  huboard.board(user, repo).milestone number
           json milestone.reorder index
         end
 
-        post '/api/:user/:repo/assigncard' do 
+        post '/api/:user/:repo/assigncard' do
           user, repo, number, assignee = params[:user], params[:repo], params[:number], params[:assignee]
           issue = huboard.board(user, repo).issue(number)
           issue = issue.patch "assignee" => assignee
@@ -123,7 +113,7 @@ module HuBoard
           json issue
         end
 
-        post '/api/:user/:repo/assignmilestone' do 
+        post '/api/:user/:repo/assignmilestone' do
           user, repo, number, milestone = params[:user], params[:repo], params[:issue], params[:milestone]
 
           issue = huboard.board(user, repo).issue(number)
@@ -145,9 +135,7 @@ module HuBoard
 
           json(issue)
         end
-
       end
     end
   end
 end
-

@@ -8,24 +8,23 @@ require_relative "github/backlog"
 require_relative "github/hooks"
 require_relative "github/board"
 require_relative "middleware"
-
 require "addressable/uri"
 
 class Huboard
   def self.wip_pattern
-    return /(?<all>\s{1}<=\s+(?<wip>\d+)$)/
+    /(?<all>\s{1}<=\s+(?<wip>\d+)$)/
   end
-       
+
   def self.column_pattern
-    return /(^|\:\s{1})(?<id>\d+) *- *(?<name>.+)/
+    /(^|\:\s{1})(?<id>\d+) *- *(?<name>.+)/
   end
 
   def self.link_pattern
-    return /^Link <=> (?<user_name>.*)\/(?<repo>.*)/
+    /^Link <=> (?<user_name>.*)\/(?<repo>.*)/
   end
 
   def self.settings_pattern
-    return /^@huboard:(.*)/
+    /^@huboard:(.*)/
   end
 
   def self.all_patterns
@@ -33,14 +32,12 @@ class Huboard
   end
 
   class Client
-
     def initialize(access_token, params={})
-      
       @connection_factory = ->(token = nil) {
-        options = { :access_token => token || access_token }
+        options = {access_token: token || access_token}
         options = {} if(token.nil? && access_token.nil?)
         options[:api_url] = ENV["GITHUB_API_ENDPOINT"] if ENV["GITHUB_API_ENDPOINT"]
-        
+
         Ghee.new(options) do |conn|
           conn.use Faraday::Response::RaiseGheeError
           conn.use ClientId, params unless token || access_token
@@ -59,7 +56,6 @@ class Huboard
     def board(user, repo)
       Board.new(user, repo, @connection_factory)
     end
-
   end
 
   class Board
@@ -70,5 +66,4 @@ class Huboard
     include Backlog
     include Hooks
   end
-
 end

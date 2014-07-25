@@ -1,5 +1,4 @@
 class Webhook < Huboard::Service
-
   def connection
     @connection ||= Faraday.new do |builder|
       builder.response :logger
@@ -9,12 +8,10 @@ class Webhook < Huboard::Service
   end
 
   def receive_event
-    response = connection.post do |req|
+    connection.post do |req|
       req.url data.webhookURL
       req.headers['Content-Type'] = 'application/json'
       req.body = payload.to_json
     end
-
   end
 end
-

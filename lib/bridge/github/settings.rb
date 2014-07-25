@@ -1,11 +1,7 @@
 class Huboard
-
   module Settings
-
     def settings
-      defaults = {
-        :show_all => true
-      }
+      defaults = {show_all: true}
 
       the_settings = settings_labels.map do |l|
         match = Huboard.settings_pattern.match l["name"]
@@ -17,8 +13,6 @@ class Huboard
       end.reduce(:merge)
 
       defaults.merge(the_settings || {})
-
     end
-
   end
 end

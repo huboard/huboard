@@ -5,4 +5,3 @@ module HuBoard
     autoload :Assets, 'app/extensions/assets'
   end
 end
-

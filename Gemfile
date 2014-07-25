@@ -15,6 +15,7 @@ gem 'uglifier'
 gem 'closure-compiler'
 gem 'yui-compressor'
 gem 'coffee-script'
+gem 'faraday-http-cache'
 
 gem 'sinatra-pubsub'
 gem 'encryptor'

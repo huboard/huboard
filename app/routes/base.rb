@@ -9,15 +9,14 @@ module HuBoard
         disable :protection
         disable :static
 
-        set :erb, 
-                  layout_options: {views: 'app/views/layouts'}
+        set :erb, layout_options: {views: 'app/views/layouts'}
 
         enable :use_code
         set :raise_errors, true
       end
 
-      helpers do 
-        set(:is_logged_in) do |enabled| 
+      helpers do
+        set(:is_logged_in) do |enabled|
           condition do
             enabled == logged_in?
           end
@@ -30,9 +29,8 @@ module HuBoard
       helpers Sinatra::Partials
 
       not_found do
-        erb :"404", :layout => false
+        erb :"404", layout: false
       end
     end
   end
 end
-
