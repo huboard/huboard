@@ -8,6 +8,7 @@ require 'active_support/core_ext/array'
 require 'active_support/core_ext/hash'
 require 'active_support/json'
 require 'active_support/cache/dalli_store'
+require 'active_support/number_helper'
 
 %w{ bridge couch }.each do |folder|
   libraries = Dir[File.expand_path("../lib/#{folder}/**/*.rb", __FILE__)]
@@ -87,6 +88,7 @@ module HuBoard
     use Rack::Deflater
     use Rack::Standards
 
+    use PDFKit::Middleware
     use Routes::Static
 
     unless settings.production?

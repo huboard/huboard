@@ -24,6 +24,13 @@ module HuBoard
         erb :accounts, layout: :ember_layout
       end
 
+      get "/settings/invoices/:invoice_id" do
+        @invoice = Hashie::Mash.new(Stripe::Invoice.retrieve(id: params[:invoice_id], expand: ['customer', 'charge']).to_hash)
+
+        @customer = OpenStruct.new :billing_email => "herp@derp.com", :additional_info => ""
+        erb :receipt, layout: false
+      end
+
       put "/settings/profile/:name/card/?" do
         user = gh.users params[:name]
 
@@ -46,6 +53,7 @@ module HuBoard
           json success: false, message: "Unable to find plan"
         end
       end
+      
 
       delete "/settings/profile/:name/plans/:plan_id/?" do
         user = gh.users params[:name]

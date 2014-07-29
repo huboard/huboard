@@ -60,6 +60,10 @@ module HuBoard
           }
           json data
         end
+
+        get '/api/profiles/:account/history' do
+          json Stripe::Invoice.all(customer: params[:account])
+        end
       end
     end
   end
