@@ -45,6 +45,8 @@ gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 group :development do
   gem 'shotgun'
   gem 'foreman'
+  gem 'librarian-puppet'
+  gem 'puppet'
 
   gem 'heroku'
   gem 'pry'
