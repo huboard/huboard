@@ -1,6 +1,7 @@
 class Huboard
   module Hooks
     def hook_exists?
+      return true if gh.hooks.raw.status == 404
       gh.hooks.any? { |x| x['name'] == 'huboard' }
     end
 
