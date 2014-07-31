@@ -52,6 +52,7 @@ module HuBoard
           end
 
           data = {
+
             org: org.to_hash,
             plans: plans,
             card: customer.rows.any? ? customer.rows.map {|cust| cust.value.stripe.customer.cards.data.find {|card| card.id == cust.value.stripe.customer.default_card }}.first : nil,
@@ -61,8 +62,21 @@ module HuBoard
           json data
         end
 
-        get '/api/profiles/:account/history' do
-          json Stripe::Invoice.all(customer: params[:account])
+        get '/api/profiles/:org/history' do
+          org = gh.orgs(params[:org])
+          customer = couch.customers.findPlanById(org.id)
+          if customer.rows && customer.rows.size > 0
+            customer_doc = customer.rows.first.value
+            charges = Stripe::Charge.all(customer: customer_doc.stripe.customer.id)['data']
+            json({
+              charges: charges,
+              additional_info: customer_doc.additional_info
+            })
+          else
+            json({
+              charges:[]
+            })
+          end
         end
       end
     end

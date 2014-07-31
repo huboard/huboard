@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+  <title>HuBoard Receipt</title>
   <style type="text/css">
     body {
       padding: 0 .5in .5in .5in;
@@ -89,6 +90,13 @@
     }
     address span.message a:hover {
       color: #777;
+    }
+    address h1,
+    address h2,
+    address h3,
+    address h4,
+    address p{
+      margin: 0;
     }
     div.details {
       position: relative;
@@ -183,7 +191,7 @@
         Print this receipt
       </a>
       or
-      <a href="#">
+      <a href="/settings/invoices/<%= @invoice.id %>.pdf" download="<%= @invoice.id %>.pdf" >
         <img alt="Icon-download-2x" src="<%= asset_path 'icon-download-2x.png' %>" width="22">
         Download a PDF
       </a>
@@ -198,12 +206,14 @@
           Austin, TX 78704 USA
         </address>
         <address class="customer">
-          <strong><%= @customer.name %></strong><br>
+          <strong><%= @customer.github.account.name %></strong><br>
             <%= @invoice.customer.email %><br>
-            <% if @customer.additional_info.empty? %>
-              link back to account
+            <% if @customer.additional_info.nil? %>
+              <span class='message'>
+                Additional information (address, VAT number, etc.)
+              </span>
             <% else %>
-              <%= @customer.additional_info %>
+              <%= markdown @customer.additional_info %>
             <% end %>
         </address>
       </header>
@@ -217,7 +227,7 @@
           </tr>
           <tr>
             <td class="product">
-              HuBoard account (1 month)
+              HuBoard <%= @customer.github.account.type %> account (1 month)
               <span class="meta"><%= @invoice.customer.email %></span>
             </td>
             <td><%= Time.at(@invoice.date).strftime('%m/%d/%Y') %></td>
@@ -233,10 +243,5 @@
         <h2>Thank you.</h2>
       </div>
     </div>
-    <pre>
-      <code>
-        <%= JSON.pretty_generate( @invoice.to_hash ) %>
-      </code>
-    </pre>
   </body>
 </html>
