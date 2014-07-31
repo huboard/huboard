@@ -27,10 +27,17 @@ module HuBoard
             plan.merge! purchased: customer.rows.any? { |row| row.value.stripe.plan.plan_id == plan.plan_id }
           end
 
+          card = nil
+
+          if customer.rows.any?
+            customer_doc = customer.rows.first.value
+            card = customer_doc.stripe.customer.cards.nil? ? nil : customer_doc.stripe.customers.cards.data.find {|card| card.id == cust.value.stripe.customer.default_card }.first
+          end
+
           data = {
             org: user.to_hash,
             plans: plans,
-            card: customer.rows.any? ? customer.rows.map {|cust| cust.value.stripe.customer.cards.data.find {|card| card.id == cust.value.stripe.customer.default_card }}.first : nil,
+            card: card,
             is_owner: true,
             has_plan: customer.rows.size > 0
           }
@@ -51,11 +58,18 @@ module HuBoard
             plan.merge! purchased: customer.rows.any? { |row| row.value.stripe.plan.plan_id == plan.plan_id}
           end
 
+          card = nil
+
+          if customer.rows.any?
+            customer_doc = customer.rows.first.value
+            card = customer_doc.stripe.customer.cards.nil? ? nil : customer_doc.stripe.customers.cards.data.find {|card| card.id == cust.value.stripe.customer.default_card }.first 
+          end
+          
           data = {
 
             org: org.to_hash,
             plans: plans,
-            card: customer.rows.any? ? customer.rows.map {|cust| cust.value.stripe.customer.cards.data.find {|card| card.id == cust.value.stripe.customer.default_card }}.first : nil,
+            card: card,
             is_owner: is_owner,
             has_plan: customer.rows.size > 0
           }
