@@ -83,6 +83,7 @@ module HuBoard
       end
 
       get '/:user/:repo/?' do
+        raise Sinatra::NotFound unless huboard.board(params[:user], params[:repo]).repo_exists?
         redirect "/#{params[:user]}/#{params[:repo]}/board/create" unless huboard.board(params[:user], params[:repo]).has_board?
 
         @parameters = params.merge({ :socket_backend => socket_backend})

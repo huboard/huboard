@@ -13,6 +13,10 @@ class Huboard
       @gh.repos(user, repo)
     end
 
+    def repo_exists?
+      gh.raw.status == 200
+    end
+
     def has_board?
       gh.raw.status == 200 && column_labels.size > 0
     end
