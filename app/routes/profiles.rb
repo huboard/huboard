@@ -24,6 +24,28 @@ module HuBoard
         erb :accounts, layout: :ember_layout
       end
 
+      get "/settings/invoices/:invoice_id" do
+        @invoice = Hashie::Mash.new(Stripe::Invoice.retrieve(id: params[:invoice_id], expand: ['customer', 'charge']).to_hash)
+
+        @customer = couch.connection.get("Customers-#{@invoice.customer.id}").body
+
+        erb :receipt, layout: false
+      end
+
+      put '/settings/profile/:name/additionalInfo/?' do
+        user = gh.users params[:name]
+        docs = couch.customers.findPlanById user.id
+        if docs.rows.any?
+          plan_doc = docs.rows.first.value
+          plan_doc.additional_info = params[:additional_info]
+
+          couch.customers.save plan_doc
+          json success: true, message: "Info updated"
+        else
+          json success: false, message: "Unable to find customer"
+        end
+      end
+
       put "/settings/profile/:name/card/?" do
         user = gh.users params[:name]
 
@@ -46,6 +68,7 @@ module HuBoard
           json success: false, message: "Unable to find plan"
         end
       end
+      
 
       delete "/settings/profile/:name/plans/:plan_id/?" do
         user = gh.users params[:name]
