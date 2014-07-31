@@ -94,7 +94,11 @@
           <td>{{ receipt_email }}</td>
           <td>{{stripe-money amount }}</td>
           <td class="text-right">    
+           {{#if paid}}
             <a href="/settings/invoices/{{unbound invoice }}">HTML</a> | <a href="/settings/invoices/{{unbound invoice}}.pdf">PDF</a>
+           {{else}}
+            UNPAID
+           {{/if}}
           </td>
         </tr>
         {{else}}
