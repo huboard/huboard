@@ -31,7 +31,7 @@ module HuBoard
 
           if customer.rows.any?
             customer_doc = customer.rows.first.value
-            card = customer_doc.stripe.customer.cards.nil? ? nil : customer_doc.stripe.customers.cards.data.find {|card| card.id == cust.value.stripe.customer.default_card }.first
+            card = customer_doc.stripe.customer.cards.nil? ? nil : customer_doc.stripe.customer.cards.data.find {|card| card.id == customer_doc.stripe.customer.default_card }
           end
 
           data = {
@@ -62,7 +62,7 @@ module HuBoard
 
           if customer.rows.any?
             customer_doc = customer.rows.first.value
-            card = customer_doc.stripe.customer.cards.nil? ? nil : customer_doc.stripe.customers.cards.data.find {|card| card.id == cust.value.stripe.customer.default_card }.first 
+            card = customer_doc.stripe.customer.cards.nil? ? nil : customer_doc.stripe.customer.cards.data.find {|card| card.id == customer_doc.stripe.customer.default_card }
           end
           
           data = {
@@ -77,7 +77,7 @@ module HuBoard
         end
 
         get '/api/profiles/:org/history' do
-          org = gh.orgs(params[:org])
+          org = gh.users(params[:org])
           customer = couch.customers.findPlanById(org.id)
           if customer.rows && customer.rows.size > 0
             customer_doc = customer.rows.first.value
