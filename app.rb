@@ -88,7 +88,7 @@ module HuBoard
     use Rack::Deflater
     use Rack::Standards
 
-    use PDFKit::Middleware
+    use PDFKit::Middleware, {print_media_type: true}, only: %r[^/settings]
     use Routes::Static
 
     unless settings.production?
