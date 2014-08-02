@@ -37,6 +37,7 @@ module HuBoard
                                                         :socket_timeout       => 1.5,
                                                         :socket_failure_delay => 0.2
                                                       })
+    HuBoard.cache.logger = Logger.new STDOUT
   end
 
 

@@ -17,6 +17,10 @@ class Huboard
         @dalli ||= HuBoard.cache
       end
 
+      def logger
+        cache.logger
+      end
+
       def clear(key)
         cache.with do |dalli|
           dalli.delete(key)
@@ -33,6 +37,7 @@ class Huboard
           response = app.call(env)
 
           if response.status == 304
+            logger.debug("Cache hit: #{key}")
             return cached
           elsif response.status == 200
             write(key, response)
@@ -50,12 +55,14 @@ class Huboard
 
       def get(key)
         cache.with do |dalli|
+          logger.debug("Cache read: #{key}")
           dalli.get(key)
         end
       end
 
       def write(key, data)
         cache.with do |dalli|
+          logger.debug("Cache write: #{key}")
           dalli.set(key, Marshal.dump(data))
           data
         end
