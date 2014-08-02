@@ -29,7 +29,7 @@ module HuBoard
   end
   unless HuBoard.cache
     HuBoard.cache = ActiveSupport::Cache.lookup_store(:dalli_store,
-                                                      (ENV["CACHE_SERVERS"] || "").split(","),
+                                                      (ENV["MEMCACHE_SERVERS"] || "").split(","),
                                                       {:username              => ENV["MEMCACHE_USERNAME"],
                                                         :password             => ENV["MEMCACHE_PASSWORD"],
                                                         :pool_size                 => 5,
