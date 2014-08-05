@@ -27,6 +27,7 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
     addressable (2.3.5)
+    analytics-ruby (2.0.5)
     better_errors (1.1.0)
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
@@ -34,6 +35,12 @@ GEM
       debug_inspector (>= 0.0.1)
     celluloid (0.15.2)
       timers (~> 1.1.0)
+    celluloid-io (0.15.0)
+      celluloid (>= 0.15.0)
+      nio4r (>= 0.5.0)
+    celluloid-redis (0.0.2)
+      celluloid-io (>= 0.13.0.pre)
+      redis
     closure-compiler (1.1.10)
     coderay (1.0.9)
     coffee-script (2.3.0)
@@ -96,6 +103,7 @@ GEM
     multipart-post (1.2.0)
     netrc (0.7.7)
     newrelic_rpm (3.9.0.229)
+    nio4r (1.0.0)
     octokit (2.7.0)
       sawyer (~> 0.5.2)
     pdfkit (0.6.2)
@@ -187,7 +195,10 @@ PLATFORMS
 DEPENDENCIES
   activesupport (~> 4.1.4)
   addressable
+  analytics-ruby (~> 2.0.0)
   better_errors
+  celluloid
+  celluloid-redis
   closure-compiler
   coffee-script
   connection_pool
@@ -218,6 +229,7 @@ DEPENDENCIES
   rake
   raygun4ruby
   rdiscount
+  redis
   sass (~> 3.3.9)
   shotgun
   sinatra (~> 1.4.0)
