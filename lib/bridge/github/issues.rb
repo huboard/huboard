@@ -242,22 +242,24 @@ class Huboard
       end
 
       def embed_data(data = nil)
+        r = /@huboard:(.*)/
         if !data
-          r = /@huboard:(.*)/
-          match = r.match self.description
-          return { "order" => self.number } if match.nil?
+          match = r.match(self.description || "")
+          return { order: self.number } if match.nil?
 
           begin
-            return MultiJson.load(match[1])
+            data = MultiJson.load(match[1])
+            data["order"] = self.number unless data["order"]
+            return data
           rescue
-            return { "order" => self.number}
+            return { order: self.number }
           end
         else
           _data = embed_data
-          if _data.empty?
-            self.description = self.description.concat  "\r\n\r\n<!---\r\n@huboard:#{MultiJson.dump(data)}\r\n-->\r\n" 
+          if r.match self.description
+            self.description = self.description.to_s.gsub /@huboard:.*/, "@huboard:#{MultiJson.dump(_data.merge(data))}"
           else
-            self.description = self.description.gsub /@huboard:.*/, "@huboard:#{MultiJson.dump(_data.merge(data))}"
+            self.description = self.description.to_s.concat  "\r\n\r\n<!---\r\n@huboard:#{MultiJson.dump(data)}\r\n-->\r\n" 
           end
         end
       end

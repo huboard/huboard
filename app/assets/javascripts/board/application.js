@@ -541,7 +541,7 @@ App.deferReadiness();
 module.exports = App;
 
 
-},{"../../vendor/jquery.color":75,"../utilities/correlationId":45,"../utilities/observers":46,"../vendor/autoresize":48,"../vendor/ember":49,"../vendor/handlebars":51,"../vendor/jquery":52,"../vendor/lodash":53,"../vendor/marked":54}],12:[function(require,module,exports){
+},{"../../vendor/jquery.color":76,"../utilities/correlationId":45,"../utilities/observers":46,"../vendor/autoresize":48,"../vendor/ember":49,"../vendor/handlebars":51,"../vendor/jquery":52,"../vendor/lodash":53,"../vendor/marked":54}],12:[function(require,module,exports){
 var App = require('./app');
 
 App.Router.map(function() {
@@ -1224,6 +1224,7 @@ module.exports = MilestonesController = Ember.ObjectController.extend({
   left_column: function () {
     return Ember.Object.create({
       title: "No milestone",
+      orderable: false,
       filterBy: function(i) {
         return !Ember.get(i, "milestone");
       },
@@ -1234,15 +1235,38 @@ module.exports = MilestonesController = Ember.ObjectController.extend({
     return this.get("milestones").map(function(m){
       return Ember.Object.create({
         title: m.title,
+        orderable: true,
         filterBy: function (i){
           return i.milestone && i.milestone.number == m.number;
         },
         milestone: m
       });
+    }).sort(function(a, b) {
+      return a.milestone._data.order - b.milestone._data.order;
     });
 
   }.property(),
-  forceRedraw: 0
+  forceRedraw: 0,
+  milestoneMoved: function(milestoneController, index){
+    
+    var milestone = milestoneController.get("model.milestone"),
+      owner = milestone.repo.owner.login,
+      name = milestone.repo.name;
+
+    // should make ajax calls here
+    
+    $.ajax({
+      url: "/api/" + owner + "/" + name + "/reordermilestone",
+      type: "POST",
+      data: {
+        number: milestone.number,
+        index: index
+      },
+      success: function(response){
+        milestoneController.set("model.milestone._data", response._data);
+      }
+    })
+  }
 });
 
 },{}],25:[function(require,module,exports){
@@ -1329,6 +1353,7 @@ App.FilterView = require('./views/filter_view');
 App.IssueView = require('./views/issue_view');
 App.LoadingView = require('./views/loading_view');
 App.MilestoneColumnView = require('./views/milestone_column_view');
+App.MilestonesView = require('./views/milestones_view');
 App.ModalView = require('./views/modal_view');
 App.SearchView = require('./views/search_view');
 App.SettingsShowCountsView = require('./views/settings/show_counts_view');
@@ -1345,7 +1370,7 @@ require('./config/routes');
 module.exports = App;
 
 
-},{"./components/hb_assignee_component":1,"./components/hb_avatar_component":2,"./components/hb_column_crumb_component":3,"./components/hb_label_component":4,"./components/hb_label_selector_component":5,"./components/hb_markdown_editor_component":6,"./components/hb_milestone_component":7,"./components/hb_pane_component":8,"./components/hb_selected_column_component":9,"./components/hb_tabs_component":10,"./config/app":11,"./config/routes":12,"./controllers/application_controller":13,"./controllers/assignee_controller":14,"./controllers/card_controller":15,"./controllers/column_controller":16,"./controllers/column_count_controller":17,"./controllers/filters_controller":18,"./controllers/index_controller":19,"./controllers/integrations/integrations_controller":20,"./controllers/issue/create_controller":21,"./controllers/issue_controller":22,"./controllers/milestone_column_controller":23,"./controllers/milestones_controller":24,"./controllers/search_controller":25,"./helpers/moment_ago":26,"./mixins/serializable":28,"./mixins/socket":29,"./mixins/wip_limit":30,"./models/board":31,"./models/integration":32,"./models/issue":33,"./models/repo":34,"./models/settings":35,"./routes/application_route":36,"./routes/index/integrations_route":37,"./routes/index/issue_route":38,"./routes/index_route":39,"./routes/issue_route":40,"./routes/milestones/integrations_route":41,"./routes/milestones/issue_route":42,"./routes/milestones_route":43,"./templates":44,"./views/assignee_filter_view":56,"./views/card_milestone_view":57,"./views/card_view":58,"./views/card_wrapper_view":59,"./views/column_count_view":60,"./views/column_view":61,"./views/css_view":62,"./views/filter_view":63,"./views/integrations/integrations_view":64,"./views/issue/activities_view":65,"./views/issue/create_view":66,"./views/issue/selected_column_view":67,"./views/issue_view":68,"./views/loading_view":69,"./views/milestone_column_view":70,"./views/modal_view":71,"./views/search_view":72,"./views/settings/show_counts_view":73}],28:[function(require,module,exports){
+},{"./components/hb_assignee_component":1,"./components/hb_avatar_component":2,"./components/hb_column_crumb_component":3,"./components/hb_label_component":4,"./components/hb_label_selector_component":5,"./components/hb_markdown_editor_component":6,"./components/hb_milestone_component":7,"./components/hb_pane_component":8,"./components/hb_selected_column_component":9,"./components/hb_tabs_component":10,"./config/app":11,"./config/routes":12,"./controllers/application_controller":13,"./controllers/assignee_controller":14,"./controllers/card_controller":15,"./controllers/column_controller":16,"./controllers/column_count_controller":17,"./controllers/filters_controller":18,"./controllers/index_controller":19,"./controllers/integrations/integrations_controller":20,"./controllers/issue/create_controller":21,"./controllers/issue_controller":22,"./controllers/milestone_column_controller":23,"./controllers/milestones_controller":24,"./controllers/search_controller":25,"./helpers/moment_ago":26,"./mixins/serializable":28,"./mixins/socket":29,"./mixins/wip_limit":30,"./models/board":31,"./models/integration":32,"./models/issue":33,"./models/repo":34,"./models/settings":35,"./routes/application_route":36,"./routes/index/integrations_route":37,"./routes/index/issue_route":38,"./routes/index_route":39,"./routes/issue_route":40,"./routes/milestones/integrations_route":41,"./routes/milestones/issue_route":42,"./routes/milestones_route":43,"./templates":44,"./views/assignee_filter_view":56,"./views/card_milestone_view":57,"./views/card_view":58,"./views/card_wrapper_view":59,"./views/column_count_view":60,"./views/column_view":61,"./views/css_view":62,"./views/filter_view":63,"./views/integrations/integrations_view":64,"./views/issue/activities_view":65,"./views/issue/create_view":66,"./views/issue/selected_column_view":67,"./views/issue_view":68,"./views/loading_view":69,"./views/milestone_column_view":70,"./views/milestones_view":71,"./views/modal_view":72,"./views/search_view":73,"./views/settings/show_counts_view":74}],28:[function(require,module,exports){
 function serialize() {
     var result = {};
     for (var key in $.extend(true, {}, this))
@@ -2862,7 +2887,7 @@ function program8(depth0,data) {
   hashContexts = {};
   options = {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.outlet || depth0.outlet),stack1 ? stack1.call(depth0, "sidebarMiddle", options) : helperMissing.call(depth0, "outlet", "sidebarMiddle", options))));
-  data.buffer.push("\n    </div>\n  </div>\n\n  <div id=\"content\" class=\"content\">\n    <div class=\"board\">\n      ");
+  data.buffer.push("\n    </div>\n  </div>\n\n  <div id=\"content\" class=\"content\">\n    <div class=\"board board-not-dragging\">\n      ");
   hashTypes = {};
   hashContexts = {};
   stack2 = helpers.each.call(depth0, "column", "in", "board_columns", {hash:{},inverse:self.noop,fn:self.program(8, program8, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
@@ -67263,7 +67288,7 @@ var AssigneeFilterView = Ember.View.extend({
   draggable: true,
   dragStart: function(ev){
     ev.dataTransfer.effectAllowed = "copy";
-    ev.dataTransfer.setData("text/plain", this.get("assignee"));
+    ev.dataTransfer.setData("text/huboard-assignee", this.get("assignee"));
   },
   click: function (){
     var previous = this.get("lastClicked");
@@ -67423,19 +67448,19 @@ var CardWrapperView = Em.View.extend({
     },
     dragEnter: function(ev) {
       ev.preventDefault();
-      if(ev.dataTransfer.types.contains("text/plain")){
+      if(ev.dataTransfer.types.contains("text/huboard-assignee")){
         this.$().addClass("assignee-accept");
       }
     },
     dragOver: function(ev) {
       ev.preventDefault();
-      if(ev.dataTransfer.types.contains("text/plain")){
+      if(ev.dataTransfer.types.contains("text/huboard-assignee")){
         this.$().addClass("assignee-accept");
       }
     },
     dragLeave: function(ev) {
       ev.preventDefault();
-      if(ev.dataTransfer.types.contains("text/plain")){
+      if(ev.dataTransfer.types.contains("text/huboard-assignee")){
         this.$().removeClass("assignee-accept");
       }
     },
@@ -67444,9 +67469,9 @@ var CardWrapperView = Em.View.extend({
         ev.stopPropagation();
       }
 
-      if(ev.dataTransfer.types.contains("text/plain")){
+      if(ev.dataTransfer.types.contains("text/huboard-assignee")){
         var view = Em.View.views[this.$().find("> div").attr("id")];
-        view.get("controller").send("assignUser", ev.dataTransfer.getData("text/plain"));
+        view.get("controller").send("assignUser", ev.dataTransfer.getData("text/huboard-assignee"));
 
         ev.preventDefault();
         this.$().removeClass("assignee-accept");
@@ -67547,7 +67572,7 @@ var CollectionView = Ember.CollectionView.extend({
 })
 
 var ColumnView = Ember.ContainerView.extend({
-  classNameBindings:[":hb-task-column",":column","isCollapsed:hb-state-collapsed","isHovering:hovering"],
+  classNameBindings:[":hb-task-column",":column",":task-column","isCollapsed:hb-state-collapsed","isHovering:hovering"],
   isCollapsed: Ember.computed.alias("controller.isCollapsed"),
   isHovering: Ember.computed.alias("controller.isHovering"),
   childViews: ["headerView", CollectionView, "collapsedView"],
@@ -67784,7 +67809,7 @@ var IssuesView = ModalView.extend({
 
 module.exports = IssuesView;
 
-},{"./modal_view":71}],69:[function(require,module,exports){
+},{"./modal_view":72}],69:[function(require,module,exports){
 var Spinner = require('../../spin');
 var LoadingView = Ember.View.extend({
   didInsertElement: function(){
@@ -67820,7 +67845,7 @@ var LoadingView = Ember.View.extend({
 
 module.exports = LoadingView;
 
-},{"../../spin":74}],70:[function(require,module,exports){
+},{"../../spin":75}],70:[function(require,module,exports){
 var WrapperView = require("./card_wrapper_view");
 
 WrapperView = WrapperView.extend({
@@ -67836,7 +67861,7 @@ var CollectionView = Ember.CollectionView.extend({
   style: Ember.computed.alias("controller.style"),
   content: Ember.computed.alias("controller.issues"),
   isHovering: false,
-  didInsertElement: function(){
+  setupDraggable: function(){
     var that = this;
     this.$().sortable({
       tolerance: 'pointer',
@@ -67899,9 +67924,8 @@ var CollectionView = Ember.CollectionView.extend({
         }
       }
     })
-    this._super();
 
-  },
+  }.on("didInsertElement"),
   itemViewClass: WrapperView
 })
 
@@ -67929,6 +67953,85 @@ var ColumnView = Ember.ContainerView.extend({
 module.exports = ColumnView;
 
 },{"./card_wrapper_view":59}],71:[function(require,module,exports){
+var MilestonesView = Ember.View.extend({
+  classNameBindings: ["dragging:board-dragging:board-not-dragging"],
+  dragging: false,
+  setupDragging: function(){
+    var that = this;
+    this.$(".board").sortable({
+      axis: 'x',
+      tolerance: 'pointer',
+      handle: 'h3',
+      placeholder: "milestone-placeholder",
+      items: ".milestone:not(.no-milestone)",
+      over: function () {
+        that.set("isHovering", true);
+      },
+      out: function () {
+        that.set("isHovering", false);
+      },
+      start: function(){
+        that.set('dragging', true)
+      },
+      stop: function() {
+        that.set('dragging', false)
+      },
+      activate: function () {
+        // that.get("controller").set("isHovering", true);
+      },
+      deactivate: function() {
+        // that.get("controller").set("isHovering", false);
+      }, 
+      update: function (ev, ui) {
+
+        var findViewData = function (element){
+           return Em.View.views[$(element).attr("id")]
+             .get("controller");
+        };
+
+        var elements = $(".milestone:not(.no-milestone)", that.$()),
+        index = elements.index(ui.item);
+
+        if(index === -1) { return; }
+
+        var first = index === 0,
+        last = index === elements.size() - 1,
+        currentElement = $(ui.item),
+        currentData = findViewData(currentElement),
+        beforeElement = elements.get(index ? index - 1 : index),
+        beforeIndex = elements.index(beforeElement),
+        beforeData = findViewData(beforeElement),
+        afterElement = elements.get(elements.size() - 1 > index ? index + 1 : index),
+        afterIndex = elements.index(afterElement),
+        afterData = findViewData(afterElement),
+        current = currentData.get("model.milestone._data.order") || currentData.get("model.milestone.number"),
+        before = beforeData.get("model.milestone._data.order") || beforeData.get("model.milestone.number"),
+        after = afterData.get("model.milestone._data.order") || afterData.get("model.milestone.number");
+
+        if(first && last) {
+          that.get("controller").milestoneMoved(currentData, currentData.get("model.milestone.number"))
+          return;
+        }
+        
+        if(first) {
+          that.get("controller").milestoneMoved(currentData, (after || 1)/2);
+          // dragged it to the top
+
+        } else if (last) {
+          // dragged to the bottom
+          that.get("controller").milestoneMoved(currentData, (before + 1));
+
+        }  else {
+          that.get("controller").milestoneMoved(currentData, (((after + before) || 1)/2));
+        }
+      }
+    })
+
+  }.on("didInsertElement"),
+})
+module.exports = MilestonesView;
+
+},{}],72:[function(require,module,exports){
 var ModalView = Em.View.extend({
   layoutName: "layouts/modal",
   modalSize: "",
@@ -67968,7 +68071,7 @@ var ModalView = Em.View.extend({
 
 module.exports = ModalView;
 
-},{}],72:[function(require,module,exports){
+},{}],73:[function(require,module,exports){
 var SearchView = Ember.View.extend({
   classNames: ["search"],
   classNameBindings: ["hasValue:has-value"],
@@ -67990,7 +68093,7 @@ var SearchView = Ember.View.extend({
 
 module.exports = SearchView;
 
-},{}],73:[function(require,module,exports){
+},{}],74:[function(require,module,exports){
 var ShowCountsView = Ember.View.extend({
   classNameBindings: ["showColumnCounts:checked"],
   showColumnCounts: Ember.computed.alias("settings.showColumnCounts"),
@@ -68011,7 +68114,7 @@ var ShowCountsView = Ember.View.extend({
 
 module.exports = ShowCountsView;
 
-},{}],74:[function(require,module,exports){
+},{}],75:[function(require,module,exports){
 //fgnass.github.com/spin.js#v1.3
 
 /**
@@ -68362,7 +68465,7 @@ module.exports = ShowCountsView;
 
 }));
 
-},{}],75:[function(require,module,exports){
+},{}],76:[function(require,module,exports){
 /*!
  * jQuery Color Animations v@VERSION
  * https://github.com/jquery/jquery-color

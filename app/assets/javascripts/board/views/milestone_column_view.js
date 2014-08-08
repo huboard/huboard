@@ -13,7 +13,7 @@ var CollectionView = Ember.CollectionView.extend({
   style: Ember.computed.alias("controller.style"),
   content: Ember.computed.alias("controller.issues"),
   isHovering: false,
-  didInsertElement: function(){
+  setupDraggable: function(){
     var that = this;
     this.$().sortable({
       tolerance: 'pointer',
@@ -76,9 +76,8 @@ var CollectionView = Ember.CollectionView.extend({
         }
       }
     })
-    this._super();
 
-  },
+  }.on("didInsertElement"),
   itemViewClass: WrapperView
 })
 
