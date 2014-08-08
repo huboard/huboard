@@ -6,7 +6,7 @@ var AssigneeFilterView = Ember.View.extend({
   draggable: true,
   dragStart: function(ev){
     ev.dataTransfer.effectAllowed = "copy";
-    ev.dataTransfer.setData("text/plain", this.get("assignee"));
+    ev.dataTransfer.setData("text/huboard-assignee", this.get("assignee"));
   },
   click: function (){
     var previous = this.get("lastClicked");
