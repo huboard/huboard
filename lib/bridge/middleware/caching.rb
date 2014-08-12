@@ -17,6 +17,10 @@ class Huboard
         @dalli ||= HuBoard.cache
       end
 
+      def logger
+        cache.logger
+      end
+
       def clear(key)
         cache.with do |dalli|
           dalli.delete(key)
@@ -24,7 +28,6 @@ class Huboard
       end
 
       def read(key, app, env)
-
         if cached = get(key)
           cached = Marshal.load(cached)
           etag =  cached.headers[:etag]
@@ -34,6 +37,7 @@ class Huboard
           response = app.call(env)
 
           if response.status == 304
+            logger.debug("Cache hit: #{key}")
             return cached
           elsif response.status == 200
             write(key, response)
@@ -51,12 +55,14 @@ class Huboard
 
       def get(key)
         cache.with do |dalli|
+          logger.debug("Cache read: #{key}")
           dalli.get(key)
         end
       end
 
       def write(key, data)
         cache.with do |dalli|
+          logger.debug("Cache write: #{key}")
           dalli.set(key, Marshal.dump(data))
           data
         end
@@ -83,7 +89,7 @@ class Huboard
       #
       # Yields if no cache is given. The block should return a cache object.
       def initialize(app, options = {:namespace => "huboard_v1", :compress => true, :expires_in => 1.day,
-                     :username => HuboardApplication.cache_config[:username], :password => HuboardApplication.cache_config[:password]})
+                                     :username => HuboardApplication.cache_config[:username], :password => HuboardApplication.cache_config[:password]})
         super(app)
         @cache = SimpleCache.new app, options
         @options = options
@@ -143,6 +149,5 @@ class Huboard
         response
       end
     end
-
   end
 end

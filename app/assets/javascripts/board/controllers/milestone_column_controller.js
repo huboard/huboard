@@ -5,6 +5,8 @@ var MilestoneColumnController = Ember.ObjectController.extend({
       .filter(function(i) {
         // FIXME: this flag is for archived issue left on the board.
         return !i.get("isArchived");
+      }).sort(function (a, b){
+        return a._data.milestone_order - b._data.milestone_order;
       })
       .filter(this.get("filterBy"));
     return issues;

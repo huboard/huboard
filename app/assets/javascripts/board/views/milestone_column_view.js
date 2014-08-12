@@ -1,5 +1,10 @@
 var WrapperView = require("./card_wrapper_view");
 
+WrapperView = WrapperView.extend({
+  templateName: "milestoneItem",
+  classNames: ["card", "card--milestone"]
+})
+
 var CollectionView = Ember.CollectionView.extend({
   tagName:"ul",
   classNames: ["sortable"],
@@ -8,7 +13,7 @@ var CollectionView = Ember.CollectionView.extend({
   style: Ember.computed.alias("controller.style"),
   content: Ember.computed.alias("controller.issues"),
   isHovering: false,
-  didInsertElement: function(){
+  setupDraggable: function(){
     var that = this;
     this.$().sortable({
       tolerance: 'pointer',
@@ -34,7 +39,7 @@ var CollectionView = Ember.CollectionView.extend({
              .get("controller");
         };
 
-        var elements = $("li", that.$()),
+        var elements = $("> li", that.$()),
         index = elements.index(ui.item);
 
         if(index === -1) { return; }
@@ -49,9 +54,9 @@ var CollectionView = Ember.CollectionView.extend({
         afterElement = elements.get(elements.size() - 1 > index ? index + 1 : index),
         afterIndex = elements.index(afterElement),
         afterData = findViewData(afterElement),
-        current = currentData.get("model._data.order") || currentData.get("model.number"),
-        before = beforeData.get("model._data.order") || beforeData.get("model.number"),
-        after = afterData.get("model._data.order") || afterData.get("model.number");
+        current = currentData.get("model._data.milestone_order") || currentData.get("model.number"),
+        before = beforeData.get("model._data.milestone_order") || beforeData.get("model.number"),
+        after = afterData.get("model._data.milestone_order") || afterData.get("model.number");
 
         if(first && last) {
           that.get("controller").cardMoved(currentData, currentData.get("model.number"))
@@ -71,9 +76,8 @@ var CollectionView = Ember.CollectionView.extend({
         }
       }
     })
-    this._super();
 
-  },
+  }.on("didInsertElement"),
   itemViewClass: WrapperView
 })
 

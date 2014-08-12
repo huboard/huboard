@@ -1,6 +1,10 @@
 var SocketMixin = require("../mixins/socket");
 
 var CardController = Ember.ObjectController.extend(SocketMixin,{
+  needs: ["application"],
+  columns: function() {
+    return this.get("controllers.application.model.board.columns")
+  }.property("controllers.application.model.board.columns"),
   sockets: {
     config: {
       messagePath: "issueNumber",

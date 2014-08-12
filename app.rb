@@ -8,6 +8,7 @@ require 'active_support/core_ext/array'
 require 'active_support/core_ext/hash'
 require 'active_support/json'
 require 'active_support/cache/dalli_store'
+require 'active_support/number_helper'
 
 %w{ bridge couch }.each do |folder|
   libraries = Dir[File.expand_path("../lib/#{folder}/**/*.rb", __FILE__)]
@@ -28,7 +29,7 @@ module HuBoard
   end
   unless HuBoard.cache
     HuBoard.cache = ActiveSupport::Cache.lookup_store(:dalli_store,
-                                                      (ENV["CACHE_SERVERS"] || "").split(","),
+                                                      (ENV["MEMCACHE_SERVERS"] || "").split(","),
                                                       {:username              => ENV["MEMCACHE_USERNAME"],
                                                         :password             => ENV["MEMCACHE_PASSWORD"],
                                                         :pool_size                 => 5,
@@ -36,6 +37,7 @@ module HuBoard
                                                         :socket_timeout       => 1.5,
                                                         :socket_failure_delay => 0.2
                                                       })
+    HuBoard.cache.logger = Logger.new STDOUT
   end
 
 
@@ -57,7 +59,7 @@ module HuBoard
       set :sessions,
           key: 'rack.session',
           path: '/',
-          secure: HuBoard.sass?,
+          secure: HuBoard.sass? && settings.production?,
           httponly: true,
           expire_after: 5.years,
           secret: ENV['SESSION_SECRET']
@@ -87,6 +89,7 @@ module HuBoard
     use Rack::Deflater
     use Rack::Standards
 
+    use PDFKit::Middleware, {print_media_type: true}, only: %r[^/settings]
     use Routes::Static
 
     unless settings.production?

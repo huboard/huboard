@@ -34,7 +34,7 @@ var CollectionView = Ember.CollectionView.extend({
              .get("controller");
         };
 
-        var elements = $("li", that.$()),
+        var elements = $("> li", that.$()),
         index = elements.index(ui.item);
 
         if(index === -1) { return; }
@@ -78,7 +78,7 @@ var CollectionView = Ember.CollectionView.extend({
 })
 
 var ColumnView = Ember.ContainerView.extend({
-  classNameBindings:[":hb-task-column",":column","isCollapsed:hb-state-collapsed","isHovering:hovering"],
+  classNameBindings:[":hb-task-column",":column",":task-column","isCollapsed:hb-state-collapsed","isHovering:hovering"],
   isCollapsed: Ember.computed.alias("controller.isCollapsed"),
   isHovering: Ember.computed.alias("controller.isHovering"),
   childViews: ["headerView", CollectionView, "collapsedView"],

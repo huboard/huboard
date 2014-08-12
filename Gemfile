@@ -8,7 +8,7 @@ gem 'rack-standards'
 gem 'thin'
 gem 'erubis'
 gem 'i18n'
-gem 'activesupport'
+gem 'activesupport', '~> 4.1.4'
 gem 'dotenv'
 gem 'rake'
 gem 'uglifier'
@@ -35,8 +35,16 @@ gem 'sprockets'
 gem 'sass', '~> 3.3.9'
 gem 'sprockets-helpers'
 gem 'execjs', "~> 1.4"
-gem 'sucker_punch', '~> 1.0'
 gem 'eventmachine'
+
+gem 'sucker_punch', '~> 1.0'
+gem 'redis'
+gem 'celluloid'
+gem 'celluloid-redis'
+gem 'analytics-ruby', '~> 2.0.0'
+
+gem 'wkhtmltopdf-heroku', '~> 1.0'
+gem 'pdfkit'
 
 gem 'memcachier'
 
@@ -45,6 +53,8 @@ gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 group :development do
   gem 'shotgun'
   gem 'foreman'
+  #gem 'librarian-puppet'
+  #gem 'puppet'
 
   gem 'heroku'
   gem 'pry'

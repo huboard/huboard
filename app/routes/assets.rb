@@ -1,6 +1,6 @@
 module HuBoard
   module Routes
-    class Assets < Sinatra::Application 
+    class Assets < Sinatra::Application
       configure do
         set :root, File.expand_path('../../../', __FILE__)
 
@@ -18,4 +18,3 @@ module HuBoard
     end
   end
 end
-

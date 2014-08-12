@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>HuBoard Receipt</title>
+  <style type="text/css">
+    body {
+      padding: 0 .5in .5in .5in;
+      background: #eee;
+    }
+    .print {
+      margin: 0 auto;
+      padding: .25in;
+      width: 8.5in;
+      font-family: 'Helvetica Neue', Helvetica, Arial, 'Nimbus Sans L', sans-serif;
+      font-size: 11pt;
+      text-align: center;
+      color: #999;
+    }
+    .print a {
+      margin: 0 10px;
+      font-size: 11pt;
+      font-weight: bold;
+      line-height: 1;
+      color: #333;
+      text-decoration: none;
+    }
+    .print a img {
+      position: relative;
+      top: 2px;
+      margin: 0 1px 0 0;
+    }
+    .print a:hover {
+      opacity: .7;
+    }
+    .receipt {
+      margin: 0 auto;
+      padding: .5in;
+      width: 8.5in;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 12pt;
+      color: #333;
+      border: 1px solid #ccc;
+      background: #fff;
+      border-radius: 3px;
+      box-shadow: 2px 2px 2px #ddd;
+    }
+    header {
+      margin: 0 0 .25in 0;
+      padding: 0 0 .25in 0;
+      border-bottom: 3pt solid #999;
+      overflow: hidden;
+    }
+    h1 {
+      margin: 0 0 20px 0;
+      padding: 0 0 10px 0;
+      font-size: 24pt;
+      line-height: 1;
+      letter-spacing: -1pt;
+      border-bottom: 1px solid #ccc;
+    }
+    h3 {
+      float: right;
+      margin: 0;
+      padding: 18px 0 0 0;
+      font-size: 11pt;
+      font-weight: normal;
+      line-height: 1;
+      color: #999;
+    }
+    address {
+      font-size: 12pt;
+      font-style: normal;
+      line-height: 1.4;
+    }
+    address.huboard {
+      float: right;
+      width: 3in;
+    }
+    address.huboard img {
+      float: left;
+      margin: .04in .12in 0 0;
+    }
+    address span.message {
+      display: block;
+      margin: 10px 0 0 0;
+      color: #999;
+    }
+    address span.message a {
+      color: #333;
+    }
+    address span.message a:hover {
+      color: #777;
+    }
+    address h1,
+    address h2,
+    address h3,
+    address h4,
+    address p{
+      margin: 0;
+    }
+    div.details {
+      position: relative;
+    }
+    table {
+      clear: both;
+      width: 100%;
+      border-collapse: collapse;
+    }
+    table th,
+    table td {
+      margin: 0;
+      padding: .12in .15in;
+      text-align: left;
+      border-bottom: 1pt solid #ccc;
+    }
+    table th {
+      font-size: 10pt;
+      text-transform: uppercase;
+      color: #999;
+    }
+    table .num {
+      text-align: right;
+    }
+    table td span.meta {
+      display: block;
+      margin: 5px 0 0 0;
+      font-size: 10pt;
+      color: #777;
+    }
+    img.stamp {
+      position: absolute;
+      bottom: 2px;
+      right: 70px;
+    }
+    h2 {
+      margin: .5in;
+      font-size: 40pt;
+      line-height: 1;
+      text-align: center;
+      letter-spacing: -1pt;
+      color: #ccc;
+    }
+    footer {
+      margin: .25in 0 0 0;
+      padding: .25in 0 0 0;
+      font-size: 10pt;
+      line-height: 1.4;
+      color: #999;
+      border-top: 3pt solid #999;
+    }
+    footer img {
+      float: right;
+    }
+    footer a {
+      color: #999;
+      text-decoration: none;
+    }
+
+    </style>
+    <% if request.env["Rack-Middleware-PDFKit"] == 'true' %>
+    <style type="text/css">
+    <% else %>
+    <style type="text/css" media="print">
+    <% end %>
+
+      body {
+        margin: 0;
+        padding: 0;
+        background: none;
+      }
+      .print,
+      address span.message,
+      img.stamp {
+        display: none;
+      }
+      .receipt {
+        border: none;
+        box-shadow: none;
+      }
+      h1,
+      h2 {
+        letter-spacing: inherit;
+      }
+  </style>
+  </head>
+
+  <body>
+    <div class="print">
+      <a href="#" onclick="javascript:window.print();">
+        <img alt="Icon-print-2x" src="<%= asset_path 'icon-print-2x.png' %>" width="16"> 
+        Print this receipt
+      </a>
+      or
+      <a href="/settings/invoices/<%= @invoice.id %>.pdf" download="<%= @invoice.id %>.pdf" >
+        <img alt="Icon-download-2x" src="<%= asset_path 'icon-download-2x.png' %>" width="22">
+        Download a PDF
+      </a>
+    </div>
+    <div class='receipt'>
+      <header>
+        <h3>Order/Invoice ID: <%= @invoice.id %></h3>
+        <h1>Receipt</h1>
+        <address class="huboard">
+          <strong>HuBoard LLC</strong><br>
+          1307 Kinney Ave, #115<br>
+          Austin, TX 78704 USA
+        </address>
+        <address class="customer">
+          <strong><%= @customer.github.account.name %></strong><br>
+            <%= @invoice.customer.email %><br>
+            <% if @customer.additional_info.nil? %>
+              <span class='message'>
+                Additional information (address, VAT number, etc.)
+              </span>
+            <% else %>
+              <%= markdown @customer.additional_info %>
+            <% end %>
+        </address>
+      </header>
+      <div class="details">
+        <table>
+          <tbody><tr>
+            <th>Item</th>
+            <th>Date Purchased</th>
+            <th class="num">Amount</th>
+            <th>Paid by</th>
+          </tr>
+          <tr>
+            <td class="product">
+              HuBoard <%= @customer.github.account.type %> account (1 month)
+              <span class="meta"><%= @invoice.customer.email %></span>
+            </td>
+            <td><%= Time.at(@invoice.date).strftime('%m/%d/%Y') %></td>
+            <td class="num">
+              <%= ActiveSupport::NumberHelper.number_to_currency(@invoice.total / 100) %>
+            </td>
+            <td class="payment">
+                  Credit Card
+                  <span class="meta">**** **** **** <%= @invoice.charge.card.last4 %></span>
+            </td>
+          </tr>
+        </tbody></table>
+        <h2>Thank you.</h2>
+      </div>
+    </div>
+  </body>
+</html>
