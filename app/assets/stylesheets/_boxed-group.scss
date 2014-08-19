@@ -1,0 +1,13 @@
+.boxed-group {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  > h3 {
+   margin: 0;
+   padding: 6px 12px;
+   border-bottom: 1px solid #ccc;
+
+  }
+}
+.boxed-group__content {
+  padding:12px;
+}
