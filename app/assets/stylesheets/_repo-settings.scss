@@ -1,0 +1,41 @@
+.repo-settings {
+  @include display(flex);
+  @include flex(1);
+  @include flex-direction(column);
+  background-color: #fff;
+  border: 1px solid #e5e5e5;
+  border-bottom-color: darken(#e5e5e5, 5%); 
+  box-shadow: 0px 1px 1px rgba(0,0,0,0.1);
+  margin: 20px;
+  padding: 10px;
+
+
+}
+
+.repo-settings--nav {
+  @include display(flex);
+  @include justify-content(center);
+  border-bottom: 1px solid #ccc;
+
+  li {
+    list-style: none;
+    margin: 0px 6px;
+    box-sizing: border-box;
+  }
+
+  a {
+    display: block;
+    padding: 20px;
+    box-sizing: border-box;
+    position: relative;
+    &.active {
+      border-bottom: 2px solid #7965cc;
+      top: 1px;
+    }
+  }
+
+}
+
+.repo-settings--content {
+
+}
