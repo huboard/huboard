@@ -6,7 +6,7 @@
           Paste the incoming webhook url from Slack below
         </p>
         <label>
-          {{input value=editing.attrs.webhookURL placeholder="Slack webhook url" }}
+          {{input value=attrs.webhookURL placeholder="Slack webhook url" }}
         </label>
         <p>
           Enter the slack room channel that want the HuBoard bot to post into, you can leave this 
@@ -18,7 +18,7 @@
           incoming webhook for that room
         </p>
         <label>
-          {{input value=editing.attrs.channel placeholder="Optional: #channel_name" }}
+          {{input value=attrs.channel placeholder="Optional: #channel_name" }}
         </label>
         <p>
           Click the Submit webhook button to create the integration.

@@ -1,4 +1,6 @@
 {{#each integration in possibleIntegrations}}
-<button type="button" class="hb-button hb-button-grey" {{action transitionTo integration}} >{{integration.name}}</button>
+{{#link-to 'settings.integrations.new' integration.name tagName='button' classNames='hb-button hb-button-grey'}}
+  {{integration.name}}
+{{/link-to}}
 {{/each}}
 
