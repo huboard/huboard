@@ -5,7 +5,6 @@
     <meta name="description" content="Instant project management for GitHub issues">
     <link rel="shortcut icon" href="/favicon.ico?v=3" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-     <%= partial_erb :analytics %>
     
      <%= stylesheet_tag 'bootstrap' %>
      <%= stylesheet_tag 'flex_layout' %>
@@ -17,6 +16,7 @@
      </div>
      <%= yield_content :overlay %>
 
+     <%= partial_erb :analytics %>
      <%= yield_content :javascripts %>
      <%= partial :fontdeck %>
 

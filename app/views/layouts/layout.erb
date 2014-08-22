@@ -4,7 +4,6 @@
     <title><%= yield_content :title %>HuBoard</title>
     <meta name="description" content="Instant project management for GitHub issues">
     <link rel="shortcut icon" href="/favicon.ico?v=3" />
-     <%= partial_erb :analytics %>
 
     <%= javascript_tag 'vendor/jquery' %>
     <%= javascript_tag 'bootstrap' %>
@@ -61,5 +60,6 @@
     </div>
 
     <%= yield_content :overlay %>
+     <%= partial_erb :analytics %>
    </body>
  </html>
