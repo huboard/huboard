@@ -18,6 +18,7 @@
 @import "integrations";
 @import "breadcrumbs";
 @import "components/selector";
+@import 'textcomplete';
 
 #application > .ember-view {
    @include display(flex);

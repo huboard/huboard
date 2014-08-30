@@ -232,6 +232,7 @@ var HbMarkdownEditorComponent = Ember.Component.extend({
   },
   markdown: "",
   preview: "",
+  mentions: [],
   onMarkdownChange: function () {
     var that = this;
     return Ember.run.once(function () {
@@ -243,26 +244,47 @@ var HbMarkdownEditorComponent = Ember.Component.extend({
     });
   }.observes("markdown"),
   setupTextcomplete: function(){
-    this.$('textarea').textcomplete([
-    { // emoji strategy
-            match: /\B:([\-+\w]*)$/,
-            search: function (term, callback) {
-                callback($.map(_.pairs(window.EMOJIS), function (emoji) {
-                    return emoji[0].indexOf(term) === 0 ? {key:emoji[0], value:emoji[1]} : null;
-                }));
-            },
-            template: function (value) {
-                return '<img style="height:32px;" src="' + value.value + '"></img>' + value.key;
-            },
-            replace: function (value) {
-                return ':' + value.key + ': ';
-            },
-            index: 1,
-            maxCount: 5
+    var component = this;
+    var emojiStrategy = { 
+      match: /\B:([\-+\w]*)$/,
+      search: function (term, callback) {
+        callback($.map(_.pairs(window.EMOJIS), function (emoji) {
+          return emoji[0].indexOf(term) === 0 ? {key:emoji[0], value:emoji[1]} : null;
+        }));
+      },
+      template: function (value) {
+        return '<img style="height:32px;" src="' + value.value + '"></img>' + value.key;
+      },
+      replace: function (value) {
+        return ':' + value.key + ': ';
+      },
+      index: 1,
+      maxCount: 5
     }
-    ])
 
-  }.on('didInsertElement')
+    var mentionStrategy =  { 
+      match: /(^|\s)@(\w*)$/,
+      search: function (term, callback) {
+        callback(component.get('mentions').filter(function(a){
+          return a.login.indexOf(term) === 0;
+        }))
+      },
+      template: function (value) {
+        return '<img style="height:32px;" src="' + value.avatar_url + '"></img>' + value.login;
+      },
+      replace: function (value) {
+        return '$1@' + value.login + ' ';
+      },
+      cache: true,
+      maxCount: 5
+    }
+
+    this.$('textarea').textcomplete([ emojiStrategy, mentionStrategy ])
+
+  }.on('didInsertElement'),
+  cleanUpTextcomplete: function(){
+    this.$('textarea').textcomplete('destroy');
+  }.on('willDestroyElement')
 });
 
 module.exports = HbMarkdownEditorComponent;
@@ -1098,8 +1120,12 @@ var IssuesCreateController = Ember.ObjectController.extend({
   }.property("processing","isValid"),
   isValid: function () {
     return this.get("model.title");
-  }.property("model.title")
-
+  }.property("model.title"),
+  mentions: function(){
+    return _.uniq(_.compact(this.get('controllers.application.model.board.assignees')), function(i){
+      return i.login 
+    });
+  }.property('controllers.application.model.board.assignees')
 });
 
 module.exports = IssuesCreateController;
@@ -1199,7 +1225,13 @@ var IssuesEditController = Ember.ObjectController.extend({
       .sort(function (a, b) {
         return a.created_at.localeCompare(b.created_at); 
       });
-  }.property("_events", "_comments")
+  }.property("_events", "_comments"),
+  mentions: function (){
+    var union = _.union(this.get('controllers.application.model.board.assignees'),this.get('sortedActivities').mapBy('user'))
+    return _.uniq(_.compact(union), function(i){
+      return i.login 
+    });
+  }.property('controllers.application.model.board.assignees','sortedActivities')
 });
 
 module.exports = IssuesEditController;
@@ -2990,10 +3022,11 @@ function program8(depth0,data) {
     'on': ("submit")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(" class=\"flex-form\">\n    ");
-  hashContexts = {'markdown': depth0};
-  hashTypes = {'markdown': "ID"};
+  hashContexts = {'markdown': depth0,'mentions': depth0};
+  hashTypes = {'markdown': "ID",'mentions': "ID"};
   options = {hash:{
-    'markdown': ("controller.commentBody")
+    'markdown': ("controller.commentBody"),
+    'mentions': ("mentions")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers['hb-markdown-editor'] || depth0['hb-markdown-editor']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-markdown-editor", options))));
   data.buffer.push("\n    <button ");
@@ -3401,10 +3434,11 @@ function program1(depth0,data) {
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
   data.buffer.push("\n      </label>\n      ");
-  hashContexts = {'markdown': depth0};
-  hashTypes = {'markdown': "ID"};
+  hashContexts = {'markdown': depth0,'mentions': depth0};
+  hashTypes = {'markdown': "ID",'mentions': "ID"};
   options = {hash:{
-    'markdown': ("body")
+    'markdown': ("body"),
+    'mentions': ("mentions")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers['hb-markdown-editor'] || depth0['hb-markdown-editor']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-markdown-editor", options))));
   data.buffer.push("\n      <button ");
