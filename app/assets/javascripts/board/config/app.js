@@ -6,6 +6,7 @@ require('../vendor/jquery');
 require('../vendor/handlebars');
 require('../vendor/ember');
 require("../vendor/autoresize");
+require("../vendor/jquery.textcomplete");
 var color = require('../../vendor/jquery.color');
 require('../utilities/observers');
 
