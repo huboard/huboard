@@ -73,7 +73,8 @@ class Huboard
        milestone = Hashie::Mash.new params["milestone"]
 
        gh.milestones.create({
-         title: milestone.title
+         title: milestone.title,
+         description: milestone.description
        })
     end
 

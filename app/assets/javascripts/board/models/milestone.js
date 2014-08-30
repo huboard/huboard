@@ -22,6 +22,7 @@ Milestone.reopenClass({
      return Milestone.create({
        id: null,
        title: "",
+       description: "",
        repo: App.get("repo")
      })
   }
