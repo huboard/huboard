@@ -23,6 +23,7 @@ Milestone.reopenClass({
        id: null,
        title: "",
        description: "",
+       due_on: "",
        repo: App.get("repo")
      })
   }

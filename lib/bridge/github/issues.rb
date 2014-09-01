@@ -74,7 +74,8 @@ class Huboard
 
        gh.milestones.create({
          title: milestone.title,
-         description: milestone.description
+         description: milestone.description,
+         due_on: milestone.due_on
        })
     end
 
