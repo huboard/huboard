@@ -42,6 +42,21 @@ var Repo = Ember.Object.extend(Serializable,{
         return this._integrations;
       }.bind(this));
 
+  },
+  fetchLinks: function() {
+    if(this._links) {return this._links;}
+    return Ember.$.getJSON("/api/" + this.get("full_name") + "/links")
+      .then(function(links){
+        var results = Ember.A();
+        links.forEach(function(l){
+          results.pushObject(App.Link.create(l));
+        })
+        this._links = Ember.Object.create({ 
+          links: results 
+        })
+        return this._links;
+      }.bind(this));
+
   }
 });
 

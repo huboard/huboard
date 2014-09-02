@@ -14,6 +14,17 @@ module HuBoard
             json(failure: true, message: "couldn't link board")
           end
         end
+
+        get '/api/:user/:repo/links' do
+          board = huboard.board(params[:user], params[:repo])
+          links = board.link_labels.map do |label|
+            {
+              label: label,
+              columns: huboard.board(label.user, label.repo).column_labels
+            }
+          end
+          json links 
+        end
       end
     end
   end

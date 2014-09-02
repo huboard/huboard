@@ -15,6 +15,10 @@ App.Router.map(function() {
       this.route('new', {path: '/new/:name'});
     });
 
+    this.resource('settings.links', {path: '/links'}, function(){
+      this.route('new', {path: '/new/:name'});
+    });
+
    });
 });
 

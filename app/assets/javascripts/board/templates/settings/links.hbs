@@ -1,0 +1,31 @@
+    <h3>Existing Links </h3>
+    <div class="flex-form-top"> 
+      <ul class="unstyled links">
+        {{#each link in links}}
+          <li>
+            <div class="link">
+              <div class="flex-crumbs">
+                <ul class="nav breadcrumbs disabled">
+                  {{#each column in link.columns}}
+                    <li>
+                      <a>
+                        <span>{{ column.text }}</span>
+                      </a>
+                    </li>
+                  {{/each}}
+                </ul>
+              </div>
+            </div>
+          </li>
+        {{else}}
+          <li>
+            <em> Links are totally rad, you should add one </em>
+          </li>
+        {{/each}}
+      </ul>
+    </div>
+    <hr></hr>
+    <h3> Add a linked repository </h3>
+    {{ outlet }}
+
+
