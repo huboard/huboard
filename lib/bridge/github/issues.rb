@@ -244,7 +244,7 @@ class Huboard
       end
 
       def patch(hash)
-        m = client.patch hash
+        m = client.patch hash["milestone"]
         m.extend(Milestone).merge! :repo => self["repo"]
       end
 
