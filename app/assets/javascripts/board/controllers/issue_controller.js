@@ -91,7 +91,13 @@ var IssuesEditController = Ember.ObjectController.extend({
       .sort(function (a, b) {
         return a.created_at.localeCompare(b.created_at); 
       });
-  }.property("_events", "_comments")
+  }.property("_events", "_comments"),
+  mentions: function (){
+    var union = _.union(this.get('controllers.application.model.board.assignees'),this.get('sortedActivities').mapBy('user'))
+    return _.uniq(_.compact(union), function(i){
+      return i.login 
+    });
+  }.property('controllers.application.model.board.assignees','sortedActivities')
 });
 
 module.exports = IssuesEditController;

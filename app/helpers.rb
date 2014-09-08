@@ -79,5 +79,9 @@ module HuBoard
       @base_url ||= "#{request.env['rack.url_scheme']}://#{request.env['HTTP_HOST']}"
     end
 
+    def emojis
+      @emojis ||= gh.connection.get('./emojis').body
+    end
+
   end
 end

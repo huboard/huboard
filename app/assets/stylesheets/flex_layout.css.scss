@@ -18,6 +18,7 @@
 @import "integrations";
 @import "breadcrumbs";
 @import "components/selector";
+@import 'textcomplete';
 
 #application > .ember-view {
    @include display(flex);
@@ -137,6 +138,7 @@
 .board-dragging {
   .column.milestone {
     min-width: 230px;
+    max-width: 230px;
     @include display(block);
     &.hb-state-collapsed {
       .text {

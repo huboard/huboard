@@ -10,7 +10,7 @@ require 'active_support/json'
 require 'active_support/cache/dalli_store'
 require 'active_support/number_helper'
 
-%w{ bridge couch }.each do |folder|
+%w{ bridge couch warden }.each do |folder|
   libraries = Dir[File.expand_path("../lib/#{folder}/**/*.rb", __FILE__)]
   libraries.each do |path_name|
     require path_name
@@ -81,7 +81,7 @@ module HuBoard
 
     use Warden::Manager do |config|
       config.failure_app = HuBoard::Routes::Failure
-      config.default_strategies :github
+      config.default_strategies :github, :personal_token
       config.scope_defaults :default, :config => GITHUB_CONFIG
       config.scope_defaults :private, :config => GITHUB_CONFIG.merge(:scope => 'repo')
     end

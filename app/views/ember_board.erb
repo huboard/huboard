@@ -40,6 +40,18 @@
       App.set("loggedIn", false);
     <% end %>
 
+    if(window.analytics) {
+      App.Router.reopen({
+        notifySegmentIo: function(){
+          return window.analytics.page(this.get('url'),{
+            page: this.get('url'),
+            title: this.get('url')
+          }) 
+        }.on("didTransition")
+
+      });
+
+    }
 
     App.advanceReadiness();
   </script>

@@ -27,8 +27,12 @@ var IssuesCreateController = Ember.ObjectController.extend({
   }.property("processing","isValid"),
   isValid: function () {
     return this.get("model.title");
-  }.property("model.title")
-
+  }.property("model.title"),
+  mentions: function(){
+    return _.uniq(_.compact(this.get('controllers.application.model.board.assignees')), function(i){
+      return i.login 
+    });
+  }.property('controllers.application.model.board.assignees')
 });
 
 module.exports = IssuesCreateController;

@@ -4,7 +4,7 @@
       <label>
         {{input value=title placeholder="Title" }}
       </label>
-      {{hb-markdown-editor markdown=body}}
+      {{hb-markdown-editor markdown=body mentions=mentions}}
       <button {{bind-attr disabled=disabled}} class="hb-button">Submit issue</button>
     </div>
     <div class="flex-form-right">
