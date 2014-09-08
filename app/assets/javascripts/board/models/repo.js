@@ -43,6 +43,10 @@ var Repo = Ember.Object.extend(Serializable,{
       }.bind(this));
 
   },
+  fetchSettings: function(){
+    if(this._settings) {return this._settings;}
+    return Ember.$.getJSON("/api/" + this.get("full_name") + "/settings")
+  },
   fetchLinks: function() {
     if(this._links) {return this._links;}
     return Ember.$.getJSON("/api/" + this.get("full_name") + "/links")
@@ -51,9 +55,7 @@ var Repo = Ember.Object.extend(Serializable,{
         links.forEach(function(l){
           results.pushObject(App.Link.create(l));
         })
-        this._links = Ember.Object.create({ 
-          links: results 
-        })
+        this._links = results; 
         return this._links;
       }.bind(this));
 

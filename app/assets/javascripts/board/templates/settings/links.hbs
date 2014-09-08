@@ -1,11 +1,33 @@
-    <h3>Existing Links </h3>
+    
+    <h3>Your board</h3>
+    
+    <h4>{{repository.full_name}}</h4>
+    <div class="flex-crumbs">
+      <ul class="nav breadcrumbs">
+        {{#each column in columns}}
+          <li>
+            <a>
+              <span>{{ column.text }}</span>
+            </a>
+          </li>
+        {{/each}}
+      </ul>
+    </div>
+
+    <h3>Existing links </h3>
     <div class="flex-form-top"> 
       <ul class="unstyled links">
-        {{#each link in links}}
-          <li>
+        {{#each link in controller}}
+        <li {{bind-attr class="link.isLinked:hb-state-link:hb-state-unlink" }}>
+            <div class="link-states">
+              <i class="ui-icon ui-icon-link"></i>
+              <i class="ui-icon ui-icon-unlink"></i>
+            </div>
             <div class="link">
+
+              <h4>{{link.label.user}}/{{link.label.repo}}</h4>
               <div class="flex-crumbs">
-                <ul class="nav breadcrumbs disabled">
+                <ul class="nav breadcrumbs">
                   {{#each column in link.columns}}
                     <li>
                       <a>
@@ -15,6 +37,14 @@
                   {{/each}}
                 </ul>
               </div>
+            </div>
+            <div class="link-actions">
+              <button>
+              <i class="ui-icon ui-icon-x-thin"></i>
+              </button>
+              <button>
+              <i class="ui-icon ui-icon-pencil"></i>
+              </button>
             </div>
           </li>
         {{else}}

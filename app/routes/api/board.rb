@@ -25,6 +25,15 @@ module HuBoard
           end
           json links 
         end
+
+        get '/api/:user/:repo/settings' do
+          board = huboard.board(params[:user], params[:repo])
+          json(
+            column_labels: board.column_labels,
+            repository: board.gh.to_hash
+          )
+
+        end
       end
     end
   end

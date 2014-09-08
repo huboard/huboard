@@ -83,6 +83,10 @@ Ember.onLoad("Ember.Application", function ($app) {
       application.inject('settings:main', 'repo', 'repo:main');
       application.inject('controller', 'settings', 'settings:main');
       application.inject('view', 'settings', 'settings:main');
+
+      application.register('global:main', application.Global);
+      application.inject('controller', 'global', 'global:main');
+      application.inject('view', 'global', 'global:main');
     }
   })
 })
