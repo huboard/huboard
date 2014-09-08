@@ -26,6 +26,11 @@ module HuBoard
         redirect params[:redirect_to] || '/'
       end
 
+      get '/login/personal/?' do
+        authenticate! :personal_token
+        redirect params[:redirect_to] || '/'
+      end
+
       get '/logout/?' do
         logout!
         redirect '/'
