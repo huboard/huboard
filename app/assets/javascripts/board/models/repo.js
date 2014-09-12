@@ -48,7 +48,7 @@ var Repo = Ember.Object.extend(Serializable,{
     return Ember.$.getJSON("/api/" + this.get("full_name") + "/settings")
   },
   fetchLinks: function() {
-    if(this._links) {return this._links;}
+    if(this._links) {return Ember.RSVP.resolve(this._links,"Already fetched links");}
     return Ember.$.getJSON("/api/" + this.get("full_name") + "/links")
       .then(function(links){
         var results = Ember.A();
@@ -58,6 +58,22 @@ var Repo = Ember.Object.extend(Serializable,{
         this._links = results; 
         return this._links;
       }.bind(this));
+
+  },
+  createLink: function(name){
+    var board = this;
+    return this.fetchLinks().then(function(links){
+      var api = "/api/" + board.get("full_name") + "/links";
+      return Ember.$.ajax({
+        url: api,
+        type: 'POST',
+        dataType: 'json',
+        data: {link: name},
+        success: function(response){
+          links.pushObject(Ember.Object.create(response));
+        }
+      })
+    })
 
   }
 });

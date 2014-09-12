@@ -26,6 +26,23 @@ module HuBoard
           json links 
         end
 
+        post '/api/:user/:repo/links' do
+          board = huboard.board(params[:user], params[:repo])
+          link = board.create_link params[:link]
+          json(
+            label: link,
+            columns: huboard.board(link.user, link.repo).column_labels
+          )
+        end
+
+        delete '/api/:user/:repo/links' do
+          board = huboard.board(params[:user], params[:repo])
+          link = board.destroy_link params[:link]
+          json(
+           status: link 
+          )
+        end
+
         get '/api/:user/:repo/settings' do
           board = huboard.board(params[:user], params[:repo])
           json(

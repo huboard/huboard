@@ -14,11 +14,12 @@
       </ul>
     </div>
 
+    <hr></hr>
+
     <h3>Existing links </h3>
     <div class="flex-form-top"> 
       <ul class="unstyled links">
-        {{#each link in controller}}
-        <li {{bind-attr class="link.isLinked:hb-state-link:hb-state-unlink" }}>
+        {{#each link in controller itemViewClass='App.SettingsLinkView'}}
             <div class="link-states">
               <i class="ui-icon ui-icon-link"></i>
               <i class="ui-icon ui-icon-unlink"></i>
@@ -39,16 +40,17 @@
               </div>
             </div>
             <div class="link-actions">
-              <button>
+              <button {{action 'remove' link }}>
               <i class="ui-icon ui-icon-x-thin"></i>
               </button>
+              {{!--
               <button>
               <i class="ui-icon ui-icon-pencil"></i>
               </button>
+              --}}
             </div>
-          </li>
         {{else}}
-          <li>
+          <li class="hb-empty">
             <em> Links are totally rad, you should add one </em>
           </li>
         {{/each}}

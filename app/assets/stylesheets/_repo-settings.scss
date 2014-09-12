@@ -42,12 +42,17 @@
 }
 
 .repo-settings--content {
+  
   .links {
     padding: 3px 6px;
     border-radius: 3px;
     background: #fafafa;
     box-shadow: inset 0px 0px 2px 0px rgba(0,0,0,0.3);
-    > li {
+    > .hb-empty {
+      padding: 12px;
+
+    }
+    > .hb-widget-link {
       background: #fff;
       margin: 9px 0;
       border: 1px solid #ccc;

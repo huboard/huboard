@@ -47,6 +47,25 @@ class Huboard
     def create_label(params)
       gh.labels.create params
     end
+    
+    def destroy_label(name)
+      gh.labels(name).destroy
+    end
+    alias_method :destroy_link, :destroy_label
+
+
+    def create_link(repo)
+      new_link = create_label name: "Link <=> #{repo}", color: random_color
+      match = Huboard.link_pattern.match new_link.name
+      new_link.user = match[:user_name]
+      new_link.repo = match[:repo]
+      new_link
+    end
+    
+    def random_color
+      colors = %w{ e11d21 eb6420 eb6420 fbca04 009800 006b75 207de5 0052cc 5319e7 }
+      colors.sample
+    end
 
     def link_labels
       labels.select{|l| Huboard.link_pattern.match l.name }.map do |l|

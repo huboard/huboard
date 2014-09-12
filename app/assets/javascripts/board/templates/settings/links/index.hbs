@@ -1,0 +1,7 @@
+<form class="flex-form" {{action 'submit'  on='submit'}}>
+  <label>
+    {{input value=repoFullName placeholder='owner/repo'}}
+    
+  </label>
+  <button {{bind-attr disabled=isDisabled }} class='hb-button'>Create link</button>
+</form>
