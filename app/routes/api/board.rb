@@ -47,7 +47,7 @@ module HuBoard
           board = huboard.board(params[:user], params[:repo])
           board.copy_board params[:columns]
           json(
-            columns: params[:columns]
+            columns: huboard.board(params[:user], params[:repo]).column_labels
           )
         end
 
