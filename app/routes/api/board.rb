@@ -43,6 +43,14 @@ module HuBoard
           )
         end
 
+        put '/api/:user/:repo/columns' do 
+          board = huboard.board(params[:user], params[:repo])
+          board.copy_board params[:columns]
+          json(
+            columns: params[:columns]
+          )
+        end
+
         get '/api/:user/:repo/settings' do
           board = huboard.board(params[:user], params[:repo])
           json(

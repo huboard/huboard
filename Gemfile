@@ -5,6 +5,7 @@ gem 'sinatra', "~> 1.4.0"
 gem 'sinatra-contrib', github: 'maccman/sinatra-contrib'
 gem 'sprockets-memcache-store'
 gem 'rack-standards'
+gem 'rack-contrib'
 gem 'thin'
 gem 'erubis'
 gem 'i18n'

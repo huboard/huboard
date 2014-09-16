@@ -42,6 +42,13 @@
 }
 
 .repo-settings--content {
+  .flex-split {
+    @include display(flex);
+    .flex-left {
+      @include flex(1);
+      padding-right: 12px;
+    }
+  }
   
   .links {
     padding: 3px 6px;
@@ -96,6 +103,13 @@
         .ui-icon-unlink {
           display: inline-block;
         }
+      }
+      .flex-crumbs {
+        cursor: not-allowed;
+        a span {
+          color: $lightGrey;
+        }
+
       }
     }
     h4 {

@@ -61,6 +61,15 @@ class Huboard
       new_link.repo = match[:repo]
       new_link
     end
+
+    def copy_board(columns)
+      column_labels.each do |column|
+        destroy_label(column["name"])
+      end
+      columns.each do |column|
+        create_label name: column["name"], color: column["color"]
+      end
+    end
     
     def random_color
       colors = %w{ e11d21 eb6420 eb6420 fbca04 009800 006b75 207de5 0052cc 5319e7 }

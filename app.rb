@@ -2,6 +2,7 @@ require 'memcachier'
 
 # Require base
 require 'sinatra/base'
+require 'rack/contrib'
 require 'active_support/all'
 require 'active_support/core_ext/string'
 require 'active_support/core_ext/array'
@@ -88,6 +89,8 @@ module HuBoard
 
     use Rack::Deflater
     use Rack::Standards
+    use Rack::NestedParams
+    use Rack::PostBodyContentTypeParser
 
     use PDFKit::Middleware, {print_media_type: true}, only: %r[^/settings]
     use Routes::Static

@@ -1417,7 +1417,7 @@ var SettingsLinkController = Ember.ObjectController.extend({
   isLinked: function(){
     return this.get("controllers.settings.column_labels.length") === this.get("columns.length")
 
-  }.property("controllers.settings.column_labels.@each","column_labels.@each"),
+  }.property("controllers.settings.column_labels.@each","columns.@each"),
   actions: {
     remove: function(link) {
       this.get("controllers.settingsLinks.model").removeObject(link);
@@ -1429,10 +1429,27 @@ var SettingsLinkController = Ember.ObjectController.extend({
         type: 'DELETE',
 
       })
+    },
+    copy: function(parent){
+      var controller = this,
+        apiUrl = "/api/" + this.get("label.user") + "/" + this.get("label.repo") + "/columns";
+
+      Ember.$.ajax({
+        url: apiUrl,
+        dataType: 'json',
+        contentType: 'application/json',
+        type: 'PUT',
+        data: JSON.stringify({
+          columns: this.get("controllers.settings.model.column_labels")
+        }),
+        success: function(response) {
+          controller.set("columns", Ember.A(response.columns))
+        }
+      })
+
+
     }
   }
-
-
 });
 
 module.exports = SettingsLinkController;
@@ -3669,20 +3686,30 @@ function program3(depth0,data) {
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "link.label.repo", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("</h4>\n              <div class=\"flex-crumbs\">\n                <ul class=\"nav breadcrumbs\">\n                  ");
+  data.buffer.push("</h4>\n              ");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers.each.call(depth0, "column", "in", "link.columns", {hash:{},inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack1 = helpers['if'].call(depth0, "link.isLinked", {hash:{},inverse:self.program(7, program7, data),fn:self.program(4, program4, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n                </ul>\n              </div>\n            </div>\n            <div class=\"link-actions\">\n              <button ");
+  data.buffer.push("\n            </div>\n            <div class=\"link-actions\">\n              <button ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "remove", "link", {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(">\n              <i class=\"ui-icon ui-icon-x-thin\"></i>\n              </button>\n              ");
-  data.buffer.push("\n            </div>\n        ");
+  data.buffer.push(">\n              <i class=\"ui-icon ui-icon-x-thin\"></i>\n              </button>\n            </div>\n        ");
   return buffer;
   }
 function program4(depth0,data) {
+  
+  var buffer = '', stack1, hashTypes, hashContexts;
+  data.buffer.push("\n              <div class=\"flex-crumbs\">\n                <ul class=\"nav breadcrumbs\">\n                  ");
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers.each.call(depth0, "column", "in", "link.columns", {hash:{},inverse:self.noop,fn:self.program(5, program5, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n                </ul>\n              </div>\n              ");
+  return buffer;
+  }
+function program5(depth0,data) {
   
   var buffer = '', hashTypes, hashContexts;
   data.buffer.push("\n                    <li>\n                      <a>\n                        <span>");
@@ -3693,7 +3720,60 @@ function program4(depth0,data) {
   return buffer;
   }
 
-function program6(depth0,data) {
+function program7(depth0,data) {
+  
+  var buffer = '', stack1, hashTypes, hashContexts;
+  data.buffer.push("\n                ");
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers['if'].call(depth0, "link.columns.length", {hash:{},inverse:self.noop,fn:self.program(8, program8, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n              <div class='flex-split'>\n                <div class='flex-left'>\n                  <div class=\"flex-crumbs\">\n                    <ul class=\"nav breadcrumbs\">\n                      ");
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers.each.call(depth0, "column", "in", "columns", {hash:{},inverse:self.noop,fn:self.program(11, program11, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n                    </ul>\n                  </div>\n                </div>\n                <div class='flex-right'>\n                  <button class=\"hb-button hb-button-grey\" ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "copy", "model", {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">\n                    Copy parent board\n                  </button>\n                </div>\n              </div>\n              ");
+  return buffer;
+  }
+function program8(depth0,data) {
+  
+  var buffer = '', stack1, hashTypes, hashContexts;
+  data.buffer.push("\n                <div class=\"flex-crumbs\">\n                  <ul class=\"nav breadcrumbs\">\n                    ");
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers.each.call(depth0, "column", "in", "link.columns", {hash:{},inverse:self.noop,fn:self.program(9, program9, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n                  </ul>\n                </div>\n                <hr></hr>\n                ");
+  return buffer;
+  }
+function program9(depth0,data) {
+  
+  var buffer = '', hashTypes, hashContexts;
+  data.buffer.push("\n                      <li>\n                        <a>\n                          <span>");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "column.text", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("</span>\n                        </a>\n                      </li>\n                    ");
+  return buffer;
+  }
+
+function program11(depth0,data) {
+  
+  var buffer = '', hashTypes, hashContexts;
+  data.buffer.push("\n                        <li>\n                          <a>\n                            <span>");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "column.text", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("</span>\n                          </a>\n                        </li>\n                      ");
+  return buffer;
+  }
+
+function program13(depth0,data) {
   
   
   data.buffer.push("\n          <li class=\"hb-empty\">\n            <em> Links are totally rad, you should add one </em>\n          </li>\n        ");
@@ -3713,7 +3793,7 @@ function program6(depth0,data) {
   hashTypes = {'itemViewClass': "STRING"};
   stack1 = helpers.each.call(depth0, "link", "in", "controller", {hash:{
     'itemViewClass': ("App.SettingsLinkView")
-  },inverse:self.program(6, program6, data),fn:self.program(3, program3, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  },inverse:self.program(13, program13, data),fn:self.program(3, program3, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n      </ul>\n    </div>\n    <hr></hr>\n    <h3> Add a linked repository </h3>\n    ");
   hashTypes = {};

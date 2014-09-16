@@ -27,6 +27,7 @@
             <div class="link">
 
               <h4>{{link.label.user}}/{{link.label.repo}}</h4>
+              {{#if link.isLinked }}
               <div class="flex-crumbs">
                 <ul class="nav breadcrumbs">
                   {{#each column in link.columns}}
@@ -38,16 +39,47 @@
                   {{/each}}
                 </ul>
               </div>
+              {{else}}
+                {{#if link.columns.length }}
+                <div class="flex-crumbs">
+                  <ul class="nav breadcrumbs">
+                    {{#each column in link.columns}}
+                      <li>
+                        <a>
+                          <span>{{ column.text }}</span>
+                        </a>
+                      </li>
+                    {{/each}}
+                  </ul>
+                </div>
+                <hr></hr>
+                {{/if}}
+              <div class='flex-split'>
+                <div class='flex-left'>
+                  <div class="flex-crumbs">
+                    <ul class="nav breadcrumbs">
+                      {{#each column in columns}}
+                        <li>
+                          <a>
+                            <span>{{ column.text }}</span>
+                          </a>
+                        </li>
+                      {{/each}}
+                    </ul>
+                  </div>
+                </div>
+                <div class='flex-right'>
+                  <button class="hb-button hb-button-grey" {{action 'copy' model}}>
+                    Copy parent board
+                  </button>
+                </div>
+              </div>
+              {{/if}}
             </div>
             <div class="link-actions">
               <button {{action 'remove' link }}>
               <i class="ui-icon ui-icon-x-thin"></i>
               </button>
-              {{!--
-              <button>
-              <i class="ui-icon ui-icon-pencil"></i>
-              </button>
-              --}}
             </div>
         {{else}}
           <li class="hb-empty">
