@@ -2583,11 +2583,11 @@ function program9(depth0,data) {
   hashContexts = {};
   stack2 = helpers['if'].call(depth0, "App.loggedIn", {hash:{},inverse:self.program(9, program9, data),fn:self.program(7, program7, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\n     </ul>\n   </div>\n </div>\n</div>\n\n");
+  data.buffer.push("\n     </ul>\n   </div>\n </div>\n</div>\n<div class=\"application-outlet\">\n");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "outlet", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\n\n<div id=\"footer\">\n  <div class=\"container\">\n    <div class=\"row\">\n      <div class=\"span6\">\n        <img class=\"animate-before\" src=\"/img/LogoFullPurpleLight.png\"/>\n      </div>\n      <div class=\"links span6\">\n        <a href=\"/site/terms\">terms</a>\n        <a href=\"/site/privacy\">privacy</a>\n        <a href=\"https://github.com/rauhryan/huboard\">github</a>\n      </div>\n    </div>\n  </div>\n</div>\n");
+  data.buffer.push("\n</div>\n\n<div id=\"footer\">\n  <div class=\"container\">\n    <div class=\"row\">\n      <div class=\"span6\">\n        <img class=\"animate-before\" src=\"/img/LogoFullPurpleLight.png\"/>\n      </div>\n      <div class=\"links span6\">\n        <a href=\"/site/terms\">terms</a>\n        <a href=\"/site/privacy\">privacy</a>\n        <a href=\"https://github.com/rauhryan/huboard\">github</a>\n      </div>\n    </div>\n  </div>\n</div>\n");
   hashTypes = {};
   hashContexts = {};
   options = {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
@@ -3760,7 +3760,7 @@ function program9(depth0,data) {
   hashContexts = {'disabled': depth0};
   hashTypes = {'disabled': "ID"};
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
-    'disabled': ("isDisabled")
+    'disabled': ("link.isDisabled")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(" ");
   hashTypes = {};
