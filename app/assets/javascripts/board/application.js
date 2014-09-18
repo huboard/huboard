@@ -1457,7 +1457,7 @@ module.exports = SettingsLinkController;
 
 },{}],29:[function(require,module,exports){
 var SettingsLinksIndexController = Ember.ObjectController.extend({
-  needs: ['application'],
+  needs: ['application', 'settingsLinks'],
   repoFullName: '',
   validateRepo: function(){
     console.log(this.get('repoFullName'));
@@ -1465,6 +1465,9 @@ var SettingsLinksIndexController = Ember.ObjectController.extend({
   observesFullName: function(){
     Ember.run.debounce(this, this.validateRepo, 400);
   }.observes('repoFullName'),
+  shouldDisplayWarning: Ember.computed.alias("controllers.settingsLinks.shouldDisplayWarning"),
+  shouldDisplayError: false,
+  errorMessage: '',
   actions: {
     submit: function(){
       var controller = this;
@@ -1472,7 +1475,14 @@ var SettingsLinksIndexController = Ember.ObjectController.extend({
       this.get("controllers.application.model").createLink(this.get("repoFullName"))
         .then(function(){
           controller.set("isDisabled", false);
+          controller.set("shouldDisplayError", false);
+          controller.set("errorMessage", '');
           controller.set("repoFullName","")
+        }, function(jqXHR){
+          var response = JSON.parse(jqXHR.responseText);
+          controller.set("shouldDisplayError", true);
+          controller.set("errorMessage", response.message);
+          controller.set("isDisabled", false);
         });
     }
   }
@@ -1485,8 +1495,10 @@ var SettingsLinksController = Ember.ArrayController.extend({
   needs: ["settings"],
   repository: Ember.computed.alias("controllers.settings.repository"),
   columns: Ember.computed.alias("controllers.settings.column_labels"),
-  itemController: 'settingsLink'
-
+  itemController: 'settingsLink',
+  shouldDisplayWarning: function(){
+    return this.get("content.length") > 5;
+  }.property('content.length')
 });
 
 module.exports = SettingsLinksController;
@@ -3677,6 +3689,12 @@ function program1(depth0,data) {
 
 function program3(depth0,data) {
   
+  
+  data.buffer.push("\n      <div class=\"alert alert-error\">\n        <strong>Warning</strong>: Linking more than 5 repositories together can seriously degrade performance. We suggest breaking them up into smaller groups, ie; back end vs. front end services.\n      </div>\n      ");
+  }
+
+function program5(depth0,data) {
+  
   var buffer = '', stack1, hashTypes, hashContexts;
   data.buffer.push("\n            <div class=\"link-states\">\n              <i class=\"ui-icon ui-icon-link\"></i>\n              <i class=\"ui-icon ui-icon-unlink\"></i>\n            </div>\n            <div class=\"link\">\n\n              <h4>");
   hashTypes = {};
@@ -3689,7 +3707,7 @@ function program3(depth0,data) {
   data.buffer.push("</h4>\n              ");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers['if'].call(depth0, "link.isLinked", {hash:{},inverse:self.program(7, program7, data),fn:self.program(4, program4, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack1 = helpers['if'].call(depth0, "link.isLinked", {hash:{},inverse:self.program(9, program9, data),fn:self.program(6, program6, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n            </div>\n            <div class=\"link-actions\">\n              <button ");
   hashTypes = {};
@@ -3698,18 +3716,18 @@ function program3(depth0,data) {
   data.buffer.push(">\n              <i class=\"ui-icon ui-icon-x-thin\"></i>\n              </button>\n            </div>\n        ");
   return buffer;
   }
-function program4(depth0,data) {
+function program6(depth0,data) {
   
   var buffer = '', stack1, hashTypes, hashContexts;
   data.buffer.push("\n              <div class=\"flex-crumbs\">\n                <ul class=\"nav breadcrumbs\">\n                  ");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers.each.call(depth0, "column", "in", "link.columns", {hash:{},inverse:self.noop,fn:self.program(5, program5, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack1 = helpers.each.call(depth0, "column", "in", "link.columns", {hash:{},inverse:self.noop,fn:self.program(7, program7, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n                </ul>\n              </div>\n              ");
   return buffer;
   }
-function program5(depth0,data) {
+function program7(depth0,data) {
   
   var buffer = '', hashTypes, hashContexts;
   data.buffer.push("\n                    <li>\n                      <a>\n                        <span>");
@@ -3720,18 +3738,18 @@ function program5(depth0,data) {
   return buffer;
   }
 
-function program7(depth0,data) {
+function program9(depth0,data) {
   
   var buffer = '', stack1, hashTypes, hashContexts;
   data.buffer.push("\n                ");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers['if'].call(depth0, "link.columns.length", {hash:{},inverse:self.noop,fn:self.program(8, program8, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack1 = helpers['if'].call(depth0, "link.columns.length", {hash:{},inverse:self.noop,fn:self.program(10, program10, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n              <div class='flex-split'>\n                <div class='flex-left'>\n                  <div class=\"flex-crumbs\">\n                    <ul class=\"nav breadcrumbs\">\n                      ");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers.each.call(depth0, "column", "in", "columns", {hash:{},inverse:self.noop,fn:self.program(11, program11, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack1 = helpers.each.call(depth0, "column", "in", "columns", {hash:{},inverse:self.noop,fn:self.program(13, program13, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n                    </ul>\n                  </div>\n                </div>\n                <div class='flex-right'>\n                  <button class=\"hb-button hb-button-grey\" ");
   hashTypes = {};
@@ -3740,18 +3758,18 @@ function program7(depth0,data) {
   data.buffer.push(">\n                    Copy parent board\n                  </button>\n                </div>\n              </div>\n              ");
   return buffer;
   }
-function program8(depth0,data) {
+function program10(depth0,data) {
   
   var buffer = '', stack1, hashTypes, hashContexts;
   data.buffer.push("\n                <div class=\"flex-crumbs\">\n                  <ul class=\"nav breadcrumbs\">\n                    ");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers.each.call(depth0, "column", "in", "link.columns", {hash:{},inverse:self.noop,fn:self.program(9, program9, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack1 = helpers.each.call(depth0, "column", "in", "link.columns", {hash:{},inverse:self.noop,fn:self.program(11, program11, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n                  </ul>\n                </div>\n                <hr></hr>\n                ");
   return buffer;
   }
-function program9(depth0,data) {
+function program11(depth0,data) {
   
   var buffer = '', hashTypes, hashContexts;
   data.buffer.push("\n                      <li>\n                        <a>\n                          <span>");
@@ -3762,7 +3780,7 @@ function program9(depth0,data) {
   return buffer;
   }
 
-function program11(depth0,data) {
+function program13(depth0,data) {
   
   var buffer = '', hashTypes, hashContexts;
   data.buffer.push("\n                        <li>\n                          <a>\n                            <span>");
@@ -3773,7 +3791,7 @@ function program11(depth0,data) {
   return buffer;
   }
 
-function program13(depth0,data) {
+function program15(depth0,data) {
   
   
   data.buffer.push("\n          <li class=\"hb-empty\">\n            <em> Links are totally rad, you should add one </em>\n          </li>\n        ");
@@ -3788,12 +3806,21 @@ function program13(depth0,data) {
   hashContexts = {};
   stack1 = helpers.each.call(depth0, "column", "in", "columns", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n      </ul>\n    </div>\n\n    <hr></hr>\n\n    <h3>Existing links </h3>\n    <div class=\"flex-form-top\"> \n      <ul class=\"unstyled links\">\n        ");
+  data.buffer.push("\n      </ul>\n    </div>\n\n    <hr></hr>\n\n    <h3>Existing links <strong>(");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "controller.length", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(")</strong> </h3>\n    <div class=\"flex-form-top\"> \n      ");
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers['if'].call(depth0, "shouldDisplayWarning", {hash:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n      <ul class=\"unstyled links\">\n        ");
   hashContexts = {'itemViewClass': depth0};
   hashTypes = {'itemViewClass': "STRING"};
   stack1 = helpers.each.call(depth0, "link", "in", "controller", {hash:{
     'itemViewClass': ("App.SettingsLinkView")
-  },inverse:self.program(13, program13, data),fn:self.program(3, program3, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  },inverse:self.program(15, program15, data),fn:self.program(5, program5, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n      </ul>\n    </div>\n    <hr></hr>\n    <h3> Add a linked repository </h3>\n    ");
   hashTypes = {};
@@ -3807,8 +3834,24 @@ function program13(depth0,data) {
 Ember.TEMPLATES['settings/links/index'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, hashContexts, hashTypes, options, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
+  var buffer = '', stack1, stack2, hashContexts, hashTypes, options, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, self=this;
 
+function program1(depth0,data) {
+  
+  var buffer = '', hashTypes, hashContexts;
+  data.buffer.push("\n    <span class=\"help-block\">\n      ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "errorMessage", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n    </span>\n    ");
+  return buffer;
+  }
+
+function program3(depth0,data) {
+  
+  
+  data.buffer.push("\n<div class=\"alert alert-error\">\n  <strong>Warning</strong>: Linking more than 5 repositories together can seriously degrade performance. We suggest breaking them up into smaller groups, ie; back end vs. front end services.\n</div>\n");
+  }
 
   data.buffer.push("<form class=\"flex-form\" ");
   hashContexts = {'on': depth0};
@@ -3816,6 +3859,12 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "submit", {hash:{
     'on': ("submit")
   },contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">\n  <div ");
+  hashContexts = {'class': depth0};
+  hashTypes = {'class': "STRING"};
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'class': ("shouldDisplayError:error :control-group")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(">\n  <label>\n    ");
   hashContexts = {'value': depth0,'placeholder': depth0};
   hashTypes = {'value': "ID",'placeholder': "STRING"};
@@ -3824,13 +3873,24 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
     'placeholder': ("owner/repo")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
-  data.buffer.push("\n    \n  </label>\n  <button ");
-  hashContexts = {'disabled': depth0};
-  hashTypes = {'disabled': "ID"};
+  data.buffer.push("\n    \n  </label>\n    ");
+  hashTypes = {};
+  hashContexts = {};
+  stack2 = helpers['if'].call(depth0, "shouldDisplayError", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+  data.buffer.push("\n  </div>\n  <button ");
+  hashContexts = {'disabled': depth0,'class': depth0};
+  hashTypes = {'disabled': "ID",'class': "STRING"};
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
-    'disabled': ("isDisabled")
+    'disabled': ("isDisabled"),
+    'class': (":hb-button shouldDisplayWarning:hb-button-danger")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(" class='hb-button'>Create link</button>\n</form>\n");
+  hashTypes = {};
+  hashContexts = {};
+  stack2 = helpers['if'].call(depth0, "shouldDisplayWarning", {hash:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+  data.buffer.push("\n");
   return buffer;
   
 });

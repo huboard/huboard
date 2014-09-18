@@ -1,5 +1,5 @@
 var SettingsLinksIndexController = Ember.ObjectController.extend({
-  needs: ['application'],
+  needs: ['application', 'settingsLinks'],
   repoFullName: '',
   validateRepo: function(){
     console.log(this.get('repoFullName'));
@@ -7,6 +7,9 @@ var SettingsLinksIndexController = Ember.ObjectController.extend({
   observesFullName: function(){
     Ember.run.debounce(this, this.validateRepo, 400);
   }.observes('repoFullName'),
+  shouldDisplayWarning: Ember.computed.alias("controllers.settingsLinks.shouldDisplayWarning"),
+  shouldDisplayError: false,
+  errorMessage: '',
   actions: {
     submit: function(){
       var controller = this;
@@ -14,7 +17,14 @@ var SettingsLinksIndexController = Ember.ObjectController.extend({
       this.get("controllers.application.model").createLink(this.get("repoFullName"))
         .then(function(){
           controller.set("isDisabled", false);
+          controller.set("shouldDisplayError", false);
+          controller.set("errorMessage", '');
           controller.set("repoFullName","")
+        }, function(jqXHR){
+          var response = JSON.parse(jqXHR.responseText);
+          controller.set("shouldDisplayError", true);
+          controller.set("errorMessage", response.message);
+          controller.set("isDisabled", false);
         });
     }
   }

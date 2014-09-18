@@ -16,8 +16,13 @@
 
     <hr></hr>
 
-    <h3>Existing links </h3>
+    <h3>Existing links <strong>({{controller.length}})</strong> </h3>
     <div class="flex-form-top"> 
+      {{#if shouldDisplayWarning }}
+      <div class="alert alert-error">
+        <strong>Warning</strong>: Linking more than 5 repositories together can seriously degrade performance. We suggest breaking them up into smaller groups, ie; back end vs. front end services.
+      </div>
+      {{/if}}
       <ul class="unstyled links">
         {{#each link in controller itemViewClass='App.SettingsLinkView'}}
             <div class="link-states">

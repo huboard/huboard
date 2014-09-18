@@ -19,6 +19,7 @@ require 'active_support/number_helper'
 end
 require 'jobs'
 
+require 'app/errors'
 require 'app/extensions'
 require 'app/helpers'
 require 'app/routes'

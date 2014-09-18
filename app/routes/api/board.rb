@@ -29,10 +29,14 @@ module HuBoard
         post '/api/:user/:repo/links' do
           board = huboard.board(params[:user], params[:repo])
           link = board.create_link params[:link]
-          json(
-            label: link,
-            columns: huboard.board(link.user, link.repo).column_labels
-          )
+          if link
+            json(
+              label: link,
+              columns: huboard.board(link.user, link.repo).column_labels
+            )
+          else
+            raise HuBoard::Error, "Unable to link #{params[:link]} to your repository"
+          end
         end
 
         delete '/api/:user/:repo/links' do
