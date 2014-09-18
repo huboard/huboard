@@ -45,6 +45,10 @@ module HuBoard
         error HuBoard::Error do
           halt_json_error 400
         end
+
+        error Ghee::Error do
+          halt_json_error 422
+        end
       end
     end
   end

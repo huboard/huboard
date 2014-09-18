@@ -46,7 +46,7 @@
               </div>
               {{else}}
                 {{#if link.columns.length }}
-                <div class="flex-crumbs">
+                <div class="flex-crumbs control-group error">
                   <ul class="nav breadcrumbs">
                     {{#each column in link.columns}}
                       <li>
@@ -56,8 +56,19 @@
                       </li>
                     {{/each}}
                   </ul>
+                  <p class="help-block">
+                  This HuBoard's columns are not compatible with your parent board. Click the Copy parent board button to copy the parent HuBoard's columns.
+                  </p>
+
                 </div>
                 <hr></hr>
+                {{else}}
+                  <div class="control-group error">
+                    <p class="help-block">
+                    This repository doesn't have any columns. Click the Copy parent board button to copy the parent HuBoard's columns.
+                    </p>
+                  </div>
+                  <hr></hr>
                 {{/if}}
               <div class='flex-split'>
                 <div class='flex-left'>
@@ -74,8 +85,8 @@
                   </div>
                 </div>
                 <div class='flex-right'>
-                  <button class="hb-button hb-button-grey" {{action 'copy' model}}>
-                    Copy parent board
+                  <button class="hb-button hb-button-grey" {{bind-attr disabled=isDisabled  }} {{action 'copy' model}}>
+                    Copy parent HuBoard
                   </button>
                 </div>
               </div>

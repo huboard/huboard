@@ -4,6 +4,7 @@ var SettingsLinkController = Ember.ObjectController.extend({
     return this.get("controllers.settings.column_labels.length") === this.get("columns.length")
 
   }.property("controllers.settings.column_labels.@each","columns.@each"),
+  isDisabled: false,
   actions: {
     remove: function(link) {
       this.get("controllers.settingsLinks.model").removeObject(link);
@@ -17,8 +18,11 @@ var SettingsLinkController = Ember.ObjectController.extend({
       })
     },
     copy: function(parent){
+
       var controller = this,
         apiUrl = "/api/" + this.get("label.user") + "/" + this.get("label.repo") + "/columns";
+
+      controller.set('isDisabled', true);
 
       Ember.$.ajax({
         url: apiUrl,
@@ -30,6 +34,7 @@ var SettingsLinkController = Ember.ObjectController.extend({
         }),
         success: function(response) {
           controller.set("columns", Ember.A(response.columns))
+          controller.set('isDisabled', false);
         }
       })
 
