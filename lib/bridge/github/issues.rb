@@ -38,7 +38,7 @@ class Huboard
       attributes = {
         title: issue.title,
         body: issue.body,
-        labels: [column_labels.first.name].concat(issue.labels.map{|l| l["name"]}),
+        labels: [column_labels.first.name].concat((issue.labels || []).map{|l| l["name"]}),
         assignee: assignee,
         milestone: milestone
       }
