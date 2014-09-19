@@ -58,7 +58,7 @@ class Huboard
       label_name = "Link <=> #{repo}"
       match = Huboard.link_pattern.match label_name
 
-      if repo_exists?(match[:user_name], match[:repo])
+      if match and repo_exists?(match[:user_name], match[:repo])
         new_link = create_label name: label_name, color: random_color
         new_link.user = match[:user_name]
         new_link.repo = match[:repo]
