@@ -69,5 +69,6 @@ end
 group :production do
   gem 'newrelic_rpm'
   gem 'puma'
+  gem 'unicorn'
   gem 'raygun4ruby'
 end
