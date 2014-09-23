@@ -3,15 +3,7 @@
     
     <h4>{{repository.full_name}}</h4>
     <div class="flex-crumbs">
-      <ul class="nav breadcrumbs">
-        {{#each column in columns}}
-          <li>
-            <a>
-              <span>{{ column.text }}</span>
-            </a>
-          </li>
-        {{/each}}
-      </ul>
+      {{hb-board-columns columns=columns }}
     </div>
 
     <hr></hr>
@@ -34,28 +26,12 @@
               <h4>{{link.label.user}}/{{link.label.repo}}</h4>
               {{#if link.isLinked }}
               <div class="flex-crumbs">
-                <ul class="nav breadcrumbs">
-                  {{#each column in link.columns}}
-                    <li>
-                      <a>
-                        <span>{{ column.text }}</span>
-                      </a>
-                    </li>
-                  {{/each}}
-                </ul>
+                {{hb-board-columns columns=link.columns }}
               </div>
               {{else}}
                 {{#if link.columns.length }}
                 <div class="flex-crumbs control-group error">
-                  <ul class="nav breadcrumbs">
-                    {{#each column in link.columns}}
-                      <li>
-                        <a>
-                          <span>{{ column.text }}</span>
-                        </a>
-                      </li>
-                    {{/each}}
-                  </ul>
+                    {{hb-board-columns columns=link.columns }}
                   <p class="help-block">
                   This HuBoard's columns are not compatible with your parent board. Click the Copy parent board button to copy the parent HuBoard's columns.
                   </p>
@@ -73,15 +49,7 @@
               <div class='flex-split'>
                 <div class='flex-left'>
                   <div class="flex-crumbs">
-                    <ul class="nav breadcrumbs">
-                      {{#each column in columns}}
-                        <li>
-                          <a>
-                            <span>{{ column.text }}</span>
-                          </a>
-                        </li>
-                      {{/each}}
-                    </ul>
+                    {{hb-board-columns columns=columns }}
                   </div>
                 </div>
                 <div class='flex-right'>
