@@ -46,6 +46,9 @@ gem 'celluloid'
 gem 'celluloid-redis'
 gem 'analytics-ruby', '~> 2.0.0'
 
+gem 'faye'
+gem 'faye-redis'
+
 gem 'wkhtmltopdf-heroku', '~> 1.0'
 gem 'pdfkit'
 
