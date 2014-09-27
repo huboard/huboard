@@ -24,7 +24,7 @@ gem 'encryptor'
 gem 'rack-no-www'
 gem 'rdiscount'
 gem 'slim'
-gem 'warden-github'
+gem 'warden-github', :github => "atmos/warden-github"
 gem 'warden_strategies'
 gem 'ghee'
 gem 'rack-ssl'

@@ -1,4 +1,12 @@
 GIT
+  remote: git://github.com/atmos/warden-github.git
+  revision: 13ebd61a57315c2099a9cdd4bd202f49fd8493bb
+  specs:
+    warden-github (1.0.1)
+      octokit (> 2.1.0)
+      warden (> 1.0)
+
+GIT
   remote: git://github.com/maccman/sinatra-contrib.git
   revision: 3dde2819a31791a9124d916c4449df0741af45f9
   specs:
@@ -224,9 +232,6 @@ GEM
       raindrops (~> 0.7)
     warden (1.2.3)
       rack (>= 1.0)
-    warden-github (1.0.1)
-      octokit (> 2.1.0)
-      warden (> 1.0)
     warden_strategies (0.1.0)
     websocket-driver (0.3.4)
     wkhtmltopdf-heroku (1.0.0)
@@ -290,7 +295,7 @@ DEPENDENCIES
   thin
   uglifier
   unicorn
-  warden-github
+  warden-github!
   warden_strategies
   wkhtmltopdf-heroku (~> 1.0)
   yui-compressor

@@ -21,6 +21,7 @@ module HuBoard
         @parameters = params
         @repos = huboard.all_repos
         @private = nil
+        @user = gh.users(current_user.login)
         erb :index
       end
 
