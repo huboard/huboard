@@ -516,6 +516,7 @@ Ember.onLoad("Ember.Application", function ($app) {
           subscribeTo: function(channel) {
             var client = this.get('client'), 
               callbacks = Ember.$.Callbacks();
+              client.disable("eventsource");
             var source = client.subscribe("/" + channel, function(event){
               callbacks.fire(event);
             });

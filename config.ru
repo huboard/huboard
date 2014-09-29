@@ -18,41 +18,22 @@ require "config/initializers/#{environment}.rb"
 Octokit.api_endpoint = ENV["GITHUB_API_ENDPOINT"] if ENV["GITHUB_API_ENDPOINT"]
 Octokit.web_endpoint = ENV["GITHUB_WEB_ENDPOINT"] if ENV["GITHUB_WEB_ENDPOINT"]
 
-
-options = {
-  mount: '/site/pubsub',
-  timeout: 25,
-  ping: 15,
-  engine: {
-    type: Faye::Redis,
-    uri: (ENV['REDIS_URL'] || 'redis://localhost:6379')
+if HuBoard::App.development? 
+  run HuBoard::App
+else
+  options = {
+    mount: '/site/pubsub',
+    timeout: 25,
+    ping: 15,
+    engine: {
+      type: Faye::Redis,
+      uri: (ENV['REDIS_URL'] || 'redis://localhost:6379')
+    }
   }
-}
 
-run Faye::RackAdapter.new(HuBoard::App, options)
+  run Faye::RackAdapter.new(HuBoard::App, options)
 
-require 'logger'
-Faye.logger = Logger.new(STDOUT)
-Faye.logger.level = Logger::INFO
-
-module HuBoard
-  class Faye
-    include Singleton
-    def initialize
-      @client = ::Faye::Client.new(::Faye::Server.new({
-        mount: '/site/pubsub',
-        timeout: 25,
-        ping: 15,
-        engine: {
-          type: ::Faye::Redis,
-          uri: (ENV['REDIS_URL'] || 'redis://localhost:6379')
-        }
-      }))
-    end
-
-    def publish(channel, payload)
-      @client.publish channel, payload
-    end
-
-  end
+  require 'logger'
+  Faye.logger = Logger.new(STDOUT)
+  Faye.logger.level = Logger::INFO
 end

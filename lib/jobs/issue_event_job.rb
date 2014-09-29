@@ -1,4 +1,4 @@
-require 'sinatra/pubsub'
+
 require 'time'
 
 class IssueEventJob
@@ -15,8 +15,7 @@ class IssueEventJob
 
     payload[:meta].merge! :origin => HuboardApplication.settings.server_origin
 
-    Sinatra::PubSub.publish payload[:meta][:repo_full_name], payload
-    HuBoard::Faye.instance.publish "/" + payload[:meta][:repo_full_name], payload
+    HuBoard::PubSub.publish payload[:meta][:repo_full_name], payload
 
 
     PublishWebhookJob.new.publish payload if self.class.included_modules.include? IsPublishable

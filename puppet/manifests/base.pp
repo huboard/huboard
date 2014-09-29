@@ -20,6 +20,11 @@ package {
   'nginx-extras': ensure => latest;
 }
 
+service { 'nginx':
+  ensure  => running,
+  require => Package['nginx'],
+}
+
 user { "vagrant":
   ensure => present,
   shell  => '/bin/bash',
@@ -105,3 +110,43 @@ exec { 'run-couchapp':
 class { 'memcached':
   max_memory => '12%'
 }
+
+class {'elasticsearch':
+ package_url  => 'https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.3.2.deb',
+ java_install => true,
+ status       => 'enabled',
+ ensure       => present,
+}
+
+elasticsearch::instance { 'es-01': }
+elasticsearch::plugin{ 'com.sksamuel.elasticsearch/elasticsearch-river-redis/1.1.0':
+  module_dir => 'river-redis',
+  instances  => 'es-01',
+}
+
+elasticsearch::plugin {'lmenezes/elasticsearch-kopf':
+  module_dir => 'kopf',
+  instances  => 'es-01',
+}
+
+class { 'logstash': 
+  package_url => 'https://download.elasticsearch.org/logstash/logstash/packages/debian/logstash_1.4.2-1-2c0f5a1_all.deb',
+}
+
+file { '/opt/kibana':
+  ensure => directory
+}
+
+file { '/etc/nginx/sites-available/default':
+  ensure  => file,
+  content  =>'server { listen 9201; root /opt/kibana/src; location / { } }',
+  notify  => Service['nginx'],
+}
+
+exec { 'clone-kibana': 
+  command => '/usr/bin/git clone https://github.com/elasticsearch/kibana.git .',
+  cwd     => '/opt/kibana',
+  require => File['/opt/kibana'],
+  creates => '/opt/kibana/.git',
+}
+
