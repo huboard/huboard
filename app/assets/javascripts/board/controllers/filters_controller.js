@@ -73,6 +73,14 @@ var FiltersController = Ember.ObjectController.extend({
         }
        })
     }));
+    this.get("milestoneFilters").insertAt(0, Ember.Object.create({
+      name: 'No milestone',
+      mode:0,
+      condition:function(i){
+        return i.milestone == null;
+      }
+
+    }));
     this.set("labelFilters", this.get("otherLabels").map(function(l){
        return Ember.Object.create({
         name: l.name,
