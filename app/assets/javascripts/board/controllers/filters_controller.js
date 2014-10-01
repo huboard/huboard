@@ -2,6 +2,7 @@ var FiltersController = Ember.ObjectController.extend({
   needs: ["application"],
   milestonesBinding: "controllers.application.model.board.filterMilestones",
   otherLabelsBinding: "controllers.application.model.board.filterLabels",
+  linkLabelsBinding: "controllers.application.model.board.link_labels",
   lastUserFilterClicked: null,
   lastUserFilterClickedChanged: function(){
     Ember.run.once(function(){
@@ -15,6 +16,17 @@ var FiltersController = Ember.ObjectController.extend({
   }.observes("lastUserFilterClicked"),
   userFilters: null,
   milestoneFilters: null,
+  linkFilters: null,
+  lastLinkFilterClickedChanged: function(){
+    Ember.run.once(function(){
+      var self = this;
+      this.get("linkFilters").filter(function(f){
+        return f.name != self.get("lastLinkFilterClicked");
+      }).forEach(function(f){
+        Ember.set(f,"mode", 0);
+      })
+    }.bind(this))
+  }.observes("lastLinkFilterClicked"),
   lastMilestoneFilterClickedChanged: function(){
     Ember.run.once(function(){
       var self = this;
@@ -93,13 +105,27 @@ var FiltersController = Ember.ObjectController.extend({
         }
        })
     }));
+    var parentBoardOwner = this.get("controllers.application.model.board.full_name").split("/")[0];
+    this.set("linkFilters", this.get("linkLabels").map(function(l){
+       var name = parentBoardOwner == l.user ? l.repo : l.user + "/" + l.repo;
+       return Ember.Object.create({
+        name: name,
+        mode:0,
+        color: l.color,
+        condition:function(i){
+          return i.repo.name == l.repo && i.repo.owner.login == l.user;
+        }
+       })
+    }));
   },
   lastMilestoneFilterClicked: null,
   lastLabelFilterClicked: null,
+  lastLinkFilterClicked: null,
   dimFiltersChanged: function(){
     Ember.run.once(function(){
       var allFilters = this.get("milestoneFilters")
                           .concat(this.get("userFilters"))
+                          .concat(this.get("linkFilters"))
                           .concat(this.get("labelFilters"));
 
       this.set("dimFilters", allFilters.filter(function(f){
@@ -110,7 +136,7 @@ var FiltersController = Ember.ObjectController.extend({
         return f.mode == 2;
       }));
     }.bind(this))
-  }.observes("milestoneFilters.@each.mode", "userFilters.@each.mode","labelFilters.@each.mode"),
+  }.observes("milestoneFilters.@each.mode", "userFilters.@each.mode","labelFilters.@each.mode", "linkFilters.@each.mode"),
   dimFiltersBinding: "App.dimFilters",
   hideFiltersBinding: "App.hideFilters"
   
