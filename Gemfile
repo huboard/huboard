@@ -45,6 +45,7 @@ gem 'redis'
 gem 'celluloid'
 gem 'celluloid-redis'
 gem 'analytics-ruby', '~> 2.0.0'
+gem 'frappuccino'
 
 gem 'faye'
 gem 'faye-redis'

@@ -25,6 +25,15 @@ require 'app/helpers'
 require 'app/routes'
 
 module HuBoard
+  class EnsureEMRunning
+    def initialize(app)
+      @app = app
+    end
+    def call(env)
+     ::Faye.ensure_reactor_running! 
+     @app.call(env)
+    end
+  end
   class << self
     attr_accessor :cache
 
@@ -88,6 +97,7 @@ module HuBoard
       config.scope_defaults :private, :config => GITHUB_CONFIG.merge(:scope => 'repo')
     end
 
+    use EnsureEMRunning
     use Rack::Deflater
     use Rack::Standards
     use Rack::NestedParams

@@ -18,9 +18,7 @@ require "config/initializers/#{environment}.rb"
 Octokit.api_endpoint = ENV["GITHUB_API_ENDPOINT"] if ENV["GITHUB_API_ENDPOINT"]
 Octokit.web_endpoint = ENV["GITHUB_WEB_ENDPOINT"] if ENV["GITHUB_WEB_ENDPOINT"]
 
-if HuBoard::App.development? 
-  run HuBoard::App
-else
+if ENV["SELF_HOST_FAYE"]
   options = {
     mount: '/site/pubsub',
     timeout: 25,
@@ -36,4 +34,6 @@ else
   require 'logger'
   Faye.logger = Logger.new(STDOUT)
   Faye.logger.level = Logger::INFO
+else
+  run HuBoard::App
 end
