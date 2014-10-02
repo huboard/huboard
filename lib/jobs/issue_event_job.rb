@@ -1,4 +1,4 @@
-require 'sinatra/pubsub'
+
 require 'time'
 
 class IssueEventJob
@@ -15,11 +15,12 @@ class IssueEventJob
 
     payload[:meta].merge! :origin => HuboardApplication.settings.server_origin
 
-    Sinatra::PubSub.publish payload[:meta][:repo_full_name], payload
+    HuBoard::PubSub.publish payload[:meta][:repo_full_name], payload
+
 
     PublishWebhookJob.new.publish payload if self.class.included_modules.include? IsPublishable
   rescue => e
-    puts "ERROR: IssueEventJob: error publishing event #{e}"
+    puts "ERROR: IssueEventJob: error publishing event #{e}\nBacktract:\n#{e.backtrace * "\n"}"
   end
 
   def production?

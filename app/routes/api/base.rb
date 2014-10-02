@@ -13,6 +13,8 @@ module HuBoard
           set :erb, layout_options: {views: 'app/views/layouts'}
 
           set :raise_errors, true
+          set :show_exceptions, false
+          set :dump_errors, false
         end
 
         RESERVED_URLS = %w{ site profiles }
@@ -34,6 +36,18 @@ module HuBoard
 
         not_found do
           json(message: "Not found")
+        end
+
+        error HuBoard::RepoNotFound do
+          halt_json_error 404
+        end
+
+        error HuBoard::Error do
+          halt_json_error 400
+        end
+
+        error Ghee::Error do
+          halt_json_error 422
         end
       end
     end

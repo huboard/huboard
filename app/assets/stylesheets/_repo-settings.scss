@@ -1,0 +1,151 @@
+.repo-settings {
+  @include display(flex);
+  @include flex(1);
+  @include flex-direction(column);
+  background-color: #fff;
+  border: 1px solid #e5e5e5;
+  border-bottom-color: darken(#e5e5e5, 5%); 
+  box-shadow: 0px 1px 1px rgba(0,0,0,0.1);
+  margin: 20px auto;
+  padding: 10px;
+  max-width: 860px;
+
+}
+
+.repo-settings--nav {
+  @include display(flex);
+  @include justify-content(center);
+  border-bottom: 1px solid #ccc;
+
+  li {
+    list-style: none;
+    margin: 0px 6px;
+    box-sizing: border-box;
+  }
+
+  a {
+    display: block;
+    padding: 20px;
+    box-sizing: border-box;
+    position: relative;
+    &.active {
+      border-bottom: 2px solid #7965cc;
+      top: 1px;
+    }
+  }
+
+}
+
+.repo-settings--content {
+  padding: 12px;
+
+  > button {
+    margin-right: 3px;
+
+  }
+
+}
+
+.repo-settings--content {
+  .flex-split {
+    @include display(flex);
+    .flex-left {
+      @include flex(1);
+      padding-right: 12px;
+    }
+  }
+  
+  .links {
+    padding: 3px 6px;
+    border-radius: 3px;
+    background: #fafafa;
+    box-shadow: inset 0px 0px 2px 0px rgba(0,0,0,0.3);
+    > .hb-empty {
+      padding: 12px;
+
+    }
+    > .hb-widget-link {
+      background: #fff;
+      margin: 9px 0;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      @include box-shadow(0px 1px 1px rgba(0,0,0,0.1));
+      @include display(flex);
+    }
+
+    .link {
+      @include flex(1);
+      padding: 6px;
+      padding-top: 0px;
+    }
+    .link-states {
+      @include display(flex);
+      @include justify-content(center);
+      @include align-items(center);
+      @include flex(0 1 78px);
+      border-radius: 3px 0 0 3px;
+
+      .ui-icon {
+        font-size: 24px;
+        height: 24px;
+        width: 24px;
+        color: white;
+        display: none;
+      }
+
+    }
+    .hb-state-link {
+      .link-states {
+        background-color: $hb-purple;
+        .ui-icon-link {
+          display: inline-block;
+        }
+      }
+    }
+    .hb-state-unlink {
+      .link-states {
+        background-color: #F9646D;
+        .ui-icon-unlink {
+          display: inline-block;
+        }
+      }
+      .flex-crumbs {
+        cursor: not-allowed;
+        a span {
+          color: $lightGrey;
+        }
+
+      }
+    }
+    h4 {
+      margin-bottom: 8px;
+    }
+    .breadcrumbs {
+      margin: 0;
+    }
+
+    .link-actions {
+      background-clip: padding-box;
+      border-left: 1px solid #ccc;
+      box-shadow: inset 0px 0px 40px rgba(0,0,0,0.1);
+      @include display(flex);
+      @include flex-direction(column);
+
+      button {
+        background: #fff;
+        outline: none;
+        border: none;
+        border-bottom: 1px solid #ccc;
+        &:last-child {
+          box-shadow: 0px 2px 2px #ccc;
+        }
+        .ui-icon {
+          font-size: 12px;
+          height: 12px;
+          width: 12px;
+        }
+      }
+    }
+
+  }
+}

@@ -7,6 +7,7 @@ require_relative "github/issues"
 require_relative "github/backlog"
 require_relative "github/hooks"
 require_relative "github/board"
+require_relative "github/user"
 require_relative "middleware"
 require "addressable/uri"
 

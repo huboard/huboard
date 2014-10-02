@@ -16,6 +16,8 @@
 @import "flex_form";
 @import "issue";
 @import "integrations";
+@import 'repo-settings';
+@import 'boxed-group';
 @import "breadcrumbs";
 @import "components/selector";
 @import 'textcomplete';
@@ -24,6 +26,12 @@
    @include display(flex);
    @include flex-direction(column);
    min-height: 100vh;
+}
+.application-outlet {
+
+   @include display(flex);
+   @include flex(1);
+   @include flex-direction(column);
 }
 
 [draggable] {

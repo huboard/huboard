@@ -28,3 +28,6 @@ mod 'benjamin/couchdb',
 mod 'willdurand/nodejs'
 
 mod 'saz/memcached'
+
+mod 'elasticsearch/elasticsearch'
+mod 'elasticsearch/logstash'

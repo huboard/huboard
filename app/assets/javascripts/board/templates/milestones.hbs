@@ -5,25 +5,9 @@
  {{#if App.repo.is_collaborator}}
     <div class="create-button">
       <button {{action createNewIssue }} class="hb-button small">Create new issue</button>
-      <span class="dropdown">
-        <a data-toggle="dropdown" class="dropdown-toggle hb-icon-link" href="#">
-          <i class="ui-icon ui-icon-18 ui-icon-gear"></i>
-        </a>
-        <ul class="dropdown-menu dropdown-menu-right">
-          <li>
-              {{#link-to "milestones.integrations" title="Settings" bubbles=true }}
-              Integrations
-              {{/link-to}}
-          </li>
-          <li class="divider"></li>
-          {{#view "settings.showCounts" }}
-            <a href="#">
-              <i class="ui-icon ui-icon-checkmark"></i>
-              Show counts
-            </a>
-          {{/view}}
-          </ul>
-      </span>
+    {{#link-to 'settings' class='hb-icon-link' }}
+        <i class="ui-icon ui-icon-18 ui-icon-gear"></i>
+    {{/link-to}}
     </div>
   {{else}}
     <div class="create-button">

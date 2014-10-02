@@ -2,6 +2,7 @@ require 'memcachier'
 
 # Require base
 require 'sinatra/base'
+require 'rack/contrib'
 require 'active_support/all'
 require 'active_support/core_ext/string'
 require 'active_support/core_ext/array'
@@ -18,11 +19,21 @@ require 'active_support/number_helper'
 end
 require 'jobs'
 
+require 'app/errors'
 require 'app/extensions'
 require 'app/helpers'
 require 'app/routes'
 
 module HuBoard
+  class EnsureEMRunning
+    def initialize(app)
+      @app = app
+    end
+    def call(env)
+     ::Faye.ensure_reactor_running! 
+     @app.call(env)
+    end
+  end
   class << self
     attr_accessor :cache
 
@@ -86,8 +97,11 @@ module HuBoard
       config.scope_defaults :private, :config => GITHUB_CONFIG.merge(:scope => 'repo')
     end
 
+    use EnsureEMRunning
     use Rack::Deflater
     use Rack::Standards
+    use Rack::NestedParams
+    use Rack::PostBodyContentTypeParser
 
     use PDFKit::Middleware, {print_media_type: true}, only: %r[^/settings]
     use Routes::Static

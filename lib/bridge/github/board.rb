@@ -13,8 +13,12 @@ class Huboard
       @gh.repos(user, repo)
     end
 
-    def repo_exists?
-      gh.raw.status == 200
+    def repo_exists?(user = nil, repo = nil)
+      if user and repo
+        @gh.repos(user, repo).raw.status == 200
+      else
+        gh.raw.status == 200
+      end
     end
 
     def has_board?

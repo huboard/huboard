@@ -11,16 +11,15 @@ module HuBoard
         end
 
         post '/api/:user/:repo/issues' do
-          client_data = JSON.parse(request.body.read)
-          issue = huboard.board(params[:user],params[:repo]).create_issue client_data
+          issue = huboard.board(params[:user],params[:repo]).create_issue params
 
-          IssueOpenedEvent.new.publish issue, current_user.attribs, client_data["correlationId"]
+          IssueOpenedEvent.new.publish issue, current_user.attribs, params["correlationId"]
 
           json issue
         end
 
         post '/api/:user/:repo/issues/:number/comment' do
-          data = {body: JSON.parse(request.body.read)["markdown"]}
+          data = {body: params["markdown"]}
           comment = gh.repos(params[:user], params[:repo]).issues(params[:number]).comments.create data
 
           json comment.to_hash
@@ -29,7 +28,7 @@ module HuBoard
         put '/api/:user/:repo/issues/:number' do
           api = huboard.board(params[:user], params[:repo])
 
-          issue = api.issue(params[:number]).update(JSON.parse(request.body.read)).to_hash
+          issue = api.issue(params[:number]).update(params).to_hash
 
           json issue
         end
