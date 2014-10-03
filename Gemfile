@@ -63,7 +63,6 @@ group :development do
   #gem 'librarian-puppet'
   #gem 'puppet'
 
-  gem 'heroku'
   gem 'pry'
   gem 'pry-rescue'
   gem 'pry-stack_explorer'
