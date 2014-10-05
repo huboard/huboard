@@ -57,7 +57,7 @@ gem 'memcachier'
 
 gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 gem 'foreman'
-gem 'foreman-export-initd'
+gem 'foreman-export-initscript'
 
 group :development do
   gem 'shotgun'
