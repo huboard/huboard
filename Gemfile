@@ -56,10 +56,11 @@ gem 'pdfkit'
 gem 'memcachier'
 
 gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
+gem 'foreman'
+gem 'foreman-export-initd'
 
 group :development do
   gem 'shotgun'
-  gem 'foreman'
   #gem 'librarian-puppet'
   #gem 'puppet'
 
