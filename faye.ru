@@ -6,8 +6,8 @@ Dotenv.load
 
 options = {
   mount: '/site/pubsub',
-  timeout: 25,
-  ping: 15,
+  timeout: 10,
+  ping: 5,
   engine: {
     type: Faye::Redis,
     uri: (ENV['REDIS_URL'] || 'redis://localhost:6379')
