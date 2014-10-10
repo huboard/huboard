@@ -49,8 +49,9 @@
       <h4> Activity </h4>
     </div>
     {{! render the activity stream }}
-    {{view App.IssueActivitiesView activities=sortedActivities }}
+    {{ render 'issue.activities' allActivities }}
   </div>
+
   {{#if App.loggedIn }}
   <hr></hr>
   <form {{action submitComment on="submit"}} class="flex-form">

@@ -10,12 +10,11 @@ var EventView = Ember.View.extend({
 
 
 var ActivitiesView = Ember.CollectionView.extend({
-  content: Ember.computed.alias("activities"),
+  content: Ember.computed.alias("controller"),
   createChildView: function(viewClass, attrs) {
-    if(attrs.content.type == "comment") {
+    if(!attrs.content.event) {
        viewClass = CommentView;
-    }
-    if(attrs.content.type == "event") {
+    }else{
        viewClass = Ember.View.extend({
          classNames: ["card-event","card-event-" + attrs.content.event],
          templateName: "issue/events/" + attrs.content.event
