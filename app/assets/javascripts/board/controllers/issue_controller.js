@@ -85,11 +85,11 @@ var IssuesEditController = Ember.ObjectController.extend({
   }.property("model.activities.comments.@each"),
   allActivities: Ember.computed.union("model.activities.{comments,events}"),
   mentions: function (){
-    var union = _.union(this.get('controllers.application.model.board.assignees'),this.get('sortedActivities').mapBy('user'))
+    var union = _.union(this.get('controllers.application.model.board.assignees'),this.get('allActivities').mapBy('user'))
     return _.uniq(_.compact(union), function(i){
       return i.login 
     });
-  }.property('controllers.application.model.board.assignees','sortedActivities')
+  }.property('controllers.application.model.board.assignees','allActivities')
 });
 
 module.exports = IssuesEditController;

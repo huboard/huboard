@@ -1,5 +1,6 @@
 var IssueActivitiesController = Ember.ArrayController.extend({
-  sortProperties: ["created_at"]
+  sortProperties: ["created_at"],
+  itemController: "issueActivity"
 
 })
 

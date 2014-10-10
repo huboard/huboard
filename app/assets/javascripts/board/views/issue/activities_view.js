@@ -3,21 +3,16 @@ var CommentView = Ember.View.extend({
   classNames: ["card-comment"]
 })
 
-var EventView = Ember.View.extend({
-  templateName: "issue/event",
-  classNames: ["card-event"]
-})
-
-
+//var ActivitiesView = Ember.Handlebars.EachView.extend({
 var ActivitiesView = Ember.CollectionView.extend({
   content: Ember.computed.alias("controller"),
   createChildView: function(viewClass, attrs) {
-    if(!attrs.content.event) {
+    if(!attrs.content.model.event) {
        viewClass = CommentView;
     }else{
        viewClass = Ember.View.extend({
-         classNames: ["card-event","card-event-" + attrs.content.event],
-         templateName: "issue/events/" + attrs.content.event
+         classNames: ["card-event","card-event-" + attrs.content.model.event],
+         templateName: "issue/events/" + attrs.content.model.event
        })
     }
     return this._super(viewClass, attrs)
