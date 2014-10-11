@@ -3,6 +3,14 @@
     padding-bottom: 6px;
     color: #999;
   }
+  .hb-action {
+    cursor: pointer;
+    &:hover {
+      color: $hb-purple;
+
+    }
+
+  }
 }
 
 

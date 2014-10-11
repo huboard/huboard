@@ -2,13 +2,6 @@ module HuBoard
   module Routes
     module Api
       class Issues < Base
-        get '/api/:user/:repo/issues/:number/details' do
-          api = huboard.board(params[:user], params[:repo])
-
-          issue = api.issue(params[:number]).activities
-
-          json issue
-        end
 
         post '/api/:user/:repo/issues' do
           issue = huboard.board(params[:user],params[:repo]).create_issue params
@@ -18,11 +11,29 @@ module HuBoard
           json issue
         end
 
+        ## Edit a comment
+        #  Accepts a params[:comment]
+        #  Returns json of comment
+        put '/api/:user/:repo/issues/comments/:id' do
+          api = huboard.board(params[:user], params[:repo])
+
+          comment = api.comments(params[:comment][:id]).patch body: params[:comment][:body]
+
+          json(comment)
+        end
         post '/api/:user/:repo/issues/:number/comment' do
           data = {body: params["markdown"]}
           comment = gh.repos(params[:user], params[:repo]).issues(params[:number]).comments.create data
 
           json comment.to_hash
+        end
+
+        get '/api/:user/:repo/issues/:number/details' do
+          api = huboard.board(params[:user], params[:repo])
+
+          issue = api.issue(params[:number]).activities
+
+          json issue
         end
 
         put '/api/:user/:repo/issues/:number' do

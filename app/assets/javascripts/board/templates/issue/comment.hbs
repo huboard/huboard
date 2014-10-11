@@ -5,9 +5,9 @@
   <div class="author">
 
     {{#if view.content.isEditing}}
-      <i title="Cancel editing" {{action "cancel" target=view.content }} class="pull-right ui-icon ui-icon-x-thin"></i>
+      <i title="Cancel editing" {{action "cancel" target=view.content }} class="hb-action pull-right ui-icon ui-icon-x-thin"></i>
     {{else}}
-      <i title="Edit comment" {{action "edit" target=view.content }} class="pull-right ui-icon ui-icon-pencil"></i>
+      <i title="Edit comment" {{action "edit" target=view.content }} class="hb-action pull-right ui-icon ui-icon-pencil"></i>
     {{/if}}
     <strong>{{view.content.user.login}}</strong> commented {{momentAgo view.content.created_at}} 
 
