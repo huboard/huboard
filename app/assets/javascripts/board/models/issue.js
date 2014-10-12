@@ -39,8 +39,10 @@ var Issue = Ember.Object.extend(Serializable,{
         }
 
         Ember.$.ajax(options)
-        .then(function(){
+        .then(function(response){
           this.set("processing", false);
+          this.set("body", response.body)
+          this.set("body_html", response.body_html)
 
         }.bind(this));
         return value;

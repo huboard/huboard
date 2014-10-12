@@ -1,0 +1,16 @@
+{{#if canEdit }}
+  {{#if isEditing}}
+    <button {{action "cancel" }} class="hb-button hb-button-grey">Cancel</button> 
+    <button {{bind-attr disabled=disabled}} {{action "save" }} class="hb-button ">Save</button> 
+  {{else}}
+    <button {{action "edit" target=view }} class="hb-button hb-button-grey">Edit</button> 
+  {{/if}}
+{{/if}}
+<h2>
+  {{#if isEditing }}
+    {{input value=bufferedContent.title }}
+  {{else}}
+    {{ title }}
+    <a class="number" href="{{{unbound html_url }}}" target="_blank" {{bind-attr title="title"}}><small>#{{number}}</small></a>
+  {{/if}}
+</h2>

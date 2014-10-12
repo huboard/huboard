@@ -108,7 +108,12 @@ body > .fullscreen-overlay {
     margin-top: 0;
     button{
       float:right;
-
+      margin-left: 6px;
+    }
+    input {
+      width: calc(100% - 170px);
+      padding: 7px;
+      padding-bottom: 8px;
     }
   }
 
