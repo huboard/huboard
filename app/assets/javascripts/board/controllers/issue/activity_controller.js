@@ -3,9 +3,17 @@ var BufferedController = require("../buffered_controller");
 
 var IssueActivityController = BufferedController.extend({
   needs: ["issue"],
+  isCollaboratorBinding: "App.repo.is_collaborator",
+  isLoggedInBinding: "App.loggedIn",
+  currentUserBinding: "App.currentUser",
   mentions: Ember.computed.alias("controllers.issue.mentions"),
   isEditing: false,
   disabled: false,
+  canEdit: function(){
+    return this.get("isLoggedIn") &&
+      ( this.get("isCollaborator") || (this.get("currentUser.id") === this.get("model.user.id")) );
+
+  }.property('{isCollaborator,isLoggedIn,currentUser}'),
   actions: {
     edit: function(){
       this.set("isEditing", true);
