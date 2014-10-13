@@ -25,7 +25,7 @@
 </head>
 <body>
 <!-- top container -->
-<div class="top <%= @controller %> <%= @controller == "integrations" ? "top--stars" : "" %>"> <div class="top-inner">
+<div class="top top--<%= @controller %> <%= @controller == "integrations" ? "top--stars" : "" %>"> <div class="top-inner">
   <%= partial_erb 'header' %>
   <%= yield_content :marketing_hero %>
 
