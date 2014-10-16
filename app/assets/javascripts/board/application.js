@@ -3553,7 +3553,6 @@ function program4(depth0,data) {
   options = {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.render || depth0.render),stack1 ? stack1.call(depth0, "issue.body", "model", options) : helperMissing.call(depth0, "render", "issue.body", "model", options))));
   data.buffer.push("\n\n  <div class=\"fullscreen-card-activity\">\n    <div class=\"fullscreen-header\">\n      <h4> Activity </h4>\n    </div>\n    ");
-  data.buffer.push("\n    ");
   hashTypes = {};
   hashContexts = {};
   options = {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
