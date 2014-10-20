@@ -24,8 +24,21 @@ var MilestoneColumnController = Ember.ObjectController.extend({
     return this.getIssues();
   }.property("controllers.milestones.forceRedraw"),
   cardMoved : function (cardController, index){
-    cardController.send("assignMilestone",index,  this.get("model.milestone"));
 
+    var equalsA = function(a) {
+      return function(b) {
+        return _.isEqual(a, b.repo);
+      }
+    }(cardController.get("model.repo"));
+
+    var milestone = this.get('model.group').find(equalsA);
+
+    if (milestone) {
+      cardController.send("assignMilestone",index, milestone);
+    } else {
+      debugger;
+
+    }
   }
 })
 module.exports = MilestoneColumnController;
