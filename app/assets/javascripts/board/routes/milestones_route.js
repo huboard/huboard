@@ -36,6 +36,13 @@ module.exports = MilestonesRoute =  Ember.Route.extend({
     openIssueFullscreen: function(model){
       this.transitionTo("milestones.issue", model)
     },
+    createMilestoneOrAbort: function(argBag) { 
+      this.render("milestones.missing", {
+        into: "application",
+        outlet: "modal",
+        model: argBag
+      })
+    },
     forceRepaint: function(target){
       if(target === "index") {
         return;

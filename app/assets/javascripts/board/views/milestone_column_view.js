@@ -62,17 +62,21 @@ var CollectionView = Ember.CollectionView.extend({
           that.get("controller").cardMoved(currentData, currentData.get("model.number"))
           return;
         }
+
+        var onCancel = function(){
+          ui.sender.sortable('cancel');
+        }
         
         if(first) {
-          that.get("controller").cardMoved(currentData, (after || 1)/2);
+          that.get("controller").cardMoved(currentData, (after || 1)/2, onCancel);
           // dragged it to the top
 
         } else if (last) {
           // dragged to the bottom
-          that.get("controller").cardMoved(currentData, (before + 1));
+          that.get("controller").cardMoved(currentData, (before + 1), onCancel);
 
         }  else {
-          that.get("controller").cardMoved(currentData, (((after + before) || 1)/2));
+          that.get("controller").cardMoved(currentData, (((after + before) || 1)/2), onCancel);
         }
       }
     })
