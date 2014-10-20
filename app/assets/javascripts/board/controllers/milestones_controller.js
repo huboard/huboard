@@ -13,16 +13,21 @@ module.exports = MilestonesController = Ember.ObjectController.extend({
     });
   }.property(),
   milestone_columns: function () {
-    return this.get("milestones").map(function(m){
+
+    return _.chain(this.get("model.combinedMilestones")).map(function(groups){
+      var m = _.first(groups);
       return Ember.Object.create({
         title: m.title,
         orderable: true,
         filterBy: function (i){
-          return i.milestone && i.milestone.number == m.number;
+          return i.milestone && i.milestone.title.toLocaleLowerCase() == m.title.toLocaleLowerCase();
         },
-        milestone: m
+        milestone: m,
+        group: groups,
       });
-    }).sort(function(a, b) {
+    })
+    .value()
+    .sort(function(a, b) {
       return a.milestone._data.order - b.milestone._data.order;
     });
 

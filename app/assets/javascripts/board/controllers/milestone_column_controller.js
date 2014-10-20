@@ -1,7 +1,7 @@
 var MilestoneColumnController = Ember.ObjectController.extend({
   needs: ["milestones"],
   getIssues: function () {
-    var issues = this.get("controllers.milestones.model.issues")
+    var issues = this.get("controllers.milestones.model.combinedIssues")
       .filter(function(i) {
         // FIXME: this flag is for archived issue left on the board.
         return !i.get("isArchived");

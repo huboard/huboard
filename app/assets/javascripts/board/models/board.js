@@ -34,14 +34,19 @@ var Board = Ember.Object.extend({
             });
   }.property(),
   filterMilestones: function () {
+    return _.chain(this.get("combinedMilestones"))
+            .map(function (g) {
+              return _.first(g);
+            })
+            .value();
+  }.property("combinedMilestones"),
+  combinedMilestones: function(){
     var milestones = _.union.apply(_,[this.milestones]
                     .concat(this.linkedRepos.map(function (r){return r.milestones; })));
     return _.chain(milestones)
             .groupBy(function(l){return l.title.toLocaleLowerCase() })
-            .map(function (g) {
-              return _.first(g);
-            }).value();
-  }.property(),
+            .value();
+  }.property("milestones","linkedRepos.@each"),
   loadLinkedBoards: function () {
     var model = this;
     var urls = this.get("link_labels").map(function (l) {
