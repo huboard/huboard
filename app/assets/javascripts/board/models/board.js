@@ -5,7 +5,7 @@ var Board = Ember.Object.extend({
   linkedRepos: [],
   topIssue: function() {
     var firstColumn = this.get("columns.firstObject");
-    var firstIssue = this.combinedIssues().filter(function(i){
+    var firstIssue = this.get("combinedIssues").filter(function(i){
       return i.current_state.index === firstColumn.index;
     }).sort(function (a, b){
        return a._data.order - b._data.order;
@@ -16,7 +16,7 @@ var Board = Ember.Object.extend({
   },
   combinedIssues: function () {                                                                        
      return _.union.apply(_,[this.issues].concat(this.linkedRepos.map(function (r){return r.issues; })));
-  },
+  }.property("linkedRepos.@each", "issues"),
   combinedLabels :function () {
     return _.union.apply(_,[this.other_labels]
                     .concat(this.linkedRepos.map(function (r){return r.other_labels; })));
