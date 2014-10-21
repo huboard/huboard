@@ -24,6 +24,7 @@ var MilestoneColumnController = Ember.ObjectController.extend({
     return this.getIssues();
   }.property("controllers.milestones.forceRedraw"),
   cardMoved : function (cardController, index, onCancel){
+    var columnController = this;
 
     var equalsA = function(a) {
       return function(b) {
@@ -44,7 +45,7 @@ var MilestoneColumnController = Ember.ObjectController.extend({
         onAccept: function(milestone) {
           // save the issue with the newly created milestone
           cardController.send("assignMilestone",index, milestone);
-          // columnController.get("groups").pushObject(milestone);
+          columnController.get("model.group").pushObject(milestone);
         },
         onReject: function(){
           // move the card to where it came from

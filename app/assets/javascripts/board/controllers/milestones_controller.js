@@ -39,8 +39,6 @@ module.exports = MilestonesController = Ember.ObjectController.extend({
       owner = milestone.repo.owner.login,
       name = milestone.repo.name;
 
-    // should make ajax calls here
-    
     $.ajax({
       url: "/api/" + owner + "/" + name + "/reordermilestone",
       type: "POST",

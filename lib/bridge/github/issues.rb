@@ -69,6 +69,10 @@ class Huboard
       milestone
     end
 
+    def create_milestone(milestone)
+      gh.milestones.create(milestone).extend(Milestone).merge!(repo: {owner: {login: user}, name: repo, full_name: "#{user}/#{repo}" })
+    end
+
     module Card
       def current_state
         r = Huboard.column_pattern
