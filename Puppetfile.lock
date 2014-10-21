@@ -1,5 +1,5 @@
 FORGE
-  remote: https://forgeapi.puppetlabs.com
+  remote: http://forge.puppetlabs.com
   specs:
     elasticsearch/elasticsearch (0.4.0)
       puppetlabs/stdlib (>= 3.2.0)
@@ -17,7 +17,7 @@ FORGE
     thomasvandoren/redis (0.10.0)
       maestrodev/wget (>= 1.1.0)
       puppetlabs/gcc (>= 0.0.3)
-    willdurand/nodejs (1.6.5)
+    willdurand/nodejs (1.8.3)
       maestrodev/wget (>= 1.2.0)
       puppetlabs/stdlib (>= 3.2.1)
 
