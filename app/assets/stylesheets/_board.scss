@@ -235,6 +235,9 @@
   }               
 
   &.card--milestone {
+    &.border {
+      padding-left: 6px;
+    }
     padding-bottom: 5px;
     margin-bottom: 15px;
     .card-avatar {

@@ -28,7 +28,7 @@ var CssView = Ember.View.extend({
          var start = _.template(".-x<%= color %>.border",{ color: l.color });
          buffer.push(start);
          buffer.push("{")
-         buffer.push("border-color: #" + l.color + ";")
+         buffer.push("border-left-color: #" + l.color + ";")
          buffer.push("}");
 
          var start = _.template(".-x<%= color %>.font-color",{ color: l.color });
