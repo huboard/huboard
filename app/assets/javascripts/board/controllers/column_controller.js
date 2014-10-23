@@ -19,7 +19,7 @@ var ColumnController = Ember.ObjectController.extend({
   getIssues: function(){
     var index = this.get("model.index");
     var column = this.get("model");
-    var issues = this.get("controllers.index.model").combinedIssues().filter(function(i){
+    var issues = this.get("controllers.index.model.combinedIssues").filter(function(i){
       return i.current_state.index === index;
     })
     .filter(function(i) {

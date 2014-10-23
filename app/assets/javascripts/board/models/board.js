@@ -5,7 +5,7 @@ var Board = Ember.Object.extend({
   linkedRepos: [],
   topIssue: function() {
     var firstColumn = this.get("columns.firstObject");
-    var firstIssue = this.combinedIssues().filter(function(i){
+    var firstIssue = this.get("combinedIssues").filter(function(i){
       return i.current_state.index === firstColumn.index;
     }).sort(function (a, b){
        return a._data.order - b._data.order;
@@ -16,7 +16,7 @@ var Board = Ember.Object.extend({
   },
   combinedIssues: function () {                                                                        
      return _.union.apply(_,[this.issues].concat(this.linkedRepos.map(function (r){return r.issues; })));
-  },
+  }.property("linkedRepos.@each", "issues"),
   combinedLabels :function () {
     return _.union.apply(_,[this.other_labels]
                     .concat(this.linkedRepos.map(function (r){return r.other_labels; })));
@@ -34,14 +34,19 @@ var Board = Ember.Object.extend({
             });
   }.property(),
   filterMilestones: function () {
+    return _.chain(this.get("combinedMilestones"))
+            .map(function (g) {
+              return _.first(g);
+            })
+            .value();
+  }.property("combinedMilestones"),
+  combinedMilestones: function(){
     var milestones = _.union.apply(_,[this.milestones]
                     .concat(this.linkedRepos.map(function (r){return r.milestones; })));
     return _.chain(milestones)
             .groupBy(function(l){return l.title.toLocaleLowerCase() })
-            .map(function (g) {
-              return _.first(g);
-            }).value();
-  }.property(),
+            .value();
+  }.property("milestones","linkedRepos.@each"),
   loadLinkedBoards: function () {
     var model = this;
     var urls = this.get("link_labels").map(function (l) {
