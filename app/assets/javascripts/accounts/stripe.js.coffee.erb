@@ -116,6 +116,8 @@ App.PurchaseFormController = App.CreditCardForm.extend
     @set('processingCard', false)
     @set("model.plan.purchased", true)
     @set("model.details.card", response.card)
+    
+    @set 'model.details.discount', response.discount
     this.send("close")
     
   purchaseDidError: (error) ->
@@ -167,6 +169,7 @@ App.CancelFormController = Ember.Controller.extend
       this.ajax("/settings/profile/" + @get("model.org.login") + "/plans/" + @get('model.plan.id'),{})
         .then(@didCancel.bind(this), @cancelDidError.bind(this))
   didCancel: ->
+    @set('model.details.discount.coupon', null)
     @set('processingAction', false)
     @set("model.plan.purchased", false)
     @set("model.details.card", null)
@@ -198,7 +201,7 @@ App.CancelFormController = Ember.Controller.extend
 App.CancelFormView = App.ModalView.extend 
   processingAction: Ember.computed.alias('controller.processingAction')
 
-App.CouponController = Ember.Controller.extend
+App.CouponController = Ember.Mixin.create
   processingAction: false
 
   onCouponChange: (->
@@ -228,14 +231,15 @@ App.CouponController = Ember.Controller.extend
     @set('errors', JSON.parse(error.responseText).error.message)
     @set('processingAction', false)
 
-  didAcceptCoupon: ->
+  didAcceptCoupon: (response) ->
     @send('close')
     @set('processingAction', false)
+    @set('model.details.discount.coupon', response.discount.coupon)
 
   clearCouponAlerts: ->
     @set('errors', null)
 
-App.ApplyCouponController = App.CouponController.extend
+App.ApplyCouponController = Ember.ObjectController.extend App.CouponController,
   coupon: null
   customer: Ember.computed.alias('model.details.card.customer')
   isDisabled: ( ->

@@ -104,8 +104,14 @@ module HuBoard
         begin
           customer = Stripe::Customer.retrieve(params[:id])
           customer.coupon = params[:coupon]
-          customer.save
-        rescue => e
+          response = customer.save
+
+          customer_doc = couch.connection.get("Customers-#{customer.id}").body
+          customer_doc.stripe.customer.discount.coupon = response.discount.coupon
+          couch.customers.save customer_doc
+
+          json(response)
+        rescue Stripe::InvalidRequestError => e
           status 422
           json(e.json_body)
         end
@@ -141,8 +147,7 @@ module HuBoard
         }
         couch.customers.save(attributes)
 
-        json success: true, card: customer["cards"]["data"].first
-        #coupon...
+        json success: true, card: customer["cards"]["data"].first, discount: customer.discount
         rescue Stripe::InvalidRequestError => e
           status 422
           json e.json_body
