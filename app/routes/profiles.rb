@@ -100,8 +100,15 @@ module HuBoard
         end
       end
 
-      post "" do
-
+      put "/settings/redeem_coupon/:id/?" do
+        begin
+          customer = Stripe::Customer.retrieve(params[:id])
+          customer.coupon = params[:coupon]
+          customer.save
+        rescue => e
+          status 422
+          json(e.json_body)
+        end
       end
 
       post "/settings/charge/:id/?" do
@@ -135,6 +142,7 @@ module HuBoard
         couch.customers.save(attributes)
 
         json success: true, card: customer["cards"]["data"].first
+        #coupon...
         rescue Stripe::InvalidRequestError => e
           status 422
           json e.json_body

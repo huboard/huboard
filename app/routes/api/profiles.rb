@@ -32,12 +32,14 @@ module HuBoard
           if customer.rows.any?
             customer_doc = customer.rows.first.value
             card = customer_doc.stripe.customer.cards.nil? ? nil : customer_doc.stripe.customer.cards.data.find {|card| card.id == customer_doc.stripe.customer.default_card }
+            coupon = customer_doc.stripe.customer.discount.coupon.nil? ? nil : customer_doc.stripe.customer.discount.coupon
           end
 
           data = {
             org: user.to_hash,
             plans: plans,
             card: card,
+            coupon: coupon,
             is_owner: true,
             has_plan: customer.rows.size > 0
           }

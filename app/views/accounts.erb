@@ -122,14 +122,24 @@
     </p>
   </div>
 
-  <div class='credit-card'>
-    {{#if model.details.card }}
-     <img src="<%= image_path 'Plain.png' %>" /> <strong>Credit card on file.</strong> Ending in {{ model.details.card.last4 }}
-     <button {{action updateCard this }} class="hb-button small">Update card</button>
-    {{else}}
-     <img src="<%= image_path 'Plain.png' %>" /> <strong>No Credit card on file.</strong>
+  <div class='account-details'>
+    <div class='credit-card'>
+      {{#if model.details.card }}
+       <img src="<%= image_path 'Plain.png' %>" /> <strong>Credit card on file.</strong> Ending in {{ model.details.card.last4 }}
+       <button style="float: right" {{action updateCard this }} class="hb-button small">Update card</button>
+      {{else}}
+       <img src="<%= image_path 'Plain.png' %>" /> <strong>No Credit card on file.</strong>
 
-    {{/if}}
+      {{/if}}
+    </div>
+
+    <div class='coupon'>
+      {{#if model.details.coupon }}
+        <img src="<%= image_path 'icn-coupon.png' %>" /> <strong> Coupon: {{{model.details.coupon.id}}} </strong>
+      <button style="float: right"class="hb-button small"
+      {{action applyCoupon this}}> Redeem Coupon </button>
+      {{/if}}
+    </div>
   </div>
 
    <div class="table-wrapper">
@@ -150,8 +160,6 @@
           <td>unlimited</td>
           <td>unlimited</td>
           <td class="text-right">    
-            <button class="hb-button small"
-               {{action apply_coupon this }}> Apply Coupon </button>
            {{#if purchased }} 
               Your plan
               <button class="hb-button small"
@@ -169,6 +177,38 @@
     </table>
   </div>
 </script>   
+
+<script type="text/x-handlebars" data-template-name="apply_coupon">
+  <div class="fullscreen-credit-card">
+    <form {{action apply_coupon on=submit}}>
+      <div class="modal-header">
+        <div>
+          <button type="button" class="close" {{action close}} data-dismiss="modal" aria-hidden="true">×</button>
+          Redeem a Coupon! 
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="form-row full">
+          <p> (applied against your next invoice of greater than $0.00) </p>
+            <label>
+              Coupon:
+            </label>
+           {{view App.CouponCodeField valueBinding="coupon"}}
+        </div>
+        {{#if errors}}
+          <div class="alert alert-error">{{errors}}</div>
+        {{/if}}
+        {{#if processingAction }}
+          <div class="fullscreen-overlay">
+          </div>
+        {{/if}}
+      </div>
+      <div class="modal-footer">
+        <button href="#" class="stripe-connect light-blue" type="submit" {{bindAttr disabled="isDisabled"}}><span> Redeem </span></button>
+      </div>
+    </form>
+  </div>
+</script>
 
 <script type="text/x-handlebars" data-template-name="cancel_form">
 <div class="fullscreen-credit-card">
@@ -264,17 +304,6 @@
       <button href="#" class="stripe-connect light-blue" type="submit" {{bindAttr disabled="processingCard"}}><span>Update card</span></button>
   </div>
   </form>
-  </div>
-</script>
-
-<script type="text/x-handlebars" data-template-name="apply_coupon">
-  <div class="fullscreen-overlay">
-    <div class="modal-header">
-      Blah
-      <div class="modal-body">
-        Blah
-      </div>
-    </div>
   </div>
 </script>
 
