@@ -150,6 +150,8 @@
           <td>unlimited</td>
           <td>unlimited</td>
           <td class="text-right">    
+            <button class="hb-button small"
+               {{action apply_coupon this }}> Apply Coupon </button>
            {{#if purchased }} 
               Your plan
               <button class="hb-button small"
@@ -265,6 +267,17 @@
   </div>
 </script>
 
+<script type="text/x-handlebars" data-template-name="apply_coupon">
+  <div class="fullscreen-overlay">
+    <div class="modal-header">
+      Blah
+      <div class="modal-body">
+        Blah
+      </div>
+    </div>
+  </div>
+</script>
+
 <script type="text/x-handlebars" data-template-name="purchase_form">
 <div class="fullscreen-credit-card">
   <form {{action process on=submit}}>
@@ -281,6 +294,18 @@
       {{#if errors}}
         <div class="alert alert-error">{{errors}}</div>
       {{/if}}
+
+      <div class="form-row full">
+        <tr>
+          <td> Have Coupon? </td>
+          <td> {{view App.CouponCheckbox checkedBinding="couponChecked"}} </td>
+        </tr>
+        <label>
+          {{#if couponChecked }}
+            {{view App.CouponCodeField valueBinding="coupon"}}
+          {{/if}}
+        </label>
+      </div>
 
       <div class="form-row full">
         <label>

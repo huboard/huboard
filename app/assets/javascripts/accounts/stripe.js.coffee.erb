@@ -99,6 +99,7 @@ App.PurchaseFormController = App.CreditCardForm.extend
     this.ajax("/settings/charge/" + @get("model.org.login"), {
       email:@get("model.org.billing_email"),
       card: token,
+      coupon: @get("coupon")
       plan: @get("model.plan")
     }).then(@didPurchase.bind(this), @purchaseDidError.bind(this))
 
@@ -112,13 +113,13 @@ App.PurchaseFormController = App.CreditCardForm.extend
     @set('errors', error.responseJSON.error.message)
     @set('processingCard', false)
        
-  ajax: (url, data) ->
+  ajax: (url, data, verb) ->
     controller = this
 
     new Ember.RSVP.Promise (resolve, reject) ->
       hash = {}
       hash.url = url
-      hash.type = 'POST'
+      hash.type = verb || 'POST'
       hash.context = controller
       hash.data = data
       
@@ -208,3 +209,26 @@ App.CardExpiryField = Ember.TextField.extend
   didInsertElement: ->
     @$().payment("formatCardExpiry")
 
+App.CouponCodeField = Ember.TextField.extend
+  required: false
+  format: "CODE"
+  placeholder: Ember.computed.alias("format")
+  change: ->
+    controller = @get('targetObject')
+    coupon_id = @get('value')
+    return @get('clearCouponAlerts') if coupon_id == ""
+    controller.ajax("/settings/coupon_valid/" + coupon_id,{}, "GET")
+        .then(@didApproveCoupon.bind(this), @didRejectCoupon.bind(this))
+  didApproveCoupon: ->
+
+  didRejectCoupon: ->
+    controller = @get('targetObject')
+    controller.set('errors', "You Have Entered an Invalid Coupon")
+  clearCouponAlerts: ->
+    controller = @get('targetObject')
+    controller.set('errors', null)
+
+App.CouponCheckbox = Ember.Checkbox.extend
+  required: false
+
+    

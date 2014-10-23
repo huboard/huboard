@@ -91,6 +91,10 @@ module HuBoard
         end
       end
 
+      get "/settings/coupon_valid/:coupon_id/?" do
+        Stripe::Coupon.retrieve(params[:coupon_id])
+      end
+
       post "/settings/charge/:id/?" do
         customer = Stripe::Customer.create(
           email: params[:email],
