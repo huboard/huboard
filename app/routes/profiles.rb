@@ -92,16 +92,29 @@ module HuBoard
       end
 
       get "/settings/coupon_valid/:coupon_id/?" do
-        Stripe::Coupon.retrieve(params[:coupon_id])
+        begin
+          Stripe::Coupon.retrieve(params[:coupon_id])
+        rescue => e
+          status 422
+          json(e.json_body)
+        end
+      end
+
+      post "" do
+
       end
 
       post "/settings/charge/:id/?" do
-        customer = Stripe::Customer.create(
+        begin
+        stripe_customer_hash = {
           email: params[:email],
           card: params[:card][:id],
           plan:  params[:plan][:id],
           trial_end: (Time.now.utc + (params[:plan][:trial_period].to_i * 60 * 60 * 24)).to_i
-        )
+        }
+
+        stripe_customer_hash.merge!(coupon: params[:coupon]) if params[:coupon]
+        customer = Stripe::Customer.create(stripe_customer_hash)
 
         user = gh.user
         account = gh.users(params[:id])
@@ -122,6 +135,10 @@ module HuBoard
         couch.customers.save(attributes)
 
         json success: true, card: customer["cards"]["data"].first
+        rescue Stripe::InvalidRequestError => e
+          status 422
+          json e.json_body
+        end
       end
     end
   end

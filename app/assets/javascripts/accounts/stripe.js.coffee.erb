@@ -81,7 +81,16 @@ App.UpdateCardView = App.ModalView.extend
 
 App.PurchaseFormController = App.CreditCardForm.extend
 
-  coupon: null,
+  coupon: null
+
+  isDisabled: (->
+    @get("isProcessing") or @get('errors')
+  ).property("isProcessing","errors")
+
+  onCouponChange: (->
+    errors = @get 'errors'
+    @set 'errors', null if errors
+  ).observes('coupon')
   
   price: (->
     @get("model.amount")
@@ -110,8 +119,16 @@ App.PurchaseFormController = App.CreditCardForm.extend
     this.send("close")
     
   purchaseDidError: (error) ->
-    @set('errors', error.responseJSON.error.message)
+    @set('errors', JSON.parse(error.responseText).error.message)
     @set('processingCard', false)
+
+  didApproveCoupon: ->
+
+  didRejectCoupon: (error, statusText) ->
+    @set('errors', JSON.parse(error.responseText).error.message)
+
+  clearCouponAlerts: ->
+    @set('errors', null)
        
   ajax: (url, data, verb) ->
     controller = this
@@ -130,6 +147,13 @@ App.PurchaseFormController = App.CreditCardForm.extend
         reject(jqXHR)
 
       Ember.$.ajax(hash)
+
+  actions:
+    couponChanged: ->
+      coupon_id = @get('coupon')
+      return @clearCouponAlerts() if coupon_id == ""
+      @ajax("/settings/coupon_valid/" + coupon_id,{}, "GET")
+          .then(@didApproveCoupon.bind(this), @didRejectCoupon.bind(this))
 
   
 App.PurchaseFormView = App.ModalView.extend 
@@ -215,18 +239,7 @@ App.CouponCodeField = Ember.TextField.extend
   placeholder: Ember.computed.alias("format")
   change: ->
     controller = @get('targetObject')
-    coupon_id = @get('value')
-    return @get('clearCouponAlerts') if coupon_id == ""
-    controller.ajax("/settings/coupon_valid/" + coupon_id,{}, "GET")
-        .then(@didApproveCoupon.bind(this), @didRejectCoupon.bind(this))
-  didApproveCoupon: ->
-
-  didRejectCoupon: ->
-    controller = @get('targetObject')
-    controller.set('errors', "You Have Entered an Invalid Coupon")
-  clearCouponAlerts: ->
-    controller = @get('targetObject')
-    controller.set('errors', null)
+    controller.send 'couponChanged'
 
 App.CouponCheckbox = Ember.Checkbox.extend
   required: false
