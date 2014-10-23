@@ -122,8 +122,6 @@ App.PurchaseFormController = App.CreditCardForm.extend
     @set('errors', JSON.parse(error.responseText).error.message)
     @set('processingCard', false)
 
-  didApproveCoupon: ->
-
   didRejectCoupon: (error, statusText) ->
     @set('errors', JSON.parse(error.responseText).error.message)
 
@@ -153,7 +151,7 @@ App.PurchaseFormController = App.CreditCardForm.extend
       coupon_id = @get('coupon')
       return @clearCouponAlerts() if coupon_id == ""
       @ajax("/settings/coupon_valid/" + coupon_id,{}, "GET")
-          .then(@didApproveCoupon.bind(this), @didRejectCoupon.bind(this))
+        .then(success=(->), @didRejectCoupon.bind(this))
 
   
 App.PurchaseFormView = App.ModalView.extend 
@@ -200,8 +198,69 @@ App.CancelFormController = Ember.Controller.extend
 App.CancelFormView = App.ModalView.extend 
   processingAction: Ember.computed.alias('controller.processingAction')
 
+App.CouponController = Ember.Controller.extend
+  processingAction: false
 
-  
+  onCouponChange: (->
+    errors = @get 'errors'
+    @set 'errors', null if errors
+  ).observes('coupon')
+
+  ajax: (url, data, verb) ->
+    controller = this
+
+    new Ember.RSVP.Promise (resolve, reject) ->
+      hash = {}
+      hash.url = url
+      hash.type = verb || 'GET'
+      hash.context = controller
+      hash.data = data
+      
+      hash.success = (json) ->
+        resolve(json)
+
+      hash.error = (jqXHR, textStatus, errorThrown) ->
+        reject(jqXHR)
+
+      Ember.$.ajax(hash)
+
+  didRejectCoupon: (error, statusText) ->
+    @set('errors', JSON.parse(error.responseText).error.message)
+    @set('processingAction', false)
+
+  didAcceptCoupon: ->
+    @send('close')
+    @set('processingAction', false)
+
+  clearCouponAlerts: ->
+    @set('errors', null)
+
+App.ApplyCouponController = App.CouponController.extend
+  coupon: null
+  customer: Ember.computed.alias('model.details.card.customer')
+  isDisabled: ( ->
+    @get('errors') or @get('processingAction')
+  ).property('errors')
+
+  actions:
+    apply_coupon: ->
+      coupon_id = @get('coupon')
+      customer = @get('customer')
+      @set('processingAction', true)
+      @ajax("/settings/redeem_coupon/" + customer,{coupon: coupon_id}, "PUT")
+        .then(@didAcceptCoupon.bind(this), @didRejectCoupon.bind(this))
+        
+    couponChanged: ->
+      coupon_id = @get('coupon')
+      return @clearCouponAlerts() if coupon_id == ""
+      @ajax("/settings/coupon_valid/" + coupon_id,{}, "GET")
+        .then(success=(->), @didRejectCoupon.bind(this))
+
+    close: ->
+      this.send "closeModal"
+
+App.ApplyCouponView = App.ModalView.extend
+  processingAction: Ember.computed.alias('controller.processingAction')
 
 Ember.TextSupport.reopen
  attributeBindings: ["data-stripe", "autocomplete", "autocompletetype", "required"]
