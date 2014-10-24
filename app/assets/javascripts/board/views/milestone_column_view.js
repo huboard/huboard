@@ -58,14 +58,15 @@ var CollectionView = Ember.CollectionView.extend({
         before = beforeData.get("model._data.milestone_order") || beforeData.get("model.number"),
         after = afterData.get("model._data.milestone_order") || afterData.get("model.number");
 
-        if(first && last) {
-          that.get("controller").cardMoved(currentData, currentData.get("model.number"))
-          return;
-        }
-
         var onCancel = function(){
           ui.sender.sortable('cancel');
         }
+
+        if(first && last) {
+          that.get("controller").cardMoved(currentData, currentData.get("model.number"), onCancel)
+          return;
+        }
+
         
         if(first) {
           that.get("controller").cardMoved(currentData, (after || 1)/2, onCancel);
