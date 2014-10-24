@@ -118,6 +118,8 @@ App.PurchaseFormController = App.CreditCardForm.extend
     @set("model.details.card", response.card)
     
     @set 'model.details.discount', response.discount
+    @set 'model.details.has_plan', true
+
     this.send("close")
     
   purchaseDidError: (error) ->
@@ -169,6 +171,7 @@ App.CancelFormController = Ember.Controller.extend
       this.ajax("/settings/profile/" + @get("model.org.login") + "/plans/" + @get('model.plan.id'),{})
         .then(@didCancel.bind(this), @cancelDidError.bind(this))
   didCancel: ->
+    @set('model.details.has_plan', false)
     @set('model.details.discount.coupon', null)
     @set('processingAction', false)
     @set("model.plan.purchased", false)
@@ -234,7 +237,7 @@ App.CouponController = Ember.Mixin.create
   didAcceptCoupon: (response) ->
     @send('close')
     @set('processingAction', false)
-    @set('model.details.discount.coupon', response.discount.coupon)
+    @set('model.details.discount', response.discount)
 
   clearCouponAlerts: ->
     @set('errors', null)

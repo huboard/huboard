@@ -107,7 +107,7 @@ module HuBoard
           response = customer.save
 
           customer_doc = couch.connection.get("Customers-#{customer.id}").body
-          customer_doc.stripe.customer.discount.coupon = response.discount.coupon
+          customer_doc.stripe.customer.discount = response.discount
           couch.customers.save customer_doc
 
           json(response)
@@ -125,8 +125,13 @@ module HuBoard
           plan:  params[:plan][:id],
           trial_end: (Time.now.utc + (params[:plan][:trial_period].to_i * 60 * 60 * 24)).to_i
         }
+        puts "coupon: #{params[:coupon]} #{params[:coupon].empty?}"
 
-        stripe_customer_hash.merge!(coupon: params[:coupon]) if params[:coupon]
+        if !params[:coupon].nil? && !params[:coupon].empty?
+          puts "applying coupon"
+          stripe_customer_hash.merge!(coupon: params[:coupon]) 
+        end
+
         customer = Stripe::Customer.create(stripe_customer_hash)
 
         user = gh.user

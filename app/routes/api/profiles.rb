@@ -39,7 +39,7 @@ module HuBoard
             org: user.to_hash,
             plans: plans,
             card: card,
-            discount: discount,
+            discount: discount || {discount: { coupon: {id: ''} }},
             is_owner: true,
             has_plan: customer.rows.size > 0
           }
@@ -65,6 +65,7 @@ module HuBoard
           if customer.rows.any?
             customer_doc = customer.rows.first.value
             card = customer_doc.stripe.customer.cards.nil? ? nil : customer_doc.stripe.customer.cards.data.find {|card| card.id == customer_doc.stripe.customer.default_card }
+             discount = customer_doc.stripe.customer.discount
           end
           
           data = {
@@ -72,6 +73,7 @@ module HuBoard
             org: org.to_hash,
             plans: plans,
             card: card,
+            discount: discount || {discount: { coupon: {id: ''} }},
             is_owner: is_owner,
             has_plan: customer.rows.size > 0
           }

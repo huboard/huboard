@@ -134,8 +134,8 @@
     </div>
 
     <div class='coupon'>
-      {{#if model.details.plans.length }}
-        <img src="<%= image_path 'icn-coupon.png' %>" /> <strong> Coupon: {{{model.details.discount.coupon.id}}} </strong>
+      {{#if model.details.has_plan }}
+        <img src="<%= image_path 'icn-coupon.png' %>" /> <strong> Coupon: {{{couponCode}}} </strong>
       <button style="float: right"class="hb-button small"
       {{action applyCoupon this}}> Redeem Coupon </button>
       {{/if}}
@@ -162,7 +162,7 @@
           <td class="text-right">    
            {{#if purchased }} 
               Your plan
-              <button class="hb-button small"
+              <button class="hb-button hb-button-danger small"
                  {{action cancel this }}>Cancel plan</button>
             {{else}}
               <button class="hb-button small"
