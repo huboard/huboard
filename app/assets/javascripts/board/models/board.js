@@ -16,12 +16,12 @@ var Board = Ember.Object.extend({
   },
   combinedIssues: function () {                                                                        
      return _.union.apply(_,[this.issues].concat(this.linkedRepos.map(function (r){return r.issues; })));
-  }.property("linkedRepos.@each", "issues"),
+  }.property("linkedRepos.@each.issues.length", "issues.length"),
   combinedLabels :function () {
     return _.union.apply(_,[this.other_labels]
                     .concat(this.linkedRepos.map(function (r){return r.other_labels; })));
 
-  }.property("linkedRepos.@each", "issues"),
+  }.property("linkedRepos.@each.issues.length", "issues.length"),
   filterLabels: function () {
     var labels = this.get("combinedLabels");
 
@@ -46,7 +46,7 @@ var Board = Ember.Object.extend({
     return _.chain(milestones)
             .groupBy(function(l){return l.title.toLocaleLowerCase() })
             .value();
-  }.property("milestones","linkedRepos.@each"),
+  }.property("milestones.length","linkedRepos.@each.milestones.length"),
   loadLinkedBoards: function () {
     var model = this;
     var urls = this.get("link_labels").map(function (l) {
