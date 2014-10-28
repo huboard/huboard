@@ -172,7 +172,7 @@ App.CancelFormController = Ember.Controller.extend
         .then(@didCancel.bind(this), @cancelDidError.bind(this))
   didCancel: ->
     @set('model.details.has_plan', false)
-    @set('model.details.discount.coupon', null)
+    @set('model.details.discount', null)
     @set('processingAction', false)
     @set("model.plan.purchased", false)
     @set("model.details.card", null)
