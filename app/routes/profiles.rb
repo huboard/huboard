@@ -125,10 +125,8 @@ module HuBoard
           plan:  params[:plan][:id],
           trial_end: (Time.now.utc + (params[:plan][:trial_period].to_i * 60 * 60 * 24)).to_i
         }
-        puts "coupon: #{params[:coupon]} #{params[:coupon].empty?}"
 
         if !params[:coupon].nil? && !params[:coupon].empty?
-          puts "applying coupon"
           stripe_customer_hash.merge!(coupon: params[:coupon]) 
         end
 
@@ -153,7 +151,7 @@ module HuBoard
         couch.customers.save(attributes)
 
         json success: true, card: customer["cards"]["data"].first, discount: customer.discount
-        rescue Stripe::InvalidRequestError => e
+        rescue Stripe::StripeError => e
           status 422
           json e.json_body
         end
