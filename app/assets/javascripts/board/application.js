@@ -3385,13 +3385,14 @@ function program7(depth0,data) {
   
   var buffer = '', hashContexts, hashTypes;
   data.buffer.push("\n    ");
-  hashContexts = {'lastClicked': depth0,'name': depth0,'mode': depth0,'color': depth0};
-  hashTypes = {'lastClicked': "ID",'name': "ID",'mode': "ID",'color': "ID"};
+  hashContexts = {'lastClicked': depth0,'name': depth0,'mode': depth0,'color': depth0,'tagType': depth0};
+  hashTypes = {'lastClicked': "ID",'name': "ID",'mode': "ID",'color': "ID",'tagType': "STRING"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.FilterView", {hash:{
     'lastClicked': ("lastLabelFilterClicked"),
     'name': ("filter.name"),
     'mode': ("filter.mode"),
-    'color': ("filter.color")
+    'color': ("filter.color"),
+    'tagType': ("filtered-label")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("\n  ");
   return buffer;
@@ -76139,6 +76140,10 @@ var CssView = Ember.View.extend({
 
     _(["filter","card-label"]).each(function(name){
        _(that.get("content.combinedLabels")).each(function(l){
+
+         buffer.push("." + name + ".-x" + l.color + " > a {");
+         buffer.push("border-left-color: #" + l.color + ";");
+         buffer.push("}");
        
          _([
            {
@@ -76179,7 +76184,10 @@ var FilterView = Ember.View.extend({
   tagName: "li",
   templateName: "filter",
   classNames: ["filter"],
-  classNameBindings: ["customColor"],
+  classNameBindings: ["customColor", "reportTagType"],
+  reportTagType: function() {
+    return this.get('tagType');
+  }.property('tagType'),
   customColor: function () {
     return this.get("color") ? "-x" + this.get('color') : "";
   }.property("color"),
@@ -76210,7 +76218,7 @@ var FilterView = Ember.View.extend({
   mode: 0,
   modes:[0,1,2,0],
   name: null,
-  lastClicked: null
+  lastClicked: null,
 })
 
 module.exports = FilterView;
