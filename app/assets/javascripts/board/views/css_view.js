@@ -76,7 +76,6 @@ var CssView = Ember.View.extend({
              buffer.push(start);
              buffer.push("{")
              buffer.push("background-color: #" + l.color + ";")
-             buffer.push("border-left-color: #" + l.color + ";")
              var color =  $.Color("#"+ l.color).alpha(style.opacity);
              buffer.push("background-color: " + $.Color(color).toString() + ";")
              buffer.push("color: " + $.Color("#"+l.color).contrastColor() + ";")
