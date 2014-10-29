@@ -2,7 +2,10 @@ var FilterView = Ember.View.extend({
   tagName: "li",
   templateName: "filter",
   classNames: ["filter"],
-  classNameBindings: ["customColor"],
+  classNameBindings: ["customColor", "reportTagType"],
+  reportTagType: function() {
+    return this.get('tagType');
+  }.property('tagType'),
   customColor: function () {
     return this.get("color") ? "-x" + this.get('color') : "";
   }.property("color"),
@@ -33,7 +36,7 @@ var FilterView = Ember.View.extend({
   mode: 0,
   modes:[0,1,2,0],
   name: null,
-  lastClicked: null
+  lastClicked: null,
 })
 
 module.exports = FilterView;

@@ -16,7 +16,7 @@
   {{/each}}
   <h5>Labels</h5>
   {{#each filter in labelFilters }}
-    {{view App.FilterView lastClicked=lastLabelFilterClicked name=filter.name mode=filter.mode color=filter.color}}
+    {{view App.FilterView lastClicked=lastLabelFilterClicked name=filter.name mode=filter.mode color=filter.color tagType="filtered-label"}}
   {{/each}}
 
 </ul>

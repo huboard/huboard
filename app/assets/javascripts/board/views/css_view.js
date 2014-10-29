@@ -49,6 +49,10 @@ var CssView = Ember.View.extend({
 
     _(["filter","card-label"]).each(function(name){
        _(that.get("content.combinedLabels")).each(function(l){
+
+         buffer.push("." + name + ".-x" + l.color + " > a {");
+         buffer.push("border-left-color: #" + l.color + ";");
+         buffer.push("}");
        
          _([
            {
@@ -72,6 +76,7 @@ var CssView = Ember.View.extend({
              buffer.push(start);
              buffer.push("{")
              buffer.push("background-color: #" + l.color + ";")
+             buffer.push("border-left-color: #" + l.color + ";")
              var color =  $.Color("#"+ l.color).alpha(style.opacity);
              buffer.push("background-color: " + $.Color(color).toString() + ";")
              buffer.push("color: " + $.Color("#"+l.color).contrastColor() + ";")
