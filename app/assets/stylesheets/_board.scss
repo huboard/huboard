@@ -340,6 +340,14 @@
   background: #fff;
   border-radius: 4px;
 }
+
+.filters li.filtered-label a {
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-left-style: solid;
+  border-left-width: 3px;
+}
+
 .filters li.clear-filters, .filters li.clear-filters a {
   background: none;
   color:$grey;
@@ -380,6 +388,7 @@
 }
 
 .filter {
+
   .ui-icon {
     position: absolute;
     top: 13px;
