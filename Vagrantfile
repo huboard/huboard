@@ -9,6 +9,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Every Vagrant virtual environment requires a box to build off of.
   config.vm.box = "puppetlabs/debian-7.4-64-puppet"
 
+
+  config.vm.network "forwarded_port", guest: 5984, host: 5984
   config.vm.network "forwarded_port", guest: 9393, host: 9393
   config.vm.network "forwarded_port", guest: 9394, host: 9394
   config.vm.network "forwarded_port", guest: 9200, host: 9200

@@ -38,6 +38,7 @@ rbenv::install { "vagrant rbenv":
 rbenv::compile { "vagrant/2.1.2":
   user   => "vagrant",
   ruby   => "2.1.2",
+  global => true,
   require => [
     Rbenv::Install["vagrant rbenv"],
   ]
@@ -69,7 +70,7 @@ exec { 'install-vagrant':
 }
 
 class { 'redis':
-  version            => '2.6.5',
+  version            => '2.8.12',
 }
 
 package { 'couchdb':
@@ -90,6 +91,7 @@ class { 'nodejs':
 
 package { 'couchapp':
   provider => npm,
+  require => Class['nodejs'],
 }
 
 exec { 'create_db':

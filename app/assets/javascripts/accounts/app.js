@@ -219,7 +219,10 @@
   });
 
   App.AccountController = Ember.ObjectController.extend({
-    needs: ["purchaseForm","cancelForm", "updateCard"],  
+    needs: ["purchaseForm","cancelForm", "updateCard", "applyCoupon"],  
+    couponCode: function(){
+      return this.get("model.details.discount.coupon.id");
+    }.property("model.details.discount","model.details.discount.coupon", "model.details.discount.coupon.id"),
     actions: {
       purchase: function (model) {
         var org = this.get("model.details.org");
@@ -241,6 +244,10 @@
         this.set("controllers.cancelForm.model", plan)
         this.send("openModal","cancelForm")
       
+      },
+      applyCoupon: function (model) {
+        this.set("controllers.applyCoupon.model", model)
+        this.send("openModal","applyCoupon");
       }
     }  
   });

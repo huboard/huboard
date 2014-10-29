@@ -47,7 +47,7 @@ gem 'celluloid-redis'
 gem 'analytics-ruby', '~> 2.0.0'
 gem 'frappuccino'
 
-gem 'faye'
+gem 'faye-huboard'
 gem 'faye-redis'
 
 gem 'wkhtmltopdf-heroku', '~> 1.0'

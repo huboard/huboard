@@ -91,13 +91,46 @@ module HuBoard
         end
       end
 
+      get "/settings/coupon_valid/:coupon_id/?" do
+        begin
+          Stripe::Coupon.retrieve(params[:coupon_id])
+        rescue => e
+          status 422
+          json(e.json_body)
+        end
+      end
+
+      put "/settings/redeem_coupon/:id/?" do
+        begin
+          customer = Stripe::Customer.retrieve(params[:id])
+          customer.coupon = params[:coupon]
+          response = customer.save
+
+          customer_doc = couch.connection.get("Customers-#{customer.id}").body
+          customer_doc.stripe.customer.discount = response.discount
+          couch.customers.save customer_doc
+
+          json(response)
+        rescue Stripe::InvalidRequestError => e
+          status 422
+          json(e.json_body)
+        end
+      end
+
       post "/settings/charge/:id/?" do
-        customer = Stripe::Customer.create(
+        begin
+        stripe_customer_hash = {
           email: params[:email],
           card: params[:card][:id],
           plan:  params[:plan][:id],
           trial_end: (Time.now.utc + (params[:plan][:trial_period].to_i * 60 * 60 * 24)).to_i
-        )
+        }
+
+        if !params[:coupon].nil? && !params[:coupon].empty?
+          stripe_customer_hash.merge!(coupon: params[:coupon]) 
+        end
+
+        customer = Stripe::Customer.create(stripe_customer_hash)
 
         user = gh.user
         account = gh.users(params[:id])
@@ -117,7 +150,11 @@ module HuBoard
         }
         couch.customers.save(attributes)
 
-        json success: true, card: customer["cards"]["data"].first
+        json success: true, card: customer["cards"]["data"].first, discount: customer.discount
+        rescue Stripe::StripeError => e
+          status 422
+          json e.json_body
+        end
       end
     end
   end

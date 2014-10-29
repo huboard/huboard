@@ -1,11 +1,6 @@
 <div class="fullscreen-card">
   <div class="fullscreen-card-preamble clearfix">
-    <div class="fullscreen-header">
-      {{!-- <button class="hb-button hb-button-grey">Edit</button> --}}
-      <h2>{{ title }}
-      <a class="number" href="{{{unbound html_url }}}" target="_blank" {{bind-attr title="title"}}><small>#{{number}}</small></a>
-      </h2>
-    </div>
+    {{render 'issue.title' model }}
     <div class="flex-crumbs">
       {{view App.IssueSelectedColumnView content=columns}}
     </div>
@@ -28,29 +23,15 @@
       {{hb-milestone editable=App.repo.is_collaborator assign="assignMilestone" selected=controller.model.milestone milestones=controller.repository.milestones}}
   </div>
 <div class="fullscreen-card-left">
-  <div class="fullscreen-card-description card-comment">
-    <a href="{{unbound user.html_url}}" target="_blank">
-      {{hb-avatar user=user title=user.login width=30 height=30 }}
-    </a>
-    <div class="comment-body">
-      <div class="author">
-        <strong>{{user.login}}</strong> opened this issue {{momentAgo created_at}}
-      </div>
-      {{#if body_html }}
-        {{{body_html}}}
-      {{else}}
-        <p class="empty"> No description given </p>
-      {{/if}}
-    </div>
-  </div>
+  {{render 'issue.body' model}}
 
   <div class="fullscreen-card-activity">
     <div class="fullscreen-header">
       <h4> Activity </h4>
     </div>
-    {{! render the activity stream }}
-    {{view App.IssueActivitiesView activities=sortedActivities }}
+    {{ render 'issue.activities' allActivities }}
   </div>
+
   {{#if App.loggedIn }}
   <hr></hr>
   <form {{action submitComment on="submit"}} class="flex-form">

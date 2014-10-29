@@ -58,21 +58,26 @@ var CollectionView = Ember.CollectionView.extend({
         before = beforeData.get("model._data.milestone_order") || beforeData.get("model.number"),
         after = afterData.get("model._data.milestone_order") || afterData.get("model.number");
 
+        var onCancel = function(){
+          ui.sender.sortable('cancel');
+        }
+
         if(first && last) {
-          that.get("controller").cardMoved(currentData, currentData.get("model.number"))
+          that.get("controller").cardMoved(currentData, currentData.get("model.number"), onCancel)
           return;
         }
+
         
         if(first) {
-          that.get("controller").cardMoved(currentData, (after || 1)/2);
+          that.get("controller").cardMoved(currentData, (after || 1)/2, onCancel);
           // dragged it to the top
 
         } else if (last) {
           // dragged to the bottom
-          that.get("controller").cardMoved(currentData, (before + 1));
+          that.get("controller").cardMoved(currentData, (before + 1), onCancel);
 
         }  else {
-          that.get("controller").cardMoved(currentData, (((after + before) || 1)/2));
+          that.get("controller").cardMoved(currentData, (((after + before) || 1)/2), onCancel);
         }
       }
     })
