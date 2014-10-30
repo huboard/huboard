@@ -9,6 +9,7 @@ Dotenv.load
 Bundler.require
 $: << File.expand_path('../', __FILE__)
 $: << File.expand_path('../lib', __FILE__)
+require 'faye'
 
 environment = ENV["HUBOARD_ENV"] || "development"
 require "config/environments/#{environment}.rb"

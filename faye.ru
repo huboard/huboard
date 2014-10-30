@@ -4,6 +4,8 @@ Bundler.require
 require 'dotenv'
 Dotenv.load
 
+require 'faye'
+
 options = {
   mount: '/site/pubsub',
   timeout: 10,
