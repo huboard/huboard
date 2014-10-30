@@ -3010,14 +3010,18 @@ function program2(depth0,data) {
 function program4(depth0,data) {
   
   var buffer = '', stack1, hashContexts, hashTypes, options;
-  data.buffer.push("\n  ");
+  data.buffer.push("\n  <div class=\"hb-avatar-tooltip\">\n    ");
   hashContexts = {'user': depth0};
   hashTypes = {'user': "ID"};
   options = {hash:{
     'user': ("assignee")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers['hb-avatar'] || depth0['hb-avatar']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-avatar", options))));
-  data.buffer.push("\n");
+  data.buffer.push("\n    <p> ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "assignee.login", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" </p>\n  </div>\n");
   return buffer;
   }
 
