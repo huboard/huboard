@@ -29,7 +29,8 @@ module HuBoard
       helpers Sinatra::Partials
 
       not_found do
-        erb :"404", layout: false
+
+        erb ([:"404",:"404a"].sample), layout: false
       end
 
       error Ghee::Unauthorized do
