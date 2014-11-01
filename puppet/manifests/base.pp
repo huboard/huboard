@@ -1,3 +1,5 @@
+
+
 group {'puppet': 
  ensure => "present",
 }
@@ -8,16 +10,17 @@ File {
   mode  => 0644,
 }
 
+class { 'apt':
+  always_apt_update => true,
+}
+
 exec { 'apt-update':
   command => "/usr/bin/apt-get update"
 }
 
 Exec["apt-update"] -> Package <| |> 
-
 package { 
   'vim-gnome': ensure => installed;
-  'nginx': ensure => latest;
-  'nginx-extras': ensure => latest;
 }
 
 service { 'nginx':
@@ -139,11 +142,6 @@ file { '/opt/kibana':
   ensure => directory
 }
 
-file { '/etc/nginx/sites-available/default':
-  ensure  => file,
-  content  =>'server { listen 9201; root /opt/kibana/src; location / { } }',
-  notify  => Service['nginx'],
-}
 
 exec { 'clone-kibana': 
   command => '/usr/bin/git clone https://github.com/elasticsearch/kibana.git .',
@@ -152,3 +150,5 @@ exec { 'clone-kibana':
   creates => '/opt/kibana/.git',
 }
 
+
+include service_nginx

@@ -1,4 +1,2 @@
-web: bundle exec shotgun
-memcache: memcached
-couchdb: couchdb
+web: bundle exec shotgun -p $PORT
 
