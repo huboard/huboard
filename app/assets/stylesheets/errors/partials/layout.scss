@@ -1,0 +1,18 @@
+.flex-wrap {
+ @include display(flex);
+ min-height: 100vh;
+
+ @include m(left) {
+  @include rem((
+    margin-top: 20px,
+    margin-bottom: 20px
+  ));
+  @include display(flex);
+  @include flex(1);
+  background: url(asset-path('errors/403/403_page.svg')) no-repeat center center;
+ }
+ @include m(right) {
+   @include flex(1);
+ }
+
+}

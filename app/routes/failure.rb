@@ -5,6 +5,9 @@ module HuBoard
         status 403
         erb :"401", layout: false
       end
+      get '/access_denied' do
+        erb :"403", layout: false
+      end
     end
   end
 end

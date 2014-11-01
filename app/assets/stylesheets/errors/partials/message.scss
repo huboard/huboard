@@ -1,0 +1,98 @@
+.message {
+
+  @include display(flex);
+  @include flex-direction(column);
+
+  @include e(top) {
+    @include flex(2);
+  }
+  @include e(middle) {
+    @include flex(1);
+  }
+  @include e(bottom) {
+    @include flex(1);
+  }
+
+  margin-left: 13.5vw;
+  margin-right: 13.5vw;
+
+  @include rem((
+    margin-top: 30px,
+    margin-bottom: 20px
+  ));
+  
+
+
+  h1 {
+    text-align: center;
+    font-size: 18vh;
+    color: white;
+    @include rem((
+      margin-bottom: 10px
+    ));
+
+  }
+
+  h2 {
+    text-align: center;
+    font-size: 5vh;
+    color: #F69333;
+    @include rem((
+      margin-bottom: 10px
+    ));
+  }
+
+  h3 {
+    text-align: center;
+    color: white;
+    font-size: 4vh;
+    @include rem((
+      margin-bottom: 10px
+    ));
+  }
+  p {
+    text-align: center;
+    color: white;
+    @include rem((
+      padding: 0 10px
+    ));
+  }
+
+  .call-to-action {
+    background: #F69333;
+    text-align: center;
+    color: white;
+    font-size: 1.5em;
+    @include rem((
+      padding: 20px 10px,
+      margin: 0 20px
+    ));
+
+    cursor: pointer;
+  }
+
+}
+
+.illustration {
+  @include rem((
+  margin-top: 20px,
+  margin-right: 20px
+  ));
+
+  @include m(policeman) {
+    background: url(asset-path('errors/403/403_policeman.svg')) no-repeat center bottom;
+  }
+  @include m(death) {
+    background: url(asset-path('errors/404a/404a-death.svg')) no-repeat center bottom;
+  }
+  @include m(thief) {
+    background: url(asset-path('errors/404/404-thief.svg')) no-repeat center bottom;
+  }
+  @include m(robot) {
+    background: url(asset-path('errors/500/500-robot.svg')) no-repeat center bottom;
+  }
+  @include m(guy) {
+    background: url(asset-path('errors/503/503-guy.svg')) no-repeat center bottom;
+  }
+
+}

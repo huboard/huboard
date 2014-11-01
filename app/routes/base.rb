@@ -31,6 +31,10 @@ module HuBoard
       not_found do
         erb :"404", layout: false
       end
+
+      error Ghee::Unauthorized do
+        throw(:warden, action: 'access_denied')
+      end
     end
   end
 end
