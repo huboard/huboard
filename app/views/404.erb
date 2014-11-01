@@ -2,25 +2,36 @@
 <html>
 <head>
   <meta charset="utf-8" />
+  <meta name="description" content="Instant project management for GitHub issues">
   <title>HuBoard :: Not found</title>
-  <link rel="stylesheet" href="<%= stylesheet_path "splash.css" %>">
-  </head>
+  <link rel="stylesheet" href="<%= stylesheet_path "errors/main.css" %>">
+</head>
   <body>
-  <div class="splash">
-    <img height="468" src="<%= image_path 'headerTransparent.png' %>" />
-  </div>
-  <div id="wrapper">
-  
-    <div class="header">
-      <div class="font-numbers numbers-big">
-          404
+    <div class="flex-wrap">
+      <div class="flex-wrap--left">
+        <div class="message">
+          <div class="message__top">
+            <h1>404</h1>
+            <h2> UH OH! </h2>
+            <h3> Looks like someone has run off with that page. </h3>
+          </div>
+          <div class="message__middle">
+            <p>
+            While we send out the blood hounds, why don't you go back to the homepage and try again.
+
+            </p>
+          </div>
+          <div class="message__bottom">
+            <a href="/" class="call-to-action">
+              BACK HOME
+            </a>
+          </div>
+
+        </div>
       </div>
-      <h1> There is no HuBoard here </h1>
-      <a href='/' class="back-link">Back home</a>
-
+      <div class="flex-wrap--right illustration illustration--thief">
+      </div>
     </div>
-  </div>
-
-
-</body>
+     <%= partial :fontdeck %>
+  </body>
 </html>
