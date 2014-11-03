@@ -1,4 +1,5 @@
 .message {
+  position: relative;
 
   @include display(flex);
   @include flex-direction(column);
@@ -13,23 +14,48 @@
     @include flex(1);
   }
 
-  margin-left: 13.5vw;
-  margin-right: 13.5vw;
+  background: rgba(255,255,255, 0.2);
+
+  @include rem((
+    margin: 0,
+    padding: 30px
+  ));
+
+  &:before, &:after {
+    content: ' ';
+    width:0;
+    height: 0;
+    position: absolute;
+    top:0;
+    right:0;
+  }
+  &:before {
+    border-top: 100px solid #7E62A9;
+    border-left: 100px solid transparent;
+  }
+  &:after {
+    border-bottom: 100px solid rgba(255,255,255, 0.2);
+    border-right: 100px solid transparent;
+  }
+
 
   @include rem((
     margin-top: 30px,
     margin-bottom: 20px
   ));
-  
+
 
 
   h1 {
     text-align: center;
     font-family: $hb-font-headings;
     font-size: 18vh;
+    @media (max-width: 768px) {
+      font-size: 12vh;
+    }
     color: white;
     @include rem((
-      margin-bottom: 10px
+    margin-bottom: 10px
     ));
 
   }
@@ -40,7 +66,7 @@
     font-size: 5vh;
     color: #F69333;
     @include rem((
-      margin-bottom: 10px
+    margin-bottom: 10px
     ));
   }
 
@@ -50,7 +76,7 @@
     color: white;
     font-size: 4vh;
     @include rem((
-      margin-bottom: 10px
+    margin-bottom: 10px
     ));
   }
   p {
@@ -58,7 +84,7 @@
     text-align: center;
     color: white;
     @include rem((
-      padding: 0 10px
+    padding: 0 10px
     ));
   }
 
@@ -69,8 +95,8 @@
     color: white;
     font-size: 1.5em;
     @include rem((
-      padding: 20px 10px,
-      margin: 0 20px
+    padding: 20px 10px,
+    margin: 0 20px
     ));
 
     cursor: pointer;
@@ -99,5 +125,6 @@
   @include m(guy) {
     background: url(asset-path('errors/503/503-guy.svg')) no-repeat center bottom;
   }
+
 
 }

@@ -13,6 +13,8 @@ module HuBoard
 
         enable :use_code
         set :raise_errors, true
+        set :dump_errors, false
+        set :show_exceptions, false
       end
 
       helpers do
@@ -28,13 +30,24 @@ module HuBoard
       helpers Sinatra::ContentFor
       helpers Sinatra::Partials
 
-      not_found do
+      get '/throw' do
+        raise "SHIT!"
+      end
 
+      get '/site/error' do
+        erb :"500", layout: false
+      end
+
+      not_found do
         erb ([:"404",:"404a"].sample), layout: false
       end
 
       error Ghee::Unauthorized do
         throw(:warden, action: 'access_denied')
+      end
+
+      error do
+        erb :"500", layout: false
       end
     end
   end
