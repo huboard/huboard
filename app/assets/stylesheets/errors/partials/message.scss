@@ -66,7 +66,7 @@
     font-size: 5vh;
     color: #F69333;
     @include rem((
-    margin-bottom: 10px
+      margin-bottom: 10px
     ));
   }
 
@@ -76,16 +76,22 @@
     color: white;
     font-size: 4vh;
     @include rem((
-    margin-bottom: 10px
+      margin-bottom: 10px
     ));
+    max-width: 530px;
+    margin-left: auto;
+    margin-right: auto;
   }
   p {
     font-family: $hb-font-body;
     text-align: center;
     color: white;
     @include rem((
-    padding: 0 10px
+      padding: 0 10px
     ));
+    max-width: 450px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .call-to-action {
