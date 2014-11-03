@@ -21,7 +21,7 @@ module HuBoard
     end
 
     def logged_in?
-      return authenticated?(:private) || authenticated?(:public) || authenticated?
+      return authenticated?(:private) || authenticated?
     end
 
     def encrypted_token

@@ -30,10 +30,6 @@ module HuBoard
       helpers Sinatra::ContentFor
       helpers Sinatra::Partials
 
-      get '/throw' do
-        raise "SHIT!"
-      end
-
       get '/site/error' do
         erb :"500", layout: false
       end

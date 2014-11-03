@@ -22,12 +22,7 @@ module HuBoard
       end
 
       get '/login/public/?' do
-        authenticate! :scope => :public
-        redirect params[:redirect_to] || '/'
-      end
-
-      get '/login/last_known/?' do
-        authenticate! :scope => :last_known
+        authenticate!
         redirect params[:redirect_to] || '/'
       end
 
