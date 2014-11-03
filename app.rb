@@ -57,7 +57,6 @@ module HuBoard
     GITHUB_CONFIG = {
       :client_id     => ENV['GITHUB_CLIENT_ID'],
       :client_secret => ENV['GITHUB_SECRET'],
-      :scope => "public_repo"
     }
 
     configure do
@@ -93,8 +92,11 @@ module HuBoard
     use Warden::Manager do |config|
       config.failure_app = HuBoard::Routes::Failure
       config.default_strategies :github, :personal_token
-      config.scope_defaults :default, :config => GITHUB_CONFIG
+      config.scope_defaults :default, :config => GITHUB_CONFIG.merge(:scope => "public_repo")
+      config.scope_defaults :public, :config => GITHUB_CONFIG.merge(:scope => "public_repo")
       config.scope_defaults :private, :config => GITHUB_CONFIG.merge(:scope => 'repo')
+      config.scope_defaults :last_known, :config => GITHUB_CONFIG
+
     end
 
     use EnsureEMRunning

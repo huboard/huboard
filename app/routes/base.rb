@@ -43,7 +43,8 @@ module HuBoard
       end
 
       error Ghee::Unauthorized do
-        throw(:warden, action: 'access_denied')
+        binding.pry
+        throw(:warden, action: 'bad_credentials')
       end
 
       error do
