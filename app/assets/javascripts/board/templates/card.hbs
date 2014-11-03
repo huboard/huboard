@@ -12,10 +12,7 @@
 </div>
 
 {{#if assignee }}
-  <div class="hb-avatar-tooltip">
-    {{hb-avatar user=assignee }}
-    <p> {{ assignee.login }} </p>
-  </div>
+  {{hb-avatar-tooltip user=assignee width="24" height="24" }}
 {{/if}}
 
 <div class="card-labels">

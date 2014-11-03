@@ -1,6 +1,13 @@
 .hb-avatar-tooltip {
   color: white;
 
+  &:hover {
+    p {
+      display: block;
+      visibility: visible;
+    }
+  }
+
   p {
     z-index: 10;
     position: absolute;
@@ -27,10 +34,4 @@
     }
   }
 
-  &:hover {
-    p {
-      display: block;
-      visibility: visible;
-    }
-  }
 }
