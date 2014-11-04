@@ -1,5 +1,5 @@
 var ColumnController = Ember.ObjectController.extend({
-  needs: ["index"],
+  needs: ["index", "application"],
   quickTitle: "Herp",
   style: Ember.computed.alias("controllers.index.column_style"),
   isLastColumn: function(){
@@ -41,7 +41,21 @@ var ColumnController = Ember.ObjectController.extend({
   dragging: false,
   cardMoved : function (cardController, index){
     cardController.send("moved", index, this.get("model"))
-  }
+  },
+  onQuickAdd: function(){
+    var newIssue = App.Issue.createNew();
+    var controller = this;
+    var first = this.get("controllers.application.model.board").topIssue();
+    var order = null;
+    if(first) {
+      order = first._data.order / 2;
+    }
+    newIssue.set('title', controller.get('quickTitle'));
+    newIssue.saveNew(order).then(function(issue){
+      controller.send("issueCreated", issue);
+      controller.set('quickTitle', '');
+    });
+  },
 })
 
 module.exports = ColumnController;

@@ -845,7 +845,7 @@ module.exports = CardController;
 
 },{"../mixins/socket":41}],18:[function(require,module,exports){
 var ColumnController = Ember.ObjectController.extend({
-  needs: ["index"],
+  needs: ["index", "application"],
   quickTitle: "Herp",
   style: Ember.computed.alias("controllers.index.column_style"),
   isLastColumn: function(){
@@ -887,7 +887,21 @@ var ColumnController = Ember.ObjectController.extend({
   dragging: false,
   cardMoved : function (cardController, index){
     cardController.send("moved", index, this.get("model"))
-  }
+  },
+  onQuickAdd: function(){
+    var newIssue = App.Issue.createNew();
+    var controller = this;
+    var first = this.get("controllers.application.model.board").topIssue();
+    var order = null;
+    if(first) {
+      order = first._data.order / 2;
+    }
+    newIssue.set('title', controller.get('quickTitle'));
+    newIssue.saveNew(order).then(function(issue){
+      controller.send("issueCreated", issue);
+      controller.set('quickTitle', '');
+    });
+  },
 })
 
 module.exports = ColumnController;
@@ -3304,14 +3318,19 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   var buffer = '', stack1, hashContexts, hashTypes, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
 
 
-  hashContexts = {'value': depth0,'placeholder': depth0};
-  hashTypes = {'value': "STRING",'placeholder': "STRING"};
+  hashContexts = {'action': depth0,'value': depth0,'placeholder': depth0};
+  hashTypes = {'action': "STRING",'value': "ID",'placeholder': "STRING"};
   options = {hash:{
+    'action': ("onQuickAdd"),
     'value': ("quickTitle"),
     'placeholder': ("Create issue")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
-  data.buffer.push("\n<i class=\"ui-icon ui-icon-plus\" ></i>\n\n\n\n");
+  data.buffer.push("\n<i class=\"ui-icon ui-icon-plus\" ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "createNewIssue", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" ></i>\n\n\n\n");
   return buffer;
   
 });
@@ -76100,12 +76119,8 @@ var ColumnView = Ember.ContainerView.extend({
     templateName: "createNewIssue",
     classNames: ["create-issue"],
     isVisible: function(){
-      return this.get('controller.isFirstColumn');
+      return this.get('controller.isFirstColumn') && App.get('loggedIn');
     }.property('controller.isFirstColumn'),
-    click: function(){
-      this.get('controller').send("createNewIssue");
-    },
-    // do something to listen to the enterkey on the textbox and submit the issue
   }),
   collapsedView: Ember.View.extend({
     classNames:["collapsed"],
