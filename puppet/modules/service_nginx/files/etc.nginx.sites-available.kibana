@@ -1,0 +1,9 @@
+server {
+
+  listen 9201;
+  root /opt/kibana/src;
+  location / {
+    
+
+  }
+}
