@@ -1,5 +1,6 @@
 var ColumnController = Ember.ObjectController.extend({
   needs: ["index"],
+  quickTitle: "Herp",
   style: Ember.computed.alias("controllers.index.column_style"),
   isLastColumn: function(){
     return this.get("controllers.index.columns.lastObject.name") === this.get("model.name");

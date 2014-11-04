@@ -81,13 +81,24 @@ var ColumnView = Ember.ContainerView.extend({
   classNameBindings:[":hb-task-column",":column",":task-column","isCollapsed:hb-state-collapsed","isHovering:hovering"],
   isCollapsed: Ember.computed.alias("controller.isCollapsed"),
   isHovering: Ember.computed.alias("controller.isHovering"),
-  childViews: ["headerView", CollectionView, "collapsedView"],
+  childViews: ["headerView", "newIssueView", CollectionView, "collapsedView"],
   headerView: Ember.View.extend({
     tagName: "h3",
     templateName: "columnHeader",
     click: function(){
       this.get("controller").toggleProperty('isCollapsed')
     }
+  }),
+  newIssueView: Ember.View.extend({
+    templateName: "createNewIssue",
+    classNames: ["create-issue"],
+    isVisible: function(){
+      return this.get('controller.isFirstColumn');
+    }.property('controller.isFirstColumn'),
+    click: function(){
+      this.get('controller').send("createNewIssue");
+    },
+    // do something to listen to the enterkey on the textbox and submit the issue
   }),
   collapsedView: Ember.View.extend({
     classNames:["collapsed"],

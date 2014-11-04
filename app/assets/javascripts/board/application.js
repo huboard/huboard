@@ -846,6 +846,7 @@ module.exports = CardController;
 },{"../mixins/socket":41}],18:[function(require,module,exports){
 var ColumnController = Ember.ObjectController.extend({
   needs: ["index"],
+  quickTitle: "Herp",
   style: Ember.computed.alias("controllers.index.column_style"),
   isLastColumn: function(){
     return this.get("controllers.index.columns.lastObject.name") === this.get("model.name");
@@ -3293,6 +3294,24 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   options = {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.render || depth0.render),stack1 ? stack1.call(depth0, "column_count", "model", options) : helperMissing.call(depth0, "render", "column_count", "model", options))));
   data.buffer.push("</small>\n");
+  return buffer;
+  
+});
+
+Ember.TEMPLATES['create_new_issue'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', stack1, hashContexts, hashTypes, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+
+
+  hashContexts = {'value': depth0,'placeholder': depth0};
+  hashTypes = {'value': "STRING",'placeholder': "STRING"};
+  options = {hash:{
+    'value': ("quickTitle"),
+    'placeholder': ("Create issue")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
+  data.buffer.push("\n<i class=\"ui-icon ui-icon-plus\" ></i>\n\n\n\n");
   return buffer;
   
 });
@@ -76069,13 +76088,24 @@ var ColumnView = Ember.ContainerView.extend({
   classNameBindings:[":hb-task-column",":column",":task-column","isCollapsed:hb-state-collapsed","isHovering:hovering"],
   isCollapsed: Ember.computed.alias("controller.isCollapsed"),
   isHovering: Ember.computed.alias("controller.isHovering"),
-  childViews: ["headerView", CollectionView, "collapsedView"],
+  childViews: ["headerView", "newIssueView", CollectionView, "collapsedView"],
   headerView: Ember.View.extend({
     tagName: "h3",
     templateName: "columnHeader",
     click: function(){
       this.get("controller").toggleProperty('isCollapsed')
     }
+  }),
+  newIssueView: Ember.View.extend({
+    templateName: "createNewIssue",
+    classNames: ["create-issue"],
+    isVisible: function(){
+      return this.get('controller.isFirstColumn');
+    }.property('controller.isFirstColumn'),
+    click: function(){
+      this.get('controller').send("createNewIssue");
+    },
+    // do something to listen to the enterkey on the textbox and submit the issue
   }),
   collapsedView: Ember.View.extend({
     classNames:["collapsed"],
