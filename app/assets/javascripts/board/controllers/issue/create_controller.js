@@ -2,7 +2,7 @@ var IssuesCreateController = Ember.ObjectController.extend({
   needs: ["application"],
   actions: {
     submit: function() {
-      this.createNewIssue();
+      this.createIssue();
     }
   },
   isCollaboratorBinding: "App.repo.is_collaborator",
@@ -23,7 +23,7 @@ var IssuesCreateController = Ember.ObjectController.extend({
       return i.login 
     });
   }.property('controllers.application.model.board.assignees'),
-  createNewIssue: function(){
+  createIssue: function(){
     var controller = this;
     this.set("processing",true)
     var first = this.get("controllers.application.model.board").topIssue();

@@ -10,7 +10,7 @@ var IssuesQuickCreateController = IssuesCreateController.extend({
   actions: {
     onQuickAdd: function(){
       this.set('model.title', this.get('quickTitle'));
-      this.createNewIssue();
+      this.createIssue();
       this.set('quickTitle', '');
     },
   },
