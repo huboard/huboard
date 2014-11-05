@@ -2,17 +2,7 @@ var IssuesCreateController = Ember.ObjectController.extend({
   needs: ["application"],
   actions: {
     submit: function() {
-      var controller = this;
-      this.set("processing",true)
-      var first = this.get("controllers.application.model.board").topIssue();
-      var order = null;
-      if(first) {
-        order = first._data.order / 2;
-      }
-      this.get("model").saveNew(order).then(function(issue){
-         controller.send("issueCreated", issue)
-         controller.set("processing",false)
-      });
+      this.createNewIssue();
     }
   },
   isCollaboratorBinding: "App.repo.is_collaborator",
@@ -32,7 +22,20 @@ var IssuesCreateController = Ember.ObjectController.extend({
     return _.uniq(_.compact(this.get('controllers.application.model.board.assignees')), function(i){
       return i.login 
     });
-  }.property('controllers.application.model.board.assignees')
+  }.property('controllers.application.model.board.assignees'),
+  createNewIssue: function(){
+    var controller = this;
+    this.set("processing",true)
+    var first = this.get("controllers.application.model.board").topIssue();
+    var order = null;
+    if(first) {
+      order = first._data.order / 2;
+    }
+    this.get("model").saveNew(order).then(function(issue){
+       controller.send("issueCreated", issue)
+       controller.set("processing",false)
+    });
+  },
 });
 
 module.exports = IssuesCreateController;

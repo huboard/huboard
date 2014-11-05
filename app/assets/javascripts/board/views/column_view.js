@@ -81,7 +81,7 @@ var ColumnView = Ember.ContainerView.extend({
   classNameBindings:[":hb-task-column",":column",":task-column","isCollapsed:hb-state-collapsed","isHovering:hovering"],
   isCollapsed: Ember.computed.alias("controller.isCollapsed"),
   isHovering: Ember.computed.alias("controller.isHovering"),
-  childViews: ["headerView", "newIssueView", CollectionView, "collapsedView"],
+  childViews: ["headerView", "quickIssueView", CollectionView, "collapsedView"],
   headerView: Ember.View.extend({
     tagName: "h3",
     templateName: "columnHeader",
@@ -89,8 +89,8 @@ var ColumnView = Ember.ContainerView.extend({
       this.get("controller").toggleProperty('isCollapsed')
     }
   }),
-  newIssueView: Ember.View.extend({
-    templateName: "createNewIssue",
+  quickIssueView: Ember.View.extend({
+    templateName: "quickIssue",
     classNames: ["create-issue"],
     isVisible: function(){
       return this.get('controller.isFirstColumn') && App.get('loggedIn');
