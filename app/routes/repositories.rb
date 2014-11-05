@@ -91,8 +91,12 @@ module HuBoard
 
         @repo = gh.repos(params[:user],params[:repo])
         if logged_in?
-          is_a_collaborator = gh.connection.get("./repos/#{params[:user]}/#{params[:repo]}/collaborators/#{current_user.login}").status == 204
-          @repo.merge!(is_collaborator: is_a_collaborator)
+          begin
+            is_a_collaborator = gh.connection.get("./repos/#{params[:user]}/#{params[:repo]}/collaborators/#{current_user.login}").status == 204
+            @repo.merge!(is_collaborator: is_a_collaborator)
+          rescue
+            @repo.merge!(is_collaborator: true)
+          end
         else
           @repo.merge!(is_collaborator: false)
         end
