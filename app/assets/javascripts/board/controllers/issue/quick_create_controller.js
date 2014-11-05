@@ -1,19 +1,19 @@
 var IssuesCreateController = require("./create_controller.js");
 
 var IssuesQuickCreateController = IssuesCreateController.extend({
-  quickTitle: '',
-
-  init: function(){
-    this.set('model', this.get('model').createNew());
-  },
-
   actions: {
-    onQuickAdd: function(){
-      this.set('model.title', this.get('quickTitle'));
-      this.createIssue();
-      this.set('quickTitle', '');
+    openFullScreen: function(){
+      var model = App.Issue.createNew();
+      model.set('title', this.get('title'));
+      model.set('milestone', this.get('milestone'));
+      this.send("createNewIssue", model);
+      this.set('model.title', '');
     },
-  },
+    onQuickAdd: function(){
+      this.createIssue();
+      this.set('model.title', '');
+    }
+  }
 });
 
 module.exports = IssuesQuickCreateController;

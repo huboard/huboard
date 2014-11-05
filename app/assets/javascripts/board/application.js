@@ -853,6 +853,7 @@ var ColumnController = Ember.ObjectController.extend({
   isFirstColumn: function(){
     return this.get("controllers.index.columns.firstObject.name") === this.get("model.name");
   }.property("controllers.index.columns.firstObject"),
+  isCreateVisible: Ember.computed.alias("isFirstColumn"),
   isCollapsed: function(key, value) {
     if(arguments.length > 1) {
       this.set("settings.taskColumn" + this.get("model.index") + "Collapsed", value);
@@ -887,6 +888,9 @@ var ColumnController = Ember.ObjectController.extend({
   cardMoved : function (cardController, index){
     cardController.send("moved", index, this.get("model"))
   },
+  newIssue: function(){
+    return App.Issue.createNew();
+  }.property()
 })
 
 module.exports = ColumnController;
@@ -1221,7 +1225,7 @@ var IssuesCreateController = Ember.ObjectController.extend({
        controller.send("issueCreated", issue)
        controller.set("processing",false)
     });
-  },
+  }
 });
 
 module.exports = IssuesCreateController;
@@ -1231,19 +1235,19 @@ module.exports = IssuesCreateController;
 var IssuesCreateController = require("./create_controller.js");
 
 var IssuesQuickCreateController = IssuesCreateController.extend({
-  quickTitle: '',
-
-  init: function(){
-    this.set('model', this.get('model').createNew());
-  },
-
   actions: {
-    onQuickAdd: function(){
-      this.set('model.title', this.get('quickTitle'));
-      this.createIssue();
-      this.set('quickTitle', '');
+    openFullScreen: function(){
+      var model = App.Issue.createNew();
+      model.set('title', this.get('title'));
+      model.set('milestone', this.get('milestone'));
+      this.send("createNewIssue", model);
+      this.set('model.title', '');
     },
-  },
+    onQuickAdd: function(){
+      this.createIssue();
+      this.set('model.title', '');
+    }
+  }
 });
 
 module.exports = IssuesQuickCreateController;
@@ -1423,6 +1427,12 @@ var MilestoneColumnController = Ember.ObjectController.extend({
   issues: function() {
     return this.getIssues();
   }.property("controllers.milestones.forceRedraw"),
+  newIssue: function(){
+    var newModel = App.Issue.createNew();
+    newModel.set('milestone', this.get("model.milestone"));
+    return newModel;
+  }.property(),
+  isCreateVisible: true,
   cardMoved : function (cardController, index, onCancel){
     var columnController = this;
 
@@ -2600,8 +2610,8 @@ var IndexRoute = Ember.Route.extend({
     this.render('filters', {into: 'index', outlet: 'sidebarMiddle'})
   },
   actions : {
-    createNewIssue : function () {
-      this.controllerFor("issue.create").set("model", App.Issue.createNew());
+    createNewIssue : function (model) {
+      this.controllerFor("issue.create").set("model", model || App.Issue.createNew());
       this.send("openModal","issue.create")
     },
     archive: function (issue) {
@@ -2712,8 +2722,8 @@ module.exports = MilestonesRoute =  Ember.Route.extend({
     this.render('filters', {into: 'milestones', outlet: 'sidebarMiddle'})
   },
   actions :{
-    createNewIssue : function () {
-      this.controllerFor("issue.create").set("model", App.Issue.createNew());
+    createNewIssue : function (model) {
+      this.controllerFor("issue.create").set("model", model || App.Issue.createNew());
       this.send("openModal","issue.create")
     },
     archive: function (issue) {
@@ -3691,14 +3701,14 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   hashTypes = {'action': "STRING",'value': "ID",'placeholder': "STRING"};
   options = {hash:{
     'action': ("onQuickAdd"),
-    'value': ("quickTitle"),
+    'value': ("title"),
     'placeholder': ("Create issue")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
   data.buffer.push("\n<i class=\"ui-icon ui-icon-plus\" ");
   hashTypes = {};
   hashContexts = {};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "createNewIssue", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "openFullScreen", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(" ></i>\n\n\n\n");
   return buffer;
   
@@ -3853,7 +3863,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   hashTypes = {};
   hashContexts = {};
   options = {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
-  data.buffer.push(escapeExpression(((stack1 = helpers.render || depth0.render),stack1 ? stack1.call(depth0, "issue_quick_create", "App.Issue", options) : helperMissing.call(depth0, "render", "issue_quick_create", "App.Issue", options))));
+  data.buffer.push(escapeExpression(((stack1 = helpers.render || depth0.render),stack1 ? stack1.call(depth0, "issue_quick_create", "newIssue", options) : helperMissing.call(depth0, "render", "issue_quick_create", "newIssue", options))));
   data.buffer.push("\n\n");
   return buffer;
   
@@ -76337,6 +76347,14 @@ module.exports = IssueBodyView;
 
 },{}],86:[function(require,module,exports){
 var IssuesCreateView = App.ModalView.extend({
+  focusTitleField: function(){
+      Ember.run.schedule('afterRender', this, 'focusTextbox');
+  }.on('init'),
+  focusTextbox: function(){
+    var input = this.$('input');
+    input.focus();
+    input.val(input.val());
+  }
 });
 
 module.exports = IssuesCreateView;
@@ -76528,13 +76546,20 @@ var ColumnView = Ember.ContainerView.extend({
   classNameBindings:[":milestone","controller.cssClass",":column","isCollapsed:hb-state-collapsed","isHovering:hovering"],
   isCollapsed: Ember.computed.alias("controller.isCollapsed"),
   isHovering: Ember.computed.alias("controller.isHovering"),
-  childViews: ["headerView", CollectionView, "collapsedView"],
+  childViews: ["headerView","quickIssueView", CollectionView, "collapsedView"],
   headerView: Ember.View.extend({
     tagName: "h3",
     templateName: "milestoneColumnHeader",
     click: function(){
       this.get("controller").toggleProperty('isCollapsed')
     }
+  }),
+  quickIssueView: Ember.View.extend({
+    templateName: "quickIssue",
+    classNames: ["create-issue"],
+    isVisible: function(){
+      return this.get('controller.isCreateVisible') && App.get('loggedIn');
+    }.property('controller.isFirstColumn'),
   }),
   collapsedView: Ember.View.extend({
     classNames:["collapsed"],

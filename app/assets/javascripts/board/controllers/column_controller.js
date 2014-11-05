@@ -7,6 +7,7 @@ var ColumnController = Ember.ObjectController.extend({
   isFirstColumn: function(){
     return this.get("controllers.index.columns.firstObject.name") === this.get("model.name");
   }.property("controllers.index.columns.firstObject"),
+  isCreateVisible: Ember.computed.alias("isFirstColumn"),
   isCollapsed: function(key, value) {
     if(arguments.length > 1) {
       this.set("settings.taskColumn" + this.get("model.index") + "Collapsed", value);
@@ -41,6 +42,9 @@ var ColumnController = Ember.ObjectController.extend({
   cardMoved : function (cardController, index){
     cardController.send("moved", index, this.get("model"))
   },
+  newIssue: function(){
+    return App.Issue.createNew();
+  }.property()
 })
 
 module.exports = ColumnController;

@@ -35,7 +35,7 @@ var IssuesCreateController = Ember.ObjectController.extend({
        controller.send("issueCreated", issue)
        controller.set("processing",false)
     });
-  },
+  }
 });
 
 module.exports = IssuesCreateController;
