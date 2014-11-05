@@ -10,7 +10,8 @@ var IssuesQuickCreateController = IssuesCreateController.extend({
       this.set('model.title', '');
     },
     onQuickAdd: function(){
-      this.createIssue();
+      var leOrder = this.get("target.topOrderNumber")
+      this.createIssue(leOrder);
       this.set('model.title', '');
     }
   }

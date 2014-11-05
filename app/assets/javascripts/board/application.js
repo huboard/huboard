@@ -888,6 +888,14 @@ var ColumnController = Ember.ObjectController.extend({
   cardMoved : function (cardController, index){
     cardController.send("moved", index, this.get("model"))
   },
+  topOrderNumber: function(){
+    var issues = this.get("issues");
+    if(issues.length){
+      return issues.get("firstObject._data.order") / 2;
+    } else {
+      return null;
+    }
+  }.property("issues.@each", "controllers.index.forceRedraw"),
   newIssue: function(){
     return App.Issue.createNew();
   }.property()
@@ -1192,7 +1200,13 @@ var IssuesCreateController = Ember.ObjectController.extend({
   needs: ["application"],
   actions: {
     submit: function() {
-      this.createIssue();
+      var first = this.get("controllers.application.model.board").topIssue();
+      
+      var order = null;
+      if(first) {
+        order = first._data.order / 2;
+      }
+      this.createIssue(order);
     }
   },
   isCollaboratorBinding: "App.repo.is_collaborator",
@@ -1213,14 +1227,9 @@ var IssuesCreateController = Ember.ObjectController.extend({
       return i.login 
     });
   }.property('controllers.application.model.board.assignees'),
-  createIssue: function(){
+  createIssue: function(order){
     var controller = this;
     this.set("processing",true)
-    var first = this.get("controllers.application.model.board").topIssue();
-    var order = null;
-    if(first) {
-      order = first._data.order / 2;
-    }
     this.get("model").saveNew(order).then(function(issue){
        controller.send("issueCreated", issue)
        controller.set("processing",false)
@@ -1244,7 +1253,8 @@ var IssuesQuickCreateController = IssuesCreateController.extend({
       this.set('model.title', '');
     },
     onQuickAdd: function(){
-      this.createIssue();
+      var leOrder = this.get("target.topOrderNumber")
+      this.createIssue(leOrder);
       this.set('model.title', '');
     }
   }
@@ -1427,6 +1437,14 @@ var MilestoneColumnController = Ember.ObjectController.extend({
   issues: function() {
     return this.getIssues();
   }.property("controllers.milestones.forceRedraw"),
+  topOrderNumber: function(){
+    var issues = this.get("issues");
+    if(issues.length){
+      return issues.get("firstObject._data.order") / 2;
+    } else {
+      return null;
+    }
+  }.property("issues.@each", "controllers.milestones.forceRedraw"),
   newIssue: function(){
     var newModel = App.Issue.createNew();
     newModel.set('milestone', this.get("model.milestone"));

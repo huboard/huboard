@@ -42,6 +42,14 @@ var ColumnController = Ember.ObjectController.extend({
   cardMoved : function (cardController, index){
     cardController.send("moved", index, this.get("model"))
   },
+  topOrderNumber: function(){
+    var issues = this.get("issues");
+    if(issues.length){
+      return issues.get("firstObject._data.order") / 2;
+    } else {
+      return null;
+    }
+  }.property("issues.@each", "controllers.index.forceRedraw"),
   newIssue: function(){
     return App.Issue.createNew();
   }.property()
