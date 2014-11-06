@@ -448,37 +448,37 @@ var HbSelectedColumnComponent = Ember.Component.extend({
 module.exports = HbSelectedColumnComponent;
 
 },{}],11:[function(require,module,exports){
+var Spinner = require('../../spin.js');
 var HbSpinnerComponent = Ember.Component.extend({
+  classNames: ["hb-spinner"],
+  spinner: function(){
+    var opts = {
+      lines: 11, // The number of lines to draw
+      length: 0, // The length of each line
+      width: 6, // The line thickness
+      radius: 8, // The radius of the inner circle
+      corners: 1, // Corner roundness (0..1)
+      rotate: 19, // The rotation offset
+      direction: 1, // 1: clockwise, -1: counterclockwise
+      color: '#999', // #rgb or #rrggbb or array of colors
+      speed: 0.3, // Rounds per second
+      trail: 42, // Afterglow percentage
+      shadow: false, // Whether to render a shadow
+      hwaccel: true, // Whether to use hardware acceleration
+      className: 'spinner', // The CSS class to assign to the spinner
+      zIndex: 2e9, // The z-index (defaults to 2000000000)
+      left: '0px', // Left position relative to parent in px
+      top: '0px',
+      position: "absolute"
+    };
 
-  actions: {
-    spinner: function(){
-      var opts = {
-        lines: 13, // The number of lines to draw
-        length: 0, // The length of each line
-        width: 6, // The line thickness
-        radius: 14, // The radius of the inner circle
-        corners: 1, // Corner roundness (0..1)
-        rotate: 19, // The rotation offset
-        direction: 1, // 1: clockwise, -1: counterclockwise
-        color: '#4a3e93', // #rgb or #rrggbb or array of colors
-        speed: 0.3, // Rounds per second
-        trail: 42, // Afterglow percentage
-        shadow: false, // Whether to render a shadow
-        hwaccel: true, // Whether to use hardware acceleration
-        className: 'spinner', // The CSS class to assign to the spinner
-        zIndex: 2e9, // The z-index (defaults to 2000000000)
-        top: '100px', // Top position relative to parent in px
-        left: 'auto' // Left position relative to parent in px
-        };
-
-      new Spinner(opts).spin(this.$().find("> div").get(0));
-    }
-  }
+    new Spinner(opts).spin(this.$().find("> div").get(0));
+  }.on('didInsertElement')
 });
 
 module.exports = HbSpinnerComponent;
 
-},{}],12:[function(require,module,exports){
+},{"../../spin.js":100}],12:[function(require,module,exports){
 var HbTabsComponent = Ember.Component.extend({
     classNames: ["tabbable"],
     init: function() {
@@ -633,7 +633,7 @@ App.deferReadiness();
 module.exports = App;
 
 
-},{"../../vendor/jquery.color":100,"../utilities/correlationId":63,"../utilities/observers":64,"../vendor/autoresize":66,"../vendor/ember":68,"../vendor/handlebars":70,"../vendor/jquery":71,"../vendor/jquery.textcomplete":72,"../vendor/lodash":73,"../vendor/marked":74}],14:[function(require,module,exports){
+},{"../../vendor/jquery.color":101,"../utilities/correlationId":63,"../utilities/observers":64,"../vendor/autoresize":66,"../vendor/ember":68,"../vendor/handlebars":70,"../vendor/jquery":71,"../vendor/jquery.textcomplete":72,"../vendor/lodash":73,"../vendor/marked":74}],14:[function(require,module,exports){
 var App = require('./app');
 
 App.Router.map(function() {
@@ -1272,9 +1272,9 @@ module.exports = IssuesCreateController;
 
 
 },{}],27:[function(require,module,exports){
-var IssuesCreateController = require("./create_controller.js");
+var IssueCreateController = require("./create_controller.js");
 
-var IssuesQuickCreateController = IssuesCreateController.extend({
+var IssueQuickCreateController = IssueCreateController.extend({
   actions: {
     openFullScreen: function(){
       var model = App.Issue.createNew();
@@ -1284,6 +1284,9 @@ var IssuesQuickCreateController = IssuesCreateController.extend({
       this.set('model.title', '');
     },
     onQuickAdd: function(){
+      if (this.get('model.title').trim() == "") {
+        return ;
+      }
       var leOrder = this.get("target.topOrderNumber")
       this.createIssue(leOrder);
       this.set('model.title', '');
@@ -1291,7 +1294,7 @@ var IssuesQuickCreateController = IssuesCreateController.extend({
   }
 });
 
-module.exports = IssuesQuickCreateController;
+module.exports = IssueQuickCreateController;
 
 },{"./create_controller.js":26}],28:[function(require,module,exports){
 var BufferedController = require("../buffered_controller");
@@ -1973,6 +1976,7 @@ App.MilestonesMissingView = require('./views/milestones/missing_view');
 App.IssueActivitiesView = require('./views/issue/activities_view');
 App.IssueBodyView = require('./views/issue/body_view');
 App.IssueCreateView = require('./views/issue/create_view');
+App.IssueQuickCreateView = require('./views/issue/quick_create_view');
 App.IssueSelectedColumnView = require('./views/issue/selected_column_view');
 App.IssueTitleView = require('./views/issue/title_view');
 App.IntegrationsIntegrationsView = require('./views/integrations/integrations_view');
@@ -1985,7 +1989,7 @@ require('./config/routes');
 module.exports = App;
 
 
-},{"./components/hb_assignee_component":1,"./components/hb_avatar_component":2,"./components/hb_board_columns_component":3,"./components/hb_column_crumb_component":4,"./components/hb_label_component":5,"./components/hb_label_selector_component":6,"./components/hb_markdown_editor_component":7,"./components/hb_milestone_component":8,"./components/hb_pane_component":9,"./components/hb_selected_column_component":10,"./components/hb_spinner_component":11,"./components/hb_tabs_component":12,"./config/app":13,"./config/routes":14,"./controllers/application_controller":15,"./controllers/assignee_controller":16,"./controllers/buffered_controller":17,"./controllers/card_controller":18,"./controllers/column_controller":19,"./controllers/column_count_controller":20,"./controllers/filters_controller":21,"./controllers/index_controller":22,"./controllers/issue/activities_controller":23,"./controllers/issue/activity_controller":24,"./controllers/issue/body_controller":25,"./controllers/issue/create_controller":26,"./controllers/issue/quick_create_controller":27,"./controllers/issue/title_controller":28,"./controllers/issue_controller":29,"./controllers/milestone_column_controller":30,"./controllers/milestones/missing_controller":31,"./controllers/milestones_controller":32,"./controllers/search_controller":33,"./controllers/settings/integrations/index_controller":34,"./controllers/settings/integrations/new_controller":35,"./controllers/settings/integrations_controller":36,"./controllers/settings/link_controller":37,"./controllers/settings/links/index_controller":38,"./controllers/settings/links_controller":39,"./helpers/moment_ago":40,"./mixins/serializable":42,"./mixins/socket":43,"./mixins/wip_limit":44,"./models/board":45,"./models/global":46,"./models/integration":47,"./models/issue":48,"./models/link":49,"./models/repo":50,"./models/settings":51,"./routes/application_route":52,"./routes/index/issue_route":53,"./routes/index_route":54,"./routes/issue_route":55,"./routes/milestones/issue_route":56,"./routes/milestones_route":57,"./routes/settings/integrations/new_route":58,"./routes/settings/integrations_route":59,"./routes/settings/links_route":60,"./routes/settings_route":61,"./templates":62,"./views/assignee_filter_view":76,"./views/card_milestone_view":77,"./views/card_view":78,"./views/card_wrapper_view":79,"./views/column_count_view":80,"./views/column_view":81,"./views/css_view":82,"./views/filter_view":83,"./views/integrations/integrations_view":84,"./views/issue/activities_view":85,"./views/issue/body_view":86,"./views/issue/create_view":87,"./views/issue/selected_column_view":88,"./views/issue/title_view":89,"./views/issue_view":90,"./views/loading_view":91,"./views/milestone_column_view":92,"./views/milestones/missing_view":93,"./views/milestones_view":94,"./views/modal_view":95,"./views/search_view":96,"./views/settings/link_view":97,"./views/settings/show_counts_view":98}],42:[function(require,module,exports){
+},{"./components/hb_assignee_component":1,"./components/hb_avatar_component":2,"./components/hb_board_columns_component":3,"./components/hb_column_crumb_component":4,"./components/hb_label_component":5,"./components/hb_label_selector_component":6,"./components/hb_markdown_editor_component":7,"./components/hb_milestone_component":8,"./components/hb_pane_component":9,"./components/hb_selected_column_component":10,"./components/hb_spinner_component":11,"./components/hb_tabs_component":12,"./config/app":13,"./config/routes":14,"./controllers/application_controller":15,"./controllers/assignee_controller":16,"./controllers/buffered_controller":17,"./controllers/card_controller":18,"./controllers/column_controller":19,"./controllers/column_count_controller":20,"./controllers/filters_controller":21,"./controllers/index_controller":22,"./controllers/issue/activities_controller":23,"./controllers/issue/activity_controller":24,"./controllers/issue/body_controller":25,"./controllers/issue/create_controller":26,"./controllers/issue/quick_create_controller":27,"./controllers/issue/title_controller":28,"./controllers/issue_controller":29,"./controllers/milestone_column_controller":30,"./controllers/milestones/missing_controller":31,"./controllers/milestones_controller":32,"./controllers/search_controller":33,"./controllers/settings/integrations/index_controller":34,"./controllers/settings/integrations/new_controller":35,"./controllers/settings/integrations_controller":36,"./controllers/settings/link_controller":37,"./controllers/settings/links/index_controller":38,"./controllers/settings/links_controller":39,"./helpers/moment_ago":40,"./mixins/serializable":42,"./mixins/socket":43,"./mixins/wip_limit":44,"./models/board":45,"./models/global":46,"./models/integration":47,"./models/issue":48,"./models/link":49,"./models/repo":50,"./models/settings":51,"./routes/application_route":52,"./routes/index/issue_route":53,"./routes/index_route":54,"./routes/issue_route":55,"./routes/milestones/issue_route":56,"./routes/milestones_route":57,"./routes/settings/integrations/new_route":58,"./routes/settings/integrations_route":59,"./routes/settings/links_route":60,"./routes/settings_route":61,"./templates":62,"./views/assignee_filter_view":76,"./views/card_milestone_view":77,"./views/card_view":78,"./views/card_wrapper_view":79,"./views/column_count_view":80,"./views/column_view":81,"./views/css_view":82,"./views/filter_view":83,"./views/integrations/integrations_view":84,"./views/issue/activities_view":85,"./views/issue/body_view":86,"./views/issue/create_view":87,"./views/issue/quick_create_view":88,"./views/issue/selected_column_view":89,"./views/issue/title_view":90,"./views/issue_view":91,"./views/loading_view":92,"./views/milestone_column_view":93,"./views/milestones/missing_view":94,"./views/milestones_view":95,"./views/modal_view":96,"./views/search_view":97,"./views/settings/link_view":98,"./views/settings/show_counts_view":99}],42:[function(require,module,exports){
 function serialize() {
     var result = {};
     for (var key in $.extend(true, {}, this))
@@ -3515,16 +3519,12 @@ function program7(depth0,data) {
 Ember.TEMPLATES['index'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, stack2, hashTypes, hashContexts, options, escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
+  var buffer = '', stack1, stack2, hashTypes, hashContexts, options, self=this, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
 
 function program1(depth0,data) {
   
-  var buffer = '', stack1, stack2, hashTypes, hashContexts, options;
-  data.buffer.push("\n  <div class=\"create-button\">\n    <button ");
-  hashTypes = {};
-  hashContexts = {};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "createNewIssue", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(" class=\"hb-button small\">Create new issue</button>\n    ");
+  var buffer = '', stack1, stack2, hashContexts, hashTypes, options;
+  data.buffer.push("\n  <div class=\"create-button\">\n    ");
   hashContexts = {'class': depth0};
   hashTypes = {'class': "STRING"};
   options = {hash:{
@@ -3532,7 +3532,7 @@ function program1(depth0,data) {
   },inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   stack2 = ((stack1 = helpers['link-to'] || depth0['link-to']),stack1 ? stack1.call(depth0, "settings", options) : helperMissing.call(depth0, "link-to", "settings", options));
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\n\n  </div>\n  ");
+  data.buffer.push("\n  </div>\n  ");
   return buffer;
   }
 function program2(depth0,data) {
@@ -3542,17 +3542,6 @@ function program2(depth0,data) {
   }
 
 function program4(depth0,data) {
-  
-  var buffer = '', hashTypes, hashContexts;
-  data.buffer.push("\n  <div class=\"create-button\">\n    <a target=\"_blank\" href=\"");
-  hashTypes = {};
-  hashContexts = {};
-  data.buffer.push(escapeExpression(helpers.unbound.call(depth0, "App.repo.html_url", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("/issues/new\" class=\"hb-button small\">Create new issue</a>\n  </div>\n  ");
-  return buffer;
-  }
-
-function program6(depth0,data) {
   
   var buffer = '', stack1, hashTypes, hashContexts, options;
   data.buffer.push("\n      ");
@@ -3577,7 +3566,7 @@ function program6(depth0,data) {
   data.buffer.push(" class=\"ui-icon ui-icon-triangle-1-e\"></i></a>\n  </div>\n\n  ");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers['if'].call(depth0, "App.repo.is_collaborator", {hash:{},inverse:self.program(4, program4, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack1 = helpers['if'].call(depth0, "App.repo.is_collaborator", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n\n</div>\n<div id=\"main-stage\" ");
   hashContexts = {'class': depth0};
@@ -3598,7 +3587,7 @@ function program6(depth0,data) {
   data.buffer.push("\n    </div>\n  </div>\n\n  <div id=\"content\" class=\"content\">\n    <div class=\"board board-not-dragging\">\n      ");
   hashTypes = {};
   hashContexts = {};
-  stack2 = helpers.each.call(depth0, "column", "in", "board_columns", {hash:{},inverse:self.noop,fn:self.program(6, program6, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack2 = helpers.each.call(depth0, "column", "in", "board_columns", {hash:{},inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n    </div>\n  </div>\n</div>\n");
   return buffer;
@@ -3744,21 +3733,12 @@ function program4(depth0,data) {
 Ember.TEMPLATES['issue_quick_create'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, hashTypes, hashContexts, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, self=this;
+  var buffer = '', stack1, stack2, hashContexts, hashTypes, options, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, self=this;
 
 function program1(depth0,data) {
   
-  var buffer = '', stack1, hashContexts, hashTypes, options;
-  data.buffer.push("\n  ");
-  hashContexts = {'action': depth0,'value': depth0,'placeholder': depth0};
-  hashTypes = {'action': "STRING",'value': "ID",'placeholder': "STRING"};
-  options = {hash:{
-    'action': ("onQuickAdd"),
-    'value': ("title"),
-    'placeholder': ("Create issue")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
-  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
-  data.buffer.push("\n  <i class=\"ui-icon ui-icon-plus\" ");
+  var buffer = '', hashTypes, hashContexts;
+  data.buffer.push("\n  <i class=\"ui-icon ui-icon-plus\" title=\"Create with details\" ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "openFullScreen", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
@@ -3769,18 +3749,27 @@ function program1(depth0,data) {
 function program3(depth0,data) {
   
   var buffer = '', hashTypes, hashContexts;
-  data.buffer.push("\n  ");
+  data.buffer.push("\n  <div style=\"position:absolute; right: 36px; top: 7px; \">\n    ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "hb-spinner", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\n");
+  data.buffer.push("\n  </div>\n");
   return buffer;
   }
 
+  hashContexts = {'action': depth0,'value': depth0,'placeholder': depth0};
+  hashTypes = {'action': "STRING",'value': "ID",'placeholder': "ID"};
+  options = {hash:{
+    'action': ("onQuickAdd"),
+    'value': ("title"),
+    'placeholder': ("view.placeholderText")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
+  data.buffer.push("\n");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers.unless.call(depth0, "processing", {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  stack2 = helpers.unless.call(depth0, "processing", {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n");
   return buffer;
   
@@ -3831,16 +3820,12 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 Ember.TEMPLATES['milestones'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, stack2, hashTypes, hashContexts, options, escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
+  var buffer = '', stack1, stack2, hashTypes, hashContexts, options, self=this, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
 
 function program1(depth0,data) {
   
-  var buffer = '', stack1, stack2, hashTypes, hashContexts, options;
-  data.buffer.push("\n    <div class=\"create-button\">\n      <button ");
-  hashTypes = {};
-  hashContexts = {};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "createNewIssue", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(" class=\"hb-button small\">Create new issue</button>\n    ");
+  var buffer = '', stack1, stack2, hashContexts, hashTypes, options;
+  data.buffer.push("\n    <div class=\"create-button\">\n    ");
   hashContexts = {'class': depth0};
   hashTypes = {'class': "STRING"};
   options = {hash:{
@@ -3858,17 +3843,6 @@ function program2(depth0,data) {
   }
 
 function program4(depth0,data) {
-  
-  var buffer = '', hashTypes, hashContexts;
-  data.buffer.push("\n    <div class=\"create-button\">\n      <a target=\"_blank\" href=\"");
-  hashTypes = {};
-  hashContexts = {};
-  data.buffer.push(escapeExpression(helpers.unbound.call(depth0, "App.repo.html_url", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("/issues/new\" class=\"hb-button small\">Create new issue</a>\n    </div>\n  ");
-  return buffer;
-  }
-
-function program6(depth0,data) {
   
   var buffer = '', stack1, hashTypes, hashContexts, options;
   data.buffer.push("\n        ");
@@ -3893,7 +3867,7 @@ function program6(depth0,data) {
   data.buffer.push(" class=\"ui-icon ui-icon-triangle-1-e\"></i></a>\n  </div>\n ");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers['if'].call(depth0, "App.repo.is_collaborator", {hash:{},inverse:self.program(4, program4, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack1 = helpers['if'].call(depth0, "App.repo.is_collaborator", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n\n</div>\n<div id=\"main-stage\" ");
   hashContexts = {'class': depth0};
@@ -3919,7 +3893,7 @@ function program6(depth0,data) {
   data.buffer.push("\n      ");
   hashTypes = {};
   hashContexts = {};
-  stack2 = helpers.each.call(depth0, "column", "in", "milestone_columns", {hash:{},inverse:self.noop,fn:self.program(6, program6, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack2 = helpers.each.call(depth0, "column", "in", "milestone_columns", {hash:{},inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n    </div>\n  </div>\n</div>\n\n");
   return buffer;
@@ -3935,7 +3909,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   hashTypes = {};
   hashContexts = {};
   options = {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
-  data.buffer.push(escapeExpression(((stack1 = helpers.render || depth0.render),stack1 ? stack1.call(depth0, "issue_quick_create", "newIssue", options) : helperMissing.call(depth0, "render", "issue_quick_create", "newIssue", options))));
+  data.buffer.push(escapeExpression(((stack1 = helpers.render || depth0.render),stack1 ? stack1.call(depth0, "issueQuickCreate", "newIssue", options) : helperMissing.call(depth0, "render", "issueQuickCreate", "newIssue", options))));
   data.buffer.push("\n\n");
   return buffer;
   
@@ -5746,14 +5720,10 @@ function program1(depth0,data) {
 Ember.TEMPLATES['components/hb-spinner'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', hashTypes, hashContexts, escapeExpression=this.escapeExpression;
+  
 
 
-  hashTypes = {};
-  hashContexts = {};
-  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "spinner", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\n");
-  return buffer;
+  data.buffer.push("<div></div>\n");
   
 });
 
@@ -76446,6 +76416,24 @@ var IssuesCreateView = App.ModalView.extend({
 module.exports = IssuesCreateView;
 
 },{}],88:[function(require,module,exports){
+var IssueQuickCreateView = Ember.View.extend({
+  placeholderText: "Add issue",
+  bindToFocus: function(){
+    var view = this;
+    this.$('input').on('focus.huboard', function() {
+      view.set('placeholderText', 'Add title then ↵');
+    });
+    this.$('input').on('blur.huboard', function() {
+      view.set('placeholderText', 'Add issue...');
+    });
+  }.on('didInsertElement'),
+  releaseEvents: function(){
+    this.$('input').off('blur.huboard focus.huboard');
+  }.on('willDestroyElement')
+})
+module.exports = IssueQuickCreateView;
+
+},{}],89:[function(require,module,exports){
 var IssueSelectedColumnView = Ember.CollectionView.extend({
   tagName: "ul",
   classNames: ["nav","breadcrumbs"],
@@ -76477,7 +76465,7 @@ var IssueSelectedColumnView = Ember.CollectionView.extend({
 
 module.exports = IssueSelectedColumnView;
 
-},{}],89:[function(require,module,exports){
+},{}],90:[function(require,module,exports){
 var IssueTitleView = Ember.View.extend({
   classNames: ["fullscreen-header"],
   actions: {
@@ -76495,7 +76483,7 @@ var IssueTitleView = Ember.View.extend({
 
 module.exports = IssueTitleView;
 
-},{}],90:[function(require,module,exports){
+},{}],91:[function(require,module,exports){
 var ModalView = require("./modal_view")
 
 var IssuesView = ModalView.extend({
@@ -76503,7 +76491,7 @@ var IssuesView = ModalView.extend({
 
 module.exports = IssuesView;
 
-},{"./modal_view":95}],91:[function(require,module,exports){
+},{"./modal_view":96}],92:[function(require,module,exports){
 var Spinner = require('../../spin');
 var LoadingView = Ember.View.extend({
   didInsertElement: function(){
@@ -76539,7 +76527,7 @@ var LoadingView = Ember.View.extend({
 
 module.exports = LoadingView;
 
-},{"../../spin":99}],92:[function(require,module,exports){
+},{"../../spin":100}],93:[function(require,module,exports){
 var WrapperView = require("./card_wrapper_view");
 
 WrapperView = WrapperView.extend({
@@ -76658,7 +76646,7 @@ var ColumnView = Ember.ContainerView.extend({
 
 module.exports = ColumnView;
 
-},{"./card_wrapper_view":79}],93:[function(require,module,exports){
+},{"./card_wrapper_view":79}],94:[function(require,module,exports){
 var ModalView = require("../modal_view")
 
 var MilestonesMissingView = ModalView.extend({
@@ -76667,7 +76655,7 @@ var MilestonesMissingView = ModalView.extend({
 
 module.exports = MilestonesMissingView;
 
-},{"../modal_view":95}],94:[function(require,module,exports){
+},{"../modal_view":96}],95:[function(require,module,exports){
 var MilestonesView = Ember.View.extend({
   classNameBindings: ["dragging:board-dragging:board-not-dragging"],
   dragging: false,
@@ -76746,7 +76734,7 @@ var MilestonesView = Ember.View.extend({
 })
 module.exports = MilestonesView;
 
-},{}],95:[function(require,module,exports){
+},{}],96:[function(require,module,exports){
 var ModalView = Em.View.extend({
   layoutName: "layouts/modal",
   modalSize: "",
@@ -76786,7 +76774,7 @@ var ModalView = Em.View.extend({
 
 module.exports = ModalView;
 
-},{}],96:[function(require,module,exports){
+},{}],97:[function(require,module,exports){
 var SearchView = Ember.View.extend({
   classNames: ["search"],
   classNameBindings: ["hasValue:has-value"],
@@ -76808,7 +76796,7 @@ var SearchView = Ember.View.extend({
 
 module.exports = SearchView;
 
-},{}],97:[function(require,module,exports){
+},{}],98:[function(require,module,exports){
 var SettingsLinkView = Ember.View.extend({
   tagName: 'li',
   classNameBindings: [":hb-widget-link","content.isLinked:hb-state-link:hb-state-unlink"],
@@ -76818,7 +76806,7 @@ var SettingsLinkView = Ember.View.extend({
 });
 module.exports = SettingsLinkView;
 
-},{}],98:[function(require,module,exports){
+},{}],99:[function(require,module,exports){
 var ShowCountsView = Ember.View.extend({
   classNameBindings: ["showColumnCounts:checked"],
   showColumnCounts: Ember.computed.alias("settings.showColumnCounts"),
@@ -76839,7 +76827,7 @@ var ShowCountsView = Ember.View.extend({
 
 module.exports = ShowCountsView;
 
-},{}],99:[function(require,module,exports){
+},{}],100:[function(require,module,exports){
 //fgnass.github.com/spin.js#v1.3
 
 /**
@@ -77190,7 +77178,7 @@ module.exports = ShowCountsView;
 
 }));
 
-},{}],100:[function(require,module,exports){
+},{}],101:[function(require,module,exports){
 /*!
  * jQuery Color Animations v@VERSION
  * https://github.com/jquery/jquery-color

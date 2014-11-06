@@ -1,6 +1,6 @@
-var IssuesCreateController = require("./create_controller.js");
+var IssueCreateController = require("./create_controller.js");
 
-var IssuesQuickCreateController = IssuesCreateController.extend({
+var IssueQuickCreateController = IssueCreateController.extend({
   actions: {
     openFullScreen: function(){
       var model = App.Issue.createNew();
@@ -10,6 +10,9 @@ var IssuesQuickCreateController = IssuesCreateController.extend({
       this.set('model.title', '');
     },
     onQuickAdd: function(){
+      if (this.get('model.title').trim() == "") {
+        return ;
+      }
       var leOrder = this.get("target.topOrderNumber")
       this.createIssue(leOrder);
       this.set('model.title', '');
@@ -17,4 +20,4 @@ var IssuesQuickCreateController = IssuesCreateController.extend({
   }
 });
 
-module.exports = IssuesQuickCreateController;
+module.exports = IssueQuickCreateController;
