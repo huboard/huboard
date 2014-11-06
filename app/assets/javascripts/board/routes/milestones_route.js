@@ -26,8 +26,8 @@ module.exports = MilestonesRoute =  Ember.Route.extend({
     this.render('filters', {into: 'milestones', outlet: 'sidebarMiddle'})
   },
   actions :{
-    createNewIssue : function () {
-      this.controllerFor("issue.create").set("model", App.Issue.createNew());
+    createNewIssue : function (model) {
+      this.controllerFor("issue.create").set("model", model || App.Issue.createNew());
       this.send("openModal","issue.create")
     },
     archive: function (issue) {

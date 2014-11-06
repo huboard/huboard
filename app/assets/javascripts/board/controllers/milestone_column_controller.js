@@ -23,6 +23,20 @@ var MilestoneColumnController = Ember.ObjectController.extend({
   issues: function() {
     return this.getIssues();
   }.property("controllers.milestones.forceRedraw"),
+  topOrderNumber: function(){
+    var issues = this.get("issues");
+    if(issues.length){
+      return issues.get("firstObject._data.milestone_order") / 2;
+    } else {
+      return null;
+    }
+  }.property("issues.@each", "controllers.milestones.forceRedraw"),
+  newIssue: function(){
+    var newModel = App.Issue.createNew();
+    newModel.set('milestone', this.get("model.milestone"));
+    return newModel;
+  }.property(),
+  isCreateVisible: true,
   cardMoved : function (cardController, index, onCancel){
     var columnController = this;
 
