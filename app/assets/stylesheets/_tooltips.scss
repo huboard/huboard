@@ -1,5 +1,6 @@
 .hb-avatar-tooltip {
   color: white;
+  position: relative;
 
   &:hover {
     p {
@@ -21,7 +22,7 @@
 
     background-color: $hb-purple;
     bottom: 27px;
-    padding: 2px 10px;
+    padding: 4px 10px;
     font-size: 12px;
 
     &:after {
