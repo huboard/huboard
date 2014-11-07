@@ -30,7 +30,7 @@ class Huboard
 
     def create_issue(params)
       issue = Hashie::Mash.new params["issue"]
-      issue.extend(Card).embed_data "order" => params["order"].to_f, "milestone_order" => params["order"].to_f if params["order"].to_f > 0 || params["milestone_order"] > 0
+      issue.extend(Card).embed_data "order" => params["order"].to_f, "milestone_order" => params["order"].to_f if params["order"].to_f > 0 
 
       milestone = issue["milestone"].nil? ? nil : issue.milestone.number
       assignee = issue["assignee"].nil? ? nil : issue.assignee.login
