@@ -6,7 +6,8 @@ var IssueQuickCreateController = IssueCreateController.extend({
       var model = App.Issue.createNew();
       model.set('title', this.get('title'));
       model.set('milestone', this.get('milestone'));
-      this.send("createNewIssue", model);
+      var leOrder = this.get("target.topOrderNumber")
+      this.send("createNewIssue", model, leOrder);
       this.set('model.title', '');
     },
     onQuickAdd: function(){

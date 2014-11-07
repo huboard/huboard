@@ -45,9 +45,9 @@ var ColumnController = Ember.ObjectController.extend({
   topOrderNumber: function(){
     var issues = this.get("issues");
     if(issues.length){
-      return issues.get("firstObject._data.order") / 2;
+      return { order: issues.get("firstObject._data.order") / 2 };
     } else {
-      return null;
+      return {};
     }
   }.property("issues.@each", "controllers.index.forceRedraw"),
   newIssue: function(){

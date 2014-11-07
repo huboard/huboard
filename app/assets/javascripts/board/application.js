@@ -930,9 +930,9 @@ var ColumnController = Ember.ObjectController.extend({
   topOrderNumber: function(){
     var issues = this.get("issues");
     if(issues.length){
-      return issues.get("firstObject._data.order") / 2;
+      return { order: issues.get("firstObject._data.order") / 2 };
     } else {
-      return null;
+      return {};
     }
   }.property("issues.@each", "controllers.index.forceRedraw"),
   newIssue: function(){
@@ -1239,13 +1239,7 @@ var IssuesCreateController = Ember.ObjectController.extend({
   needs: ["application"],
   actions: {
     submit: function() {
-      var first = this.get("controllers.application.model.board").topIssue();
-      
-      var order = null;
-      if(first) {
-        order = first._data.order / 2;
-      }
-      this.createIssue(order);
+      this.createIssue(this.get("order"));
     }
   },
   isCollaboratorBinding: "App.repo.is_collaborator",
@@ -1266,6 +1260,7 @@ var IssuesCreateController = Ember.ObjectController.extend({
       return i.login 
     });
   }.property('controllers.application.model.board.assignees'),
+  order: {},
   createIssue: function(order){
     var controller = this;
     this.set("processing",true)
@@ -1288,7 +1283,8 @@ var IssueQuickCreateController = IssueCreateController.extend({
       var model = App.Issue.createNew();
       model.set('title', this.get('title'));
       model.set('milestone', this.get('milestone'));
-      this.send("createNewIssue", model);
+      var leOrder = this.get("target.topOrderNumber")
+      this.send("createNewIssue", model, leOrder);
       this.set('model.title', '');
     },
     onQuickAdd: function(){
@@ -1455,7 +1451,7 @@ module.exports = IssuesEditController;
 
 },{}],31:[function(require,module,exports){
 var MilestoneColumnController = Ember.ObjectController.extend({
-  needs: ["milestones"],
+  needs: ["milestones", "application"],
   getIssues: function () {
     var issues = this.get("controllers.milestones.model.combinedIssues")
       .filter(function(i) {
@@ -1480,11 +1476,19 @@ var MilestoneColumnController = Ember.ObjectController.extend({
     return this.getIssues();
   }.property("controllers.milestones.forceRedraw"),
   topOrderNumber: function(){
+    var first = this.get("controllers.application.model.board").topIssue();
     var issues = this.get("issues");
     if(issues.length){
-      return issues.get("firstObject._data.milestone_order") / 2;
+      var order = { milestone_order: issues.get("firstObject._data.milestone_order") / 2};
+      if(first){
+        order.order = first._data.order / 2;
+      }
+      return order;
     } else {
-      return null;
+      if(first){
+        return { order: first._data.order / 2 };
+      }
+      return {};
     }
   }.property("issues.@each", "controllers.milestones.forceRedraw"),
   newIssue: function(){
@@ -2673,8 +2677,9 @@ var IndexRoute = Ember.Route.extend({
     this.render('filters', {into: 'index', outlet: 'sidebarMiddle'})
   },
   actions : {
-    createNewIssue : function (model) {
+    createNewIssue : function (model, order) {
       this.controllerFor("issue.create").set("model", model || App.Issue.createNew());
+      this.controllerFor("issue.create").set("order", order || {});
       this.send("openModal","issue.create")
     },
     archive: function (issue) {
@@ -2785,8 +2790,9 @@ module.exports = MilestonesRoute =  Ember.Route.extend({
     this.render('filters', {into: 'milestones', outlet: 'sidebarMiddle'})
   },
   actions :{
-    createNewIssue : function (model) {
+    createNewIssue : function (model, order) {
       this.controllerFor("issue.create").set("model", model || App.Issue.createNew());
+      this.controllerFor("issue.create").set("order", order || {});
       this.send("openModal","issue.create")
     },
     archive: function (issue) {
