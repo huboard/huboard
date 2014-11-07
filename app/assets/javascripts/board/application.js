@@ -3261,14 +3261,16 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = '', stack1, hashContexts, hashTypes, options;
-  data.buffer.push("\n    <div class=\"card-avatar\">\n      ");
-  hashContexts = {'user': depth0};
-  hashTypes = {'user': "ID"};
+  data.buffer.push("\n      ");
+  hashContexts = {'user': depth0,'width': depth0,'height': depth0};
+  hashTypes = {'user': "ID",'width': "STRING",'height': "STRING"};
   options = {hash:{
-    'user': ("assignee")
+    'user': ("assignee"),
+    'width': ("24"),
+    'height': ("24")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
-  data.buffer.push(escapeExpression(((stack1 = helpers['hb-avatar'] || depth0['hb-avatar']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-avatar", options))));
-  data.buffer.push("\n    </div>\n    ");
+  data.buffer.push(escapeExpression(((stack1 = helpers['hb-avatar-tooltip'] || depth0['hb-avatar-tooltip']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-avatar-tooltip", options))));
+  data.buffer.push("\n    ");
   return buffer;
   }
 

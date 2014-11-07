@@ -1,9 +1,7 @@
 <div class="card-header">
   <div class="title" {{bind-attr title=title }}>
     {{#if assignee}}
-    <div class="card-avatar">
-      {{hb-avatar user=assignee }}
-    </div>
+      {{hb-avatar-tooltip user=assignee width="24" height="24"}}
     {{/if}}
     {{title}} 
     <small>#{{number}}</small>

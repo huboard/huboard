@@ -305,7 +305,11 @@
     }
     padding-bottom: 5px;
     margin-bottom: 15px;
-    .card-avatar {
+    .hb-avatar-tooltip {
+      p {
+        bottom: auto;
+        top: -24px;
+      }
       display: inline;
       img {
         position: static;
