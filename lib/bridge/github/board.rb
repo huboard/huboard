@@ -10,7 +10,7 @@ class Huboard
     end
 
     def gh
-      @gh.repos(user, repo)
+      @response ||= @gh.repos(user, repo)
     end
 
     def repo_exists?(user = nil, repo = nil)
@@ -23,6 +23,17 @@ class Huboard
 
     def has_board?
       gh.raw.status == 200 && column_labels.size > 0
+    end
+
+    def issues_enabled?
+      gh.has_issues
+    end
+
+    def enable_issues
+      gh.patch(
+        :name => @repo,
+        :has_issues => true
+      )
     end
 
     def linked?(user, repo)

@@ -5,15 +5,9 @@
 
   {{#if App.repo.is_collaborator}}
   <div class="create-button">
-    <button {{action createNewIssue }} class="hb-button small">Create new issue</button>
     {{#link-to 'settings' class='hb-icon-link' }}
         <i class="ui-icon ui-icon-18 ui-icon-gear"></i>
     {{/link-to}}
-
-  </div>
-  {{else}}
-  <div class="create-button">
-    <a target="_blank" href="{{unbound App.repo.html_url}}/issues/new" class="hb-button small">Create new issue</a>
   </div>
   {{/if}}
 

@@ -33,7 +33,7 @@ module HuBoard
 
       get '/logout/?' do
         logout!
-        redirect '/'
+        redirect '/login'
       end
     end
   end

@@ -58,9 +58,11 @@ gem 'memcachier'
 gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 gem 'foreman'
 gem 'foreman-export-initscript'
+gem 'solid_use_case'
 
 group :development do
   gem 'shotgun'
+  gem 'rspec'
   #gem 'librarian-puppet'
   #gem 'puppet'
 

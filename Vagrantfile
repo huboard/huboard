@@ -27,7 +27,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # argument is a set of non-required options.
   config.vm.synced_folder ".", "/opt/huboard", type: "nfs"
 
-  config.vm.provision "puppet", :facter => { "osfamily" => "debian" }, :module_path => [ "modules"] do |puppet|
+  config.vm.provision "puppet", :facter => { "osfamily" => "debian" }, :module_path => [ "modules", "puppet/modules" ] do |puppet|
     puppet.manifests_path = "puppet/manifests"
     puppet.manifest_file  = "base.pp"
     puppet.options        = %w[ --libdir=\\$manifestdir/../modules-0/rbenv/lib/puppet ]

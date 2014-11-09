@@ -1,4 +1,5 @@
 @import "arrow";
+
 .container-fluid {
    padding-right: 25px;
    padding-left: 25px;
@@ -8,6 +9,67 @@
   vertical-align: top;
   padding: 0px 10px;
   @include box-sizing(border-box);
+}
+
+.column {
+  &.hb-state-collapsed {
+    input {
+      visibility: hidden;
+    }
+  }
+  .create-issue {
+    position: relative;
+
+    margin-bottom: 6px;
+    padding: 6px;
+
+    background: white;
+    @include box-shadow(inset 0 0px 1px rgba(0,0,0, 0.3));
+    border: 1px solid #e5e5e5;
+    border-bottom-color: darken(#e5e5e5, 5%); 
+    @include clearfix;
+
+    .ui-icon {
+      position: absolute;
+      top: 5px;
+      right: 4px;
+      cursor: pointer;
+      padding: 8px;
+      color: $hb-grey-light;
+      &:hover {
+        @include box-shadow(inset 0 0px 1px rgba(0,0,0, 0.3));
+        border: 1px solid #e5e5e5;
+        border-bottom-color: darken(#e5e5e5, 5%); 
+        padding: 7px;
+      }
+    }
+
+
+    input {
+      box-sizing: border-box;
+      height: auto;
+      width: 100%;
+      margin: 0;
+      padding: 6px 24px 6px 6px;
+      outline: none;
+      border: none;
+      background: white;
+      @include box-shadow(none);
+      @include transition(all 0s);
+
+
+      &:focus, &:hover {
+        outline: none;
+        border: none;
+        background: white;
+        border-bottom: 1px dashed #ccc;
+        padding-bottom: 5px;
+      }
+
+    }
+
+  }
+
 }
 
 
@@ -120,6 +182,9 @@
   border: 1px solid #e5e5e5;
   border-bottom-color: darken(#e5e5e5, 5%); 
   @include transform(translateZ(0));
+  .hb-avatar-tooltip {
+    position: static;
+  }
 
 
   &.border {
@@ -240,7 +305,11 @@
     }
     padding-bottom: 5px;
     margin-bottom: 15px;
-    .card-avatar {
+    .hb-avatar-tooltip {
+      p {
+        bottom: auto;
+        top: -24px;
+      }
       display: inline;
       img {
         position: static;

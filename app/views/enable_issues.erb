@@ -1,0 +1,13 @@
+  <div class="instructions drop-shadow">
+    <h2> We noticed issues are not enabled for your repository</h2>
+    <% if @repo.permissions.admin %>
+      <p> No worries, HuBoard can fix that right up.  </p>
+      <form action="/<%= h @parameters[:user]%>/<%= h @parameters[:repo]%>/board/enable_issues" method="post">
+        <input class="btn primary" type="submit" value="Yes, Enable issues for me!"/>
+      </form>
+    <% else %>
+      <p> Unfortunately, HuBoard doesn't have permission to fix that for you.  </p>
+      <p> You'll need to head over to <a href="<%= @repo.html_url %>">GitHub</a> for that</p>
+    <% end %>
+  </div>
+

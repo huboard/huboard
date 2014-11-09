@@ -11,7 +11,7 @@ require 'active_support/json'
 require 'active_support/cache/dalli_store'
 require 'active_support/number_helper'
 
-%w{ bridge couch warden }.each do |folder|
+%w{ use_cases bridge couch warden }.each do |folder|
   libraries = Dir[File.expand_path("../lib/#{folder}/**/*.rb", __FILE__)]
   libraries.each do |path_name|
     require path_name

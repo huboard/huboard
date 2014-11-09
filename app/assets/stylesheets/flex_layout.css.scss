@@ -21,6 +21,7 @@
 @import "breadcrumbs";
 @import "components/selector";
 @import 'textcomplete';
+@import "tooltips";
 
 #application > .ember-view {
    @include display(flex);

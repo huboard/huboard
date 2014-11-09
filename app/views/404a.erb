@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>HuBoard :: Not found</title>
+	<meta name="description" content="Instant project management for GitHub issues">
+  <link rel="shortcut icon" href="/favicon.ico?v=3" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- Stylesheets -->
+	<link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="<%= stylesheet_path "errors/main.css" %>">
+</head>
+  <body>
+    <div class="flex-wrap">
+      <div class="flex-wrap--left">
+        <div class="message">
+          <div class="message__top">
+            <h1>404</h1>
+            <h2> UH OH! </h2>
+            <h3> Looks like that page has bit the dust. </h3>
+          </div>
+          <div class="message__middle">
+            <p>
+            Before rigor mortis sets in, why don't you go back to the home page and try again.
+            </p>
+          </div>
+          <div class="message__bottom">
+            <a href="/" class="call-to-action">
+              BACK HOME
+            </a>
+          </div>
+
+        </div>
+      </div>
+      <div class="flex-wrap--right illustration illustration--death">
+      </div>
+    </div>
+     <%= partial :fontdeck %>
+  </body>
+</html>

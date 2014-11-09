@@ -1,0 +1,35 @@
+.hb-avatar-tooltip {
+  color: white;
+
+  p {
+    z-index: 10;
+    position: absolute;
+    visibility: hidden;
+    display: none;
+
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 5px;
+
+    background-color: $hb-purple;
+    bottom: 22.5%;
+    padding: 2px 10px;
+    font-size: 12px;
+
+    &:after {
+      @include position(absolute, 0 100 0 0%);
+      z-index: -1;
+      content: "\25BC";
+      color: $hb-purple;
+      font-size: 20px;
+      bottom: 2%;
+    }
+  }
+
+  &:hover {
+    p {
+      display: block;
+      visibility: visible;
+    }
+  }
+}
