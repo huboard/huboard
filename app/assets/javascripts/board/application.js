@@ -1451,7 +1451,7 @@ module.exports = IssuesEditController;
 
 },{}],31:[function(require,module,exports){
 var MilestoneColumnController = Ember.ObjectController.extend({
-  needs: ["milestones", "application"],
+  needs: ["milestones", "application", "index"],
   getIssues: function () {
     var issues = this.get("controllers.milestones.model.combinedIssues")
       .filter(function(i) {
@@ -1464,6 +1464,9 @@ var MilestoneColumnController = Ember.ObjectController.extend({
     return issues;
 
   },
+  isFirstColumn: function(){
+    return this.get("model.title") === "No milestone";
+  }.property("model.title"),
   isCollapsed: function(key, value) {
     if(arguments.length > 1) {
       this.set("settings.milestoneColumn" + this.get("model.milestone.number") + "Collapsed", value);
@@ -1496,7 +1499,10 @@ var MilestoneColumnController = Ember.ObjectController.extend({
     newModel.set('milestone', this.get("model.milestone"));
     return newModel;
   }.property(),
-  isCreateVisible: true,
+  isCreateVisible: function(){
+    return App.get("repo.is_collaborator") || 
+      App.get('loggedIn') && this.get('isFirstColumn');
+  }.property('isFirstColumn'),
   cardMoved : function (cardController, index, onCancel){
     var columnController = this;
 
@@ -1506,7 +1512,11 @@ var MilestoneColumnController = Ember.ObjectController.extend({
       }
     }(cardController.get("model.repo"));
 
-    var milestone = this.get('model.group').find(equalsA);
+    if (this.get('model.group') == undefined) {
+      var milestone = this.get('model');
+    } else {
+      var milestone = this.get('model.group').find(equalsA);
+    }
 
     if (milestone) {
       cardController.send("assignMilestone",index, milestone);
@@ -76674,7 +76684,7 @@ var ColumnView = Ember.ContainerView.extend({
     templateName: "quickIssue",
     classNames: ["create-issue"],
     isVisible: function(){
-      return this.get('controller.isCreateVisible') && App.get('loggedIn');
+      return this.get('controller.isCreateVisible');
     }.property('controller.isFirstColumn'),
   }),
   collapsedView: Ember.View.extend({
