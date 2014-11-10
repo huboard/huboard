@@ -5,6 +5,7 @@ module.exports = MilestonesController = Ember.ObjectController.extend({
   left_column: function () {
     return Ember.Object.create({
       title: "No milestone",
+      noMilestone: true,
       orderable: false,
       filterBy: function(i) {
         return !Ember.get(i, "milestone");

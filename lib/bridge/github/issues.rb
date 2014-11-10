@@ -35,14 +35,21 @@ class Huboard
       milestone = issue["milestone"].nil? ? nil : issue.milestone.number
       assignee = issue["assignee"].nil? ? nil : issue.assignee.login
 
+      labels = column_labels
+
       attributes = {
         title: issue.title,
         body: issue.body,
-        labels: [column_labels.first.name].concat((issue.labels || []).map{|l| l["name"]}),
+        labels: [labels.first.name].concat((issue.labels || []).map{|l| l["name"]}),
         assignee: assignee,
         milestone: milestone
       }
-      gh.issues.create(attributes).extend(Card).merge!("repo" => {owner: {login: @user}, name: @repo,  full_name: "#{@user}/#{@repo}" })
+
+      result = gh.issues.create(attributes).extend(Card).merge!("repo" => {owner: {login: @user}, name: @repo,  full_name: "#{@user}/#{@repo}" })
+
+      result.current_state = labels.first if result.current_state["name"] == "__nil__"
+
+      result
     end
 
     def closed_issues(label, since = (Time.now - 2*7*24*60*60).utc.iso8601)

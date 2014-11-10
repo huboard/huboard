@@ -52,6 +52,10 @@ var MilestoneColumnController = Ember.ObjectController.extend({
       App.get('loggedIn') && this.get('isFirstColumn');
   }.property('isFirstColumn'),
   cardMoved : function (cardController, index, onCancel){
+    if (this.get('model.noMilestone')) {
+      return cardController.send("assignMilestone",index, null);
+    }
+
     var columnController = this;
 
     var equalsA = function(a) {
@@ -60,11 +64,7 @@ var MilestoneColumnController = Ember.ObjectController.extend({
       }
     }(cardController.get("model.repo"));
 
-    if (this.get('model.group') == undefined) {
-      var milestone = this.get('model');
-    } else {
-      var milestone = this.get('model.group').find(equalsA);
-    }
+    var milestone = this.get('model.group').find(equalsA);
 
     if (milestone) {
       cardController.send("assignMilestone",index, milestone);
