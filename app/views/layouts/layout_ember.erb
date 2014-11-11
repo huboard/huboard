@@ -8,6 +8,19 @@
     
      <%= stylesheet_tag 'bootstrap' %>
      <%= stylesheet_tag 'flex_layout' %>
+  <style>
+    .ember-view {
+      -webkit-animation: debug .3s;
+    }
+    @-webkit-keyframes debug {
+      0% {
+        background-color: yellow;
+      }
+      100% {
+        background-color: inherit;
+      }
+    }
+  </style>
 
 
   </head>

@@ -1,4 +1,4 @@
-var CardWrapperView = Em.View.extend({
+var CardWrapperView = Em.CloakedView.extend({
     templateName: "cardItem",
     classNames: ["card"],
     classNameBindings: ["isFiltered","isDraggable:is-draggable", "isClosable:closable", "colorLabel", "content.color:border"],

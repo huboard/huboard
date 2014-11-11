@@ -1,6 +1,6 @@
 var WrapperView = require("./card_wrapper_view");
 
-var CollectionView = Ember.CollectionView.extend({
+var CollectionView = Ember.CloakedCollectionView.extend({
   tagName:"ul",
   classNames: ["sortable"],
   classNameBindings:["isHovering:ui-sortable-hover"],
@@ -74,7 +74,9 @@ var CollectionView = Ember.CollectionView.extend({
     this._super();
 
   },
-  itemViewClass: WrapperView
+  cloakView: "card",
+  preservesContext: true,
+  itemController: "card"
 })
 
 var ColumnView = Ember.ContainerView.extend({
