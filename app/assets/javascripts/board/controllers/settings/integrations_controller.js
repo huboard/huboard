@@ -30,6 +30,23 @@ var IntegrationsController = Ember.ObjectController.extend({
       disabled: function(){
         return !this.get("attrs.webhookURL")
       }.property("attrs.webhookURL")
+    }).create(),
+
+    Ember.Object.extend({
+      name: "HipChat",
+      room: "",
+      authToken: "",
+      attrs: function(){
+        return {
+          webhookURL: this.get('webhookURL'),
+        }
+      }.property('room', 'authToken'),
+      webhookURL: function(){
+        return "https://api.hipchat.com/v2/room/" + this.get('room') + "/notification?auth_token=" + this.get('authToken');
+      }.property('room', 'authToken'),
+      disabled: function(){
+        return !this.get("attrs.webhookURL")
+      }.property("attrs.webhookURL")
     }).create()
 
   ],
