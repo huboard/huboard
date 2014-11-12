@@ -69,4 +69,31 @@ class HipChat < Huboard::Service
       message_format: 'text'
     }
   end
+
+  def transform_issue_opened(mash)
+    {
+      color: "purple",
+      message: "#{URI.join(github_url,mash.meta.user.login)} opened a new issue #{mash.payload.issue.html_url} \nTitle: #{mash.payload.issue.title}",
+      notify: true,
+      message_format: 'text'
+    }
+  end
+
+  def transform_issue_closed(mash)
+    {
+      color: "purple",
+      message: "#{URI.join(github_url,mash.meta.user.login)} closed #{mash.payload.issue.html_url} \nTitle: #{mash.payload.issue.title}",
+      notify: true,
+      message_format: 'text'
+    }
+  end
+
+  def transform_issue_reopened(hash)
+    {
+      color: "purple",
+      message: "#{URI.join(github_url,mash.meta.user.login)} reopened #{mash.payload.issue.html_url} \nTitle: #{mash.payload.issue.title}",
+      notify: true,
+      message_format: 'text'
+    }
+  end
 end
