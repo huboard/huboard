@@ -8,7 +8,10 @@ var IntegrationsController = Ember.ObjectController.extend({
       },
       disabled: function(){
         return !this.get("attrs.webhookURL")
-      }.property("attrs.webhookURL")
+      }.property("attrs.webhookURL"),
+      clearForm: function(){
+        this.set("attrs.webhookURL", "");
+      }
     }).create(),
     Ember.Object.extend({
       name: "Gitter",
@@ -18,7 +21,10 @@ var IntegrationsController = Ember.ObjectController.extend({
       disabled: function(){
         return !this.get("attrs.webhookURL")
 
-      }.property("attrs.webhookURL")
+      }.property("attrs.webhookURL"),
+      clearForm: function(){
+        this.set("attrs.webhookURL", "");
+      }
     }).create(),
 
     Ember.Object.extend({
@@ -29,7 +35,11 @@ var IntegrationsController = Ember.ObjectController.extend({
       },
       disabled: function(){
         return !this.get("attrs.webhookURL")
-      }.property("attrs.webhookURL")
+      }.property("attrs.webhookURL"),
+      clearForm: function(){
+        this.set("attrs.webhookURL", "");
+        this.set("attrs.channel", "");
+      }
     }).create(),
 
     Ember.Object.extend({
@@ -46,7 +56,11 @@ var IntegrationsController = Ember.ObjectController.extend({
       }.property('room', 'authToken'),
       disabled: function(){
         return !this.get("attrs.webhookURL")
-      }.property("attrs.webhookURL")
+      }.property("attrs.webhookURL"),
+      clearForm: function(){
+        this.set("room", "");
+        this.set("authToken", "");
+      }
     }).create()
 
   ],
@@ -71,24 +85,6 @@ var IntegrationsController = Ember.ObjectController.extend({
     cancel: function() {
       this.send("transitionTo", {name: "index"})
 
-    },
-    submit: function(){
-      var controller = this,
-        endpoint = "/api/" + this.get("controllers.application.model.full_name") + "/integrations";
-
-        this.set("processing", true);
-
-        Ember.$.post(endpoint,{
-          integration: {
-            name: this.get("editing.name"),
-            data: Ember.merge({},this.get("editing.attrs"))
-          }
-        }, "json").then(function(result) {
-          controller.get("model.integrations")
-            .pushObject(App.Integration.create(result));
-          controller.send("transitionTo", {name: "index"})
-          controller.set("processing", false);
-        });
     },
     removeWebhook: function(hook){
       this.get("model.integrations").removeObject(hook)
