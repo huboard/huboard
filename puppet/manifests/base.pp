@@ -152,3 +152,4 @@ exec { 'clone-kibana':
 
 
 include service_nginx
+include redis
