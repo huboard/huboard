@@ -2949,7 +2949,7 @@ function program7(depth0,data) {
   hashContexts = {'user': depth0,'width': depth0};
   hashTypes = {'user': "ID",'width': "STRING"};
   options = {hash:{
-    'user': ("App.currentUser.gravatar_id"),
+    'user': ("App.currentUser"),
     'width': ("30")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers['hb-avatar'] || depth0['hb-avatar']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-avatar", options))));
