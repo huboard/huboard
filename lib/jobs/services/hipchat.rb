@@ -27,21 +27,21 @@ class HipChat < Huboard::Service
   def transform_moved(mash)
     {
       color: 'purple',
-      message: "#{URI.join(github_url,mash.meta.user.login)} moved #{mash.payload.issue.title}(#{mash.payload.issue.html_url}) from #{mash.payload.previous.text} to #{mash.payload.column.text }",
+      message: "<a href='#{URI.join(github_url,mash.meta.user.login)}'> #{mash.meta.user.login} </a> moved <a href='#{mash.payload.issue.html_url}'>#{mash.payload.issue.title}</a> from <b>#{mash.payload.previous.text}</b> to <b>#{mash.payload.column.text }</b>",
       notify: true,
-      message_format: 'text'
+      message_format: 'html'
     }
   end
 
   def transform_assigned(mash)
     assigned = mash.payload.assignee.nil? ? 'unassigned:' : 'assigned'
-    issue_assignee = mash.payload.assignee.nil? ? '' : mash.payload.assignee.html_url
+    issue_assignee = mash.payload.assignee.nil? ? '' : "<a href='#{mash.payload.assignee.html_url}'> #{mash.payload.assignee.login} </a>"
     to = mash.payload.assignee.nil? ? '' : 'to '
     {
       color: 'purple',
-      message: "#{URI.join(github_url,mash.meta.user.login)} #{assigned} #{issue_assignee} #{to}#{mash.payload.issue.title}(#{mash.payload.issue.html_url})",
+      message: "<a href='#{URI.join(github_url,mash.meta.user.login)}'> #{mash.meta.user.login} </a> #{assigned} #{issue_assignee} #{to}<a href='#{mash.payload.issue.html_url}'>#{mash.meta.repo_full_name}##{mash.payload.issue.number}</a><br><b>#{mash.payload.issue.title}</b><br>#{mash.payload.issue.body}",
       notify: true,
-      message_format: 'text'
+      message_format: 'html'
     }
   end
 
@@ -49,51 +49,52 @@ class HipChat < Huboard::Service
     milestone = mash.payload.milestone.nil? ? "No Milestone" : mash.payload.milestone.title
     {
       color: 'purple',
-      message: "#{URI.join(github_url,mash.meta.user.login)} changed milestone of #{mash.payload.issue.html_url} to #{milestone}",
+      message: "<a href='#{URI.join(github_url,mash.meta.user.login)}'> #{mash.meta.user.login} </a> changed milestone of <a href='#{mash.payload.issue.html_url}'>#{mash.meta.repo_full_name}##{mash.payload.issue.number}</a> to #{milestone}",
       notify: true,
-      message_format: 'text'
+      message_format: 'html'
     }
   end
 
   def transform_issue_status_changed(mash)
     color = {
       unready: "yellow",
-      ready: "purple",
+      ready: "green",
       blocked: "red",
       unblocked: "green"
     }
     {
       color: "#{color[mash.payload.action.to_sym]}",
-      message: "#{URI.join(github_url,mash.meta.user.login)} changed the status of #{mash.payload.issue.html_url} to #{mash.payload.action} \nTitle: #{mash.payload.issue.title}",
+      message: "<a href='#{URI.join(github_url,mash.meta.user.login)}'> #{mash.meta.user.login} </a> changed the status of <a href='#{mash.payload.issue.html_url}'>#{mash.meta.repo_full_name}##{mash.payload.issue.number}</a> to #{mash.payload.action}<br><b>#{mash.payload.issue.title}</b><br>#{mash.payload.issue.body}",
       notify: true,
-      message_format: 'text'
+      message_format: 'html'
     }
   end
 
   def transform_issue_opened(mash)
     {
       color: "purple",
-      message: "#{URI.join(github_url,mash.meta.user.login)} opened a new issue #{mash.payload.issue.html_url} \nTitle: #{mash.payload.issue.title}",
+      message: "<a href='#{URI.join(github_url,mash.meta.user.login)}'> #{mash.meta.user.login} </a> opened a new issue <a href='#{mash.payload.issue.html_url}'>#{mash.meta.repo_full_name}##{mash.payload.issue.number}</a> <br><b>#{mash.payload.issue.title}</b><br>#{mash.payload.issue.body}",
       notify: true,
-      message_format: 'text'
+      message_format: 'html'
     }
   end
 
   def transform_issue_closed(mash)
     {
       color: "purple",
-      message: "#{URI.join(github_url,mash.meta.user.login)} closed #{mash.payload.issue.html_url} \nTitle: #{mash.payload.issue.title}",
+      message: "<a href='#{URI.join(github_url,mash.meta.user.login)}'> #{mash.meta.user.login} </a> closed <a href='#{mash.payload.issue.html_url}'>#{mash.meta.repo_full_name}##{mash.payload.issue.number}</a> <br><b>#{mash.payload.issue.title}</b><br>#{mash.payload.issue.body}",
       notify: true,
-      message_format: 'text'
+      message_format: 'html'
     }
   end
 
-  def transform_issue_reopened(hash)
-    {
-      color: "purple",
-      message: "#{URI.join(github_url,mash.meta.user.login)} reopened #{mash.payload.issue.html_url} \nTitle: #{mash.payload.issue.title}",
-      notify: true,
-      message_format: 'text'
-    }
-  end
+  # No Such Event
+  #def transform_issue_reopened(hash)
+  #  {
+  #    color: "purple",
+  #    message: "#{URI.join(github_url,mash.meta.user.login)} reopened #{mash.payload.issue.html_url} \nTitle: #{mash.payload.issue.title}",
+  #    notify: true,
+  #    message_format: 'text'
+  #  }
+  #end
 end
