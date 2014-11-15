@@ -1,11 +1,10 @@
 var WrapperView = require("./card_wrapper_view");
 
 WrapperView = WrapperView.extend({
-  templateName: "milestoneItem",
   classNames: ["card", "card--milestone"]
 })
 
-var CollectionView = Ember.CollectionView.extend({
+var CollectionView = Ember.CloakedCollectionView.extend({
   tagName:"ul",
   classNames: ["sortable"],
   classNameBindings:["isHovering:ui-sortable-hover"],
@@ -83,7 +82,9 @@ var CollectionView = Ember.CollectionView.extend({
     })
 
   }.on("didInsertElement"),
-  itemViewClass: WrapperView
+  overrideViewClass: WrapperView,
+  cloakView: 'cardMilestone',
+  itemController: 'card'
 })
 
 var ColumnView = Ember.ContainerView.extend({

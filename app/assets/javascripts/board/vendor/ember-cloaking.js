@@ -25,27 +25,51 @@
       // Set the slack ratio differently to allow for more or less slack in preloading
       var slackRatio = parseFloat(this.get('slackRatio'));
       if (!slackRatio) { this.set('slackRatio', 1.0); }
+      
+      if(this.get("overrideViewClass")) {
+        this.set('itemViewClass', this.get("overrideViewClass").extend({
+          cloaks: cloakView,
+          preservesContext: this.get('preservesContext') === 'true',
+          cloaksController: this.get('itemController'),
+          defaultHeight: this.get('defaultHeight'),
 
-      this.set('itemViewClass', Ember.CloakedView.extend({
-        classNames: [cloakView + '-cloak'],
-        cloaks: cloakView,
-        preservesContext: this.get('preservesContext') === 'true',
-        cloaksController: this.get('itemController'),
-        defaultHeight: this.get('defaultHeight'),
+          init: function() {
+            this._super();
 
-        init: function() {
-          this._super();
-
-          if (idProperty) {
-            this.set('elementId', cloakView + '-cloak-' + this.get('content.' + idProperty));
+            if (idProperty) {
+              this.set('elementId', cloakView + '-cloak-' + this.get('content.' + idProperty));
+            }
+            if (uncloakDefault) {
+              this.uncloak();
+            } else {
+              this.cloak();
+            }
           }
-          if (uncloakDefault) {
-            this.uncloak();
-          } else {
-            this.cloak();
+
+        }));
+      } else {
+
+        this.set('itemViewClass', Ember.CloakedView.extend({
+          classNames: [cloakView + '-cloak'],
+          cloaks: cloakView,
+          preservesContext: this.get('preservesContext') === 'true',
+          cloaksController: this.get('itemController'),
+          defaultHeight: this.get('defaultHeight'),
+
+          init: function() {
+            this._super();
+
+            if (idProperty) {
+              this.set('elementId', cloakView + '-cloak-' + this.get('content.' + idProperty));
+            }
+            if (uncloakDefault) {
+              this.uncloak();
+            } else {
+              this.cloak();
+            }
           }
-        }
-      }));
+        }));
+      }
 
       this._super();
       Ember.run.next(this, 'scrolled');
@@ -114,6 +138,7 @@
     scrolled: function() {
       if (!this.get('scrollingEnabled')) { return; }
 
+
       var childViews = this.get('childViews');
       if ((!childViews) || (childViews.length === 0)) { return; }
 
@@ -134,6 +159,7 @@
           bottomView = topView,
           offsetFixedTopElement = this.get('offsetFixedTopElement'),
           offsetFixedBottomElement = this.get('offsetFixedBottomElement');
+
 
       if (windowBottom > bodyHeight) { windowBottom = bodyHeight; }
       if (viewportBottom > bodyHeight) { viewportBottom = bodyHeight; }

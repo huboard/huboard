@@ -9,16 +9,18 @@ var IndexRoute = Ember.Route.extend({
     if(App.get("isLoaded")) {
       return;
     }
-    var cssView = CssView.create({
-      content: model
-    });
-    cssView.appendTo("head")
     return model.loadLinkedBoards().then(function(boards) {
      App.set("isLoaded", true); 
      var socket = this.get("socket");
      boards.forEach(function(b) {
        socket.subscribeTo(b.full_name);
      });
+      Ember.run.schedule('afterRender',this, function(){
+        var cssView = CssView.create({
+          content: model
+        });
+        cssView.appendTo("head")
+      })
     }.bind(this));
   },
   renderTemplate: function() {

@@ -74,8 +74,8 @@ var CollectionView = Ember.CloakedCollectionView.extend({
     this._super();
 
   },
+  overrideViewClass: WrapperView,
   cloakView: "card",
-  preservesContext: true,
   itemController: "card"
 })
 

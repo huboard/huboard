@@ -2,7 +2,6 @@ var CardView = Ember.View.extend({
   templateName: 'card',
   classNameBindings:["stateClass"],
   stateClass: function(){
-    debugger
      var github_state = this.get("controller.model.state");
      if(github_state === "closed"){
        return "hb-state-" + "closed";
