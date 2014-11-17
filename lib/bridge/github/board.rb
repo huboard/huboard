@@ -52,6 +52,7 @@ class Huboard
     end
 
     def meta
+      gh_repos = gh
       columns = column_labels
       first_column = columns.first
 
@@ -62,8 +63,8 @@ class Huboard
       end
 
       {
-        "id" => gh.id,
-        full_name: gh.full_name,
+        "id" => gh_repos.id,
+        full_name: gh_repos.full_name,
         columns: columns,
         milestones: milestones,
         other_labels: other_labels.sort_by {|l| l.name.downcase },
