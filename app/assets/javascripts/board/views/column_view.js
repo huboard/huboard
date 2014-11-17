@@ -8,6 +8,9 @@ var CollectionView = Ember.CloakedCollectionView.extend({
   style: Ember.computed.alias("controller.style"),
   content: Ember.computed.alias("controller.issues"),
   isHovering: false,
+  onFilter: function(){
+    Ember.run.debounce(this, 'scrollTriggered', this._scrollDebounce);
+  }.observes("App.memberFilter.mode", "App.dimFilters", "App.hideFilters", "App.searchFilter", "App.eventReceived"),
   didInsertElement: function(){
     var that = this;
     this.$().sortable({
@@ -76,7 +79,8 @@ var CollectionView = Ember.CloakedCollectionView.extend({
   },
   overrideViewClass: WrapperView,
   cloakView: "card",
-  itemController: "card"
+  itemController: "card",
+  slackRatio: 1.5
 })
 
 var ColumnView = Ember.ContainerView.extend({

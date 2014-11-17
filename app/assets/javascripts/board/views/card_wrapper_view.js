@@ -92,7 +92,9 @@ var CardWrapperView = Em.CloakedView.extend({
         ev.preventDefault();
         this.$().removeClass("assignee-accept");
       }
-    }
+    },
+    _setHeights: null
+
 });
 
 module.exports = CardWrapperView;
