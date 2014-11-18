@@ -47,31 +47,6 @@ var Board = Ember.Object.extend({
             .groupBy(function(l){return l.title.toLocaleLowerCase() })
             .value();
   }.property("milestones.length","linkedRepos.@each.milestones.length"),
-  loadLinkedBoards: function () {
-    var model = this;
-    var urls = this.get("link_labels").map(function (l) {
-      return "/api/" + model.full_name + "/linked/" + l.user + "/" + l.repo  
-    })
-
-    var requests = urls.map(function (url){
-      return Ember.$.getJSON(url);
-    })
-
-    return Ember.RSVP.all(requests).then(function (boards){
-      boards.forEach(function (b){
-        if(b.failure) {return;}
-         var issues = Ember.A();
-         b.issues.forEach(function(i){
-           issues.pushObject(App.Issue.create(i));
-         })
-
-         var board =  Board.create(_.extend(b, {issues: issues}));
-
-         model.linkedRepos.pushObject(b)
-      })
-      return boards;
-    })
-  }
 });
 
 Board.reopenClass({
