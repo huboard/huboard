@@ -30,6 +30,32 @@ var CardWrapperView = Em.CloakedView.extend({
         });
         this.set('cardController', controller);
     }.on('init'),
+    uncloak: function() {
+      var state = this._state || this.state;
+      if (state !== 'inDOM' && state !== 'preRender') { return; }
+
+      if (!this.get('hasChildViews')) {
+        var controller = this.get('cardController');
+
+        var createArgs = {},
+            target = controller;
+
+        if (this.get('preservesContext')) {
+          createArgs.content = target;
+        } else {
+          createArgs.context = target;
+        }
+        if (controller) { createArgs.controller = controller; }
+
+        this.setProperties({
+          style: null,
+          loading: false
+        });
+
+        this.pushObject(this.createChildView(this.get('cloaks'), createArgs))
+        this.rerender();
+      }
+    },
     isClosable: function () {
      var currentState = this.get("content.current_state");
 
