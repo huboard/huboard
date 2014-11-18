@@ -27,6 +27,9 @@ var CollectionView = Ember.CloakedCollectionView.extend({
       },
       activate: function () {
         // that.get("controller").set("isHovering", true);
+        that._uncloak = that.get("childViews")
+
+        that.uncloakQueue();
       },
       deactivate: function() {
         // that.get("controller").set("isHovering", false);
@@ -84,7 +87,12 @@ var CollectionView = Ember.CloakedCollectionView.extend({
   }.on("didInsertElement"),
   overrideViewClass: WrapperView,
   cloakView: 'cardMilestone',
-  itemController: 'card'
+  itemController: 'card',
+  isFiltered: function() {
+    this._uncloak = this.get("childViews")
+
+    this.uncloakQueue();
+  }.observes("App.memberFilter.mode", "App.dimFilters", "App.hideFilters", "App.searchFilter"),
 })
 
 var ColumnView = Ember.ContainerView.extend({

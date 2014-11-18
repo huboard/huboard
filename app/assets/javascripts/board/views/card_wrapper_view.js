@@ -111,8 +111,8 @@ var CardWrapperView = Em.CloakedView.extend({
 
     }.property("App.memberFilter.mode", "App.dimFilters", "App.hideFilters", "App.searchFilter", "App.eventReceived"),
     click: function(){
-      var view = Em.View.views[this.$().find("> div").attr("id")];
-      view.get("controller").send("fullscreen")
+      var view = Em.View.views[this.$().attr("id")];
+      view.get("cardController").send("fullscreen")
     },
     dragEnter: function(ev) {
       ev.preventDefault();

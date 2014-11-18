@@ -8,9 +8,6 @@ var CollectionView = Ember.CloakedCollectionView.extend({
   style: Ember.computed.alias("controller.style"),
   content: Ember.computed.alias("controller.issues"),
   isHovering: false,
-  onFilter: function(){
-    Ember.run.debounce(this, 'scrollTriggered', this._scrollDebounce);
-  }.observes("App.memberFilter.mode", "App.dimFilters", "App.hideFilters", "App.searchFilter", "App.eventReceived"),
   didInsertElement: function(){
     var that = this;
     this.$().sortable({
@@ -26,6 +23,9 @@ var CollectionView = Ember.CloakedCollectionView.extend({
       },
       activate: function () {
         // that.get("controller").set("isHovering", true);
+        that._uncloak = that.get("childViews")
+
+        that.uncloakQueue();
       },
       deactivate: function() {
         // that.get("controller").set("isHovering", false);
@@ -80,7 +80,14 @@ var CollectionView = Ember.CloakedCollectionView.extend({
   overrideViewClass: WrapperView,
   cloakView: "card",
   itemController: "card",
-  slackRatio: 1.5
+  slackRatio: 1.5,
+  isFiltered: function() {
+    this._uncloak = this.get("childViews")
+
+    this.uncloakQueue();
+  }.observes("App.memberFilter.mode", "App.dimFilters", "App.hideFilters", "App.searchFilter"),
+
+
 })
 
 var ColumnView = Ember.ContainerView.extend({
