@@ -1715,6 +1715,7 @@ var SettingsIntegrationsNewController = Ember.ObjectController.extend({
           controller.transitionToRoute("settings.integrations.index");
           controller.set("processing", false);
         });
+        this.get('model').clearForm();
     },
   }
 })
@@ -1732,7 +1733,10 @@ var IntegrationsController = Ember.ObjectController.extend({
       },
       disabled: function(){
         return !this.get("attrs.webhookURL")
-      }.property("attrs.webhookURL")
+      }.property("attrs.webhookURL"),
+      clearForm: function(){
+        this.set("attrs.webhookURL", "");
+      }
     }).create(),
     Ember.Object.extend({
       name: "Gitter",
@@ -1742,7 +1746,10 @@ var IntegrationsController = Ember.ObjectController.extend({
       disabled: function(){
         return !this.get("attrs.webhookURL")
 
-      }.property("attrs.webhookURL")
+      }.property("attrs.webhookURL"),
+      clearForm: function(){
+        this.set("attrs.webhookURL", "");
+      }
     }).create(),
 
     Ember.Object.extend({
@@ -1753,7 +1760,32 @@ var IntegrationsController = Ember.ObjectController.extend({
       },
       disabled: function(){
         return !this.get("attrs.webhookURL")
-      }.property("attrs.webhookURL")
+      }.property("attrs.webhookURL"),
+      clearForm: function(){
+        this.set("attrs.webhookURL", "");
+        this.set("attrs.channel", "");
+      }
+    }).create(),
+
+    Ember.Object.extend({
+      name: "HipChat",
+      room: "",
+      authToken: "",
+      attrs: function(){
+        return {
+          webhookURL: this.get('webhookURL'),
+        }
+      }.property('room', 'authToken'),
+      webhookURL: function(){
+        return "https://api.hipchat.com/v2/room/" + this.get('room') + "/notification?auth_token=" + this.get('authToken');
+      }.property('room', 'authToken'),
+      disabled: function(){
+        return !this.get("attrs.webhookURL")
+      }.property("attrs.webhookURL"),
+      clearForm: function(){
+        this.set("room", "");
+        this.set("authToken", "");
+      }
     }).create()
 
   ],
@@ -1778,24 +1810,6 @@ var IntegrationsController = Ember.ObjectController.extend({
     cancel: function() {
       this.send("transitionTo", {name: "index"})
 
-    },
-    submit: function(){
-      var controller = this,
-        endpoint = "/api/" + this.get("controllers.application.model.full_name") + "/integrations";
-
-        this.set("processing", true);
-
-        Ember.$.post(endpoint,{
-          integration: {
-            name: this.get("editing.name"),
-            data: Ember.merge({},this.get("editing.attrs"))
-          }
-        }, "json").then(function(result) {
-          controller.get("model.integrations")
-            .pushObject(App.Integration.create(result));
-          controller.send("transitionTo", {name: "index"})
-          controller.set("processing", false);
-        });
     },
     removeWebhook: function(hook){
       this.get("model.integrations").removeObject(hook)
@@ -2155,31 +2169,6 @@ var Board = Ember.Object.extend({
             .groupBy(function(l){return l.title.toLocaleLowerCase() })
             .value();
   }.property("milestones.length","linkedRepos.@each.milestones.length"),
-  loadLinkedBoards: function () {
-    var model = this;
-    var urls = this.get("link_labels").map(function (l) {
-      return "/api/" + model.full_name + "/linked/" + l.user + "/" + l.repo  
-    })
-
-    var requests = urls.map(function (url){
-      return Ember.$.getJSON(url);
-    })
-
-    return Ember.RSVP.all(requests).then(function (boards){
-      boards.forEach(function (b){
-        if(b.failure) {return;}
-         var issues = Ember.A();
-         b.issues.forEach(function(i){
-           issues.pushObject(App.Issue.create(i));
-         })
-
-         var board =  Board.create(_.extend(b, {issues: issues}));
-
-         model.linkedRepos.pushObject(b)
-      })
-      return boards;
-    })
-  }
 });
 
 Board.reopenClass({
@@ -2477,18 +2466,34 @@ var Repo = Ember.Object.extend(Serializable,{
   betaUrl: function () {
      return this.get("repoUrl") + "/beta";
   }.property("repoUrl"),
-  fetchBoard: function(){
-
+  fetchBoard: function(linkedBoards){
     if(this._board) {return this._board;}
     return Ember.$.getJSON("/api/" + this.get("full_name") + "/board").then(function(board){
        var issues = Ember.A();
        board.issues.forEach(function(i){
          issues.pushObject(Issue.create(i));
        })
-       this._board =  Board.create(_.extend(board, {issues: issues}));
+       this._board =  Board.create(_.extend(board, {issues: issues, linkedBoardsPreload: linkedBoards}));
        this.set("board", this._board);
        return this._board;
     }.bind(this));
+  },
+  fetchLinkedBoards: function(){
+    var self = this;
+    return Ember.$.getJSON("/api/" + self.get("full_name") + "/link_labels")
+    .then(function(link_labels){
+      urls = link_labels.map(function (l) {
+        return "/api/" + self.get("full_name") + "/linked/" + l.user + "/" + l.repo  
+      })
+
+      var requests = urls.map(function (url){
+        return Ember.$.getJSON(url);
+      });
+
+      return Ember.RSVP.all(requests).then(function(boards){
+        return boards;
+      });
+    });
   },
   fetchIntegrations: function() {
     if(this._integrations) {return this._integrations;}
@@ -2663,28 +2668,38 @@ module.exports = Route.extend({
 
 },{"../issue_route":56}],55:[function(require,module,exports){
 var CssView = require("../views/css_view");
+var Board = require("../models/board");
 
 var IndexRoute = Ember.Route.extend({
   model: function(){
     var repo = this.modelFor("application");
-    return repo.fetchBoard(repo);
+    var linked_boards = repo.fetchLinkedBoards();
+    return repo.fetchBoard(linked_boards);
   },
   afterModel: function (model){
     if(App.get("isLoaded")) {
       return;
     }
-    return model.loadLinkedBoards().then(function(boards) {
+    var cssView = CssView.create({
+      content: model
+    });
+    cssView.appendTo("head")
+    return model.linkedBoardsPreload.done(function(linkedBoardsPromise){
      App.set("isLoaded", true); 
      var socket = this.get("socket");
-     boards.forEach(function(b) {
-       socket.subscribeTo(b.full_name);
+     return linkedBoardsPromise.then(function(boards){
+       boards.forEach(function(b) {
+        if(b.failure) {return;}
+         var issues = Ember.A();
+         b.issues.forEach(function(i){
+           issues.pushObject(App.Issue.create(i));
+         })
+         var board = Board.create(_.extend(b, {issues: issues}));
+         model.linkedRepos.pushObject(board);
+         socket.subscribeTo(b.full_name);
+       });
+       return boards;
      });
-      Ember.run.schedule('afterRender',this, function(){
-        var cssView = CssView.create({
-          content: model
-        });
-        cssView.appendTo("head")
-      })
     }.bind(this));
   },
   renderTemplate: function() {
@@ -2725,7 +2740,7 @@ var IndexRoute = Ember.Route.extend({
 
 module.exports = IndexRoute;
 
-},{"../views/css_view":84}],56:[function(require,module,exports){
+},{"../models/board":46,"../views/css_view":84}],56:[function(require,module,exports){
 var IssueRoute = Ember.Route.extend({
   setupController: function(controller, model) {
     controller.set("model", model);
@@ -2779,10 +2794,13 @@ module.exports = Route.extend({
 
 },{"../issue_route":56}],58:[function(require,module,exports){
 var CssView = require("../views/css_view");
+var Board = require("../models/board");
+
 module.exports = MilestonesRoute =  Ember.Route.extend({
   model: function () {
     var repo = this.modelFor("application");
-    return repo.fetchBoard(repo);
+    var linked_boards = repo.fetchLinkedBoards();
+    return repo.fetchBoard(linked_boards);
   },
   afterModel: function (model){
     if(App.get("isLoaded")) {
@@ -2792,11 +2810,21 @@ module.exports = MilestonesRoute =  Ember.Route.extend({
       content: model
     });
     cssView.appendTo("head")
-    return model.loadLinkedBoards().then(function(boards) {
+    return model.linkedBoardsPreload.done(function(linkedBoardsPromise){
      App.set("isLoaded", true); 
      var socket = this.get("socket");
-     boards.forEach(function(b) {
-       socket.subscribeTo(b.full_name);
+     return linkedBoardsPromise.then(function(boards){
+       boards.forEach(function(b) {
+        if(b.failure) {return;}
+         var issues = Ember.A();
+         b.issues.forEach(function(i){
+           issues.pushObject(App.Issue.create(i));
+         })
+         var board = Board.create(_.extend(b, {issues: issues}));
+         model.linkedRepos.pushObject(board);
+         socket.subscribeTo(b.full_name);
+       });
+       return boards;
      });
     }.bind(this));
   },
@@ -2844,7 +2872,7 @@ module.exports = MilestonesRoute =  Ember.Route.extend({
 
 })
 
-},{"../views/css_view":84}],59:[function(require,module,exports){
+},{"../models/board":46,"../views/css_view":84}],59:[function(require,module,exports){
 var SettingsIntegrationsNewRoute = Ember.Route.extend({
   model: function(params, transition){
     return this.controllerFor('settingsIntegrations')
@@ -4346,6 +4374,51 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "cancel", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(">Cancel</a> </div>\n      </form>\n    </div>\n\n");
+  return buffer;
+  
+});
+
+Ember.TEMPLATES['settings/integrations/hipchat'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', stack1, hashContexts, hashTypes, options, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
+
+
+  data.buffer.push("<div class=\"flex-form-bottom\">\n  <form ");
+  hashContexts = {'on': depth0};
+  hashTypes = {'on': "STRING"};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "submit", {hash:{
+    'on': ("submit")
+  },contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" class=\"flex-form\">\n    <h3>HipChat Instructions</h3>\n    <p> Choose a room to receive notifications from HuBoard. Currently only one room can be registered at a time, to receive notifications to multiple rooms please register one webhook per room. </p>\n    <label>\n      ");
+  hashContexts = {'value': depth0,'placeholder': depth0,'required': depth0};
+  hashTypes = {'value': "ID",'placeholder': "STRING",'required': "BOOLEAN"};
+  options = {hash:{
+    'value': ("room"),
+    'placeholder': ("Room Name"),
+    'required': (true)
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
+  data.buffer.push("\n    </label>\n    <p> Generate an API Authorization token (a room specific token is recommended) and paste it below: </p>\n    <label>\n      ");
+  hashContexts = {'value': depth0,'placeholder': depth0,'required': depth0};
+  hashTypes = {'value': "ID",'placeholder': "STRING",'required': "BOOLEAN"};
+  options = {hash:{
+    'value': ("authToken"),
+    'placeholder': ("Authorization Token"),
+    'required': (true)
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
+  data.buffer.push("\n    </label>\n    <button ");
+  hashContexts = {'disabled': depth0};
+  hashTypes = {'disabled': "ID"};
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'disabled': ("disabled")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" class=\"hb-button\">Submit webhook</button>\n    <div class=\"with-line\"><span>or</span></div>\n    <div class=\"cancel\"> <a href=\"#\" ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "cancel", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">Cancel</a> </div>\n  </form>\n</div>\n");
   return buffer;
   
 });
@@ -76511,6 +76584,32 @@ var CardWrapperView = Em.CloakedView.extend({
     colorLabel: function () {
       return "-x" + this.get("content.color");
     }.property("content.color"),
+    cardController: function(){
+        var model = this.get('content'),
+            container = this.get('container');
+
+        var controllerName = "card";
+
+        var controllerFullName = 'controller:' + controllerName,
+        factory = container.lookupFactory(controllerFullName),
+        parentController = this.get('controller');
+
+        // let ember generate controller if needed
+        if (factory === undefined) {
+          factory = Ember.generateControllerFactory(container, controllerName, model);
+
+          // inform developer about typo
+          Ember.Logger.warn('ember-cloaking: can\'t lookup controller by name "' + controllerFullName + '".');
+          Ember.Logger.warn('ember-cloaking: using ' + factory.toString() + '.');
+        }
+
+        var controller = factory.create({
+          model: model,
+          parentController: parentController,
+          target: parentController
+        });
+        this.set('cardController', controller);
+    }.on('init'),
     isClosable: function () {
      var currentState = this.get("content.current_state");
 
@@ -76652,8 +76751,8 @@ var CollectionView = Ember.CloakedCollectionView.extend({
       update: function (ev, ui) {
 
         var findViewData = function (element){
-           return Em.View.views[$(element).find("> div").attr("id")]
-             .get("controller");
+           return Em.View.views[$(element).attr("id")]
+             .get("cardController");
         };
 
         var elements = $("> li", that.$()),

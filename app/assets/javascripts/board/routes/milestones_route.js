@@ -1,8 +1,11 @@
 var CssView = require("../views/css_view");
+var Board = require("../models/board");
+
 module.exports = MilestonesRoute =  Ember.Route.extend({
   model: function () {
     var repo = this.modelFor("application");
-    return repo.fetchBoard(repo);
+    var linked_boards = repo.fetchLinkedBoards();
+    return repo.fetchBoard(linked_boards);
   },
   afterModel: function (model){
     if(App.get("isLoaded")) {
@@ -12,11 +15,21 @@ module.exports = MilestonesRoute =  Ember.Route.extend({
       content: model
     });
     cssView.appendTo("head")
-    return model.loadLinkedBoards().then(function(boards) {
+    return model.linkedBoardsPreload.done(function(linkedBoardsPromise){
      App.set("isLoaded", true); 
      var socket = this.get("socket");
-     boards.forEach(function(b) {
-       socket.subscribeTo(b.full_name);
+     return linkedBoardsPromise.then(function(boards){
+       boards.forEach(function(b) {
+        if(b.failure) {return;}
+         var issues = Ember.A();
+         b.issues.forEach(function(i){
+           issues.pushObject(App.Issue.create(i));
+         })
+         var board = Board.create(_.extend(b, {issues: issues}));
+         model.linkedRepos.pushObject(board);
+         socket.subscribeTo(b.full_name);
+       });
+       return boards;
      });
     }.bind(this));
   },

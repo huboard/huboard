@@ -6,6 +6,10 @@ module HuBoard
           json huboard.board(params[:user], params[:repo]).meta
         end
 
+        get '/api/:user/:repo/link_labels' do
+          json huboard.board(params[:user], params[:repo]).link_labels
+        end
+
         get '/api/:user/:repo/linked/:linked_user/:linked_repo' do
           board = huboard.board(params[:user], params[:repo])
           if board.linked? params[:linked_user], params[:linked_repo]
