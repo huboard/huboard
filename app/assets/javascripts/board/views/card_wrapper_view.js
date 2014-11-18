@@ -4,6 +4,32 @@ var CardWrapperView = Em.CloakedView.extend({
     colorLabel: function () {
       return "-x" + this.get("content.color");
     }.property("content.color"),
+    cardController: function(){
+        var model = this.get('content'),
+            container = this.get('container');
+
+        var controllerName = "card";
+
+        var controllerFullName = 'controller:' + controllerName,
+        factory = container.lookupFactory(controllerFullName),
+        parentController = this.get('controller');
+
+        // let ember generate controller if needed
+        if (factory === undefined) {
+          factory = Ember.generateControllerFactory(container, controllerName, model);
+
+          // inform developer about typo
+          Ember.Logger.warn('ember-cloaking: can\'t lookup controller by name "' + controllerFullName + '".');
+          Ember.Logger.warn('ember-cloaking: using ' + factory.toString() + '.');
+        }
+
+        var controller = factory.create({
+          model: model,
+          parentController: parentController,
+          target: parentController
+        });
+        this.set('cardController', controller);
+    }.on('init'),
     isClosable: function () {
      var currentState = this.get("content.current_state");
 

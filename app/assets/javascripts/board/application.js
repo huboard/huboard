@@ -77171,8 +77171,8 @@ var CollectionView = Ember.CloakedCollectionView.extend({
       update: function (ev, ui) {
 
         var findViewData = function (element){
-           return Em.View.views[$(element).find("> div").attr("id")]
-             .get("controller");
+           return Em.View.views[$(element).attr("id")]
+             .get("cardController");
         };
 
         var elements = $("> li", that.$()),
