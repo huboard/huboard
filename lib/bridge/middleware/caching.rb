@@ -37,7 +37,7 @@ class Huboard
           response = app.call(env)
 
           if response.status == 304
-            logger.debug("Cache hit: #{key}")
+            logger.debug("Cache hit: #{key} - #{response.headers[:"x-ratelimit-remaining"] }")
             return cached
           elsif response.status == 200
             write(key, response)
@@ -121,7 +121,8 @@ class Huboard
           url.query = build_query params
         end
         url.normalize!
-        Digest::MD5.hexdigest(url.request_uri)
+        #Digest::MD5.hexdigest(url.request_uri)
+        url.request_uri
       end
 
       def params_to_ignore
