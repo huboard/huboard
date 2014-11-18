@@ -18,26 +18,26 @@ var CssView = Ember.View.extend({
         that = this;
 
     _(_.union(that.get("content.combinedLabels"), this.get("content.link_labels"))).each(function(l){
-         var start = _.template(".-x<%= color %>.background",{ color: l.color });
+         var start = ".-x" + l.color + ".background";
          buffer.push(start);
          buffer.push("{")
          buffer.push("background-color: #" + l.color + ";")
          buffer.push("color: " + $.Color("#"+l.color).contrastColor() + ";")
          buffer.push("}");
 
-         var start = _.template(".-x<%= color %>.border",{ color: l.color });
+         var start = ".-x" + l.color + ".border";
          buffer.push(start);
          buffer.push("{")
          buffer.push("border-left-color: #" + l.color + ";")
          buffer.push("}");
 
-         var start = _.template(".-x<%= color %>.font-color",{ color: l.color });
+         var start = ".-x" + l.color + ".font-color";
          buffer.push(start);
          buffer.push("{")
          buffer.push("color: #" + l.color + ";")
          buffer.push("}");
 
-         var start = _.template(".-x<%= color %>.active",{ color: l.color });
+         var start = ".-x" + l.color + ".active";
 
          var color =  $.Color("#"+ l.color).alpha(0.3);
          buffer.push(start);
