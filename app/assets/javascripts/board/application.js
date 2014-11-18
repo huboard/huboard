@@ -2152,31 +2152,6 @@ var Board = Ember.Object.extend({
             .groupBy(function(l){return l.title.toLocaleLowerCase() })
             .value();
   }.property("milestones.length","linkedRepos.@each.milestones.length"),
-  loadLinkedBoards: function () {
-    var model = this;
-    var urls = this.get("link_labels").map(function (l) {
-      return "/api/" + model.full_name + "/linked/" + l.user + "/" + l.repo  
-    })
-
-    var requests = urls.map(function (url){
-      return Ember.$.getJSON(url);
-    })
-
-    return Ember.RSVP.all(requests).then(function (boards){
-      boards.forEach(function (b){
-        if(b.failure) {return;}
-         var issues = Ember.A();
-         b.issues.forEach(function(i){
-           issues.pushObject(App.Issue.create(i));
-         })
-
-         var board =  Board.create(_.extend(b, {issues: issues}));
-
-         model.linkedRepos.pushObject(b)
-      })
-      return boards;
-    })
-  }
 });
 
 Board.reopenClass({
@@ -2474,22 +2449,22 @@ var Repo = Ember.Object.extend(Serializable,{
   betaUrl: function () {
      return this.get("repoUrl") + "/beta";
   }.property("repoUrl"),
-  fetchBoard: function(linkedRepos){
+  fetchBoard: function(linkedBoards){
     if(this._board) {return this._board;}
     return Ember.$.getJSON("/api/" + this.get("full_name") + "/board").then(function(board){
        var issues = Ember.A();
        board.issues.forEach(function(i){
          issues.pushObject(Issue.create(i));
        })
-       this._board =  Board.create(_.extend(board, {issues: issues, linkedReposPromise: linkedRepos}));
+       this._board =  Board.create(_.extend(board, {issues: issues, linkedBoardsPreload: linkedBoards}));
        this.set("board", this._board);
        return this._board;
     }.bind(this));
   },
-  fetchLinkedRepos: function(){
+  fetchLinkedBoards: function(){
     var self = this;
     return Ember.$.getJSON("/api/" + self.get("full_name") + "/link_labels")
-    .done(function(link_labels){
+    .then(function(link_labels){
       urls = link_labels.map(function (l) {
         return "/api/" + self.get("full_name") + "/linked/" + l.user + "/" + l.repo  
       })
@@ -2499,7 +2474,6 @@ var Repo = Ember.Object.extend(Serializable,{
       });
 
       return Ember.RSVP.all(requests).then(function(boards){
-        debugger
         return boards;
       });
     });
@@ -2682,8 +2656,8 @@ var Board = require("../models/board");
 var IndexRoute = Ember.Route.extend({
   model: function(){
     var repo = this.modelFor("application");
-    var linked_repos = repo.fetchLinkedRepos();
-    return repo.fetchBoard(linked_repos);
+    var linked_boards = repo.fetchLinkedBoards();
+    return repo.fetchBoard(linked_boards);
   },
   afterModel: function (model){
     if(App.get("isLoaded")) {
@@ -2693,21 +2667,22 @@ var IndexRoute = Ember.Route.extend({
       content: model
     });
     cssView.appendTo("head")
-    model.linkedReposPromise.then(function(boards) {
-     debugger
+    return model.linkedBoardsPreload.done(function(linkedBoardsPromise){
      App.set("isLoaded", true); 
      var socket = this.get("socket");
-     boards.forEach(function(b) {
-      if(b.failure) {return;}
-       var issues = Ember.A();
-       b.issues.forEach(function(i){
-         issues.pushObject(App.Issue.create(i));
-       })
-       var board = Board.create(_.extend(b, {issues: issues}));
-       model.linkedRepos.pushObject(board);
-       socket.subscribeTo(b.full_name);
+     return linkedBoardsPromise.then(function(boards){
+       boards.forEach(function(b) {
+        if(b.failure) {return;}
+         var issues = Ember.A();
+         b.issues.forEach(function(i){
+           issues.pushObject(App.Issue.create(i));
+         })
+         var board = Board.create(_.extend(b, {issues: issues}));
+         model.linkedRepos.pushObject(board);
+         socket.subscribeTo(b.full_name);
+       });
+       return boards;
      });
-     return boards;
     }.bind(this));
   },
   renderTemplate: function() {

@@ -4,8 +4,8 @@ var Board = require("../models/board");
 var IndexRoute = Ember.Route.extend({
   model: function(){
     var repo = this.modelFor("application");
-    var linked_repos = repo.fetchLinkedRepos();
-    return repo.fetchBoard(linked_repos);
+    var linked_boards = repo.fetchLinkedBoards();
+    return repo.fetchBoard(linked_boards);
   },
   afterModel: function (model){
     if(App.get("isLoaded")) {
@@ -15,21 +15,22 @@ var IndexRoute = Ember.Route.extend({
       content: model
     });
     cssView.appendTo("head")
-    model.linkedReposPromise.then(function(boards) {
-     debugger
+    return model.linkedBoardsPreload.done(function(linkedBoardsPromise){
      App.set("isLoaded", true); 
      var socket = this.get("socket");
-     boards.forEach(function(b) {
-      if(b.failure) {return;}
-       var issues = Ember.A();
-       b.issues.forEach(function(i){
-         issues.pushObject(App.Issue.create(i));
-       })
-       var board = Board.create(_.extend(b, {issues: issues}));
-       model.linkedRepos.pushObject(board);
-       socket.subscribeTo(b.full_name);
+     return linkedBoardsPromise.then(function(boards){
+       boards.forEach(function(b) {
+        if(b.failure) {return;}
+         var issues = Ember.A();
+         b.issues.forEach(function(i){
+           issues.pushObject(App.Issue.create(i));
+         })
+         var board = Board.create(_.extend(b, {issues: issues}));
+         model.linkedRepos.pushObject(board);
+         socket.subscribeTo(b.full_name);
+       });
+       return boards;
      });
-     return boards;
     }.bind(this));
   },
   renderTemplate: function() {
