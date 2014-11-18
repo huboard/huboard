@@ -1712,6 +1712,7 @@ var SettingsIntegrationsNewController = Ember.ObjectController.extend({
           controller.transitionToRoute("settings.integrations.index");
           controller.set("processing", false);
         });
+        this.get('model').clearForm();
     },
   }
 })
@@ -1729,7 +1730,10 @@ var IntegrationsController = Ember.ObjectController.extend({
       },
       disabled: function(){
         return !this.get("attrs.webhookURL")
-      }.property("attrs.webhookURL")
+      }.property("attrs.webhookURL"),
+      clearForm: function(){
+        this.set("attrs.webhookURL", "");
+      }
     }).create(),
     Ember.Object.extend({
       name: "Gitter",
@@ -1739,7 +1743,10 @@ var IntegrationsController = Ember.ObjectController.extend({
       disabled: function(){
         return !this.get("attrs.webhookURL")
 
-      }.property("attrs.webhookURL")
+      }.property("attrs.webhookURL"),
+      clearForm: function(){
+        this.set("attrs.webhookURL", "");
+      }
     }).create(),
 
     Ember.Object.extend({
@@ -1750,7 +1757,32 @@ var IntegrationsController = Ember.ObjectController.extend({
       },
       disabled: function(){
         return !this.get("attrs.webhookURL")
-      }.property("attrs.webhookURL")
+      }.property("attrs.webhookURL"),
+      clearForm: function(){
+        this.set("attrs.webhookURL", "");
+        this.set("attrs.channel", "");
+      }
+    }).create(),
+
+    Ember.Object.extend({
+      name: "HipChat",
+      room: "",
+      authToken: "",
+      attrs: function(){
+        return {
+          webhookURL: this.get('webhookURL'),
+        }
+      }.property('room', 'authToken'),
+      webhookURL: function(){
+        return "https://api.hipchat.com/v2/room/" + this.get('room') + "/notification?auth_token=" + this.get('authToken');
+      }.property('room', 'authToken'),
+      disabled: function(){
+        return !this.get("attrs.webhookURL")
+      }.property("attrs.webhookURL"),
+      clearForm: function(){
+        this.set("room", "");
+        this.set("authToken", "");
+      }
     }).create()
 
   ],
@@ -1775,24 +1807,6 @@ var IntegrationsController = Ember.ObjectController.extend({
     cancel: function() {
       this.send("transitionTo", {name: "index"})
 
-    },
-    submit: function(){
-      var controller = this,
-        endpoint = "/api/" + this.get("controllers.application.model.full_name") + "/integrations";
-
-        this.set("processing", true);
-
-        Ember.$.post(endpoint,{
-          integration: {
-            name: this.get("editing.name"),
-            data: Ember.merge({},this.get("editing.attrs"))
-          }
-        }, "json").then(function(result) {
-          controller.get("model.integrations")
-            .pushObject(App.Integration.create(result));
-          controller.send("transitionTo", {name: "index"})
-          controller.set("processing", false);
-        });
     },
     removeWebhook: function(hook){
       this.get("model.integrations").removeObject(hook)
@@ -4341,6 +4355,51 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "cancel", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(">Cancel</a> </div>\n      </form>\n    </div>\n\n");
+  return buffer;
+  
+});
+
+Ember.TEMPLATES['settings/integrations/hipchat'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', stack1, hashContexts, hashTypes, options, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
+
+
+  data.buffer.push("<div class=\"flex-form-bottom\">\n  <form ");
+  hashContexts = {'on': depth0};
+  hashTypes = {'on': "STRING"};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "submit", {hash:{
+    'on': ("submit")
+  },contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" class=\"flex-form\">\n    <h3>HipChat Instructions</h3>\n    <p> Choose a room to receive notifications from HuBoard. Currently only one room can be registered at a time, to receive notifications to multiple rooms please register one webhook per room. </p>\n    <label>\n      ");
+  hashContexts = {'value': depth0,'placeholder': depth0,'required': depth0};
+  hashTypes = {'value': "ID",'placeholder': "STRING",'required': "BOOLEAN"};
+  options = {hash:{
+    'value': ("room"),
+    'placeholder': ("Room Name"),
+    'required': (true)
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
+  data.buffer.push("\n    </label>\n    <p> Generate an API Authorization token (a room specific token is recommended) and paste it below: </p>\n    <label>\n      ");
+  hashContexts = {'value': depth0,'placeholder': depth0,'required': depth0};
+  hashTypes = {'value': "ID",'placeholder': "STRING",'required': "BOOLEAN"};
+  options = {hash:{
+    'value': ("authToken"),
+    'placeholder': ("Authorization Token"),
+    'required': (true)
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
+  data.buffer.push("\n    </label>\n    <button ");
+  hashContexts = {'disabled': depth0};
+  hashTypes = {'disabled': "ID"};
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'disabled': ("disabled")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" class=\"hb-button\">Submit webhook</button>\n    <div class=\"with-line\"><span>or</span></div>\n    <div class=\"cancel\"> <a href=\"#\" ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "cancel", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">Cancel</a> </div>\n  </form>\n</div>\n");
   return buffer;
   
 });
