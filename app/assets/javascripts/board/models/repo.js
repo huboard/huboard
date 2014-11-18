@@ -15,18 +15,35 @@ var Repo = Ember.Object.extend(Serializable,{
   betaUrl: function () {
      return this.get("repoUrl") + "/beta";
   }.property("repoUrl"),
-  fetchBoard: function(){
-
+  fetchBoard: function(linkedRepos){
     if(this._board) {return this._board;}
     return Ember.$.getJSON("/api/" + this.get("full_name") + "/board").then(function(board){
        var issues = Ember.A();
        board.issues.forEach(function(i){
          issues.pushObject(Issue.create(i));
        })
-       this._board =  Board.create(_.extend(board, {issues: issues}));
+       this._board =  Board.create(_.extend(board, {issues: issues, linkedReposPromise: linkedRepos}));
        this.set("board", this._board);
        return this._board;
     }.bind(this));
+  },
+  fetchLinkedRepos: function(){
+    var self = this;
+    return Ember.$.getJSON("/api/" + self.get("full_name") + "/link_labels")
+    .done(function(link_labels){
+      urls = link_labels.map(function (l) {
+        return "/api/" + self.get("full_name") + "/linked/" + l.user + "/" + l.repo  
+      })
+
+      var requests = urls.map(function (url){
+        return Ember.$.getJSON(url);
+      });
+
+      return Ember.RSVP.all(requests).then(function(boards){
+        debugger
+        return boards;
+      });
+    });
   },
   fetchIntegrations: function() {
     if(this._integrations) {return this._integrations;}
