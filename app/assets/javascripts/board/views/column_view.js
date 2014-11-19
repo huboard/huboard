@@ -80,7 +80,7 @@ var CollectionView = Ember.CloakedCollectionView.extend({
   overrideViewClass: WrapperView,
   cloakView: "card",
   itemController: "card",
-  slackRatio: 1.5,
+  slackRatio: 1.2,
   isFiltered: function() {
     this._uncloak = this.get("childViews")
 

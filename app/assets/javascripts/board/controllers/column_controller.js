@@ -35,7 +35,7 @@ var ColumnController = Ember.ObjectController.extend({
     });
     return issues;
   },
-  issues: function(){
+  issuesx: function(){
     return this.getIssues();
   }.property("controllers.index.forceRedraw"),
   dragging: false,

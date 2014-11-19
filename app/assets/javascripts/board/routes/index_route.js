@@ -4,8 +4,7 @@ var Board = require("../models/board");
 var IndexRoute = Ember.Route.extend({
   model: function(){
     var repo = this.modelFor("application");
-    var linked_boards = repo.fetchLinkedBoards();
-    return repo.fetchBoard(linked_boards);
+    return repo.fetchBoard();
   },
   afterModel: function (model){
     if(App.get("isLoaded")) {
@@ -15,26 +14,13 @@ var IndexRoute = Ember.Route.extend({
       content: model
     });
     cssView.appendTo("head")
-    return model.linkedBoardsPreload.done(function(linkedBoardsPromise){
-     App.set("isLoaded", true); 
-     var socket = this.get("socket");
-     return linkedBoardsPromise.then(function(boards){
-       boards.forEach(function(b) {
-        if(b.failure) {return;}
-         var issues = Ember.A();
-         b.issues.forEach(function(i){
-           issues.pushObject(App.Issue.create(i));
-         })
-         var board = Board.create(_.extend(b, {issues: issues}));
-         model.linkedRepos.pushObject(board);
-         socket.subscribeTo(b.full_name);
-       });
-       return boards;
-     });
-    }.bind(this));
+    App.set("isLoaded", true); 
+    //TODO: figure out how to subscribe to linked repo events
+    //var socket = this.get("socket");
+    //socket.subscribeTo(b.full_name);
   },
   renderTemplate: function() {
-    
+
     this._super.apply(this, arguments);
     this.render('filters', {into: 'index', outlet: 'sidebarMiddle'})
   },

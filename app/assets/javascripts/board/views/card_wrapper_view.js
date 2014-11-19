@@ -145,7 +145,22 @@ var CardWrapperView = Em.CloakedView.extend({
         this.$().removeClass("assignee-accept");
       }
     },
-    _setHeights: null
+    _setHeights: null,
+    cloak: function() {
+      var self = this;
+
+      if (this.get('hasChildViews') && (this._state || this.state) === 'inDOM') {
+
+        // We need to remove the container after the height of the element has taken
+        // effect.
+        Ember.run.schedule('afterRender', function() {
+          self.get('childViews').forEach(function(view) {
+            self.removeObject(view);
+            view.remove();
+          });
+        });
+      }
+    }
 
 });
 

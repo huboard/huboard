@@ -1,5 +1,6 @@
 var Board = require("./board");
 var Issue = require("./issue");
+var Column = require("./column");
 
 var Serializable = require("../mixins/serializable");
 var Repo = Ember.Object.extend(Serializable,{
@@ -15,14 +16,36 @@ var Repo = Ember.Object.extend(Serializable,{
   betaUrl: function () {
      return this.get("repoUrl") + "/beta";
   }.property("repoUrl"),
-  fetchBoard: function(linkedBoards){
+  fetchBoard: function(){
     if(this._board) {return this._board;}
+    var linked_boards = this.fetchLinkedBoards();
     return Ember.$.getJSON("/api/" + this.get("full_name") + "/board").then(function(board){
        var issues = Ember.A();
        board.issues.forEach(function(i){
          issues.pushObject(Issue.create(i));
        })
-       this._board =  Board.create(_.extend(board, {issues: issues, linkedBoardsPreload: linkedBoards}));
+       var columns = Ember.A();
+       board.columns.forEach(function(column){
+         columns.pushObject(Column.build(column, issues));
+       })
+       var parentBoard = this._board =  Board.create(_.extend(board, {issues: issues, columns: columns}));
+       linked_boards.then(function(boardsPromise){
+         boardsPromise.then(function(boards){
+          boards.forEach(function(b) {
+            if(b.failure) {return;}
+            var issues = Ember.A();
+            b.issues.forEach(function(i){
+              issues.pushObject(App.Issue.create(i));
+            })
+
+            parentBoard.columns.forEach(function(column){
+              column.merge(issues);
+            })
+            var board = Board.create(_.extend(b, {issues: issues, columns: parentBoard.columns}));
+            parentBoard.linkedRepos.pushObject(board);
+          });
+         });
+       });
        this.set("board", this._board);
        return this._board;
     }.bind(this));
