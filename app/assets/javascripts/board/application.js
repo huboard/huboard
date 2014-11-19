@@ -76836,9 +76836,9 @@ var CollectionView = Ember.CloakedCollectionView.extend({
       },
       activate: function () {
         // that.get("controller").set("isHovering", true);
-        that._uncloak = that.get("childViews")
+        //that._uncloak = that.get("childViews")
 
-        that.uncloakQueue();
+        //that.uncloakQueue();
       },
       deactivate: function() {
         // that.get("controller").set("isHovering", false);
