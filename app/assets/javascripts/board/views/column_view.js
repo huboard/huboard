@@ -8,6 +8,7 @@ var CollectionView = Ember.CloakedCollectionView.extend({
   style: Ember.computed.alias("controller.style"),
   content: Ember.computed.alias("controller.issues"),
   isHovering: false,
+  loadingHTML: null,
   didInsertElement: function(){
     var that = this;
     this.$().sortable({

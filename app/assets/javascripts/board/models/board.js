@@ -47,8 +47,28 @@ var Board = Ember.Object.extend({
             .groupBy(function(l){return l.title.toLocaleLowerCase() })
             .value();
   }.property("milestones.length","linkedRepos.@each.milestones.length"),
-  moveIssue: function(issue, column){
+  moveIssue: function(issue, column, index){
+    // begin editing ALL THE THINGS
+    Ember.beginPropertyChanges();
+    issue.beginPropertyChanges();
 
+    if(issue.get('parentController') === column) {
+      issue.set("model._data.order", index);
+    } else {
+      issue.get('parentController.model.issues').beginPropertyChanges();
+      column.get('model.issues').beginPropertyChanges();
+
+      issue.set("model._data.order", index);
+      issue.get('parentController.model.issues').removeObject(issue.get('model'));
+      column.get('model.issues').pushObject(issue.get('model'));
+
+      issue.get('parentController.model.issues').endPropertyChanges();
+      column.get('model.issues').endPropertyChanges();
+    }
+    issue.send("moved", index, column.get('model'));
+
+    Ember.endPropertyChanges();
+    issue.endPropertyChanges();
   }
 });
 

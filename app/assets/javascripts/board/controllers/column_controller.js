@@ -1,6 +1,5 @@
 var ColumnController = Ember.ObjectController.extend({
   needs: ["index", "application"],
-  style: Ember.computed.alias("controllers.index.column_style"),
   isLastColumn: function(){
     return this.get("controllers.index.columns.lastObject.name") === this.get("model.name");
   }.property("controllers.index.columns.lastObject"),
@@ -17,30 +16,11 @@ var ColumnController = Ember.ObjectController.extend({
     }
   }.property(),
   isHovering: false,
-  getIssues: function(){
-    var index = this.get("model.index");
-    var column = this.get("model");
-    var issues = this.get("controllers.index.model.combinedIssues").filter(function(i){
-      return i.current_state.index === index;
-    })
-    .filter(function(i) {
-      // FIXME: this flag is for archived issue left on the board.
-      return !i.get("isArchived");
-    })
-    .map(function (i){
-       i.set("current_state", column);
-       return i;
-    }).sort(function (a, b){
-       return a._data.order - b._data.order;
-    });
-    return issues;
-  },
-  issuesx: function(){
-    return this.getIssues();
-  }.property("controllers.index.forceRedraw"),
   dragging: false,
   cardMoved : function (cardController, index){
-    cardController.send("moved", index, this.get("model"))
+    this.get("controllers.index.model").moveIssue(cardController, this, index);
+
+    //cardController.send("moved", index, this.get("model"))
   },
   topOrderNumber: function(){
     var issues = this.get("issues");

@@ -5,7 +5,7 @@ require('../vendor/lodash');
 require('../vendor/jquery');
 require('../vendor/handlebars');
 require('../vendor/ember');
-//require('../vendor/ember-renderspeed');
+require('../vendor/ember-renderspeed');
 require('../vendor/ember-cloaking');
 require("../vendor/autoresize");
 
