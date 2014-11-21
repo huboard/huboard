@@ -911,9 +911,9 @@ var ColumnController = Ember.ObjectController.extend({
     //cardController.send("moved", index, this.get("model"))
   },
   topOrderNumber: function(){
-    var issues = this.get("issues");
-    if(issues.length){
-      return { order: issues.get("firstObject._data.order") / 2 };
+    debugger;
+    if(this.get("issues.length")){
+      return { order: this.get("issues.firstObject._data.order") / 2 };
     } else {
       return {};
     }
@@ -2167,6 +2167,7 @@ var Board = Ember.Object.extend({
 
       issue.get('parentController.model.issues').endPropertyChanges();
       column.get('model.issues').endPropertyChanges();
+      issue.set('parentController', column);
     }
     issue.send("moved", index, column.get('model'));
 
