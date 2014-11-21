@@ -16,6 +16,8 @@ module HuBoard
             customer = couch.customers.findPlanById user.id
             session[:github_login] = user.login
             session[:upgrade_url] = user.login == gh.user.login ? "/settings/profile" : "/settings/profile/#/#{user.login}"
+            return if customer.rows.any?
+            customer = couch.customers.findPlanById current_user.id
             throw(:warden) if !customer.rows.any? #|| customer.rows.first.value.stripe.customer.delinquent
           end
 
