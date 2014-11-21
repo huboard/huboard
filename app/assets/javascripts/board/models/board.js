@@ -58,9 +58,9 @@ var Board = Ember.Object.extend({
       issue.get('parentController.model.issues').beginPropertyChanges();
       column.get('model.issues').beginPropertyChanges();
 
-      issue.set("model._data.order", index);
       issue.get('parentController.model.issues').removeObject(issue.get('model'));
       column.get('model.issues').pushObject(issue.get('model'));
+      issue.set("model._data.order", index);
 
       issue.get('parentController.model.issues').endPropertyChanges();
       column.get('model.issues').endPropertyChanges();

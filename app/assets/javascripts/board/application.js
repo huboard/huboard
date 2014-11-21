@@ -2161,9 +2161,9 @@ var Board = Ember.Object.extend({
       issue.get('parentController.model.issues').beginPropertyChanges();
       column.get('model.issues').beginPropertyChanges();
 
-      issue.set("model._data.order", index);
       issue.get('parentController.model.issues').removeObject(issue.get('model'));
       column.get('model.issues').pushObject(issue.get('model'));
+      issue.set("model._data.order", index);
 
       issue.get('parentController.model.issues').endPropertyChanges();
       column.get('model.issues').endPropertyChanges();
@@ -2782,7 +2782,7 @@ var IndexRoute = Ember.Route.extend({
     },
     issueCreated: function(issue){
       var controller = this.controllerFor("index");
-      var issues = controller.get("model.issues")
+      var issues = controller.get("model.columns.firstObject.issues")
       issues.pushObject(issue);
       Ember.run.schedule('afterRender', controller, function () {
         controller.incrementProperty("forceRedraw");
@@ -76932,10 +76932,13 @@ var CollectionView = Ember.CloakedCollectionView.extend({
       }, 
       update: function (ev, ui) {
 
-        var findViewData = function (element){
-           return Em.View.views[$(element).attr("id")]
-             .get("cardController");
+        var findView = function (element){
+           return Em.View.views[$(element).attr("id")];
         };
+
+        var findViewData = function(element){
+          return findView(element).get('cardController');
+        }
 
         var elements = $("> li", that.$()),
         index = elements.index(ui.item);
@@ -76955,6 +76958,8 @@ var CollectionView = Ember.CloakedCollectionView.extend({
         current = currentData.get("model._data.order") || currentData.get("model.number"),
         before = beforeData.get("model._data.order") || beforeData.get("model.number"),
         after = afterData.get("model._data.order") || afterData.get("model.number");
+
+        ui.item.remove();
 
         if(first && last) {
           that.get("controller").cardMoved(currentData, currentData.get("model.number"))

@@ -33,10 +33,13 @@ var CollectionView = Ember.CloakedCollectionView.extend({
       }, 
       update: function (ev, ui) {
 
-        var findViewData = function (element){
-           return Em.View.views[$(element).attr("id")]
-             .get("cardController");
+        var findView = function (element){
+           return Em.View.views[$(element).attr("id")];
         };
+
+        var findViewData = function(element){
+          return findView(element).get('cardController');
+        }
 
         var elements = $("> li", that.$()),
         index = elements.index(ui.item);
@@ -56,6 +59,8 @@ var CollectionView = Ember.CloakedCollectionView.extend({
         current = currentData.get("model._data.order") || currentData.get("model.number"),
         before = beforeData.get("model._data.order") || beforeData.get("model.number"),
         after = afterData.get("model._data.order") || afterData.get("model.number");
+
+        ui.item.remove();
 
         if(first && last) {
           that.get("controller").cardMoved(currentData, currentData.get("model.number"))
