@@ -64,6 +64,7 @@ var Board = Ember.Object.extend({
 
       issue.get('parentController.model.issues').endPropertyChanges();
       column.get('model.issues').endPropertyChanges();
+      issue.set('parentController', column);
     }
     issue.send("moved", index, column.get('model'));
 
