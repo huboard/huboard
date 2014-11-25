@@ -866,7 +866,7 @@ var CardController = Ember.ObjectController.extend(SocketMixin,{
       return this.get("model").assignUser(login);
     },
     fullscreen: function () {
-      this.send("openIssueFullscreen", this.get("model"));
+      this.send("openIssueFullscreen", this);
     },
     close: function (issue){
       return this.get("model").close();
@@ -1337,7 +1337,8 @@ module.exports = IssueTitleController;
 },{"../buffered_controller":18}],30:[function(require,module,exports){
 var IssuesEditController = Ember.ObjectController.extend({
   needs: ["application"],
-  columns: Ember.computed.alias("controllers.application.model.board.columns"),
+  board: Ember.computed.alias("controllers.application.model.board"),
+  columns: Ember.computed.alias("board.columns"),
   isReady: function(key, value){
     if(value !== undefined) {
       if(value) {
@@ -1375,10 +1376,7 @@ var IssuesEditController = Ember.ObjectController.extend({
       if(!App.get("repo.is_collaborator")) {
         return false;
       }
-      this.get("model").reorder(this.get("model._data.order"),column).then(function() {
-        this.send("forceRepaint","index");
-      }.bind(this));
-      Ember.run.next(this, "send", "forceRepaint", "index")
+      this.get('board').moveIssue(this.get('cardController'), column, this.get('model._data.order'))
     },
     assignUser: function(login){
       return this.get("model").assignUser(login);
@@ -2150,26 +2148,26 @@ var Board = Ember.Object.extend({
             .groupBy(function(l){return l.title.toLocaleLowerCase() })
             .value();
   }.property("milestones.length","linkedRepos.@each.milestones.length"),
-  moveIssue: function(issue, column, index){
+  moveIssue: function(issue, toColumn, index){
+    var fromColumn = issue.get('current_state');
     // begin editing ALL THE THINGS
     Ember.beginPropertyChanges();
     issue.beginPropertyChanges();
 
-    if(issue.get('parentController') === column) {
+    if(toColumn === fromColumn) {
       issue.set("model._data.order", index);
     } else {
-      issue.get('parentController.model.issues').beginPropertyChanges();
-      column.get('model.issues').beginPropertyChanges();
+      fromColumn.get('issues').beginPropertyChanges();
+      toColumn.get('issues').beginPropertyChanges();
 
-      issue.get('parentController.model.issues').removeObject(issue.get('model'));
-      column.get('model.issues').pushObject(issue.get('model'));
+      fromColumn.get('issues').removeObject(issue.get('model'));
+      toColumn.get('issues').pushObject(issue.get('model'));
       issue.set("model._data.order", index);
 
-      issue.get('parentController.model.issues').endPropertyChanges();
-      column.get('model.issues').endPropertyChanges();
-      issue.set('parentController', column);
+      fromColumn.get('issues').endPropertyChanges();
+      toColumn.get('issues').endPropertyChanges();
     }
-    issue.send("moved", index, column.get('model'));
+    issue.send("moved", index, toColumn.get('model') || toColumn);
 
     Ember.endPropertyChanges();
     issue.endPropertyChanges();
@@ -2205,6 +2203,7 @@ var Column = Ember.Object.extend({
 
 Column.reopenClass({
   build: function(column, issues){
+    var column = Column.create(column);
     var index = column.index;
     var issues = issues.filter(function(i){
       return i.current_state.index === index;
@@ -2224,9 +2223,8 @@ Column.reopenClass({
         sortProperties: ["_data.order"]
       })
 
-    var toReturn = Column.create(column);
-    toReturn.set('issues', sortedIssues);
-    return toReturn;
+    column.set('issues', sortedIssues);
+    return column;
 
   }
 
@@ -2797,8 +2795,10 @@ module.exports = IndexRoute;
 
 },{"../models/board":46,"../views/css_view":86}],57:[function(require,module,exports){
 var IssueRoute = Ember.Route.extend({
-  setupController: function(controller, model) {
+  setupController: function(controller, cardController) {
+    var model = cardController.get('model');
     controller.set("model", model);
+    controller.set("cardController", cardController);
 
     var appModel = this.modelFor("application"),
       board = appModel.fetchBoard(appModel);
@@ -2816,7 +2816,7 @@ var IssueRoute = Ember.Route.extend({
     return this._super("issue", _skipAssert);
   },
   afterModel: function (model) {
-    return model.loadDetails();
+    return model.get("model").loadDetails();
   },
   renderTemplate: function () {
     this.render("issue",{into:'application',outlet:'modal'})

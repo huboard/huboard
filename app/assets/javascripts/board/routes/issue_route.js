@@ -1,6 +1,8 @@
 var IssueRoute = Ember.Route.extend({
-  setupController: function(controller, model) {
+  setupController: function(controller, cardController) {
+    var model = cardController.get('model');
     controller.set("model", model);
+    controller.set("cardController", cardController);
 
     var appModel = this.modelFor("application"),
       board = appModel.fetchBoard(appModel);
@@ -18,7 +20,7 @@ var IssueRoute = Ember.Route.extend({
     return this._super("issue", _skipAssert);
   },
   afterModel: function (model) {
-    return model.loadDetails();
+    return model.get("model").loadDetails();
   },
   renderTemplate: function () {
     this.render("issue",{into:'application',outlet:'modal'})

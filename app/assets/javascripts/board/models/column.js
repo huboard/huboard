@@ -23,6 +23,7 @@ var Column = Ember.Object.extend({
 
 Column.reopenClass({
   build: function(column, issues){
+    var column = Column.create(column);
     var index = column.index;
     var issues = issues.filter(function(i){
       return i.current_state.index === index;
@@ -42,9 +43,8 @@ Column.reopenClass({
         sortProperties: ["_data.order"]
       })
 
-    var toReturn = Column.create(column);
-    toReturn.set('issues', sortedIssues);
-    return toReturn;
+    column.set('issues', sortedIssues);
+    return column;
 
   }
 

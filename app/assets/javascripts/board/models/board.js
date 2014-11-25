@@ -47,26 +47,26 @@ var Board = Ember.Object.extend({
             .groupBy(function(l){return l.title.toLocaleLowerCase() })
             .value();
   }.property("milestones.length","linkedRepos.@each.milestones.length"),
-  moveIssue: function(issue, column, index){
+  moveIssue: function(issue, toColumn, index){
+    var fromColumn = issue.get('current_state');
     // begin editing ALL THE THINGS
     Ember.beginPropertyChanges();
     issue.beginPropertyChanges();
 
-    if(issue.get('parentController') === column) {
+    if(toColumn === fromColumn) {
       issue.set("model._data.order", index);
     } else {
-      issue.get('parentController.model.issues').beginPropertyChanges();
-      column.get('model.issues').beginPropertyChanges();
+      fromColumn.get('issues').beginPropertyChanges();
+      toColumn.get('issues').beginPropertyChanges();
 
-      issue.get('parentController.model.issues').removeObject(issue.get('model'));
-      column.get('model.issues').pushObject(issue.get('model'));
+      fromColumn.get('issues').removeObject(issue.get('model'));
+      toColumn.get('issues').pushObject(issue.get('model'));
       issue.set("model._data.order", index);
 
-      issue.get('parentController.model.issues').endPropertyChanges();
-      column.get('model.issues').endPropertyChanges();
-      issue.set('parentController', column);
+      fromColumn.get('issues').endPropertyChanges();
+      toColumn.get('issues').endPropertyChanges();
     }
-    issue.send("moved", index, column.get('model'));
+    issue.send("moved", index, toColumn.get('model') || toColumn);
 
     Ember.endPropertyChanges();
     issue.endPropertyChanges();

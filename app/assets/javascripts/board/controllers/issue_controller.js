@@ -1,6 +1,7 @@
 var IssuesEditController = Ember.ObjectController.extend({
   needs: ["application"],
-  columns: Ember.computed.alias("controllers.application.model.board.columns"),
+  board: Ember.computed.alias("controllers.application.model.board"),
+  columns: Ember.computed.alias("board.columns"),
   isReady: function(key, value){
     if(value !== undefined) {
       if(value) {
@@ -38,10 +39,7 @@ var IssuesEditController = Ember.ObjectController.extend({
       if(!App.get("repo.is_collaborator")) {
         return false;
       }
-      this.get("model").reorder(this.get("model._data.order"),column).then(function() {
-        this.send("forceRepaint","index");
-      }.bind(this));
-      Ember.run.next(this, "send", "forceRepaint", "index")
+      this.get('board').moveIssue(this.get('cardController'), column, this.get('model._data.order'))
     },
     assignUser: function(login){
       return this.get("model").assignUser(login);

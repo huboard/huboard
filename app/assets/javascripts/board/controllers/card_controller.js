@@ -63,7 +63,7 @@ var CardController = Ember.ObjectController.extend(SocketMixin,{
       return this.get("model").assignUser(login);
     },
     fullscreen: function () {
-      this.send("openIssueFullscreen", this.get("model"));
+      this.send("openIssueFullscreen", this);
     },
     close: function (issue){
       return this.get("model").close();
