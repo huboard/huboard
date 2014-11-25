@@ -1230,7 +1230,9 @@ var IssueBodyController = BufferedController.extend({
       !this.get('disabled') && this.set("isEditing", true);
     },
     save: function() {
+
       var controller = this,
+        model = controller.get("model"),
         url = "/api/" + this.get("controllers.issue.model.repo.full_name") + "/issues/" + this.get("model.number");
 
       this.get('bufferedContent').applyBufferedChanges();
@@ -1245,8 +1247,11 @@ var IssueBodyController = BufferedController.extend({
         contentType: 'application/json',
         data: JSON.stringify({body: this.get("model.body")}),
         success: function(response){
+          model.set("body_html", response.body_html);
+          if(controller.isDestroyed || controller.isDestroying){
+            return;
+          }
           controller.set("disabled", false);
-          controller.set("model.body_html", response.body_html);
           controller.set("isEditing", false);
           controller._last = null;
         }
@@ -2443,6 +2448,8 @@ var Issue = Ember.Object.extend(Serializable,{
         correlationId: this.get("correlationId")
       }).then(function( response ){
          this.set("_data.order", response._data.order);
+         this.set("body", response.body);
+         this.set("body_html", response.body_html);
          return this;
       }.bind(this))
   
