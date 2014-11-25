@@ -12,10 +12,8 @@ var Column = Ember.Object.extend({
     .map(function (i){
        i.set("current_state", column);
        return i;
-    })
-   // .forEach(function(issue){
-   //   column.get('issues').insertItemSorted(issue);
-   // })
+    });
+
     column.get('issues').pushObjects(issues);
 
   }

@@ -43,6 +43,8 @@ var Repo = Ember.Object.extend(Serializable,{
             })
             var board = Board.create(_.extend(b, {issues: issues, columns: parentBoard.columns}));
             parentBoard.linkedRepos.pushObject(board);
+            // FIXME: this is lame-o
+            App.__container__.lookup("socket:main").subscribeTo(b.full_name)
           });
          });
        });
