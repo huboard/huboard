@@ -17,7 +17,7 @@ var IssueBodyController = BufferedController.extend({
   actions: {
     taskChanged: function(body) {
       this.set('bufferedContent.body', body);
-      this.send('save', true);
+      this.send('save');
     },
     edit: function(){
       !this.get('disabled') && this.set("isEditing", true);

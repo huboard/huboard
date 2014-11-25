@@ -1,9 +1,19 @@
 var HbTaskListComponent = Ember.Component.extend({
   classNames: ["js-task-list-container"],
   onBodyChange: function(){
-    this.cleanUp();
-    Ember.run.schedule('afterRender', this, "wireUp");
+    Ember.run(this, function(){
+      this.set("bodyMarkup", this.get('body_html'));
+    });
   }.observes('body_html'),
+  bodyMarkup: function(key, value){
+    if(arguments.length > 1){
+      this.cleanUp();
+      Ember.run.schedule('afterRender', this, "wireUp");
+      return value;
+    } else {
+      return this.get("body_html")
+    }
+  }.property(),
   wireUp: function(){
     var component = this;
     this.$().taskList("enable");
@@ -13,6 +23,7 @@ var HbTaskListComponent = Ember.Component.extend({
   }.on("didInsertElement"),
   cleanUp: function(){
     this.$().taskList("destroy");
+    this.$(".js-task-list-field").off("tasklist:changed");
   }.on('willDestroyElement')
 });
 

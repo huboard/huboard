@@ -19,6 +19,8 @@
     <button {{bind-attr disabled=view.content.disabled}} class="hb-button">Submit comment</button>
   </form>
   {{else}}
-    {{{ view.content.body_html}}}
+    {{#with view.content}}
+      {{ hb-task-list body_html=body_html body=body taskChanged="taskChanged" targetObject=this }}
+    {{/with}}
   {{/if}}
 </div>

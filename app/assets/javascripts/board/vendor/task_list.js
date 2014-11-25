@@ -96,7 +96,8 @@
   };
 
   destroyTaskList = function($container){
-    $container.off("change.tasklist", '.task-list-item-checkbox');
+    $container.off();
+    disableTaskList($container);
   }
 
   destroyTaskLists = function($containers) {

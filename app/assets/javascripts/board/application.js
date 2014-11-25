@@ -513,9 +513,19 @@ module.exports = HbTabsComponent;
 var HbTaskListComponent = Ember.Component.extend({
   classNames: ["js-task-list-container"],
   onBodyChange: function(){
-    this.cleanUp();
-    Ember.run.schedule('afterRender', this, "wireUp");
+    Ember.run(this, function(){
+      this.set("bodyMarkup", this.get('body_html'));
+    });
   }.observes('body_html'),
+  bodyMarkup: function(key, value){
+    if(arguments.length > 1){
+      this.cleanUp();
+      Ember.run.schedule('afterRender', this, "wireUp");
+      return value;
+    } else {
+      return this.get("body_html")
+    }
+  }.property(),
   wireUp: function(){
     var component = this;
     this.$().taskList("enable");
@@ -525,6 +535,7 @@ var HbTaskListComponent = Ember.Component.extend({
   }.on("didInsertElement"),
   cleanUp: function(){
     this.$().taskList("destroy");
+    this.$(".js-task-list-field").off("tasklist:changed");
   }.on('willDestroyElement')
 });
 
@@ -1170,27 +1181,37 @@ var IssueActivityController = BufferedController.extend({
 
   }.property('{isCollaborator,isLoggedIn,currentUser}'),
   actions: {
+    taskChanged: function(body){
+      this.set('bufferedContent.body', body);
+      this.send('save');
+    },
     edit: function(){
       this.set("isEditing", true);
     },
     save: function() {
       var controller = this,
+        model = controller.get('model'),
         url = "/api/" + this.get("controllers.issue.model.repo.full_name") + "/issues/comments/" + this.get("model.id");
 
       this.get('bufferedContent').applyBufferedChanges();
 
       controller.set("disabled", true);
 
-      Ember.$.ajax({
+      if(this._last) { this._last.abort() };
+      this._last = Ember.$.ajax({
         url: url,
         type: "PUT",
         dataType: 'json',
         contentType: 'application/json',
         data: JSON.stringify({comment: this.get("model")}),
         success: function(response){
+          Ember.set(model, "body_html", response.body_html);
+          if(controller.isDestroyed || controller.isDestroying){
+            return;
+          }
           controller.set("disabled", false);
-          controller.set("model.body_html", response.body_html);
           controller.set("isEditing", false);
+          controller._last = null;
         }
       })
     },
@@ -1224,7 +1245,7 @@ var IssueBodyController = BufferedController.extend({
   actions: {
     taskChanged: function(body) {
       this.set('bufferedContent.body', body);
-      this.send('save', true);
+      this.send('save');
     },
     edit: function(){
       !this.get('disabled') && this.set("isEditing", true);
@@ -4857,15 +4878,29 @@ function program6(depth0,data) {
 
 function program8(depth0,data) {
   
-  var buffer = '', stack1, hashContexts, hashTypes;
+  var buffer = '', stack1, hashTypes, hashContexts;
   data.buffer.push("\n    ");
-  hashContexts = {'unescaped': depth0};
-  hashTypes = {'unescaped': "STRING"};
-  stack1 = helpers._triageMustache.call(depth0, "view.content.body_html", {hash:{
-    'unescaped': ("true")
-  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers['with'].call(depth0, "view.content", {hash:{},inverse:self.noop,fn:self.program(9, program9, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n  ");
+  return buffer;
+  }
+function program9(depth0,data) {
+  
+  var buffer = '', stack1, hashContexts, hashTypes, options;
+  data.buffer.push("\n      ");
+  hashContexts = {'body_html': depth0,'body': depth0,'taskChanged': depth0,'targetObject': depth0};
+  hashTypes = {'body_html': "ID",'body': "ID",'taskChanged': "STRING",'targetObject': "ID"};
+  options = {hash:{
+    'body_html': ("body_html"),
+    'body': ("body"),
+    'taskChanged': ("taskChanged"),
+    'targetObject': ("")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['hb-task-list'] || depth0['hb-task-list']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-task-list", options))));
+  data.buffer.push("\n    ");
   return buffer;
   }
 
@@ -5940,7 +5975,7 @@ function program1(depth0,data) {
   data.buffer.push("\n  ");
   hashContexts = {'unescaped': depth0};
   hashTypes = {'unescaped': "STRING"};
-  stack1 = helpers._triageMustache.call(depth0, "body_html", {hash:{
+  stack1 = helpers._triageMustache.call(depth0, "bodyMarkup", {hash:{
     'unescaped': ("true")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
@@ -76203,7 +76238,8 @@ if (typeof exports === 'object') {
   };
 
   destroyTaskList = function($container){
-    $container.off("change.tasklist", '.task-list-item-checkbox');
+    $container.off();
+    disableTaskList($container);
   }
 
   destroyTaskLists = function($containers) {
