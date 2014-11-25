@@ -15,8 +15,12 @@ var IssueBodyController = BufferedController.extend({
 
   }.property('{isCollaborator,isLoggedIn,currentUser}'),
   actions: {
+    taskChanged: function(body) {
+      this.set('bufferedContent.body', body);
+      this.send('save', true);
+    },
     edit: function(){
-      this.set("isEditing", true);
+      !this.get('disabled') && this.set("isEditing", true);
     },
     save: function() {
       var controller = this,
@@ -26,7 +30,8 @@ var IssueBodyController = BufferedController.extend({
 
       controller.set("disabled", true);
 
-      Ember.$.ajax({
+      if(this._last) { this._last.abort() };
+      this._last = Ember.$.ajax({
         url: url,
         type: "PUT",
         dataType: 'json',
@@ -36,6 +41,7 @@ var IssueBodyController = BufferedController.extend({
           controller.set("disabled", false);
           controller.set("model.body_html", response.body_html);
           controller.set("isEditing", false);
+          controller._last = null;
         }
       })
     },
