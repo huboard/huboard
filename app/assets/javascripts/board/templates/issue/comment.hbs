@@ -7,7 +7,9 @@
       {{#if view.content.isEditing}}
         <i title="Cancel editing" {{action "cancel" target=view.content }} class="hb-action pull-right ui-icon ui-icon-x-thin"></i>
       {{else}}
-        <i title="Edit comment" {{action "edit" target=view.content }} class="hb-action pull-right ui-icon ui-icon-pencil"></i>
+        {{#unless view.content.disabled}}
+          <i title="Edit comment" {{action "edit" target=view.content }} class="hb-action pull-right ui-icon ui-icon-pencil"></i>
+        {{/unless}}
       {{/if}}
     {{/if}}
     <strong>{{view.content.user.login}}</strong> commented {{momentAgo view.content.created_at}} 
