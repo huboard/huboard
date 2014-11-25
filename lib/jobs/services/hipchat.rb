@@ -24,14 +24,14 @@ class HipChat < Huboard::Service
     ENV["GITHUB_WEB_ENDPOINT"] || "https://github.com/"
   end
 
-  def huboard_img
-    "<img src='https://s3-us-west-2.amazonaws.com/prod.huboard.com/v1/images/favicon.ico'/>"
+  def avatar(mash)
+    "<a href='#{URI.join(github_url,mash.meta.user.login)}'> <img src='#{mash.meta.user.avatar_url}' height='25' width='25'/></a>&nbsp"
   end
 
   def transform_moved(mash)
     {
       color: 'purple',
-      message: "#{huboard_img} <a href='#{URI.join(github_url,mash.meta.user.login)}'> #{mash.meta.user.login} </a> moved <a href='#{mash.payload.issue.html_url}'>#{mash.payload.issue.title}</a> from <b>#{mash.payload.previous.text}</b> to <b>#{mash.payload.column.text }</b>",
+      message: "#{avatar(mash)} <a href='#{URI.join(github_url,mash.meta.user.login)}'> #{mash.meta.user.login} </a> moved <a href='#{mash.payload.issue.html_url}'>#{mash.payload.issue.title}</a> from <b>#{mash.payload.previous.text}</b> to <b>#{mash.payload.column.text }</b>",
       notify: true,
       message_format: 'html'
     }
@@ -43,7 +43,7 @@ class HipChat < Huboard::Service
     to = mash.payload.assignee.nil? ? '' : 'to '
     {
       color: 'purple',
-      message: "#{huboard_img} <a href='#{URI.join(github_url,mash.meta.user.login)}'> #{mash.meta.user.login} </a> #{assigned} #{issue_assignee} #{to}<a href='#{mash.payload.issue.html_url}'>#{mash.meta.repo_full_name}##{mash.payload.issue.number}</a><br><b>#{mash.payload.issue.title}</b><br>#{mash.payload.issue.body}",
+      message: "#{avatar(mash)} <a href='#{URI.join(github_url,mash.meta.user.login)}'> #{mash.meta.user.login} </a> #{assigned} #{issue_assignee} #{to}<a href='#{mash.payload.issue.html_url}'>#{mash.meta.repo_full_name}##{mash.payload.issue.number}</a><br><b>#{mash.payload.issue.title}</b><br>#{mash.payload.issue.body}",
       notify: true,
       message_format: 'html'
     }
@@ -53,7 +53,7 @@ class HipChat < Huboard::Service
     milestone = mash.payload.milestone.nil? ? "No Milestone" : mash.payload.milestone.title
     {
       color: 'purple',
-      message: "#{huboard_img} <a href='#{URI.join(github_url,mash.meta.user.login)}'> #{mash.meta.user.login} </a> changed milestone of <a href='#{mash.payload.issue.html_url}'>#{mash.payload.issue.title}</a> to #{milestone}",
+      message: "#{avatar(mash)} <a href='#{URI.join(github_url,mash.meta.user.login)}'> #{mash.meta.user.login} </a> changed milestone of <a href='#{mash.payload.issue.html_url}'>#{mash.payload.issue.title}</a> to #{milestone}",
       notify: true,
       message_format: 'html'
     }
@@ -68,7 +68,7 @@ class HipChat < Huboard::Service
     }
     {
       color: "#{color[mash.payload.action.to_sym]}",
-      message: "#{huboard_img} <a href='#{URI.join(github_url,mash.meta.user.login)}'> #{mash.meta.user.login} </a> changed the status of <a href='#{mash.payload.issue.html_url}'>#{mash.meta.repo_full_name}##{mash.payload.issue.number}</a> to #{mash.payload.action}<br><b>#{mash.payload.issue.title}</b><br>#{mash.payload.issue.body}",
+      message: "#{avatar(mash)} <a href='#{URI.join(github_url,mash.meta.user.login)}'> #{mash.meta.user.login} </a> changed the status of <a href='#{mash.payload.issue.html_url}'>#{mash.meta.repo_full_name}##{mash.payload.issue.number}</a> to #{mash.payload.action}<br><b>#{mash.payload.issue.title}</b><br>#{mash.payload.issue.body}",
       notify: true,
       message_format: 'html'
     }
@@ -77,7 +77,7 @@ class HipChat < Huboard::Service
   def transform_issue_opened(mash)
     {
       color: "purple",
-      message: "#{huboard_img} <a href='#{URI.join(github_url,mash.meta.user.login)}'> #{mash.meta.user.login} </a> opened a new issue <a href='#{mash.payload.issue.html_url}'>#{mash.meta.repo_full_name}##{mash.payload.issue.number}</a> <br><b>#{mash.payload.issue.title}</b><br>#{mash.payload.issue.body}",
+      message: "#{avatar(mash)} <a href='#{URI.join(github_url,mash.meta.user.login)}'> #{mash.meta.user.login} </a> opened a new issue <a href='#{mash.payload.issue.html_url}'>#{mash.meta.repo_full_name}##{mash.payload.issue.number}</a> <br><b>#{mash.payload.issue.title}</b><br>#{mash.payload.issue.body}",
       notify: true,
       message_format: 'html'
     }
@@ -86,7 +86,7 @@ class HipChat < Huboard::Service
   def transform_issue_closed(mash)
     {
       color: "purple",
-      message: "#{huboard_img} <a href='#{URI.join(github_url,mash.meta.user.login)}'> #{mash.meta.user.login} </a> closed <a href='#{mash.payload.issue.html_url}'>#{mash.meta.repo_full_name}##{mash.payload.issue.number}</a> <br><b>#{mash.payload.issue.title}</b><br>#{mash.payload.issue.body}",
+      message: "#{avatar(mash)} <a href='#{URI.join(github_url,mash.meta.user.login)}'> #{mash.meta.user.login} </a> closed <a href='#{mash.payload.issue.html_url}'>#{mash.meta.repo_full_name}##{mash.payload.issue.number}</a> <br><b>#{mash.payload.issue.title}</b><br>#{mash.payload.issue.body}",
       notify: true,
       message_format: 'html'
     }
