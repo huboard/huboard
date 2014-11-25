@@ -22,7 +22,7 @@
   </form>
   {{else}}
     {{#with view.content}}
-      {{ hb-task-list body_html=body_html body=body taskChanged="taskChanged" targetObject=this }}
+      {{ hb-task-list body_html=body_html body=body taskChanged="taskChanged" targetObject=this canEdit=canEdit }}
     {{/with}}
   {{/if}}
 </div>

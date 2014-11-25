@@ -527,11 +527,13 @@ var HbTaskListComponent = Ember.Component.extend({
     }
   }.property(),
   wireUp: function(){
-    var component = this;
-    this.$().taskList("enable");
-    this.$(".js-task-list-field").on("tasklist:changed", function(){
-      component.sendAction("taskChanged", this.value);
-    });
+    if (this.get('canEdit')) {
+      var component = this;
+      this.$().taskList("enable");
+      this.$(".js-task-list-field").on("tasklist:changed", function(){
+        component.sendAction("taskChanged", this.value);
+      });
+    }
   }.on("didInsertElement"),
   cleanUp: function(){
     this.$().taskList("destroy");
@@ -4757,11 +4759,12 @@ function program9(depth0,data) {
   
   var buffer = '', stack1, hashContexts, hashTypes, options;
   data.buffer.push("\n    ");
-  hashContexts = {'body_html': depth0,'body': depth0,'taskChanged': depth0};
-  hashTypes = {'body_html': "ID",'body': "ID",'taskChanged': "STRING"};
+  hashContexts = {'body_html': depth0,'body': depth0,'canEdit': depth0,'taskChanged': depth0};
+  hashTypes = {'body_html': "ID",'body': "ID",'canEdit': "ID",'taskChanged': "STRING"};
   options = {hash:{
     'body_html': ("body_html"),
     'body': ("body"),
+    'canEdit': ("canEdit"),
     'taskChanged': ("taskChanged")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers['hb-task-list'] || depth0['hb-task-list']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-task-list", options))));
@@ -4902,13 +4905,14 @@ function program10(depth0,data) {
   
   var buffer = '', stack1, hashContexts, hashTypes, options;
   data.buffer.push("\n      ");
-  hashContexts = {'body_html': depth0,'body': depth0,'taskChanged': depth0,'targetObject': depth0};
-  hashTypes = {'body_html': "ID",'body': "ID",'taskChanged': "STRING",'targetObject': "ID"};
+  hashContexts = {'body_html': depth0,'body': depth0,'taskChanged': depth0,'targetObject': depth0,'canEdit': depth0};
+  hashTypes = {'body_html': "ID",'body': "ID",'taskChanged': "STRING",'targetObject': "ID",'canEdit': "ID"};
   options = {hash:{
     'body_html': ("body_html"),
     'body': ("body"),
     'taskChanged': ("taskChanged"),
-    'targetObject': ("")
+    'targetObject': (""),
+    'canEdit': ("canEdit")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers['hb-task-list'] || depth0['hb-task-list']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-task-list", options))));
   data.buffer.push("\n    ");
