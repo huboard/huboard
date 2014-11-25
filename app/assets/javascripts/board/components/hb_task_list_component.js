@@ -15,11 +15,13 @@ var HbTaskListComponent = Ember.Component.extend({
     }
   }.property(),
   wireUp: function(){
-    var component = this;
-    this.$().taskList("enable");
-    this.$(".js-task-list-field").on("tasklist:changed", function(){
-      component.sendAction("taskChanged", this.value);
-    });
+    if (this.get('canEdit')) {
+      var component = this;
+      this.$().taskList("enable");
+      this.$(".js-task-list-field").on("tasklist:changed", function(){
+        component.sendAction("taskChanged", this.value);
+      });
+    }
   }.on("didInsertElement"),
   cleanUp: function(){
     this.$().taskList("destroy");

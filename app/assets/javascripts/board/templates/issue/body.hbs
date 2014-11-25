@@ -21,6 +21,6 @@
     <button {{bind-attr disabled=disabled}} class="hb-button">Submit comment</button>
   </form>
   {{else}}
-    {{ hb-task-list body_html=body_html body=body taskChanged="taskChanged" }}
+    {{ hb-task-list body_html=body_html body=body canEdit=canEdit taskChanged="taskChanged" }}
   {{/if}}
 </div>
