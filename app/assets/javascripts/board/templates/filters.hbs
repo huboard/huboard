@@ -1,8 +1,8 @@
 {{render 'assignee' this}}
 <ul class='filters'>
-  <h5>Linked repos</h5>
-  {{#each filter in linkFilters }}
-    {{view App.FilterView lastClicked=lastLinkFilterClicked name=filter.name mode=filter.mode color=filter.color}}
+  <h5>Repos</h5>
+  {{#each filter in boardFilters }}
+    {{view App.FilterView lastClicked=lastBoardFilterClicked name=filter.name mode=filter.mode color=filter.color}}
   {{/each}}
 
   <h5>Assignment</h5>
