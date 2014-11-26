@@ -34,10 +34,7 @@
 			background: white;
 			border-radius: 6px;
 			display: inline-block;
-      max-width: 275px;
-			@include rem((
-				padding: 17px
-			));
+      max-width: 357px;
       cursor: -webkit-zoom-in;
       cursor: -moz-zoom-in;
       cursor: zoom-in;
@@ -109,24 +106,28 @@
 		margin-bottom: 70px
 	));
 
+  .feature__image {
+    max-width: 100%;
+  }
+
 	.feature__image {
-		float: left;
+		float: right;
 		@include rem((
-			margin-right: 30px
+			margin-left: 30px
 		));
 	}
 	.feature__copy {
 	}
 
 	/**
-	 * Right aligned image
+	 * Left aligned image
 	 */
 	@include m(alt) {
 
 		.feature__image  {
-			float: right;
+			float: left;
 			@include rem((
-				margin: 0 0 0 30px
+				margin: 0 30px 0 0
 			));
 		}
 	}
@@ -177,6 +178,7 @@
 	text-align: center;
 
 	.feature__image {
+    min-height: 221px;
 		@include rem((
 			margin-bottom: 40px
 		));
