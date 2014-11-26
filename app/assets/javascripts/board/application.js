@@ -1016,17 +1016,17 @@ var FiltersController = Ember.ObjectController.extend({
   }.observes("lastUserFilterClicked"),
   userFilters: null,
   milestoneFilters: null,
-  linkFilters: null,
-  lastLinkFilterClickedChanged: function(){
+  boardFilters: null,
+  lastBoardFilterClickedChanged: function(){
     Ember.run.once(function(){
       var self = this;
-      this.get("linkFilters").filter(function(f){
-        return f.name != self.get("lastLinkFilterClicked");
+      this.get("boardFilters").filter(function(f){
+        return f.name != self.get("lastBoardFilterClicked");
       }).forEach(function(f){
         Ember.set(f,"mode", 0);
       })
     }.bind(this))
-  }.observes("lastLinkFilterClicked"),
+  }.observes("lastBoardFilterClicked"),
   lastMilestoneFilterClickedChanged: function(){
     Ember.run.once(function(){
       var self = this;
@@ -1106,7 +1106,7 @@ var FiltersController = Ember.ObjectController.extend({
        })
     }));
     var parentBoardOwner = this.get("controllers.application.model.board.full_name").split("/")[0];
-    this.set("linkFilters", this.get("linkLabels").map(function(l){
+    this.set("boardFilters", this.get("linkLabels").map(function(l){
        var name = parentBoardOwner == l.user ? l.repo : l.user + "/" + l.repo;
        return Ember.Object.create({
         name: name,
@@ -1117,15 +1117,22 @@ var FiltersController = Ember.ObjectController.extend({
         }
        })
     }));
+    this.get("boardFilters").insertAt(0, Ember.Object.create({
+      name: App.get('repo.name'),
+      mode:0,
+      condition:function(i){
+        return i.repo.name == App.get('repo.name');
+      }
+    }));
   },
   lastMilestoneFilterClicked: null,
   lastLabelFilterClicked: null,
-  lastLinkFilterClicked: null,
+  lastBoardFilterClicked: null,
   dimFiltersChanged: function(){
     Ember.run.once(function(){
       var allFilters = this.get("milestoneFilters")
                           .concat(this.get("userFilters"))
-                          .concat(this.get("linkFilters"))
+                          .concat(this.get("boardFilters"))
                           .concat(this.get("labelFilters"));
 
       this.set("dimFilters", allFilters.filter(function(f){
@@ -1136,7 +1143,7 @@ var FiltersController = Ember.ObjectController.extend({
         return f.mode == 2;
       }));
     }.bind(this))
-  }.observes("milestoneFilters.@each.mode", "userFilters.@each.mode","labelFilters.@each.mode", "linkFilters.@each.mode"),
+  }.observes("milestoneFilters.@each.mode", "userFilters.@each.mode","labelFilters.@each.mode", "boardFilters.@each.mode"),
   dimFiltersBinding: "App.dimFilters",
   hideFiltersBinding: "App.hideFilters"
   
@@ -3548,7 +3555,7 @@ function program1(depth0,data) {
   hashContexts = {'lastClicked': depth0,'name': depth0,'mode': depth0,'color': depth0};
   hashTypes = {'lastClicked': "ID",'name': "ID",'mode': "ID",'color': "ID"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.FilterView", {hash:{
-    'lastClicked': ("lastLinkFilterClicked"),
+    'lastClicked': ("lastBoardFilterClicked"),
     'name': ("filter.name"),
     'mode': ("filter.mode"),
     'color': ("filter.color")
@@ -3610,10 +3617,10 @@ function program7(depth0,data) {
   hashContexts = {};
   options = {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.render || depth0.render),stack1 ? stack1.call(depth0, "assignee", "", options) : helperMissing.call(depth0, "render", "assignee", "", options))));
-  data.buffer.push("\n<ul class='filters'>\n  <h5>Linked repos</h5>\n  ");
+  data.buffer.push("\n<ul class='filters'>\n  <h5>Repos</h5>\n  ");
   hashTypes = {};
   hashContexts = {};
-  stack2 = helpers.each.call(depth0, "filter", "in", "linkFilters", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack2 = helpers.each.call(depth0, "filter", "in", "boardFilters", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n\n  <h5>Assignment</h5>\n  ");
   hashTypes = {};
