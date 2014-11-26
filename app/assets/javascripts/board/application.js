@@ -1017,16 +1017,16 @@ var FiltersController = Ember.ObjectController.extend({
   userFilters: null,
   milestoneFilters: null,
   boardFilters: null,
-  lastLinkFilterClickedChanged: function(){
+  lastBoardFilterClickedChanged: function(){
     Ember.run.once(function(){
       var self = this;
       this.get("boardFilters").filter(function(f){
-        return f.name != self.get("lastLinkFilterClicked");
+        return f.name != self.get("lastBoardFilterClicked");
       }).forEach(function(f){
         Ember.set(f,"mode", 0);
       })
     }.bind(this))
-  }.observes("lastLinkFilterClicked"),
+  }.observes("lastBoardFilterClicked"),
   lastMilestoneFilterClickedChanged: function(){
     Ember.run.once(function(){
       var self = this;
