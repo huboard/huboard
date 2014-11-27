@@ -999,7 +999,14 @@ module.exports = ColumnCountController;
 
 },{}],23:[function(require,module,exports){
 var FiltersController = Ember.ObjectController.extend({
-  needs: ["application"],
+  needs: ["application", "index"],
+
+  queryParamsBinding: "controllers.index.queryParams",
+  repoqpBinding: "controllers.index.repoqp",
+  assigneeqpBinding: "controllers.index.assigneeqp",
+  milestoneqpBinding: "controllers.index.milestoneqp",
+  labelqpBinding: "controllers.index.labelqp",
+
   milestonesBinding: "controllers.application.model.board.filterMilestones",
   otherLabelsBinding: "controllers.application.model.board.filterLabels",
   linkLabelsBinding: "controllers.application.model.board.link_labels",
@@ -1038,10 +1045,12 @@ var FiltersController = Ember.ObjectController.extend({
     }.bind(this))
   }.observes("lastMilestoneFilterClicked"),
   init: function(){
+    var self = this;
     if(App.get("loggedIn")){
       this.set("userFilters", [
         {
           name: "Assigned to me",
+          queryParam: "assigneeqp",
           mode: 0,
           condition: function(i){
             return i.assignee && i.assignee.login === App.get("currentUser").login;
@@ -1050,24 +1059,26 @@ var FiltersController = Ember.ObjectController.extend({
 
         {
           name: "Assigned to others",
+          queryParam: "assigneeqp",
           mode: 0,
           condition: function(i){
-            return i.assignee && i.assignee.login !== App.get("currentUser").login;
+            return i.assignee && i.assignee.login// !== App.get("currentUser").login;
           }
         },
         {
           name: "Unassigned issues",
+          queryParam: "assigneeqp",
           mode: 0,
           condition: function(i){
             return !i.assignee;
           }
         }
       ]);
-    
     }else{
       this.set("userFilters", [
         {
           name: "Unassigned issues",
+          queryParam: "assigneeqp",
           mode: 0,
           condition: function(i){
             return !i.assignee;
@@ -1079,6 +1090,7 @@ var FiltersController = Ember.ObjectController.extend({
     this.set("milestoneFilters", this.get("milestones").map(function(m){
        return Ember.Object.create({
         name: m.title,
+        queryParam: "milestoneqp",
         mode:0,
         condition:function(i){
          return i.milestone && i.milestone.title.toLocaleLowerCase() === m.title.toLocaleLowerCase();
@@ -1087,6 +1099,7 @@ var FiltersController = Ember.ObjectController.extend({
     }));
     this.get("milestoneFilters").insertAt(0, Ember.Object.create({
       name: 'No milestone',
+      queryParam: "milestoneqp",
       mode:0,
       condition:function(i){
         return i.milestone == null;
@@ -1096,6 +1109,7 @@ var FiltersController = Ember.ObjectController.extend({
     this.set("labelFilters", this.get("otherLabels").map(function(l){
        return Ember.Object.create({
         name: l.name,
+        queryParam: "labelqp",
         mode:0,
         color: l.color,
         condition:function(i){
@@ -1110,6 +1124,7 @@ var FiltersController = Ember.ObjectController.extend({
        var name = parentBoardOwner == l.user ? l.repo : l.user + "/" + l.repo;
        return Ember.Object.create({
         name: name,
+        queryParam: "repoqp",
         mode:0,
         color: l.color,
         condition:function(i){
@@ -1119,6 +1134,7 @@ var FiltersController = Ember.ObjectController.extend({
     }));
     this.get("boardFilters").insertAt(0, Ember.Object.create({
       name: App.get('repo.name'),
+      queryParam: "repoqp",
       mode:0,
       condition:function(i){
         return i.repo.name == App.get('repo.name');
@@ -1128,8 +1144,9 @@ var FiltersController = Ember.ObjectController.extend({
   lastMilestoneFilterClicked: null,
   lastLabelFilterClicked: null,
   lastBoardFilterClicked: null,
-  dimFiltersChanged: function(){
+  applyFilters: function(){
     Ember.run.once(function(){
+      var self = this;
       var allFilters = this.get("milestoneFilters")
                           .concat(this.get("userFilters"))
                           .concat(this.get("boardFilters"))
@@ -1140,9 +1157,13 @@ var FiltersController = Ember.ObjectController.extend({
       }));
 
       this.set("hideFilters", allFilters.filter(function(f){
-        return f.mode == 2;
+        var formattedParam = f.name.replace(/\s+/g, '');
+        var isQueryParamFiltered = self.get(f.queryParam).contains(formattedParam);
+        return f.mode == 2 || isQueryParamFiltered;
       }));
-    }.bind(this))
+  }.bind(this))}.on('init'),
+  dimFiltersChanged: function(){
+    this.applyFilters();
   }.observes("milestoneFilters.@each.mode", "userFilters.@each.mode","labelFilters.@each.mode", "boardFilters.@each.mode"),
   dimFiltersBinding: "App.dimFilters",
   hideFiltersBinding: "App.hideFilters"
@@ -1154,6 +1175,11 @@ module.exports = FiltersController;
 },{}],24:[function(require,module,exports){
 var IndexController = Ember.ObjectController.extend({
   needs: ["application"],
+  queryParams: ["assigneeqp", "repoqp", "milestoneqp", "labelqp"],
+  repoqp: [],
+  assigneeqp: [],
+  milestoneqp: [],
+  labelqp: [],
   isSidebarOpen: Ember.computed.alias("controllers.application.isSidebarOpen"),
   board_columns: function(){
      return this.get("columns");
@@ -3552,13 +3578,14 @@ function program1(depth0,data) {
   
   var buffer = '', hashContexts, hashTypes;
   data.buffer.push("\n    ");
-  hashContexts = {'lastClicked': depth0,'name': depth0,'mode': depth0,'color': depth0};
-  hashTypes = {'lastClicked': "ID",'name': "ID",'mode': "ID",'color': "ID"};
+  hashContexts = {'lastClicked': depth0,'name': depth0,'mode': depth0,'color': depth0,'queryParam': depth0};
+  hashTypes = {'lastClicked': "ID",'name': "ID",'mode': "ID",'color': "ID",'queryParam': "STRING"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.FilterView", {hash:{
     'lastClicked': ("lastBoardFilterClicked"),
     'name': ("filter.name"),
     'mode': ("filter.mode"),
-    'color': ("filter.color")
+    'color': ("filter.color"),
+    'queryParam': ("repoqp")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("\n  ");
   return buffer;
@@ -3568,13 +3595,14 @@ function program3(depth0,data) {
   
   var buffer = '', hashContexts, hashTypes;
   data.buffer.push("\n    ");
-  hashContexts = {'lastClicked': depth0,'name': depth0,'mode': depth0,'color': depth0};
-  hashTypes = {'lastClicked': "ID",'name': "ID",'mode': "ID",'color': "ID"};
+  hashContexts = {'lastClicked': depth0,'name': depth0,'mode': depth0,'color': depth0,'queryParam': depth0};
+  hashTypes = {'lastClicked': "ID",'name': "ID",'mode': "ID",'color': "ID",'queryParam': "STRING"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.FilterView", {hash:{
     'lastClicked': ("lastUserFilterClicked"),
     'name': ("filter.name"),
     'mode': ("filter.mode"),
-    'color': ("filter.color")
+    'color': ("filter.color"),
+    'queryParam': ("assigneeqp")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("\n  ");
   return buffer;
@@ -3584,13 +3612,14 @@ function program5(depth0,data) {
   
   var buffer = '', hashContexts, hashTypes;
   data.buffer.push("\n    ");
-  hashContexts = {'lastClicked': depth0,'name': depth0,'mode': depth0,'color': depth0};
-  hashTypes = {'lastClicked': "ID",'name': "ID",'mode': "ID",'color': "ID"};
+  hashContexts = {'lastClicked': depth0,'name': depth0,'mode': depth0,'color': depth0,'queryParam': depth0};
+  hashTypes = {'lastClicked': "ID",'name': "ID",'mode': "ID",'color': "ID",'queryParam': "STRING"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.FilterView", {hash:{
     'lastClicked': ("lastMilestoneFilterClicked"),
     'name': ("filter.name"),
     'mode': ("filter.mode"),
-    'color': ("filter.color")
+    'color': ("filter.color"),
+    'queryParam': ("milestoneqp")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("\n  ");
   return buffer;
@@ -3600,14 +3629,15 @@ function program7(depth0,data) {
   
   var buffer = '', hashContexts, hashTypes;
   data.buffer.push("\n    ");
-  hashContexts = {'lastClicked': depth0,'name': depth0,'mode': depth0,'color': depth0,'tagType': depth0};
-  hashTypes = {'lastClicked': "ID",'name': "ID",'mode': "ID",'color': "ID",'tagType': "STRING"};
+  hashContexts = {'lastClicked': depth0,'name': depth0,'mode': depth0,'color': depth0,'tagType': depth0,'queryParam': depth0};
+  hashTypes = {'lastClicked': "ID",'name': "ID",'mode': "ID",'color': "ID",'tagType': "STRING",'queryParam': "STRING"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.FilterView", {hash:{
     'lastClicked': ("lastLabelFilterClicked"),
     'name': ("filter.name"),
     'mode': ("filter.mode"),
     'color': ("filter.color"),
-    'tagType': ("filtered-label")
+    'tagType': ("filtered-label"),
+    'queryParam': ("labelqp")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("\n  ");
   return buffer;
@@ -76716,11 +76746,15 @@ var FilterView = Ember.View.extend({
     ev.preventDefault();
     var $target = $(ev.target);
     this.set("lastClicked", this.get("name"));
+    var formattedParam = this.get("name").replace(/\s+/g, '');
+    var queryParams = this.get("controller").get(this.get("queryParam"));
     if($target.is(".ui-icon")){
+      queryParams.removeObject(formattedParam);
       this.set("mode", 0);
       return;
     }
     this.set("mode", this.get("modes")[this.get("mode") + 1]);
+    this.queryParamsHandler(queryParams, formattedParam);
   },
   modeClass: function(){
     switch(this.get("mode")){
@@ -76736,6 +76770,28 @@ var FilterView = Ember.View.extend({
     }
     return "";
   }.property("mode"),
+  queryParamsHandler: function(params, formattedParam){
+    var queryAlreadyThere = params.contains(formattedParam);
+    if(this.get("modeClass") == "") {
+      params.removeObject(formattedParam);
+      return;
+    }
+    //If this is not a label, remove any filters of this class from QP's
+    if(this.get("modeClass") == "dim" && this.get("queryParam") != "labelqp") {
+      params.clear();
+      return;
+    }
+    if (this.get("modeClass") == "active" && !queryAlreadyThere){
+      params.pushObject(formattedParam);
+      return;
+    }
+  },
+  activatePrexistingFilters: function(){
+    var formattedParam = this.get("name").replace(/\s+/g, '');
+    var queryParams = this.get("controller").get(this.get("queryParam"));
+    var queryAlreadyThere = queryParams.contains(formattedParam);
+    if (queryAlreadyThere){ this.set("mode", 2); }
+  }.on("didInsertElement"),
   mode: 0,
   modes:[0,1,2,0],
   name: null,

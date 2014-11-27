@@ -13,11 +13,15 @@ var FilterView = Ember.View.extend({
     ev.preventDefault();
     var $target = $(ev.target);
     this.set("lastClicked", this.get("name"));
+    var formattedParam = this.get("name").replace(/\s+/g, '');
+    var queryParams = this.get("controller").get(this.get("queryParam"));
     if($target.is(".ui-icon")){
+      queryParams.removeObject(formattedParam);
       this.set("mode", 0);
       return;
     }
     this.set("mode", this.get("modes")[this.get("mode") + 1]);
+    this.queryParamsHandler(queryParams, formattedParam);
   },
   modeClass: function(){
     switch(this.get("mode")){
@@ -33,6 +37,28 @@ var FilterView = Ember.View.extend({
     }
     return "";
   }.property("mode"),
+  queryParamsHandler: function(params, formattedParam){
+    var queryAlreadyThere = params.contains(formattedParam);
+    if(this.get("modeClass") == "") {
+      params.removeObject(formattedParam);
+      return;
+    }
+    //If this is not a label, remove any filters of this class from QP's
+    if(this.get("modeClass") == "dim" && this.get("queryParam") != "labelqp") {
+      params.clear();
+      return;
+    }
+    if (this.get("modeClass") == "active" && !queryAlreadyThere){
+      params.pushObject(formattedParam);
+      return;
+    }
+  },
+  activatePrexistingFilters: function(){
+    var formattedParam = this.get("name").replace(/\s+/g, '');
+    var queryParams = this.get("controller").get(this.get("queryParam"));
+    var queryAlreadyThere = queryParams.contains(formattedParam);
+    if (queryAlreadyThere){ this.set("mode", 2); }
+  }.on("didInsertElement"),
   mode: 0,
   modes:[0,1,2,0],
   name: null,

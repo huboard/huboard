@@ -2,21 +2,21 @@
 <ul class='filters'>
   <h5>Repos</h5>
   {{#each filter in boardFilters }}
-    {{view App.FilterView lastClicked=lastBoardFilterClicked name=filter.name mode=filter.mode color=filter.color}}
+    {{view App.FilterView lastClicked=lastBoardFilterClicked name=filter.name mode=filter.mode color=filter.color queryParam="repoqp"}}
   {{/each}}
 
   <h5>Assignment</h5>
   {{#each filter in userFilters }}
-    {{view App.FilterView lastClicked=lastUserFilterClicked name=filter.name mode=filter.mode color=filter.color }}
+    {{view App.FilterView lastClicked=lastUserFilterClicked name=filter.name mode=filter.mode color=filter.color queryParam="assigneeqp"}}
   {{/each}}
 
   <h5>Milestones</h5>
   {{#each filter in milestoneFilters }}
-    {{view App.FilterView lastClicked=lastMilestoneFilterClicked name=filter.name mode=filter.mode color=filter.color }}
+    {{view App.FilterView lastClicked=lastMilestoneFilterClicked name=filter.name mode=filter.mode color=filter.color queryParam="milestoneqp"}}
   {{/each}}
   <h5>Labels</h5>
   {{#each filter in labelFilters }}
-    {{view App.FilterView lastClicked=lastLabelFilterClicked name=filter.name mode=filter.mode color=filter.color tagType="filtered-label"}}
+    {{view App.FilterView lastClicked=lastLabelFilterClicked name=filter.name mode=filter.mode color=filter.color tagType="filtered-label" queryParam="labelqp"}}
   {{/each}}
 
 </ul>
