@@ -38,17 +38,17 @@ var FilterView = Ember.View.extend({
     return "";
   }.property("mode"),
   queryParamsHandler: function(params, formattedParam){
-    var queryAlreadyThere = params.contains(formattedParam);
-    if(this.get("modeClass") == "") {
+    if(this.get("mode") == 0) {
       params.removeObject(formattedParam);
       return;
     }
-    //If this is not a label, remove any filters of this class from QP's
-    if(this.get("modeClass") == "dim" && this.get("queryParam") != "labelqp") {
+    //If this is not a label and is dimmed,
+    //remove any filters of this type from the URL's QP's
+    if(this.get("mode") == 1 && this.get("queryParam") != "labelqp") {
       params.clear();
       return;
     }
-    if (this.get("modeClass") == "active" && !queryAlreadyThere){
+    if (this.get("mode") == 2 && !params.contains(formattedParam)){
       params.pushObject(formattedParam);
       return;
     }
@@ -56,8 +56,7 @@ var FilterView = Ember.View.extend({
   activatePrexistingFilters: function(){
     var formattedParam = this.get("name").replace(/\s+/g, '');
     var queryParams = this.get("controller").get(this.get("queryParam"));
-    var queryAlreadyThere = queryParams.contains(formattedParam);
-    if (queryAlreadyThere){ this.set("mode", 2); }
+    if (queryParams.contains(formattedParam)){ this.set("mode", 2); }
   }.on("didInsertElement"),
   mode: 0,
   modes:[0,1,2,0],

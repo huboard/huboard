@@ -76324,6 +76324,7 @@ var AssigneeFilterView = Ember.View.extend({
   classNameBindings: ["modeClass"],
   attributeBindings: ["draggable"],
   draggable: true,
+  queryParam: "assigneeqp",
   dragStart: function(ev){
     ev.dataTransfer.effectAllowed = "copy";
     ev.dataTransfer.setData("text/huboard-assignee", this.get("assignee"));
@@ -76340,6 +76341,10 @@ var AssigneeFilterView = Ember.View.extend({
     }
 
     this.set("mode", this.get("modes")[this.get("mode") + 1]);
+
+    var formattedParam = this.get("assignee").replace(/\s+/g, '');
+    var queryParams = this.get("controller").get(this.get("queryParam"));
+    this.queryParamsHandler(queryParams, formattedParam);
   },
   modeClass : function() {
     var lastClicked = this.get("lastClicked");
@@ -76371,6 +76376,24 @@ var AssigneeFilterView = Ember.View.extend({
       break;
     }
   }.property("lastClicked.mode"),
+  queryParamsHandler: function(params, formattedParam){
+    if(this.get("mode") == 0 || this.get("mode") == 1) {
+      params.clear();
+      return;
+    }
+    if (this.get("mode") == 2 && !params.contains(formattedParam)){
+      params.pushObject(formattedParam);
+      return;
+    }
+  },
+  activatePrexistingFilters: function(){
+    var formattedParam = this.get("assignee").replace(/\s+/g, '');
+    var queryParams = this.get("controller.target").get(this.get("queryParam"));
+    if (queryParams.contains(formattedParam)){
+      this.set("lastClicked", this);
+      this.set("mode", 2);
+    }
+  }.on("didInsertElement"),
   mode: 0,
   modes:[0,1,2,0],
   gravatarId: null
@@ -76771,17 +76794,17 @@ var FilterView = Ember.View.extend({
     return "";
   }.property("mode"),
   queryParamsHandler: function(params, formattedParam){
-    var queryAlreadyThere = params.contains(formattedParam);
-    if(this.get("modeClass") == "") {
+    if(this.get("mode") == 0) {
       params.removeObject(formattedParam);
       return;
     }
-    //If this is not a label, remove any filters of this class from QP's
-    if(this.get("modeClass") == "dim" && this.get("queryParam") != "labelqp") {
+    //If this is not a label and is dimmed,
+    //remove any filters of this type from the URL's QP's
+    if(this.get("mode") == 1 && this.get("queryParam") != "labelqp") {
       params.clear();
       return;
     }
-    if (this.get("modeClass") == "active" && !queryAlreadyThere){
+    if (this.get("mode") == 2 && !params.contains(formattedParam)){
       params.pushObject(formattedParam);
       return;
     }
@@ -76789,8 +76812,7 @@ var FilterView = Ember.View.extend({
   activatePrexistingFilters: function(){
     var formattedParam = this.get("name").replace(/\s+/g, '');
     var queryParams = this.get("controller").get(this.get("queryParam"));
-    var queryAlreadyThere = queryParams.contains(formattedParam);
-    if (queryAlreadyThere){ this.set("mode", 2); }
+    if (queryParams.contains(formattedParam)){ this.set("mode", 2); }
   }.on("didInsertElement"),
   mode: 0,
   modes:[0,1,2,0],
