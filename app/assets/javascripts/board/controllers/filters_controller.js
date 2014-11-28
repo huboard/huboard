@@ -1,5 +1,5 @@
 var FiltersController = Ember.ObjectController.extend({
-  needs: ["application", "index"],
+  needs: ["application"],
 
   queryParamsBinding: "controllers.application.queryParams",
   repoqpBinding: "controllers.application.repoqp",

@@ -1004,7 +1004,7 @@ module.exports = ColumnCountController;
 
 },{}],23:[function(require,module,exports){
 var FiltersController = Ember.ObjectController.extend({
-  needs: ["application", "index"],
+  needs: ["application"],
 
   queryParamsBinding: "controllers.application.queryParams",
   repoqpBinding: "controllers.application.repoqp",
