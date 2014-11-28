@@ -711,6 +711,11 @@ App.Router.reopen({
 },{"./app":15}],17:[function(require,module,exports){
 var ApplicationController = Ember.ObjectController.extend({
   isSidebarOpen: false,
+  queryParams: ["assigneeqp", "repoqp", "milestoneqp", "labelqp"],
+  repoqp: [],
+  assigneeqp: [],
+  milestoneqp: [],
+  labelqp: [],
   sockets: {
     config: {
       messagePath: "issueNumber",
@@ -1001,11 +1006,11 @@ module.exports = ColumnCountController;
 var FiltersController = Ember.ObjectController.extend({
   needs: ["application", "index"],
 
-  queryParamsBinding: "controllers.index.queryParams",
-  repoqpBinding: "controllers.index.repoqp",
-  assigneeqpBinding: "controllers.index.assigneeqp",
-  milestoneqpBinding: "controllers.index.milestoneqp",
-  labelqpBinding: "controllers.index.labelqp",
+  queryParamsBinding: "controllers.application.queryParams",
+  repoqpBinding: "controllers.application.repoqp",
+  assigneeqpBinding: "controllers.application.assigneeqp",
+  milestoneqpBinding: "controllers.application.milestoneqp",
+  labelqpBinding: "controllers.application.labelqp",
 
   milestonesBinding: "controllers.application.model.board.filterMilestones",
   otherLabelsBinding: "controllers.application.model.board.filterLabels",
@@ -1175,11 +1180,6 @@ module.exports = FiltersController;
 },{}],24:[function(require,module,exports){
 var IndexController = Ember.ObjectController.extend({
   needs: ["application"],
-  queryParams: ["assigneeqp", "repoqp", "milestoneqp", "labelqp"],
-  repoqp: [],
-  assigneeqp: [],
-  milestoneqp: [],
-  labelqp: [],
   isSidebarOpen: Ember.computed.alias("controllers.application.isSidebarOpen"),
   board_columns: function(){
      return this.get("columns");

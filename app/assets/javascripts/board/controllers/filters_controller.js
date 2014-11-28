@@ -1,11 +1,11 @@
 var FiltersController = Ember.ObjectController.extend({
   needs: ["application", "index"],
 
-  queryParamsBinding: "controllers.index.queryParams",
-  repoqpBinding: "controllers.index.repoqp",
-  assigneeqpBinding: "controllers.index.assigneeqp",
-  milestoneqpBinding: "controllers.index.milestoneqp",
-  labelqpBinding: "controllers.index.labelqp",
+  queryParamsBinding: "controllers.application.queryParams",
+  repoqpBinding: "controllers.application.repoqp",
+  assigneeqpBinding: "controllers.application.assigneeqp",
+  milestoneqpBinding: "controllers.application.milestoneqp",
+  labelqpBinding: "controllers.application.labelqp",
 
   milestonesBinding: "controllers.application.model.board.filterMilestones",
   otherLabelsBinding: "controllers.application.model.board.filterLabels",
