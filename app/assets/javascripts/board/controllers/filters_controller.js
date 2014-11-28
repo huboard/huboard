@@ -114,7 +114,7 @@ var FiltersController = Ember.ObjectController.extend({
   lastMilestoneFilterClicked: null,
   lastLabelFilterClicked: null,
   lastBoardFilterClicked: null,
-  applyFilters: function(){
+  dimFiltersChanged: function(){
     Ember.run.once(function(){
       var self = this;
       var allFilters = this.get("milestoneFilters")
@@ -131,10 +131,8 @@ var FiltersController = Ember.ObjectController.extend({
         var isQueryParamFiltered = self.get(f.queryParam).contains(formattedParam);
         return f.mode == 2 || isQueryParamFiltered;
       }));
-  }.bind(this))}.on('init'),
-  dimFiltersChanged: function(){
-    this.applyFilters();
-  }.observes("milestoneFilters.@each.mode", "userFilters.@each.mode","labelFilters.@each.mode", "boardFilters.@each.mode"),
+    }.bind(this))
+  }.observes("milestoneFilters.@each.mode", "userFilters.@each.mode","labelFilters.@each.mode", "boardFilters.@each.mode").on("init"),
   dimFiltersBinding: "App.dimFilters",
   hideFiltersBinding: "App.hideFilters"
   
