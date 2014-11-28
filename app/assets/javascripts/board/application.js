@@ -1067,7 +1067,7 @@ var FiltersController = Ember.ObjectController.extend({
           queryParam: "assigneeqp",
           mode: 0,
           condition: function(i){
-            return i.assignee && i.assignee.login// !== App.get("currentUser").login;
+            return i.assignee && i.assignee.login !== App.get("currentUser").login;
           }
         },
         {
