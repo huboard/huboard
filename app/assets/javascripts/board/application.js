@@ -1016,39 +1016,9 @@ var FiltersController = Ember.ObjectController.extend({
   otherLabelsBinding: "controllers.application.model.board.filterLabels",
   linkLabelsBinding: "controllers.application.model.board.link_labels",
   lastUserFilterClicked: null,
-  lastUserFilterClickedChanged: function(){
-    Ember.run.once(function(){
-      var self = this;
-      this.get("userFilters").filter(function(f){
-        return f.name != self.get("lastUserFilterClicked");
-      }).forEach(function(f){
-        Ember.set(f,"mode", 0);
-      })
-    }.bind(this))
-  }.observes("lastUserFilterClicked"),
   userFilters: null,
   milestoneFilters: null,
   boardFilters: null,
-  lastBoardFilterClickedChanged: function(){
-    Ember.run.once(function(){
-      var self = this;
-      this.get("boardFilters").filter(function(f){
-        return f.name != self.get("lastBoardFilterClicked");
-      }).forEach(function(f){
-        Ember.set(f,"mode", 0);
-      })
-    }.bind(this))
-  }.observes("lastBoardFilterClicked"),
-  lastMilestoneFilterClickedChanged: function(){
-    Ember.run.once(function(){
-      var self = this;
-      this.get("milestoneFilters").filter(function(f){
-        return f.name != self.get("lastMilestoneFilterClicked");
-      }).forEach(function(f){
-        Ember.set(f,"mode", 0);
-      })
-    }.bind(this))
-  }.observes("lastMilestoneFilterClicked"),
   init: function(){
     var self = this;
     if(App.get("loggedIn")){
