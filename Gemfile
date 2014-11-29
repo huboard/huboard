@@ -39,13 +39,13 @@ gem 'sass', '~> 3.3.9'
 gem 'sprockets-helpers'
 gem 'execjs', "~> 1.4"
 gem 'eventmachine'
+gem 'carrierwave_direct'
 
 gem 'sucker_punch', '~> 1.0'
 gem 'redis'
 gem 'celluloid'
 gem 'celluloid-redis'
 gem 'analytics-ruby', '~> 2.0.0'
-gem 'frappuccino'
 
 gem 'faye-huboard'
 gem 'faye-redis'
@@ -57,7 +57,6 @@ gem 'memcachier'
 
 gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 gem 'foreman'
-gem 'foreman-export-initscript'
 gem 'solid_use_case'
 
 group :development do

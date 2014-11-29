@@ -270,6 +270,32 @@ var HbMarkdownComposerComponent = Ember.Component.extend({
         holder.append(image);
       };
       reader.readAsDataURL(file);
+
+      Ember.$.getJSON("/api/uploads/asset")
+      .then(function(response){
+        response = response.uploader
+        var fd = new FormData();
+        fd.append('utf8', '✓')
+        fd.append('key', response.key)
+        fd.append('acl', response.acl)
+        //fd.append('Content-Type', file.type)
+        fd.append('AWSAccessKeyId', response.aws_access_key_id)
+        fd.append('policy', response.policy)
+        fd.append('signature', response.signature)
+        fd.append('success_action_status', "201")
+        fd.append('file', file)
+
+        var request = new XMLHttpRequest();
+        request.addEventListener('readystatechange', function(){
+          if(request.readyState === 4) {
+            debugger;
+          }
+        })
+
+        request.open('POST', "https://s3-us-west-2.amazonaws.com/dev.huboard.com", true);
+        request.send(fd);
+      });
+
     }
     ev.preventDefault();
   }
@@ -76507,19 +76533,19 @@ var CardWrapperView = Em.View.extend({
       view.get("controller").send("fullscreen")
     },
     dragEnter: function(ev) {
-      ev.preventDefault();
+      //ev.preventDefault();
       if(ev.dataTransfer.types.contains("text/huboard-assignee")){
         this.$().addClass("assignee-accept");
       }
     },
     dragOver: function(ev) {
-      ev.preventDefault();
+      //ev.preventDefault();
       if(ev.dataTransfer.types.contains("text/huboard-assignee")){
         this.$().addClass("assignee-accept");
       }
     },
     dragLeave: function(ev) {
-      ev.preventDefault();
+      //ev.preventDefault();
       if(ev.dataTransfer.types.contains("text/huboard-assignee")){
         this.$().removeClass("assignee-accept");
       }
