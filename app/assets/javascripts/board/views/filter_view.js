@@ -43,8 +43,8 @@ var FilterView = Ember.View.extend({
       return;
     }
     //If this is not a label and is dimmed,
-    //remove any filters of this type from the URL's QP's
-    if(this.get("mode") == 1 && this.get("queryParam") != "labelqp") {
+    //remove any filters of this type from the URL's 's
+    if(this.get("mode") == 1 && this.get("queryParam") != "label") {
       params.clear();
       return;
     }

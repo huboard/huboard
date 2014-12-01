@@ -2,10 +2,10 @@ var FiltersController = Ember.ObjectController.extend({
   needs: ["application"],
 
   queryParamsBinding: "controllers.application.queryParams",
-  repoqpBinding: "controllers.application.repoqp",
-  assigneeqpBinding: "controllers.application.assigneeqp",
-  milestoneqpBinding: "controllers.application.milestoneqp",
-  labelqpBinding: "controllers.application.labelqp",
+  repoBinding: "controllers.application.repo",
+  assigneeBinding: "controllers.application.assignee",
+  milestoneBinding: "controllers.application.milestone",
+  labelBinding: "controllers.application.label",
 
   milestonesBinding: "controllers.application.model.board.filterMilestones",
   otherLabelsBinding: "controllers.application.model.board.filterLabels",
@@ -50,7 +50,7 @@ var FiltersController = Ember.ObjectController.extend({
       this.set("userFilters", [
         {
           name: "Assigned to me",
-          queryParam: "assigneeqp",
+          queryParam: "assignee",
           mode: 0,
           condition: function(i){
             return i.assignee && i.assignee.login === App.get("currentUser").login;
@@ -59,7 +59,7 @@ var FiltersController = Ember.ObjectController.extend({
 
         {
           name: "Assigned to others",
-          queryParam: "assigneeqp",
+          queryParam: "assignee",
           mode: 0,
           condition: function(i){
             return i.assignee && i.assignee.login !== App.get("currentUser").login;
@@ -67,7 +67,7 @@ var FiltersController = Ember.ObjectController.extend({
         },
         {
           name: "Unassigned issues",
-          queryParam: "assigneeqp",
+          queryParam: "assignee",
           mode: 0,
           condition: function(i){
             return !i.assignee;
@@ -78,7 +78,7 @@ var FiltersController = Ember.ObjectController.extend({
       this.set("userFilters", [
         {
           name: "Unassigned issues",
-          queryParam: "assigneeqp",
+          queryParam: "assignee",
           mode: 0,
           condition: function(i){
             return !i.assignee;
@@ -90,7 +90,7 @@ var FiltersController = Ember.ObjectController.extend({
     this.set("milestoneFilters", this.get("milestones").map(function(m){
        return Ember.Object.create({
         name: m.title,
-        queryParam: "milestoneqp",
+        queryParam: "milestone",
         mode:0,
         condition:function(i){
          return i.milestone && i.milestone.title.toLocaleLowerCase() === m.title.toLocaleLowerCase();
@@ -99,7 +99,7 @@ var FiltersController = Ember.ObjectController.extend({
     }));
     this.get("milestoneFilters").insertAt(0, Ember.Object.create({
       name: 'No milestone',
-      queryParam: "milestoneqp",
+      queryParam: "milestone",
       mode:0,
       condition:function(i){
         return i.milestone == null;
@@ -109,7 +109,7 @@ var FiltersController = Ember.ObjectController.extend({
     this.set("labelFilters", this.get("otherLabels").map(function(l){
        return Ember.Object.create({
         name: l.name,
-        queryParam: "labelqp",
+        queryParam: "label",
         mode:0,
         color: l.color,
         condition:function(i){
@@ -124,7 +124,7 @@ var FiltersController = Ember.ObjectController.extend({
        var name = parentBoardOwner == l.user ? l.repo : l.user + "/" + l.repo;
        return Ember.Object.create({
         name: name,
-        queryParam: "repoqp",
+        queryParam: "repo",
         mode:0,
         color: l.color,
         condition:function(i){
@@ -134,7 +134,7 @@ var FiltersController = Ember.ObjectController.extend({
     }));
     this.get("boardFilters").insertAt(0, Ember.Object.create({
       name: App.get('repo.name'),
-      queryParam: "repoqp",
+      queryParam: "repo",
       mode:0,
       condition:function(i){
         return i.repo.name == App.get('repo.name');
