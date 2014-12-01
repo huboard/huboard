@@ -5,7 +5,8 @@ module HuBoard
 
         get '/api/uploads/asset' do
           uploader = Uploader.new
-          uploader.success_action_status = "201".to_s
+          uploader.will_include_content_type = true
+          uploader.success_action_status = "201"
           json(
             uploader: {
               key: uploader.key,

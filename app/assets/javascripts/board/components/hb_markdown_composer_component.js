@@ -21,6 +21,7 @@ var HbMarkdownComposerComponent = Ember.Component.extend({
       ev.stopPropagation();
     }
     var file = ev.dataTransfer.files[0],
+      component = this,
       holder = this.$();
     if(this.get("acceptedTypes")[file.type] === true) {
       var reader = new FileReader();
@@ -30,7 +31,7 @@ var HbMarkdownComposerComponent = Ember.Component.extend({
         image.width = 250; // a fake resize
         holder.append(image);
       };
-      reader.readAsDataURL(file);
+      //reader.readAsDataURL(file);
 
       Ember.$.getJSON("/api/uploads/asset")
       .then(function(response){
@@ -39,7 +40,7 @@ var HbMarkdownComposerComponent = Ember.Component.extend({
         fd.append('utf8', '✓')
         fd.append('key', response.key)
         fd.append('acl', response.acl)
-        //fd.append('Content-Type', file.type)
+        fd.append('Content-Type', file.type)
         fd.append('AWSAccessKeyId', response.aws_access_key_id)
         fd.append('policy', response.policy)
         fd.append('signature', response.signature)
@@ -49,11 +50,18 @@ var HbMarkdownComposerComponent = Ember.Component.extend({
         var request = new XMLHttpRequest();
         request.addEventListener('readystatechange', function(){
           if(request.readyState === 4) {
-            debugger;
+
+            var $xml = $(request.responseXML),
+              location = $xml.find("Location").text(),
+              key = $xml.find("Key").text();
+
+            var imgMarkdown = "\n![" + key + "]("+ location + ")\n"
+            component.set("markdown", (component.get("markdown") || "") + imgMarkdown);
+            holder.find("textarea").focus().val(holder.find("textarea").val());
           }
         })
 
-        request.open('POST', "https://s3-us-west-2.amazonaws.com/dev.huboard.com", true);
+        request.open('POST', response.upload_url, true);
         request.send(fd);
       });
 
