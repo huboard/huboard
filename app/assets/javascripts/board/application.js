@@ -252,6 +252,11 @@ var HbMarkdownComposerComponent = Ember.Component.extend({
     var component = this,
     holder = this.$();
 
+    if(file.size > 5242880) {
+      alert("Yowza, that file is too big");
+      return;
+    }
+
     this.set('uploading', true);
 
     Ember.$.getJSON("/api/uploads/asset")

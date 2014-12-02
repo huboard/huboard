@@ -5,6 +5,7 @@ module HuBoard
     true
   end
 end
+
 CarrierWave.configure do |config|
   config.storage = :fog
   config.fog_credentials = {
@@ -19,7 +20,7 @@ CarrierWave.configure do |config|
   #config.fog_attributes = { :multipart_chunk_size => 104857600 }
   config.fog_attributes = {'Cache-Control'=>"max-age=#{365.day.to_i}"}
   config.min_file_size = "1"
-  config.max_file_size = "#{2 * 1024 * 1024 * 1024}"
+  config.max_file_size = "#{5 * 1024 * 1024}"
   config.fog_public = true
   config.use_action_status = true
 end
