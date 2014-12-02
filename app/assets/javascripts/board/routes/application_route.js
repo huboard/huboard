@@ -28,6 +28,9 @@ var ApplicationRoute = Ember.Route.extend({
           outlet: 'modal'
         });
       }.bind(this));
+    },
+    clearFilters: function(){
+      this.controllerFor("filters").send("clearFilters");
     }
   },
   model: function () {

@@ -144,13 +144,16 @@ var FiltersController = Ember.ObjectController.extend({
   lastMilestoneFilterClicked: null,
   lastLabelFilterClicked: null,
   lastBoardFilterClicked: null,
+  allFilters: function(){
+      return this.get("milestoneFilters")
+              .concat(this.get("userFilters"))
+              .concat(this.get("boardFilters"))
+              .concat(this.get("labelFilters"));
+  }.property("milestoneFilters.@each.mode", "userFilters.@each.mode","labelFilters.@each.mode", "boardFilters.@each.mode"),
   dimFiltersChanged: function(){
+    self = this;
     Ember.run.once(function(){
-      var self = this;
-      var allFilters = this.get("milestoneFilters")
-                          .concat(this.get("userFilters"))
-                          .concat(this.get("boardFilters"))
-                          .concat(this.get("labelFilters"));
+      var allFilters = self.get("allFilters");
 
       this.set("dimFilters", allFilters.filter(function(f){
         return f.mode == 1;
@@ -162,10 +165,29 @@ var FiltersController = Ember.ObjectController.extend({
         return f.mode == 2 || isQueryParamFiltered;
       }));
     }.bind(this))
-  }.observes("milestoneFilters.@each.mode", "userFilters.@each.mode","labelFilters.@each.mode", "boardFilters.@each.mode").on("init"),
+  }.observes("allFilters").on("init"),
   dimFiltersBinding: "App.dimFilters",
-  hideFiltersBinding: "App.hideFilters"
-  
+  hideFiltersBinding: "App.hideFilters",
+  filtersActive: function(){
+    var allFilters = this.get("allFilters");
+    var active =  _.any(allFilters, function(f){
+      return f.mode > 0;
+    });
+    return active;
+  }.property("allFilters"),
+  actions: {
+    clearFilters: function(){
+      var self = this;
+      Ember.run.once(function(){
+        var params = ["repo", "assignee", "milestone", "label"];
+        _.each(params, function(p){ self.get(p).clear(); });
+        var allFilters = self.get("allFilters");
+        var active =  _.each(allFilters, function(f){
+          Ember.set(f,"mode",0);
+        });
+      });
+    }
+  }
 });
 
 module.exports = FiltersController;
