@@ -4,6 +4,7 @@ module HuBoard
       class Uploads < Base
 
         get '/api/uploads/asset' do
+          raise Sinatra::NotFound unless logged_in?
           uploader = Uploader.new
           uploader.will_include_content_type = true
           uploader.success_action_status = "201"
