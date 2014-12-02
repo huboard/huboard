@@ -239,6 +239,7 @@ module.exports = HbLabelSelectorComponent;
 },{}],8:[function(require,module,exports){
 var HbMarkdownComposerComponent = Ember.Component.extend({
   classNames: ["markdown-composer"],
+  classNameBindings: ["uploading:hb-state-uploading"],
   acceptedTypes: {
     "image/png": true,
     "image/gif": true,
@@ -246,66 +247,86 @@ var HbMarkdownComposerComponent = Ember.Component.extend({
     "image/svg" : true,
     "image/svg+xml": true
   },
-  dragEnter: function(ev) {
-    return false;
+  files: [],
+  uploadFile: function(file){
+    var component = this,
+    holder = this.$();
+
+    this.set('uploading', true);
+
+    Ember.$.getJSON("/api/uploads/asset")
+    .then(function(response){
+      response = response.uploader
+      var fd = new FormData();
+      fd.append('utf8', '✓')
+      fd.append('key', response.key)
+      fd.append('acl', response.acl)
+      fd.append('Content-Type', file.type)
+      fd.append('AWSAccessKeyId', response.aws_access_key_id)
+      fd.append('policy', response.policy)
+      fd.append('signature', response.signature)
+      fd.append('success_action_status', "201")
+      fd.append('file', file)
+
+      var request = new XMLHttpRequest();
+      request.addEventListener('readystatechange', function(){
+        if(request.readyState === 4) {
+
+          var $xml = $(request.responseXML),
+          location = $xml.find("Location").text(),
+          key = $xml.find("Key").text();
+
+          var imgMarkdown = "\n![" + key + "]("+ location + ")\n"
+          component.set("markdown", (component.get("markdown") || "") + imgMarkdown);
+          holder.find("textarea").focus().val(holder.find("textarea").val());
+          component.set('uploading', false);
+        }
+      })
+
+      request.open('POST', response.upload_url, true);
+      request.send(fd);
+    });
   },
-  dragOver: function(ev) {
-    return false;
-  },
-  dragLeave: function(ev) {
-    return false;
-  },
+  wireUp: function(){
+    var component = this;
+    this.$("input[type='file']").on("change.huboard", function(){
+      if(this.files != null && this.files.length) {
+        _.each(this.files,function(file) {
+          if(component.get("acceptedTypes")[file.type] === true) {
+            component.uploadFile(file);
+          }
+        });
+      }
+    })
+
+    this.$().on('paste', function(ev){
+      if(ev.originalEvent.clipboardData.items.length) {
+        _.each(ev.originalEvent.clipboardData.items, function(item) {
+          if(component.get("acceptedTypes")[item.type] === true) {
+            component.uploadFile(item.getAsFile());
+          }
+        })
+      }
+    })
+  }.on('didInsertElement'),
+  tearDown: function(){
+    this.$("input[type='file']").off("change.huboard");
+  }.on('willDestroyElement'),
   drop: function(ev) {
     if(ev.stopPropagation) {
       ev.stopPropagation();
     }
-    var file = ev.dataTransfer.files[0],
-      component = this,
-      holder = this.$();
-    if(this.get("acceptedTypes")[file.type] === true) {
-      var reader = new FileReader();
-      reader.onload = function (event) {
-        var image = new Image();
-        image.src = event.target.result;
-        image.width = 250; // a fake resize
-        holder.append(image);
-      };
-      //reader.readAsDataURL(file);
-
-      Ember.$.getJSON("/api/uploads/asset")
-      .then(function(response){
-        response = response.uploader
-        var fd = new FormData();
-        fd.append('utf8', '✓')
-        fd.append('key', response.key)
-        fd.append('acl', response.acl)
-        fd.append('Content-Type', file.type)
-        fd.append('AWSAccessKeyId', response.aws_access_key_id)
-        fd.append('policy', response.policy)
-        fd.append('signature', response.signature)
-        fd.append('success_action_status', "201")
-        fd.append('file', file)
-
-        var request = new XMLHttpRequest();
-        request.addEventListener('readystatechange', function(){
-          if(request.readyState === 4) {
-
-            var $xml = $(request.responseXML),
-              location = $xml.find("Location").text(),
-              key = $xml.find("Key").text();
-
-            var imgMarkdown = "\n![" + key + "]("+ location + ")\n"
-            component.set("markdown", (component.get("markdown") || "") + imgMarkdown);
-            holder.find("textarea").focus().val(holder.find("textarea").val());
-          }
-        })
-
-        request.open('POST', response.upload_url, true);
-        request.send(fd);
-      });
-
-    }
     ev.preventDefault();
+    if(ev.dataTransfer.files.length){
+      var component = this,
+      holder = this.$();
+
+      _.each(ev.dataTransfer.files,function(file) {
+        if(component.get("acceptedTypes")[file.type] === true) {
+          component.uploadFile(file);
+        }
+      });
+    }
   }
 })
 
@@ -5836,7 +5857,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
     'placeholder': ("Leave a comment")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.textarea || depth0.textarea),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "textarea", options))));
-  data.buffer.push("\n<p class=\"markdown-drag-and-drop\">\n Attach images by dragging and dropping, <input type='file' multiple=\"multiple\" /> <a class=\"manual-file-chooser\">selecting them</a>, or pasting from the clipboard.\n</p>\n\n");
+  data.buffer.push("\n<p class=\"markdown-drag-and-drop\">\n  <span class='hb-default'>\n    Attach images by dragging and dropping, <input type='file' multiple=\"multiple\" /> <a class=\"manual-file-chooser\">selecting them</a>, or pasting from the clipboard.\n  </span>\n  <span class=\"hb-uploading\">\n    Uploading....\n  </span>\n</p>\n\n");
   return buffer;
   
 });

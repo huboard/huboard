@@ -30,5 +30,16 @@
       opacity: 0.0001;
     }
   }
+  .hb-uploading {
+    display:none;
+  }
+  .hb-state-uploading {
+    .hb-uploading {
+      display:inline;
+    }
+    .hb-default {
+      display: none;
+    }
+  }
 }
 
