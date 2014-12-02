@@ -77,6 +77,7 @@ var HbMarkdownComposerComponent = Ember.Component.extend({
   }.on('didInsertElement'),
   tearDown: function(){
     this.$("input[type='file']").off("change.huboard");
+    this.$().off('paste');
   }.on('willDestroyElement'),
   drop: function(ev) {
     if(ev.stopPropagation) {
