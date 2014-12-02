@@ -5836,7 +5836,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
     'placeholder': ("Leave a comment")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.textarea || depth0.textarea),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "textarea", options))));
-  data.buffer.push("\n\n");
+  data.buffer.push("\n<p class=\"markdown-drag-and-drop\">\n Attach images by dragging and dropping, <input type='file' multiple=\"multiple\" /> <a class=\"manual-file-chooser\">selecting them</a>, or pasting from the clipboard.\n</p>\n\n");
   return buffer;
   
 });
