@@ -2,6 +2,20 @@
   <div class="sidebar-toggle">
     <a href="#" {{action "toggleSidebar" }}>Filters <i {{bind-attr class=":ui-icon isSidebarOpen:ui-icon-triangle-1-w:ui-icon-triangle-1-e"}} class="ui-icon ui-icon-triangle-1-e"></i></a>
   </div>
+
+  {{#if filtersActive}}
+  <div class="filters-clear">
+    <a href="#" {{action "clearFilters"}}>
+      <div class="filter-icon"> 
+        <i class="ui-icon ui-icon-filter"></i>
+      </div>
+      <div class="filter-type">
+        <p>Clear filters</p>
+      </div>
+    </a>
+  </div>
+  {{/if}}
+
  {{#if App.repo.is_collaborator}}
     <div class="create-button">
     {{#link-to 'settings' class='hb-icon-link' }}

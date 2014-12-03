@@ -1,6 +1,7 @@
 module.exports = MilestonesController = Ember.ObjectController.extend({
 
-  needs: ['application'],
+  needs: ['application', 'filters'],
+  filtersActive: Ember.computed.alias("controllers.filters.filtersActive"),
   isSidebarOpen: Ember.computed.alias("controllers.application.isSidebarOpen"),
   left_column: function () {
     return Ember.Object.create({

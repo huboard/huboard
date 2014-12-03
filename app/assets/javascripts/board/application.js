@@ -1698,7 +1698,8 @@ module.exports = MilestonesMissingController;
 },{}],34:[function(require,module,exports){
 module.exports = MilestonesController = Ember.ObjectController.extend({
 
-  needs: ['application'],
+  needs: ['application', 'filters'],
+  filtersActive: Ember.computed.alias("controllers.filters.filtersActive"),
   isSidebarOpen: Ember.computed.alias("controllers.application.isSidebarOpen"),
   left_column: function () {
     return Ember.Object.create({
@@ -4016,9 +4017,20 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 Ember.TEMPLATES['milestones'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, stack2, hashTypes, hashContexts, options, self=this, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  var buffer = '', stack1, stack2, hashTypes, hashContexts, options, escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
 
 function program1(depth0,data) {
+  
+  var buffer = '', hashTypes, hashContexts;
+  data.buffer.push("\n  <div class=\"filters-clear\">\n    <a href=\"#\" ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "clearFilters", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">\n      <div class=\"filter-icon\"> \n        <i class=\"ui-icon ui-icon-filter\"></i>\n      </div>\n      <div class=\"filter-type\">\n        <p>Clear filters</p>\n      </div>\n    </a>\n  </div>\n  ");
+  return buffer;
+  }
+
+function program3(depth0,data) {
   
   var buffer = '', stack1, stack2, hashContexts, hashTypes, options;
   data.buffer.push("\n    <div class=\"create-button\">\n    ");
@@ -4026,19 +4038,19 @@ function program1(depth0,data) {
   hashTypes = {'class': "STRING"};
   options = {hash:{
     'class': ("hb-icon-link")
-  },inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  },inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   stack2 = ((stack1 = helpers['link-to'] || depth0['link-to']),stack1 ? stack1.call(depth0, "settings", options) : helperMissing.call(depth0, "link-to", "settings", options));
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n    </div>\n  ");
   return buffer;
   }
-function program2(depth0,data) {
+function program4(depth0,data) {
   
   
   data.buffer.push("\n        <i class=\"ui-icon ui-icon-18 ui-icon-gear\"></i>\n    ");
   }
 
-function program4(depth0,data) {
+function program6(depth0,data) {
   
   var buffer = '', stack1, hashTypes, hashContexts, options;
   data.buffer.push("\n        ");
@@ -4060,10 +4072,15 @@ function program4(depth0,data) {
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
     'class': (":ui-icon isSidebarOpen:ui-icon-triangle-1-w:ui-icon-triangle-1-e")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(" class=\"ui-icon ui-icon-triangle-1-e\"></i></a>\n  </div>\n ");
+  data.buffer.push(" class=\"ui-icon ui-icon-triangle-1-e\"></i></a>\n  </div>\n\n  ");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers['if'].call(depth0, "App.repo.is_collaborator", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack1 = helpers['if'].call(depth0, "filtersActive", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n\n ");
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers['if'].call(depth0, "App.repo.is_collaborator", {hash:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n\n</div>\n<div id=\"main-stage\" ");
   hashContexts = {'class': depth0};
@@ -4089,7 +4106,7 @@ function program4(depth0,data) {
   data.buffer.push("\n      ");
   hashTypes = {};
   hashContexts = {};
-  stack2 = helpers.each.call(depth0, "column", "in", "milestone_columns", {hash:{},inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack2 = helpers.each.call(depth0, "column", "in", "milestone_columns", {hash:{},inverse:self.noop,fn:self.program(6, program6, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n    </div>\n  </div>\n</div>\n\n");
   return buffer;
