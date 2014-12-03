@@ -813,7 +813,8 @@ App.Router.reopen({
 },{"./app":16}],18:[function(require,module,exports){
 var ApplicationController = Ember.ObjectController.extend({
   isSidebarOpen: false,
-  queryParams: ["assignee", "repo", "milestone", "label"],
+  queryParams: ["assignee", "repo", "milestone", "label", "search"],
+  search: null,
   repo: [],
   assignee: [],
   milestone: [],
@@ -879,10 +880,22 @@ var AssigneeController = Ember.ObjectController.extend({
   actions: {
     toggleShowMode: function(mode){
       this.set("showMode", mode);
+    },
+    clearFilters: function(){
+      var self = this;
+      Ember.run.once(function(){
+        var params = ["assignee"];
+        _.each(params, function(p){ self.get(p).clear(); });
+        var allFilters = self.get("filters");
+        var active =  _.each(allFilters, function(f){
+          Ember.set(f,"mode",0);
+        });
+      });
     }
   },
   showMode: "less",
   assigneesBinding: "controllers.application.model.board.assignees",
+  assigneeBinding: "controllers.application.assignee",
   memberFilterBinding: "App.memberFilter",
   lastClicked: null,
   filterChanged : function(){
@@ -920,7 +933,12 @@ var AssigneeController = Ember.ObjectController.extend({
            }
          })
      });
-  }.property("avatars")
+  }.property("avatars"),
+  filtersActive: function(){
+   return this.get("filters").any(function(f){
+      return Ember.get(f, "mode") !== 0;
+    });
+  }.property("filters.@each.mode"),
 });
 
 module.exports = AssigneeController;
@@ -1251,13 +1269,16 @@ var FiltersController = Ember.ObjectController.extend({
   lastMilestoneFilterClicked: null,
   lastLabelFilterClicked: null,
   lastBoardFilterClicked: null,
+  allFilters: function(){
+      return this.get("milestoneFilters")
+              .concat(this.get("userFilters"))
+              .concat(this.get("boardFilters"))
+              .concat(this.get("labelFilters"));
+  }.property("milestoneFilters.@each.mode", "userFilters.@each.mode","labelFilters.@each.mode", "boardFilters.@each.mode"),
   dimFiltersChanged: function(){
+    self = this;
     Ember.run.once(function(){
-      var self = this;
-      var allFilters = this.get("milestoneFilters")
-                          .concat(this.get("userFilters"))
-                          .concat(this.get("boardFilters"))
-                          .concat(this.get("labelFilters"));
+      var allFilters = self.get("allFilters");
 
       this.set("dimFilters", allFilters.filter(function(f){
         return f.mode == 1;
@@ -1269,18 +1290,45 @@ var FiltersController = Ember.ObjectController.extend({
         return f.mode == 2 || isQueryParamFiltered;
       }));
     }.bind(this))
-  }.observes("milestoneFilters.@each.mode", "userFilters.@each.mode","labelFilters.@each.mode", "boardFilters.@each.mode").on("init"),
+
+  }.observes("allFilters").on("init"),
   dimFiltersBinding: "App.dimFilters",
-  hideFiltersBinding: "App.hideFilters"
-  
+  hideFiltersBinding: "App.hideFilters",
+  filtersActive: function(){
+    var allFilters = this.get("allFilters");
+    var active =  _.any(allFilters, function(f){
+      return f.mode > 0;
+    });
+    return active;
+  }.property("allFilters"),
+  membersActive: false,
+  actions: {
+    clearFilters: function(){
+      var self = this;
+      Ember.run.once(function(){
+        var params = ["repo", "assignee", "milestone", "label"];
+        _.each(params, function(p){ self.get(p).clear(); });
+        var allFilters = self.get("allFilters");
+        var active =  _.each(allFilters, function(f){
+          Ember.set(f,"mode",0);
+        });
+      });
+    }
+  }
 });
 
 module.exports = FiltersController;
 
 },{}],25:[function(require,module,exports){
 var IndexController = Ember.ObjectController.extend({
-  needs: ["application"],
+  needs: ["application", "filters", "assignee", "search"],
   isSidebarOpen: Ember.computed.alias("controllers.application.isSidebarOpen"),
+  filtersActive: function(){
+    return  this.get("controllers.filters.filtersActive") ||
+            this.get("controllers.search.filtersActive") ||
+            this.get("controllers.assignee.filtersActive");
+
+  }.property("controllers.filters.filtersActive", "controllers.assignee.filtersActive", "controllers.search.filtersActive"),
   board_columns: function(){
      return this.get("columns");
   }.property("columns"),
@@ -1776,8 +1824,13 @@ module.exports = MilestonesMissingController;
 
 },{}],35:[function(require,module,exports){
 module.exports = MilestonesController = Ember.ObjectController.extend({
+  needs: ["application", "filters", "assignee", "search"],
+  filtersActive: function(){
+    return  this.get("controllers.filters.filtersActive") ||
+            this.get("controllers.search.filtersActive") ||
+            this.get("controllers.assignee.filtersActive");
 
-  needs: ['application'],
+  }.property("controllers.filters.filtersActive", "controllers.assignee.filtersActive", "controllers.search.filtersActive"),
   isSidebarOpen: Ember.computed.alias("controllers.application.isSidebarOpen"),
   left_column: function () {
     return Ember.Object.create({
@@ -1835,6 +1888,19 @@ module.exports = MilestonesController = Ember.ObjectController.extend({
 var Fuse = require("../vendor/fuse.min");
 var SearchController = Ember.Controller.extend({
   needs:["application"],
+  searchBinding: "controllers.application.search",
+  updateSearch: function(){
+    if (this.get("term").length) {
+      this.set("search", this.get("term").trim());
+    } else {
+      this.set("search", null);
+    }
+  }.observes('term'),
+  checkForQueryParams: function(){
+    if (this.get("search")) {
+      this.set("term", this.get("search"));
+    }
+  }.on("init"),
   term: "",
   termChanged : Ember.debouncedObserver(function(){
     var term = this.get("term");
@@ -1846,7 +1912,15 @@ var SearchController = Ember.Controller.extend({
        return term.length == 0 || results.indexOf(i.id) !== -1;
     }});
 
-  },"term", 300)
+  },"term", 300),
+  filtersActive: function(){
+    return this.get("term").length
+  }.property("term"),
+  actions : {
+    clearFilters : function(){
+      this.set("term", "");
+    }
+  }
 });
 
 module.exports = SearchController;
@@ -2814,6 +2888,11 @@ var ApplicationRoute = Ember.Route.extend({
           outlet: 'modal'
         });
       }.bind(this));
+    },
+    clearFilters: function(){
+      this.controllerFor("filters").send("clearFilters");
+      this.controllerFor("assignee").send("clearFilters");
+      this.controllerFor("search").send("clearFilters");
     }
   },
   model: function () {
@@ -2895,6 +2974,7 @@ var IndexRoute = Ember.Route.extend({
   renderTemplate: function() {
     
     this._super.apply(this, arguments);
+    this.render('assignee', {into: 'index', outlet: 'sidebarTop'})
     this.render('filters', {into: 'index', outlet: 'sidebarMiddle'})
   },
   actions : {
@@ -3021,6 +3101,7 @@ module.exports = MilestonesRoute =  Ember.Route.extend({
 
   renderTemplate: function() {
     this._super.apply(this, arguments);
+    this.render('assignee', {into: 'milestones', outlet: 'sidebarTop'})
     this.render('filters', {into: 'milestones', outlet: 'sidebarMiddle'})
   },
   actions :{
@@ -3295,14 +3376,15 @@ function program6(depth0,data) {
   
   var buffer = '', hashContexts, hashTypes;
   data.buffer.push("\n    ");
-  hashContexts = {'lastClicked': depth0,'assignee': depth0,'data-assignee': depth0,'gravatarUser': depth0,'content': depth0};
-  hashTypes = {'lastClicked': "ID",'assignee': "ID",'data-assignee': "ID",'gravatarUser': "ID",'content': "ID"};
+  hashContexts = {'lastClicked': depth0,'assignee': depth0,'data-assignee': depth0,'gravatarUser': depth0,'content': depth0,'mode': depth0};
+  hashTypes = {'lastClicked': "ID",'assignee': "ID",'data-assignee': "ID",'gravatarUser': "ID",'content': "ID",'mode': "ID"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.AssigneeFilterView", {hash:{
     'lastClicked': ("controller.lastClicked"),
     'assignee': ("filter.avatar.login"),
     'data-assignee': ("filter.avatar.login"),
     'gravatarUser': ("filter.avatar"),
-    'content': ("filter")
+    'content': ("filter"),
+    'mode': ("filter.mode")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("\n  ");
   return buffer;
@@ -3673,7 +3755,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 Ember.TEMPLATES['filters'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, stack2, hashTypes, hashContexts, options, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, self=this;
+  var buffer = '', stack1, hashTypes, hashContexts, escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
@@ -3744,30 +3826,26 @@ function program7(depth0,data) {
   return buffer;
   }
 
+  data.buffer.push("<ul class='filters'>\n  <h5>Repos</h5>\n  ");
   hashTypes = {};
   hashContexts = {};
-  options = {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
-  data.buffer.push(escapeExpression(((stack1 = helpers.render || depth0.render),stack1 ? stack1.call(depth0, "assignee", "", options) : helperMissing.call(depth0, "render", "assignee", "", options))));
-  data.buffer.push("\n<ul class='filters'>\n  <h5>Repos</h5>\n  ");
-  hashTypes = {};
-  hashContexts = {};
-  stack2 = helpers.each.call(depth0, "filter", "in", "boardFilters", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
-  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+  stack1 = helpers.each.call(depth0, "filter", "in", "boardFilters", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n\n  <h5>Assignment</h5>\n  ");
   hashTypes = {};
   hashContexts = {};
-  stack2 = helpers.each.call(depth0, "filter", "in", "userFilters", {hash:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
-  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+  stack1 = helpers.each.call(depth0, "filter", "in", "userFilters", {hash:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n\n  <h5>Milestones</h5>\n  ");
   hashTypes = {};
   hashContexts = {};
-  stack2 = helpers.each.call(depth0, "filter", "in", "milestoneFilters", {hash:{},inverse:self.noop,fn:self.program(5, program5, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
-  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+  stack1 = helpers.each.call(depth0, "filter", "in", "milestoneFilters", {hash:{},inverse:self.noop,fn:self.program(5, program5, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n  <h5>Labels</h5>\n  ");
   hashTypes = {};
   hashContexts = {};
-  stack2 = helpers.each.call(depth0, "filter", "in", "labelFilters", {hash:{},inverse:self.noop,fn:self.program(7, program7, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
-  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+  stack1 = helpers.each.call(depth0, "filter", "in", "labelFilters", {hash:{},inverse:self.noop,fn:self.program(7, program7, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n\n</ul>\n");
   return buffer;
   
@@ -3776,9 +3854,20 @@ function program7(depth0,data) {
 Ember.TEMPLATES['index'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, stack2, hashTypes, hashContexts, options, self=this, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  var buffer = '', stack1, stack2, hashTypes, hashContexts, options, escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
 
 function program1(depth0,data) {
+  
+  var buffer = '', hashTypes, hashContexts;
+  data.buffer.push("\n  <div class=\"filters-clear\">\n    <a class=\"hb-icon-button hb-icon-button-purple\" href=\"#\" ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "clearFilters", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">\n      <i class=\"ui-icon ui-icon-filter ui-icon-16\"></i>\n      <span class= \"ui-text\">Clear filters</span>\n    </a>\n  </div>\n  ");
+  return buffer;
+  }
+
+function program3(depth0,data) {
   
   var buffer = '', stack1, stack2, hashContexts, hashTypes, options;
   data.buffer.push("\n  <div class=\"create-button\">\n    ");
@@ -3786,19 +3875,19 @@ function program1(depth0,data) {
   hashTypes = {'class': "STRING"};
   options = {hash:{
     'class': ("hb-icon-link")
-  },inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  },inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   stack2 = ((stack1 = helpers['link-to'] || depth0['link-to']),stack1 ? stack1.call(depth0, "settings", options) : helperMissing.call(depth0, "link-to", "settings", options));
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n  </div>\n  ");
   return buffer;
   }
-function program2(depth0,data) {
+function program4(depth0,data) {
   
   
   data.buffer.push("\n        <i class=\"ui-icon ui-icon-18 ui-icon-gear\"></i>\n    ");
   }
 
-function program4(depth0,data) {
+function program6(depth0,data) {
   
   var buffer = '', stack1, hashTypes, hashContexts, options;
   data.buffer.push("\n      ");
@@ -3820,10 +3909,15 @@ function program4(depth0,data) {
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
     'class': (":ui-icon isSidebarOpen:ui-icon-triangle-1-w:ui-icon-triangle-1-e")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(" class=\"ui-icon ui-icon-triangle-1-e\"></i></a>\n  </div>\n\n  ");
+  data.buffer.push(" class=\"ui-icon ui-icon-triangle-1-e\"></i></a>\n\n  </div>\n  ");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers['if'].call(depth0, "App.repo.is_collaborator", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack1 = helpers['if'].call(depth0, "filtersActive", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n\n  ");
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers['if'].call(depth0, "App.repo.is_collaborator", {hash:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n\n</div>\n<div id=\"main-stage\" ");
   hashContexts = {'class': depth0};
@@ -3844,7 +3938,7 @@ function program4(depth0,data) {
   data.buffer.push("\n    </div>\n  </div>\n\n  <div id=\"content\" class=\"content\">\n    <div class=\"board board-not-dragging\">\n      ");
   hashTypes = {};
   hashContexts = {};
-  stack2 = helpers.each.call(depth0, "column", "in", "board_columns", {hash:{},inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack2 = helpers.each.call(depth0, "column", "in", "board_columns", {hash:{},inverse:self.noop,fn:self.program(6, program6, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n    </div>\n  </div>\n</div>\n");
   return buffer;
@@ -4077,9 +4171,20 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 Ember.TEMPLATES['milestones'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, stack2, hashTypes, hashContexts, options, self=this, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  var buffer = '', stack1, stack2, hashTypes, hashContexts, options, escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
 
 function program1(depth0,data) {
+  
+  var buffer = '', hashTypes, hashContexts;
+  data.buffer.push("\n  <div class=\"filters-clear\">\n    <a class=\"hb-icon-button hb-icon-button-purple\" href=\"#\" ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "clearFilters", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">\n      <i class=\"ui-icon ui-icon-filter ui-icon-16\"></i>\n      <span class= \"ui-text\">Clear filters</span>\n    </a>\n  </div>\n  ");
+  return buffer;
+  }
+
+function program3(depth0,data) {
   
   var buffer = '', stack1, stack2, hashContexts, hashTypes, options;
   data.buffer.push("\n    <div class=\"create-button\">\n    ");
@@ -4087,19 +4192,19 @@ function program1(depth0,data) {
   hashTypes = {'class': "STRING"};
   options = {hash:{
     'class': ("hb-icon-link")
-  },inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  },inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   stack2 = ((stack1 = helpers['link-to'] || depth0['link-to']),stack1 ? stack1.call(depth0, "settings", options) : helperMissing.call(depth0, "link-to", "settings", options));
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n    </div>\n  ");
   return buffer;
   }
-function program2(depth0,data) {
+function program4(depth0,data) {
   
   
   data.buffer.push("\n        <i class=\"ui-icon ui-icon-18 ui-icon-gear\"></i>\n    ");
   }
 
-function program4(depth0,data) {
+function program6(depth0,data) {
   
   var buffer = '', stack1, hashTypes, hashContexts, options;
   data.buffer.push("\n        ");
@@ -4121,10 +4226,15 @@ function program4(depth0,data) {
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
     'class': (":ui-icon isSidebarOpen:ui-icon-triangle-1-w:ui-icon-triangle-1-e")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(" class=\"ui-icon ui-icon-triangle-1-e\"></i></a>\n  </div>\n ");
+  data.buffer.push(" class=\"ui-icon ui-icon-triangle-1-e\"></i></a>\n  </div>\n\n  ");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers['if'].call(depth0, "App.repo.is_collaborator", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack1 = helpers['if'].call(depth0, "filtersActive", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n\n ");
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers['if'].call(depth0, "App.repo.is_collaborator", {hash:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n\n</div>\n<div id=\"main-stage\" ");
   hashContexts = {'class': depth0};
@@ -4150,7 +4260,7 @@ function program4(depth0,data) {
   data.buffer.push("\n      ");
   hashTypes = {};
   hashContexts = {};
-  stack2 = helpers.each.call(depth0, "column", "in", "milestone_columns", {hash:{},inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack2 = helpers.each.call(depth0, "column", "in", "milestone_columns", {hash:{},inverse:self.noop,fn:self.program(6, program6, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n    </div>\n  </div>\n</div>\n\n");
   return buffer;
@@ -76506,7 +76616,7 @@ var AssigneeFilterView = Ember.View.extend({
   },
   activatePrexistingFilters: function(){
     var formattedParam = this.get("assignee").replace(/\s+/g, '');
-    var queryParams = this.get("controller.target").get(this.get("queryParam"));
+    var queryParams = this.get("controller").get(this.get("queryParam"));
     if (queryParams.contains(formattedParam)){
       this.set("lastClicked", this);
       this.set("mode", 2);

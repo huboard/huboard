@@ -3,10 +3,22 @@ var AssigneeController = Ember.ObjectController.extend({
   actions: {
     toggleShowMode: function(mode){
       this.set("showMode", mode);
+    },
+    clearFilters: function(){
+      var self = this;
+      Ember.run.once(function(){
+        var params = ["assignee"];
+        _.each(params, function(p){ self.get(p).clear(); });
+        var allFilters = self.get("filters");
+        var active =  _.each(allFilters, function(f){
+          Ember.set(f,"mode",0);
+        });
+      });
     }
   },
   showMode: "less",
   assigneesBinding: "controllers.application.model.board.assignees",
+  assigneeBinding: "controllers.application.assignee",
   memberFilterBinding: "App.memberFilter",
   lastClicked: null,
   filterChanged : function(){
@@ -44,7 +56,12 @@ var AssigneeController = Ember.ObjectController.extend({
            }
          })
      });
-  }.property("avatars")
+  }.property("avatars"),
+  filtersActive: function(){
+   return this.get("filters").any(function(f){
+      return Ember.get(f, "mode") !== 0;
+    });
+  }.property("filters.@each.mode"),
 });
 
 module.exports = AssigneeController;

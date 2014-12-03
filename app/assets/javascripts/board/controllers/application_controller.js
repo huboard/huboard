@@ -1,6 +1,7 @@
 var ApplicationController = Ember.ObjectController.extend({
   isSidebarOpen: false,
-  queryParams: ["assignee", "repo", "milestone", "label"],
+  queryParams: ["assignee", "repo", "milestone", "label", "search"],
+  search: null,
   repo: [],
   assignee: [],
   milestone: [],
