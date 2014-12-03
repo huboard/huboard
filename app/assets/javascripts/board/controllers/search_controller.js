@@ -12,7 +12,15 @@ var SearchController = Ember.Controller.extend({
        return term.length == 0 || results.indexOf(i.id) !== -1;
     }});
 
-  },"term", 300)
+  },"term", 300),
+  filtersActive: function(){
+    return this.get("term").length
+  }.property("term"),
+  actions : {
+    clearFilters : function(){
+      this.set("term", "");
+    }
+  }
 });
 
 module.exports = SearchController;

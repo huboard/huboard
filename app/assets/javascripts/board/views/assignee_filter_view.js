@@ -68,7 +68,7 @@ var AssigneeFilterView = Ember.View.extend({
   },
   activatePrexistingFilters: function(){
     var formattedParam = this.get("assignee").replace(/\s+/g, '');
-    var queryParams = this.get("controller.target").get(this.get("queryParam"));
+    var queryParams = this.get("controller").get(this.get("queryParam"));
     if (queryParams.contains(formattedParam)){
       this.set("lastClicked", this);
       this.set("mode", 2);

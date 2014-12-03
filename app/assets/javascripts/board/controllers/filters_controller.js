@@ -165,6 +165,7 @@ var FiltersController = Ember.ObjectController.extend({
         return f.mode == 2 || isQueryParamFiltered;
       }));
     }.bind(this))
+
   }.observes("allFilters").on("init"),
   dimFiltersBinding: "App.dimFilters",
   hideFiltersBinding: "App.hideFilters",
@@ -175,6 +176,7 @@ var FiltersController = Ember.ObjectController.extend({
     });
     return active;
   }.property("allFilters"),
+  membersActive: false,
   actions: {
     clearFilters: function(){
       var self = this;

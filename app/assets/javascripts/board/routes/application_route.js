@@ -31,6 +31,8 @@ var ApplicationRoute = Ember.Route.extend({
     },
     clearFilters: function(){
       this.controllerFor("filters").send("clearFilters");
+      this.controllerFor("assignee").send("clearFilters");
+      this.controllerFor("search").send("clearFilters");
     }
   },
   model: function () {
