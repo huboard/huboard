@@ -3756,11 +3756,11 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = '', hashTypes, hashContexts;
-  data.buffer.push("\n  <div class=\"filters-clear\">\n    <a href=\"#\" ");
+  data.buffer.push("\n  <div class=\"filters-clear\">\n    <a class=\"hb-icon-button hb-icon-button-purple\" href=\"#\" ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "clearFilters", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(">\n      <div class=\"filter-icon\"> \n        <i class=\"ui-icon ui-icon-filter\"></i>\n      </div>\n      <div class=\"filter-type\">\n        <p>Clear filters</p>\n      </div>\n    </a>\n  </div>\n  ");
+  data.buffer.push(">\n      <i class=\"ui-icon ui-icon-filter ui-icon-16\"></i>\n      <span class= \"ui-text\">Clear filters</span>\n    </a>\n  </div>\n  ");
   return buffer;
   }
 
@@ -3806,7 +3806,7 @@ function program6(depth0,data) {
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
     'class': (":ui-icon isSidebarOpen:ui-icon-triangle-1-w:ui-icon-triangle-1-e")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(" class=\"ui-icon ui-icon-triangle-1-e\"></i></a>\n  </div>\n\n  ");
+  data.buffer.push(" class=\"ui-icon ui-icon-triangle-1-e\"></i></a>\n\n  </div>\n  ");
   hashTypes = {};
   hashContexts = {};
   stack1 = helpers['if'].call(depth0, "filtersActive", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
@@ -4073,11 +4073,11 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = '', hashTypes, hashContexts;
-  data.buffer.push("\n  <div class=\"filters-clear\">\n    <a href=\"#\" ");
+  data.buffer.push("\n  <div class=\"filters-clear\">\n    <a class=\"hb-icon-button hb-icon-button-purple\" href=\"#\" ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "clearFilters", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(">\n      <div class=\"filter-icon\"> \n        <i class=\"ui-icon ui-icon-filter\"></i>\n      </div>\n      <div class=\"filter-type\">\n        <p>Clear filters</p>\n      </div>\n    </a>\n  </div>\n  ");
+  data.buffer.push(">\n      <i class=\"ui-icon ui-icon-filter ui-icon-16\"></i>\n      <span class= \"ui-text\">Clear filters</span>\n    </a>\n  </div>\n  ");
   return buffer;
   }
 
