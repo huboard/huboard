@@ -77451,19 +77451,19 @@ var CardWrapperView = Em.CloakedView.extend({
       view.get("cardController").send("fullscreen")
     },
     dragEnter: function(ev) {
-      //ev.preventDefault();
+      ev.preventDefault();
       if(ev.dataTransfer.types.contains("text/huboard-assignee")){
         this.$().addClass("assignee-accept");
       }
     },
     dragOver: function(ev) {
-      //ev.preventDefault();
+      ev.preventDefault();
       if(ev.dataTransfer.types.contains("text/huboard-assignee")){
         this.$().addClass("assignee-accept");
       }
     },
     dragLeave: function(ev) {
-      //ev.preventDefault();
+      ev.preventDefault();
       if(ev.dataTransfer.types.contains("text/huboard-assignee")){
         this.$().removeClass("assignee-accept");
       }
