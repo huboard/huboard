@@ -1,6 +1,19 @@
 var Fuse = require("../vendor/fuse.min");
 var SearchController = Ember.Controller.extend({
   needs:["application"],
+  searchBinding: "controllers.application.search",
+  updateSearch: function(){
+    if (this.get("term").length) {
+      this.set("search", this.get("term").trim());
+    } else {
+      this.set("search", null);
+    }
+  }.observes('term'),
+  checkForQueryParams: function(){
+    if (this.get("search")) {
+      this.set("term", this.get("search"));
+    }
+  }.on("init"),
   term: "",
   termChanged : Ember.debouncedObserver(function(){
     var term = this.get("term");
@@ -12,7 +25,15 @@ var SearchController = Ember.Controller.extend({
        return term.length == 0 || results.indexOf(i.id) !== -1;
     }});
 
-  },"term", 300)
+  },"term", 300),
+  filtersActive: function(){
+    return this.get("term").length
+  }.property("term"),
+  actions : {
+    clearFilters : function(){
+      this.set("term", "");
+    }
+  }
 });
 
 module.exports = SearchController;

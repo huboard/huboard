@@ -10,6 +10,7 @@ require('../vendor/ember-cloaking');
 require("../vendor/autoresize");
 
 require("../vendor/jquery.textcomplete");
+require("../vendor/task_list.js");
 var color = require('../../vendor/jquery.color');
 require('../utilities/observers');
 

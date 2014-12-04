@@ -1,0 +1,6 @@
+{{#if body_html }}
+  {{{ bodyMarkup }}}
+  {{ textarea value=body class="js-task-list-field"}}
+{{else}}
+  <p class="empty">No description given</p>
+{{/if}}

@@ -28,6 +28,11 @@ var ApplicationRoute = Ember.Route.extend({
           outlet: 'modal'
         });
       }.bind(this));
+    },
+    clearFilters: function(){
+      this.controllerFor("filters").send("clearFilters");
+      this.controllerFor("assignee").send("clearFilters");
+      this.controllerFor("search").send("clearFilters");
     }
   },
   model: function () {

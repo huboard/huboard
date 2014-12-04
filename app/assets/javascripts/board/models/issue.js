@@ -199,6 +199,8 @@ var Issue = Ember.Object.extend(Serializable,{
         correlationId: this.get("correlationId")
       }).then(function( response ){
          this.set("_data.order", response._data.order);
+         this.set("body", response.body);
+         this.set("body_html", response.body_html);
          return this;
       }.bind(this))
   

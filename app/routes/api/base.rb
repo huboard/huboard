@@ -17,7 +17,7 @@ module HuBoard
           set :dump_errors, false
         end
 
-        RESERVED_URLS = %w{ site profiles }
+        RESERVED_URLS = %w{ site profiles uploads }
 
         before '/api/:user/:repo/?*' do
           return if RESERVED_URLS.include? params[:user]

@@ -1,0 +1,48 @@
+.markdown-editor {
+  .markdown-composer textarea, .markdown-preview {
+    padding: 12px 12px;
+    margin-bottom: 0px;
+    background: #fff;
+    border-radius: 3px 3px 0 0;
+    border: 1px solid #ccc;
+  }
+
+  .markdown-composer textarea {
+    border-bottom: 1px dashed #CCC;
+  }
+
+  .markdown-preview {
+    margin-bottom: 12px;
+  }
+  .markdown-drag-and-drop {
+    position: relative;
+    border-radius: 0 0 3px 3px;
+    padding: 6px 12px;
+    background: #fff;
+    margin-top: 0;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-top: 0;
+    color: #999;
+    input[type='file'] {
+      position: absolute;
+      margin-left:-80px;
+      padding: 5px;
+      width: 240px;
+      cursor: pointer;
+      opacity: 0.0001;
+    }
+  }
+  .hb-uploading {
+    display:none;
+  }
+  .hb-state-uploading {
+    .hb-uploading {
+      display:inline;
+    }
+    .hb-default {
+      display: none;
+    }
+  }
+}
+

@@ -7,7 +7,9 @@
       {{#if view.content.isEditing}}
         <i title="Cancel editing" {{action "cancel" target=view.content }} class="hb-action pull-right ui-icon ui-icon-x-thin"></i>
       {{else}}
-        <i title="Edit comment" {{action "edit" target=view.content }} class="hb-action pull-right ui-icon ui-icon-pencil"></i>
+        {{#unless view.content.disabled}}
+          <i title="Edit comment" {{action "edit" target=view.content }} class="hb-action pull-right ui-icon ui-icon-pencil"></i>
+        {{/unless}}
       {{/if}}
     {{/if}}
     <strong>{{view.content.user.login}}</strong> commented {{momentAgo view.content.created_at}} 
@@ -19,6 +21,8 @@
     <button {{bind-attr disabled=view.content.disabled}} class="hb-button">Submit comment</button>
   </form>
   {{else}}
-    {{{ view.content.body_html}}}
+    {{#with view.content}}
+      {{ hb-task-list body_html=body_html body=body taskChanged="taskChanged" targetObject=this canEdit=canEdit }}
+    {{/with}}
   {{/if}}
 </div>

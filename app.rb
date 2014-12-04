@@ -116,6 +116,7 @@ module HuBoard
     use Routes::Login
 
     # API routes
+    use Routes::Api::Uploads
     use Routes::Api::Board
     use Routes::Api::Milestones
     use Routes::Api::Issues
