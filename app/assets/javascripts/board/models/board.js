@@ -73,12 +73,17 @@ var Board = Ember.Object.extend({
   }, 
   assignMilestone: function(issue, toMilestone, index, onCancel) {
     var fromMilestone = issue.get("current_milestone");
-    if (this.get('model.noMilestone')) {
+    if (toMilestone.get('noMilestone')) {
+      fromMilestone.get("issues").removeObject(issue.get("model"))
+      toMilestone.get("issues").pushObject(issue.get("model"))
+      issue.set("model._data.milestone_order", index)
+      issue.set("current_milestone", toMilestone.get("model") || toMilestone);
       return issue.send("assignMilestone",index, null);
     }
 
     if(toMilestone === fromMilestone) {
       issue.set("model._data.milestone_order", index)
+      issue.send("assignMilestone",index, toMilestone.get("milestone"));
     } else {
       var equalsA = function(a) {
         return function(b) {
@@ -86,12 +91,13 @@ var Board = Ember.Object.extend({
         }
       }(issue.get("model.repo"));
 
-      var milestone = toMilestone.get('model.group').find(equalsA);
+      var milestone = toMilestone.get('group').find(equalsA);
 
       if (milestone) {
         fromMilestone.get("issues").removeObject(issue.get("model"))
         toMilestone.get("issues").pushObject(issue.get("model"))
         issue.set("model._data.milestone_order", index)
+        issue.set("current_milestone", toMilestone.get("model") || toMilestone);
         issue.send("assignMilestone",index, milestone);
       } else {
 
@@ -104,8 +110,9 @@ var Board = Ember.Object.extend({
             fromMilestone.get("issues").removeObject(issue.get("model"))
             toMilestone.get("issues").pushObject(issue.get("model"))
             issue.set("model._data.milestone_order", index)
+            issue.set("current_milestone", toMilestone.get("model") || toMilestone);
             issue.send("assignMilestone",index, milestone);
-            toMilestone.get("model.group").pushObject(milestone);
+            toMilestone.get("group").pushObject(milestone);
           },
           onReject: function(){
             // move the card to where it came from

@@ -1612,8 +1612,13 @@ var IssuesEditController = Ember.ObjectController.extend({
       return this.get("model").assignUser(login);
     },
     assignMilestone: function(milestone) {
-      this.get("model").assignMilestone(this.get("model.number"), milestone);
-      Ember.run.next(this, "send", "forceRepaint", "milestones")
+      if (milestone === "") {
+       return this.get('board').assignMilestone(this.get('cardController'), this.get("board.noMilestoneColumn"), this.get("model.number"), function(){});
+      }
+      var milestoneColumn = this.get('board.milestoneColumns').find(function(column) {
+          return column.get('milestone') && (column.get("title").toLowerCase() == milestone.title.toLowerCase());
+      })
+      this.get('board').assignMilestone(this.get('cardController'), milestoneColumn, this.get("model.number"), function(){});
     },
     submitComment: function () {
       var comments = this.get("model.activities.comments");
@@ -2354,12 +2359,17 @@ var Board = Ember.Object.extend({
   }, 
   assignMilestone: function(issue, toMilestone, index, onCancel) {
     var fromMilestone = issue.get("current_milestone");
-    if (this.get('model.noMilestone')) {
+    if (toMilestone.get('noMilestone')) {
+      fromMilestone.get("issues").removeObject(issue.get("model"))
+      toMilestone.get("issues").pushObject(issue.get("model"))
+      issue.set("model._data.milestone_order", index)
+      issue.set("current_milestone", toMilestone.get("model") || toMilestone);
       return issue.send("assignMilestone",index, null);
     }
 
     if(toMilestone === fromMilestone) {
       issue.set("model._data.milestone_order", index)
+      issue.send("assignMilestone",index, toMilestone.get("milestone"));
     } else {
       var equalsA = function(a) {
         return function(b) {
@@ -2367,12 +2377,13 @@ var Board = Ember.Object.extend({
         }
       }(issue.get("model.repo"));
 
-      var milestone = toMilestone.get('model.group').find(equalsA);
+      var milestone = toMilestone.get('group').find(equalsA);
 
       if (milestone) {
         fromMilestone.get("issues").removeObject(issue.get("model"))
         toMilestone.get("issues").pushObject(issue.get("model"))
         issue.set("model._data.milestone_order", index)
+        issue.set("current_milestone", toMilestone.get("model") || toMilestone);
         issue.send("assignMilestone",index, milestone);
       } else {
 
@@ -2385,8 +2396,9 @@ var Board = Ember.Object.extend({
             fromMilestone.get("issues").removeObject(issue.get("model"))
             toMilestone.get("issues").pushObject(issue.get("model"))
             issue.set("model._data.milestone_order", index)
+            issue.set("current_milestone", toMilestone.get("model") || toMilestone);
             issue.send("assignMilestone",index, milestone);
-            toMilestone.get("model.group").pushObject(milestone);
+            toMilestone.get("group").pushObject(milestone);
           },
           onReject: function(){
             // move the card to where it came from
@@ -3115,8 +3127,8 @@ var IndexRoute = Ember.Route.extend({
       var controller = this.controllerFor("index");
       var issues = controller.get("model.columns.firstObject.issues")
       issues.pushObject(issue);
+
       Ember.run.schedule('afterRender', controller, function () {
-        controller.incrementProperty("forceRedraw");
         this.send("closeModal")
       }.bind(this))
     }
@@ -3232,10 +3244,18 @@ module.exports = MilestonesRoute =  Ember.Route.extend({
     },
     issueCreated: function(issue){
       var controller = this.controllerFor("milestones");
-      var issues = controller.get("model.issues")
-      issues.pushObject(issue);
+
+      if(issue.milestone){
+        var column = controller.get("milestoneColumns").find(function(column) {
+            return issue.milestone && (column.get("title").toLowerCase() == issue.milestone.title.toLowerCase());
+        })
+        var issues = column.get("issues")
+        issues.pushObject(issue);
+      } else {
+        controller.get("noMilestoneColumn.issues").pushObject(issue);
+      }
+
       Ember.run.schedule('afterRender', controller, function () {
-        controller.incrementProperty("forceRedraw");
         this.send("closeModal")
       }.bind(this))
     }
@@ -77821,7 +77841,7 @@ var IssuesCreateView = App.ModalView.extend({
       Ember.run.schedule('afterRender', this, 'focusTextbox');
   }.on('init'),
   focusTextbox: function(){
-    var input = this.$('input');
+    var input = this.$('input:first');
     input.focus();
     input.val(input.val());
   }

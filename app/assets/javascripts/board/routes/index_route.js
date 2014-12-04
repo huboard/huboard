@@ -48,8 +48,8 @@ var IndexRoute = Ember.Route.extend({
       var controller = this.controllerFor("index");
       var issues = controller.get("model.columns.firstObject.issues")
       issues.pushObject(issue);
+
       Ember.run.schedule('afterRender', controller, function () {
-        controller.incrementProperty("forceRedraw");
         this.send("closeModal")
       }.bind(this))
     }

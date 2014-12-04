@@ -45,8 +45,13 @@ var IssuesEditController = Ember.ObjectController.extend({
       return this.get("model").assignUser(login);
     },
     assignMilestone: function(milestone) {
-      this.get("model").assignMilestone(this.get("model.number"), milestone);
-      Ember.run.next(this, "send", "forceRepaint", "milestones")
+      if (milestone === "") {
+       return this.get('board').assignMilestone(this.get('cardController'), this.get("board.noMilestoneColumn"), this.get("model.number"), function(){});
+      }
+      var milestoneColumn = this.get('board.milestoneColumns').find(function(column) {
+          return column.get('milestone') && (column.get("title").toLowerCase() == milestone.title.toLowerCase());
+      })
+      this.get('board').assignMilestone(this.get('cardController'), milestoneColumn, this.get("model.number"), function(){});
     },
     submitComment: function () {
       var comments = this.get("model.activities.comments");
