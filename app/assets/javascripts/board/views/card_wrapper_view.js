@@ -64,19 +64,19 @@ var CardWrapperView = Em.View.extend({
       view.get("controller").send("fullscreen")
     },
     dragEnter: function(ev) {
-      //ev.preventDefault();
+      ev.preventDefault();
       if(ev.dataTransfer.types.contains("text/huboard-assignee")){
         this.$().addClass("assignee-accept");
       }
     },
     dragOver: function(ev) {
-      //ev.preventDefault();
+      ev.preventDefault();
       if(ev.dataTransfer.types.contains("text/huboard-assignee")){
         this.$().addClass("assignee-accept");
       }
     },
     dragLeave: function(ev) {
-      //ev.preventDefault();
+      ev.preventDefault();
       if(ev.dataTransfer.types.contains("text/huboard-assignee")){
         this.$().removeClass("assignee-accept");
       }
