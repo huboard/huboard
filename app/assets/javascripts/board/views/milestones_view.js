@@ -53,6 +53,8 @@ var MilestonesView = Ember.View.extend({
         before = beforeData.get("model.milestone._data.order") || beforeData.get("model.milestone.number"),
         after = afterData.get("model.milestone._data.order") || afterData.get("model.milestone.number");
 
+        ui.item.remove();
+
         if(first && last) {
           that.get("controller").milestoneMoved(currentData, currentData.get("model.milestone.number"))
           return;

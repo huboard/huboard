@@ -12,6 +12,7 @@ var CollectionView = Ember.CloakedCollectionView.extend({
   style: Ember.computed.alias("controller.style"),
   content: Ember.computed.alias("controller.issues"),
   isHovering: false,
+  loadingHTML: null,
   setupDraggable: function(){
     var that = this;
     this.$().sortable({
@@ -64,6 +65,8 @@ var CollectionView = Ember.CloakedCollectionView.extend({
           ui.sender.sortable('cancel');
         }
 
+        ui.item.remove();
+
         if(first && last) {
           that.get("controller").cardMoved(currentData, currentData.get("model.number"), onCancel)
           return;
@@ -92,7 +95,7 @@ var CollectionView = Ember.CloakedCollectionView.extend({
     this._uncloak = this.get("childViews")
 
     this.uncloakQueue();
-  }.observes("App.memberFilter.mode", "App.dimFilters", "App.hideFilters", "App.searchFilter"),
+  }.observes("App.memberFilter.mode", "App.dimFilters", "App.hideFilters", "App.searchFilter")
 })
 
 var ColumnView = Ember.ContainerView.extend({

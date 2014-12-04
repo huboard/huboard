@@ -23,7 +23,6 @@ var ColumnController = Ember.ObjectController.extend({
     //cardController.send("moved", index, this.get("model"))
   },
   topOrderNumber: function(){
-    debugger;
     if(this.get("issues.length")){
       return { order: this.get("issues.firstObject._data.order") / 2 };
     } else {

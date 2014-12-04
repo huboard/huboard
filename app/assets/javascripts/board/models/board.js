@@ -70,6 +70,52 @@ var Board = Ember.Object.extend({
 
     Ember.endPropertyChanges();
     issue.endPropertyChanges();
+  }, 
+  assignMilestone: function(issue, toMilestone, index, onCancel) {
+    var fromMilestone = issue.get("current_milestone");
+    if (this.get('model.noMilestone')) {
+      return issue.send("assignMilestone",index, null);
+    }
+
+    if(toMilestone === fromMilestone) {
+      issue.set("model._data.milestone_order", index)
+    } else {
+      var equalsA = function(a) {
+        return function(b) {
+          return _.isEqual(a, b.repo);
+        }
+      }(issue.get("model.repo"));
+
+      var milestone = toMilestone.get('model.group').find(equalsA);
+
+      if (milestone) {
+        fromMilestone.get("issues").removeObject(issue.get("model"))
+        toMilestone.get("issues").pushObject(issue.get("model"))
+        issue.set("model._data.milestone_order", index)
+        issue.send("assignMilestone",index, milestone);
+      } else {
+
+        toMilestone.send("createMilestoneOrAbort", {
+          cardController: issue,
+          index: index,
+          columnController: toMilestone,
+          onAccept: function(milestone) {
+            // save the issue with the newly created milestone
+            fromMilestone.get("issues").removeObject(issue.get("model"))
+            toMilestone.get("issues").pushObject(issue.get("model"))
+            issue.set("model._data.milestone_order", index)
+            issue.send("assignMilestone",index, milestone);
+            toMilestone.get("model.group").pushObject(milestone);
+          },
+          onReject: function(){
+            // move the card to where it came from
+            onCancel();
+          }
+        })
+      }
+    }
+
+
   }
 });
 

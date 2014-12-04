@@ -9,11 +9,12 @@ var CollectionView = Ember.CloakedCollectionView.extend({
   content: Ember.computed.alias("controller.issues"),
   isHovering: false,
   loadingHTML: null,
-  didInsertElement: function(){
+  setupDragging: function(){
     var that = this;
     this.$().sortable({
       tolerance: 'pointer',
       connectWith:".sortable",
+      //helper: 'clone',
       placeholder: "ui-sortable-placeholder",
       items: "li.is-draggable",
       over: function () {
@@ -80,18 +81,24 @@ var CollectionView = Ember.CloakedCollectionView.extend({
         }
       }
     })
-    this._super();
 
-  },
+  }.on("didInsertElement"),
   overrideViewClass: WrapperView,
+  //uncloakDefault: true,
   cloakView: "card",
   itemController: "card",
   slackRatio: 1.2,
+  mouseEnter: function(){
+    this._uncloak = this.get("childViews")
+
+    this.uncloakQueue();
+
+  },
   isFiltered: function() {
     this._uncloak = this.get("childViews")
 
     this.uncloakQueue();
-  }.observes("App.memberFilter.mode", "App.dimFilters", "App.hideFilters", "App.searchFilter"),
+  }.observes("App.memberFilter.mode", "App.dimFilters", "App.hideFilters", "App.searchFilter")
 
 
 })
