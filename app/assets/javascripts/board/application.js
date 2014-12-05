@@ -813,12 +813,6 @@ App.Router.reopen({
 },{"./app":16}],18:[function(require,module,exports){
 var ApplicationController = Ember.ObjectController.extend({
   isSidebarOpen: false,
-  queryParams: ["assignee", "repo", "milestone", "label", "search"],
-  search: null,
-  repo: [],
-  assignee: [],
-  milestone: [],
-  label: [],
   sockets: {
     config: {
       messagePath: "issueNumber",
@@ -876,7 +870,7 @@ module.exports = ApplicationController;
 
 },{}],19:[function(require,module,exports){
 var AssigneeController = Ember.ObjectController.extend({
-  needs: ["application"],
+  needs: ["application", "index", "milestones"],
   actions: {
     toggleShowMode: function(mode){
       this.set("showMode", mode);
@@ -895,7 +889,14 @@ var AssigneeController = Ember.ObjectController.extend({
   },
   showMode: "less",
   assigneesBinding: "controllers.application.model.board.assignees",
-  assigneeBinding: "controllers.application.assignee",
+  assignee: "",
+
+  //Determine which controller to derive query params from
+  _setFilterBindings: function(){
+    var binding_prefix = "controllers." + App.get("_queryParamsFor");
+    Ember.Binding.from(binding_prefix + ".assignee").to("assignee").connect(this);
+  }.observes("App._queryParamsFor").on("init"),
+
   memberFilterBinding: "App.memberFilter",
   lastClicked: null,
   filterChanged : function(){
@@ -1124,13 +1125,22 @@ module.exports = ColumnCountController;
 
 },{}],24:[function(require,module,exports){
 var FiltersController = Ember.ObjectController.extend({
-  needs: ["application"],
+  needs: ["application", "index", "milestones"],
 
-  queryParamsBinding: "controllers.application.queryParams",
-  repoBinding: "controllers.application.repo",
-  assigneeBinding: "controllers.application.assignee",
-  milestoneBinding: "controllers.application.milestone",
-  labelBinding: "controllers.application.label",
+  repo: "",
+  assignee: "",
+  milestone: "",
+  label: "",
+  //Determine which controller to derive query params from
+  _setFilterBindings: function(){
+    var binding_prefix = "controllers." + App.get("_queryParamsFor");
+    Ember.Binding.from("queryParams")
+                  .to(binding_prefix + ".queryParams").connect(this)
+    Ember.Binding.from(binding_prefix + ".repo").to("repo").connect(this)
+    Ember.Binding.from(binding_prefix + ".assignee").to("assignee").connect(this)
+    Ember.Binding.from(binding_prefix + ".milestone").to("milestone").connect(this)
+    Ember.Binding.from(binding_prefix + ".label").to("label").connect(this)
+  }.observes("App._queryParamsFor").on("init"),
 
   milestonesBinding: "controllers.application.model.board.filterMilestones",
   otherLabelsBinding: "controllers.application.model.board.filterLabels",
@@ -1332,7 +1342,14 @@ var IndexController = Ember.ObjectController.extend({
   board_columns: function(){
      return this.get("columns");
   }.property("columns"),
-  forceRedraw: 0
+  forceRedraw: 0,
+
+  queryParams: ["repo", "label", "assignee", "milestone", "search"],
+  search: null,
+  repo: [],
+  assignee: [],
+  milestone: [],
+  label: [],
 });
 
 module.exports = IndexController;
@@ -1825,6 +1842,12 @@ module.exports = MilestonesMissingController;
 },{}],35:[function(require,module,exports){
 module.exports = MilestonesController = Ember.ObjectController.extend({
   needs: ["application", "filters", "assignee", "search"],
+  queryParams: ["repo", "label", "assignee", "milestone", "search"],
+  search: null,
+  repo: [],
+  assignee: [],
+  milestone: [],
+  label: [],
   filtersActive: function(){
     return  this.get("controllers.filters.filtersActive") ||
             this.get("controllers.search.filtersActive") ||
@@ -1887,8 +1910,15 @@ module.exports = MilestonesController = Ember.ObjectController.extend({
 },{}],36:[function(require,module,exports){
 var Fuse = require("../vendor/fuse.min");
 var SearchController = Ember.Controller.extend({
-  needs:["application"],
-  searchBinding: "controllers.application.search",
+  needs:["application", "index", "milestones"],
+
+  //Determine which controller to derive query params from
+  search: "",
+  _setFilterBindings: function(){
+    var binding_prefix = "controllers." + App.get("_queryParamsFor");
+    Ember.Binding.from(binding_prefix + ".search").to("search").connect(this);
+  }.observes("App._queryParamsFor").on("init"),
+
   updateSearch: function(){
     if (this.get("term").length) {
       this.set("search", this.get("term").trim());
@@ -2974,6 +3004,7 @@ var IndexRoute = Ember.Route.extend({
   renderTemplate: function() {
     
     this._super.apply(this, arguments);
+    App.set("_queryParamsFor", "index");
     this.render('assignee', {into: 'index', outlet: 'sidebarTop'})
     this.render('filters', {into: 'index', outlet: 'sidebarMiddle'})
   },
@@ -3101,6 +3132,7 @@ module.exports = MilestonesRoute =  Ember.Route.extend({
 
   renderTemplate: function() {
     this._super.apply(this, arguments);
+    App.set("_queryParamsFor", "milestones");
     this.render('assignee', {into: 'milestones', outlet: 'sidebarTop'})
     this.render('filters', {into: 'milestones', outlet: 'sidebarMiddle'})
   },

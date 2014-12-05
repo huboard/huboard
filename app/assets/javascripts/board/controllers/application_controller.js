@@ -1,11 +1,5 @@
 var ApplicationController = Ember.ObjectController.extend({
   isSidebarOpen: false,
-  queryParams: ["assignee", "repo", "milestone", "label", "search"],
-  search: null,
-  repo: [],
-  assignee: [],
-  milestone: [],
-  label: [],
   sockets: {
     config: {
       messagePath: "issueNumber",

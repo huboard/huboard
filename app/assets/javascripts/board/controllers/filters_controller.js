@@ -1,11 +1,20 @@
 var FiltersController = Ember.ObjectController.extend({
-  needs: ["application"],
+  needs: ["application", "index", "milestones"],
 
-  queryParamsBinding: "controllers.application.queryParams",
-  repoBinding: "controllers.application.repo",
-  assigneeBinding: "controllers.application.assignee",
-  milestoneBinding: "controllers.application.milestone",
-  labelBinding: "controllers.application.label",
+  repo: "",
+  assignee: "",
+  milestone: "",
+  label: "",
+  //Determine which controller to derive query params from
+  _setFilterBindings: function(){
+    var binding_prefix = "controllers." + App.get("_queryParamsFor");
+    Ember.Binding.from("queryParams")
+                  .to(binding_prefix + ".queryParams").connect(this)
+    Ember.Binding.from(binding_prefix + ".repo").to("repo").connect(this)
+    Ember.Binding.from(binding_prefix + ".assignee").to("assignee").connect(this)
+    Ember.Binding.from(binding_prefix + ".milestone").to("milestone").connect(this)
+    Ember.Binding.from(binding_prefix + ".label").to("label").connect(this)
+  }.observes("App._queryParamsFor").on("init"),
 
   milestonesBinding: "controllers.application.model.board.filterMilestones",
   otherLabelsBinding: "controllers.application.model.board.filterLabels",

@@ -36,6 +36,7 @@ var IndexRoute = Ember.Route.extend({
   renderTemplate: function() {
     
     this._super.apply(this, arguments);
+    App.set("_queryParamsFor", "index");
     this.render('assignee', {into: 'index', outlet: 'sidebarTop'})
     this.render('filters', {into: 'index', outlet: 'sidebarMiddle'})
   },

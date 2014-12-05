@@ -1,5 +1,11 @@
 module.exports = MilestonesController = Ember.ObjectController.extend({
   needs: ["application", "filters", "assignee", "search"],
+  queryParams: ["repo", "label", "assignee", "milestone", "search"],
+  search: null,
+  repo: [],
+  assignee: [],
+  milestone: [],
+  label: [],
   filtersActive: function(){
     return  this.get("controllers.filters.filtersActive") ||
             this.get("controllers.search.filtersActive") ||

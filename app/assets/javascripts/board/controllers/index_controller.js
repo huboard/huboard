@@ -10,7 +10,14 @@ var IndexController = Ember.ObjectController.extend({
   board_columns: function(){
      return this.get("columns");
   }.property("columns"),
-  forceRedraw: 0
+  forceRedraw: 0,
+
+  queryParams: ["repo", "label", "assignee", "milestone", "search"],
+  search: null,
+  repo: [],
+  assignee: [],
+  milestone: [],
+  label: [],
 });
 
 module.exports = IndexController;
