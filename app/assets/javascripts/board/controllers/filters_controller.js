@@ -1,20 +1,18 @@
 var FiltersController = Ember.ObjectController.extend({
-  needs: ["application", "index", "milestones"],
+  needs: ["application"],
 
-  repo: "",
-  assignee: "",
-  milestone: "",
-  label: "",
-  //Determine which controller to derive query params from
-  _setFilterBindings: function(){
-    var binding_prefix = "controllers." + App.get("_queryParamsFor");
-    Ember.Binding.from("queryParams")
-                  .to(binding_prefix + ".queryParams").connect(this)
-    Ember.Binding.from(binding_prefix + ".repo").to("repo").connect(this)
-    Ember.Binding.from(binding_prefix + ".assignee").to("assignee").connect(this)
-    Ember.Binding.from(binding_prefix + ".milestone").to("milestone").connect(this)
-    Ember.Binding.from(binding_prefix + ".label").to("label").connect(this)
-  }.observes("App._queryParamsFor").on("init"),
+  repo: function(){
+    return App.get("_queryParams.repo");
+  }.property("App._queryParams.repo.@each"),
+  assignment: function(){
+    return App.get("_queryParams.assignment");
+  }.property("App._queryParams.assignment.@each"),
+  milestone: function(){
+    return App.get("_queryParams.milestone");
+  }.property("App._queryParams.milestone.@each"),
+  label: function(){
+    return App.get("_queryParams.label");
+  }.property("App._queryParams.label.@each"),
 
   milestonesBinding: "controllers.application.model.board.filterMilestones",
   otherLabelsBinding: "controllers.application.model.board.filterLabels",
@@ -59,7 +57,7 @@ var FiltersController = Ember.ObjectController.extend({
       this.set("userFilters", [
         {
           name: "Assigned to me",
-          queryParam: "assignee",
+          queryParam: "assignment",
           mode: 0,
           condition: function(i){
             return i.assignee && i.assignee.login === App.get("currentUser").login;
@@ -68,7 +66,7 @@ var FiltersController = Ember.ObjectController.extend({
 
         {
           name: "Assigned to others",
-          queryParam: "assignee",
+          queryParam: "assignment",
           mode: 0,
           condition: function(i){
             return i.assignee && i.assignee.login !== App.get("currentUser").login;
@@ -76,7 +74,7 @@ var FiltersController = Ember.ObjectController.extend({
         },
         {
           name: "Unassigned issues",
-          queryParam: "assignee",
+          queryParam: "assignment",
           mode: 0,
           condition: function(i){
             return !i.assignee;
@@ -87,7 +85,7 @@ var FiltersController = Ember.ObjectController.extend({
       this.set("userFilters", [
         {
           name: "Unassigned issues",
-          queryParam: "assignee",
+          queryParam: "assignment",
           mode: 0,
           condition: function(i){
             return !i.assignee;
@@ -190,7 +188,7 @@ var FiltersController = Ember.ObjectController.extend({
     clearFilters: function(){
       var self = this;
       Ember.run.once(function(){
-        var params = ["repo", "assignee", "milestone", "label"];
+        var params = ["repo", "assignment", "milestone", "label"];
         _.each(params, function(p){ self.get(p).clear(); });
         var allFilters = self.get("allFilters");
         var active =  _.each(allFilters, function(f){

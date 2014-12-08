@@ -36,7 +36,6 @@ module.exports = MilestonesRoute =  Ember.Route.extend({
 
   renderTemplate: function() {
     this._super.apply(this, arguments);
-    App.set("_queryParamsFor", "milestones");
     this.render('assignee', {into: 'milestones', outlet: 'sidebarTop'})
     this.render('filters', {into: 'milestones', outlet: 'sidebarMiddle'})
   },

@@ -12,12 +12,23 @@ var IndexController = Ember.ObjectController.extend({
   }.property("columns"),
   forceRedraw: 0,
 
-  queryParams: ["repo", "label", "assignee", "milestone", "search"],
-  search: null,
+  queryParams: ["repo", "label", "assignee", "milestone", "search", "assignment"],
+  search: "",
   repo: [],
-  assignee: [],
   milestone: [],
   label: [],
+  assignment: [],
+  assignee: [],
+  syncQueryParams: function(){
+    App.get("_queryParams").syncQueryParams(this);
+  }.observes("repo", "milestone", "label", "assignment", "assignee"),
+  //syncSearchParams: function(){
+  //  if (!this.get("search").length){
+  //    this.set("search", this.get("controllers.search.term"));
+  //  } else {
+  //    this.set("controllers.search.term", this.get("search"));
+  //  }
+  //}.observes("controllers.search.term", "search").on("init")
 });
 
 module.exports = IndexController;

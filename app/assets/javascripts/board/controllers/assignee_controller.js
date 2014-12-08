@@ -1,5 +1,5 @@
 var AssigneeController = Ember.ObjectController.extend({
-  needs: ["application", "index", "milestones"],
+  needs: ["application"],
   actions: {
     toggleShowMode: function(mode){
       this.set("showMode", mode);
@@ -18,14 +18,9 @@ var AssigneeController = Ember.ObjectController.extend({
   },
   showMode: "less",
   assigneesBinding: "controllers.application.model.board.assignees",
-  assignee: "",
-
-  //Determine which controller to derive query params from
-  _setFilterBindings: function(){
-    var binding_prefix = "controllers." + App.get("_queryParamsFor");
-    Ember.Binding.from(binding_prefix + ".assignee").to("assignee").connect(this);
-  }.observes("App._queryParamsFor").on("init"),
-
+  assignee: function(){
+    return App.get("_queryParams.assignee");
+  }.property("App._queryParams.assignee"),
   memberFilterBinding: "App.memberFilter",
   lastClicked: null,
   filterChanged : function(){

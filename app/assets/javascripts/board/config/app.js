@@ -12,6 +12,7 @@ var color = require('../../vendor/jquery.color');
 require('../utilities/observers');
 
 var Markdown = require("../vendor/marked")
+var QueryParamsHelper = require("../helpers/query_params");
 
 Ember.LinkView.reopen({
   init: function(){
@@ -99,7 +100,8 @@ var App = Ember.Application.create({
     dimFilters: [],
     hideFilters: [],
     searchFilter: null,
-    memberFilter: null
+    memberFilter: null,
+    _queryParams: QueryParamsHelper,
 });
 
 App.Markdown = Markdown;

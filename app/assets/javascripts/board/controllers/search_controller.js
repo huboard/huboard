@@ -1,26 +1,7 @@
 var Fuse = require("../vendor/fuse.min");
 var SearchController = Ember.Controller.extend({
-  needs:["application", "index", "milestones"],
+  needs:["application"],
 
-  //Determine which controller to derive query params from
-  search: "",
-  _setFilterBindings: function(){
-    var binding_prefix = "controllers." + App.get("_queryParamsFor");
-    Ember.Binding.from(binding_prefix + ".search").to("search").connect(this);
-  }.observes("App._queryParamsFor").on("init"),
-
-  updateSearch: function(){
-    if (this.get("term").length) {
-      this.set("search", this.get("term").trim());
-    } else {
-      this.set("search", null);
-    }
-  }.observes('term'),
-  checkForQueryParams: function(){
-    if (this.get("search")) {
-      this.set("term", this.get("search"));
-    }
-  }.on("init"),
   term: "",
   termChanged : Ember.debouncedObserver(function(){
     var term = this.get("term");
