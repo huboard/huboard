@@ -4,9 +4,10 @@ var QueryParamsHelper = Ember.Object.create({
   milestone: [],
   label: [],
   assignee: [],
+  search: "",
 
   syncQueryParams: function(controller){
-    var params = ["repo", "label", "assignee", "milestone", "assignment"]  
+    var params = ["repo", "label", "assignee", "milestone", "assignment", "search"]  
     var self = this;
     _.each(params, function(param){
       if (!self.get(param).length){

@@ -10,13 +10,9 @@ module.exports = MilestonesController = Ember.ObjectController.extend({
   syncQueryParams: function(){
     App.get("_queryParams").syncQueryParams(this);
   }.observes("repo", "milestone", "label", "assignment", "assignee", "search"),
-  syncSearchParams: function(){
-    if (!this.get("search").length){
-      this.set("search", this.get("controllers.search.term"));
-    } else {
-      this.set("controllers.search.term", this.get("search"));
-    }
-  }.observes("controllers.search.term.length", "search.length").on("init"),
+  syncSearch: function(){
+    this.set("search", App.get("_queryParams.search"));
+  }.observes("App._queryParams.search"),
   filtersActive: function(){
     return  this.get("controllers.filters.filtersActive") ||
             this.get("controllers.search.filtersActive") ||

@@ -21,14 +21,10 @@ var IndexController = Ember.ObjectController.extend({
   assignee: [],
   syncQueryParams: function(){
     App.get("_queryParams").syncQueryParams(this);
-  }.observes("repo", "milestone", "label", "assignment", "assignee"),
-  //syncSearchParams: function(){
-  //  if (!this.get("search").length){
-  //    this.set("search", this.get("controllers.search.term"));
-  //  } else {
-  //    this.set("controllers.search.term", this.get("search"));
-  //  }
-  //}.observes("controllers.search.term", "search").on("init")
+  }.observes("repo", "milestone", "label", "assignment", "assignee", "search"),
+  syncSearch: function(){
+    this.set("search", App.get("_queryParams.search"));
+  }.observes("App._queryParams.search")
 });
 
 module.exports = IndexController;

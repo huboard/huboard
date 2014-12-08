@@ -1348,14 +1348,10 @@ var IndexController = Ember.ObjectController.extend({
   assignee: [],
   syncQueryParams: function(){
     App.get("_queryParams").syncQueryParams(this);
-  }.observes("repo", "milestone", "label", "assignment", "assignee"),
-  //syncSearchParams: function(){
-  //  if (!this.get("search").length){
-  //    this.set("search", this.get("controllers.search.term"));
-  //  } else {
-  //    this.set("controllers.search.term", this.get("search"));
-  //  }
-  //}.observes("controllers.search.term", "search").on("init")
+  }.observes("repo", "milestone", "label", "assignment", "assignee", "search"),
+  syncSearch: function(){
+    this.set("search", App.get("_queryParams.search"));
+  }.observes("App._queryParams.search")
 });
 
 module.exports = IndexController;
@@ -1858,13 +1854,9 @@ module.exports = MilestonesController = Ember.ObjectController.extend({
   syncQueryParams: function(){
     App.get("_queryParams").syncQueryParams(this);
   }.observes("repo", "milestone", "label", "assignment", "assignee", "search"),
-  syncSearchParams: function(){
-    if (!this.get("search").length){
-      this.set("search", this.get("controllers.search.term"));
-    } else {
-      this.set("controllers.search.term", this.get("search"));
-    }
-  }.observes("controllers.search.term.length", "search.length").on("init"),
+  syncSearch: function(){
+    this.set("search", App.get("_queryParams.search"));
+  }.observes("App._queryParams.search"),
   filtersActive: function(){
     return  this.get("controllers.filters.filtersActive") ||
             this.get("controllers.search.filtersActive") ||
@@ -1929,6 +1921,12 @@ var Fuse = require("../vendor/fuse.min");
 var SearchController = Ember.Controller.extend({
   needs:["application"],
 
+  search: function(){
+    App.set("_queryParams.search", this.get("term"));
+  }.observes("term"),
+  searchChanged: function(){
+    this.set("term", App.get("_queryParams.search"));
+  }.observes("App._queryParams.search").on("init"),
   term: "",
   termChanged : Ember.debouncedObserver(function(){
     var term = this.get("term");
@@ -2228,9 +2226,10 @@ var QueryParamsHelper = Ember.Object.create({
   milestone: [],
   label: [],
   assignee: [],
+  search: "",
 
   syncQueryParams: function(controller){
-    var params = ["repo", "label", "assignee", "milestone", "assignment"]  
+    var params = ["repo", "label", "assignee", "milestone", "assignment", "search"]  
     var self = this;
     _.each(params, function(param){
       if (!self.get(param).length){

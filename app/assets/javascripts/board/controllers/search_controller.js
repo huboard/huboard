@@ -2,6 +2,12 @@ var Fuse = require("../vendor/fuse.min");
 var SearchController = Ember.Controller.extend({
   needs:["application"],
 
+  search: function(){
+    App.set("_queryParams.search", this.get("term"));
+  }.observes("term"),
+  searchChanged: function(){
+    this.set("term", App.get("_queryParams.search"));
+  }.observes("App._queryParams.search").on("init"),
   term: "",
   termChanged : Ember.debouncedObserver(function(){
     var term = this.get("term");
