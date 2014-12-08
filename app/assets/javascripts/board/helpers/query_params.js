@@ -6,7 +6,7 @@ var QueryParamsHelper = Ember.Object.create({
   assignee: [],
   search: "",
   defaultParams: ["repo", "label", "assignee", "milestone", "assignment", "search"],
-  savedParams: {},
+  stashedParams: {},
 
   syncQueryParams: function(controller, params){
     var params = params || this.get("defaultParams");
@@ -27,20 +27,23 @@ var QueryParamsHelper = Ember.Object.create({
     _.each(params, function(param){
       var value = self.determineParamValue(param);
       saved[param] = self.get(param);
-      self.set(param, value);
-      controller.set(param, value);
+      Ember.run.once(function(){
+        self.set(param, value);
+        controller.set(param, value);
+      });
     });
-    this.set("savedParams", {controller: controller, params: saved});
+    this.set("stashedParams", {controller: controller, params: saved});
   },
 
   restoreQueryParams: function(){
-    saved = this.get("savedParams");
+    saved = this.get("stashedParams");
     controller = saved["controller"];
     var self = this;
     _.each(saved["params"], function(param, key){
       self.set(key, param);
       controller.set(key, param);
     })
+    this.set("stashedParams", {});
   },
 
   determineParamValue: function(param){
