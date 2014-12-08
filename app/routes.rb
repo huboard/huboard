@@ -19,6 +19,7 @@ module HuBoard
       autoload :Integrations, 'app/routes/api/integrations'
       autoload :Webhooks, 'app/routes/api/webhooks'
       autoload :Profiles, 'app/routes/api/profiles'
+      autoload :Uploads, 'app/routes/api/uploads'
     end
   end
 end

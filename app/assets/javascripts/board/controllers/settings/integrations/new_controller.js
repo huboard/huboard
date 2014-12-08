@@ -21,6 +21,7 @@ var SettingsIntegrationsNewController = Ember.ObjectController.extend({
           controller.transitionToRoute("settings.integrations.index");
           controller.set("processing", false);
         });
+        this.get('model').clearForm();
     },
   }
 })
