@@ -2230,7 +2230,9 @@ var QueryParamsHelper = Ember.Object.create({
   defaultParams: ["repo", "label", "assignee", "milestone", "assignment", "search"],
   stashedParams: {},
 
+  syncingPaused: false,
   syncQueryParams: function(controller, params){
+    if (this.get("syncingPaused")){ return;} 
     var params = params || this.get("defaultParams");
     var self = this;
     _.each(params, function(param){
@@ -2243,17 +2245,16 @@ var QueryParamsHelper = Ember.Object.create({
   },
 
   stashQueryParams: function(controller, params){
+    this.set("syncingPaused", true);
     var params = params || this.get("defaultParams");
     var self = this;
     var saved = {};
     _.each(params, function(param){
       var value = self.determineParamValue(param);
       saved[param] = self.get(param);
-      Ember.run.once(function(){
-        self.set(param, value);
-        controller.set(param, value);
-      });
+      controller.set(param, value);
     });
+    this.set("syncingPaused", false);
     this.set("stashedParams", {controller: controller, params: saved});
   },
 
