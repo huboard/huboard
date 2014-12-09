@@ -1,7 +1,7 @@
 <ul class='filters'>
   <h5>Repos</h5>
   {{#each filter in boardFilters }}
-    {{view App.FilterView lastClicked=lastBoardFilterClicked name=filter.name mode=filter.mode color=filter.color queryParam="repo"}}
+    {{view App.FilterView lastClicked=lastBoardFilterClicked name=filter.name mode=filter.mode color=filter.color tagType="colored" queryParam="repo"}}
   {{/each}}
 
   <h5>Assignment</h5>
@@ -15,7 +15,7 @@
   {{/each}}
   <h5>Labels</h5>
   {{#each filter in labelFilters }}
-    {{view App.FilterView lastClicked=lastLabelFilterClicked name=filter.name mode=filter.mode color=filter.color tagType="filtered-label" queryParam="label"}}
+    {{view App.FilterView lastClicked=lastLabelFilterClicked name=filter.name mode=filter.mode color=filter.color tagType="colored" queryParam="label"}}
   {{/each}}
 
 </ul>
