@@ -16,13 +16,24 @@
 @import "flex_form";
 @import "issue";
 @import "integrations";
+@import 'repo-settings';
+@import 'boxed-group';
 @import "breadcrumbs";
 @import "components/selector";
+@import 'textcomplete';
+@import "tooltips";
+@import "markdown";
 
 #application > .ember-view {
    @include display(flex);
    @include flex-direction(column);
    min-height: 100vh;
+}
+.application-outlet {
+
+   @include display(flex);
+   @include flex(1);
+   @include flex-direction(column);
 }
 
 [draggable] {
@@ -31,10 +42,50 @@
   user-drag: element;
 }
 
+.hb-icon-button {
+  @include display(inline-flex);
+  line-height: 28px;
+  vertical-align: middle;
+  .ui-text {
+    font-size: 12px;
+    padding: 0 6px;
+  }
+  .ui-icon {
+    line-height: 20px;
+    padding: 6px;
+  }
+  &.hb-icon-button-purple {
+    color: white;
+    .ui-text {
+      background: $hb-purple;
+      opacity: 0.6;
+    }
+    .ui-icon {
+      background: $hb-purple;
+    }
+    &:hover {
+      .ui-text {
+        opacity: 1.0;
+       }
+    }
+
+    &:active {
+      @include box-shadow(inset 0 1px 1px $hb-purple-dark);
+      .ui-text {
+        opacity: 1.0;
+       }
+    }
+  }
+}
 
 .main-toolbar {
   @include display(flex);
   @include justify-content(space-between);
+  
+  .filters-clear {
+    @include flex(1);
+    padding: 0 12px;
+  }
 
   .create-button {
     .hb-icon-link {
@@ -116,18 +167,68 @@
     padding-left: 0;
   }
 }
-
 .column.no-milestone {
   margin: -6px 6px -6px 0;
   padding: 6px 16px 6px 10px;
   border-right: 1px solid #ddd;
-  @include flex(0 0 230px);
 }
-.column.milestone {
-  @include flex(0 0 230px);
-  &.hb-state-collapsed {
-    @include flex(0 0 90px);
+
+.board-not-dragging {
+  .column.milestone {
+    @include display(flex);
+    @include flex-direction(column);
+    @include flex(0 0 230px);
+    &.hb-state-collapsed {
+      @include flex(0 0 90px);
+    }
+    @include transition(all 0.4s ease-out);
   }
+}
+
+.board-dragging {
+  .column.milestone {
+    min-width: 230px;
+    max-width: 230px;
+    @include display(block);
+    &.hb-state-collapsed {
+      .text {
+        display: inline-block;
+      }
+    }
+  }
+  .collapsed {
+    min-height: 100vh;
+  }
+
+  @include transition(all 0s);
+}
+
+.milestone {
+
+  > h3 {
+
+    line-height: 16px;
+
+    .ui-icon {
+      float:left;
+      padding-right: 6px !important;
+    }
+
+    .text {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      display: inline-block;
+      max-width: calc(100% - 30px);
+
+    }
+  }
+}
+
+.milestone-placeholder {
+  @include display(flex);
+  @include flex(0 0 230px);
+  border: 1px dotted #ccc;
 }
 
 .milestones {
@@ -154,12 +255,16 @@
     }
   }
 }
-.column {
+
+.task-column {
   float:none;
   @include flex(1);
   @include display(flex);
   @include flex-direction(column);
   @include transition(all 0.4s ease-out);
+}
+.column {
+  //@include transition(all 0.4s ease-out);
   h3 {
     cursor: pointer;
   }
@@ -178,6 +283,7 @@
     @include flex(1);
 
   }
+
   > h3 .ui-icon {
     color: #999;
     opacity: 0.5;
@@ -190,7 +296,7 @@
     @include flex(1 0 80px);
     > h3 .ui-icon-plus { display:inline; }
     .collapsed {
-      display: block;
+      @include display(flex);
     }
     > h3 span, > h3 .ui-icon-minus, > h3 small {
       display:none;
@@ -381,6 +487,7 @@
   
 .tab-pane {
   display: none;
+  margin-top: 1px;
 }
 
 .tab-pane.active {

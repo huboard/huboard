@@ -2,7 +2,7 @@ module HuBoard
   module Routes
     class Repositories < Base
 
-      RESERVED_URLS = %w{ repositories settings }
+      RESERVED_URLS = %w{ login repositories settings }
 
       before '/:user/:repo/?*' do
         return if RESERVED_URLS.include? params[:user]
@@ -21,6 +21,7 @@ module HuBoard
         @parameters = params
         @repos = huboard.all_repos
         @private = nil
+        @user = gh.users(current_user.login)
         erb :index
       end
 
@@ -83,26 +84,56 @@ module HuBoard
       end
 
       get '/:user/:repo/?' do
-        redirect "/#{params[:user]}/#{params[:repo]}/board/create" unless huboard.board(params[:user], params[:repo]).has_board?
+        UseCase::FetchBoard.new(huboard).run(params).match do
+          success do
+            @parameters = params.merge({ :socket_backend => socket_backend})
 
-        @parameters = params.merge({ :socket_backend => socket_backend})
+            @repo = gh.repos(params[:user],params[:repo])
+            if logged_in?
+              begin
+                is_a_collaborator = @repo.permissions.push
+                @repo.merge!(is_collaborator: is_a_collaborator)
+              rescue
+                @repo.merge!(is_collaborator: true)
+              end
+            else
+              @repo.merge!(is_collaborator: false)
+            end
 
-        @repo = gh.repos(params[:user],params[:repo])
-        if logged_in?
-          is_a_collaborator = gh.connection.get("./repos/#{params[:user]}/#{params[:repo]}/collaborators/#{current_user.login}").status == 204
-          @repo.merge!(is_collaborator: is_a_collaborator)
-        else
-          @repo.merge!(is_collaborator: false)
+            erb :ember_board, layout: :layout_ember
+          end
+
+          failure :not_found do
+            raise Sinatra::NotFound
+          end
+
+          failure :no_board do 
+             redirect "/#{params[:user]}/#{params[:repo]}/board/create" 
+          end
+          failure :no_issues do
+             redirect "/#{params[:user]}/#{params[:repo]}/board/enable_issues" 
+          end
         end
-
-        erb :ember_board, layout: :layout_ember
       end
 
       get '/:user/:repo/board/?' do
         redirect "/#{params[:user]}/#{params[:repo]}"
       end
 
+      get '/:user/:repo/board/enable_issues/?' do
+        raise Sinatra::NotFound unless logged_in?
+        @parameters = params
+        @repo = gh.repos(params[:user],params[:repo])
+        erb :enable_issues
+      end
+
+      post '/:user/:repo/board/enable_issues/?' do
+        huboard.board(params[:user], params[:repo]).enable_issues
+        redirect "/#{params[:user]}/#{params[:repo]}/"
+      end
+
       get '/:user/:repo/board/create/?' do
+        raise Sinatra::NotFound unless logged_in?
         @parameters = params
         @repo = gh.repos(params[:user],params[:repo])
         erb :create_board

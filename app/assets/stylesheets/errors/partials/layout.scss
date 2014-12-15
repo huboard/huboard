@@ -1,0 +1,38 @@
+.flex-wrap {
+ @include display(flex);
+ min-height: 100vh;
+
+ @include m(left) {
+  @include rem((
+    margin: 20px
+  ));
+  @include display(flex);
+  @include flex(1);
+  @include justify-content(center);
+ }
+ @include m(right) {
+   @include flex(1);
+ }
+
+ @media (max-width: 768px) {
+   @include flex-direction(column);
+   @include m(left) {
+     z-index: 10;
+     opacity: .8;
+      @include rem((
+        margin: 20px auto
+      ));
+   }
+   
+
+    @include m(right) {
+      min-width: 100vw;
+      min-height: 50vh;
+      position:fixed;
+      bottom: 0;
+      opacity: .7;
+    }
+
+ }
+
+}

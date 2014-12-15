@@ -2,6 +2,9 @@
   <%= @repo.full_name %>
 <% end %>
 <% content_for :javascripts do %>
+  <% unless ENV["SOCKET_BACKEND"].nil? %>
+  <script src='<%= ENV['SOCKET_BACKEND']%>/client.js'></script>
+  <% end %>
   <%= javascript_tag 'board/application' %>
   <%= javascript_tag 'bootstrap' %>
   <%= javascript_tag 'vendor/jquery-ui' %>
@@ -40,6 +43,18 @@
       App.set("loggedIn", false);
     <% end %>
 
+    if(window.analytics) {
+      App.Router.reopen({
+        notifySegmentIo: function(){
+          return window.analytics.page(this.get('url'),{
+            page: this.get('url'),
+            title: this.get('url')
+          }) 
+        }.on("didTransition")
+
+      });
+
+    }
 
     App.advanceReadiness();
   </script>

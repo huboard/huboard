@@ -1,6 +1,11 @@
-var SocketMixin = require("../mixins/socket");
-var ApplicationController = Ember.ObjectController.extend(SocketMixin,{
+var ApplicationController = Ember.ObjectController.extend({
   isSidebarOpen: false,
+  queryParams: ["assignee", "repo", "milestone", "label", "search"],
+  search: null,
+  repo: [],
+  assignee: [],
+  milestone: [],
+  label: [],
   sockets: {
     config: {
       messagePath: "issueNumber",
@@ -50,9 +55,8 @@ var ApplicationController = Ember.ObjectController.extend(SocketMixin,{
      return "*";
   }.property(),
   repositoryName: function () {
-    // FIXME: file a bug report about the model not being set here
-    return this.target.router.activeTransition.resolvedModels.application.get("full_name")
-  }.property(),
+    return this.get("model.full_name");
+  }.property("model.full_name"),
 })
 
 module.exports = ApplicationController;

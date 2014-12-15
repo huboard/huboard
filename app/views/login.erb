@@ -55,6 +55,9 @@
 
 	<!-- permissions -->
 	<div class="permissions">
+    
+
+
 		<p class="permissions__copy">
 			Please choose which permissions you want to allow HuBoard
 		</p>
@@ -169,6 +172,21 @@
 			</div>
 		</div>
 	</div>
+  <div class="permissions">
+
+		<p class="permissions__copy">
+			Or provide HuBoard a personal access token
+		</p>
+		<div class="permissions__list" style='background:#f2f2f2;'>
+      <form action='/login/personal' method="GET">
+        <div class="form__field form__field--full">
+          <label class="form__label" for="personal_token">GitHub personal access token</label>
+          <input class="form__input" id="personal_token" name="token" type="text" placeholderx='4a68631afb82ba1a9f9c49892e0e3c82eaa7ef66'>
+        </div>
+				<button style="width: 100%" class="btn btn--flat">Submit personal token</button>
+      </form>
+    </div>
+  </div>
 	
 </div></div>
 <!-- / main content area -->

@@ -1,6 +1,6 @@
 li.dropdown
   a.dropdown-toggle.avatar data-toggle="dropdown" href="#"
-     img src="https://secure.gravatar.com/avatar/#{current_user.gravatar_id}?s=30&d=retro" <b class="caret"></b>
+     img height=30 width=30 src="#{ current_user.safe_avatar_url  }" <b class="caret"></b>
 
   ul.dropdown-menu
     li 

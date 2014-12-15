@@ -1,4 +1,5 @@
 @import "arrow";
+
 .container-fluid {
    padding-right: 25px;
    padding-left: 25px;
@@ -8,6 +9,79 @@
   vertical-align: top;
   padding: 0px 10px;
   @include box-sizing(border-box);
+}
+
+.column {
+  &.hb-state-collapsed {
+    input {
+      visibility: hidden;
+    }
+  }
+  .create-issue {
+    position: relative;
+
+    margin-bottom: 6px;
+    padding: 6px;
+
+    background: white;
+    @include box-shadow(inset 0 0px 1px rgba(0,0,0, 0.3));
+    border: 1px solid #e5e5e5;
+    border-bottom-color: darken(#e5e5e5, 5%); 
+    @include clearfix;
+
+    .ui-icon {
+      position: absolute;
+      top: 6px;
+      right: 4px;
+      cursor: pointer;
+      padding: 8px;
+      color: white;
+      background: $hb-purple;
+      border-radius: 1px;
+      opacity: 0.6;
+
+      &:hover {
+        @include box-shadow(0 0px 1px rgba(0,0,0, 0.3));
+        border: 1px solid $hb-purple;
+        border-bottom-color: $hb-purple-dark; 
+        padding: 7px;
+        opacity: 1;
+      }
+      &:active {
+        @include box-shadow(inset 0 1px 1px $hb-purple-dark);
+        border: none;
+        padding: 8px;
+        top: 7px;
+        opacity: 1;
+      }
+    }
+
+
+    input {
+      box-sizing: border-box;
+      height: auto;
+      width: calc(100% - 33px);
+      margin: 0;
+      padding: 6px;
+      outline: none;
+      border: none;
+      background: white;
+      @include box-shadow(none);
+      @include transition(all 0s);
+
+
+      &:focus, &:hover {
+        outline: none;
+        border: none;
+        background: white;
+        border-bottom: 1px dashed #ccc;
+        padding-bottom: 5px;
+      }
+
+    }
+
+  }
+
 }
 
 
@@ -50,7 +124,7 @@
   @extend .arrow;
 }
 
-.column ul {
+.column > ul {
   margin:0;
   padding: 0;
 }
@@ -110,7 +184,7 @@
   }
 }
 
-.column li {
+.card {
   cursor:pointer;
   list-style: none;
   padding: 5px 5px 34px 5px;
@@ -120,6 +194,10 @@
   border: 1px solid #e5e5e5;
   border-bottom-color: darken(#e5e5e5, 5%); 
   @include transform(translateZ(0));
+  .hb-avatar-tooltip {
+    position: static;
+  }
+
 
   &.border {
     border-top-color: #e5e5e5;
@@ -139,8 +217,9 @@
   }
   
   .hb-action {
-      position: absolute;
-      width: 100%;
+    position: absolute;
+    width: 100%;
+
     button {
       opacity: 0.3;
       position: absolute;
@@ -231,25 +310,91 @@
       margin-right: -7px;
     }
   }               
+
+  &.card--milestone {
+    &.border {
+      padding-left: 6px;
+    }
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+    .hb-avatar-tooltip {
+      p {
+        bottom: auto;
+        top: -24px;
+      }
+      display: inline;
+      img {
+        position: static;
+      }
+    }
+    .card-header {
+      border-bottom: none;
+    }
+    .card-labels {
+      bottom: auto;
+      top: -8px;
+    }
+    .flex-crumbs {
+      .breadcrumbs {
+        overflow:hidden;
+        padding-bottom: 2px;
+      }
+      .card-states {
+        opacity: 0.7;
+      }
+      img {
+        bottom: auto;
+      }
+      .crumb {
+        &:before {
+          bottom: -2px;
+        }
+      }
+      .hb-state {
+        .active {
+          @include flex(0 0 44%);
+        }
+        .inactive {
+          @include flex(0 0 28%);
+        }
+      }
+      .crumb--last {
+        .card-states {
+          right: 0px;
+        }
+      }
+      > ul.nav.breadcrumbs {
+        margin: 0px -6px -8px;
+
+        .crumb--middle, .crumb--last {
+          a {
+            padding-left: 18px;
+          }
+        }
+      }
+
+    }
+
+  }
 }
 
 
 
-.column li a.close {
+.card a.close {
   position: absolute;
   top: 12px;
   right: 6px;
   width: 16px;
   opacity:0.0;
 }
-.column li:hover a.close {
+.card:hover a.close {
   opacity:0.3;
 }
-.column li a.close:hover {
+.card a.close:hover {
   opacity:0.5;
 }
 
-.column li a small {
+.card a small {
   color: $lightGrey;
   padding-right:2px;
 }
@@ -276,6 +421,14 @@
   background: #fff;
   border-radius: 4px;
 }
+
+.filters li.filtered-label a {
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-left-style: solid;
+  border-left-width: 3px;
+}
+
 .filters li.clear-filters, .filters li.clear-filters a {
   background: none;
   color:$grey;
@@ -316,6 +469,7 @@
 }
 
 .filter {
+
   .ui-icon {
     position: absolute;
     top: 13px;

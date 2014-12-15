@@ -4,4 +4,4 @@
 //= require ./marketing/main
 
 
-$('.feature__image--popup').magnificPopup({type:'image'});
+//$('.feature__image--popup').magnificPopup({type:'image'});

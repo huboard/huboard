@@ -51,9 +51,66 @@
       </div>
     </div>
     {{/x-pane}}
+    {{#x-pane title="Billing"}}
+        <div class="nav-section">
+
+        <div class="widget-body">
+          {{ render history model }}
+        </div>
+      </div>
+    {{/x-pane}}
 {{/x-tabs}}
 
 </script>
+<script type="text/x-handlebars" id="history">
+  <div class="receipt-information">
+    <h3>Receipt info <small>(optional)</small></h3>
+    <p>
+    HuBoard does not provide invoices, but if you need additional contact or tax information added to your
+    receipts (business address, VAT number, etc.), enter it below and it will appear on all of your receipts.
+    </p>
+    <p>
+    {{ textarea value=model.history.additional_info }}
+
+    <button class="hb-button small"
+      {{action saveAdditionalInfo this }} {{bind-attr disabled=processing }} >Update</button>
+    </p>
+
+  </div>
+
+   <div class="table-wrapper">
+    <table class="table">
+      <thead>
+        <th>Date</th>
+        <th>Account</th>
+        <th>Amount</th>
+        <th></th>
+      </head>
+      <tbody>
+
+        {{#each model.history.charges }}
+        <tr>
+          <td>{{stripe-date created }}</td>
+          <td>{{ receipt_email }}</td>
+          <td>{{stripe-money amount }}</td>
+          <td class="text-right">    
+           {{#if paid}}
+            <a href="/settings/invoices/{{unbound invoice }}">HTML</a> | <a href="/settings/invoices/{{unbound invoice}}.pdf">PDF</a>
+           {{else}}
+            UNPAID
+           {{/if}}
+          </td>
+        </tr>
+        {{else}}
+        <tr>
+          <td colspan='4' class="empty">No charges yet</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</script>   
+
 
 <script type="text/x-handlebars" id="account">
   <div class="alert alert-success">
@@ -65,14 +122,24 @@
     </p>
   </div>
 
-  <div class='credit-card'>
-    {{#if model.details.card }}
-     <img src="<%= image_path 'Plain.png' %>" /> <strong>Credit card on file.</strong> Ending in {{ model.details.card.last4 }}
-     <button {{action updateCard this }} class="hb-button small">Update card</button>
-    {{else}}
-     <img src="<%= image_path 'Plain.png' %>" /> <strong>No Credit card on file.</strong>
+  <div class='account-details'>
+    <div class='credit-card'>
+      {{#if model.details.card }}
+       <img src="<%= image_path 'Plain.png' %>" /> <strong>Credit card on file.</strong> Ending in {{ model.details.card.last4 }}
+       <button style="float: right" {{action updateCard this }} class="hb-button small">Update card</button>
+      {{else}}
+       <img src="<%= image_path 'Plain.png' %>" /> <strong>No Credit card on file.</strong>
 
-    {{/if}}
+      {{/if}}
+    </div>
+
+    <div class='coupon'>
+      {{#if model.details.has_plan }}
+        <img src="<%= image_path 'icn-coupon.png' %>" /> <strong> Coupon: {{{couponCode}}} </strong>
+      <button style="float: right"class="hb-button small"
+      {{action applyCoupon this}}> Redeem Coupon </button>
+      {{/if}}
+    </div>
   </div>
 
    <div class="table-wrapper">
@@ -87,6 +154,7 @@
       <tbody>
 
         {{#each model.details.plans }}
+        <tr>
           <td>{{ name }}</td>
           <td>{{stripe-money amount }}/month</td>
           <td>unlimited</td>
@@ -94,7 +162,7 @@
           <td class="text-right">    
            {{#if purchased }} 
               Your plan
-              <button class="hb-button small"
+              <button class="hb-button hb-button-danger small"
                  {{action cancel this }}>Cancel plan</button>
             {{else}}
               <button class="hb-button small"
@@ -102,12 +170,45 @@
             {{/if}}
 
           </td>
+        </tr>
 
         {{/each}}
       </tbody>
     </table>
   </div>
 </script>   
+
+<script type="text/x-handlebars" data-template-name="apply_coupon">
+  <div class="fullscreen-credit-card">
+    <form {{action apply_coupon on=submit}}>
+      <div class="modal-header">
+        <div>
+          <button type="button" class="close" {{action close}} data-dismiss="modal" aria-hidden="true">×</button>
+          Redeem a Coupon! 
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="form-row full">
+          <p> (applied against your next invoice of greater than $0.00) </p>
+            <label>
+              Coupon:
+            </label>
+           {{view App.CouponCodeField valueBinding="coupon"}}
+        </div>
+        {{#if errors}}
+          <div class="alert alert-error">{{errors}}</div>
+        {{/if}}
+        {{#if processingAction }}
+          <div class="fullscreen-overlay">
+          </div>
+        {{/if}}
+      </div>
+      <div class="modal-footer">
+        <button href="#" class="stripe-connect light-blue" type="submit" {{bindAttr disabled="isDisabled"}}><span> Redeem </span></button>
+      </div>
+    </form>
+  </div>
+</script>
 
 <script type="text/x-handlebars" data-template-name="cancel_form">
 <div class="fullscreen-credit-card">
@@ -213,15 +314,11 @@
     <button type="button" class="close" {{action close}} data-dismiss="modal" aria-hidden="true">×</button>
     Credit card infomation 
   </div>
-  <div class="modal-body">
+  <div style="padding:20px;">
     <p>
       Thanks for choosing to become a paying customer! Once we successfully charge your credit card, we'll immediately upgrade your account to the <strong>{{model.plan.name}}</strong> plan.
     </p>
     <fieldset>
-
-      {{#if errors}}
-        <div class="alert alert-error">{{errors}}</div>
-      {{/if}}
 
       <div class="form-row full">
         <label>
@@ -263,6 +360,22 @@
         {{input valueBinding="model.org.billing_email" type=text required=true }}
       </div>
 
+      <div class="form-row full">
+        <tr>
+          <td> Have Coupon? </td>
+          <td> {{view App.CouponCheckbox checkedBinding="couponChecked"}} </td>
+        </tr>
+        <label>
+          {{#if couponChecked }}
+            {{view App.CouponCodeField valueBinding="coupon"}}
+          {{/if}}
+        </label>
+      </div>
+
+      {{#if errors}}
+        <div class="alert alert-error">{{errors}}</div>
+      {{/if}}
+
     </fieldset>
 
     <p>
@@ -275,7 +388,7 @@
     {{/if}}
   </div>
   <div class="modal-footer">
-      <button href="#" class="stripe-connect light-blue" type="submit" {{bindAttr disabled="processingCard"}}><span>Pay with stripe</span></button>
+      <button href="#" class="stripe-connect light-blue" type="submit" {{bindAttr disabled="isDisabled"}}><span>Pay with stripe</span></button>
   </div>
   </form>
   </div>
@@ -284,7 +397,7 @@
 <script type="text/x-handlebars" id="profile">
 
 {{#x-tabs}}
-      {{#x-pane title="Plans"}}
+  {{#x-pane title="Plans"}}
       <div class="nav-section">
 
       <div class="widget-body">
@@ -303,8 +416,18 @@
         {{/if}}
       </div>
     </div>
+  {{/x-pane}}
+  {{#if model.details.org.is_owner }}
+    {{#x-pane title="Billing"}}
+        <div class="nav-section">
+
+        <div class="widget-body">
+          {{ render history model }}
+        </div>
+      </div>
     {{/x-pane}}
-    {{/x-tabs}}
+  {{/if}}
+{{/x-tabs}}
 
 </script>
 

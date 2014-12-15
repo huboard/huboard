@@ -17,7 +17,7 @@ class Huboard
       gh.issues(params).all.each{
         |i| i.extend(Card)
       }.each{ |i|
-        i.merge!("repo" => {owner: {login: user}, name: repo })
+        i.merge!("repo" => {owner: {login: user}, name: repo, full_name: "#{user}/#{repo}" })
       }.sort_by { |i| i["_data"]["order"] || i["number"].to_f }
     end
 
@@ -25,56 +25,62 @@ class Huboard
       issue = gh.issues(number)
       labels = issue.labels.all.reject {|l| Huboard.all_patterns.any? {|p| p.match l.name }}.sort_by {|l| l.name}
 
-      gh.issues(number).patch(labels: labels).extend(Card).merge!("repo" => {owner: {login: @user}, name: @repo })
+      gh.issues(number).patch(labels: labels).extend(Card).merge!("repo" => {owner: {login: @user}, name: @repo,  full_name: "#{@user}/#{@repo}" })
     end
 
     def create_issue(params)
       issue = Hashie::Mash.new params["issue"]
-      issue.extend(Card).embed_data "order" => params["order"].to_f if params["order"].to_f > 0
+      issue.extend(Card).embed_data params["order"]
 
       milestone = issue["milestone"].nil? ? nil : issue.milestone.number
       assignee = issue["assignee"].nil? ? nil : issue.assignee.login
 
+      labels = column_labels
+
       attributes = {
         title: issue.title,
         body: issue.body,
-        labels: [column_labels.first.name].concat(issue.labels.map{|l| l["name"]}),
+        labels: [labels.first.name].concat((issue.labels || []).map{|l| l["name"]}),
         assignee: assignee,
         milestone: milestone
       }
-      gh.issues.create(attributes).extend(Card).merge!("repo" => {owner: {login: @user}, name: @repo })
+
+      result = gh.issues.create(attributes).extend(Card).merge!("repo" => {owner: {login: @user}, name: @repo,  full_name: "#{@user}/#{@repo}" })
+
+      result.current_state = labels.first if result.current_state["name"] == "__nil__"
+
+      result
     end
 
     def closed_issues(label, since = (Time.now - 2*7*24*60*60).utc.iso8601)
       params = {labels: label, state: "closed", since: since, per_page: 30}
 
-      gh.issues(params).each{|i| i.extend(Card)}.each{ |i| i.merge!("repo" => {owner: {login: user}, name: repo }) }.sort_by { |i| i["_data"]["order"] || i["number"].to_f }
+      gh.issues(params).each{|i| i.extend(Card)}.each{ |i| i.merge!("repo" => {owner: {login: user}, name: repo,  full_name: "#{user}/#{repo}" }) }.sort_by { |i| i["_data"]["order"] || i["number"].to_f }
     end
 
     def issue(number)
       raise "number is nil" unless number
 
-      issue = gh.issues(number).extend(Card).merge!(repo: {owner: {login: user}, name: repo })
+      issue = gh.issues(number).extend(Card).merge!(repo: {owner: {login: user}, name: repo, full_name: "#{user}/#{repo}" })
       issue.attach_client connection_factory
       issue
     end
 
     def milestones
-      gh.milestones.all.each { |m| m.extend(Milestone) }.each{ |i| i.merge!("repo" => {owner: {login: user}, name: repo }) }.sort_by { |i| i["_data"]["order"] || i["number"].to_f }
+      gh.milestones.all.each { |m| m.extend(Milestone) }.each{ |i| i.merge!("repo" => {owner: {login: user}, name: repo, full_name: "#{user}/#{repo}" }) }.sort_by { |i| i["_data"]["order"] || i["number"].to_f }
     end
 
     def milestone(number)
-      milestone = gh.milestones(number).extend(Milestone).merge!(repo: {owner: {login: user}, name: repo })
+      milestone = gh.milestones(number).extend(Milestone).merge!(repo: {owner: {login: user}, name: repo, full_name: "#{user}/#{repo}" })
       milestone.attach_client connection_factory
       milestone
     end
 
-    def create_milestone(params)
-       milestone = Hashie::Mash.new params["milestone"]
-
-       gh.milestones.create({
-         title: milestone.title
-       })
+    def create_milestone(milestone)
+      gh.milestones.create(milestone).extend(Milestone).merge!({
+        repo: {owner: {login: user}, name: repo, full_name: "#{user}/#{repo}" },
+        title: milestone.title
+      })
     end
 
     module Card
@@ -193,19 +199,22 @@ class Huboard
         r = /@huboard:(.*)/
         if !data
           match = r.match(self.body || "")
-          return { order: self.number } if match.nil?
+          return { order: self.number, milestone_order: self.number } if match.nil?
 
           begin
-            return JSON.load(match[1])
+            data = MultiJson.load(match[1])
+            data["order"] = self.number unless data["order"]
+            data["milestone_order"] = self.number unless data["milestone_order"]
+            return data
           rescue
-            return { order: self.number }
+            return { order: self.number, milestone_order: self.number }
           end
         else
           _data = embed_data
           if r.match self.body
-            self.body = self.body.to_s.gsub(/@huboard:.*/, "@huboard:#{JSON.dump(_data.merge(data))}")
+            self.body = self.body.to_s.gsub /@huboard:.*/, "@huboard:#{MultiJson.dump(_data.merge(data))}"
           else
-            self.body = self.body.to_s.concat  "\r\n\r\n<!---\r\n@huboard:#{JSON.dump(data)}\r\n-->\r\n"
+            self.body = self.body.to_s.concat  "\r\n\r\n<!---\r\n@huboard:#{MultiJson.dump(data)}\r\n-->\r\n" 
           end
         end
       end
@@ -247,22 +256,24 @@ class Huboard
       end
 
       def embed_data(data = nil)
+        r = /@huboard:(.*)/
         if !data
-          r = /@huboard:(.*)/
-          match = r.match self.description
-          return {} if match.nil?
+          match = r.match(self.description || "")
+          return { order: self.number } if match.nil?
 
           begin
-            return JSON.load(match[1])
+            data = MultiJson.load(match[1])
+            data["order"] = self.number unless data["order"]
+            return data
           rescue
-            return {}
+            return { order: self.number }
           end
         else
           _data = embed_data
-          if _data.empty?
-            self.description = self.description.concat  "\r\n\r\n<!---\r\n@huboard:#{JSON.dump(data)}\r\n-->\r\n"
+          if r.match self.description
+            self.description = self.description.to_s.gsub /@huboard:.*/, "@huboard:#{MultiJson.dump(_data.merge(data))}"
           else
-            self.description = self.description.gsub(/@huboard:.*/, "@huboard:#{JSON.dump(_data.merge(data))}")
+            self.description = self.description.to_s.concat  "\r\n\r\n<!---\r\n@huboard:#{MultiJson.dump(data)}\r\n-->\r\n" 
           end
         end
       end

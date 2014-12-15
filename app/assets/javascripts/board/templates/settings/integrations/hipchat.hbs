@@ -1,0 +1,16 @@
+<div class="flex-form-bottom">
+  <form {{action 'submit' on="submit"}} class="flex-form">
+    <h3>HipChat Instructions</h3>
+    <p> Choose a room to receive notifications from HuBoard. Currently only one room can be registered at a time, to receive notifications to multiple rooms please register one webhook per room. </p>
+    <label>
+      {{input value=room placeholder="Room Name" required=true }}
+    </label>
+    <p> Generate an API Authorization token (a room specific token is recommended) and paste it below: </p>
+    <label>
+      {{input value=authToken placeholder="Authorization Token" required=true }}
+    </label>
+    <button {{bind-attr disabled=disabled}} class="hb-button">Submit webhook</button>
+    <div class="with-line"><span>or</span></div>
+    <div class="cancel"> <a href="#" {{action cancel}}>Cancel</a> </div>
+  </form>
+</div>

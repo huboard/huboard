@@ -1,5 +1,6 @@
 var CardWrapperView = Em.View.extend({
     templateName: "cardItem",
+    classNames: ["card"],
     classNameBindings: ["isFiltered","isDraggable:is-draggable", "isClosable:closable", "colorLabel", "content.color:border"],
     colorLabel: function () {
       return "-x" + this.get("content.color");
@@ -64,19 +65,19 @@ var CardWrapperView = Em.View.extend({
     },
     dragEnter: function(ev) {
       ev.preventDefault();
-      if(ev.dataTransfer.types.contains("text/plain")){
+      if(ev.dataTransfer.types.contains("text/huboard-assignee")){
         this.$().addClass("assignee-accept");
       }
     },
     dragOver: function(ev) {
       ev.preventDefault();
-      if(ev.dataTransfer.types.contains("text/plain")){
+      if(ev.dataTransfer.types.contains("text/huboard-assignee")){
         this.$().addClass("assignee-accept");
       }
     },
     dragLeave: function(ev) {
       ev.preventDefault();
-      if(ev.dataTransfer.types.contains("text/plain")){
+      if(ev.dataTransfer.types.contains("text/huboard-assignee")){
         this.$().removeClass("assignee-accept");
       }
     },
@@ -85,9 +86,9 @@ var CardWrapperView = Em.View.extend({
         ev.stopPropagation();
       }
 
-      if(ev.dataTransfer.types.contains("text/plain")){
+      if(ev.dataTransfer.types.contains("text/huboard-assignee")){
         var view = Em.View.views[this.$().find("> div").attr("id")];
-        view.get("controller").send("assignUser", ev.dataTransfer.getData("text/plain"));
+        view.get("controller").send("assignUser", ev.dataTransfer.getData("text/huboard-assignee"));
 
         ev.preventDefault();
         this.$().removeClass("assignee-accept");

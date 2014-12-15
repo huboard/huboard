@@ -57,6 +57,43 @@
 
   }
 }
+
+.hb-icon-button {
+  @include display(inline-flex);
+  line-height: 28px;
+  vertical-align: middle;
+  .ui-text {
+    font-size: 12px;
+    padding: 0 6px;
+  }
+  .ui-icon {
+    line-height: 20px;
+    padding: 6px;
+  }
+  &.hb-icon-button-purple {
+    color: white;
+    .ui-text {
+      background: $hb-purple;
+      opacity: 0.6;
+    }
+    .ui-icon {
+      background: $hb-purple;
+    }
+    &:hover {
+      .ui-text {
+        opacity: 1.0;
+       }
+    }
+
+    &:active {
+      @include box-shadow(inset 0 1px 1px $hb-purple-dark);
+      .ui-text {
+        opacity: 1.0;
+       }
+    }
+  }
+}
+
                                   
 .input-append {
   .hb-button {

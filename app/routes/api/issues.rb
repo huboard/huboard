@@ -2,6 +2,32 @@ module HuBoard
   module Routes
     module Api
       class Issues < Base
+
+        post '/api/:user/:repo/issues' do
+          issue = huboard.board(params[:user],params[:repo]).create_issue params
+
+          IssueOpenedEvent.new.publish issue, current_user.attribs, params["correlationId"]
+
+          json issue
+        end
+
+        ## Edit a comment
+        #  Accepts a params[:comment]
+        #  Returns json of comment
+        put '/api/:user/:repo/issues/comments/:id' do
+          api = huboard.board(params[:user], params[:repo])
+
+          comment = api.comments(params[:comment][:id]).patch body: params[:comment][:body]
+
+          json(comment)
+        end
+        post '/api/:user/:repo/issues/:number/comment' do
+          data = {body: params["markdown"]}
+          comment = gh.repos(params[:user], params[:repo]).issues(params[:number]).comments.create data
+
+          json comment.to_hash
+        end
+
         get '/api/:user/:repo/issues/:number/details' do
           api = huboard.board(params[:user], params[:repo])
 
@@ -10,26 +36,10 @@ module HuBoard
           json issue
         end
 
-        post '/api/:user/:repo/issues' do
-          client_data = JSON.parse(request.body.read)
-          issue = huboard.board(params[:user],params[:repo]).create_issue client_data
-
-          IssueOpenedEvent.new.publish issue, current_user.attribs, client_data["correlationId"]
-
-          json issue
-        end
-
-        post '/api/:user/:repo/issues/:number/comment' do
-          data = {body: JSON.parse(request.body.read)["markdown"]}
-          comment = gh.repos(params[:user], params[:repo]).issues(params[:number]).comments.create data
-
-          json comment.to_hash
-        end
-
         put '/api/:user/:repo/issues/:number' do
           api = huboard.board(params[:user], params[:repo])
 
-          issue = api.issue(params[:number]).update(JSON.parse(request.body.read)).to_hash
+          issue = api.issue(params[:number]).update(params).to_hash
 
           json issue
         end
@@ -117,9 +127,12 @@ module HuBoard
           user, repo, number, milestone = params[:user], params[:repo], params[:issue], params[:milestone]
 
           issue = huboard.board(user, repo).issue(number)
-          issue = issue.patch "milestone" => milestone
+          issue.embed_data("milestone_order" => params[:order].to_f) if params[:order].to_f > 0
+          issue = issue.patch "milestone"    => milestone, "body" => issue.body
 
-          IssueMilestoneChangedEvent.new.publish issue, current_user.attribs, params[:correlationId]
+          if params[:changed_milestones] == "true"
+            IssueMilestoneChangedEvent.new.publish issue, current_user.attribs, params[:correlationId]
+          end
 
           json issue
         end

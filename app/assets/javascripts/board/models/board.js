@@ -5,7 +5,7 @@ var Board = Ember.Object.extend({
   linkedRepos: [],
   topIssue: function() {
     var firstColumn = this.get("columns.firstObject");
-    var firstIssue = this.combinedIssues().filter(function(i){
+    var firstIssue = this.get("combinedIssues").filter(function(i){
       return i.current_state.index === firstColumn.index;
     }).sort(function (a, b){
        return a._data.order - b._data.order;
@@ -16,12 +16,12 @@ var Board = Ember.Object.extend({
   },
   combinedIssues: function () {                                                                        
      return _.union.apply(_,[this.issues].concat(this.linkedRepos.map(function (r){return r.issues; })));
-  },
+  }.property("linkedRepos.@each.issues.length", "issues.length"),
   combinedLabels :function () {
     return _.union.apply(_,[this.other_labels]
                     .concat(this.linkedRepos.map(function (r){return r.other_labels; })));
 
-  }.property("linkedRepos.@each", "issues"),
+  }.property("linkedRepos.@each.issues.length", "issues.length"),
   filterLabels: function () {
     var labels = this.get("combinedLabels");
 
@@ -34,39 +34,19 @@ var Board = Ember.Object.extend({
             });
   }.property(),
   filterMilestones: function () {
+    return _.chain(this.get("combinedMilestones"))
+            .map(function (g) {
+              return _.first(g);
+            })
+            .value();
+  }.property("combinedMilestones"),
+  combinedMilestones: function(){
     var milestones = _.union.apply(_,[this.milestones]
                     .concat(this.linkedRepos.map(function (r){return r.milestones; })));
     return _.chain(milestones)
             .groupBy(function(l){return l.title.toLocaleLowerCase() })
-            .map(function (g) {
-              return _.first(g);
-            }).value();
-  }.property(),
-  loadLinkedBoards: function () {
-    var model = this;
-    var urls = this.get("link_labels").map(function (l) {
-      return "/api/" + model.full_name + "/linked/" + l.user + "/" + l.repo  
-    })
-
-    var requests = urls.map(function (url){
-      return Ember.$.getJSON(url);
-    })
-
-    return Ember.RSVP.all(requests).then(function (boards){
-      boards.forEach(function (b){
-        if(b.failure) {return;}
-         var issues = Ember.A();
-         b.issues.forEach(function(i){
-           issues.pushObject(App.Issue.create(i));
-         })
-
-         var board =  Board.create(_.extend(b, {issues: issues}));
-
-         model.linkedRepos.pushObject(b)
-      })
-      return boards;
-    })
-  }
+            .value();
+  }.property("milestones.length","linkedRepos.@each.milestones.length"),
 });
 
 Board.reopenClass({

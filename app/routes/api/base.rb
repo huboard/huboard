@@ -13,9 +13,11 @@ module HuBoard
           set :erb, layout_options: {views: 'app/views/layouts'}
 
           set :raise_errors, true
+          set :show_exceptions, false
+          set :dump_errors, false
         end
 
-        RESERVED_URLS = %w{ site profiles }
+        RESERVED_URLS = %w{ site profiles uploads }
 
         before '/api/:user/:repo/?*' do
           return if RESERVED_URLS.include? params[:user]
@@ -34,6 +36,18 @@ module HuBoard
 
         not_found do
           json(message: "Not found")
+        end
+
+        error HuBoard::RepoNotFound do
+          halt_json_error 404
+        end
+
+        error HuBoard::Error do
+          halt_json_error 400
+        end
+
+        error Ghee::Error do
+          halt_json_error 422
         end
       end
     end

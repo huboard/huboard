@@ -1,0 +1,8 @@
+{{input action="onQuickAdd" value=title placeholder=view.placeholderText}}
+{{#unless processing}}
+  <i class="ui-icon ui-icon-plus" title="Create with details" {{action 'openFullScreen' }} ></i>
+{{else}}
+  <div style="position:absolute; right: 36px; top: 7px; ">
+    {{hb-spinner}}
+  </div>
+{{/unless}}

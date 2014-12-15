@@ -5,6 +5,13 @@
 	background: rgba(58,55,68,0.30);
 	background: url(asset-path('marketing/header-bg--github.png')) no-repeat top center;
 	background-size: cover;
+  &.top--home {
+    min-height: 100vh;
+    .hero {
+      margin-top: calc(100vh - 90vh);
+
+    }
+  }
 
 	/**
 	 * Alternate backgrounds

@@ -7,6 +7,8 @@ require_relative "github/issues"
 require_relative "github/backlog"
 require_relative "github/hooks"
 require_relative "github/board"
+require_relative "github/user"
+require_relative "github/comments"
 require_relative "middleware"
 require "addressable/uri"
 
@@ -43,6 +45,7 @@ class Huboard
           conn.use ClientId, params unless token || access_token
           conn.use Mimetype
           conn.request :retry, 3
+          # conn.response :logger
           # disable cache because github api is broken
           conn.use Caching
         end
@@ -65,5 +68,6 @@ class Huboard
     include Issues
     include Backlog
     include Hooks
+    include Comments
   end
 end

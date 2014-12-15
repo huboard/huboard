@@ -6,6 +6,8 @@ require('../vendor/jquery');
 require('../vendor/handlebars');
 require('../vendor/ember');
 require("../vendor/autoresize");
+require("../vendor/jquery.textcomplete");
+require("../vendor/task_list.js");
 var color = require('../../vendor/jquery.color');
 require('../utilities/observers');
 
@@ -35,14 +37,16 @@ Ember.onLoad("Ember.Application", function ($app) {
         var socket = Ember.Object.extend({
           correlationId : correlationId,
           sockets: {},
+          client: new Faye.Client(application.get('socketBackend')),
           subscribe: function (channel, callback) {
             this.get("sockets")[channel].callbacks.add(callback);
           },
           subscribeTo: function(channel) {
-            var source = new EventSource(App.get("socketBackend") + "/subscribe/" + channel, {withCredentials: true}),
+            var client = this.get('client'), 
               callbacks = Ember.$.Callbacks();
-            source.addEventListener("message", function(event){
-              callbacks.fire(JSON.parse(event.data));
+              client.disable("eventsource");
+            var source = client.subscribe("/" + channel, function(event){
+              callbacks.fire(event);
             });
             this.get("sockets")[channel] = {
               source: source,
@@ -82,6 +86,10 @@ Ember.onLoad("Ember.Application", function ($app) {
       application.inject('settings:main', 'repo', 'repo:main');
       application.inject('controller', 'settings', 'settings:main');
       application.inject('view', 'settings', 'settings:main');
+
+      application.register('global:main', application.Global);
+      application.inject('controller', 'global', 'global:main');
+      application.inject('view', 'global', 'global:main');
     }
   })
 })

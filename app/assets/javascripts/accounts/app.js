@@ -5,6 +5,11 @@
     var value = Ember.getPath(this, path);
     return "$" + parseFloat(value/100).toFixed(0);
   });
+  Handlebars.registerHelper("stripe-date", function(path) {
+    var value = Ember.getPath(this, path);
+    var date = new Date(value * 1000);
+    return date.toDateString();
+  });
   
   App = Ember.Application.create({
     rootElement : "#main-application"
@@ -110,6 +115,15 @@
         }));
       });
     },
+    loadHistory : function () {
+      var user = this; 
+      return Em.Deferred.promise(function(p) {
+        p.resolve($.getJSON("/api/profiles/"+ user.get("login") + "/history").then(function (response) {
+          user.set("history", response)
+          return response;
+        }));
+      });
+    }
 
   })
 
@@ -129,6 +143,15 @@
         }));
       });
     },
+    loadHistory : function () {
+      var org = this; 
+      return Em.Deferred.promise(function(p) {
+        p.resolve($.getJSON("/api/profiles/"+ org.get("login") + "/history").then(function (response) {
+          org.set("history", response)
+          return response;
+        }));
+      });
+    }
 
   })
 
@@ -139,7 +162,9 @@
     },
 
     afterModel: function (model) {
-      return model.loadDetails();
+      return model.loadDetails().then(function(){
+        return model.loadHistory();
+      });
     }
   })
 
@@ -161,12 +186,43 @@
     },
 
     afterModel : function (model) {
-      return model.loadDetails();
+      return model.loadDetails().then(function(){
+        return model.loadHistory();
+      });
     }
   })
 
+  App.HistoryController = Ember.ObjectController.extend({
+    actions: {
+      saveAdditionalInfo: function (model) {
+        controller = this;
+        controller.set("processing", true);
+        return new Ember.RSVP.Promise(function(resolve, reject){
+          Ember.$.ajax({
+            url: "/settings/profile/" + model.get("login") + "/additionalInfo",
+            type: "PUT",
+            data: {
+              additional_info: model.get("history.additional_info")
+            },
+            success: function(response){
+              resolve(response);
+              controller.set("processing", false);
+            },
+            error: function(response){
+              reject(response);
+              controller.set("processing", false);
+            }
+          })
+        })
+      }
+    }
+  });
+
   App.AccountController = Ember.ObjectController.extend({
-    needs: ["purchaseForm","cancelForm", "updateCard"],  
+    needs: ["purchaseForm","cancelForm", "updateCard", "applyCoupon"],  
+    couponCode: function(){
+      return this.get("model.details.discount.coupon.id");
+    }.property("model.details.discount","model.details.discount.coupon", "model.details.discount.coupon.id"),
     actions: {
       purchase: function (model) {
         var org = this.get("model.details.org");
@@ -188,6 +244,10 @@
         this.set("controllers.cancelForm.model", plan)
         this.send("openModal","cancelForm")
       
+      },
+      applyCoupon: function (model) {
+        this.set("controllers.applyCoupon.model", model)
+        this.send("openModal","applyCoupon");
       }
     }  
   });

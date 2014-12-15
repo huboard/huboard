@@ -13,6 +13,7 @@
 @import "section";
 @import "credit_cards";
 @import "breadcrumbs";
+@import "account";
 
 form {
   margin: 0;
@@ -110,6 +111,7 @@ form {
   
 .tab-pane {
   display: none;
+  margin-top: 1px;
 }
 
 .tab-pane.active {

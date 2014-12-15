@@ -19,8 +19,8 @@ class Huboard
     end
 
     def labels
-      labels = gh.labels.all
-      labels.is_a?(Array) ? labels : []
+      @labels ||= gh.labels.all
+      @labels.is_a?(Array) ? @labels : []
     end
 
     def other_labels
@@ -46,6 +46,41 @@ class Huboard
 
     def create_label(params)
       gh.labels.create params
+    end
+    
+    def destroy_label(name)
+      gh.labels(name).destroy
+    end
+    alias_method :destroy_link, :destroy_label
+
+
+    def create_link(repo)
+      label_name = "Link <=> #{repo}"
+      match = Huboard.link_pattern.match label_name
+
+      if match and repo_exists?(match[:user_name], match[:repo])
+        new_link = create_label name: label_name, color: random_color
+        new_link.user = match[:user_name]
+        new_link.repo = match[:repo]
+        new_link
+      else
+        nil
+      end
+
+    end
+
+    def copy_board(columns)
+      column_labels.each do |column|
+        destroy_label(column["name"])
+      end
+      columns.each do |column|
+        create_label name: column["name"], color: column["color"]
+      end
+    end
+    
+    def random_color
+      colors = %w{ e11d21 eb6420 eb6420 fbca04 009800 006b75 207de5 0052cc 5319e7 }
+      colors.sample
     end
 
     def link_labels

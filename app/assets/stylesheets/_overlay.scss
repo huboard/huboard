@@ -52,7 +52,7 @@ body > .fullscreen-overlay {
 
 .fullscreen-body {
   max-width: 960px;
-  margin: 50px auto;
+  margin: 50px auto 250px;
   &.credit-card {
     max-width: 460px;
     margin: 50px auto;
@@ -96,6 +96,13 @@ body > .fullscreen-overlay {
 
 }
 
+.fullscreen-card--center {
+  h2, .flex-form-top {
+    text-align: center;
+    margin-bottom: 12px;
+  }
+}
+
 .fullscreen-header {
   margin: 20px 0;
 
@@ -108,7 +115,12 @@ body > .fullscreen-overlay {
     margin-top: 0;
     button{
       float:right;
-
+      margin-left: 6px;
+    }
+    input {
+      width: calc(100% - 170px);
+      padding: 7px;
+      padding-bottom: 8px;
     }
   }
 

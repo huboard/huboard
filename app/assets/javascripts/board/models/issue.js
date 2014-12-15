@@ -39,8 +39,10 @@ var Issue = Ember.Object.extend(Serializable,{
         }
 
         Ember.$.ajax(options)
-        .then(function(){
+        .then(function(response){
           this.set("processing", false);
+          this.set("body", response.body)
+          this.set("body_html", response.body_html)
 
         }.bind(this));
         return value;
@@ -159,23 +161,23 @@ var Issue = Ember.Object.extend(Serializable,{
       changedMilestones = this.get("milestone.number") != milestone.number;
     }
     this.set("milestone", milestone);
-    if(changedMilestones){
 
-      var user = this.get("repo.owner.login"),
-          repo = this.get("repo.name"),
-          full_name = user + "/" + repo;
+    var user = this.get("repo.owner.login"),
+        repo = this.get("repo.name"),
+        full_name = user + "/" + repo;
 
-      return Ember.$.post("/api/" + full_name + "/assignmilestone", {
-        issue : this.get("number"),
-        order: index.toString(),
-        milestone: milestone ? milestone.number : null,
-        changed_milestones: changedMilestones,
-        correlationId: this.get("correlationId")
-      }).then(function( response ){
-          this.set("_data.order", response._data.order);
-          return this;
-      }.bind(this))
-    }
+    return Ember.$.post("/api/" + full_name + "/assignmilestone", {
+      issue : this.get("number"),
+      order: index.toString(),
+      changed_milestones: changedMilestones,
+      milestone: milestone ? milestone.number : null,
+      changed_milestones: changedMilestones,
+      correlationId: this.get("correlationId")
+    }).then(function( response ){
+        this.set("_data.order", response._data.order);
+        this.set("_data.milestone_order", response._data.milestone_order);
+        return this;
+    }.bind(this))
       
   },
   reorder: function (index, column) {
@@ -197,6 +199,8 @@ var Issue = Ember.Object.extend(Serializable,{
         correlationId: this.get("correlationId")
       }).then(function( response ){
          this.set("_data.order", response._data.order);
+         this.set("body", response.body);
+         this.set("body_html", response.body_html);
          return this;
       }.bind(this))
   

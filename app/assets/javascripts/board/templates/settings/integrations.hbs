@@ -1,0 +1,26 @@
+    <h3>Existing Integrations </h3>
+    <div class="flex-form-top"> 
+      <ul class="unstyled integrations">
+        {{#each integration in integrations}}
+          <li>
+            <div class="integration">
+              <button {{action "removeWebhook" integration}} type="button" class="hb-button hb-button-danger pull-right">Delete</button>
+              <div class="title">
+                {{ integration.integration.name }}
+              </div>
+              {{#each integration.keys }}
+              <em>{{key}}</em>: {{value}}
+              {{/each}}
+            </div>
+          </li>
+        {{else}}
+          <li>
+            <em> Integrations are totally rad, you should add one </em>
+          </li>
+        {{/each}}
+      </ul>
+    </div>
+    <hr></hr>
+    <h3> Add an integration </h3>
+    {{ outlet }}
+

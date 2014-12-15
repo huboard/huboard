@@ -16,7 +16,7 @@ module HuBoard
     class Marketing < Base
       helpers do
         def cloudfront_path(image)
-          URI::join(ENV["CLOUDFRONT_URL"],image)
+          ENV['HUBOARD_ENV'] == "production" ? URI::join(ENV["CLOUDFRONT_URL"],image) : "assets/#{image}" 
         end
 
         def controller?(*controller)

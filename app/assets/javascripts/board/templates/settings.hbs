@@ -1,0 +1,41 @@
+<div class="main-toolbar">
+  {{#if App.repo.is_collaborator}}
+  <div>
+  </div>
+  <div class="create-button">
+    <span class="dropdown">
+      <a data-toggle="dropdown" class="dropdown-toggle hb-icon-link" href="#/settings">
+        <i class="ui-icon ui-icon-18 ui-icon-gear"></i>
+      </a>
+    </span>
+  </div>
+  {{/if}}
+</div>
+<div id="main-stage" class="main-content">
+  <div id="content" class="content">
+    <div class="repo-settings">
+      <nav class="repo-settings--nav">
+        <li>
+          {{#link-to 'settings.index' }}
+            General
+          {{/link-to}}
+        </li>
+        <li>
+          {{#link-to 'settings.links' }}
+            Links
+          {{/link-to}}
+        </li>
+        <li>
+          {{#link-to 'settings.integrations' }}
+            Integrations
+          {{/link-to}}
+        </li>
+      </nav>
+      <div class="repo-settings--content">
+        {{outlet}}
+      </div>
+    </div>
+  </div>
+</div>
+
+

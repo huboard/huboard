@@ -27,10 +27,19 @@ module HuBoard
             plan.merge! purchased: customer.rows.any? { |row| row.value.stripe.plan.plan_id == plan.plan_id }
           end
 
+          card = nil
+
+          if customer.rows.any?
+            customer_doc = customer.rows.first.value
+            card = customer_doc.stripe.customer.cards.nil? ? nil : customer_doc.stripe.customer.cards.data.find {|card| card.id == customer_doc.stripe.customer.default_card }
+             discount = customer_doc.stripe.customer.discount
+          end
+
           data = {
             org: user.to_hash,
             plans: plans,
-            card: customer.rows.any? ? customer.rows.map {|cust| cust.value.stripe.customer.cards.data.find {|card| card.id == cust.value.stripe.customer.default_card }}.first : nil,
+            card: card,
+            discount: discount || {discount: { coupon: {id: ''} }},
             is_owner: true,
             has_plan: customer.rows.size > 0
           }
@@ -51,14 +60,41 @@ module HuBoard
             plan.merge! purchased: customer.rows.any? { |row| row.value.stripe.plan.plan_id == plan.plan_id}
           end
 
+          card = nil
+
+          if customer.rows.any?
+            customer_doc = customer.rows.first.value
+            card = customer_doc.stripe.customer.cards.nil? ? nil : customer_doc.stripe.customer.cards.data.find {|card| card.id == customer_doc.stripe.customer.default_card }
+             discount = customer_doc.stripe.customer.discount
+          end
+          
           data = {
+
             org: org.to_hash,
             plans: plans,
-            card: customer.rows.any? ? customer.rows.map {|cust| cust.value.stripe.customer.cards.data.find {|card| card.id == cust.value.stripe.customer.default_card }}.first : nil,
+            card: card,
+            discount: discount || {discount: { coupon: {id: ''} }},
             is_owner: is_owner,
             has_plan: customer.rows.size > 0
           }
           json data
+        end
+
+        get '/api/profiles/:org/history' do
+          org = gh.users(params[:org])
+          customer = couch.customers.findPlanById(org.id)
+          if customer.rows && customer.rows.size > 0
+            customer_doc = customer.rows.first.value
+            charges = Stripe::Charge.all(customer: customer_doc.stripe.customer.id)['data']
+            json({
+              charges: charges,
+              additional_info: customer_doc.additional_info
+            })
+          else
+            json({
+              charges:[]
+            })
+          end
         end
       end
     end

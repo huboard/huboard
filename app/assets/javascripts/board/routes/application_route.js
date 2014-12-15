@@ -1,4 +1,5 @@
 var Serializable = require("../mixins/serializable");
+var SocketMixin = require("../mixins/socket");
 var ApplicationRoute = Ember.Route.extend({
   actions: {
     loading: function(){
@@ -27,6 +28,11 @@ var ApplicationRoute = Ember.Route.extend({
           outlet: 'modal'
         });
       }.bind(this));
+    },
+    clearFilters: function(){
+      this.controllerFor("filters").send("clearFilters");
+      this.controllerFor("assignee").send("clearFilters");
+      this.controllerFor("search").send("clearFilters");
     }
   },
   model: function () {
@@ -36,6 +42,11 @@ var ApplicationRoute = Ember.Route.extend({
         p.resolve(App.Repo.create(repo.serialize()));
        })
     });
+  },
+  setupController: function(controller){
+    this._super.apply(this, arguments);
+    SocketMixin.apply(controller);
+    controller.setUpSocketEvents();
   }
 
 })

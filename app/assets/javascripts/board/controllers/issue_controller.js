@@ -83,15 +83,13 @@ var IssuesEditController = Ember.ObjectController.extend({
      var comments = this.get("model.activities.comments");
      return comments.map(function (e){ return _.extend(e, {type: "comment" }) })
   }.property("model.activities.comments.@each"),
-  sortedActivities: function () {
-    var events = this.get("_events"),
-        comments = this.get("_comments");
-    
-    return _.union(events,comments)
-      .sort(function (a, b) {
-        return a.created_at.localeCompare(b.created_at); 
-      });
-  }.property("_events", "_comments")
+  allActivities: Ember.computed.union("model.activities.{comments,events}"),
+  mentions: function (){
+    var union = _.union(this.get('controllers.application.model.board.assignees'),this.get('allActivities').mapBy('user'))
+    return _.uniq(_.compact(union), function(i){
+      return i.login 
+    });
+  }.property('controllers.application.model.board.assignees','allActivities')
 });
 
 module.exports = IssuesEditController;

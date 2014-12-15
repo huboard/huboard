@@ -1,9 +1,3 @@
-.credit-card {
-  margin: -5px -5px 0 -5px;
-  padding: 20px;
-  border-bottom: 1px solid #ccc;
-}
-
 .widget-body {
 
   .table {
@@ -30,6 +24,9 @@
     height: 31px;
     list-style:none;
     margin-right:3px;
+    padding: 0;
+    margin: 0;
+    border:0; 
     opacity: 0.3;
   }
   .card-visa {

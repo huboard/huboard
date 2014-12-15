@@ -3,12 +3,17 @@ module HuBoard
     module Api
       class Milestones < Base
         post '/api/:user/:repo/milestones' do
-          client_data = JSON.parse(request.body.read)
           milestone = huboard.board(params[:user],params[:repo])
-            .create_milestone client_data
+            .create_milestone params[:milestone]
 
           json milestone
+        end
 
+        post '/api/:user/:repo/milestones/:number' do
+          milestone = huboard.board(params[:user],params[:repo])
+            .milestone(params[:number]).patch(params[:milestone])
+
+          json milestone
         end
       end
     end

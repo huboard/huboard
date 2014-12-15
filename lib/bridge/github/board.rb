@@ -10,21 +10,30 @@ class Huboard
     end
 
     def gh
-      @gh.repos(user, repo)
+      @response ||= @gh.repos(user, repo)
     end
 
-    def backlog_column
-      grouped = issues.group_by {|i| i["current_state"]["name"] }
-      first = column_labels.first
-      issues =  (grouped["__nil__"] || []).concat(grouped[first.name]|| [])
-      {
-        index: first[:index],
-        issues: issues.sort_by {|i| i.order }
-      }
+    def repo_exists?(user = nil, repo = nil)
+      if user and repo
+        @gh.repos(user, repo).raw.status == 200
+      else
+        gh.raw.status == 200
+      end
     end
 
     def has_board?
       gh.raw.status == 200 && column_labels.size > 0
+    end
+
+    def issues_enabled?
+      gh.has_issues
+    end
+
+    def enable_issues
+      gh.patch(
+        :name => @repo,
+        :has_issues => true
+      )
     end
 
     def linked?(user, repo)
@@ -43,6 +52,7 @@ class Huboard
     end
 
     def meta
+      gh_repos = gh
       columns = column_labels
       first_column = columns.first
 
@@ -53,35 +63,14 @@ class Huboard
       end
 
       {
-        "id" => gh.id,
-        full_name: gh.full_name,
+        "id" => gh_repos.id,
+        full_name: gh_repos.full_name,
         columns: columns,
         milestones: milestones,
         other_labels: other_labels.sort_by {|l| l.name.downcase },
         link_labels: link_labels,
         assignees: assignees.to_a,
         issues: issues
-      }
-    end
-
-    def board
-      settings = self.settings
-
-      columns = column_labels.drop(settings[:show_all] ? 1 : 0)
-      issues = columns.map { |c| issues(c.name) }.flat_map {|i| i }
-      grouped = issues.group_by {|i| i["current_state"]["name"] }
-      columns = column_labels.each_with_index do |label, index|
-        label["issues"] = (grouped[label.name] || [])
-        label
-      end
-
-      {
-        "id" => gh.id,
-        full_name: gh.full_name,
-        labels: columns,
-        milestones: milestones,
-        other_labels: other_labels,
-        assignees: assignees.to_a
       }
     end
 

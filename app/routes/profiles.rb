@@ -24,6 +24,28 @@ module HuBoard
         erb :accounts, layout: :ember_layout
       end
 
+      get "/settings/invoices/:invoice_id" do
+        @invoice = Hashie::Mash.new(Stripe::Invoice.retrieve(id: params[:invoice_id], expand: ['customer', 'charge']).to_hash)
+
+        @customer = couch.connection.get("Customers-#{@invoice.customer.id}").body
+
+        erb :receipt, layout: false
+      end
+
+      put '/settings/profile/:name/additionalInfo/?' do
+        user = gh.users params[:name]
+        docs = couch.customers.findPlanById user.id
+        if docs.rows.any?
+          plan_doc = docs.rows.first.value
+          plan_doc.additional_info = params[:additional_info]
+
+          couch.customers.save plan_doc
+          json success: true, message: "Info updated"
+        else
+          json success: false, message: "Unable to find customer"
+        end
+      end
+
       put "/settings/profile/:name/card/?" do
         user = gh.users params[:name]
 
@@ -46,6 +68,7 @@ module HuBoard
           json success: false, message: "Unable to find plan"
         end
       end
+      
 
       delete "/settings/profile/:name/plans/:plan_id/?" do
         user = gh.users params[:name]
@@ -68,13 +91,46 @@ module HuBoard
         end
       end
 
+      get "/settings/coupon_valid/:coupon_id/?" do
+        begin
+          Stripe::Coupon.retrieve(params[:coupon_id])
+        rescue => e
+          status 422
+          json(e.json_body)
+        end
+      end
+
+      put "/settings/redeem_coupon/:id/?" do
+        begin
+          customer = Stripe::Customer.retrieve(params[:id])
+          customer.coupon = params[:coupon]
+          response = customer.save
+
+          customer_doc = couch.connection.get("Customers-#{customer.id}").body
+          customer_doc.stripe.customer.discount = response.discount
+          couch.customers.save customer_doc
+
+          json(response)
+        rescue Stripe::InvalidRequestError => e
+          status 422
+          json(e.json_body)
+        end
+      end
+
       post "/settings/charge/:id/?" do
-        customer = Stripe::Customer.create(
+        begin
+        stripe_customer_hash = {
           email: params[:email],
           card: params[:card][:id],
           plan:  params[:plan][:id],
           trial_end: (Time.now.utc + (params[:plan][:trial_period].to_i * 60 * 60 * 24)).to_i
-        )
+        }
+
+        if !params[:coupon].nil? && !params[:coupon].empty?
+          stripe_customer_hash.merge!(coupon: params[:coupon]) 
+        end
+
+        customer = Stripe::Customer.create(stripe_customer_hash)
 
         user = gh.user
         account = gh.users(params[:id])
@@ -94,7 +150,11 @@ module HuBoard
         }
         couch.customers.save(attributes)
 
-        json success: true, card: customer["cards"]["data"].first
+        json success: true, card: customer["cards"]["data"].first, discount: customer.discount
+        rescue Stripe::StripeError => e
+          status 422
+          json e.json_body
+        end
       end
     end
   end

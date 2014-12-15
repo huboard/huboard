@@ -1,8 +1,6 @@
 {{#hb-tabs}}
   {{#hb-pane title="Compose"}}
-    <div class="markdown-composer">
-      {{textarea autoresize=true value=markdown placeholder="Leave a comment"}}
-    </div>
+    {{hb-markdown-composer markdown=markdown}}
   {{/hb-pane}}
   {{#hb-pane title="Preview"}}
     <div class="markdown-preview">
