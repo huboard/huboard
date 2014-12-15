@@ -79,7 +79,6 @@ class Huboard
     def create_milestone(milestone)
       gh.milestones.create(milestone).extend(Milestone).merge!({
         repo: {owner: {login: user}, name: repo, full_name: "#{user}/#{repo}" },
-        title: milestone.title
       })
     end
 
