@@ -1,0 +1,1 @@
+ApplicationController = Ember.Controller.extend();
