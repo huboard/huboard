@@ -1887,7 +1887,7 @@ module.exports = MilestonesController = Ember.ObjectController.extend({
     .sort(function(a, b) {
       return a.milestone._data.order - b.milestone._data.order;
     });
-  }.property(),
+  }.property("forceRedraw"),
   forceRedraw: 0,
   milestoneMoved: function(milestoneController, index){
     
@@ -4260,64 +4260,28 @@ function program1(depth0,data) {
 function program3(depth0,data) {
   
   var buffer = '', stack1, stack2, hashTypes, hashContexts, options;
-  data.buffer.push("\n    <div class=\"create-button\">\n      <button ");
-  hashTypes = {};
-  hashContexts = {};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "createNewIssue", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(" class=\"hb-button small\">Create new issue</button>\n      <button ");
+  data.buffer.push("\n    <div class=\"create-button\">\n      <a class=\"hb-icon-button hb-icon-button-purple\" href=\"#\" ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "createNewMilestone", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(" class=\"hb-button small\">Create new milestone</button>\n      <span class=\"dropdown\">\n        <a data-toggle=\"dropdown\" class=\"dropdown-toggle hb-icon-link\" href=\"#\">\n          <i class=\"ui-icon ui-icon-18 ui-icon-gear\"></i>\n        </a>\n        <ul class=\"dropdown-menu dropdown-menu-right\">\n          <li>\n              ");
-  hashContexts = {'title': depth0,'bubbles': depth0};
-  hashTypes = {'title': "STRING",'bubbles': "BOOLEAN"};
-  options = {hash:{
-    'title': ("Settings"),
-    'bubbles': (true)
-  },inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
-  stack2 = ((stack1 = helpers['link-to'] || depth0['link-to']),stack1 ? stack1.call(depth0, "milestones.integrations", options) : helperMissing.call(depth0, "link-to", "milestones.integrations", options));
-  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\n          </li>\n          <li class=\"divider\"></li>\n          ");
-  hashTypes = {};
-  hashContexts = {};
-  stack2 = helpers.view.call(depth0, "settings.showCounts", {hash:{},inverse:self.noop,fn:self.program(6, program6, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
-  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
-  data.buffer.push("\n          </ul>\n      </span>\n    </div>\n  ");
-  return buffer;
-  }
-function program4(depth0,data) {
-  
-  
-  data.buffer.push("\n              Integrations\n              ");
-  }
-
-function program6(depth0,data) {
-  
-  
-  data.buffer.push("\n            <a href=\"#\">\n              <i class=\"ui-icon ui-icon-checkmark\"></i>\n              Show counts\n            </a>\n          ");
-  }
-
-function program8(depth0,data) {
-  
-  var buffer = '', stack1, stack2, hashContexts, hashTypes, options;
-  data.buffer.push("\n    <div>\n    ");
+  data.buffer.push(">\n        <i class=\"ui-icon ui-icon-flag ui-icon-16\"></i>\n        <span class= \"ui-text\"> Create milestone</span>\n      </a>\n    ");
   hashContexts = {'class': depth0};
   hashTypes = {'class': "STRING"};
   options = {hash:{
     'class': ("hb-icon-link")
-  },inverse:self.noop,fn:self.program(9, program9, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  },inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   stack2 = ((stack1 = helpers['link-to'] || depth0['link-to']),stack1 ? stack1.call(depth0, "settings", options) : helperMissing.call(depth0, "link-to", "settings", options));
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n    </div>\n  ");
   return buffer;
   }
-function program9(depth0,data) {
+function program4(depth0,data) {
   
   
   data.buffer.push("\n        <i class=\"ui-icon ui-icon-18 ui-icon-gear\"></i>\n    ");
   }
 
-function program11(depth0,data) {
+function program6(depth0,data) {
   
   var buffer = '', stack1, hashTypes, hashContexts, options;
   data.buffer.push("\n        ");
@@ -4347,7 +4311,7 @@ function program11(depth0,data) {
   data.buffer.push("\n\n ");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers['if'].call(depth0, "App.repo.is_collaborator", {hash:{},inverse:self.program(8, program8, data),fn:self.program(3, program3, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack1 = helpers['if'].call(depth0, "App.repo.is_collaborator", {hash:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n\n</div>\n<div id=\"main-stage\" ");
   hashContexts = {'class': depth0};
@@ -4373,7 +4337,7 @@ function program11(depth0,data) {
   data.buffer.push("\n      ");
   hashTypes = {};
   hashContexts = {};
-  stack2 = helpers.each.call(depth0, "column", "in", "milestone_columns", {hash:{},inverse:self.noop,fn:self.program(11, program11, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack2 = helpers.each.call(depth0, "column", "in", "milestone_columns", {hash:{},inverse:self.noop,fn:self.program(6, program6, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n    </div>\n  </div>\n</div>\n\n");
   return buffer;
