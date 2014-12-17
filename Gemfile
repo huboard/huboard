@@ -45,7 +45,6 @@ gem 'sucker_punch', '~> 1.0'
 gem 'redis'
 gem 'celluloid'
 gem 'celluloid-redis'
-gem 'elasticsearch'
 gem 'analytics-ruby', '~> 2.0.0'
 
 gem 'faye-huboard'
