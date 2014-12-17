@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby "2.1.1"
+ruby "2.1.5"
 
 gem 'sinatra', "~> 1.4.0"
 gem 'sinatra-contrib', github: 'maccman/sinatra-contrib'
@@ -45,6 +45,7 @@ gem 'sucker_punch', '~> 1.0'
 gem 'redis'
 gem 'celluloid'
 gem 'celluloid-redis'
+gem 'elasticsearch'
 gem 'analytics-ruby', '~> 2.0.0'
 
 gem 'faye-huboard'
