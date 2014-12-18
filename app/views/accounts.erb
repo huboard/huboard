@@ -2,6 +2,10 @@
   <h1> Accounts </h1>
 <% end %>
 
+<% content_for :javascripts do %>
+  <%= javascript_tag 'accounts/application' %>
+<% end %>
+
 <script type="text/x-handlebars" id="loading">
   <div class="fullscreen-overlay"></div>
 </script>
