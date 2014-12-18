@@ -1,0 +1,1 @@
+var App = require('./app');
