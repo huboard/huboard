@@ -18,7 +18,9 @@ var AssigneeController = Ember.ObjectController.extend({
   },
   showMode: "less",
   assigneesBinding: "controllers.application.model.board.assignees",
-  assigneeBinding: "controllers.application.assignee",
+  assignee: function(){
+    return App.get("_queryParams.assignee");
+  }.property("App._queryParams.assignee"),
   memberFilterBinding: "App.memberFilter",
   lastClicked: null,
   filterChanged : function(){

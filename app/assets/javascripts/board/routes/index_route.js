@@ -49,6 +49,7 @@ var IndexRoute = Ember.Route.extend({
       issue.archive();
     },
     openIssueFullscreen: function(model){
+      App.get("_queryParams").stashQueryParams(this.get("controller"));
       this.transitionTo("index.issue", model)
     },
     forceRepaint: function(target) {
@@ -65,6 +66,7 @@ var IndexRoute = Ember.Route.extend({
       Ember.run.schedule('afterRender', controller, function () {
         controller.incrementProperty("forceRedraw");
         this.send("closeModal")
+        App.get("_queryParams").restoreQueryParams();
       }.bind(this))
     }
   }

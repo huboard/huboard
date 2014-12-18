@@ -13,6 +13,7 @@ module.exports = Route.extend({
   },
   actions: {
     closeModal: function () {
+        App.get("_queryParams").restoreQueryParams();
         this.transitionTo("index")
         return true;
     }

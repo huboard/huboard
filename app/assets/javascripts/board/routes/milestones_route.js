@@ -49,6 +49,7 @@ module.exports = MilestonesRoute =  Ember.Route.extend({
       issue.archive();
     },
     openIssueFullscreen: function(model){
+      App.get("_queryParams").stashQueryParams(this.get("controller"));
       this.transitionTo("milestones.issue", model)
     },
     createMilestoneOrAbort: function(argBag) { 
