@@ -3249,9 +3249,11 @@ module.exports = MilestonesRoute =  Ember.Route.extend({
         var column = controller.get("milestoneColumns").find(function(column) {
             return issue.milestone && (column.get("title").toLowerCase() == issue.milestone.title.toLowerCase());
         })
+        issue.set("current_milestone", column);
         var issues = column.get("issues")
         issues.pushObject(issue);
       } else {
+        issue.set("current_milestone", controller.get("noMilestoneColumn"));
         controller.get("noMilestoneColumn.issues").pushObject(issue);
       }
 
