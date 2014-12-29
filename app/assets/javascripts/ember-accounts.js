@@ -5,4 +5,4 @@
 //= require spin.js
 //
 //= require ./vendor/jquery.payment.js
-//= require ./accounts
+//= require ./accounts/application.js
