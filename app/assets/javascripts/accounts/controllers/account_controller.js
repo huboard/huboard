@@ -32,4 +32,4 @@ AccountController = Ember.ObjectController.extend({
   }  
 });
 
-modules.exports = AccountController;
+module.exports = AccountController;

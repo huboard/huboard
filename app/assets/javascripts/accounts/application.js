@@ -55,6 +55,56 @@ App.animateModalOpen = function() {
   return promise.promise;
 };
 
+Ember.TextSupport.reopen({
+  attributeBindings: ["data-stripe", "autocomplete", "autocompletetype", "required"]
+});
+
+App.CvcField = Ember.TextField.extend({
+  required: true,
+  autocompletetype: "cc-csc",
+  format: "123",
+  placeholder: Ember.computed.alias("format"),
+  autocomplete: "off",
+  didInsertElement: function() {
+    return this.$().payment("formatCardCVC");
+  }
+});
+
+App.CardNumberField = Ember.TextField.extend({
+  required: true,
+  autocompletetype: "cc-number",
+  format: "1234 5678 9012 3456",
+  placeholder: Ember.computed.alias("format"),
+  didInsertElement: function() {
+    return this.$().payment("formatCardNumber");
+  }
+});
+
+App.CardExpiryField = Ember.TextField.extend({
+  required: true,
+  autocompletetype: "cc-exp",
+  format: "MM / YY",
+  placeholder: Ember.computed.alias("format"),
+  didInsertElement: function() {
+    return this.$().payment("formatCardExpiry");
+  }
+});
+
+App.CouponCodeField = Ember.TextField.extend({
+  required: false,
+  format: "CODE",
+  placeholder: Ember.computed.alias("format"),
+  change: function() {
+    var controller;
+    controller = this.get('targetObject');
+    return controller.send('couponChanged');
+  }
+});
+
+App.CouponCheckbox = Ember.Checkbox.extend({
+  required: false
+});
+
 module.exports = App;
 
 },{}],4:[function(require,module,exports){
@@ -99,7 +149,7 @@ AccountController = Ember.ObjectController.extend({
   }  
 });
 
-modules.exports = AccountController;
+module.exports = AccountController;
 
 },{}],6:[function(require,module,exports){
 ApplicationController = Ember.Controller.extend();
@@ -107,6 +157,174 @@ ApplicationController = Ember.Controller.extend();
 module.exports = ApplicationController;
 
 },{}],7:[function(require,module,exports){
+require("./coupon_controller");
+
+ApplyCouponController = Ember.ObjectController.extend(CouponController, {
+  coupon: null,
+  customer: Ember.computed.alias('model.details.card.customer'),
+  isDisabled: (function() {
+    return this.get('errors') || this.get('processingAction');
+  }).property('errors'),
+  actions: {
+    apply_coupon: function() {
+      var coupon_id, customer;
+      coupon_id = this.get('coupon');
+      customer = this.get('customer');
+      this.set('processingAction', true);
+      return this.ajax("/settings/redeem_coupon/" + customer, {
+        coupon: coupon_id
+      }, "PUT").then(this.didAcceptCoupon.bind(this), this.didRejectCoupon.bind(this));
+    },
+    couponChanged: function() {
+      var coupon_id, success;
+      coupon_id = this.get('coupon');
+      if (coupon_id === "") {
+        return this.clearCouponAlerts();
+      }
+      return this.ajax("/settings/coupon_valid/" + coupon_id, {}, "GET").then(success = (function() {}), this.didRejectCoupon.bind(this));
+    },
+    close: function() {
+      return this.send("closeModal");
+    }
+  }
+});
+
+module.exports = ApplyCouponController
+
+},{"./coupon_controller":9}],8:[function(require,module,exports){
+CancelFormController = Ember.Controller.extend({
+  processingAction: false,
+  actions: {
+    close: function() {
+      return this.send("closeModal");
+    },
+    cancel: function() {
+      this.set('processingAction', true);
+      return this.ajax("/settings/profile/" + this.get("model.org.login") + "/plans/" + this.get('model.plan.id'), {}).then(this.didCancel.bind(this), this.cancelDidError.bind(this));
+    }
+  },
+  didCancel: function() {
+    this.set('model.details.has_plan', false);
+    this.set('model.details.discount', null);
+    this.set('processingAction', false);
+    this.set("model.plan.purchased", false);
+    this.set("model.details.card", null);
+    return this.send("closeModal");
+  },
+  cancelDidError: function(error) {
+    this.set('errors', error.responseJSON.error.message);
+    return this.set('processingAction', false);
+  },
+  ajax: function(url, data) {
+    var controller;
+    controller = this;
+    return new Ember.RSVP.Promise(function(resolve, reject) {
+      var hash;
+      hash = {};
+      hash.url = url;
+      hash.type = 'DELETE';
+      hash.context = controller;
+      hash.data = data;
+      hash.success = function(json) {
+        return resolve(json);
+      };
+      hash.error = function(jqXHR, textStatus, errorThrown) {
+        return reject(jqXHR);
+      };
+      return Ember.$.ajax(hash);
+    });
+  }
+});
+
+module.exports = CancelFormController;
+
+},{}],9:[function(require,module,exports){
+CouponController = Ember.Mixin.create({
+  processingAction: false,
+  onCouponChange: (function() {
+    var errors;
+    errors = this.get('errors');
+    if (errors) {
+      return this.set('errors', null);
+    }
+  }).observes('coupon'),
+  ajax: function(url, data, verb) {
+    var controller;
+    controller = this;
+    return new Ember.RSVP.Promise(function(resolve, reject) {
+      var hash;
+      hash = {};
+      hash.url = url;
+      hash.type = verb || 'GET';
+      hash.context = controller;
+      hash.data = data;
+      hash.success = function(json) {
+        return resolve(json);
+      };
+      hash.error = function(jqXHR, textStatus, errorThrown) {
+        return reject(jqXHR);
+      };
+      return Ember.$.ajax(hash);
+    });
+  },
+  didRejectCoupon: function(error, statusText) {
+    this.set('errors', JSON.parse(error.responseText).error.message);
+    return this.set('processingAction', false);
+  },
+  didAcceptCoupon: function(response) {
+    this.send('close');
+    this.set('processingAction', false);
+    return this.set('model.details.discount', response.discount);
+  },
+  clearCouponAlerts: function() {
+    return this.set('errors', null);
+  }  
+});
+
+module.exports = CouponController;
+
+},{}],10:[function(require,module,exports){
+CreditCardForm = Ember.Controller.extend({
+  actions: {
+    close: function() {
+      return this.send("closeModal");
+    }
+  },
+  key: HuboardEnv.stripe_pub_key,
+  processingCard: false,
+  number: null,
+  cvc: null,
+  exp: null,
+  expMonth: (function() {
+    if (this.get("exp")) {
+      return Ember.$.payment.cardExpiryVal(this.get("exp")).month || "MM";
+    }
+    return "MM";
+  }).property("exp"),
+  expYear: (function() {
+    if (this.get("exp")) {
+      return Ember.$.payment.cardExpiryVal(this.get("exp")).year || "YYYY";
+    }
+    return "YYYY";
+  }).property("exp"),
+  cardType: (function() {
+    return Ember.$.payment.cardType(this.get('number'));
+  }).property('number'),
+  process: function() {
+    this.set('processingCard', true);
+    Stripe.setPublishableKey(this.get('key'));
+    return Stripe.card.createToken({
+      number: this.get('number'),
+      cvc: this.get('cvc'),
+      exp_month: this.get('expMonth'),
+      exp_year: this.get('expYear')
+    }, this.didProcessToken.bind(this));
+  }
+});
+
+module.exports = CreditCardForm;
+
+},{}],11:[function(require,module,exports){
 HistoryController = Ember.ObjectController.extend({
   actions: {
     saveAdditionalInfo: function (model) {
@@ -135,7 +353,139 @@ HistoryController = Ember.ObjectController.extend({
 
 module.exports = HistoryController;
 
-},{}],8:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
+require("./credit_card_form_controller");
+
+PurchaseFormController =  CreditCardForm.extend({
+  coupon: null,
+  isDisabled: (function() {
+    return this.get("isProcessing") || this.get('errors');
+  }).property("isProcessing", "errors"),
+  onCouponChange: (function() {
+    var errors;
+    errors = this.get('errors');
+    if (errors) {
+      return this.set('errors', null);
+    }
+  }).observes('coupon'),
+  price: (function() {
+    return this.get("model.amount");
+  }).property("plan.amount"),
+  didProcessToken: function(status, response) {
+    if (response.error) {
+      this.set('processingCard', false);
+      return this.set('errors', response.error.message);
+    } else {
+      return this.postCharge(response);
+    }
+  },
+  postCharge: function(token) {
+    return this.ajax("/settings/charge/" + this.get("model.org.login"), {
+      email: this.get("model.org.billing_email"),
+      card: token,
+      coupon: this.get("coupon"),
+      plan: this.get("model.plan")
+    }).then(this.didPurchase.bind(this), this.purchaseDidError.bind(this));
+  },
+  didPurchase: function(response) {
+    this.set('processingCard', false);
+    this.set("model.plan.purchased", true);
+    this.set("model.details.card", response.card);
+    this.set('model.details.discount', response.discount);
+    this.set('model.details.has_plan', true);
+    return this.send("close");
+  },
+  purchaseDidError: function(error) {
+    this.set('errors', JSON.parse(error.responseText).error.message);
+    return this.set('processingCard', false);
+  },
+  didRejectCoupon: function(error, statusText) {
+    return this.set('errors', JSON.parse(error.responseText).error.message);
+  },
+  clearCouponAlerts: function() {
+    return this.set('errors', null);
+  },
+  ajax: function(url, data, verb) {
+    var controller;
+    controller = this;
+    return new Ember.RSVP.Promise(function(resolve, reject) {
+      var hash;
+      hash = {};
+      hash.url = url;
+      hash.type = verb || 'POST';
+      hash.context = controller;
+      hash.data = data;
+      hash.success = function(json) {
+        return resolve(json);
+      };
+      hash.error = function(jqXHR, textStatus, errorThrown) {
+        return reject(jqXHR);
+      };
+      return Ember.$.ajax(hash);
+    });
+  },
+  actions: {
+    couponChanged: function() {
+      var coupon_id, success;
+      coupon_id = this.get('coupon');
+      if (coupon_id === "") {
+        return this.clearCouponAlerts();
+      }
+      return this.ajax("/settings/coupon_valid/" + coupon_id, {}, "GET").then(success = (function() {}), this.didRejectCoupon.bind(this));
+    }
+  }
+});
+
+module.exports = PurchaseFormController;
+
+},{"./credit_card_form_controller":10}],13:[function(require,module,exports){
+require("./credit_card_form_controller");
+
+UpdateCardController = CreditCardForm.extend({
+  didProcessToken: function(status, response) {
+    if (response.error) {
+      this.set('processingCard', false);
+      return this.set('errors', response.error.message);
+    } else {
+      this.set('errors', "");
+      return this.postUpdate(response);
+    }
+  },
+  postUpdate: function(token) {
+    return this.ajax("/settings/profile/" + this.get("model.org.login") + "/card", {
+      email: this.get("model.org.billing_email"),
+      card: token
+    }).then(this.didUpdate.bind(this));
+  },
+  didUpdate: function(response) {
+    this.set('processingCard', false);
+    this.set('model.card.details.card', response.card);
+    return this.send("close");
+  },
+  ajax: function(url, data) {
+    var controller;
+    controller = this;
+    return new Ember.RSVP.Promise(function(resolve, reject) {
+      var hash;
+      hash = {};
+      hash.url = url;
+      hash.type = 'PUT';
+      hash.context = controller;
+      hash.data = data;
+      hash.success = function(json) {
+        return resolve(json);
+      };
+      hash.error = function(jqXHR, textStatus, errorThrown) {
+        return reject(jqXHR);
+      };
+      return Ember.$.ajax(hash);
+    });
+  } 
+});
+
+module.exports = UpdateCardController;
+
+},{"./credit_card_form_controller":10}],14:[function(require,module,exports){
 Handlebars.registerHelper("stripe-money", function(path) {
   var value = Ember.getPath(this, path);
   return "$" + parseFloat(value/100).toFixed(0);
@@ -147,7 +497,9 @@ Handlebars.registerHelper("stripe-date", function(path) {
   return date.toDateString();
 });
 
-},{}],9:[function(require,module,exports){
+window.stripe_pub_key = '<%= ENV["STRIPE_PUBLISHABLE_API"] %>'
+
+},{}],15:[function(require,module,exports){
 // This file is auto-generated by `ember build`.
 // You should not modify it.
 
@@ -160,22 +512,32 @@ App.XPaneComponent = require('./components/x_pane_component');
 App.XTabsComponent = require('./components/x_tabs_component');
 App.AccountController = require('./controllers/account_controller');
 App.ApplicationController = require('./controllers/application_controller');
+App.ApplyCouponController = require('./controllers/apply_coupon_controller');
+App.CancelFormController = require('./controllers/cancel_form_controller');
+App.CouponController = require('./controllers/coupon_controller');
+App.CreditCardFormController = require('./controllers/credit_card_form_controller');
 App.HistoryController = require('./controllers/history_controller');
+App.PurchaseFormController = require('./controllers/purchase_form_controller');
+App.UpdateCardController = require('./controllers/update_card_controller');
 App.Org = require('./models/org');
 App.User = require('./models/user');
 App.ApplicationRoute = require('./routes/application_route');
 App.IndexRoute = require('./routes/index_route');
 App.LoadingRoute = require('./routes/loading_route');
 App.ProfileRoute = require('./routes/profile_route');
+App.ApplyCouponView = require('./views/apply_coupon_view');
+App.CancelFormView = require('./views/cancel_form_view');
 App.LoadingView = require('./views/loading_view');
-App.Modal = require('./views/modal');
+App.ModalView = require('./views/modal_view');
+App.PurchaseFormView = require('./views/purchase_form_view');
+App.UpdateCardView = require('./views/update_card_view');
 
 require('./config/routes');
 
 module.exports = App;
 
 
-},{"./components/x_pane_component":1,"./components/x_tabs_component":2,"./config/app":3,"./config/routes":4,"./controllers/account_controller":5,"./controllers/application_controller":6,"./controllers/history_controller":7,"./helpers/stripe":8,"./models/org":10,"./models/user":11,"./routes/application_route":12,"./routes/index_route":13,"./routes/loading_route":14,"./routes/profile_route":15,"./templates":16,"./views/loading_view":17,"./views/modal":18}],10:[function(require,module,exports){
+},{"./components/x_pane_component":1,"./components/x_tabs_component":2,"./config/app":3,"./config/routes":4,"./controllers/account_controller":5,"./controllers/application_controller":6,"./controllers/apply_coupon_controller":7,"./controllers/cancel_form_controller":8,"./controllers/coupon_controller":9,"./controllers/credit_card_form_controller":10,"./controllers/history_controller":11,"./controllers/purchase_form_controller":12,"./controllers/update_card_controller":13,"./helpers/stripe":14,"./models/org":16,"./models/user":17,"./routes/application_route":18,"./routes/index_route":19,"./routes/loading_route":20,"./routes/profile_route":21,"./templates":22,"./views/apply_coupon_view":23,"./views/cancel_form_view":24,"./views/loading_view":25,"./views/modal_view":26,"./views/purchase_form_view":27,"./views/update_card_view":28}],16:[function(require,module,exports){
 Org = Ember.Object.extend({
   gravatar_url : function() {
     return this.get("avatar_url") 
@@ -204,7 +566,7 @@ Org = Ember.Object.extend({
 
 module.exports = Org;
 
-},{}],11:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 User = Ember.Object.extend({
   gravatar_url : function() {
     return this.get("avatar_url")
@@ -233,7 +595,7 @@ User = Ember.Object.extend({
 
 module.exports = User;
 
-},{}],12:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 var ApplicationRoute = Ember.Route.extend({
   actions: {
     openModal: function (view){
@@ -279,7 +641,7 @@ var ApplicationRoute = Ember.Route.extend({
 
 module.exports = ApplicationRoute;
 
-},{}],13:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 IndexRoute = Ember.Route.extend({
   model : function () {
     var model = this.modelFor("application");
@@ -295,7 +657,7 @@ IndexRoute = Ember.Route.extend({
 
 module.exports = IndexRoute;
 
-},{}],14:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 var LoadingRoute = Ember.Route.extend({
   renderTemplate: function() {
     if(this.router._activeViews.application){
@@ -307,7 +669,7 @@ var LoadingRoute = Ember.Route.extend({
 
 module.exports = LoadingRoute;
 
-},{}],15:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 ProfileRoute = Ember.Route.extend({
   model: function(params) {
 
@@ -330,11 +692,29 @@ ProfileRoute = Ember.Route.extend({
 
 module.exports = ProfileRoute;
 
-},{}],16:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 
 
 
-},{}],17:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
+require("./modal_view")
+
+ApplyCouponView = ModalView.extend({
+  processingAction: Ember.computed.alias('controller.processingAction')
+});
+
+module.exports = ApplyCouponView;
+
+},{"./modal_view":26}],24:[function(require,module,exports){
+require("./modal_view")
+
+CancelFormView = ModalView.extend({
+  processingAction: Ember.computed.alias('controller.processingAction')
+});
+
+module.exports = CancelFormView;
+
+},{"./modal_view":26}],25:[function(require,module,exports){
 require("../../spin.js");
 
 var LoadingView = Ember.View.extend({
@@ -369,8 +749,8 @@ var LoadingView = Ember.View.extend({
 
 module.exports = LoadingView;
 
-},{"../../spin.js":19}],18:[function(require,module,exports){
-App.ModalView = Em.View.extend({
+},{"../../spin.js":29}],26:[function(require,module,exports){
+ModalView = Em.View.extend({
   layout: Em.Handlebars.compile("<div class='fullscreen-overlay fixed'><div class='fullscreen-wrapper'><div class='fullscreen-body credit-card'>{{yield}}</div></div></div>"),
 
   didInsertElement: function() {
@@ -400,7 +780,27 @@ App.ModalView = Em.View.extend({
   }
 });
 
-},{}],19:[function(require,module,exports){
+module.exports = ModalView;
+
+},{}],27:[function(require,module,exports){
+require("./modal_view")
+
+PurchaseFormView = ModalView.extend({
+  processingPurchase: Ember.computed.alias('controller.processingCard')
+});
+
+module.exports = PurchaseFormView;
+
+},{"./modal_view":26}],28:[function(require,module,exports){
+require("./modal_view")
+
+UpdateCardView = ModalView.extend({
+ processingCard: Ember.computed.alias('controller.processingCard')
+});
+
+module.exports = UpdateCardView;
+
+},{"./modal_view":26}],29:[function(require,module,exports){
 //fgnass.github.com/spin.js#v1.3
 
 /**
@@ -751,5 +1151,5 @@ App.ModalView = Em.View.extend({
 
 }));
 
-},{}]},{},[9])
+},{}]},{},[15])
 ;

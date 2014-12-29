@@ -8,3 +8,5 @@ Handlebars.registerHelper("stripe-date", function(path) {
   var date = new Date(value * 1000);
   return date.toDateString();
 });
+
+window.stripe_pub_key = '<%= ENV["STRIPE_PUBLISHABLE_API"] %>'
