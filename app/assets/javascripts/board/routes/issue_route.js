@@ -22,6 +22,20 @@ var IssueRoute = Ember.Route.extend({
   },
   renderTemplate: function () {
     this.render("issue",{into:'application',outlet:'modal'})
+  },
+  actions: {
+    error: function(error, transition){
+      var controller = this.controllerFor("application");
+      this.render("login", {
+        into: 'application',
+        outlet: 'modal'
+      });
+      this.render("empty", {
+        into:"application",
+        outlet:"loading",
+        controller: controller, 
+      });
+    }
   }
 });
 
