@@ -4188,13 +4188,13 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   var buffer = '', hashContexts, hashTypes, escapeExpression=this.escapeExpression;
 
 
-  data.buffer.push("<div class=\"fullscreen-login\" >\n  <span> Your Session Has Expired! </span>\n  <a ");
+  data.buffer.push("<div class=\"fullscreen-login fullscreen-login--center\">\n  <h2> Your Session Has Expired! </h2>\n  <div class=\"flex-form-top\">\n    <div class=\"well\">\n      <p> Allow Private Access to renable third-party access to GitHub </p>\n    </div>\n    <a ");
   hashContexts = {'href': depth0};
   hashTypes = {'href': "ID"};
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
     'href': ("privateLoginUrl")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(" class=\"btn btn--flat\">Allow Private Access</a>\n</div>\n");
+  data.buffer.push(" class=\"hb-button\">Allow Private Access</a>\n    <h3> or </h3>\n    <a href=\"/\" class=\"hb-button\"> Go Home </a>\n  </div>\n</div>\n");
   return buffer;
   
 });
@@ -77284,9 +77284,9 @@ module.exports = LoadingView;
 },{"../../spin":106}],98:[function(require,module,exports){
 var ModalView = require("./modal_view")
 var LoginView = ModalView.extend({
+  modalSize: "slimmer",
   didInsertElement: function() {
     App.animateModalOpen();
-
     this.$(".fullscreen-body").on('click.modal', function(event){
        if(!$(event.target).parents(".hb-selector-component").length) {
         this.$(".open")

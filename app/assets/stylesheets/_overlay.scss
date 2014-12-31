@@ -64,6 +64,20 @@ body > .fullscreen-overlay {
     max-width: 560px;
   }
 
+  &.slimmer {
+    max-width: 340px;
+
+    .fullscreen-login {
+      padding: 20px 20px;
+      .well {
+        padding: 8px;
+      }
+      h3 {
+        padding: 6px 0;
+      }
+    }
+  }
+
 }
 
 .fullscreen-card, .fullscreen-login {
@@ -96,7 +110,7 @@ body > .fullscreen-overlay {
 
 }
 
-.fullscreen-card--center {
+.fullscreen-card--center, .fullscreen-login--center {
   h2, .flex-form-top {
     text-align: center;
     margin-bottom: 12px;
