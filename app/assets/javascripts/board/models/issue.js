@@ -39,12 +39,10 @@ var Issue = Ember.Object.extend(Serializable,{
         }
 
         Ember.$.ajax(options)
-        .success(function(response){
+        .then(function(response){
           this.set("processing", false);
           this.set("body", response.body)
           this.set("body_html", response.body_html)
-        }.bind(this)).error(function(e){
-         this.set("processing", false);
         }.bind(this));
         return value;
     }
@@ -57,11 +55,9 @@ var Issue = Ember.Object.extend(Serializable,{
       dataType: 'json',
       type: "POST",
       contentType: "application/json"})
-      .success(function(response){
+      .then(function(response){
         return Issue.create(response);
-      }).error(function(e){
-        return e;
-      }.bind(this));
+      });
   },
   submitComment : function (markdown) {
      this.set("processing", true);
@@ -75,11 +71,9 @@ var Issue = Ember.Object.extend(Serializable,{
       dataType: 'json',
       type: "POST",
       contentType: "application/json"})
-      .success(function(response){
+      .then(function(response){
         this.set("processing", false);
         return response;
-      }.bind(this)).error(function(e){
-        this.set("processing", false);
       }.bind(this));
   },
   updateLabels : function () {
@@ -94,9 +88,7 @@ var Issue = Ember.Object.extend(Serializable,{
       dataType: 'json',
       type: "PUT",
       contentType: "application/json"})
-      .success(function(response){
-        this.set("processing", false);
-      }.bind(this)).error(function(e){
+      .then(function(response){
         this.set("processing", false);
       }.bind(this));
   },
@@ -110,7 +102,7 @@ var Issue = Ember.Object.extend(Serializable,{
      .success(function(details){
        this.set("activities", details.activities);
        this.set("processing", false);
-     }.bind(this)).error(function(e){
+     }.bind(this)).fail(function(e){
        this.set("processing", false);
      }.bind(this));
   },
@@ -125,10 +117,10 @@ var Issue = Ember.Object.extend(Serializable,{
       return Ember.$.post("/api/" + full_name + "/archiveissue", {
         number : this.get("number"),
         correlationId: this.get("correlationId")
-      }).success(function () {
+      }).then(function () {
         this.set("processing", false);
         this.set("isArchived", true);
-      }.bind(this)).error(function(e){
+      }.bind(this)).fail(function(e){
        this.set("processing", false);
       }.bind(this));
   },
@@ -142,11 +134,9 @@ var Issue = Ember.Object.extend(Serializable,{
       Ember.$.post("/api/" + full_name + "/close", {
         number : this.get("number"),
         correlationId: this.get("correlationId")
-      }).success(function() {
+      }).then(function() {
         this.set("state","closed")
         this.set("processing", false);
-      }.bind(this)).error(function(e){
-       this.set("processing", false);
       }.bind(this));
   },
   assignUser: function(login){
@@ -158,11 +148,9 @@ var Issue = Ember.Object.extend(Serializable,{
         number : this.get("number"),
         assignee: login, 
         correlationId: this.get("correlationId")
-      }).success(function( response ){
+      }).then(function( response ){
           this.set("assignee", response.assignee);
           return this;
-      }.bind(this)).error(function(e){
-        return e;
       }.bind(this));
   },
   assignMilestone: function(index, milestone){
@@ -187,12 +175,10 @@ var Issue = Ember.Object.extend(Serializable,{
       milestone: milestone ? milestone.number : null,
       changed_milestones: changedMilestones,
       correlationId: this.get("correlationId")
-    }).success(function( response ){
+    }).then(function( response ){
         this.set("_data.order", response._data.order);
         this.set("_data.milestone_order", response._data.milestone_order);
         return this;
-    }.bind(this)).error(function(e){
-      return e;
     }.bind(this));
   },
   reorder: function (index, column) {
@@ -212,13 +198,11 @@ var Issue = Ember.Object.extend(Serializable,{
         column: column.index.toString(),
         moved_columns: changedColumns,
         correlationId: this.get("correlationId")
-      }).success(function( response ){
+      }).then(function( response ){
          this.set("_data.order", response._data.order);
          this.set("body", response.body);
          this.set("body_html", response.body_html);
          return this;
-      }.bind(this)).error(function(e){
-        return e;
       }.bind(this));
   }
 

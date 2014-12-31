@@ -2,6 +2,9 @@ var Serializable = require("../mixins/serializable");
 var SocketMixin = require("../mixins/socket");
 var ApplicationRoute = Ember.Route.extend({
   actions: {
+    sessionErrorHandler: function(){
+      this.render("login", { into: 'application', outlet: 'modal' });
+    },
     loading: function(){
       if(this.router._activeViews.application){
         this.render("loading",{ "into" : "application", "outlet" : "loading"});
@@ -47,6 +50,11 @@ var ApplicationRoute = Ember.Route.extend({
     this._super.apply(this, arguments);
     SocketMixin.apply(controller);
     controller.setUpSocketEvents();
+    $(document).ajaxError(function(){
+      if(App.loggedIn){
+        this.send("sessionErrorHandler");
+      }
+    }.bind(this));
   }
 
 })

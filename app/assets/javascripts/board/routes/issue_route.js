@@ -25,16 +25,15 @@ var IssueRoute = Ember.Route.extend({
   },
   actions: {
     error: function(error, transition){
-      var controller = this.controllerFor("application");
-      this.render("login", {
-        into: 'application',
-        outlet: 'modal'
-      });
-      this.render("empty", {
-        into:"application",
-        outlet:"loading",
-        controller: controller, 
-      });
+      if (App.loggedIn && error.status === 404) {
+        var controller = this.controllerFor("application");
+        this.render("empty", {
+          into:"application",
+          outlet:"loading",
+          controller: controller, 
+        });
+        this.send("sessionErrorHandler");
+      }
     }
   }
 });
