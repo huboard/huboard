@@ -21,6 +21,7 @@ var IssueRoute = Ember.Route.extend({
     return model.loadDetails();
   },
   renderTemplate: function () {
+    this.set("controller.commentBody", null);
     this.render("issue",{into:'application',outlet:'modal'})
   }
 });
