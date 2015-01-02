@@ -77106,6 +77106,9 @@ module.exports = IssueBodyView;
 
 },{}],91:[function(require,module,exports){
 var IssuesCreateView = App.ModalView.extend({
+  modalCloseCriteria: function(){
+    return this.$(".markdown-composer textarea").val().length;
+  },
   focusTitleField: function(){
       Ember.run.schedule('afterRender', this, 'focusTextbox');
   }.on('init'),
@@ -77190,6 +77193,9 @@ module.exports = IssueTitleView;
 var ModalView = require("./modal_view")
 
 var IssuesView = ModalView.extend({
+  modalCloseCriteria: function(){
+    return this.$(".markdown-composer textarea").val().length;
+  }
 });
 
 module.exports = IssuesView;
@@ -77441,6 +77447,9 @@ module.exports = MilestonesView;
 var ModalView = Em.View.extend({
   layoutName: "layouts/modal",
   modalSize: "",
+  modalCloseCriteria: function(){
+    return false;
+  },
 
   didInsertElement: function() {
     App.animateModalOpen();
@@ -77463,7 +77472,11 @@ var ModalView = Em.View.extend({
     this.$(".fullscreen-overlay, .close").on('click.modal', function(event){
      if($(event.target).is("[data-ember-action],[data-toggle]")){return;}
      if($(event.target).parents("[data-ember-action],[data-toggle]").length){return;}
-     this.get('controller').send('closeModal');        
+     if(this.modalCloseCriteria()){
+       this.send("modalCloseAction");
+     } else {
+       this.get('controller').send('closeModal');
+     }
     }.bind(this))
 
     this.$(':input:not(.close):not([type="checkbox"])').first().focus();
@@ -77472,6 +77485,13 @@ var ModalView = Em.View.extend({
   willDestroyElement: function() {
     $('body').off('keyup.modal');
     this.$(".fullscreen-overlay,.fullscreen-body").off("click.modal");
+  },
+
+  actions: {
+    modalCloseAction: function(){
+     var closeModal = confirm("Any unsaved work may be lost! Continue?");
+     if(closeModal){ this.get('controller').send('closeModal'); }
+    }
   }
 });
 
