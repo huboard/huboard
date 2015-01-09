@@ -15,6 +15,7 @@ app.build.js
 .powconfig
 .rbenv-version
 node_modules
+modules
 !puppet/modules
 
 /cookbooks
