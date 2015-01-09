@@ -15,14 +15,14 @@ app.build.js
 .powconfig
 .rbenv-version
 node_modules
+!puppet/modules
 
 /cookbooks
 /bin
 .vagrant
 .tmp/
 .librarian/
-modules/
-
+j:q
 public/assets
 vendor/bundle
 vendor/bundler
