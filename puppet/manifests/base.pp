@@ -134,14 +134,9 @@ elasticsearch::plugin {'lmenezes/elasticsearch-kopf':
   instances  => 'es-01',
 }
 
-class { 'logstash': 
-  package_url => 'https://download.elasticsearch.org/logstash/logstash/packages/debian/logstash_1.4.2-1-2c0f5a1_all.deb',
-}
-
 file { '/opt/kibana':
   ensure => directory
 }
-
 
 exec { 'clone-kibana': 
   command => '/usr/bin/git clone https://github.com/elasticsearch/kibana.git .',
@@ -152,4 +147,5 @@ exec { 'clone-kibana':
 
 
 include service_nginx
+include service_logstash
 include redis
