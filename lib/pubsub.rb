@@ -22,7 +22,6 @@
       def publish(channel, payload)
         client = ::Redis.connect
         client.publish "pubsub.#{channel}", payload.to_json
-        client.publish "elasticsearch", payload.to_json
         HuBoard::Faye.instance.publish "/" + channel, payload
       end
 
