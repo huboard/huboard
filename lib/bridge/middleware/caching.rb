@@ -32,7 +32,7 @@ class Huboard
           cached = Marshal.load(cached)
           etag =  cached.headers[:etag]
 
-          env[:request_headers].merge!('If-None-Match' => etag)
+          env[:request_headers].merge!('If-None-Match' => etag) if etag
 
           response = app.call(env)
 

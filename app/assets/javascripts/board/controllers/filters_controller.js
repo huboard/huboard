@@ -136,6 +136,7 @@ var FiltersController = Ember.ObjectController.extend({
       name: App.get('repo.name'),
       queryParam: "repo",
       mode:0,
+      color: "7965cc",
       condition:function(i){
         return i.repo.name == App.get('repo.name');
       }

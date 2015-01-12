@@ -23,6 +23,19 @@ var IssueRoute = Ember.Route.extend({
   renderTemplate: function () {
     this.set("controller.commentBody", null);
     this.render("issue",{into:'application',outlet:'modal'})
+  },
+  actions: {
+    error: function(error, transition){
+      if (App.loggedIn && error.status === 404) {
+        var controller = this.controllerFor("application");
+        this.render("empty", {
+          into:"application",
+          outlet:"loading",
+          controller: controller, 
+        });
+        this.send("sessionErrorHandler");
+      }
+    }
   }
 });
 
