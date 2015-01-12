@@ -37,6 +37,11 @@ module HuBoard
   class << self
     attr_accessor :cache
 
+    def client_environment
+      features_path = File.expand_path("./features.json",File.dirname(__FILE__))
+      JSON.parse(File.read(features_path))
+    end
+
   end
   unless HuBoard.cache
     HuBoard.cache = ActiveSupport::Cache.lookup_store(:dalli_store,

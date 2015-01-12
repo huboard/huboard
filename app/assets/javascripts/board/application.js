@@ -239,7 +239,7 @@ module.exports = HbLabelSelectorComponent;
 },{}],8:[function(require,module,exports){
 var HbMarkdownComposerComponent = Ember.Component.extend({
   classNames: ["markdown-composer"],
-  classNameBindings: ["uploading:hb-state-uploading"],
+  classNameBindings: ["uploading:hb-state-uploading", "uploadsEnabled"],
   acceptedTypes: {
     "image/png": true,
     "image/gif": true,
@@ -247,10 +247,13 @@ var HbMarkdownComposerComponent = Ember.Component.extend({
     "image/svg" : true,
     "image/svg+xml": true
   },
+  uploadsEnabled: HUBOARD_ENV.FEATURES.IMAGE_UPLOADS,
   files: [],
   uploadFile: function(file){
     var component = this,
     holder = this.$();
+
+
 
     if(file.size > 5242880) {
       alert("Yowza, that file is too big");
@@ -293,6 +296,9 @@ var HbMarkdownComposerComponent = Ember.Component.extend({
     });
   },
   wireUp: function(){
+    if(!this.get("uploadsEnabled")) {
+      return;
+    }
     var component = this;
     this.$("input[type='file']").on("change.huboard", function(){
       if(this.files != null && this.files.length) {
@@ -315,10 +321,16 @@ var HbMarkdownComposerComponent = Ember.Component.extend({
     })
   }.on('didInsertElement'),
   tearDown: function(){
+    if(!this.get("uploadsEnabled")) {
+      return;
+    }
     this.$("input[type='file']").off("change.huboard");
     this.$().off('paste');
   }.on('willDestroyElement'),
   drop: function(ev) {
+    if(!this.get("uploadsEnabled")) {
+      return;
+    }
     if(ev.stopPropagation) {
       ev.stopPropagation();
     }
