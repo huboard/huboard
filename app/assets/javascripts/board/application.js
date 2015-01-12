@@ -2936,8 +2936,6 @@ var ApplicationRoute = Ember.Route.extend({
     this._super.apply(this, arguments);
     SocketMixin.apply(controller);
     controller.setUpSocketEvents();
-  },
-  didTransition: function(){
     $(document).ajaxError(function(){
       if(App.loggedIn){
         this.send("sessionErrorHandler");
