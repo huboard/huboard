@@ -1,16 +1,16 @@
 class Huboard
   module Repos
     def repos(org = nil)
-      repos = org.nil? ? connection.user.repos.paginate(:per_page =>  100, :page => 1) : connection.orgs(org).repos.paginate(:per_page => 100, :page => 1)
+
+      repos = org.nil? ? connection.user.repos(:type => "owner", :sort => "updated").paginate(:per_page => 100, :page => 1) : connection.orgs(org).repos(:type => "owner",:sort => "updated").paginate(:per_page => 100, :page => 1)
       repos.reject { |r| !r.has_issues }.sort_by{ |r| r["open_issues_count"] || 0 }.reverse
     end
 
     def all_repos
-      the_repos = repos
-      connection.orgs.each do |org|
-        the_repos.concat(repos(org.login))
-      end
-      the_repos.sort_by{|r| r["open_issues_count"] || 0}.reverse
+      #repos = connection.user.repos(:type => "sources", :sort => "updated").paginate(:per_page => 100, :page => 1)
+      repos = connection.user.repos(:type => "owner", :sort => "updated").all
+      #repos.concat(connection.user.repos(:type => "owner", :sort => "updated").paginate(:per_page => 100, :page => 1))
+      return repos.reject { |r| !r.has_issues }.sort_by{ |r| r["open_issues_count"] || 0 }.reverse
     end
 
     def repos_by_user(username)

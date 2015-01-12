@@ -13,6 +13,7 @@ module HuBoard
 
     module Api
       autoload :Base, 'app/routes/api/base'
+      autoload :User, 'app/routes/api/user'
       autoload :Milestones, 'app/routes/api/milestones'
       autoload :Board, 'app/routes/api/board'
       autoload :Issues, 'app/routes/api/issues'
