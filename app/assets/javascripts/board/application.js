@@ -239,7 +239,7 @@ module.exports = HbLabelSelectorComponent;
 },{}],8:[function(require,module,exports){
 var HbMarkdownComposerComponent = Ember.Component.extend({
   classNames: ["markdown-composer"],
-  classNameBindings: ["uploading:hb-state-uploading"],
+  classNameBindings: ["uploading:hb-state-uploading", "uploadsEnabled"],
   acceptedTypes: {
     "image/png": true,
     "image/gif": true,
@@ -247,10 +247,13 @@ var HbMarkdownComposerComponent = Ember.Component.extend({
     "image/svg" : true,
     "image/svg+xml": true
   },
+  uploadsEnabled: HUBOARD_ENV.FEATURES.IMAGE_UPLOADS,
   files: [],
   uploadFile: function(file){
     var component = this,
     holder = this.$();
+
+
 
     if(file.size > 5242880) {
       alert("Yowza, that file is too big");
@@ -293,6 +296,9 @@ var HbMarkdownComposerComponent = Ember.Component.extend({
     });
   },
   wireUp: function(){
+    if(!this.get("uploadsEnabled")) {
+      return;
+    }
     var component = this;
     this.$("input[type='file']").on("change.huboard", function(){
       if(this.files != null && this.files.length) {
@@ -315,10 +321,16 @@ var HbMarkdownComposerComponent = Ember.Component.extend({
     })
   }.on('didInsertElement'),
   tearDown: function(){
+    if(!this.get("uploadsEnabled")) {
+      return;
+    }
     this.$("input[type='file']").off("change.huboard");
     this.$().off('paste');
   }.on('willDestroyElement'),
   drop: function(ev) {
+    if(!this.get("uploadsEnabled")) {
+      return;
+    }
     if(ev.stopPropagation) {
       ev.stopPropagation();
     }
@@ -1261,6 +1273,7 @@ var FiltersController = Ember.ObjectController.extend({
       name: App.get('repo.name'),
       queryParam: "repo",
       mode:0,
+      color: "7965cc",
       condition:function(i){
         return i.repo.name == App.get('repo.name');
       }
@@ -3761,13 +3774,14 @@ function program1(depth0,data) {
   
   var buffer = '', hashContexts, hashTypes;
   data.buffer.push("\n    ");
-  hashContexts = {'lastClicked': depth0,'name': depth0,'mode': depth0,'color': depth0,'queryParam': depth0};
-  hashTypes = {'lastClicked': "ID",'name': "ID",'mode': "ID",'color': "ID",'queryParam': "STRING"};
+  hashContexts = {'lastClicked': depth0,'name': depth0,'mode': depth0,'color': depth0,'tagType': depth0,'queryParam': depth0};
+  hashTypes = {'lastClicked': "ID",'name': "ID",'mode': "ID",'color': "ID",'tagType': "STRING",'queryParam': "STRING"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.FilterView", {hash:{
     'lastClicked': ("lastBoardFilterClicked"),
     'name': ("filter.name"),
     'mode': ("filter.mode"),
     'color': ("filter.color"),
+    'tagType': ("colored"),
     'queryParam': ("repo")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("\n  ");
@@ -3819,7 +3833,7 @@ function program7(depth0,data) {
     'name': ("filter.name"),
     'mode': ("filter.mode"),
     'color': ("filter.color"),
-    'tagType': ("filtered-label"),
+    'tagType': ("colored"),
     'queryParam': ("label")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("\n  ");
@@ -76941,7 +76955,8 @@ var CssView = Ember.View.extend({
     });
 
     _(["filter","card-label"]).each(function(name){
-       _(that.get("content.combinedLabels")).each(function(l){
+      var link_labels = that.get("content.link_labels");
+       _(that.get("content.combinedLabels").concat(link_labels)).each(function(l){
 
          buffer.push("." + name + ".-x" + l.color + " > a {");
          buffer.push("border-left-color: #" + l.color + ";");
