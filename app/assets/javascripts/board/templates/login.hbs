@@ -2,9 +2,9 @@
   <h2> Your Session Has Expired! </h2>
   <div class="flex-form-top">
     <div class="well">
-      <p> Allow Private Access to renable third-party access to GitHub </p>
+      <p> Allow {{authLevel}} Access to renable third-party access to GitHub </p>
     </div>
-    <a {{bind-attr href=privateLoginUrl}} class="hb-button">Allow Private Access</a>
+    <a {{bind-attr href=loginUrl}} class="hb-button">Allow {{authLevel}} Access</a>
     <h3> or </h3>
     <a href="/" class="hb-button"> Go Home </a>
   </div>

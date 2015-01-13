@@ -1701,12 +1701,16 @@ module.exports = IssuesEditController;
 
 },{}],33:[function(require,module,exports){
 LoginController = Ember.ObjectController.extend({
-  privateLoginUrl: function(){
-    var privateUrl = "/login/private?redirect_to=";
+  authLevel: function(){
+    return App.get("authLevel").capitalize();
+  }.property("App.authLevel"),
+
+  loginUrl: function(){
+    var url = "/login/" + App.get("authLevel") + "?redirect_to=";
     var location = window.location.pathname + window.location.hash;
     var redirectParam = encodeURIComponent(location);
-    return privateUrl + redirectParam  
-  }.property()
+    return url + redirectParam  
+  }.property("App.authLevel"),
 });
 
 module.exports = LoginController;
@@ -4188,16 +4192,24 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 Ember.TEMPLATES['login'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', hashContexts, hashTypes, escapeExpression=this.escapeExpression;
+  var buffer = '', hashTypes, hashContexts, escapeExpression=this.escapeExpression;
 
 
-  data.buffer.push("<div class=\"fullscreen-login fullscreen-login--center\">\n  <h2> Your Session Has Expired! </h2>\n  <div class=\"flex-form-top\">\n    <div class=\"well\">\n      <p> Allow Private Access to renable third-party access to GitHub </p>\n    </div>\n    <a ");
+  data.buffer.push("<div class=\"fullscreen-login fullscreen-login--center\">\n  <h2> Your Session Has Expired! </h2>\n  <div class=\"flex-form-top\">\n    <div class=\"well\">\n      <p> Allow ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "authLevel", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" Access to renable third-party access to GitHub </p>\n    </div>\n    <a ");
   hashContexts = {'href': depth0};
   hashTypes = {'href': "ID"};
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
-    'href': ("privateLoginUrl")
+    'href': ("loginUrl")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(" class=\"hb-button\">Allow Private Access</a>\n    <h3> or </h3>\n    <a href=\"/\" class=\"hb-button\"> Go Home </a>\n  </div>\n</div>\n");
+  data.buffer.push(" class=\"hb-button\">Allow ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "authLevel", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" Access</a>\n    <h3> or </h3>\n    <a href=\"/\" class=\"hb-button\"> Go Home </a>\n  </div>\n</div>\n");
   return buffer;
   
 });
@@ -77163,7 +77175,7 @@ module.exports = IssueBodyView;
 var IssuesCreateView = App.ModalView.extend({
   modalCloseCriteria: function(){
     var textarea = this.$(".markdown-composer textarea")
-    if (textarea.val){
+    if (textarea.val()){
       return textarea.val().length;
     }
     return false;
