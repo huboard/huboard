@@ -1,19 +1,13 @@
+require "faye/redis/publisher"
   module HuBoard
     class Faye
       include Singleton
       def initialize
-        @client = ::Faye::Client.new(::Faye::Server.new({
-          mount: '/site/pubsub',
-          timeout: 25,
-          ping: 15,
-          engine: {
-            type: ::Faye::Redis,
-            uri: (ENV['REDIS_URL'] || 'redis://localhost:6379')
-          }
-        }))
+        @client = ::Faye::Redis::Publisher.new({uri: ENV["REDIS_URL"]})
       end
 
       def publish(channel, payload)
+        puts "===> PUBLISH #{channel}"
         @client.publish channel, payload
       end
 
