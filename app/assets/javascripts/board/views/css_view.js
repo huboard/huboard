@@ -48,7 +48,8 @@ var CssView = Ember.View.extend({
     });
 
     _(["filter","card-label"]).each(function(name){
-       _(that.get("content.combinedLabels")).each(function(l){
+      var link_labels = that.get("content.link_labels");
+       _(that.get("content.combinedLabels").concat(link_labels)).each(function(l){
 
          buffer.push("." + name + ".-x" + l.color + " > a {");
          buffer.push("border-left-color: #" + l.color + ";");

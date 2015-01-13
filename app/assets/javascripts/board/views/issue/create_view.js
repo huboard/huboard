@@ -1,4 +1,7 @@
 var IssuesCreateView = App.ModalView.extend({
+  modalCloseCriteria: function(){
+    return this.$(".markdown-composer textarea").val().length;
+  },
   focusTitleField: function(){
       Ember.run.schedule('afterRender', this, 'focusTextbox');
   }.on('init'),
