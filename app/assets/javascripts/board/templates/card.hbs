@@ -26,11 +26,13 @@
     {{/each}}
 </div>
 
-{{#if current_state.is_last}}
+{{#if isCollaborator}}
+  {{#if current_state.is_last}}
 
-<div class="hb-action actions-close">
-  <button class="hb-button" {{bind-attr disabled=processing}} {{action close this bubbles=false}}>Close</button>
-</div>                                                      
+  <div class="hb-action actions-close">
+    <button class="hb-button" {{bind-attr disabled=processing}} {{action close this bubbles=false}}>Close</button>
+  </div>
+  {{/if}}
 {{/if}}
 
 {{#if canArchive}}

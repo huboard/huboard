@@ -2,6 +2,9 @@ var SocketMixin = require("../mixins/socket");
 
 var CardController = Ember.ObjectController.extend(SocketMixin,{
   needs: ["application"],
+  isCollaborator: function() {
+    return this.get("model.repo.is_collaborator");
+  }.property("model.repo.is_collaborator"),
   columns: function() {
     return this.get("controllers.application.model.board.columns")
   }.property("controllers.application.model.board.columns"),
@@ -71,7 +74,7 @@ var CardController = Ember.ObjectController.extend(SocketMixin,{
   },
   canArchive: function () {
     return this.get("model.state") === "closed"
-      && App.get("loggedIn") && App.get("repo.is_collaborator");
+      && App.get("loggedIn") && this.get("isCollaborator");
   }.property("model.state"),
   cardLabels: function () {
       return this.get("model.other_labels").map(function(l){
