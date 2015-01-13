@@ -49,21 +49,8 @@ module.exports = MilestonesRoute =  Ember.Route.extend({
       controller.incrementProperty("forceRedraw")
     },
     issueCreated: function(issue){
-      var controller = this.controllerFor("milestones");
-
-      if(issue.milestone){
-        var column = controller.get("milestoneColumns").find(function(column) {
-            return issue.milestone && (column.get("title").toLowerCase() == issue.milestone.title.toLowerCase());
-        })
-        issue.set("current_milestone", column);
-        var issues = column.get("issues")
-        issues.pushObject(issue);
-      } else {
-        issue.set("current_milestone", controller.get("noMilestoneColumn"));
-        controller.get("noMilestoneColumn.issues").pushObject(issue);
-      }
-
-      Ember.run.schedule('afterRender', controller, function () {
+      this.modelFor('application').addIssue(issue);
+      Ember.run.schedule('afterRender', function () {
         this.send("closeModal")
       }.bind(this))
     }

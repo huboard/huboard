@@ -2840,6 +2840,23 @@ var Repo = Ember.Object.extend(Serializable,{
   betaUrl: function () {
      return this.get("repoUrl") + "/beta";
   }.property("repoUrl"),
+  addIssue: function(issue){
+    var board = this._board;
+        board.get("issues").pushObject(issue);
+     board.get("columns.firstObject.issues").pushObject(issue);
+
+      if(issue.milestone){
+        var column = board.get("milestoneColumns").find(function(column) {
+            return issue.milestone && (column.get("title").toLowerCase() == issue.milestone.title.toLowerCase());
+        })
+        issue.set("current_milestone", column);
+        var issues = column.get("issues")
+        issues.pushObject(issue);
+      } else {
+        issue.set("current_milestone", board.get("noMilestoneColumn"));
+        board.get("noMilestoneColumn.issues").pushObject(issue);
+      }
+  },
   fetchBoard: function(){
     if(this._board) {return this._board;}
     var linked_boards = this.fetchLinkedBoards();
@@ -2863,10 +2880,6 @@ var Repo = Ember.Object.extend(Serializable,{
        })
 
        var noMilestone = NoMilestone.build(null, issues)
-       
-
-
-
 
        var parentBoard = this._board =  Board.create(_.extend(board, {issues: issues, 
                                                               columns: columns, 
@@ -3158,11 +3171,8 @@ var IndexRoute = Ember.Route.extend({
       controller.incrementProperty("forceRedraw")
     },
     issueCreated: function(issue){
-      var controller = this.controllerFor("index");
-      var issues = controller.get("model.columns.firstObject.issues")
-      issues.pushObject(issue);
-
-      Ember.run.schedule('afterRender', controller, function () {
+      this.modelFor('application').addIssue(issue);
+      Ember.run.schedule('afterRender', function () {
         this.send("closeModal")
       }.bind(this))
     }
@@ -3291,21 +3301,8 @@ module.exports = MilestonesRoute =  Ember.Route.extend({
       controller.incrementProperty("forceRedraw")
     },
     issueCreated: function(issue){
-      var controller = this.controllerFor("milestones");
-
-      if(issue.milestone){
-        var column = controller.get("milestoneColumns").find(function(column) {
-            return issue.milestone && (column.get("title").toLowerCase() == issue.milestone.title.toLowerCase());
-        })
-        issue.set("current_milestone", column);
-        var issues = column.get("issues")
-        issues.pushObject(issue);
-      } else {
-        issue.set("current_milestone", controller.get("noMilestoneColumn"));
-        controller.get("noMilestoneColumn.issues").pushObject(issue);
-      }
-
-      Ember.run.schedule('afterRender', controller, function () {
+      this.modelFor('application').addIssue(issue);
+      Ember.run.schedule('afterRender', function () {
         this.send("closeModal")
       }.bind(this))
     }
