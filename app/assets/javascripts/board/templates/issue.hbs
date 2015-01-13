@@ -1,9 +1,11 @@
 <div class="fullscreen-card">
   <div class="fullscreen-card-preamble clearfix">
     {{render 'issue.title' model }}
-    <div class="flex-crumbs">
-      {{view App.IssueSelectedColumnView content=columns}}
-    </div>
+    {{#if isCollaborator }}
+      <div class="flex-crumbs">
+        {{view App.IssueSelectedColumnView content=columns}}
+      </div>
+    {{/if}}
   </div>
   <div class="fullscreen-card-right">
     {{#if App.loggedIn }}
