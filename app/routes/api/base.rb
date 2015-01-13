@@ -18,6 +18,7 @@ module HuBoard
         end
 
         RESERVED_URLS = %w{ site profiles uploads }
+        UNRESTRICTED = [/\/comment/]
 
         before '/api/:user/:repo/?*' do
           return if RESERVED_URLS.include? params[:user]
@@ -25,7 +26,7 @@ module HuBoard
           repo = gh.repos params[:user], params[:repo]
           raise Sinatra::NotFound if repo.message == "Not Found"
 
-          if request.post? || request.put? || request.delete?
+          unless request.get? || UNRESTRICTED.any?{|mtch| mtch =~ params[:splat].to_s}
             raise Sinatra::NotFound unless repo.permissions && repo.permissions.push
           end
         end
