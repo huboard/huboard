@@ -7,14 +7,10 @@ module HuBoard
       before '/:user/:repo/?*' do
         return if RESERVED_URLS.include? params[:user]
 
-        if authenticated? :private
-          repo = gh.repos params[:user], params[:repo]
+        repo = gh.repos params[:user], params[:repo]
+        raise Sinatra::NotFound if repo.message == "Not Found"
 
-          raise Sinatra::NotFound if repo.message == "Not Found"
-        else
-          repo = gh.repos params[:user], params[:repo]
-          raise Sinatra::NotFound if repo.message == "Not Found"
-        end
+        @auth_level = authenticated?(:private) ? "private" : "public"
       end
 
       get '/', is_logged_in: true do
