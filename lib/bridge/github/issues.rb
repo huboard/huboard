@@ -62,6 +62,7 @@ class Huboard
       raise "number is nil" unless number
 
       issue = gh.issues(number).extend(Card).merge!(repo: {owner: {login: user}, name: repo, full_name: "#{user}/#{repo}" })
+      issue.repo[:is_collaborator] = gh.permissions.push
       issue.attach_client connection_factory
       issue
     end
