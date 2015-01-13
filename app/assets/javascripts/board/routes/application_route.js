@@ -36,6 +36,11 @@ var ApplicationRoute = Ember.Route.extend({
       this.controllerFor("filters").send("clearFilters");
       this.controllerFor("assignee").send("clearFilters");
       this.controllerFor("search").send("clearFilters");
+    },
+    issueMovedColumns: function(issue, message){
+      var board = this.modelFor("application").get("board");
+      var toColumn = board.get("columns").objectAt(message.column.index - 1)
+      board.moveIssue(issue, toColumn, message.issue._data.order, true);
     }
   },
   model: function () {

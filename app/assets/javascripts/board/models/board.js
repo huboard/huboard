@@ -47,7 +47,7 @@ var Board = Ember.Object.extend({
             .groupBy(function(l){return l.title.toLocaleLowerCase() })
             .value();
   }.property("milestones.length","linkedRepos.@each.milestones.length"),
-  moveIssue: function(issue, toColumn, index){
+  moveIssue: function(issue, toColumn, index, dontSend){
     var fromColumn = issue.get('current_state');
     // begin editing ALL THE THINGS
     Ember.beginPropertyChanges();
@@ -66,8 +66,11 @@ var Board = Ember.Object.extend({
       fromColumn.get('issues').endPropertyChanges();
       toColumn.get('issues').endPropertyChanges();
     }
-    issue.send("moved", index, toColumn.get('model') || toColumn);
-
+    if(dontSend){
+      // don't send to server
+    } else {
+      issue.send("moved", index, toColumn.get('model') || toColumn);
+    }
     Ember.endPropertyChanges();
     issue.endPropertyChanges();
   }, 
