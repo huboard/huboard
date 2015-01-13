@@ -22,13 +22,11 @@ module HuBoard
         before '/api/:user/:repo/?*' do
           return if RESERVED_URLS.include? params[:user]
 
-          if authenticated? :private
-            repo = gh.repos params[:user], params[:repo]
+          repo = gh.repos params[:user], params[:repo]
+          raise Sinatra::NotFound if repo.message == "Not Found"
 
-            raise Sinatra::NotFound if repo.message == "Not Found"
-          else
-            repo = gh.repos params[:user], params[:repo]
-            raise Sinatra::NotFound if repo.message == "Not Found"
+          if request.post? || request.put?
+            raise Sinatra::NotFound unless repo.permissions && repo.permissions.push
           end
         end
 
