@@ -3,7 +3,7 @@ var BufferedController = require("../buffered_controller");
 
 var IssueBodyController = BufferedController.extend({
   needs: ["issue"],
-  isCollaboratorBinding: "App.repo.is_collaborator",
+  isCollaboratorBinding: "model.repo.is_collaborator",
   isLoggedInBinding: "App.loggedIn",
   currentUserBinding: "App.currentUser",
   mentions: Ember.computed.alias("controllers.issue.mentions"),

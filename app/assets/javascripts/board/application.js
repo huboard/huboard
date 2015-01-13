@@ -1365,7 +1365,7 @@ var BufferedController = require("../buffered_controller");
 
 var IssueActivityController = BufferedController.extend({
   needs: ["issue"],
-  isCollaboratorBinding: "App.repo.is_collaborator",
+  isCollaboratorBinding: "model.repo.is_collaborator",
   isLoggedInBinding: "App.loggedIn",
   currentUserBinding: "App.currentUser",
   mentions: Ember.computed.alias("controllers.issue.mentions"),
@@ -1427,7 +1427,7 @@ var BufferedController = require("../buffered_controller");
 
 var IssueBodyController = BufferedController.extend({
   needs: ["issue"],
-  isCollaboratorBinding: "App.repo.is_collaborator",
+  isCollaboratorBinding: "model.repo.is_collaborator",
   isLoggedInBinding: "App.loggedIn",
   currentUserBinding: "App.currentUser",
   mentions: Ember.computed.alias("controllers.issue.mentions"),
@@ -1492,7 +1492,7 @@ var IssuesCreateController = Ember.ObjectController.extend({
       this.createIssue(this.get("order"));
     }
   },
-  isCollaboratorBinding: "App.repo.is_collaborator",
+  isCollaboratorBinding: "model.repo.is_collaborator",
   otherLabels: function(){
     return Ember.copy(this.get("controllers.application.model.board.other_labels"));
   }.property("model","controllers.application.model.board.other_labels"),
@@ -1556,7 +1556,7 @@ var BufferedController = require("../buffered_controller");
 
 var IssueTitleController = BufferedController.extend({
   needs: ["issue"],
-  isCollaboratorBinding: "App.repo.is_collaborator",
+  isCollaboratorBinding: "model.repo.is_collaborator",
   isLoggedInBinding: "App.loggedIn",
   currentUserBinding: "App.currentUser",
   isEditing: false,
@@ -1604,6 +1604,9 @@ module.exports = IssueTitleController;
 },{"../buffered_controller":20}],32:[function(require,module,exports){
 var IssuesEditController = Ember.ObjectController.extend({
   needs: ["application"],
+  isCollaborator: function(){
+    return this.get("model.repo.is_collaborator");
+  }.property("model.repo.is_collaborator"),
   columns: Ember.computed.alias("controllers.application.model.board.columns"),
   isReady: function(key, value){
     if(value !== undefined) {
@@ -1639,7 +1642,7 @@ var IssuesEditController = Ember.ObjectController.extend({
        }.bind(this));
     },
     moveToColumn: function(column) {
-      if(!App.get("repo.is_collaborator")) {
+      if(this.get("isCollaborator")) {
         return false;
       }
       this.get("model").reorder(this.get("model._data.order"),column).then(function() {
@@ -2611,6 +2614,7 @@ var Issue = Ember.Object.extend(Serializable,{
      
      return Ember.$.getJSON("/api/" + full_name + "/issues/" + this.get("number") + "/details")
      .success(function(details){
+       this.set("repo", details.repo);
        this.set("activities", details.activities);
        this.set("processing", false);
      }.bind(this)).fail(function(e){
@@ -4009,7 +4013,7 @@ function program1(depth0,data) {
   data.buffer.push("\n      ");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers['if'].call(depth0, "App.repo.is_collaborator", {hash:{},inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack1 = helpers['if'].call(depth0, "isCollaborator", {hash:{},inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n    ");
   return buffer;
@@ -4087,7 +4091,7 @@ function program4(depth0,data) {
   hashTypes = {'labelsChanged': "STRING",'editable': "ID",'values': "ID",'selected': "ID",'title': "STRING",'labels': "ID"};
   options = {hash:{
     'labelsChanged': ("labelsChanged"),
-    'editable': ("App.repo.is_collaborator"),
+    'editable': ("isCollaborator"),
     'values': ("controller.model.other_labels"),
     'selected': ("controller.model.other_labels"),
     'title': ("Labels"),
@@ -4098,7 +4102,7 @@ function program4(depth0,data) {
   hashContexts = {'editable': depth0,'assign': depth0,'selected': depth0,'assignees': depth0};
   hashTypes = {'editable': "ID",'assign': "STRING",'selected': "ID",'assignees': "ID"};
   options = {hash:{
-    'editable': ("App.repo.is_collaborator"),
+    'editable': ("isCollaborator"),
     'assign': ("assignUser"),
     'selected': ("controller.model.assignee"),
     'assignees': ("controller.repository.assignees")
@@ -4108,7 +4112,7 @@ function program4(depth0,data) {
   hashContexts = {'editable': depth0,'assign': depth0,'selected': depth0,'milestones': depth0};
   hashTypes = {'editable': "ID",'assign': "STRING",'selected': "ID",'milestones': "ID"};
   options = {hash:{
-    'editable': ("App.repo.is_collaborator"),
+    'editable': ("isCollaborator"),
     'assign': ("assignMilestone"),
     'selected': ("controller.model.milestone"),
     'milestones': ("controller.repository.milestones")
@@ -77216,7 +77220,7 @@ var IssueSelectedColumnView = Ember.CollectionView.extend({
   classNames: ["nav","breadcrumbs"],
   classNameBindings: ["stateClass", "isEnabled:enabled:disabled"],
   isEnabled: function() {
-    return App.get("repo.is_collaborator");
+    return this.get("controller.model.repo.is_collaborator");
   }.property("App.repo.is_collaborator"),
   stateClass: function(){
     var github_state = this.get("controller.model.state");
