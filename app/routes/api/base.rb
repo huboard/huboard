@@ -25,7 +25,7 @@ module HuBoard
           repo = gh.repos params[:user], params[:repo]
           raise Sinatra::NotFound if repo.message == "Not Found"
 
-          if request.post? || request.put?
+          if request.post? || request.put? || request.delete?
             raise Sinatra::NotFound unless repo.permissions && repo.permissions.push
           end
         end

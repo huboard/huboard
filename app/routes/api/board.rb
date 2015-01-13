@@ -20,6 +20,9 @@ module HuBoard
         end
 
         get '/api/:user/:repo/links' do
+          repo = gh.repos params[:user], params[:repo]
+          raise Sinatra::NotFound unless repo.permissions && repo.permissions.push
+
           board = huboard.board(params[:user], params[:repo])
           links = board.link_labels.map do |label|
             {
@@ -60,6 +63,9 @@ module HuBoard
         end
 
         get '/api/:user/:repo/settings' do
+          repo = gh.repos params[:user], params[:repo]
+          raise Sinatra::NotFound unless repo.permissions && repo.permissions.push
+
           board = huboard.board(params[:user], params[:repo])
           json(
             column_labels: board.column_labels,
