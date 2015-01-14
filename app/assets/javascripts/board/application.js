@@ -77163,7 +77163,7 @@ module.exports = IssueBodyView;
 var IssuesCreateView = App.ModalView.extend({
   modalCloseCriteria: function(){
     var textarea = this.$(".markdown-composer textarea")
-    if (textarea.val){
+    if (textarea.val()){
       return textarea.val().length;
     }
     return false;
