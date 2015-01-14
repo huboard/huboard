@@ -61,6 +61,9 @@ var CardWrapperView = Em.CloakedView.extend({
 
      return App.get("loggedIn") && currentState.is_last && this.get("content.state") === "open";
     }.property("App.loggedIn", "content.current_state","content.state"),
+    _onDestroy: function(){
+      this.get('cardController').destroy();
+    }.on("willDestroyElement"),
     onDestroy: function (){
       Ember.run.once(function () {
         var view = this;
