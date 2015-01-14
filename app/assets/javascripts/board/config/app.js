@@ -42,7 +42,13 @@ Ember.onLoad("Ember.Application", function ($app) {
           sockets: {},
           client: new Faye.Client(application.get('socketBackend')),
           subscribe: function (channel, callback) {
+            console.log("subscribe")
             this.get("sockets")[channel].callbacks.add(callback);
+            return callback;
+          },
+          unsubscribe: function(channel, fn) {
+            console.log("unsubscribe")
+            this.get("sockets")[channel].callbacks.remove(fn);
           },
           subscribeTo: function(channel) {
             var client = this.get('client'), 
