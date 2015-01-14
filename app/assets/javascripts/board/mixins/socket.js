@@ -22,7 +22,7 @@ var SocketMixin = Ember.Mixin.create({
           eventNames = this.get("sockets") || {},
           controller = this;
       
-      this.get("socket").subscribe(channel, function (message){
+    this._callback = this.get("socket").subscribe(channel, function (message){
 
           if(messageId != "*" && message.meta.identifier != messageId) { return; }
 
@@ -34,6 +34,29 @@ var SocketMixin = Ember.Mixin.create({
           }
       });
     });
+  },
+  willDestroyElement: function(){
+    this._onDestroy();
+    this._super();
+  }.on("willDestroyElement"),
+  willDestroy: function(){
+    this._onDestroy();
+    this._super();
+  }.on("willDestroy"),
+  _onDestroy: function(){
+    if(!this.get("socket")){
+      return;
+    }
+
+    var channelPath  = this.get("sockets.config.channelPath");
+
+    if(!channelPath) {
+     throw "You must define a channelPath";
+    }
+
+    var channel = this.get(channelPath);
+    
+    this.get("socket").unsubscribe(channel, this._callback);
   },
   init: function () {
     this._super();
