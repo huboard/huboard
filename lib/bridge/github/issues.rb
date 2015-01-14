@@ -56,7 +56,10 @@ class Huboard
     def closed_issues(label, since = (Time.now - 2*7*24*60*60).utc.iso8601)
       params = {labels: label, state: "closed", since: since, per_page: 30}
 
-      gh.issues(params).each{|i| i.extend(Card)}.each{ |i| i.merge!("repo" => {owner: {login: user}, name: repo,  full_name: "#{user}/#{repo}" }) }.sort_by { |i| i["_data"]["order"] || i["number"].to_f }
+      gh.issues(params).each{|i| i.extend(Card)}.each{ |i|
+        i.merge!("repo" => {owner: {login: user}, name: repo,  full_name: "#{user}/#{repo}" })
+        i.repo[:is_collaborator] = gh.permissions ? gh.permissions.push : nil
+      }.sort_by { |i| i["_data"]["order"] || i["number"].to_f }
     end
 
     def issue(number)

@@ -1044,10 +1044,15 @@ var CardController = Ember.ObjectController.extend(SocketMixin,{
       return this.get("model").close();
     }
   },
+  isLast: function(){
+    return this.get("model.current_state.is_last") &&
+      this.get("isCollaborator")
+  }.property("model.current_state", "isCollaborator"),
   canArchive: function () {
+    this.get("isCollaborator");
     return this.get("model.state") === "closed"
       && App.get("loggedIn") && this.get("isCollaborator");
-  }.property("model.state"),
+  }.property("model.state", "isCollaborator"),
   cardLabels: function () {
       return this.get("model.other_labels").map(function(l){
         return Ember.Object.create(_.extend(l,{customColor: "-x"+l.color}));
@@ -3527,19 +3532,8 @@ function program6(depth0,data) {
 
 function program8(depth0,data) {
   
-  var buffer = '', stack1, hashTypes, hashContexts;
-  data.buffer.push("\n  ");
-  hashTypes = {};
-  hashContexts = {};
-  stack1 = helpers['if'].call(depth0, "current_state.is_last", {hash:{},inverse:self.noop,fn:self.program(9, program9, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n");
-  return buffer;
-  }
-function program9(depth0,data) {
-  
   var buffer = '', hashContexts, hashTypes;
-  data.buffer.push("\n\n  <div class=\"hb-action actions-close\">\n    <button class=\"hb-button\" ");
+  data.buffer.push("\n  <div class=\"hb-action actions-close\">\n    <button class=\"hb-button\" ");
   hashContexts = {'disabled': depth0};
   hashTypes = {'disabled': "ID"};
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
@@ -3551,11 +3545,11 @@ function program9(depth0,data) {
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "close", "", {hash:{
     'bubbles': (false)
   },contexts:[depth0,depth0],types:["ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(">Close</button>\n  </div>\n  ");
+  data.buffer.push(">Close</button>\n  </div>                                                      \n");
   return buffer;
   }
 
-function program11(depth0,data) {
+function program10(depth0,data) {
   
   var buffer = '', hashContexts, hashTypes;
   data.buffer.push("\n\n<div class=\"hb-action actions-archive\">\n  <button class=\"hb-button-icon hb-button hb-button-grey\" ");
@@ -3612,12 +3606,12 @@ function program11(depth0,data) {
   data.buffer.push("\n</div>\n\n");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers['if'].call(depth0, "isCollaborator", {hash:{},inverse:self.noop,fn:self.program(8, program8, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack1 = helpers['if'].call(depth0, "isLast", {hash:{},inverse:self.noop,fn:self.program(8, program8, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n\n");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers['if'].call(depth0, "canArchive", {hash:{},inverse:self.noop,fn:self.program(11, program11, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack1 = helpers['if'].call(depth0, "canArchive", {hash:{},inverse:self.noop,fn:self.program(10, program10, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n\n<div class=\"card-states\">\n   <img src=\"/img/check.png\" title=\"Issue is closed\" class=\"hb-state-closed\"/>\n   <img src=\"/img/arrow.png\" class=\"hb-state-ready\"/>\n   <img src=\"/img/x.png\" class=\"hb-state-blocked\"/>\n</div>\n");
   return buffer;
