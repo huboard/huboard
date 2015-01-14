@@ -38,7 +38,7 @@ var IssuesEditController = Ember.ObjectController.extend({
        }.bind(this));
     },
     moveToColumn: function(column) {
-      if(this.get("isCollaborator")) {
+      if(!this.get("isCollaborator")) {
         return false;
       }
       this.get("model").reorder(this.get("model._data.order"),column).then(function() {
