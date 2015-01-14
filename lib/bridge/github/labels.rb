@@ -1,9 +1,10 @@
 class Huboard
   module Labels
     module ColumnLabel
+
       def self.extended(l)
         match = Huboard.column_pattern.match l.name
-        l[:index] = match[:id]
+        l[:id] = match[:id]
         l[:text] = match[:name]
         if Huboard.wip_pattern =~ l[:text]
           m = Huboard.wip_pattern.match l[:text]
@@ -37,6 +38,7 @@ class Huboard
       end
 
       columns = columns.sort_by {|i| i[:index] }
+      columns.each_with_index { |issue, i| issue[:index] = i }
       if columns.any?
         columns.first[:is_first] = true
         columns.last[:is_last] = true

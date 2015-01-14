@@ -159,8 +159,7 @@ class Huboard
           column_labels = board.column_labels
           self.labels = [] if self.labels.nil?
           self.labels = self.labels.delete_if { |l| Huboard.column_pattern.match l.name }
-          regex = /#{index}\s*- *.+/ # TODO what does this regex do?
-          new_state = column_labels.find { |l| regex.match l.name }
+          new_state = column_labels.find { |l| index.to_i == l[:index] }
           self.labels << new_state unless new_state.nil?
           embed_data({"order" => order.to_f}) if order
           embed_data({"custom_state" => ""}) if moved
