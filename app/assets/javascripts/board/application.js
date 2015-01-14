@@ -702,7 +702,13 @@ Ember.onLoad("Ember.Application", function ($app) {
           sockets: {},
           client: new Faye.Client(application.get('socketBackend')),
           subscribe: function (channel, callback) {
+            console.log("subscribe")
             this.get("sockets")[channel].callbacks.add(callback);
+            return callback;
+          },
+          unsubscribe: function(channel, fn) {
+            console.log("unsubscribe")
+            this.get("sockets")[channel].callbacks.remove(fn);
           },
           subscribeTo: function(channel) {
             var client = this.get('client'), 
@@ -1002,7 +1008,7 @@ var CardController = Ember.ObjectController.extend(SocketMixin,{
        this.get("model").set("assignee", message.issue.assignee)
     },
     moved: function (message) {
-      console.log("card:controller ===> moved", message)
+      console.log("card:controller ===> moved",this.toString(), message)
       this.send("issueMovedColumns", this, message);
     },
     reordered: function (message) {
@@ -2272,7 +2278,7 @@ var SocketMixin = Ember.Mixin.create({
           eventNames = this.get("sockets") || {},
           controller = this;
       
-      this.get("socket").subscribe(channel, function (message){
+    this._callback = this.get("socket").subscribe(channel, function (message){
 
           if(messageId != "*" && message.meta.identifier != messageId) { return; }
 
@@ -2284,6 +2290,29 @@ var SocketMixin = Ember.Mixin.create({
           }
       });
     });
+  },
+  willDestroyElement: function(){
+    this._onDestroy();
+    this._super();
+  }.on("willDestroyElement"),
+  willDestroy: function(){
+    this._onDestroy();
+    this._super();
+  }.on("willDestroy"),
+  _onDestroy: function(){
+    if(!this.get("socket")){
+      return;
+    }
+
+    var channelPath  = this.get("sockets.config.channelPath");
+
+    if(!channelPath) {
+     throw "You must define a channelPath";
+    }
+
+    var channel = this.get(channelPath);
+    
+    this.get("socket").unsubscribe(channel, this._callback);
   },
   init: function () {
     this._super();
@@ -3073,8 +3102,11 @@ var ApplicationRoute = Ember.Route.extend({
       this.controllerFor("search").send("clearFilters");
     },
     issueMovedColumns: function(issue, message){
+      // TODO: we need to improve the way we handle columns by index
       var board = this.modelFor("application").get("board");
-      var toColumn = board.get("columns").objectAt(message.column.index - 1)
+      var toColumn = board.get("columns").find(function(c){
+        return c.id == message.column.id
+      });
       board.moveIssue(issue, toColumn, message.issue._data.order, true);
     }
   },
@@ -77360,6 +77392,9 @@ var CardWrapperView = Em.CloakedView.extend({
 
      return App.get("loggedIn") && currentState.is_last && this.get("content.state") === "open";
     }.property("App.loggedIn", "content.current_state","content.state"),
+    _onDestroy: function(){
+      this.get('cardController').destroy();
+    }.on("willDestroyElement"),
     onDestroy: function (){
       Ember.run.once(function () {
         var view = this;
