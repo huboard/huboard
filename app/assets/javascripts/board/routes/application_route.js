@@ -38,8 +38,11 @@ var ApplicationRoute = Ember.Route.extend({
       this.controllerFor("search").send("clearFilters");
     },
     issueMovedColumns: function(issue, message){
+      // TODO: we need to improve the way we handle columns by index
       var board = this.modelFor("application").get("board");
-      var toColumn = board.get("columns").objectAt(message.column.index - 1)
+      var toColumn = board.get("columns").find(function(c){
+        return c.id == message.column.id
+      });
       board.moveIssue(issue, toColumn, message.issue._data.order, true);
     }
   },

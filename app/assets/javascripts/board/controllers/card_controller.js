@@ -27,7 +27,7 @@ var CardController = Ember.ObjectController.extend(SocketMixin,{
        this.get("model").set("assignee", message.issue.assignee)
     },
     moved: function (message) {
-      console.log("card:controller ===> moved", message)
+      console.log("card:controller ===> moved",this.toString(), message)
       this.send("issueMovedColumns", this, message);
     },
     reordered: function (message) {
