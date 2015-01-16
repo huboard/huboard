@@ -26,7 +26,7 @@ gem 'rdiscount'
 gem 'slim'
 gem 'warden-github', :github => "atmos/warden-github"
 gem 'warden_strategies'
-gem 'ghee'
+gem 'ghee', '~> 0.9.12'
 gem 'rack-ssl'
 gem 'addressable'
 gem 'kgio'
