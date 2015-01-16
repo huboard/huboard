@@ -37,7 +37,7 @@ class Huboard
         l.extend(ColumnLabel)
       end
 
-      columns = columns.sort_by {|i| i[:index] }
+      columns = columns.sort_by {|i| i[:id] }
       columns.each_with_index { |issue, i| issue[:index] = i }
       if columns.any?
         columns.first[:is_first] = true
