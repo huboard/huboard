@@ -8,8 +8,8 @@ require 'faye'
 
 options = {
   mount: '/site/pubsub',
-  timeout: 10,
-  ping: 5,
+  timeout: 60,
+  ping: 30,
   engine: {
     type: Faye::Redis,
     uri: (ENV['REDIS_URL'] || 'redis://localhost:6379')
