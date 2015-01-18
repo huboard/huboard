@@ -25,10 +25,10 @@ module HuBoard
           if authenticated? :private
             repo = gh.repos params[:user], params[:repo]
 
-            raise Sinatra::NotFound if repo.message == "Not Found"
+            raise Sinatra::NotFound if repo['message'] == "Not Found"
           else
             repo = gh.repos params[:user], params[:repo]
-            raise Sinatra::NotFound if repo.message == "Not Found"
+            raise Sinatra::NotFound if repo['message'] == "Not Found"
           end
         end
 

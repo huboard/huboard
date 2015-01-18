@@ -10,10 +10,10 @@ module HuBoard
         if authenticated? :private
           repo = gh.repos params[:user], params[:repo]
 
-          raise Sinatra::NotFound if repo.message == "Not Found"
+          raise Sinatra::NotFound if repo['message'] == "Not Found"
         else
           repo = gh.repos params[:user], params[:repo]
-          raise Sinatra::NotFound if repo.message == "Not Found"
+          raise Sinatra::NotFound if repo['message'] == "Not Found"
         end
       end
 
@@ -30,7 +30,7 @@ module HuBoard
         raise Sinatra::NotFound unless user.status == 200
 
         @parameters = params
-        @repos = huboard.repos_by_user(params[:user]).select {|r| !r.private }
+        @repos = huboard.repos_by_user(params[:user]).select {|r| !r['private'] }
         @user = user.body
         @private = 0
         erb :index
@@ -47,9 +47,9 @@ module HuBoard
         @parameters = params
 
         if logged_in? && current_user.login == params[:user]
-          @repos = huboard.all_repos.select {|r| r.private }
+          @repos = huboard.all_repos.select {|r| r['private'] }
         else
-          @repos = huboard.all_repos.select {|r| r.private && r.owner.login.casecmp(params[:user]) == 0 }
+          @repos = huboard.all_repos.select {|r| r['private'] && r['owner']['login'].casecmp(params[:user]) == 0 }
         end
 
         @user = user.body

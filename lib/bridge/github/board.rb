@@ -26,7 +26,7 @@ class Huboard
     end
 
     def issues_enabled?
-      gh.has_issues
+      gh['has_issues']
     end
 
     def enable_issues
@@ -47,7 +47,7 @@ class Huboard
     def linked(user, repo)
       label = link_labels.find{|l| l[:user] == user && l[:repo] == repo}
       board = Board.new(user, repo, @connection_factory).meta
-      board[:issues] = board[:issues].map {|i| i.merge({ color: label.color })}
+      board[:issues] = board[:issues].map {|i| i.merge({ color: label['color'] })}
       board
     end
 
@@ -56,20 +56,20 @@ class Huboard
       columns = column_labels
       first_column = columns.first
 
-      issues = issues().concat(closed_issues(columns.last.name)).map do |i|
-        i[:current_state] = first_column if i[:current_state]["name"] == "__nil__"
-        i[:current_state] = columns.find { |c| c[:name] == i[:current_state]["name"] }
+      issues = issues().concat(closed_issues(columns.last['name'])).map do |i|
+        i['current_state'] = first_column if i['current_state']['name'] == "__nil__"
+        i['current_state'] = columns.find { |c| c['name'] == i['current_state']['name'] }
         i
       end
 
       {
-        "id" => gh_repos.id,
-        full_name: gh_repos.full_name,
+        "id" => gh_repos['id'],
+        full_name: gh_repos['full_name'],
         columns: columns,
         milestones: milestones,
-        other_labels: other_labels.sort_by {|l| l.name.downcase },
+        other_labels: other_labels.sort_by {|l| l['name'].downcase },
         link_labels: link_labels,
-        assignees: assignees.to_a,
+        assignees: assignees,
         issues: issues
       }
     end
@@ -88,16 +88,16 @@ class Huboard
 
       target[:labels].each_with_index do |l, i|
         linked = other[:labels][i][:issues].map do |issue|
-          issue["repo"][:color] = label.color
+          issue["repo"][:color] = label['color']
           issue
         end
-        l[:issues] = l[:issues].concat(linked).sort_by { |issue| issue.order }
+        l[:issues] = l[:issues].concat(linked).sort_by { |issue| issue['order'] }
       end
 
-      milestones = other[:milestones].reject {|m| target[:milestones].any? { |o| o.title == m.title }}
+      milestones = other[:milestones].reject {|m| target[:milestones].any? { |o| o['title'] == m['title'] }}
       target[:milestones] = target[:milestones].concat(milestones).sort_by { |m| m["_data"]["order"] || m["number"].to_f }
 
-      labels = other[:other_labels].reject {|m| target[:other_labels].any? { |o| o.name == m.name }}
+      labels = other[:other_labels].reject {|m| target[:other_labels].any? { |o| o['name'] == m['name'] }}
       target[:other_labels] = target[:other_labels].concat(labels)
 
       target
