@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
-ruby "2.1.2"
+ruby "2.2.0"
 
-gem 'sinatra', "~> 1.4.0"
+gem 'sinatra', "1.4.4"
 gem 'sinatra-contrib', github: 'maccman/sinatra-contrib'
 gem 'sprockets-memcache-store'
 gem 'rack-standards'
