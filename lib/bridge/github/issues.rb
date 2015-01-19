@@ -17,7 +17,7 @@ class Huboard
       gh.issues(params).all.each{
         |i| i.extend(Card)
       }.each{ |i|
-        i.merge!("repo" => {owner: {login: user}, name: repo, full_name: "#{user}/#{repo}" })
+        i.merge!(:repo => {owner: {login: user}, name: repo, full_name: "#{user}/#{repo}" })
       }.sort_by { |i| i["_data"]["order"] || i["number"].to_f }
     end
 
@@ -45,7 +45,7 @@ class Huboard
         milestone: milestone
       }
 
-      result = gh.issues.create(attributes).extend(Card).merge!("repo" => {owner: {login: @user}, name: @repo,  full_name: "#{@user}/#{@repo}" })
+      result = gh.issues.create(attributes).extend(Card).merge!(:repo => {owner: {login: @user}, name: @repo,  full_name: "#{@user}/#{@repo}" })
 
       result.current_state = labels.first if result.current_state["name"] == "__nil__"
 
@@ -87,7 +87,6 @@ class Huboard
 
         begin
           column_label = self['labels'].sort_by {|l| l["name"]}.reverse.find {|x| r.match(x["name"])}
-          puts column_label
           column_label.nil? ? 
             nil_label : 
             column_label.extend(Huboard::Labels::ColumnLabel) 
@@ -138,7 +137,7 @@ class Huboard
       end
 
       def all_comments
-        client.comments.all
+        client.comments.all.to_a
       end
 
       def feed
@@ -154,7 +153,7 @@ class Huboard
       def patch(hash)
         hash["labels"] = hash["labels"].map {|l| l["name"] } if hash["labels"]
         updated = client.patch hash
-        updated.extend(Card).merge!(:repo => repo)
+        updated.extend(Card).merge!(:repo => self[:repo])
       end
 
       overridable do
@@ -253,7 +252,7 @@ class Huboard
 
       def patch(hash)
         m = client.patch hash
-        m.extend(Milestone).merge! :repo => self["repo"]
+        m.extend(Milestone).merge! :repo => self[:repo]
       end
 
       def embed_data(data = nil)

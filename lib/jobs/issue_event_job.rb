@@ -81,11 +81,11 @@ class IssueStatusChangedEvent < IssueEventJob
     payload = {
       meta: {
         action: "issue_status_changed",
-        identifier: issue.number,
+        identifier: issue['number'],
         timestamp: Time.now.utc.iso8601,
         user: user,
         correlationId: correlationId,
-        repo_full_name: "#{issue.repo.owner.login}/#{issue.repo.name}"
+        repo_full_name: "#{issue[:repo][:owner][:login]}/#{issue[:repo][:name]}"
       },
       payload: {
         issue: issue,
@@ -104,15 +104,15 @@ class IssueMovedEvent < IssueEventJob
     payload = {
       meta: {
         action: "moved",
-        identifier: issue.number,
+        identifier: issue['number'],
         timestamp: Time.now.utc.iso8601,
         user: user,
         correlationId: correlationId,
-        repo_full_name: "#{issue.repo.owner.login}/#{issue.repo.name}"
+        repo_full_name: "#{issue[:repo][:owner][:login]}/#{issue[:repo][:name]}"
       },
       payload: {
         issue: issue,
-        column: issue.current_state,
+        column: issue['current_state'],
         previous: previous
       }
     }
@@ -128,15 +128,15 @@ class IssueReorderedEvent < IssueEventJob
     payload = {
       meta: {
         action: "reordered",
-        identifier: issue.number,
+        identifier: issue['number'],
         timestamp: Time.now.utc.iso8601,
         user: user,
         correlationId: correlationId,
-        repo_full_name: "#{issue.repo.owner.login}/#{issue.repo.name}"
+        repo_full_name: "#{issue[:repo][:owner][:login]}/#{issue[:repo][:name]}"
       },
       payload: {
         issue: issue,
-        column: issue.current_state
+        column: issue['current_state']
       }
     }
 
@@ -151,15 +151,15 @@ class IssueAssignedEvent < IssueEventJob
     payload = {
       meta: {
         action: "assigned",
-        identifier: issue.number,
+        identifier: issue['number'],
         timestamp: Time.now.utc.iso8601,
         user: user,
         correlationId: correlationId,
-        repo_full_name: "#{issue.repo.owner.login}/#{issue.repo.name}"
+        repo_full_name: "#{issue[:repo][:owner][:login]}/#{issue[:repo][:name]}"
       },
       payload: {
         issue: issue,
-        assignee: issue.assignee
+        assignee: issue['assignee']
       }
     }
 
@@ -174,15 +174,15 @@ class IssueMilestoneChangedEvent < IssueEventJob
     payload = {
       meta: {
         action: "milestone_changed",
-        identifier: issue.number,
+        identifier: issue['number'],
         timestamp: Time.now.utc.iso8601,
         user: user,
         correlationId: correlationId,
-        repo_full_name: "#{issue.repo.owner.login}/#{issue.repo.name}"
+        repo_full_name: "#{issue[:repo][:owner][:login]}/#{issue[:repo][:name]}"
       },
       payload: {
         issue: issue,
-        milestone: issue.milestone
+        milestone: issue['milestone']
       }
     }
 
@@ -197,11 +197,11 @@ class IssueClosedEvent < IssueEventJob
     payload = {
       meta: {
         action: "issue_closed",
-        identifier: issue.number,
-        timestamp: issue.closed_at,
+        identifier: issue['number'],
+        timestamp: issue['closed_at'],
         user: user,
         correlationId: correlationId,
-        repo_full_name: "#{issue.repo.owner.login}/#{issue.repo.name}"
+        repo_full_name: "#{issue[:repo][:owner][:login]}/#{issue[:repo][:name]}"
       },
       payload: {
         issue: issue
@@ -219,11 +219,11 @@ class IssueOpenedEvent < IssueEventJob
     payload = {
       meta: {
         action: "issue_opened",
-        identifier: issue.number,
-        timestamp: issue.created_at,
+        identifier: issue['number'],
+        timestamp: issue['created_at'],
         user: user,
         correlationId: correlationId,
-        repo_full_name: "#{issue.repo.owner.login}/#{issue.repo.name}"
+        repo_full_name: "#{issue[:repo][:owner][:login]}/#{issue[:repo][:name]}"
       },
       payload: {
         issue: issue
@@ -239,11 +239,11 @@ class IssueArchivedEvent < IssueEventJob
     payload = {
       meta: {
         action: "issue_archived",
-        identifier: issue.number,
-        timestamp: issue.created_at,
+        identifier: issue['number'],
+        timestamp: issue['created_at'],
         user: user,
         correlationId: correlationId,
-        repo_full_name: "#{issue.repo.owner.login}/#{issue.repo.name}"
+        repo_full_name: "#{issue[:repo][:owner][:login]}/#{issue[:repo][:name]}"
       },
       payload: {
         issue: issue
@@ -262,11 +262,11 @@ class IssueReopenedEvent < IssueEventJob
     payload = {
       meta: {
         action: "issue_reopened",
-        identifier: issue.number,
-        timestamp: issue.updated_at,
+        identifier: issue['number'],
+        timestamp: issue['updated_at'],
         user: user,
         correlationId: correlationId,
-        repo_full_name: "#{issue.repo.owner.login}/#{issue.repo.name}"
+        repo_full_name: "#{issue[:repo][:owner][:login]}/#{issue[:repo][:name]}"
       },
       payload: {
         issue: issue

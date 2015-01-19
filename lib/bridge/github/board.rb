@@ -45,7 +45,7 @@ class Huboard
     end
 
     def linked(user, repo)
-      label = link_labels.find{|l| l[:user] == user && l[:repo] == repo}
+      label = link_labels.find{|l| l['user'] == user && l['repo'] == repo}
       board = Board.new(user, repo, @connection_factory).meta
       board[:issues] = board[:issues].map {|i| i.merge({ color: label['color'] })}
       board
