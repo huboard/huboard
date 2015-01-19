@@ -202,7 +202,7 @@ GEM
     inflecto (0.0.2)
     interception (0.4)
     ipaddress (0.8.0)
-    json (1.7.7)
+    json (1.8.2)
     kgio (2.9.2)
     memcachier (0.0.2)
     method_source (0.8.2)
