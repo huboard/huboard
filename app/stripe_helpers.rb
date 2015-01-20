@@ -2,12 +2,15 @@ module HuBoard
   module StripeHelpers
 
     def trial_available?(customer)
-      customer.rows.first.value.trial &&
+      customer.rows.any? &&
+      customer.rows.first.value[:trial] &&
         customer.rows.first.value.trial == "available"
     end
 
     def subscription_active?(customer)
-      customer.rows.first.value.stripe.customer.subscriptions.data[0].status == "active"
+      customer.rows.any? &&
+      customer.rows.first.value &&
+        customer.rows.first.value.stripe.customer.subscriptions.data[0].status == "active"
     end
 
     def account_exists?(user)
