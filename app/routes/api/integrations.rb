@@ -6,7 +6,7 @@ module HuBoard
           raise Sinatra::NotFound unless gh.connection.get("./repos/#{params[:user]}/#{params[:repo]}/collaborators/#{current_user.login}").status == 204
 
           repo = gh.repos(params[:user],params[:repo])
-          json couch.integrations.by_repo(repo.id)
+          json couch.integrations.by_repo(repo['id'])
         end
 
         post '/api/:user/:repo/integrations' do
