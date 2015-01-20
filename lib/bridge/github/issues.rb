@@ -25,7 +25,7 @@ class Huboard
       issue = gh.issues(number)
       labels = issue.labels.all.reject {|l| Huboard.all_patterns.any? {|p| p.match l['name'] }}.sort_by {|l| l['name']}
 
-      gh.issues(number).patch(labels: labels).extend(Card).merge!("repo" => {owner: {login: @user}, name: @repo,  full_name: "#{@user}/#{@repo}" })
+      gh.issues(number).patch(labels: labels).extend(Card).merge!(:repo => {owner: {login: @user}, name: @repo,  full_name: "#{@user}/#{@repo}" })
     end
 
     def create_issue(params)
