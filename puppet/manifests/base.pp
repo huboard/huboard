@@ -20,7 +20,8 @@ exec { 'apt-update':
 
 Exec["apt-update"] -> Package <| |> 
 package { 
-  'vim-gnome': ensure => installed;
+  'vim': ensure => installed;
+  'libffi-dev': ensure => installed;
 }
 
 service { 'nginx':
@@ -38,9 +39,9 @@ rbenv::install { "vagrant rbenv":
   require => User["vagrant"],
 }
 
-rbenv::compile { "vagrant/2.1.5":
+rbenv::compile { "vagrant/2.2.0":
   user   => "vagrant",
-  ruby   => "2.1.5",
+  ruby   => "2.2.0",
   global => true,
   require => [
     Rbenv::Install["vagrant rbenv"],
@@ -54,7 +55,7 @@ exec { "vagrant::rbenv::rehash":
   cwd         => '/home/vagrant',
   environment => [ "HOME=/home/vagrant" ],
   path        => ["/home/vagrant/.rbenv/shims","/home/vagrant/.rbenv/bin","/bin", "/usr/bin"],
-  require     => Rbenv::Gem['rbenv::bundler vagrant 2.1.5'],
+  require     => Rbenv::Gem['rbenv::bundler vagrant 2.2.0'],
   before      => Exec["install-vagrant"],
 }
 
@@ -66,9 +67,9 @@ exec { 'install-vagrant':
   provider    => 'shell',
   path        => ["/home/vagrant/.rbenv/shims","/home/vagrant/.rbenv/bin","/bin", "/usr/bin"],
   require     => [
-    Rbenv::Compile['vagrant/2.1.5'],
-    Rbenv::Gem['rbenv::bundler vagrant 2.1.5'],
-    Exec['rbenv::rehash vagrant 2.1.5'],
+    Rbenv::Compile['vagrant/2.2.0'],
+    Rbenv::Gem['rbenv::bundler vagrant 2.2.0'],
+    Exec['rbenv::rehash vagrant 2.2.0'],
   ],
 }
 
