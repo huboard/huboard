@@ -22,7 +22,10 @@ require 'jobs'
 require 'app/errors'
 require 'app/extensions'
 require 'app/helpers'
+require 'app/stripe_helpers'
 require 'app/routes'
+
+include HuBoard::StripeHelpers
 
 module HuBoard
   class EnsureEMRunning
