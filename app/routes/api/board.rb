@@ -24,7 +24,7 @@ module HuBoard
           links = board.link_labels.map do |label|
             {
               label: label,
-              columns: huboard.board(label.user, label.repo).column_labels
+              columns: huboard.board(label['user'], label['repo']).column_labels
             }
           end
           json links 
@@ -36,7 +36,7 @@ module HuBoard
           if link
             json(
               label: link,
-              columns: huboard.board(link.user, link.repo).column_labels
+              columns: huboard.board(link['user'], link['repo']).column_labels
             )
           else
             raise HuBoard::Error, "Unable to link #{params[:link]} to your repository"
