@@ -1,6 +1,11 @@
 module HuBoard
   module StripeHelpers
 
+    def trial_available?(customer)
+      customer.rows.first.value.trial &&
+        customer.rows.first.value.trial == "available"
+    end
+
     def subscription_active?(customer)
       customer.rows.first.value.stripe.customer.subscriptions.data[0].status == "active"
     end
@@ -31,7 +36,8 @@ module HuBoard
           plan: {
             plan_id: account_type
           }
-        }
+        },
+        trial: "available"
       }
       couch.customers.save(customer_data)
     end

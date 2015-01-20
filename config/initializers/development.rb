@@ -15,8 +15,10 @@ module HuBoard
             user = gh.users params[:user]
             create_new_account(gh.user, user) unless account_exists?(user) || repo['owner']['login'] != gh.user['login']
             customer = couch.customers.findPlanById user['id']
+
             session[:github_login] = user['login']
             session[:upgrade_url] = user['login'] == gh.user['login'] ? "/settings/profile" : "/settings/profile/#/#{user['login']}"
+            redirect "/settings/trial" if trial_available?(customer) && repo['owner']['login'] == gh.user['login']
             return if customer.rows.any? && subscription_active?(customer)
             customer = couch.customers.findPlanById current_user.id
             throw(:warden) if !customer.rows.any? || !subscription_active?(customer)
