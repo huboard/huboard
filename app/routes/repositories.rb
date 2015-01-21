@@ -87,7 +87,7 @@ module HuBoard
             @repo = gh.repos(params[:user],params[:repo])
             if logged_in?
               begin
-                is_a_collaborator = @repo.permissions.push
+                is_a_collaborator = @repo['permissions'] && @repo['permissions']['push']
                 @repo.merge!(is_collaborator: is_a_collaborator)
               rescue
                 @repo.merge!(is_collaborator: true)
