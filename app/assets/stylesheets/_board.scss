@@ -245,6 +245,9 @@
   &.assignee-accept {
      border-color: #0069D6;
   }
+  &.assignee-error {
+     border-color: red;
+  }
   .card-labels {
     padding: 5px 0px;
     position: absolute;

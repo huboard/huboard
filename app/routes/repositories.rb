@@ -7,14 +7,10 @@ module HuBoard
       before '/:user/:repo/?*' do
         return if RESERVED_URLS.include? params[:user]
 
-        if authenticated? :private
-          repo = gh.repos params[:user], params[:repo]
+        repo = gh.repos params[:user], params[:repo]
+        raise Sinatra::NotFound if repo['message'] == "Not Found"
 
-          raise Sinatra::NotFound if repo.message == "Not Found"
-        else
-          repo = gh.repos params[:user], params[:repo]
-          raise Sinatra::NotFound if repo.message == "Not Found"
-        end
+        @auth_level = authenticated?(:private) ? "private" : "public"
       end
 
       get '/', is_logged_in: true do
@@ -30,7 +26,7 @@ module HuBoard
         raise Sinatra::NotFound unless user.status == 200
 
         @parameters = params
-        @repos = huboard.repos_by_user(params[:user]).select {|r| !r.private }
+        @repos = huboard.repos_by_user(params[:user]).select {|r| !r['private'] }
         @user = user.body
         @private = 0
         erb :index
@@ -47,9 +43,9 @@ module HuBoard
         @parameters = params
 
         if logged_in? && current_user.login == params[:user]
-          @repos = huboard.all_repos.select {|r| r.private }
+          @repos = huboard.all_repos.select {|r| r['private'] }
         else
-          @repos = huboard.all_repos.select {|r| r.private && r.owner.login.casecmp(params[:user]) == 0 }
+          @repos = huboard.all_repos.select {|r| r['private'] && r['owner']['login'].casecmp(params[:user]) == 0 }
         end
 
         @user = user.body
@@ -91,7 +87,7 @@ module HuBoard
             @repo = gh.repos(params[:user],params[:repo])
             if logged_in?
               begin
-                is_a_collaborator = @repo.permissions.push
+                is_a_collaborator = @repo['permissions'] && @repo['permissions']['push']
                 @repo.merge!(is_collaborator: is_a_collaborator)
               rescue
                 @repo.merge!(is_collaborator: true)

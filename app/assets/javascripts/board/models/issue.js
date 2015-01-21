@@ -43,7 +43,6 @@ var Issue = Ember.Object.extend(Serializable,{
           this.set("processing", false);
           this.set("body", response.body)
           this.set("body_html", response.body_html)
-
         }.bind(this));
         return value;
     }
@@ -55,9 +54,10 @@ var Issue = Ember.Object.extend(Serializable,{
       data: JSON.stringify({issue: this.serialize(), order: order, correlationId: this.get("correlationId") }),
       dataType: 'json',
       type: "POST",
-      contentType: "application/json"}).then(function(response){
-      return Issue.create(response);
-    })
+      contentType: "application/json"})
+      .then(function(response){
+        return Issue.create(response);
+      });
   },
   submitComment : function (markdown) {
      this.set("processing", true);
@@ -74,7 +74,7 @@ var Issue = Ember.Object.extend(Serializable,{
       .then(function(response){
         this.set("processing", false);
         return response;
-      }.bind(this))
+      }.bind(this));
   },
   updateLabels : function () {
      this.set("processing", true);
@@ -90,18 +90,22 @@ var Issue = Ember.Object.extend(Serializable,{
       contentType: "application/json"})
       .then(function(response){
         this.set("processing", false);
-      }.bind(this))
+      }.bind(this));
   },
-  loadDetails: function () {
+  loadDetails: function (route, transition) {
      this.set("processing", true);
       var user = this.get("repo.owner.login"),
           repo = this.get("repo.name"),
           full_name = user + "/" + repo;
      
-     return Ember.$.getJSON("/api/" + full_name + "/issues/" + this.get("number") + "/details").then(function(details){
+     return Ember.$.getJSON("/api/" + full_name + "/issues/" + this.get("number") + "/details")
+     .success(function(details){
+       this.set("repo", details.repo);
        this.set("activities", details.activities);
        this.set("processing", false);
-     }.bind(this))
+     }.bind(this)).fail(function(e){
+       this.set("processing", false);
+     }.bind(this));
   },
   processing: false,
   loaded: false,
@@ -117,7 +121,9 @@ var Issue = Ember.Object.extend(Serializable,{
       }).then(function () {
         this.set("processing", false);
         this.set("isArchived", true);
-      }.bind(this))
+      }.bind(this)).fail(function(e){
+       this.set("processing", false);
+      }.bind(this));
   },
   close: function () {
      this.set("processing", true);
@@ -132,10 +138,9 @@ var Issue = Ember.Object.extend(Serializable,{
       }).then(function() {
         this.set("state","closed")
         this.set("processing", false);
-      }.bind(this))
+      }.bind(this));
   },
   assignUser: function(login){
-
       var user = this.get("repo.owner.login"),
           repo = this.get("repo.name"),
           full_name = user + "/" + repo;
@@ -147,9 +152,7 @@ var Issue = Ember.Object.extend(Serializable,{
       }).then(function( response ){
           this.set("assignee", response.assignee);
           return this;
-      }.bind(this))
-    
-      
+      }.bind(this));
   },
   assignMilestone: function(index, milestone){
     var changedMilestones = false;
@@ -177,8 +180,7 @@ var Issue = Ember.Object.extend(Serializable,{
         this.set("_data.order", response._data.order);
         this.set("_data.milestone_order", response._data.milestone_order);
         return this;
-    }.bind(this))
-      
+    }.bind(this));
   },
   reorder: function (index, column) {
       var changedColumns = this.get("current_state") !== column;
@@ -202,8 +204,7 @@ var Issue = Ember.Object.extend(Serializable,{
          this.set("body", response.body);
          this.set("body_html", response.body_html);
          return this;
-      }.bind(this))
-  
+      }.bind(this));
   }
 
 });

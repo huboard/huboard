@@ -1,5 +1,5 @@
 <% content_for :title do %>
-  <%= @repo.full_name %>
+  <%= @repo['full_name'] %>
 <% end %>
 <% content_for :javascripts do %>
   <% unless ENV["SOCKET_BACKEND"].nil? %>
@@ -35,6 +35,7 @@
     App.set("repo", Ember.Object.createWithMixins(App.Serializable,<%= @repo.to_hash.to_json %>));
     <% if logged_in? %>
       App.set("loggedIn", true);
+      App.set("authLevel", "<%= @auth_level %>")
       App.set("currentUser",<%= current_user.attribs.to_json %>);
       <% if HuboardApplication.socket_backend %>
         App.set("socketBackend", "<%= HuboardApplication.socket_backend %>");

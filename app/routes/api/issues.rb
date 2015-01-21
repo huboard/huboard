@@ -24,6 +24,7 @@ module HuBoard
         post '/api/:user/:repo/issues/:number/comment' do
           data = {body: params["markdown"]}
           comment = gh.repos(params[:user], params[:repo]).issues(params[:number]).comments.create data
+          raise Sinatra::NotFound if comment['message'] == "Not Found"
 
           json comment.to_hash
         end
@@ -128,7 +129,7 @@ module HuBoard
 
           issue = huboard.board(user, repo).issue(number)
           issue.embed_data("milestone_order" => params[:order].to_f) if params[:order].to_f > 0
-          issue = issue.patch "milestone"    => milestone, "body" => issue.body
+          issue = issue.patch "milestone"    => milestone, "body" => issue['body']
 
           if params[:changed_milestones] == "true"
             IssueMilestoneChangedEvent.new.publish issue, current_user.attribs, params[:correlationId]
