@@ -974,6 +974,9 @@ var SocketMixin = require("../mixins/socket");
 
 var CardController = Ember.ObjectController.extend(SocketMixin,{
   needs: ["application"],
+  isCollaborator: function() {
+    return this.get("model.repo.is_collaborator");
+  }.property("model.repo.is_collaborator"),
   columns: function() {
     return this.get("controllers.application.model.board.columns")
   }.property("controllers.application.model.board.columns"),
@@ -1041,10 +1044,15 @@ var CardController = Ember.ObjectController.extend(SocketMixin,{
       return this.get("model").close();
     }
   },
+  isLast: function(){
+    return this.get("model.current_state.is_last") &&
+      this.get("isCollaborator")
+  }.property("model.current_state", "isCollaborator"),
   canArchive: function () {
+    this.get("isCollaborator");
     return this.get("model.state") === "closed"
-      && App.get("loggedIn") && App.get("repo.is_collaborator");
-  }.property("model.state"),
+      && App.get("loggedIn") && this.get("isCollaborator");
+  }.property("model.state", "isCollaborator"),
   cardLabels: function () {
       return this.get("model.other_labels").map(function(l){
         return Ember.Object.create(_.extend(l,{customColor: "-x"+l.color}));
@@ -1365,7 +1373,7 @@ var BufferedController = require("../buffered_controller");
 
 var IssueActivityController = BufferedController.extend({
   needs: ["issue"],
-  isCollaboratorBinding: "App.repo.is_collaborator",
+  isCollaboratorBinding: "model.repo.is_collaborator",
   isLoggedInBinding: "App.loggedIn",
   currentUserBinding: "App.currentUser",
   mentions: Ember.computed.alias("controllers.issue.mentions"),
@@ -1427,7 +1435,7 @@ var BufferedController = require("../buffered_controller");
 
 var IssueBodyController = BufferedController.extend({
   needs: ["issue"],
-  isCollaboratorBinding: "App.repo.is_collaborator",
+  isCollaboratorBinding: "model.repo.is_collaborator",
   isLoggedInBinding: "App.loggedIn",
   currentUserBinding: "App.currentUser",
   mentions: Ember.computed.alias("controllers.issue.mentions"),
@@ -1556,7 +1564,7 @@ var BufferedController = require("../buffered_controller");
 
 var IssueTitleController = BufferedController.extend({
   needs: ["issue"],
-  isCollaboratorBinding: "App.repo.is_collaborator",
+  isCollaboratorBinding: "model.repo.is_collaborator",
   isLoggedInBinding: "App.loggedIn",
   currentUserBinding: "App.currentUser",
   isEditing: false,
@@ -1604,6 +1612,9 @@ module.exports = IssueTitleController;
 },{"../buffered_controller":20}],32:[function(require,module,exports){
 var IssuesEditController = Ember.ObjectController.extend({
   needs: ["application"],
+  isCollaborator: function(){
+    return this.get("model.repo.is_collaborator");
+  }.property("model.repo.is_collaborator"),
   columns: Ember.computed.alias("controllers.application.model.board.columns"),
   isReady: function(key, value){
     if(value !== undefined) {
@@ -1639,7 +1650,7 @@ var IssuesEditController = Ember.ObjectController.extend({
        }.bind(this));
     },
     moveToColumn: function(column) {
-      if(!App.get("repo.is_collaborator")) {
+      if(!this.get("isCollaborator")) {
         return false;
       }
       this.get("model").reorder(this.get("model._data.order"),column).then(function() {
@@ -1701,12 +1712,16 @@ module.exports = IssuesEditController;
 
 },{}],33:[function(require,module,exports){
 LoginController = Ember.ObjectController.extend({
-  privateLoginUrl: function(){
-    var privateUrl = "/login/private?redirect_to=";
+  authLevel: function(){
+    return App.get("authLevel").capitalize();
+  }.property("App.authLevel"),
+
+  loginUrl: function(){
+    var url = "/login/" + App.get("authLevel") + "?redirect_to=";
     var location = window.location.pathname + window.location.hash;
     var redirectParam = encodeURIComponent(location);
-    return privateUrl + redirectParam  
-  }.property()
+    return url + redirectParam  
+  }.property("App.authLevel"),
 });
 
 module.exports = LoginController;
@@ -2607,6 +2622,7 @@ var Issue = Ember.Object.extend(Serializable,{
      
      return Ember.$.getJSON("/api/" + full_name + "/issues/" + this.get("number") + "/details")
      .success(function(details){
+       this.set("repo", details.repo);
        this.set("activities", details.activities);
        this.set("processing", false);
      }.bind(this)).fail(function(e){
@@ -2937,8 +2953,8 @@ var ApplicationRoute = Ember.Route.extend({
     this._super.apply(this, arguments);
     SocketMixin.apply(controller);
     controller.setUpSocketEvents();
-    $(document).ajaxError(function(){
-      if(App.loggedIn){
+    $(document).ajaxError(function(event, xhr){
+      if(App.loggedIn && xhr.status == 404){
         this.send("sessionErrorHandler");
       }
     }.bind(this));
@@ -3517,7 +3533,7 @@ function program6(depth0,data) {
 function program8(depth0,data) {
   
   var buffer = '', hashContexts, hashTypes;
-  data.buffer.push("\n\n<div class=\"hb-action actions-close\">\n  <button class=\"hb-button\" ");
+  data.buffer.push("\n  <div class=\"hb-action actions-close\">\n    <button class=\"hb-button\" ");
   hashContexts = {'disabled': depth0};
   hashTypes = {'disabled': "ID"};
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
@@ -3529,7 +3545,7 @@ function program8(depth0,data) {
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "close", "", {hash:{
     'bubbles': (false)
   },contexts:[depth0,depth0],types:["ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(">Close</button>\n</div>                                                      \n");
+  data.buffer.push(">Close</button>\n  </div>                                                      \n");
   return buffer;
   }
 
@@ -3590,7 +3606,7 @@ function program10(depth0,data) {
   data.buffer.push("\n</div>\n\n");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers['if'].call(depth0, "current_state.is_last", {hash:{},inverse:self.noop,fn:self.program(8, program8, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack1 = helpers['if'].call(depth0, "isLast", {hash:{},inverse:self.noop,fn:self.program(8, program8, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n\n");
   hashTypes = {};
@@ -4005,7 +4021,7 @@ function program1(depth0,data) {
   data.buffer.push("\n      ");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers['if'].call(depth0, "App.repo.is_collaborator", {hash:{},inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack1 = helpers['if'].call(depth0, "isCollaborator", {hash:{},inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n    ");
   return buffer;
@@ -4067,13 +4083,13 @@ function program4(depth0,data) {
   hashContexts = {};
   options = {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.render || depth0.render),stack1 ? stack1.call(depth0, "issue.title", "model", options) : helperMissing.call(depth0, "render", "issue.title", "model", options))));
-  data.buffer.push("\n    <div class=\"flex-crumbs\">\n      ");
+  data.buffer.push("\n      <div class=\"flex-crumbs\">\n        ");
   hashContexts = {'content': depth0};
   hashTypes = {'content': "ID"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.IssueSelectedColumnView", {hash:{
     'content': ("columns")
   },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\n    </div>\n  </div>\n  <div class=\"fullscreen-card-right\">\n    ");
+  data.buffer.push("\n      </div>\n  </div>\n  <div class=\"fullscreen-card-right\">\n    ");
   hashTypes = {};
   hashContexts = {};
   stack2 = helpers['if'].call(depth0, "App.loggedIn", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
@@ -4083,7 +4099,7 @@ function program4(depth0,data) {
   hashTypes = {'labelsChanged': "STRING",'editable': "ID",'values': "ID",'selected': "ID",'title': "STRING",'labels': "ID"};
   options = {hash:{
     'labelsChanged': ("labelsChanged"),
-    'editable': ("App.repo.is_collaborator"),
+    'editable': ("isCollaborator"),
     'values': ("controller.model.other_labels"),
     'selected': ("controller.model.other_labels"),
     'title': ("Labels"),
@@ -4094,7 +4110,7 @@ function program4(depth0,data) {
   hashContexts = {'editable': depth0,'assign': depth0,'selected': depth0,'assignees': depth0};
   hashTypes = {'editable': "ID",'assign': "STRING",'selected': "ID",'assignees': "ID"};
   options = {hash:{
-    'editable': ("App.repo.is_collaborator"),
+    'editable': ("isCollaborator"),
     'assign': ("assignUser"),
     'selected': ("controller.model.assignee"),
     'assignees': ("controller.repository.assignees")
@@ -4104,7 +4120,7 @@ function program4(depth0,data) {
   hashContexts = {'editable': depth0,'assign': depth0,'selected': depth0,'milestones': depth0};
   hashTypes = {'editable': "ID",'assign': "STRING",'selected': "ID",'milestones': "ID"};
   options = {hash:{
-    'editable': ("App.repo.is_collaborator"),
+    'editable': ("isCollaborator"),
     'assign': ("assignMilestone"),
     'selected': ("controller.model.milestone"),
     'milestones': ("controller.repository.milestones")
@@ -4188,16 +4204,24 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 Ember.TEMPLATES['login'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', hashContexts, hashTypes, escapeExpression=this.escapeExpression;
+  var buffer = '', hashTypes, hashContexts, escapeExpression=this.escapeExpression;
 
 
-  data.buffer.push("<div class=\"fullscreen-login fullscreen-login--center\">\n  <h2> Your Session Has Expired! </h2>\n  <div class=\"flex-form-top\">\n    <div class=\"well\">\n      <p> Allow Private Access to renable third-party access to GitHub </p>\n    </div>\n    <a ");
+  data.buffer.push("<div class=\"fullscreen-login fullscreen-login--center\">\n  <h2> Your Session Has Expired! </h2>\n  <div class=\"flex-form-top\">\n    <div class=\"well\">\n      <p> Allow ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "authLevel", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" Access to renable third-party access to GitHub </p>\n    </div>\n    <a ");
   hashContexts = {'href': depth0};
   hashTypes = {'href': "ID"};
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
-    'href': ("privateLoginUrl")
+    'href': ("loginUrl")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(" class=\"hb-button\">Allow Private Access</a>\n    <h3> or </h3>\n    <a href=\"/\" class=\"hb-button\"> Go Home </a>\n  </div>\n</div>\n");
+  data.buffer.push(" class=\"hb-button\">Allow ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "authLevel", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" Access</a>\n    <h3> or </h3>\n    <a href=\"/\" class=\"hb-button\"> Go Home </a>\n  </div>\n</div>\n");
   return buffer;
   
 });
@@ -76743,6 +76767,9 @@ var CardWrapperView = Em.View.extend({
     colorLabel: function () {
       return "-x" + this.get("content.color");
     }.property("content.color"),
+    isCollaborator: function(){
+      return this.get("content.repo.is_collaborator");
+    }.property("content.repo.is_collaborator"),
     isClosable: function () {
      var currentState = this.get("content.current_state");
 
@@ -76764,7 +76791,7 @@ var CardWrapperView = Em.View.extend({
       }.bind(this))
     }.observes("content.isArchived"),
     isDraggable: function( ){
-      return App.get("loggedIn") && App.get("repo.is_collaborator");
+      return App.get("loggedIn") && this.get("isCollaborator");
     }.property("App.loggedIn","content.state"),
     isFiltered: function() {
       var dimFilters = App.get("dimFilters"),
@@ -76801,22 +76828,32 @@ var CardWrapperView = Em.View.extend({
       var view = Em.View.views[this.$().find("> div").attr("id")];
       view.get("controller").send("fullscreen")
     },
+    dragAuthorized: function(ev){
+      var contains_type =  ev.dataTransfer.types.contains("text/huboard-assignee")
+      return contains_type && this.get("isCollaborator")
+    },
     dragEnter: function(ev) {
       ev.preventDefault();
-      if(ev.dataTransfer.types.contains("text/huboard-assignee")){
+      if(this.dragAuthorized(ev)){
         this.$().addClass("assignee-accept");
+      } else {
+        this.$().addClass("assignee-error");
       }
     },
     dragOver: function(ev) {
       ev.preventDefault();
-      if(ev.dataTransfer.types.contains("text/huboard-assignee")){
+      if(this.dragAuthorized(ev)){
         this.$().addClass("assignee-accept");
+      } else {
+        this.$().addClass("assignee-error");
       }
     },
     dragLeave: function(ev) {
       ev.preventDefault();
-      if(ev.dataTransfer.types.contains("text/huboard-assignee")){
+      if(this.dragAuthorized(ev)){
         this.$().removeClass("assignee-accept");
+      } else {
+        this.$().removeClass("assignee-error");
       }
     },
     drop: function(ev){
@@ -76824,13 +76861,15 @@ var CardWrapperView = Em.View.extend({
         ev.stopPropagation();
       }
 
-      if(ev.dataTransfer.types.contains("text/huboard-assignee")){
+      if(this.dragAuthorized(ev)){
         var view = Em.View.views[this.$().find("> div").attr("id")];
         view.get("controller").send("assignUser", ev.dataTransfer.getData("text/huboard-assignee"));
-
-        ev.preventDefault();
         this.$().removeClass("assignee-accept");
+      } else {
+        this.$().removeClass("assignee-error");
       }
+      
+      ev.preventDefault();
     }
 });
 
@@ -77204,8 +77243,8 @@ var IssueSelectedColumnView = Ember.CollectionView.extend({
   classNames: ["nav","breadcrumbs"],
   classNameBindings: ["stateClass", "isEnabled:enabled:disabled"],
   isEnabled: function() {
-    return App.get("repo.is_collaborator");
-  }.property("App.repo.is_collaborator"),
+    return this.get("controller.model.repo.is_collaborator");
+  }.property("controller.model.repo.is_collaborator"),
   stateClass: function(){
     var github_state = this.get("controller.model.state");
     if(github_state === "closed"){

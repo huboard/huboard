@@ -60,8 +60,8 @@ class Huboard
 
       if match and repo_exists?(match[:user_name], match[:repo])
         new_link = create_label name: label_name, color: random_color
-        new_link.user = match[:user_name]
-        new_link.repo = match[:repo]
+        new_link['user'] = match[:user_name]
+        new_link['repo'] = match[:repo]
         new_link
       else
         nil

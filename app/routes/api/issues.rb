@@ -24,6 +24,7 @@ module HuBoard
         post '/api/:user/:repo/issues/:number/comment' do
           data = {body: params["markdown"]}
           comment = gh.repos(params[:user], params[:repo]).issues(params[:number]).comments.create data
+          raise Sinatra::NotFound if comment['message'] == "Not Found"
 
           json comment.to_hash
         end

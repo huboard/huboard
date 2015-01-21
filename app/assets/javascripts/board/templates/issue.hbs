@@ -1,13 +1,13 @@
 <div class="fullscreen-card">
   <div class="fullscreen-card-preamble clearfix">
     {{render 'issue.title' model }}
-    <div class="flex-crumbs">
-      {{view App.IssueSelectedColumnView content=columns}}
-    </div>
+      <div class="flex-crumbs">
+        {{view App.IssueSelectedColumnView content=columns}}
+      </div>
   </div>
   <div class="fullscreen-card-right">
     {{#if App.loggedIn }}
-      {{#if App.repo.is_collaborator }}
+      {{#if isCollaborator }}
       <div>
         <label>
           {{input type="checkbox" name="isReady" checked=isReady }} Ready for next stage
@@ -18,9 +18,9 @@
       </div>
       {{/if}}
     {{/if}}
-          {{hb-label-selector labelsChanged="labelsChanged" editable=App.repo.is_collaborator values=controller.model.other_labels selected=controller.model.other_labels title="Labels" labels=controller.repository.other_labels}}
-      {{hb-assignee editable=App.repo.is_collaborator assign="assignUser" selected=controller.model.assignee assignees=controller.repository.assignees}}
-      {{hb-milestone editable=App.repo.is_collaborator assign="assignMilestone" selected=controller.model.milestone milestones=controller.repository.milestones}}
+          {{hb-label-selector labelsChanged="labelsChanged" editable=isCollaborator values=controller.model.other_labels selected=controller.model.other_labels title="Labels" labels=controller.repository.other_labels}}
+      {{hb-assignee editable=isCollaborator assign="assignUser" selected=controller.model.assignee assignees=controller.repository.assignees}}
+      {{hb-milestone editable=isCollaborator assign="assignMilestone" selected=controller.model.milestone milestones=controller.repository.milestones}}
   </div>
 <div class="fullscreen-card-left">
   {{render 'issue.body' model}}

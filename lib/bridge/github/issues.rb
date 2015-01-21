@@ -18,6 +18,7 @@ class Huboard
         |i| i.extend(Card)
       }.each{ |i|
         i.merge!(:repo => {owner: {login: user}, name: repo, full_name: "#{user}/#{repo}" })
+        i[:repo][:is_collaborator] = gh['permissions'] ? gh['permissions']['push'] : nil
       }.sort_by { |i| i["_data"]["order"] || i["number"].to_f }
     end
 
@@ -25,7 +26,7 @@ class Huboard
       issue = gh.issues(number)
       labels = issue.labels.all.reject {|l| Huboard.all_patterns.any? {|p| p.match l['name'] }}.sort_by {|l| l['name']}
 
-      gh.issues(number).patch(labels: labels).extend(Card).merge!("repo" => {owner: {login: @user}, name: @repo,  full_name: "#{@user}/#{@repo}" })
+      gh.issues(number).patch(labels: labels).extend(Card).merge!(:repo => {owner: {login: @user}, name: @repo,  full_name: "#{@user}/#{@repo}" })
     end
 
     def create_issue(params)
@@ -47,7 +48,7 @@ class Huboard
 
       result = gh.issues.create(attributes).extend(Card).merge!(:repo => {owner: {login: @user}, name: @repo,  full_name: "#{@user}/#{@repo}" })
 
-      result.current_state = labels.first if result.current_state["name"] == "__nil__"
+      result['current_state'] = labels.first if result.current_state["name"] == "__nil__"
 
       result
     end
@@ -55,13 +56,17 @@ class Huboard
     def closed_issues(label, since = (Time.now - 2*7*24*60*60).utc.iso8601)
       params = {labels: label, state: "closed", since: since, per_page: 30}
 
-      gh.issues(params).each{|i| i.extend(Card)}.each{ |i| i.merge!("repo" => {owner: {login: user}, name: repo,  full_name: "#{user}/#{repo}" }) }.sort_by { |i| i["_data"]["order"] || i["number"].to_f }
+      gh.issues(params).each{|i| i.extend(Card)}.each{ |i|
+        i.merge!(:repo => {owner: {login: user}, name: repo,  full_name: "#{user}/#{repo}" })
+        i[:repo][:is_collaborator] = gh['permissions'] ? gh['permissions']['push'] : nil
+      }.sort_by { |i| i["_data"]["order"] || i["number"].to_f }
     end
 
     def issue(number)
       raise "number is nil" unless number
 
       issue = gh.issues(number).extend(Card).merge!(repo: {owner: {login: user}, name: repo, full_name: "#{user}/#{repo}" })
+      issue[:repo][:is_collaborator] = gh['permissions'] ? gh['permissions']['push'] : nil
       issue.attach_client connection_factory
       issue
     end
