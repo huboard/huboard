@@ -1,3 +1,6 @@
+require 'raygun4ruby'
+require "newrelic_rpm"
+
 module HuBoard
   extend self
 

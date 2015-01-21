@@ -34,7 +34,7 @@ module HuBoard
 
       put '/settings/profile/:name/additionalInfo/?' do
         user = gh.users params[:name]
-        docs = couch.customers.findPlanById user.id
+        docs = couch.customers.findPlanById user['id']
         if docs.rows.any?
           plan_doc = docs.rows.first.value
           plan_doc.additional_info = params[:additional_info]
@@ -49,7 +49,7 @@ module HuBoard
       put "/settings/profile/:name/card/?" do
         user = gh.users params[:name]
 
-        docs = couch.customers.findPlanById user.id
+        docs = couch.customers.findPlanById user['id']
 
         if docs.rows.any?
           plan_doc = docs.rows.first.value
@@ -73,7 +73,7 @@ module HuBoard
       delete "/settings/profile/:name/plans/:plan_id/?" do
         user = gh.users params[:name]
 
-        docs = couch.customers.findPlanById user.id
+        docs = couch.customers.findPlanById user['id']
 
         if docs.rows.any?
           plan_doc = docs.rows.first.value

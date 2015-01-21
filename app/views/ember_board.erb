@@ -1,5 +1,5 @@
 <% content_for :title do %>
-  <%= @repo.full_name %>
+  <%= @repo['full_name'] %>
 <% end %>
 <% content_for :javascripts do %>
   <% unless ENV["SOCKET_BACKEND"].nil? %>

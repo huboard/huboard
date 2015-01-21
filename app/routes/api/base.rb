@@ -24,10 +24,10 @@ module HuBoard
           return if RESERVED_URLS.include? params[:user]
 
           repo = gh.repos params[:user], params[:repo]
-          raise Sinatra::NotFound if repo.message == "Not Found"
+          raise Sinatra::NotFound if repo['message'] == "Not Found"
 
           unless request.get? || UNRESTRICTED.any?{|mtch| mtch =~ params[:splat].to_s}
-            raise Sinatra::NotFound unless repo.permissions && repo.permissions.push
+            raise Sinatra::NotFound unless repo['permissions'] && repo['permissions']['push']
           end
         end
 
