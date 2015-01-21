@@ -48,7 +48,7 @@ class Huboard
 
       result = gh.issues.create(attributes).extend(Card).merge!(:repo => {owner: {login: @user}, name: @repo,  full_name: "#{@user}/#{@repo}" })
 
-      result.current_state = labels.first if result.current_state["name"] == "__nil__"
+      result['current_state'] = labels.first if result.current_state["name"] == "__nil__"
 
       result
     end
