@@ -85,7 +85,14 @@ module HuBoard
           customer = couch.customers.findPlanById(org['id'])
           if customer.rows && customer.rows.size > 0
             customer_doc = customer.rows.first.value
-            charges = Stripe::Charge.all(customer: customer_doc.stripe.customer.id)['data']
+            begin
+              charges = Stripe::Charge.all(customer: customer_doc.stripe.customer.id)['data']
+            rescue Exception => e
+              json({
+                charges:[]
+              })
+              #json_error e, 400
+            end
             json({
               charges: charges,
               additional_info: customer_doc.additional_info
