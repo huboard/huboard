@@ -6,39 +6,6 @@
   <%= javascript_tag 'accounts/application' %>
 <% end %>
 
-<script type="text/x-handlebars" >
-  {{outlet modal}}
-  {{outlet loading}}
-  <div class="row">
-   
-    <div class="span3">
-
-      <ul class="nav nav-list">
-        <li>
-        {{#linkTo "index" }} 
-        <img height="24" width="24"  {{bindAttr src=model.user.gravatar_url  }} /> 
-        {{ model.user.login }}
-        {{/linkTo}}
-        </li>
-
-        {{#each model.orgs}}
-        <li>
-        {{#linkTo "profile" this}} 
-        <img  height="24" width="24" {{bindAttr src=gravatar_url  }} /> 
-          {{ login }} 
-        {{/linkTo}}
-        </li>
-        {{/each}}
-      </ul>
-    </div> 
-    <div class="span9">
-      {{ outlet }}
-      <div>
-        <strong>Have questions?</strong> Email us anytime at support@huboard.com
-      </div>
-    </div> 
-  </div> 
-</script>
 
 <script type="text/x-handlebars" id="empty">
 

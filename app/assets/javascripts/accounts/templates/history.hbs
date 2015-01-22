@@ -8,7 +8,7 @@
   {{ textarea value=model.history.additional_info }}
 
   <button class="hb-button small"
-    {{action saveAdditionalInfo this }} {{bind-attr disabled=processing }} >Update</button>
+    {{action 'saveAdditionalInfo' this }} {{bind-attr disabled=processing }} >Update</button>
   </p>
 
 </div>
@@ -23,14 +23,14 @@
     </head>
     <tbody>
 
-      {{#each model.history.charges }}
+      {{#each charge in model.history.charges }}
       <tr>
-        <td>{{stripe-date created }}</td>
-        <td>{{ receipt_email }}</td>
-        <td>{{stripe-money amount }}</td>
+        <td>{{stripe-date charge.created }}</td>
+        <td>{{ charge.receipt_email }}</td>
+        <td>{{stripe-money charge.amount }}</td>
         <td class="text-right">    
-         {{#if paid}}
-          <a href="/settings/invoices/{{unbound invoice }}">HTML</a> | <a href="/settings/invoices/{{unbound invoice}}.pdf">PDF</a>
+         {{#if charge.paid}}
+          <a href="/settings/invoices/{{unbound charge.invoice }}">HTML</a> | <a href="/settings/invoices/{{unbound charge.invoice}}.pdf">PDF</a>
          {{else}}
           UNPAID
          {{/if}}

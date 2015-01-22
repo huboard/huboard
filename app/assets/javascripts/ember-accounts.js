@@ -1,6 +1,6 @@
-//= require ./ember/jquery-1.9.1.js
-//= require ./ember/handlebars-1.0.0.js
-//= require ./ember/ember.js
+//= require ./bower_components/jquery/dist/jquery.js
+//= require ./bower_components/handlebars/handlebars.js
+//= require ./bower_components/ember/ember.js
 //
 //= require spin.js
 //

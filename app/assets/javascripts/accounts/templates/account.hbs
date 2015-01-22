@@ -38,20 +38,20 @@
     </head>
     <tbody>
 
-      {{#each model.details.plans }}
+      {{#each plan in model.details.plans }}
       <tr>
-        <td>{{ name }}</td>
-        <td>{{stripe-money amount }}/month</td>
+        <td>{{ plan.name }}</td>
+        <td>{{stripe-money plan.amount }}/month</td>
         <td>unlimited</td>
         <td>unlimited</td>
         <td class="text-right">    
-         {{#if purchased }} 
+         {{#if plan.purchased }} 
             Your plan
             <button class="hb-button hb-button-danger small"
-               {{action cancel this }}>Cancel plan</button>
+               {{action 'cancel' plan }}>Cancel plan</button>
           {{else}}
             <button class="hb-button small"
-             {{action purchase this }}>Upgrade</button>
+             {{action 'purchase' plan }}>Upgrade</button>
           {{/if}}
 
         </td>

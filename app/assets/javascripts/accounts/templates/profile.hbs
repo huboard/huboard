@@ -5,7 +5,7 @@
       <div class="widget-body">
         {{#if model.details.org.is_owner }}
 
-          {{ render account model }}
+          {{ render 'account' model }}
 
         {{else}}
           <div class="alert">
@@ -24,7 +24,7 @@
         <div class="nav-section">
 
         <div class="widget-body">
-          {{ render history model }}
+          {{ render 'history' model }}
         </div>
       </div>
     {{/x-pane}}
