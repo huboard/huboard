@@ -1,7 +1,8 @@
 XPaneComponent = Ember.Component.extend({
-  didInsertElement: function() {
+  visible: true,
+  registerTab: function() {
     this.get('parentView').addPane(this);
-  },
+  }.on("didInsertElement"),
   selected: function() {
     return this.get('parentView.selected') === this;
   }.property('parentView.selected')

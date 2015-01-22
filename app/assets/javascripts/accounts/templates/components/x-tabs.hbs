@@ -1,9 +1,11 @@
 <div class="tabbable">
   <ul class="nav nav-tabs">
     {{#each pane in panes}}
-    <li {{bind-attr class="pane.selected:active"}}>
-      <a href="#" {{action 'select' pane}}>{{pane.title}}</a>
-    </li>
+      {{#if pane.visible}}
+      <li {{bind-attr class="pane.selected:active"}}>
+        <a href="#" {{action 'select' pane}}>{{pane.title}}</a>
+      </li>
+      {{/if}}
     {{/each}}
   </ul>
   <div class="tab-content">

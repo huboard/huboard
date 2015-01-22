@@ -3,7 +3,6 @@ XTabsComponent = Ember.Component.extend({
     this._super.apply(this, arguments);
     this.panes = [];
   },
-
   addPane: function(pane) {
     if (this.get('panes.length') == 0) this.selectPane(pane);
     this.panes.pushObject(pane);

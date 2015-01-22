@@ -19,14 +19,12 @@
       </div>
     </div>
   {{/x-pane}}
-  {{#if model.details.org.is_owner }}
-    {{#x-pane title="Billing"}}
-        <div class="nav-section">
+  {{#x-pane title="Billing" visible=model.details.org.is_owner}}
+      <div class="nav-section">
 
-        <div class="widget-body">
-          {{ render 'history' model }}
-        </div>
+      <div class="widget-body">
+        {{ render 'history' model }}
       </div>
-    {{/x-pane}}
-  {{/if}}
+    </div>
+  {{/x-pane}}
 {{/x-tabs}}
