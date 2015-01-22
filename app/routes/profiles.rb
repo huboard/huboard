@@ -17,6 +17,35 @@ module HuBoard
         end
       end
 
+      get "/settings/:user/trial" do
+        @user = params[:user]
+        erb :activate_trial
+      end
+
+      post '/settings/profile/:user/trial/activate' do
+        docs = couch.customers.findPlanById gh.users(params[:user])["id"]
+        doc = docs.rows.first.value
+
+        customer = Stripe::Customer.retrieve(doc.stripe.customer.id)
+        account_type = doc.github.account.type == "User" ? "user_basic_v1" : "org_basic_v1"
+        customer.subscriptions.create({
+          plan: account_type,
+          trial_end: (Time.now.utc + (15 * 60 * 60 * 24)).to_i
+        })
+
+        begin
+          customer.save
+          doc.stripe["customer"] = customer
+          doc.trial = "active"
+          doc.stripe["plan"] = {plan_id: account_type}
+          couch.customers.save doc
+        rescue => e
+          puts e
+        end
+
+        redirect session[:forward_to]
+      end
+
       get "/settings/profile/?" do
         @user = gh.user
         @orgs = gh.orgs
@@ -118,39 +147,27 @@ module HuBoard
       end
 
       post "/settings/charge/:id/?" do
+        repo_user = gh.users(params[:id])
+        create_new_account(gh.user, repo_user) unless account_exists?(repo_user)
         begin
-        stripe_customer_hash = {
-          email: params[:email],
-          card: params[:card][:id],
-          plan:  params[:plan][:id],
-          trial_end: (Time.now.utc + (params[:plan][:trial_period].to_i * 60 * 60 * 24)).to_i
-        }
+          docs = couch.customers.findPlanById gh.users params[:id]
+          plan_doc = docs.rows.first.value
+          #couch.customers.save plan_doc
 
-        if !params[:coupon].nil? && !params[:coupon].empty?
-          stripe_customer_hash.merge!(coupon: params[:coupon]) 
-        end
+          customer = Stripe::Customer.retrieve(plan_doc.customer.id)
+          customer.email = params[:email]
+          customer.card =  params[:card][:id]
+          customer.plan = params[:plan][:id]
+          if !params[:coupon].nil? && !params[:coupon].empty?
+            customer.coupon = params[:coupon]
+          end
+          customer.save
 
-        customer = Stripe::Customer.create(stripe_customer_hash)
+          plan_doc.stripe.customer.merge!(customer)
+          puts plan_doc
 
-        user = gh.user
-        account = gh.users(params[:id])
-
-        attributes = {
-          "id" => customer.id,
-          github: {
-            user: user.to_hash,
-            account: account.to_hash
-          },
-          stripe: {
-            customer: customer,
-            plan: {
-              plan_id: params[:plan][:plan_id]
-            }
-          }
-        }
-        couch.customers.save(attributes)
-
-        json success: true, card: customer["cards"]["data"].first, discount: customer.discount
+          fail
+          json success: true, card: customer["cards"]["data"].first, discount: customer.discount
         rescue Stripe::StripeError => e
           status 422
           json e.json_body
