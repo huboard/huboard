@@ -41,10 +41,9 @@ class Huboard
         options[:api_url] = ENV["GITHUB_API_ENDPOINT"] if ENV["GITHUB_API_ENDPOINT"]
 
         Ghee.new(options) do |conn|
-          conn.use Faraday::Response::RaiseGheeError
           conn.use ClientId, params unless token || access_token
           conn.use Mimetype
-          conn.request :retry, 3
+          conn.request :retry, 4
           # conn.response :logger
           # disable cache because github api is broken
           conn.use Caching
