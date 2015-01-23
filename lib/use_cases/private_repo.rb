@@ -2,45 +2,55 @@ module UseCase
   class PrivateRepo
     include SolidUseCase
 
-    attr_reader :repo_user, :gh_user, :couch
-    def initialize(repo_user, gh_user, couch)
-      @repo_user = repo_user
-      @gh_user = gh_user
+    attr_accessor :couch, :gh
+    def initialize(gh, couch)
+      @gh = gh
       @couch = couch
     end
 
     steps :an_account_exists?, :a_trial_available?, :has_subscription?
 
-    def an_account_exists?(customer)
-      if !account_exists?(@repo_user) && user_is_owner  
-        create_new_account(@gh_user, @repo_user)
-        continue customer
+    def an_account_exists?(params)
+      repo_user = @gh.users(params[:user])
+      if !account_exists?(repo_user) && user_is_owner(params)
+        create_new_account(@gh.user, repo_user)
+        continue(params)
       else
-        continue customer
+        continue(params)
       end
     end
 
-    def a_trial_available?(customer)
-      if trial_available?(customer) && user_is_owner
-        redirect "/settings/trial"
-        continue(customer)
+    def a_trial_available?(params)
+      customer = couch.customers.findPlanById @gh.users(params[:user])["id"]
+      if trial_available?(customer) && user_is_owner(params)
+        params[:trial_available] = true
+        continue(params)
       else
-        continue(customer)
+        continue(params)
       end
     end
 
-    def has_subscription?(customer)
+    def has_subscription?(params)
+      return continue(params) if params[:trial_available]
+      customer = couch.customers.findPlanById @gh.users(params[:user])["id"]
       if subscription_active?(customer)
-        continue(customer)
+        continue(params)
       else
-        alt_customer = couch.customers.findPlanById @gh_user['id']
+        alt_customer = couch.customers.findPlanById @gh.user['id']
         fail :unauthorized unless subscription_active?(alt_customer)
       end
     end
 
     :private
-    def user_is_owner
-      @repo_user['login'] == @gh_user['login']
+    def user_is_owner(params)
+      repo_user = @gh.users(params[:user])
+      if repo_user["type"] == "Organization"
+        @u ||= @gh.orgs(repo_user["login"]).memberships(@gh.user["login"]) do |req|
+          req.headers["Accept"] = "application/vnd.github.moondragon+json"
+        end
+        return @u["role"] == "admin"
+      end
+      repo_user['login'] == @gh.user['login']
     end
   end
 end
