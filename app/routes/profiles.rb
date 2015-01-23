@@ -26,23 +26,14 @@ module HuBoard
         docs = couch.customers.findPlanById gh.users(params[:user])["id"]
         doc = docs.rows.first.value
 
-        customer = Stripe::Customer.retrieve(doc.stripe.customer.id)
+        customer = Stripe::Customer.retrieve(doc.id)
         account_type = doc.github.account.type == "User" ? "user_basic_v1" : "org_basic_v1"
         customer.subscriptions.create({
           plan: account_type,
           trial_end: (Time.now.utc + (15 * 60 * 60 * 24)).to_i
         })
 
-        begin
-          customer.save
-          doc.stripe["customer"] = customer
-          doc.trial = "active"
-          doc.stripe["plan"] = {plan_id: account_type}
-          couch.customers.save doc
-        rescue => e
-          puts e
-        end
-
+        customer.save rescue puts "Failed to save #{customer}"
         redirect session[:forward_to]
       end
 
@@ -88,10 +79,6 @@ module HuBoard
           customer.card = params[:card][:id]
           updated = customer.save
 
-          plan_doc.stripe.customer = updated
-
-          couch.customers.save plan_doc
-
           json success: true, message: "Card updated", card: updated["cards"]["data"].first
         else
           json success: false, message: "Unable to find plan"
@@ -107,12 +94,9 @@ module HuBoard
         if docs.rows.any?
           plan_doc = docs.rows.first.value
 
-          customer = Stripe::Customer.retrieve(plan_doc.stripe.customer.id)
-
+          customer = Stripe::Customer.retrieve(plan_doc.id)
           customer.cancel_subscription at_period_end: false
-          customer.delete
-
-          couch.customers.delete! plan_doc
+          customer.save
 
           json success: true, message: "Sorry to see you go"
         else
@@ -135,10 +119,6 @@ module HuBoard
           customer.coupon = params[:coupon]
           response = customer.save
 
-          customer_doc = couch.connection.get("Customers-#{customer.id}").body
-          customer_doc.stripe.customer.discount = response.discount
-          couch.customers.save customer_doc
-
           json(response)
         rescue Stripe::InvalidRequestError => e
           status 422
@@ -152,21 +132,18 @@ module HuBoard
         begin
           docs = couch.customers.findPlanById gh.users params[:id]
           plan_doc = docs.rows.first.value
-          #couch.customers.save plan_doc
 
-          customer = Stripe::Customer.retrieve(plan_doc.customer.id)
+          customer = Stripe::Customer.retrieve(plan_doc.id)
           customer.email = params[:email]
           customer.card =  params[:card][:id]
-          customer.plan = params[:plan][:id]
+          customer.subscriptions.create({
+            plan: params[:plan][:id],
+          })
           if !params[:coupon].nil? && !params[:coupon].empty?
             customer.coupon = params[:coupon]
           end
           customer.save
 
-          plan_doc.stripe.customer.merge!(customer)
-          puts plan_doc
-
-          fail
           json success: true, card: customer["cards"]["data"].first, discount: customer.discount
         rescue Stripe::StripeError => e
           status 422
