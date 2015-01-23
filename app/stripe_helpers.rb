@@ -2,15 +2,12 @@ module HuBoard
   module StripeHelpers
 
     def trial_available?(customer)
-      customer.rows.any? &&
-      customer.rows.first.value[:trial] &&
-        customer.rows.first.value.trial == "available"
+      customer.rows.first.value.trial == "available" rescue return false
     end
 
     def subscription_active?(customer)
-      customer.rows.any? &&
-      customer.rows.first.value &&
-        customer.rows.first.value.stripe.customer.subscriptions.data[0].status == "active"
+      status = customer.rows.first.value.stripe.customer.subscriptions.data[0].status rescue false
+      return status == "active" || status == "trialing"
     end
 
     def account_exists?(user)
@@ -19,15 +16,8 @@ module HuBoard
 
     def create_new_account(user, account=nil)
       account = account ? account : user
-      account_type = account["type"] == "User" ? "user_basic_v1" :
-        "org_basic_v1"
-      stripe_trial_account = {
-        email: "trial@huboard.com",
-        plan: account_type,
-        #trial_end: (Time.now.utc + (14 * 60 * 60 * 24)).to_i
-      }
 
-      customer = Stripe::Customer.create(stripe_trial_account)
+      customer = Stripe::Customer.create(email: "trial@huboard.com")
       customer_data = {
         "id" => customer.id,
         github: {
@@ -36,9 +26,6 @@ module HuBoard
         },
         stripe: {
           customer: customer,
-          plan: {
-            plan_id: account_type
-          }
         },
         trial: "available"
       }
