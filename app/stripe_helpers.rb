@@ -6,7 +6,13 @@ module HuBoard
     end
 
     def subscription_active?(customer)
-      status = customer.rows.first.value.stripe.customer.subscriptions.data[0].status rescue false
+      begin
+        id = customer.rows.first.value.id
+        sub = Stripe::Customer.retrieve(id).subscriptions.all
+        status = sub.data[0].status 
+      rescue => e
+        return false
+      end
       return status == "active" || status == "trialing"
     end
 
