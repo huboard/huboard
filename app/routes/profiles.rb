@@ -34,6 +34,10 @@ module HuBoard
         })
 
         customer.save rescue puts "Failed to save #{customer}"
+
+        doc.trial = "active"
+        couch.customers.save doc
+
         redirect session[:forward_to]
       end
 
