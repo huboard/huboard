@@ -1,4 +1,9 @@
-  <div class="instructions drop-shadow">
-    <h2> Activate Trial! </h2>
-  </div>
+<div class="instructions drop-shadow">
+  <h2> Activate your 15 day free trial for <%= @user %> to Access this Board? </h2>
+  <form action="/settings/profile/<%=@user%>/trial/activate" method="post">
+    <input class="btn primary" type="submit" value="Do it!"/>
+  </form>
+  <br>
+  <a href="/"> No Thanks </a>
+</div>
 
