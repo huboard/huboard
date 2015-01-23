@@ -41,12 +41,19 @@ class Huboard
         options[:api_url] = ENV["GITHUB_API_ENDPOINT"] if ENV["GITHUB_API_ENDPOINT"]
 
         Ghee.new(options) do |conn|
+          conn.request :retry, max: 4,
+                               exceptions: [
+                                 Errno::ETIMEDOUT,
+                                 'Timeout::Error',
+                                 Faraday::TimeoutError,
+                                 Faraday::ConnectionFailed,
+                                ]
           conn.use ClientId, params unless token || access_token
           conn.use Mimetype
-          conn.request :retry, 4
           # conn.response :logger
           # disable cache because github api is broken
           conn.use Caching
+
         end
       }
     end
