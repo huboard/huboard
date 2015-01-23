@@ -47,6 +47,7 @@ class Huboard
       }
 
       result = gh.issues.create(attributes).extend(Card).merge!(:repo => {owner: {login: @user}, name: @repo,  full_name: "#{@user}/#{@repo}" })
+      result[:repo][:is_collaborator] = gh['permissions'] ? gh['permissions']['push'] : nil
 
       result['current_state'] = labels.first if result.current_state["name"] == "__nil__"
 
