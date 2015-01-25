@@ -9,74 +9,70 @@ module HuBoard
 
         get '/api/profiles/?' do
           user = gh.user.to_hash
-          orgs = gh.orgs.to_a
+          orgs = gh.user.memberships.orgs("active").body
 
-          json user: user, orgs: orgs
+          orgs.select!{|org| org["role"] == "admin"}
+          orgs.map!{|org| org = org["organization"]}
+
+          json user: user, orgs: orgs.to_a
         end
 
         get '/api/profiles/user/?' do
           user = gh.user
-          user.merge! billing_email: user['email']
+          create_new_account(user) unless account_exists?(user)
 
-          customer = couch.customers.findPlanById(user['id'])
-          plans_doc = couch.connection.get("./plans").body
+          begin
+            doc = couch.customers.findPlanById(user['id'])
+            customer = Stripe::Customer.retrieve(doc.rows.first.value.id)
 
-          plans = plans_doc.stripe[plans_doc.meta.mode]["User"]
+            plan = plan_for("User", customer)
+            purchased = plan["status"] == "active" || 
+              plan["status"] == "trialing"
 
-          plans = plans.map do |plan|
-            plan.merge! purchased: customer.rows.any? { |row| row.value.stripe.plan.plan_id == plan.plan_id }
+            data = {
+              org: user.to_hash,
+              plans: [plan],
+              card: customer.default_card,
+              discount: customer.discount || {discount: { coupon: {id: ''} }},
+              is_owner: true,
+              has_plan: purchased
+            }
+          rescue => e
+            #Maybe Raygun?
+            json data
           end
-
-          card = nil
-
-          if customer.rows.any?
-            customer_doc = customer.rows.first.value
-            card = customer_doc.stripe.customer.cards.nil? ? nil : customer_doc.stripe.customer.cards.data.find {|card| card.id == customer_doc.stripe.customer.default_card }
-             discount = customer_doc.stripe.customer.discount
-          end
-
-          data = {
-            org: user.to_hash,
-            plans: plans,
-            card: card,
-            discount: discount || {discount: { coupon: {id: ''} }},
-            is_owner: true,
-            has_plan: customer.rows.size > 0
-          }
           json data
         end
 
         get '/api/profiles/:org/?' do
           org = gh.orgs(params[:org])
-          is_owner = gh.orgs(params[:org]).teams.any? { |t| t['name'] == "Owners" }
-          org.merge! is_owner: is_owner
 
-          customer = couch.customers.findPlanById(org['id'])
-          plans_doc = couch.connection.get("./plans").body
-
-          plans = plans_doc.stripe[plans_doc.meta.mode]["Organization"]
-
-          plans = plans.map do |plan|
-            plan.merge! purchased: customer.rows.any? { |row| row.value.stripe.plan.plan_id == plan.plan_id}
+          user = org.memberships(gh.user["login"]) do |req|
+            req.headers["Accept"] = "application/vnd.github.moondragon+json"
           end
+          org.merge! is_owner: user["role"] == "admin"
+          create_new_account(gh.user, org) unless account_exists?(org)
 
-          card = nil
+          begin
+            doc = couch.customers.findPlanById(org['id'])
+            customer = Stripe::Customer.retrieve(doc.rows.first.value.id)
 
-          if customer.rows.any?
-            customer_doc = customer.rows.first.value
-            card = customer_doc.stripe.customer.cards.nil? ? nil : customer_doc.stripe.customer.cards.data.find {|card| card.id == customer_doc.stripe.customer.default_card }
-             discount = customer_doc.stripe.customer.discount
+            plan = plan_for("Organization", customer)
+            purchased = plan["status"] == "active" || 
+              plan["status"] == "trialing"
+
+            data = {
+              org: org.to_hash,
+              plans: [plan],
+              card: customer.default_card,
+              discount: customer.discount || {discount: { coupon: {id: ''} }},
+              is_owner: true,
+              has_plan: purchased
+            }
+          rescue => e
+            #Maybe Raygun?
+            json data
           end
-          
-          data = {
-
-            org: org.to_hash,
-            plans: plans,
-            card: card,
-            discount: discount || {discount: { coupon: {id: ''} }},
-            is_owner: is_owner,
-            has_plan: customer.rows.size > 0
-          }
           json data
         end
 
