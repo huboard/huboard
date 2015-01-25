@@ -37,5 +37,16 @@ module HuBoard
       }
       couch.customers.save(customer_data)
     end
+
+    def plan_for(user_or_org, couch_doc)
+      if couch_doc.subscriptions.all.data.size > 0
+        plan = couch_doc.subscriptions.all.data[0]
+      else
+        plan = { status: "", plan: {amount: 0} }
+      end
+      plan["amount"] = plan[:plan][:amount].to_i
+      plan["name"] = user_or_org
+      plan
+    end
   end
 end
