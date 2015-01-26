@@ -1,0 +1,28 @@
+<div class="fullscreen-credit-card">
+  <form {{action 'cancel' on=submit}}>
+    <div class="modal-header">
+      <button type="button" class="close" {{action 'close'}} data-dismiss="modal" aria-hidden="true">×</button>
+      Cancel plan
+    </div>
+    <div class="modal-body">
+      <p>
+        By cancelling your subscription you will not be billed again and your account will be suspended immediately.
+      </p>
+      <p> 
+        We'd hate to see you go, are you sure you want to cancel?
+      </p>
+
+      <p>
+        If you have any questions, <a href="mailto:support@huboard.com?subject=Cancel subscription">contact us</a> anytime.
+      </p>
+
+      {{#if processingAction }}
+        <div class="fullscreen-overlay">
+        </div>
+      {{/if}}
+    </div>
+    <div class="modal-footer">
+      <button href="#" class="hb-button danger full" type="submit" {{bind-attr disabled="processingAction"}}><span>Cancel my plan</span></button>
+    </div>
+  </form>
+</div>

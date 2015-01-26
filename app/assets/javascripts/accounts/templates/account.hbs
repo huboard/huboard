@@ -1,0 +1,63 @@
+<div class="alert alert-success">
+  <p>
+    <strong>All plans</strong> receive a <strong>15 day free trial</strong>.
+  </p>
+  <p>
+    Risk free, cancel at anytime before the trial ends and receive no charges.
+  </p>
+</div>
+
+<div class='account-details'>
+  <div class='credit-card'>
+    {{#if model.details.card }}
+     <img src="<%= image_path 'Plain.png' %>" /> <strong>Credit card on file.</strong> Ending in {{ model.details.card.last4 }}
+     <button style="float: right" {{action updateCard this }} class="hb-button small">Update card</button>
+    {{else}}
+     <img src="<%= image_path 'Plain.png' %>" /> <strong>No Credit card on file.</strong>
+
+    {{/if}}
+  </div>
+
+  <div class='coupon'>
+    {{#if model.details.has_plan }}
+      <img src="<%= image_path 'icn-coupon.png' %>" /> <strong> Coupon: {{{couponCode}}} </strong>
+    <button style="float: right"class="hb-button small"
+    {{action applyCoupon this}}> Redeem Coupon </button>
+    {{/if}}
+  </div>
+</div>
+
+ <div class="table-wrapper">
+  <table class="table">
+    <thead>
+      <th>Plan</th>
+      <th>Price</th>
+      <th>Private repositories</th>
+      <th>Collaborators</th>
+      <th></th>
+    </head>
+    <tbody>
+
+      {{#each plan in model.details.plans }}
+      <tr>
+        <td>{{ plan.name }}</td>
+        <td>{{stripe-money plan.amount }}/month</td>
+        <td>unlimited</td>
+        <td>unlimited</td>
+        <td class="text-right">    
+         {{#if plan.purchased }} 
+            Your plan
+            <button class="hb-button hb-button-danger small"
+               {{action 'cancel' plan }}>Cancel plan</button>
+          {{else}}
+            <button class="hb-button small"
+             {{action 'purchase' plan }}>Upgrade</button>
+          {{/if}}
+
+        </td>
+      </tr>
+
+      {{/each}}
+    </tbody>
+  </table>
+</div>

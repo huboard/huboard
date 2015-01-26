@@ -1,0 +1,21 @@
+{
+  "name": "huboard-assets",
+  "version": "3.0.1",
+  "homepage": "https://github.com/rauhryan/huboard",
+  "authors": [
+    "Ryan Rauh <rauh.ryan@gmail.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/assets/javascripts/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "ember": "~1.9.1"
+  }
+}

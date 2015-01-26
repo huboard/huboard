@@ -1,0 +1,2 @@
+#! /bin/sh
+../../node_modules/.bin/ember build --out-file ../../app/assets/javascripts/accounts/application.js.erb $@
