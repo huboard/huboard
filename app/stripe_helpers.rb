@@ -38,14 +38,17 @@ module HuBoard
       couch.customers.save(customer_data)
     end
 
-    def plan_for(user_or_org, couch_doc)
-      if couch_doc.subscriptions.all.data.size > 0
-        plan = couch_doc.subscriptions.all.data[0]
+    def plan_for(user_or_org, customer)
+      if customer.subscriptions.all.data.size > 0
+        plan = customer.subscriptions.all.data[0].to_hash
       else
-        plan = { status: "", plan: {amount: 0} }
+        plan = { status: "pending", plan: {amount: 0}}
       end
+      id = user_or_org == "User" ? "user_basic_v1" : "org_basic_v1"
+      plan["id"] = id
       plan["amount"] = plan[:plan][:amount].to_i
       plan["name"] = user_or_org
+      plan["purchased"] = plan[:status] == "active"
       plan
     end
   end
