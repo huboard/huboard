@@ -107,6 +107,7 @@ module HuBoard
 
           customer = Stripe::Customer.retrieve(plan_doc.id)
           customer.cancel_subscription at_period_end: false
+          customer.cards.retrieve(customer.default_card).delete
           customer.save
 
           json success: true, message: "Sorry to see you go"
