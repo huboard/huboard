@@ -26,16 +26,16 @@ module HuBoard
             customer = Stripe::Customer.retrieve(doc.rows.first.value.id)
 
             plan = plan_for("User", customer)
-            purchased = plan["status"] == "active" || 
-              plan["status"] == "trialing"
+            status = plan[:status]
+            card = customer.cards.retrieve(customer.default_card) rescue false
 
             data = {
               org: user.to_hash,
               plans: [plan],
-              card: customer.default_card,
+              card: card || {last4: "- Trial Account (#{status})"},
               discount: customer.discount || {discount: { coupon: {id: ''} }},
               is_owner: true,
-              has_plan: purchased
+              has_plan: status == "trialing" || status == "active"
             }
           rescue => e
             #Maybe Raygun?
@@ -58,16 +58,16 @@ module HuBoard
             customer = Stripe::Customer.retrieve(doc.rows.first.value.id)
 
             plan = plan_for("Organization", customer)
-            purchased = plan["status"] == "active" || 
-              plan["status"] == "trialing"
+            status = plan[:status]
+            card = customer.cards.retrieve(customer.default_card) rescue false
 
             data = {
               org: org.to_hash,
               plans: [plan],
-              card: customer.default_card,
+              card: card || {last4: "- Trial Account (#{status})"},
               discount: customer.discount || {discount: { coupon: {id: ''} }},
               is_owner: true,
-              has_plan: purchased
+              has_plan: status == "trialing" || status == "active"
             }
           rescue => e
             #Maybe Raygun?

@@ -138,17 +138,17 @@ module HuBoard
       end
 
       post "/settings/charge/:id/?" do
-        repo_user = gh.users(params[:id])
-        create_new_account(gh.user, repo_user) unless account_exists?(repo_user)
         begin
+          repo_user = gh.users(params[:id])
+
           docs = couch.customers.findPlanById repo_user["id"]
           plan_doc = docs.rows.first.value
 
           customer = Stripe::Customer.retrieve(plan_doc.id)
           customer.email = params[:email]
-          customer.card =  params[:card][:id]
           customer.subscriptions.create({
             plan: params[:plan][:id],
+            card: params[:card][:id]
           })
           if !params[:coupon].nil? && !params[:coupon].empty?
             customer.coupon = params[:coupon]
