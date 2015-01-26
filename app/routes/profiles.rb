@@ -19,6 +19,11 @@ module HuBoard
 
       get "/settings/:user/trial" do
         @user = params[:user]
+
+        docs = couch.customers.findPlanById gh.users(@user)["id"]
+        trial = docs.rows.first.value.trial
+
+        redirect session[:forward_to] if trial != "available"
         erb :activate_trial
       end
 
@@ -26,17 +31,19 @@ module HuBoard
         docs = couch.customers.findPlanById gh.users(params[:user])["id"]
         doc = docs.rows.first.value
 
-        customer = Stripe::Customer.retrieve(doc.id)
-        account_type = doc.github.account.type == "User" ? "user_basic_v1" : "org_basic_v1"
-        customer.subscriptions.create({
-          plan: account_type,
-          trial_end: (Time.now.utc + (15 * 60 * 60 * 24)).to_i
-        })
+        if doc.trial == "available"
+          customer = Stripe::Customer.retrieve(doc.id)
+          account_type = doc.github.account.type == "User" ? "user_basic_v1" : "org_basic_v1"
+          customer.subscriptions.create({
+            plan: account_type,
+            trial_end: (Time.now.utc + (15 * 60 * 60 * 24)).to_i
+          })
 
-        customer.save rescue puts "Failed to save #{customer}"
+          customer.save rescue puts "Failed to save #{customer}"
 
-        doc.trial = "active"
-        couch.customers.save doc
+          doc.trial = "active"
+          couch.customers.save doc
+        end
 
         redirect session[:forward_to]
       end
@@ -134,7 +141,7 @@ module HuBoard
         repo_user = gh.users(params[:id])
         create_new_account(gh.user, repo_user) unless account_exists?(repo_user)
         begin
-          docs = couch.customers.findPlanById gh.users params[:id]
+          docs = couch.customers.findPlanById repo_user["id"]
           plan_doc = docs.rows.first.value
 
           customer = Stripe::Customer.retrieve(plan_doc.id)
