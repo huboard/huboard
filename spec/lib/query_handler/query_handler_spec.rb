@@ -67,7 +67,7 @@ describe QueryHandler do
     context "Default" do
 
       it "Logs Errors to STDOUT" do
-        expect($stdout).to receive(:puts).twice
+        expect($stdout).to receive(:puts).exactly(3).times
 
         sut.run do |query|
           query << ->{ BadQuery }

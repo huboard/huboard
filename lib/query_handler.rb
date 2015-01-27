@@ -6,6 +6,7 @@ class QueryHandler
 
   def self.logger
     @logger ||= lambda do |e|
+      $stdout.puts("QUERYHANDLER GENERATED ERROR: \n")
       $stdout.puts(e)
       $stdout.puts(e.backtrace)
     end
