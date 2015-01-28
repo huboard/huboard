@@ -12,7 +12,14 @@ module UseCase
 
     def an_account_exists?(params)
       @repo_user ||= @gh.users(params[:user])
-      if !account_exists?(@repo_user) && user_is_owner(params)
+
+      @customer = QueryHandler.run do |q|
+        q << Queries::CouchCustomer.get(@repo_user["id"], @couch)
+        q << Queries::PassThrough.go
+      end
+
+      return fail(:pass_through) if @customer[:pass_through]
+      if !account_exists?(@customer) && user_is_owner(params)
         create_new_account(@gh.user, @repo_user)
         continue(params)
       else
@@ -21,17 +28,15 @@ module UseCase
     end
 
     def a_trial_available?(params)
-      @customer ||= couch.customers.findPlanById @repo_user["id"]
       if trial_available?(@customer) && user_is_owner(params)
         params[:trial_available] = true
-        continue(params)
+        return continue(params)
       else
         continue(params)
       end
     end
 
     def has_subscription?(params)
-      return continue(params) if params[:trial_available]
       if subscription_active?(@customer)
         continue(params)
       else

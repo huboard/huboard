@@ -105,10 +105,15 @@ module HuBoard
         if docs.rows.any?
           plan_doc = docs.rows.first.value
 
-          customer = Stripe::Customer.retrieve(plan_doc.id)
+          query = Queries::StripeCustomer.get(plan_doc.id)
+          customer = QueryHandler.exec(&query) || erb(500)
+
           customer.cancel_subscription at_period_end: false
           customer.cards.retrieve(customer.default_card).delete
           customer.save
+
+          plan_doc.stripe.customer = customer
+          couch.customers.save plan_doc
 
           json success: true, message: "Sorry to see you go"
         else
@@ -144,8 +149,10 @@ module HuBoard
 
           docs = couch.customers.findPlanById repo_user["id"]
           plan_doc = docs.rows.first.value
+          
+          query = Queries::StripeCustomer.get(plan_doc.id)
+          customer = QueryHandler.exec(&query) || erb(500)
 
-          customer = Stripe::Customer.retrieve(plan_doc.id)
           customer.email = params[:email]
           customer.subscriptions.create({
             plan: params[:plan][:id],
@@ -155,6 +162,9 @@ module HuBoard
             customer.coupon = params[:coupon]
           end
           customer.save
+
+          plan_doc.stripe.customer = customer
+          couch.customers.save plan_doc
 
           json success: true, card: customer["cards"]["data"].first, discount: customer.discount
         rescue Stripe::StripeError => e

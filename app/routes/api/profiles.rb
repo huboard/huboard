@@ -19,28 +19,23 @@ module HuBoard
 
         get '/api/profiles/user/?' do
           user = gh.user
-          create_new_account(user) unless account_exists?(user)
 
-          begin
-            doc = couch.customers.findPlanById(user['id'])
-            customer = Stripe::Customer.retrieve(doc.rows.first.value.id)
+          query = Queries::CouchCustomer.get(user["id"], couch)
+          doc = QueryHandler.exec(&query) || erb(500)
 
-            plan = plan_for("User", customer)
-            status = plan[:status]
-            card = customer.cards.retrieve(customer.default_card) rescue false
+          customer = account_exists?(doc) ?
+            doc.rows.first.value : create_new_account(user)
 
-            data = {
-              org: user.to_hash,
-              plans: [plan],
-              card: card || {last4: "- Trial Account (#{status})"},
-              discount: customer.discount || {discount: { coupon: {id: ''} }},
-              is_owner: true,
-              has_plan: status == "trialing" || status == "active"
-            }
-          rescue => e
-            #Maybe Raygun?
-            json data
-          end
+          plan = plan_for("User", customer.stripe.customer)
+          data = {
+            org: user.to_hash,
+            plans: [plan],
+            card: plan[:card],
+            discount: customer.discount || {discount: { coupon: {id: ''} }},
+            is_owner: true,
+            has_plan: plan[:status] == "trialing" || plan[:status] == "active"
+          }
+
           json data
         end
 
@@ -51,28 +46,23 @@ module HuBoard
             req.headers["Accept"] = "application/vnd.github.moondragon+json"
           end
           org.merge! is_owner: user["role"] == "admin"
-          create_new_account(gh.user, org) unless account_exists?(org)
 
-          begin
-            doc = couch.customers.findPlanById(org['id'])
-            customer = Stripe::Customer.retrieve(doc.rows.first.value.id)
+          query = Queries::CouchCustomer.get(org["id"], couch)
+          doc = QueryHandler.exec(&query) || erb(500)
 
-            plan = plan_for("Organization", customer)
-            status = plan[:status]
-            card = customer.cards.retrieve(customer.default_card) rescue false
+          customer = account_exists?(doc) ?
+            doc.rows.first.value : create_new_account(gh.user, org)
 
-            data = {
-              org: org.to_hash,
-              plans: [plan],
-              card: card || {last4: "- Trial Account (#{status})"},
-              discount: customer.discount || {discount: { coupon: {id: ''} }},
-              is_owner: true,
-              has_plan: status == "trialing" || status == "active"
-            }
-          rescue => e
-            #Maybe Raygun?
-            json data
-          end
+          plan = plan_for("Organization", customer.stripe.customer)
+          data = {
+            org: org.to_hash,
+            plans: [plan],
+            card: plan[:card],
+            discount: customer.discount || {discount: { coupon: {id: ''} }},
+            is_owner: true,
+            has_plan: plan[:status] == "trialing" || plan[:status] == "active"
+          }
+
           json data
         end
 

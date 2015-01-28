@@ -23,6 +23,10 @@ module HuBoard
                 session[:upgrade_url] = user['login'] == gh.user['login'] ? "/settings/profile" : "/settings/profile/#/#{user['login']}"
               end
 
+              failure :pass_through do
+                return;
+              end
+
               failure :unauthorized do
                 throw(:warden) 
               end
