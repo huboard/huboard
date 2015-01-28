@@ -43,8 +43,10 @@ module UseCase
         continue(params)
       else
         query = Queries::CouchCustomer.get(@gh.user["id"], @couch)
-        customer = QueryHandler.exec(&query)
-        fail :unauthorized if !customer && !subscription_active?(customer)
+        customer_doc = QueryHandler.exec(&query)
+        customer = customer_doc ? customer_doc[:rows].first.value : false
+        return fail :unauthorized unless customer && subscription_active?(customer)
+        continue(params)
       end
     end
 
