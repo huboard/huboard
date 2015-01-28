@@ -21,7 +21,7 @@ module HuBoard
           user = gh.user
 
           query = Queries::CouchCustomer.get(user["id"], couch)
-          doc = QueryHandler.exec(&query) || erb(500)
+          doc = QueryHandler.exec(&query) || erb(:"500")
 
           customer = account_exists?(doc) ?
             doc.rows.first.value : create_new_account(user)
@@ -48,7 +48,7 @@ module HuBoard
           org.merge! is_owner: user["role"] == "admin"
 
           query = Queries::CouchCustomer.get(org["id"], couch)
-          doc = QueryHandler.exec(&query) || erb(500)
+          doc = QueryHandler.exec(&query) || erb(:"500")
 
           customer = account_exists?(doc) ?
             doc.rows.first.value : create_new_account(gh.user, org)
