@@ -245,6 +245,9 @@
   &.assignee-accept {
      border-color: #0069D6;
   }
+  &.assignee-error {
+     border-color: red;
+  }
   .card-labels {
     padding: 5px 0px;
     position: absolute;
@@ -422,11 +425,15 @@
   border-radius: 4px;
 }
 
-.filters li.filtered-label a {
+.filters li.colored a {
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
   border-left-style: solid;
   border-left-width: 3px;
+}
+
+.filters li.-x7965cc a{
+  border-left-color: #7965cc;
 }
 
 .filters li.clear-filters, .filters li.clear-filters a {

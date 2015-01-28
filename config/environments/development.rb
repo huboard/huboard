@@ -1,8 +1,13 @@
+require 'better_errors'
 module HuBoard
   extend self
 
   def sass?
     true
+  end
+  class App < Sinatra::Application
+    use ::BetterErrors::Middleware
+    ::BetterErrors.application_root = __dir__
   end
 end
 

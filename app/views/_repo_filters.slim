@@ -8,10 +8,10 @@ ruby:
 
 ul.nav.nav-tabs
   li.pull-right  class=(current_page_class :private)
-    a href="/repositories/private/#{user.login}"
+    a href="/repositories/private/#{user['login']}"
       span.label.label-warning Private
   li.pull-right class=(current_page_class :public)
-    a href="/repositories/public/#{user.login}"
+    a href="/repositories/public/#{user['login']}"
       span.label.label-success Public
 
   - if is_current_user
@@ -20,7 +20,7 @@ ul.nav.nav-tabs
           span All
   - else
       li.pull-right class=(current_page_class :all)
-        a href="/#{user.login}"
+        a href="/#{user['login']}"
           span All
 
   - if is_current_user
@@ -28,6 +28,6 @@ ul.nav.nav-tabs
         a href="/" Repositories
   - else
       li.active
-        a href="/#{user.login}" Repositories
+        a href="/#{user['login']}" Repositories
 
 

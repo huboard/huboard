@@ -16,9 +16,9 @@ module HuBoard
 
         get '/api/profiles/user/?' do
           user = gh.user
-          user.merge! billing_email: user.email
+          user.merge! billing_email: user['email']
 
-          customer = couch.customers.findPlanById(user.id)
+          customer = couch.customers.findPlanById(user['id'])
           plans_doc = couch.connection.get("./plans").body
 
           plans = plans_doc.stripe[plans_doc.meta.mode]["User"]
@@ -48,10 +48,10 @@ module HuBoard
 
         get '/api/profiles/:org/?' do
           org = gh.orgs(params[:org])
-          is_owner = gh.orgs(params[:org]).teams.any? { |t| t.name == "Owners" }
+          is_owner = gh.orgs(params[:org]).teams.any? { |t| t['name'] == "Owners" }
           org.merge! is_owner: is_owner
 
-          customer = couch.customers.findPlanById(org.id)
+          customer = couch.customers.findPlanById(org['id'])
           plans_doc = couch.connection.get("./plans").body
 
           plans = plans_doc.stripe[plans_doc.meta.mode]["Organization"]
@@ -82,10 +82,17 @@ module HuBoard
 
         get '/api/profiles/:org/history' do
           org = gh.users(params[:org])
-          customer = couch.customers.findPlanById(org.id)
+          customer = couch.customers.findPlanById(org['id'])
           if customer.rows && customer.rows.size > 0
             customer_doc = customer.rows.first.value
-            charges = Stripe::Charge.all(customer: customer_doc.stripe.customer.id)['data']
+            begin
+              charges = Stripe::Charge.all(customer: customer_doc.stripe.customer.id)['data']
+            rescue Exception => e
+              json({
+                charges:[]
+              })
+              #json_error e, 400
+            end
             json({
               charges: charges,
               additional_info: customer_doc.additional_info
