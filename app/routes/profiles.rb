@@ -42,6 +42,7 @@ module HuBoard
           customer.save rescue puts "Failed to save #{customer}"
 
           doc.trial = "active"
+          doc.billing_email = params[:billing_email]
           doc.stripe.customer = customer
           couch.customers.save doc
         end
@@ -107,7 +108,7 @@ module HuBoard
           plan_doc = docs.rows.first.value
 
           query = Queries::StripeCustomer.get(plan_doc.id)
-          customer = QueryHandler.exec(&query) || erb(500)
+          customer = QueryHandler.exec(&query) || erb(:"500")
 
           customer.cancel_subscription at_period_end: false
           customer.cards.retrieve(customer.default_card).delete
@@ -152,19 +153,30 @@ module HuBoard
           plan_doc = docs.rows.first.value
           
           query = Queries::StripeCustomer.get(plan_doc.id)
-          customer = QueryHandler.exec(&query) || erb(500)
+          customer = QueryHandler.exec(&query) || erb(:"500")
 
-          customer.email = params[:email]
-          customer.subscriptions.create({
-            plan: params[:plan][:id],
-            card: params[:card][:id]
-          })
+          
+          if plan_doc[:trial] && plan_doc.trial == "active"
+            customer.update_subscription({
+              plan: params[:plan][:id],
+              card: params[:card][:id]
+            })
+          else
+            customer.subscriptions.create({
+              plan: params[:plan][:id],
+              card: params[:card][:id]
+            })
+          end
+
           if !params[:coupon].nil? && !params[:coupon].empty?
             customer.coupon = params[:coupon]
           end
+
+          customer.email = params[:email]
           customer.save
 
           plan_doc.stripe.customer = customer
+          plan_doc.billing_email = params[:email]
           couch.customers.save plan_doc
 
           json success: true, card: customer["cards"]["data"].first, discount: customer.discount
