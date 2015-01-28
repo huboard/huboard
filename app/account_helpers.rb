@@ -2,20 +2,20 @@ module HuBoard
   module AccountHelpers
 
     def trial_available?(customer)
-      customer.rows.first.value.trial == "available" rescue return false
+      customer[:trial] == "available"
     end
 
     def subscription_active?(customer)
-      id = customer.rows.first.value.id
-      query = Queries::StripeCustomer.subscription(id)
-      sub = QueryHandler.exec(&query)
-
-      return false unless sub
-      return sub.status == "active" || sub.status == "trialing"
+      cus = customer[:stripe][:customer]
+      if cus[:subscriptions][:total_count] > 0
+        sub = cus[:subscriptions][:data][0]
+        return sub[:status] == "active" || sub[:status] == "trialing"
+      end
+      false
     end
 
-    def account_exists?(customer)
-      customer["rows"] && customer.rows.size > 0
+    def account_exists?(customer_doc)
+      customer_doc[:rows] && customer_doc[:rows].size > 0
     end
 
     def create_new_account(user, account=nil)
@@ -34,6 +34,7 @@ module HuBoard
         trial: "available"
       }
       couch.customers.save(customer_data)
+      return customer_data
     end
 
     #TODO this mapper is largly superflous, the client code should 
@@ -41,7 +42,7 @@ module HuBoard
     def plan_for(user_or_org, customer)
       if customer.subscriptions["data"].size > 0
         plan = customer.subscriptions["data"][0]
-        plan[:amount] = plan.amount
+        plan[:amount] = plan.plan.amount
       else
         price = user_or_org == "User" ? 7 : 24
         plan = { status: "inactive", amount: price}

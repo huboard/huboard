@@ -42,6 +42,7 @@ module HuBoard
           customer.save rescue puts "Failed to save #{customer}"
 
           doc.trial = "active"
+          doc.stripe.customer = customer
           couch.customers.save doc
         end
 

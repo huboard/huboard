@@ -13,14 +13,15 @@ module UseCase
     def an_account_exists?(params)
       @repo_user ||= @gh.users(params[:user])
 
-      @customer = QueryHandler.run do |q|
+      customer_doc = QueryHandler.run do |q|
         q << Queries::CouchCustomer.get(@repo_user["id"], @couch)
         q << Queries::PassThrough.go
       end
+      return fail(:pass_through) if customer_doc[:pass_through]
 
-      return fail(:pass_through) if @customer[:pass_through]
-      if !account_exists?(@customer) && user_is_owner(params)
-        create_new_account(@gh.user, @repo_user)
+      @customer = account_exists?(customer_doc) ? customer_doc[:rows].first.value : false
+      if !@customer && user_is_owner(params)
+        @customer = create_new_account(@gh.user, @repo_user)
         continue(params)
       else
         continue(params)
@@ -30,18 +31,20 @@ module UseCase
     def a_trial_available?(params)
       if trial_available?(@customer) && user_is_owner(params)
         params[:trial_available] = true
-        return continue(params)
+        continue(params)
       else
         continue(params)
       end
     end
 
     def has_subscription?(params)
+      return continue(params) if params[:trial_available]
       if subscription_active?(@customer)
         continue(params)
       else
-        alt_customer = couch.customers.findPlanById @gh.user['id']
-        fail :unauthorized unless subscription_active?(alt_customer)
+        query = Queries::CouchCustomer.get(@gh.user["id"], @couch)
+        customer = QueryHandler.exec(&query)
+        fail :unauthorized if !customer && !subscription_active?(customer)
       end
     end
 
