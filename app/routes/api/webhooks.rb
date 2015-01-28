@@ -38,6 +38,21 @@ module HuBoard
           LogWebhookJob.new.log params
           json message: "Webhook received"
         end
+
+        post '/api/stripe/webhook' do
+          payload = Hashie::Mash.new JSON.parse(params[:payload])
+          id = payload.data.object.id
+
+          query = Queries::CouchCustomer.get(id, couch)
+          doc = QueryHandler.exec(&query)
+
+          if payload.type == "customer.subscription.updated"
+            doc.rows.first.value.stripe.customer = payload.data.object
+            couch.customers.save doc
+          end
+
+          json message: "Webhook received"
+        end
       end
     end
   end
