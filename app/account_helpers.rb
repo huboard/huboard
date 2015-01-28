@@ -40,7 +40,7 @@ module HuBoard
     #TODO this mapper is largly superflous, the client code should 
     #more closey match a customers data
     def plan_for(user_or_org, customer)
-      if customer.subscriptions["data"].size > 0
+      if customer["subscriptions"] && customer.subscriptions["data"].size > 0
         plan = customer.subscriptions["data"][0]
         plan[:amount] = plan.plan.amount
       else
