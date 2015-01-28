@@ -50,7 +50,7 @@ module HuBoard
       id = user_or_org == "User" ? "user_basic_v1" : "org_basic_v1"
       plan[:id] = id
       plan[:name] = user_or_org
-      plan[:purchased] = plan[:status] == "active"
+      plan[:purchased] = plan[:status] == "active" || plan[:status] == "trialing"
       plan[:card] = customer.cards.data[0] rescue false
       plan
     end

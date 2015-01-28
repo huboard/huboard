@@ -33,7 +33,7 @@ module HuBoard
             card: plan[:card],
             discount: customer.discount || {discount: { coupon: {id: ''} }},
             is_owner: true,
-            has_plan: plan[:status] == "trialing" || plan[:status] == "active"
+            has_plan: plan[:purchased]
           }
 
           json data
@@ -60,7 +60,7 @@ module HuBoard
             card: plan[:card],
             discount: customer.discount || {discount: { coupon: {id: ''} }},
             is_owner: true,
-            has_plan: plan[:status] == "trialing" || plan[:status] == "active"
+            has_plan: plan[:purchased]
           }
 
           json data
