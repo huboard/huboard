@@ -38,16 +38,16 @@ module UseCase
     end
 
     def has_subscription?(params)
-      return continue(params) if params[:trial_available]
+      return continue(params) if params[:trial_available] || trial_active?(@customer)
       if subscription_active?(@customer)
         continue(params)
       else
         query = Queries::CouchCustomer.get(@gh.user["id"], @couch)
         customer_doc = QueryHandler.exec(&query)
         customer = customer_doc ? customer_doc[:rows].first.value : false
-        return fail :unauthorized unless customer && subscription_active?(customer)
-        continue(params)
       end
+      return fail :unauthorized unless customer && subscription_active?(customer)
+      return continue(params)
     end
 
     :private

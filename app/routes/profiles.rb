@@ -177,7 +177,7 @@ module HuBoard
 
           plan_doc.stripe.customer = customer
           plan_doc.billing_email = params[:email]
-          plan_doc.trial = "active"
+          plan_doc.trial = "expired"
           couch.customers.save plan_doc
 
           json success: true, card: customer["cards"]["data"].first, discount: customer.discount
