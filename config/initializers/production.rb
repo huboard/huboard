@@ -6,37 +6,44 @@ Raygun.setup do |config|
   config.silence_reporting = !raygun_api_key
 end
 
+QueryHandler.set_logger do |e|
+  ::Raygun.track_exception(e)
+end
+
 module HuBoard
   module Routes
     class Repositories
 
-      before "/:user/:repo/?*" do
+      before "/:user/:repo/?*" do 
+
         return if RESERVED_URLS.include? params[:user]
+        repo = gh.repos params[:user], params[:repo]
+        raise Sinatra::NotFound if repo['message'] == "Not Found"
 
-        if authenticated? :private
-          repo = gh.repos params[:user], params[:repo]
+        if authenticated?(:private) && repo["private"]
+          private_repo = UseCase::PrivateRepo.new(gh, couch)
 
-          raise Sinatra::NotFound if repo['message'] == "Not Found"
+          private_repo.run(params).match do
+            success do
+              session[:forward_to] = "#{params[:user]}/#{params[:repo]}"
+              redirect "/settings/#{params[:user]}/trial" if params[:trial_available]
 
-          if repo['private']
-            begin
-              user = gh.users params[:user]
-              customer = couch.customers.findPlanById user['id']
+              user = gh.users(params[:user])
               session[:github_login] = user['login']
               session[:upgrade_url] = user['login'] == gh.user['login'] ? "/settings/profile" : "/settings/profile/#/#{user['login']}"
-              return if customer.rows.any?
-              customer = couch.customers.findPlanById current_user.id
-              throw(:warden) unless customer.rows.any? #|| customer.rows.first.value.stripe.customer.delinquent
-            rescue NoMethodError => e
-              ::Raygun.track_exception(e, custom_data: { customer: customer })
-              return true
+            end
+
+            failure :pass_through do
+              return;
+            end
+
+            failure :unauthorized do
+              throw(:warden) 
             end
           end
-        else
-          repo = gh.repos params[:user], params[:repo]
-          raise Sinatra::NotFound if repo['message'] == "Not Found"
         end
       end
     end
   end
 end
+
