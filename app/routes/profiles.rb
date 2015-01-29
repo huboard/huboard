@@ -113,7 +113,9 @@ module HuBoard
           if customer.cards.total_count > 0
             customer.cards.retrieve(customer.default_card).delete
           end
-          customer.cancel_subscription at_period_end: false
+          if customer.subscriptions.total_count > 0
+            customer.cancel_subscription at_period_end: false
+          end
           customer.save
 
           plan_doc.stripe.customer = customer
