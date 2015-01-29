@@ -47,7 +47,10 @@ module HuBoard
           doc = QueryHandler.exec(&query)
 
           if payload.type == "customer.subscription.updated"
-            doc.rows.first.value.stripe.customer = payload.data.object
+            plan_doc = docs.rows.first.value
+            plan_doc.stripe.customer = payload.data.object
+            plan_doc.trial = "expired" if payload.data.object.status != "trialing"
+
             couch.customers.save doc
           end
 
