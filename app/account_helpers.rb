@@ -37,18 +37,14 @@ module HuBoard
       return customer_data
     end
 
-    #TODO this mapper is largly superflous, the client code should 
-    #more closey match a customers data
     def plan_for(user_or_org, customer)
       if customer["subscriptions"] && customer.subscriptions["data"].size > 0
         plan = customer.subscriptions["data"][0]
-        plan[:amount] = plan.plan.amount
       else
-        price = user_or_org == "User" ? 7 : 24
-        plan = { status: "inactive", amount: price}
+        plan = { status: "inactive"}
       end
-      id = user_or_org == "User" ? "user_basic_v1" : "org_basic_v1"
-      plan[:id] = id
+      plan[:amount] = user_or_org == "User" ? 7 : 24
+      plan[:id] = user_or_org == "User" ? "user_basic_v1" : "org_basic_v1"
       plan[:name] = user_or_org
       plan[:purchased] = plan[:status] == "active" || plan[:status] == "trialing"
       plan[:card] = customer.cards.data[0] rescue false
