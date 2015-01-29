@@ -29,6 +29,7 @@ module UseCase
     end
 
     def a_trial_available?(params)
+      return fail(:unauthorized) unless @customer
       if trial_available?(@customer) && user_is_owner(params)
         params[:trial_available] = true
         continue(params)
