@@ -6,7 +6,7 @@ module HuBoard
     end 
 
     def trial_active?(customer)
-      customer[:trial] == "available"
+      customer[:trial] == "active"
     end
 
     def subscription_active?(customer)
