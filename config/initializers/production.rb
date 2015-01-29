@@ -30,7 +30,6 @@ module HuBoard
 
               user = gh.users(params[:user])
               session[:github_login] = user['login']
-              session[:upgrade_url] = "/settings/profile"
             end
 
             failure :pass_through do
