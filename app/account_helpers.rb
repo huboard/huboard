@@ -43,7 +43,7 @@ module HuBoard
       else
         plan = { status: "inactive"}
       end
-      plan[:amount] = user_or_org == "User" ? 7 : 24
+      plan[:amount] = user_or_org == "User" ? 700 : 2400
       plan[:id] = user_or_org == "User" ? "user_basic_v1" : "org_basic_v1"
       plan[:name] = user_or_org
       plan[:purchased] = plan[:status] == "active" || plan[:status] == "trialing"
