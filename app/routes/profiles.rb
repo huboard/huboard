@@ -108,7 +108,8 @@ module HuBoard
           plan_doc = docs.rows.first.value
 
           query = Queries::StripeCustomer.get(plan_doc.id)
-          customer = QueryHandler.exec(&query) || erb(:"500")
+          customer = QueryHandler.exec(&query) || 
+            halt(json(success: false, message: "No Stripe Customer: #{plan_doc.id}"))
 
           if customer.cards.total_count > 0
             customer.cards.retrieve(customer.default_card).delete
@@ -117,6 +118,12 @@ module HuBoard
             customer.cancel_subscription at_period_end: false
           end
           customer.save
+
+          #Necessary because Stripe doesnt clean these up on save >.<
+          customer.subscriptions.data = []
+          customer.subscriptions.total_count = 0
+          customer.cards.data = []
+          customer.cards.total_count = 0
 
           plan_doc.stripe.customer = customer
           couch.customers.save plan_doc
