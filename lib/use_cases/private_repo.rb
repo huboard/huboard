@@ -41,7 +41,7 @@ module UseCase
     def has_subscription?(params)
       return continue(params) if params[:trial_available] || trial_active?(@customer)
       if subscription_active?(@customer)
-        continue(params)
+        return continue(params)
       else
         query = Queries::CouchCustomer.get(@gh.user["id"], @couch)
         customer_doc = QueryHandler.exec(&query)
