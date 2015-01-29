@@ -110,8 +110,10 @@ module HuBoard
           query = Queries::StripeCustomer.get(plan_doc.id)
           customer = QueryHandler.exec(&query) || erb(:"500")
 
+          if customer.cards.total_count > 0
+            customer.cards.retrieve(customer.default_card).delete
+          end
           customer.cancel_subscription at_period_end: false
-          customer.cards.retrieve(customer.default_card).delete
           customer.save
 
           plan_doc.stripe.customer = customer
