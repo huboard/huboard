@@ -40,10 +40,10 @@ module UseCase
 
     def has_subscription?(params)
       return continue(params) if params[:trial_available] || trial_active?(@customer)
-      if subscription_active?(@customer)
+      if subscription_active?(@customer) && @repo_user["type"] == "User"
         return continue(params)
       else
-        query = Queries::CouchCustomer.get(@gh.user["id"], @couch)
+        query = Queries::CouchCustomer.get(@repo_user["id"], @couch)
         customer_doc = QueryHandler.exec(&query)
         customer = customer_doc ? customer_doc[:rows].first.value : false
       end
