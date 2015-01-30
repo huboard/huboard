@@ -1,0 +1,110 @@
+{
+   "_id": "test_customer",
+   "id": "test_customer",
+   "github": {
+       "user": {
+           "login": "discorick",
+           "id": 1130665,
+           "avatar_url": "https://avatars.githubusercontent.com/u/1130665?v=3",
+           "gravatar_id": "",
+           "url": "https://api.github.com/users/discorick",
+           "html_url": "https://github.com/discorick",
+           "followers_url": "https://api.github.com/users/discorick/followers",
+           "following_url": "https://api.github.com/users/discorick/following{/other_user}",
+           "gists_url": "https://api.github.com/users/discorick/gists{/gist_id}",
+           "starred_url": "https://api.github.com/users/discorick/starred{/owner}{/repo}",
+           "subscriptions_url": "https://api.github.com/users/discorick/subscriptions",
+           "organizations_url": "https://api.github.com/users/discorick/orgs",
+           "repos_url": "https://api.github.com/users/discorick/repos",
+           "events_url": "https://api.github.com/users/discorick/events{/privacy}",
+           "received_events_url": "https://api.github.com/users/discorick/received_events",
+           "type": "User",
+           "site_admin": false,
+           "name": "",
+           "company": "",
+           "blog": "",
+           "location": "",
+           "email": "",
+           "hireable": false,
+           "bio": " ",
+           "public_repos": 11,
+           "public_gists": 1,
+           "followers": 2,
+           "following": 1,
+           "created_at": "2011-10-15T22:46:18Z",
+           "updated_at": "2015-01-26T21:24:00Z"
+       },
+       "account": {
+           "login": "discorick",
+           "id": 123456,
+           "avatar_url": "https://avatars.githubusercontent.com/u/1130665?v=3",
+           "gravatar_id": "",
+           "url": "https://api.github.com/users/discorick",
+           "html_url": "https://github.com/discorick",
+           "followers_url": "https://api.github.com/users/discorick/followers",
+           "following_url": "https://api.github.com/users/discorick/following{/other_user}",
+           "gists_url": "https://api.github.com/users/discorick/gists{/gist_id}",
+           "starred_url": "https://api.github.com/users/discorick/starred{/owner}{/repo}",
+           "subscriptions_url": "https://api.github.com/users/discorick/subscriptions",
+           "organizations_url": "https://api.github.com/users/discorick/orgs",
+           "repos_url": "https://api.github.com/users/discorick/repos",
+           "events_url": "https://api.github.com/users/discorick/events{/privacy}",
+           "received_events_url": "https://api.github.com/users/discorick/received_events",
+           "type": "User",
+           "site_admin": false,
+           "name": "",
+           "company": "",
+           "blog": "",
+           "location": "",
+           "email": "",
+           "hireable": false,
+           "bio": " ",
+           "public_repos": 11,
+           "public_gists": 1,
+           "followers": 2,
+           "following": 1,
+           "created_at": "2011-10-15T22:46:18Z",
+           "updated_at": "2015-01-26T21:24:00Z"
+       }
+   },
+   "stripe": {
+       "customer": {
+           "id": "cus_5bty44QTcw3BuY",
+           "object": "customer",
+           "created": 1422629700,
+           "livemode": false,
+           "description": null,
+           "email": "trial@huboard.com",
+           "delinquent": false,
+           "metadata": {
+           },
+           "subscriptions": {
+               "object": "list",
+               "total_count": 0,
+               "has_more": false,
+               "url": "/v1/customers/cus_5bty44QTcw3BuY/subscriptions",
+               "data": [
+               ]
+           },
+           "discount": null,
+           "account_balance": 0,
+           "currency": null,
+           "cards": {
+               "object": "list",
+               "total_count": 0,
+               "has_more": false,
+               "url": "/v1/customers/cus_5bty44QTcw3BuY/cards",
+               "data": [
+               ]
+           },
+           "default_card": null
+       }
+   },
+   "trial": "active",
+   "meta": {
+       "type": "customer"
+   },
+   "timestamp": "2015-01-30T14:55:01Z",
+   "billing_email": "richardfrank@me.com",
+   "last_updated": "2015-01-30T14:55:25Z"
+}

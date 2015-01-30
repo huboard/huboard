@@ -62,6 +62,7 @@ gem 'solid_use_case'
 group :development do
   gem 'shotgun'
   gem 'rspec'
+  gem 'couchrest'
   #gem 'librarian-puppet'
   #gem 'puppet'
 

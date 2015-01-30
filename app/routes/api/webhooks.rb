@@ -39,15 +39,17 @@ module HuBoard
           json message: "Webhook received"
         end
 
-        post '/api/stripe/webhook' do
-          payload = Hashie::Mash.new JSON.parse(params[:payload])
-          id = payload.data.object.id
+        post '/api/site/stripe/webhook' do
+          return json message: "Not Authorized" if params[:token] != ENV["STRIPE_WEBHOOK_TOKEN"]
+
+          payload = Hashie::Mash.new JSON.parse(params[:stripe])
+          id = payload.data.object.customer
 
           query = Queries::CouchCustomer.get(id, couch)
           doc = QueryHandler.exec(&query)
 
-          if payload.type == "customer.subscription.updated"
-            plan_doc = docs.rows.first.value
+          if doc[:rows] && payload.type == "customer.subscription.updated"
+            plan_doc = doc.rows.first.value
             plan_doc.stripe.customer = payload.data.object
             plan_doc.trial = "expired" if payload.data.object.status != "trialing"
 
