@@ -35,15 +35,15 @@ module HuBoard
           customer = Stripe::Customer.retrieve(doc.id)
           account_type = doc.github.account.type == "User" ? "user_basic_v1" : "org_basic_v1"
           customer.subscriptions.create({
-            email: params[:billing_email],
             plan: account_type,
             trial_end: (Time.now.utc + (15 * 60 * 60 * 24)).to_i
           })
 
+          customer.email = params[:billing_email]
           customer.save rescue puts "Failed to save #{customer}"
 
           doc.trial = "active"
-          doc.billing_email = params[:billing_email]
+          doc.billing_email = customer.email
           doc.stripe.customer = customer
           couch.customers.save doc
         end
@@ -119,12 +119,6 @@ module HuBoard
             customer.cancel_subscription at_period_end: false
           end
           customer.save
-
-          #Necessary because Stripe doesnt clean these up on save >.<
-          customer.subscriptions.data = []
-          customer.subscriptions.total_count = 0
-          customer.cards.data = []
-          customer.cards.total_count = 0
 
           plan_doc.stripe.customer = customer
           couch.customers.save plan_doc
