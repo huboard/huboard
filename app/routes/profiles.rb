@@ -35,6 +35,7 @@ module HuBoard
           customer = Stripe::Customer.retrieve(doc.id)
           account_type = doc.github.account.type == "User" ? "user_basic_v1" : "org_basic_v1"
           customer.subscriptions.create({
+            email: params[:billing_email],
             plan: account_type,
             trial_end: (Time.now.utc + (15 * 60 * 60 * 24)).to_i
           })
