@@ -222,6 +222,10 @@ class Huboard
       def findPlanById(id)
         query_view "findPlanById", :key => id
       end
+
+      def findByCustomerId(id)
+        query_view "findByCustomerId", :key => "\"#{id}\""
+      end
     end
 
     def stats

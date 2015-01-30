@@ -45,7 +45,7 @@ module HuBoard
           payload = Hashie::Mash.new JSON.parse(params[:stripe])
           id = payload.data.object.customer
 
-          query = Queries::CouchCustomer.get(id, couch)
+          query = Queries::CouchCustomer.get_cust(id, couch)
           doc = QueryHandler.exec(&query)
 
           if doc[:rows] && payload.type == "customer.subscription.updated"
