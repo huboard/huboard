@@ -26,12 +26,12 @@ module HuBoard
           customer = account_exists?(doc) ?
             doc.rows.first.value : create_new_account(user)
 
-          plan = plan_for("User", customer.stripe.customer)
+          plan = plan_for("User", customer[:stripe][:customer])
           data = {
             org: user.to_hash,
             plans: [plan],
             card: plan[:card],
-            discount: customer.discount || {discount: { coupon: {id: ''} }},
+            discount: customer[:discount] || {discount: { coupon: {id: ''} }},
             is_owner: true,
             has_plan: plan[:purchased]
           }
@@ -53,12 +53,12 @@ module HuBoard
           customer = account_exists?(doc) ?
             doc.rows.first.value : create_new_account(gh.user, org)
 
-          plan = plan_for("Organization", customer.stripe.customer)
+          plan = plan_for("Organization", customer[:stripe][:customer])
           data = {
             org: org.to_hash,
             plans: [plan],
             card: plan[:card],
-            discount: customer.discount || {discount: { coupon: {id: ''} }},
+            discount: customer[:discount] || {discount: { coupon: {id: ''} }},
             is_owner: true,
             has_plan: plan[:purchased]
           }
