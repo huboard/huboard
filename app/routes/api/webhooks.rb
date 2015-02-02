@@ -39,6 +39,8 @@ module HuBoard
           json message: "Webhook received"
         end
 
+        #Thinking Ahead to API 2.0, all this logic should be encapsulated into an
+        #event handler / background job
         post '/api/site/stripe/webhook' do
           return json message: "Not Authorized" if params[:token] != ENV["STRIPE_WEBHOOK_TOKEN"]
 
@@ -55,7 +57,7 @@ module HuBoard
             customer = plan_doc.stripe.customer
             customer.subscriptions.data[0] = payload.data.object
 
-            couch.customers.save doc
+            couch.customers.save plan_doc
           end
 
           json message: "Webhook received"

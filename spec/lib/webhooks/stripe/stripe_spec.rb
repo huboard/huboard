@@ -27,8 +27,8 @@ describe "Stripe Webhooks", :webhooks do
       HTTParty.post(api, post_data)
 
       customer = @couch.get(@doc["id"])
-      sub = customer["stripe"]["customer"]["subscriptions"]
-      expect(sub["total_count"]).to eql 1
+      sub = customer["stripe"]["customer"]["subscriptions"]["data"][0]
+      expect(sub["status"]).to eql "active"
     end
   end
 end
