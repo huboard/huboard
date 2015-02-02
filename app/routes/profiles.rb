@@ -87,11 +87,16 @@ module HuBoard
 
         if docs.rows.any?
           plan_doc = docs.rows.first.value
-
-          customer = Stripe::Customer.retrieve(plan_doc.stripe.customer.id)
+          
+          query = Queries::StripeCustomer.get(plan_doc.id)
+          customer = QueryHandler.exec(&query) || 
+            halt(json(success: false, message: "No Stripe Customer: #{plan_doc.id}"))
 
           customer.card = params[:card][:id]
           updated = customer.save
+
+          plan_doc.stripe.customer = customer
+          couch.customers.save plan_doc
 
           json success: true, message: "Card updated", card: updated["cards"]["data"].first
         else
@@ -164,10 +169,7 @@ module HuBoard
           docs = couch.customers.findPlanById repo_user["id"]
           plan_doc = docs.rows.first.value
           
-          query = Queries::StripeCustomer.get(plan_doc.id)
-          customer = QueryHandler.exec(&query) || erb(:"500")
-
-          
+          customer = Stripe::Customer.retrieve(plan_doc.id)
           if plan_doc[:trial] && plan_doc.trial == "active"
             customer.update_subscription({
               plan: params[:plan][:id],
