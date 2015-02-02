@@ -5,13 +5,13 @@
   "type": "customer.subscription.updated",
   "data": {
     "object": {
-      "id": "sub_5aS0z6vXwvNfY8",
+      "id": "test_sub",
       "plan": {
         "interval": "month",
         "name": "OrgBasicTest",
         "created": 1422294900,
         "amount": 1000,
-        "currency": "cad",
+        "currency": "usd",
         "id": "org_basic_v1",
         "object": "plan",
         "livemode": false,
@@ -48,5 +48,5 @@
   "pending_webhooks": 1,
   "request": "iar_5aS2I4KteJw9a5",
   "api_version": "2012-10-26",
-  "user_id": "acct_14epeALp4rPoDdQr"
+  "user_id": "test"
 }

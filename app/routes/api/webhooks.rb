@@ -42,7 +42,7 @@ module HuBoard
         post '/api/site/stripe/webhook' do
           return json message: "Not Authorized" if params[:token] != ENV["STRIPE_WEBHOOK_TOKEN"]
 
-          payload = Hashie::Mash.new JSON.parse(params[:stripe])
+          payload = Hashie::Mash.new(params)
           id = payload.data.object.customer
 
           query = Queries::CouchCustomer.get_cust(id, couch)

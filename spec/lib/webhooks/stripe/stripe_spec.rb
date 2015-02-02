@@ -5,8 +5,9 @@ describe "Stripe Webhooks", :webhooks do
 
   let(:api_path) { "http://localhost:5000/api/site/stripe/webhook"}
   let(:stripe_token) { ENV["STRIPE_WEBHOOK_TOKEN"] }
-  let(:api) { "#{api_path}?token=#{stripe_token}"}
 
+  let(:api) { "#{api_path}?token=#{stripe_token}" }
+  let(:content) { {"Content-Type" => "application/json"} }
 
   before(:each) do
     @doc = seed("couch_trial_account_seed.json")
@@ -19,10 +20,15 @@ describe "Stripe Webhooks", :webhooks do
 
   describe "customer.subscription.updated" do
 
-    it "passes" do
-      stripe_data = File.read(@fixtures_path + "stripe_subscription_update.json")
-      response = HTTParty.post(api, {body: {stripe: stripe_data}})
-      puts response
+    let(:stripe_data){ File.read(@fixtures_path + "stripe_subscription_update.json") }
+    let(:post_data) {{body: stripe_data, headers: content} }
+
+    it "Updates the customer data" do
+      HTTParty.post(api, post_data)
+
+      customer = @couch.get(@doc["id"])
+      sub = customer["stripe"]["customer"]["subscriptions"]
+      expect(sub["total_count"]).to eql 1
     end
   end
 end
