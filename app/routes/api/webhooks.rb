@@ -50,8 +50,10 @@ module HuBoard
 
           if doc[:rows] && payload.type == "customer.subscription.updated"
             plan_doc = doc.rows.first.value
-            plan_doc.stripe.customer = payload.data.object
             plan_doc.trial = "expired" if payload.data.object.status != "trialing"
+
+            customer = plan_doc.stripe.customer
+            customer.subscriptions.data[0] = payload.data.object
 
             couch.customers.save doc
           end
