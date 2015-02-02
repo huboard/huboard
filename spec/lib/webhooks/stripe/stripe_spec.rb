@@ -20,7 +20,7 @@ describe "Stripe Webhooks", :webhooks do
 
   describe "customer.subscription.updated" do
 
-    let(:stripe_data){ File.read(@fixtures_path + "stripe_subscription_update.json") }
+    let(:stripe_data){ File.read("#{@fixtures_path}stripe_subscription_update.json")}
     let(:post_data) {{body: stripe_data, headers: content} }
 
     it "Updates the customer data" do

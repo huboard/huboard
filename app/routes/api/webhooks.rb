@@ -42,15 +42,15 @@ module HuBoard
         #Thinking Ahead to API 2.0, all this logic should be encapsulated into an
         #event handler / background job
         post '/api/site/stripe/webhook' do
-          return json message: "Not Authorized" if params[:token] != ENV["STRIPE_WEBHOOK_TOKEN"]
+          return json message: "Not Authorized" unless params[:token] == ENV["STRIPE_WEBHOOK_TOKEN"]
 
           payload = Hashie::Mash.new(params)
           id = payload.data.object.customer
 
-          query = Queries::CouchCustomer.get_cust(id, couch)
-          doc = QueryHandler.exec(&query)
-
           if doc[:rows] && payload.type == "customer.subscription.updated"
+            query = Queries::CouchCustomer.get_cust(id, couch)
+            doc = QueryHandler.exec(&query)
+
             plan_doc = doc.rows.first.value
             plan_doc.trial = "expired" if payload.data.object.status != "trialing"
 
