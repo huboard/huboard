@@ -47,9 +47,9 @@ module HuBoard
           payload = Hashie::Mash.new(params)
           id = payload.data.object.customer
 
-          if doc[:rows] && payload.type == "customer.subscription.updated"
+          if payload.type == "customer.subscription.updated" || payload.type == "customer.subscription.deleted"
             query = Queries::CouchCustomer.get_cust(id, couch)
-            doc = QueryHandler.exec(&query)
+            doc = QueryHandler.exec(&query) || halt(json(message: "Failed to find Customer"))
 
             plan_doc = doc.rows.first.value
             plan_doc.trial = "expired" if payload.data.object.status != "trialing"
