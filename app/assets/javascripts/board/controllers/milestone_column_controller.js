@@ -60,7 +60,7 @@ var MilestoneColumnController = Ember.ObjectController.extend({
 
     var equalsA = function(a) {
       return function(b) {
-        return _.isEqual(a, b.repo);
+        return _.isEqual(a.name, b.repo.name);
       }
     }(cardController.get("model.repo"));
 

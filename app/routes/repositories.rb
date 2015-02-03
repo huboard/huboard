@@ -132,11 +132,19 @@ module HuBoard
         raise Sinatra::NotFound unless logged_in?
         @parameters = params
         @repo = gh.repos(params[:user],params[:repo])
+
+        board = huboard.board(params[:user], params[:repo])
+        redirect "/#{params[:user]}/#{params[:repo]}/" if board.has_board?
+
         erb :create_board
       end
 
       post '/:user/:repo/board/create/?' do
-        huboard.board(params[:user], params[:repo]).create_board
+        begin
+          huboard.board(params[:user], params[:repo]).create_board
+        rescue Ghee::UnprocessableEntity
+          redirect "/#{params[:user]}/#{params[:repo]}/"
+        end
         redirect "/#{params[:user]}/#{params[:repo]}/"
       end
     end
