@@ -1,7 +1,9 @@
 AccountController = Ember.ObjectController.extend({
   needs: ["purchaseForm","cancelForm", "updateCard", "applyCoupon"],  
   plan: function(){
-    return this.get("model.details.plans")[0]
+    plans = this.get("model.details.plans")
+    this.set("model.details.plans", Em.A(plans));
+    return this.get("model.details.plans.firstObject");
   }.property("model.details.plans"),
 
   inactive: function(){

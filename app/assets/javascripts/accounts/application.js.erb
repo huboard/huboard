@@ -118,7 +118,9 @@ App.Router.map(function(){
 AccountController = Ember.ObjectController.extend({
   needs: ["purchaseForm","cancelForm", "updateCard", "applyCoupon"],  
   plan: function(){
-    return this.get("model.details.plans")[0]
+    plans = this.get("model.details.plans")
+    this.set("model.details.plans", Em.A(plans));
+    return this.get("model.details.plans.firstObject");
   }.property("model.details.plans"),
 
   inactive: function(){
@@ -231,6 +233,7 @@ CancelFormController = Ember.Controller.extend({
     }
   },
   didCancel: function() {
+    this.set('model.details.plans.firstObject.status', 'cancelled');
     this.set('model.details.has_plan', false);
     this.set('model.details.discount', null);
     this.set('processingAction', false);
@@ -315,6 +318,16 @@ CreditCardForm = Ember.Controller.extend({
   actions: {
     close: function() {
       return this.send("closeModal");
+    },
+    process: function() {
+      this.set('processingCard', true);
+      Stripe.setPublishableKey(this.get('key'));
+      return Stripe.card.createToken({
+        number: this.get('number'),
+        cvc: this.get('cvc'),
+        exp_month: this.get('expMonth'),
+        exp_year: this.get('expYear')
+      }, this.didProcessToken.bind(this));
     }
   },
   key: HuboardEnv.stripe_pub_key,
@@ -336,17 +349,7 @@ CreditCardForm = Ember.Controller.extend({
   }).property("exp"),
   cardType: (function() {
     return Ember.$.payment.cardType(this.get('number'));
-  }).property('number'),
-  process: function() {
-    this.set('processingCard', true);
-    Stripe.setPublishableKey(this.get('key'));
-    return Stripe.card.createToken({
-      number: this.get('number'),
-      cvc: this.get('cvc'),
-      exp_month: this.get('expMonth'),
-      exp_year: this.get('expYear')
-    }, this.didProcessToken.bind(this));
-  }
+  }).property('number')
 });
 
 module.exports = CreditCardForm;
@@ -415,6 +418,7 @@ PurchaseFormController =  CreditCardForm.extend({
     }).then(this.didPurchase.bind(this), this.purchaseDidError.bind(this));
   },
   didPurchase: function(response) {
+    this.set('model.details.plans.firstObject.status', 'active');
     this.set('processingCard', false);
     this.set("model.plan.purchased", true);
     this.set("model.details.card", response.card);

@@ -32,6 +32,7 @@ PurchaseFormController =  CreditCardForm.extend({
     }).then(this.didPurchase.bind(this), this.purchaseDidError.bind(this));
   },
   didPurchase: function(response) {
+    this.set('model.details.plans.firstObject.status', 'active');
     this.set('processingCard', false);
     this.set("model.plan.purchased", true);
     this.set("model.details.card", response.card);
