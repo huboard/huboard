@@ -142,7 +142,6 @@ AccountController = Ember.ObjectController.extend({
   trialExpired: function(){
     var end_time = new Date(this.get("plan.trial_end") * 1000);
     var now = new Date;
-    console.log(end_time - now)
     return (end_time - now) < 1
   }.property("plan.trial_end"),
 
@@ -609,7 +608,6 @@ User = Ember.Object.extend({
     return new Em.RSVP.Promise(function(resolve) {
       resolve($.getJSON("/api/profiles/user").then(function (response) {
         user.set("details", response)
-        console.log(response);
         return response;
       }));
     });
@@ -1109,7 +1107,7 @@ function program4(depth0,data) {
   hashContexts = {};
   if (!helpers['x-tabs']) { stack1 = blockHelperMissing.call(depth0, 'x-tabs', options); }
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n");
+  data.buffer.push("\n<div>\n  <strong>Have questions?</strong> Email us anytime at support@huboard.com\n</div>\n");
   return buffer;
   
 });
