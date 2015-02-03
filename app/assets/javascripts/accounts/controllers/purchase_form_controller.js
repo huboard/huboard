@@ -5,6 +5,9 @@ PurchaseFormController =  CreditCardForm.extend({
   isDisabled: (function() {
     return this.get("isProcessing") || this.get('errors');
   }).property("isProcessing", "errors"),
+  clearErrors: function(){
+    this.set('errors', null);
+  }.observes('number', 'cvc', 'expMonth', 'expYear'),
   onCouponChange: (function() {
     var errors;
     errors = this.get('errors');
