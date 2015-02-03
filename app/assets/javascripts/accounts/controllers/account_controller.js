@@ -1,5 +1,32 @@
 AccountController = Ember.ObjectController.extend({
   needs: ["purchaseForm","cancelForm", "updateCard", "applyCoupon"],  
+  plan: function(){
+    return this.get("model.details.plans")[0]
+  }.property("model.details.plans"),
+
+  inactive: function(){
+    var status =  this.get("plan.status");
+    return status == "inactive" || status == "cancelled"
+  }.property("plan.status"),
+  trialing: function(){
+    return this.get("plan.status") == "trialing" && !this.get("trialExpired");
+  }.property("plan.status", "trialExpired"),
+  trialingExpired: function(){
+    return this.get("plan.status") == "trialing" && this.get("trialExpired");
+  }.property("plan.status", "trialExpired"),
+  active: function(){
+    return this.get("plan.status") == "active";
+  }.property("plan.status"),
+  newAccount: function(){
+    return !this.get("model.details.has_plan");
+  }.property("model.details.has_plan"),
+  trialExpired: function(){
+    var end_time = new Date(this.get("plan.trial_end") * 1000);
+    var now = new Date;
+    console.log(end_time - now)
+    return (end_time - now) < 1
+  }.property("plan.trial_end"),
+
   couponCode: function(){
     return this.get("model.details.discount.coupon.id");
   }.property("model.details.discount","model.details.discount.coupon", "model.details.discount.coupon.id"),

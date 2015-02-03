@@ -9,6 +9,7 @@ User = Ember.Object.extend({
     return new Em.RSVP.Promise(function(resolve) {
       resolve($.getJSON("/api/profiles/user").then(function (response) {
         user.set("details", response)
+        console.log(response);
         return response;
       }));
     });

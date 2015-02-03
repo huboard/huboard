@@ -117,6 +117,33 @@ App.Router.map(function(){
 },{"./app":3}],5:[function(require,module,exports){
 AccountController = Ember.ObjectController.extend({
   needs: ["purchaseForm","cancelForm", "updateCard", "applyCoupon"],  
+  plan: function(){
+    return this.get("model.details.plans")[0]
+  }.property("model.details.plans"),
+
+  inactive: function(){
+    var status =  this.get("plan.status");
+    return status == "inactive" || status == "cancelled"
+  }.property("plan.status"),
+  trialing: function(){
+    return this.get("plan.status") == "trialing" && !this.get("trialExpired");
+  }.property("plan.status", "trialExpired"),
+  trialingExpired: function(){
+    return this.get("plan.status") == "trialing" && this.get("trialExpired");
+  }.property("plan.status", "trialExpired"),
+  active: function(){
+    return this.get("plan.status") == "active";
+  }.property("plan.status"),
+  newAccount: function(){
+    return !this.get("model.details.has_plan");
+  }.property("model.details.has_plan"),
+  trialExpired: function(){
+    var end_time = new Date(this.get("plan.trial_end") * 1000);
+    var now = new Date;
+    console.log(end_time - now)
+    return (end_time - now) < 1
+  }.property("plan.trial_end"),
+
   couponCode: function(){
     return this.get("model.details.discount.coupon.id");
   }.property("model.details.discount","model.details.discount.coupon", "model.details.discount.coupon.id"),
@@ -578,6 +605,7 @@ User = Ember.Object.extend({
     return new Em.RSVP.Promise(function(resolve) {
       resolve($.getJSON("/api/profiles/user").then(function (response) {
         user.set("details", response)
+        console.log(response);
         return response;
       }));
     });
@@ -697,7 +725,7 @@ module.exports = ProfileRoute;
 Ember.TEMPLATES['account'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, hashTypes, hashContexts, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, self=this;
+  var buffer = '', stack1, stack2, hashContexts, hashTypes, options, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, self=this;
 
 function program1(depth0,data) {
   
@@ -780,21 +808,60 @@ function program10(depth0,data) {
   return buffer;
   }
 
-  data.buffer.push("<div class=\"alert alert-success\">\n  <p>\n    <strong>All plans</strong> receive a <strong>15 day free trial</strong>.\n  </p>\n  <p>\n    Risk free, cancel at anytime before the trial ends and receive no charges.\n  </p>\n</div>\n\n<div class='account-details'>\n  <div class='credit-card'>\n    ");
+  data.buffer.push("<div class=\"alert alert-success\">\n  <div ");
+  hashContexts = {'class': depth0};
+  hashTypes = {'class': "STRING"};
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'class': ("trialing:trialing:disabled")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">\n    <p><strong> Free Trial is Active! </strong><p>\n    <p>Expires: ");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers['if'].call(depth0, "model.details.card", {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  options = {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['stripe-date'] || depth0['stripe-date']),stack1 ? stack1.call(depth0, "plan.trial_end", options) : helperMissing.call(depth0, "stripe-date", "plan.trial_end", options))));
+  data.buffer.push(" </p>\n  </div>\n  <div ");
+  hashContexts = {'class': depth0};
+  hashTypes = {'class': "STRING"};
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'class': ("trialingExpired:trialing-expired:disabled")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">\n    <p><strong> Free Trial is Expired! </strong><p>\n    <p> Subscribe to a plan to enable Private access </p>\n  </div>\n  <div ");
+  hashContexts = {'class': depth0};
+  hashTypes = {'class': "STRING"};
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'class': ("noAccount:newAccount:disabled")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">\n    <p>\n      <strong>All plans</strong> receive a <strong>15 day free trial</strong>.\n    </p>\n    <p> Visit any Private Board to activate your trial </p>\n  </div>\n  <div ");
+  hashContexts = {'class': depth0};
+  hashTypes = {'class': "STRING"};
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'class': ("active:active:disabled")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">\n    <p><strong> Subscription Active </strong><p>\n  </div>\n  <div ");
+  hashContexts = {'class': depth0};
+  hashTypes = {'class': "STRING"};
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'class': ("inactive:active:disabled")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">\n    <p><strong> No Subscription Active </strong><p>\n  </div>\n</div>\n\n<div class='account-details'>\n  <div class='email'>\n    <p><strong>Email: </strong>");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "details.account_email", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("</p> \n  </div>\n  <div class='credit-card'>\n    ");
+  hashTypes = {};
+  hashContexts = {};
+  stack2 = helpers['if'].call(depth0, "model.details.card", {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n  </div>\n\n  <div class='coupon'>\n    ");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers['if'].call(depth0, "model.details.has_plan", {hash:{},inverse:self.noop,fn:self.program(5, program5, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  stack2 = helpers['if'].call(depth0, "model.details.has_plan", {hash:{},inverse:self.noop,fn:self.program(5, program5, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n  </div>\n</div>\n\n <div class=\"table-wrapper\">\n  <table class=\"table\">\n    <thead>\n      <th>Plan</th>\n      <th>Price</th>\n      <th>Private repositories</th>\n      <th>Collaborators</th>\n      <th></th>\n    </head>\n    <tbody>\n\n      ");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers.each.call(depth0, "model.details.plans", {hash:{},inverse:self.noop,fn:self.program(7, program7, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  stack2 = helpers.each.call(depth0, "model.details.plans", {hash:{},inverse:self.noop,fn:self.program(7, program7, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n    </tbody>\n  </table>\n</div>\n");
   return buffer;
   
