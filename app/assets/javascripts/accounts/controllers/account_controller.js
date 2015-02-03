@@ -8,7 +8,7 @@ AccountController = Ember.ObjectController.extend({
 
   inactive: function(){
     var status =  this.get("plan.status");
-    return status == "inactive" || status == "cancelled"
+    return status == "inactive" || status == "canceled"
   }.property("plan.status"),
   trialing: function(){
     return this.get("plan.status") == "trialing" && !this.get("trialExpired");
