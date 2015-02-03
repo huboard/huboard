@@ -25,7 +25,6 @@ AccountController = Ember.ObjectController.extend({
   trialExpired: function(){
     var end_time = new Date(this.get("plan.trial_end") * 1000);
     var now = new Date;
-    console.log(end_time - now)
     return (end_time - now) < 1
   }.property("plan.trial_end"),
 
