@@ -487,12 +487,12 @@ module.exports = UpdateCardController;
 
 },{"./credit_card_form_controller":10}],14:[function(require,module,exports){
 Handlebars.registerHelper("stripe-money", function(path) {
-  var value = Ember.getPath(this, path);
+  var value = Ember.get(this, path);
   return "$" + parseFloat(value/100).toFixed(0);
 });
 
 Handlebars.registerHelper("stripe-date", function(path) {
-  var value = Ember.getPath(this, path);
+  var value = Ember.get(this, path);
   var date = new Date(value * 1000);
   return date.toDateString();
 });
@@ -546,8 +546,8 @@ Org = Ember.Object.extend({
 
   loadDetails : function () {
     var org = this; 
-    return Em.Deferred.promise(function(p) {
-      p.resolve($.getJSON("/api/profiles/"+ org.get("login")).then(function (response) {
+    return new Em.RSVP.Promise(function(resolve) {
+      resolve($.getJSON("/api/profiles/"+ org.get("login")).then(function (response) {
         org.set("details", response)
         return response;
       }));
@@ -555,8 +555,8 @@ Org = Ember.Object.extend({
   },
   loadHistory : function () {
     var org = this; 
-    return Em.Deferred.promise(function(p) {
-      p.resolve($.getJSON("/api/profiles/"+ org.get("login") + "/history").then(function (response) {
+    return new Em.RSVP.Promise(function(resolve) {
+      resolve($.getJSON("/api/profiles/"+ org.get("login") + "/history").then(function (response) {
         org.set("history", response)
         return response;
       }));
@@ -575,8 +575,8 @@ User = Ember.Object.extend({
 
   loadDetails : function () {
     var user = this; 
-    return Em.Deferred.promise(function(p) {
-      p.resolve($.getJSON("/api/profiles/user").then(function (response) {
+    return new Em.RSVP.Promise(function(resolve) {
+      resolve($.getJSON("/api/profiles/user").then(function (response) {
         user.set("details", response)
         return response;
       }));
@@ -584,8 +584,8 @@ User = Ember.Object.extend({
   },
   loadHistory : function () {
     var user = this; 
-    return Em.Deferred.promise(function(p) {
-      p.resolve($.getJSON("/api/profiles/"+ user.get("login") + "/history").then(function (response) {
+    return new Em.RSVP.Promise(function(resolve) {
+      resolve($.getJSON("/api/profiles/"+ user.get("login") + "/history").then(function (response) {
         user.set("history", response)
         return response;
       }));
@@ -615,7 +615,7 @@ var ApplicationRoute = Ember.Route.extend({
   },
 
   model : function () {
-    return Em.Deferred.promise(function(p) {
+    return new Em.RSVP.Promise(function(resolve) {
       Ember.run.once(function() {
         $.getJSON("/api/profiles").then(function(response) {
 
@@ -627,7 +627,7 @@ var ApplicationRoute = Ember.Route.extend({
             orgs.pushObject(App.Org.create(org));
           });
 
-          p.resolve(Ember.Object.create({
+          resolve(Ember.Object.create({
             user : user,
             orgs : orgs
           }));
@@ -709,7 +709,7 @@ function program1(depth0,data) {
   data.buffer.push("\n     <button style=\"float: right\" ");
   hashTypes = {};
   hashContexts = {};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "updateCard", "", {hash:{},contexts:[depth0,depth0],types:["ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "updateCard", "", {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(" class=\"hb-button small\">Update card</button>\n    ");
   return buffer;
   }
@@ -733,7 +733,7 @@ function program5(depth0,data) {
   data.buffer.push(" </strong>\n    <button style=\"float: right\"class=\"hb-button small\"\n    ");
   hashTypes = {};
   hashContexts = {};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "applyCoupon", "", {hash:{},contexts:[depth0,depth0],types:["ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "applyCoupon", "", {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("> Redeem Coupon </button>\n    ");
   return buffer;
   }
@@ -764,7 +764,7 @@ function program8(depth0,data) {
   data.buffer.push(" \n            Your plan\n            <button class=\"hb-button hb-button-danger small\"\n               ");
   hashTypes = {};
   hashContexts = {};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "cancel", "", {hash:{},contexts:[depth0,depth0],types:["ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "cancel", "", {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(">Cancel plan</button>\n          ");
   return buffer;
   }
@@ -775,7 +775,7 @@ function program10(depth0,data) {
   data.buffer.push("\n            <button class=\"hb-button small\"\n             ");
   hashTypes = {};
   hashContexts = {};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "purchase", "", {hash:{},contexts:[depth0,depth0],types:["ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "purchase", "", {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(">Upgrade</button>\n          ");
   return buffer;
   }
@@ -803,7 +803,7 @@ function program10(depth0,data) {
 Ember.TEMPLATES['apply_coupon'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, hashContexts, hashTypes, options, escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
+  var buffer = '', stack1, hashContexts, hashTypes, escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
@@ -827,11 +827,11 @@ function program3(depth0,data) {
   hashTypes = {'on': "ID"};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "apply_coupon", {hash:{
     'on': ("submit")
-  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  },contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(">\n    <div class=\"modal-header\">\n      <div>\n        <button type=\"button\" class=\"close\" ");
   hashTypes = {};
   hashContexts = {};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "close", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "close", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(" data-dismiss=\"modal\" aria-hidden=\"true\">×</button>\n        Redeem a Coupon! \n      </div>\n    </div>\n    <div class=\"modal-body\">\n      <div class=\"form-row full\">\n        <p> (applied against your next invoice of greater than $0.00) </p>\n          <label>\n            Coupon:\n          </label>\n         ");
   hashContexts = {'valueBinding': depth0};
   hashTypes = {'valueBinding': "STRING"};
@@ -851,10 +851,9 @@ function program3(depth0,data) {
   data.buffer.push("\n    </div>\n    <div class=\"modal-footer\">\n      <button href=\"#\" class=\"stripe-connect light-blue\" type=\"submit\" ");
   hashContexts = {'disabled': depth0};
   hashTypes = {'disabled': "STRING"};
-  options = {hash:{
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
     'disabled': ("isDisabled")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
-  data.buffer.push(escapeExpression(((stack1 = helpers.bindAttr || depth0.bindAttr),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bindAttr", options))));
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("><span> Redeem </span></button>\n    </div>\n  </form>\n</div>\n");
   return buffer;
   
@@ -863,7 +862,7 @@ function program3(depth0,data) {
 Ember.TEMPLATES['cancel_form'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, hashContexts, hashTypes, options, escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
+  var buffer = '', stack1, hashContexts, hashTypes, escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
@@ -876,11 +875,11 @@ function program1(depth0,data) {
   hashTypes = {'on': "ID"};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "cancel", {hash:{
     'on': ("submit")
-  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  },contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(">\n    <div class=\"modal-header\">\n      <button type=\"button\" class=\"close\" ");
   hashTypes = {};
   hashContexts = {};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "close", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "close", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(" data-dismiss=\"modal\" aria-hidden=\"true\">×</button>\n      Cancel plan\n    </div>\n    <div class=\"modal-body\">\n      <p>\n        By cancelling your subscription you will not be billed again and your account will be suspended immediately.\n      </p>\n      <p> \n        We'd hate to see you go, are you sure you want to cancel?\n      </p>\n\n      <p>\n        If you have any questions, <a href=\"mailto:support@huboard.com?subject=Cancel subscription\">contact us</a> anytime.\n      </p>\n\n      ");
   hashTypes = {};
   hashContexts = {};
@@ -889,10 +888,9 @@ function program1(depth0,data) {
   data.buffer.push("\n    </div>\n    <div class=\"modal-footer\">\n      <button href=\"#\" class=\"hb-button danger full\" type=\"submit\" ");
   hashContexts = {'disabled': depth0};
   hashTypes = {'disabled': "STRING"};
-  options = {hash:{
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
     'disabled': ("processingAction")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
-  data.buffer.push(escapeExpression(((stack1 = helpers.bindAttr || depth0.bindAttr),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bindAttr", options))));
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("><span>Cancel my plan</span></button>\n    </div>\n  </form>\n</div>\n");
   return buffer;
   
@@ -965,7 +963,7 @@ function program6(depth0,data) {
   data.buffer.push("\n\n  <button class=\"hb-button small\"\n    ");
   hashTypes = {};
   hashContexts = {};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "saveAdditionalInfo", "", {hash:{},contexts:[depth0,depth0],types:["ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "saveAdditionalInfo", "", {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(" ");
   hashContexts = {'disabled': depth0};
   hashTypes = {'disabled': "ID"};
@@ -1015,7 +1013,7 @@ function program2(depth0,data) {
   data.buffer.push("\n    <div class=\"nav-section\">\n      <div class=\"widget-body\">\n          ");
   hashTypes = {};
   hashContexts = {};
-  options = {hash:{},contexts:[depth0,depth0],types:["ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  options = {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.render || depth0.render),stack1 ? stack1.call(depth0, "account", "model", options) : helperMissing.call(depth0, "render", "account", "model", options))));
   data.buffer.push("\n      </div>\n    </div>\n    ");
   return buffer;
@@ -1027,7 +1025,7 @@ function program4(depth0,data) {
   data.buffer.push("\n        <div class=\"nav-section\">\n\n        <div class=\"widget-body\">\n          ");
   hashTypes = {};
   hashContexts = {};
-  options = {hash:{},contexts:[depth0,depth0],types:["ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  options = {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.render || depth0.render),stack1 ? stack1.call(depth0, "history", "model", options) : helperMissing.call(depth0, "render", "history", "model", options))));
   data.buffer.push("\n        </div>\n      </div>\n    ");
   return buffer;
@@ -1096,7 +1094,7 @@ function program3(depth0,data) {
   data.buffer.push("\n\n          ");
   hashTypes = {};
   hashContexts = {};
-  options = {hash:{},contexts:[depth0,depth0],types:["ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  options = {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.render || depth0.render),stack1 ? stack1.call(depth0, "account", "model", options) : helperMissing.call(depth0, "render", "account", "model", options))));
   data.buffer.push("\n\n        ");
   return buffer;
@@ -1133,7 +1131,7 @@ function program8(depth0,data) {
   data.buffer.push("\n        <div class=\"nav-section\">\n\n        <div class=\"widget-body\">\n          ");
   hashTypes = {};
   hashContexts = {};
-  options = {hash:{},contexts:[depth0,depth0],types:["ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  options = {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.render || depth0.render),stack1 ? stack1.call(depth0, "history", "model", options) : helperMissing.call(depth0, "render", "history", "model", options))));
   data.buffer.push("\n        </div>\n      </div>\n    ");
   return buffer;
@@ -1191,11 +1189,11 @@ function program5(depth0,data) {
   hashTypes = {'on': "ID"};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "process", {hash:{
     'on': ("submit")
-  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  },contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(">\n  <div class=\"modal-header\">\n    <button type=\"button\" class=\"close\" ");
   hashTypes = {};
   hashContexts = {};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "close", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "close", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(" data-dismiss=\"modal\" aria-hidden=\"true\">×</button>\n    Credit card infomation \n  </div>\n  <div style=\"padding:20px;\">\n    <p>\n      Thanks for choosing to become a paying customer! Once we successfully charge your credit card, we'll immediately upgrade your account to the <strong>");
   hashTypes = {};
   hashContexts = {};
@@ -1290,10 +1288,9 @@ function program5(depth0,data) {
   data.buffer.push("\n  </div>\n  <div class=\"modal-footer\">\n      <button href=\"#\" class=\"stripe-connect light-blue\" type=\"submit\" ");
   hashContexts = {'disabled': depth0};
   hashTypes = {'disabled': "STRING"};
-  options = {hash:{
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
     'disabled': ("isDisabled")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
-  data.buffer.push(escapeExpression(((stack1 = helpers.bindAttr || depth0.bindAttr),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bindAttr", options))));
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("><span>Pay with stripe</span></button>\n  </div>\n  </form>\n</div>\n");
   return buffer;
   
@@ -1302,7 +1299,7 @@ function program5(depth0,data) {
 Ember.TEMPLATES['update_card'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, hashContexts, hashTypes, options, escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
+  var buffer = '', stack1, hashContexts, hashTypes, escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
@@ -1326,11 +1323,11 @@ function program3(depth0,data) {
   hashTypes = {'on': "ID"};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "process", {hash:{
     'on': ("submit")
-  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  },contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(">\n    <div class=\"modal-header\">\n      <button type=\"button\" class=\"close\" ");
   hashTypes = {};
   hashContexts = {};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "close", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "close", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(" data-dismiss=\"modal\" aria-hidden=\"true\">×</button>\n      Update credit card infomation \n    </div>\n    <div class=\"modal-body\">\n      <fieldset>\n\n        ");
   hashTypes = {};
   hashContexts = {};
@@ -1397,10 +1394,9 @@ function program3(depth0,data) {
   data.buffer.push("\n    </div>\n    <div class=\"modal-footer\">\n        <button href=\"#\" class=\"stripe-connect light-blue\" type=\"submit\" ");
   hashContexts = {'disabled': depth0};
   hashTypes = {'disabled': "STRING"};
-  options = {hash:{
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
     'disabled': ("processingCard")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
-  data.buffer.push(escapeExpression(((stack1 = helpers.bindAttr || depth0.bindAttr),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bindAttr", options))));
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("><span>Update card</span></button>\n    </div>\n  </form>\n</div>\n");
   return buffer;
   
@@ -1409,16 +1405,15 @@ function program3(depth0,data) {
 Ember.TEMPLATES['components/x-pane'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, hashContexts, hashTypes, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  var buffer = '', hashContexts, hashTypes, escapeExpression=this.escapeExpression;
 
 
   data.buffer.push("<div class=\"tab-pane\" ");
   hashContexts = {'class': depth0};
   hashTypes = {'class': "STRING"};
-  options = {hash:{
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
     'class': ("selected:active")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
-  data.buffer.push(escapeExpression(((stack1 = helpers.bindAttr || depth0.bindAttr),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bindAttr", options))));
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(">\n  ");
   hashTypes = {};
   hashContexts = {};
@@ -1431,22 +1426,21 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 Ember.TEMPLATES['components/x-tabs'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, hashTypes, hashContexts, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, self=this;
+  var buffer = '', stack1, hashTypes, hashContexts, escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
-  var buffer = '', stack1, hashContexts, hashTypes, options;
+  var buffer = '', hashContexts, hashTypes;
   data.buffer.push("\n    <li ");
   hashContexts = {'class': depth0};
   hashTypes = {'class': "STRING"};
-  options = {hash:{
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
     'class': ("pane.selected:active")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
-  data.buffer.push(escapeExpression(((stack1 = helpers.bindAttr || depth0.bindAttr),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bindAttr", options))));
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(">\n      <a href=\"#\" ");
   hashTypes = {};
   hashContexts = {};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "select", "pane", {hash:{},contexts:[depth0,depth0],types:["ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "select", "pane", {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(">");
   hashTypes = {};
   hashContexts = {};

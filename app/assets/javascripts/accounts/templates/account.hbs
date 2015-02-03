@@ -11,7 +11,7 @@
   <div class='credit-card'>
     {{#if model.details.card }}
      <img src="<%= image_path 'Plain.png' %>" /> <strong>Credit card on file.</strong> Ending in {{ model.details.card.last4 }}
-     <button style="float: right" {{action updateCard this }} class="hb-button small">Update card</button>
+     <button style="float: right" {{action 'updateCard' this }} class="hb-button small">Update card</button>
     {{else}}
      <img src="<%= image_path 'Plain.png' %>" /> <strong>No Credit card on file.</strong>
 
@@ -22,7 +22,7 @@
     {{#if model.details.has_plan }}
       <img src="<%= image_path 'icn-coupon.png' %>" /> <strong> Coupon: {{{couponCode}}} </strong>
     <button style="float: right"class="hb-button small"
-    {{action applyCoupon this}}> Redeem Coupon </button>
+    {{action 'applyCoupon' this}}> Redeem Coupon </button>
     {{/if}}
   </div>
 </div>
@@ -48,10 +48,10 @@
          {{#if purchased }} 
             Your plan
             <button class="hb-button hb-button-danger small"
-               {{action cancel this }}>Cancel plan</button>
+               {{action 'cancel' this }}>Cancel plan</button>
           {{else}}
             <button class="hb-button small"
-             {{action purchase this }}>Upgrade</button>
+             {{action 'purchase' this }}>Upgrade</button>
           {{/if}}
 
         </td>

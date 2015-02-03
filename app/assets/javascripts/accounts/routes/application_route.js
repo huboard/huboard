@@ -17,7 +17,7 @@ var ApplicationRoute = Ember.Route.extend({
   },
 
   model : function () {
-    return Em.Deferred.promise(function(p) {
+    return new Em.RSVP.Promise(function(resolve) {
       Ember.run.once(function() {
         $.getJSON("/api/profiles").then(function(response) {
 
@@ -29,7 +29,7 @@ var ApplicationRoute = Ember.Route.extend({
             orgs.pushObject(App.Org.create(org));
           });
 
-          p.resolve(Ember.Object.create({
+          resolve(Ember.Object.create({
             user : user,
             orgs : orgs
           }));

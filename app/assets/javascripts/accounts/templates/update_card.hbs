@@ -1,7 +1,7 @@
 <div class="fullscreen-credit-card">
-  <form {{action process on=submit}}>
+  <form {{action 'process' on=submit}}>
     <div class="modal-header">
-      <button type="button" class="close" {{action close}} data-dismiss="modal" aria-hidden="true">×</button>
+      <button type="button" class="close" {{action 'close'}} data-dismiss="modal" aria-hidden="true">×</button>
       Update credit card infomation 
     </div>
     <div class="modal-body">
@@ -56,7 +56,7 @@
       {{/if}}
     </div>
     <div class="modal-footer">
-        <button href="#" class="stripe-connect light-blue" type="submit" {{bindAttr disabled="processingCard"}}><span>Update card</span></button>
+        <button href="#" class="stripe-connect light-blue" type="submit" {{bind-attr disabled="processingCard"}}><span>Update card</span></button>
     </div>
   </form>
 </div>

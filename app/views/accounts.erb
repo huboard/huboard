@@ -15,18 +15,18 @@
 
       <ul class="nav nav-list">
         <li>
-        {{#linkTo "index" }} 
-        <img height="24" width="24"  {{bindAttr src=model.user.gravatar_url  }} /> 
+        {{#link-to "index" }} 
+        <img height="24" width="24"  {{bind-attr src=model.user.gravatar_url  }} /> 
         {{ model.user.login }}
-        {{/linkTo}}
+        {{/link-to}}
         </li>
 
         {{#each model.orgs}}
         <li>
-        {{#linkTo "profile" this}} 
-        <img  height="24" width="24" {{bindAttr src=gravatar_url  }} /> 
+        {{#link-to "profile" this}} 
+        <img  height="24" width="24" {{bind-attr src=gravatar_url  }} /> 
           {{ login }} 
-        {{/linkTo}}
+        {{/link-to}}
         </li>
         {{/each}}
       </ul>

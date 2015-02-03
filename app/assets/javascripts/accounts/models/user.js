@@ -6,8 +6,8 @@ User = Ember.Object.extend({
 
   loadDetails : function () {
     var user = this; 
-    return Em.Deferred.promise(function(p) {
-      p.resolve($.getJSON("/api/profiles/user").then(function (response) {
+    return new Em.RSVP.Promise(function(resolve) {
+      resolve($.getJSON("/api/profiles/user").then(function (response) {
         user.set("details", response)
         return response;
       }));
@@ -15,8 +15,8 @@ User = Ember.Object.extend({
   },
   loadHistory : function () {
     var user = this; 
-    return Em.Deferred.promise(function(p) {
-      p.resolve($.getJSON("/api/profiles/"+ user.get("login") + "/history").then(function (response) {
+    return new Em.RSVP.Promise(function(resolve) {
+      resolve($.getJSON("/api/profiles/"+ user.get("login") + "/history").then(function (response) {
         user.set("history", response)
         return response;
       }));
