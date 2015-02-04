@@ -49,14 +49,14 @@ module HuBoard
 
           if payload.type == "customer.subscription.updated" || payload.type == "customer.subscription.deleted"
             query = Queries::CouchCustomer.get_cust(id, couch)
-            doc = QueryHandler.exec(&query) || halt(json(message: "Failed to find Customer"))
+            doc = QueryHandler.exec(&query)
+            halt(json(message: "Webhook received")) unless doc && doc.rows.size > 0
 
             plan_doc = doc.rows.first.value
             plan_doc.trial = "expired" if payload.data.object.status != "trialing"
 
             customer = plan_doc.stripe.customer
             customer.subscriptions.data[0] = payload.data.object
-
             couch.customers.save plan_doc
           end
 
