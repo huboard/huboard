@@ -1,0 +1,30 @@
+{
+	"name": "huboard",
+	"description": "Instant project management for your GitHub repositories",
+	"repository": "https://github.com/rauhryan/huboard.git",
+	"keywords": [
+		"huboard",
+		"kanban",
+		"github issues"
+	],
+	"scripts": {
+		"postdeploy": "bundle install"
+	},
+	"env": {
+  		"HUBOARD_ENV":		"oss",
+		"COUCH_DATABASE":	"huboard",
+		"GITHUB_CLIENT_ID":	"your-github-oauth-client",
+		"GITHUB_SECRET":	"your-github-oauth-secret",
+		"GITHUB_API_ENDPOINT":	"https://api.github.com/",
+		"GITHUB_CLIENT_ID":	"github_client_id",
+		"GITHUB_SECRET":	"github_secret",
+		"GITHUB_WEB_ENDPOINT":	"https://github.com",
+		"RACK_ENV":		"staging",
+		"BUNDLE_WITHOUT":	"development:test"
+	},
+	"addons": [
+		"newrelic",
+		"memcachier"
+	]
+}
+
