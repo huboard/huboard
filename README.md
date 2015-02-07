@@ -10,6 +10,9 @@
   1. [How link repositories together](https://github.com/rauhryan/huboard/wiki#wiki-linking-repositories)
   1. [How deploy HuBoard to heroku](https://github.com/rauhryan/huboard/wiki/Deploying)
 
+### Quick Deploy to Heroku
+
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/rauhryan/huboard)
 
 ## How to contribute
 
