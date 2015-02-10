@@ -30,7 +30,7 @@ module HuBoard
             org: user.to_hash,
             plans: [plan],
             card: plan[:card],
-            discount: customer[:discount] || {discount: { coupon: {id: ''} }},
+            discount: customer[:stripe][:customer][:discount] || {discount: { coupon: {id: ''} }},
             is_owner: true,
             has_plan: plan[:purchased]
           }
@@ -57,7 +57,7 @@ module HuBoard
             org: org.to_hash,
             plans: [plan],
             card: plan[:card],
-            discount: customer[:discount] || {discount: { coupon: {id: ''} }},
+            discount: customer[:stripe][:customer][:discount] || {discount: { coupon: {id: ''} }},
             is_owner: true,
             has_plan: plan[:purchased]
           }
