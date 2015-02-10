@@ -1,0 +1,84 @@
+<div class="fullscreen-credit-card">
+  <form {{action 'process' on=submit}}>
+  <div class="modal-header">
+    <button type="button" class="close" {{action 'close'}} data-dismiss="modal" aria-hidden="true">×</button>
+    Credit card infomation 
+  </div>
+  <div style="padding:20px;">
+    <p>
+      Thanks for choosing to become a paying customer! Once we successfully charge your credit card, we'll immediately upgrade your account to the <strong>{{model.plan.name}}</strong> plan.
+    </p>
+    <fieldset>
+
+      <div class="form-row full">
+        <label>
+          <span>Card Number</span>
+        </label>
+        {{view App.CardNumberField valueBinding="number" size=20}}
+      </div>
+
+      <ul class="credit-cards">
+        <li {{bind-attr class=":card :card-visa cardType"}} >
+        </li>
+        <li {{bind-attr class=":card :card-master cardType"}} >
+        </li>
+        <li {{bind-attr class=":card :card-discover cardType"}} >
+        </li>
+        <li {{bind-attr class=":card :card-express cardType"}}>
+        </li>
+      </ul>
+
+      <div class="form-row">
+        <label>
+          <span>CVC</span>
+        </label>
+        {{view App.CvcField valueBinding="cvc" size="4" data-stripe="cvc"}}
+      </div>
+
+      <div class="form-row">
+        <label>
+          <span>Expiration ({{ expMonth }} / {{ expYear }})</span>
+        </label>
+        {{view App.CardExpiryField valueBinding="exp" }}
+      </div>
+
+      <div class="form-row">
+        <label>
+          <span>Billing email</span>
+        </label>
+        {{log model.org }}
+        {{input valueBinding="model.org.billing_email" type=text required=true }}
+      </div>
+
+      <div class="form-row full">
+        <tr>
+          <td> Have Coupon? </td>
+          <td> {{view App.CouponCheckbox checkedBinding="couponChecked"}} </td>
+        </tr>
+        <label>
+          {{#if couponChecked }}
+            {{view App.CouponCodeField valueBinding="coupon"}}
+          {{/if}}
+        </label>
+      </div>
+
+      {{#if errors}}
+        <div class="alert alert-error">{{errors}}</div>
+      {{/if}}
+
+    </fieldset>
+
+    <p>
+      Please review the <a href="/site/terms" target="_blank">terms of service</a>, and <a href="/site/privacy" target="_blank">privacy policy</a>.
+    </p>
+
+    {{#if processingCard }}
+      <div class="fullscreen-overlay">
+      </div>
+    {{/if}}
+  </div>
+  <div class="modal-footer">
+      <button href="#" class="stripe-connect light-blue" type="submit" {{bind-attr disabled="isDisabled"}}><span>Pay with stripe</span></button>
+  </div>
+  </form>
+</div>

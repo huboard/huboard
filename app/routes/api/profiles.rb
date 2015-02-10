@@ -40,6 +40,7 @@ module HuBoard
             plans: plans,
             card: card,
             discount: discount || {discount: { coupon: {id: ''} }},
+            account_email: customer["billing_email"],
             is_owner: true,
             has_plan: customer.rows.size > 0
           }
@@ -75,6 +76,7 @@ module HuBoard
             card: card,
             discount: discount || {discount: { coupon: {id: ''} }},
             is_owner: is_owner,
+            account_email: customer["billing_email"],
             has_plan: customer.rows.size > 0
           }
           json data

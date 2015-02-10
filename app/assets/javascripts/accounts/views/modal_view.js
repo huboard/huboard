@@ -1,4 +1,4 @@
-App.ModalView = Em.View.extend({
+ModalView = Em.View.extend({
   layout: Em.Handlebars.compile("<div class='fullscreen-overlay fixed'><div class='fullscreen-wrapper'><div class='fullscreen-body credit-card'>{{yield}}</div></div></div>"),
 
   didInsertElement: function() {
@@ -27,3 +27,5 @@ App.ModalView = Em.View.extend({
     this.$(".fullscreen-overlay,.fullscreen-body").off("click.modal");
   }
 });
+
+module.exports = ModalView;
