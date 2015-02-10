@@ -1,0 +1,20 @@
+{{#x-tabs}}
+    {{#x-pane title="Plans"}}
+    <div class="nav-section">
+      <div class="widget-body">
+          {{ render 'account' model }}
+      </div>
+    </div>
+    {{/x-pane}}
+    {{#x-pane title="Billing"}}
+        <div class="nav-section">
+
+        <div class="widget-body">
+          {{ render 'history' model }}
+        </div>
+      </div>
+    {{/x-pane}}
+{{/x-tabs}}
+<div>
+  <strong>Have questions?</strong> Email us anytime at support@huboard.com
+</div>

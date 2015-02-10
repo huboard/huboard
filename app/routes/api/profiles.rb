@@ -31,6 +31,7 @@ module HuBoard
             plans: [plan],
             card: plan[:card],
             discount: customer[:stripe][:customer][:discount] || {discount: { coupon: {id: ''} }},
+            account_email: customer["billing_email"],
             is_owner: true,
             has_plan: plan[:purchased]
           }
@@ -59,6 +60,7 @@ module HuBoard
             card: plan[:card],
             discount: customer[:stripe][:customer][:discount] || {discount: { coupon: {id: ''} }},
             is_owner: true,
+            account_email: customer["billing_email"],
             has_plan: plan[:purchased]
           }
 
