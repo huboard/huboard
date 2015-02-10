@@ -150,10 +150,17 @@ module HuBoard
       end
 
       put "/settings/redeem_coupon/:id/?" do
+        query = Queries::CouchCustomer.get_cust(params[:id], couch)
+        doc = QueryHandler.exec(&query) || halt(json(success: false, message: "Couldn't find couch record: #{plan_doc.id}"))
+        plan_doc = doc.rows.first.value
+
         begin
           customer = Stripe::Customer.retrieve(params[:id])
           customer.coupon = params[:coupon]
           response = customer.save
+
+          plan_doc.stripe.customer.discount = customer.discount
+          couch.customers.save plan_doc
 
           json(response)
         rescue Stripe::InvalidRequestError => e
