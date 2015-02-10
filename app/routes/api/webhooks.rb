@@ -39,19 +39,25 @@ module HuBoard
           json message: "Webhook received"
         end
 
-        post '/api/stripe/webhook' do
-          payload = Hashie::Mash.new JSON.parse(params[:payload])
-          id = payload.data.object.id
+        #Thinking Ahead to API 2.0, all this logic should be encapsulated into an
+        #event handler / background job
+        post '/api/site/stripe/webhook' do
+          return json message: "Not Authorized" unless params[:token] == ENV["STRIPE_WEBHOOK_TOKEN"]
 
-          query = Queries::CouchCustomer.get(id, couch)
-          doc = QueryHandler.exec(&query)
+          payload = Hashie::Mash.new(params)
+          id = payload.data.object.customer
 
-          if payload.type == "customer.subscription.updated"
-            plan_doc = docs.rows.first.value
-            plan_doc.stripe.customer = payload.data.object
+          if payload.type == "customer.subscription.updated" || payload.type == "customer.subscription.deleted"
+            query = Queries::CouchCustomer.get_cust(id, couch)
+            doc = QueryHandler.exec(&query)
+            halt(json(message: "Webhook received")) unless doc && doc.rows.size > 0
+
+            plan_doc = doc.rows.first.value
             plan_doc.trial = "expired" if payload.data.object.status != "trialing"
 
-            couch.customers.save doc
+            customer = plan_doc.stripe.customer
+            customer.subscriptions.data[0] = payload.data.object
+            couch.customers.save plan_doc
           end
 
           json message: "Webhook received"

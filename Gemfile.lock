@@ -78,6 +78,10 @@ GEM
     coffee-script-source (1.7.1)
     connection_pool (1.2.0)
     cookiejar (0.3.2)
+    couchrest (1.2.0)
+      mime-types (~> 1.15)
+      multi_json (~> 1.0)
+      rest-client (~> 1.6.1)
     daemons (1.1.9)
     dalli (2.7.2)
     debug_inspector (0.0.2)
@@ -351,6 +355,7 @@ DEPENDENCIES
   closure-compiler
   coffee-script
   connection_pool
+  couchrest
   dalli
   dotenv
   encryptor
