@@ -17,6 +17,40 @@ module HuBoard
         end
       end
 
+      get "/settings/:user/trial" do
+        @user = params[:user]
+
+        docs = couch.customers.findPlanById gh.users(@user)["id"]
+        trial = docs.rows.first.value.trial
+
+        redirect session[:forward_to] if trial != "available"
+        erb :activate_trial
+      end
+
+      post '/settings/profile/:user/trial/activate' do
+        docs = couch.customers.findPlanById gh.users(params[:user])["id"]
+        doc = docs.rows.first.value
+
+        if doc.trial == "available"
+          customer = Stripe::Customer.retrieve(doc.id)
+          account_type = doc.github.account.type == "User" ? "user_basic_v1" : "org_basic_v1"
+          customer.subscriptions.create({
+            plan: account_type,
+            trial_end: (Time.now.utc + (15 * 60 * 60 * 24)).to_i
+          })
+
+          customer.email = params[:billing_email]
+          customer.save rescue puts "Failed to save #{customer}"
+
+          doc.trial = "active"
+          doc.billing_email = customer.email
+          doc.stripe.customer = customer
+          couch.customers.save doc
+        end
+
+        redirect session[:forward_to]
+      end
+
       get "/settings/profile/?" do
         @user = gh.user
         @orgs = gh.orgs
@@ -53,14 +87,15 @@ module HuBoard
 
         if docs.rows.any?
           plan_doc = docs.rows.first.value
-
-          customer = Stripe::Customer.retrieve(plan_doc.stripe.customer.id)
+          
+          query = Queries::StripeCustomer.get(plan_doc.id)
+          customer = QueryHandler.exec(&query) || 
+            halt(json(success: false, message: "No Stripe Customer: #{plan_doc.id}"))
 
           customer.card = params[:card][:id]
           updated = customer.save
 
-          plan_doc.stripe.customer = updated
-
+          plan_doc.stripe.customer = customer
           couch.customers.save plan_doc
 
           json success: true, message: "Card updated", card: updated["cards"]["data"].first
@@ -78,12 +113,26 @@ module HuBoard
         if docs.rows.any?
           plan_doc = docs.rows.first.value
 
-          customer = Stripe::Customer.retrieve(plan_doc.stripe.customer.id)
+          query = Queries::StripeCustomer.get(plan_doc.id)
+          customer = QueryHandler.exec(&query) || 
+            halt(json(success: false, message: "No Stripe Customer: #{plan_doc.id}"))
 
-          customer.cancel_subscription at_period_end: false
-          customer.delete
+          if customer.cards.total_count > 0
+            customer.cards.retrieve(customer.default_card).delete
+          end
+          if customer.subscriptions.total_count > 0
+            customer.cancel_subscription at_period_end: false
+          end
+          customer.save
 
-          couch.customers.delete! plan_doc
+          #Couch needs the newest stripe data, no simple way around this without some intense mapping
+          #On Upgrade we can move this kind of things into background jobs..
+          query = Queries::StripeCustomer.get(plan_doc.id)
+          customer = QueryHandler.exec(&query) || 
+            halt(json(success: false, message: "No Stripe Customer: #{plan_doc.id}"))
+
+          plan_doc.stripe.customer = customer
+          couch.customers.save plan_doc
 
           json success: true, message: "Sorry to see you go"
         else
@@ -106,10 +155,6 @@ module HuBoard
           customer.coupon = params[:coupon]
           response = customer.save
 
-          customer_doc = couch.connection.get("Customers-#{customer.id}").body
-          customer_doc.stripe.customer.discount = response.discount
-          couch.customers.save customer_doc
-
           json(response)
         rescue Stripe::InvalidRequestError => e
           status 422
@@ -119,38 +164,37 @@ module HuBoard
 
       post "/settings/charge/:id/?" do
         begin
-        stripe_customer_hash = {
-          email: params[:email],
-          card: params[:card][:id],
-          plan:  params[:plan][:id],
-          trial_end: (Time.now.utc + (params[:plan][:trial_period].to_i * 60 * 60 * 24)).to_i
-        }
+          repo_user = gh.users(params[:id])
 
-        if !params[:coupon].nil? && !params[:coupon].empty?
-          stripe_customer_hash.merge!(coupon: params[:coupon]) 
-        end
+          docs = couch.customers.findPlanById repo_user["id"]
+          plan_doc = docs.rows.first.value
+          
+          customer = Stripe::Customer.retrieve(plan_doc.id)
+          if plan_doc[:trial] && plan_doc.trial == "active"
+            customer.update_subscription({
+              plan: params[:plan][:id],
+              card: params[:card][:id]
+            })
+          else
+            customer.subscriptions.create({
+              plan: params[:plan][:id],
+              card: params[:card][:id]
+            })
+          end
 
-        customer = Stripe::Customer.create(stripe_customer_hash)
+          if !params[:coupon].nil? && !params[:coupon].empty?
+            customer.coupon = params[:coupon]
+          end
 
-        user = gh.user
-        account = gh.users(params[:id])
+          customer.email = params[:email]
+          customer.save
 
-        attributes = {
-          "id" => customer.id,
-          github: {
-            user: user.to_hash,
-            account: account.to_hash
-          },
-          stripe: {
-            customer: customer,
-            plan: {
-              plan_id: params[:plan][:plan_id]
-            }
-          }
-        }
-        couch.customers.save(attributes)
+          plan_doc.stripe.customer = customer
+          plan_doc.billing_email = params[:email]
+          plan_doc.trial = "expired"
+          couch.customers.save plan_doc
 
-        json success: true, card: customer["cards"]["data"].first, discount: customer.discount
+          json success: true, card: customer["cards"]["data"].first, discount: customer.discount
         rescue Stripe::StripeError => e
           status 422
           json e.json_body

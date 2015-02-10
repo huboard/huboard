@@ -18,11 +18,16 @@ require 'active_support/number_helper'
   end
 end
 require 'jobs'
+require 'query_handler'
+require 'queries'
 
 require 'app/errors'
 require 'app/extensions'
 require 'app/helpers'
+require 'app/account_helpers'
 require 'app/routes'
+
+include HuBoard::AccountHelpers
 
 module HuBoard
   class EnsureEMRunning

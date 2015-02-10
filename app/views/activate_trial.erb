@@ -1,0 +1,13 @@
+<div class="trial_activate">
+  <div class="instructions drop-shadow">
+    <h2> Activate your 15 day free trial for <%= @user %> to Access this Board? </h2>
+    <div class="trial_form">
+      <form action="/settings/profile/<%=@user%>/trial/activate" method="post">
+        <input type="email" placeholder="Email Address" name="billing_email" required>
+        <input class="btn primary" type="submit" value="Do it!"/>
+      </form>
+    </div>
+    <br>
+    <a href="/"> No Thanks </a>
+  </div>
+</div>
