@@ -6,15 +6,16 @@ AccountController = Ember.ObjectController.extend({
     return this.get("model.details.plans.firstObject");
   }.property("model.details.plans"),
   activateTrial: function(){
-    var redirect = "?forward_to=" + encodeURIComponent(window.location.pathname);
+    var path = encodeURIComponent(window.location.pathname + window.location.hash);
+    var redirect = "?forward_to=" + path;
     var user = this.get("model.login");
     return "/settings/profile/" + user + "/trial/activate"  + redirect
   }.property("model.login"),
 
   inactive: function(){
     var trial = this.get("model.details.trial")
-    return (trial == "expired" || !trial);
-  }.property("model.details.trial"),
+    return (trial == "expired" || !trial) && !this.get("trialing") && !this.get("active");
+  }.property("model.details.trial", "active", "trialing"),
   trialing: function(){
     return this.get("plan.status") == "trialing" && !this.get("trialExpired");
   }.property("plan.status", "trialExpired"),
