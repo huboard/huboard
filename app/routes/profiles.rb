@@ -178,7 +178,7 @@ module HuBoard
           plan_doc = docs.rows.first.value
           
           customer = Stripe::Customer.retrieve(plan_doc.id)
-          if plan_doc[:trial] && plan_doc.trial == "active"
+          if plan_doc[:trial] && plan_doc.trial != "available"
             customer.update_subscription({
               plan: params[:plan][:id],
               card: params[:card][:id]

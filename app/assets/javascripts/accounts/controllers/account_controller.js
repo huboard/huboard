@@ -13,14 +13,14 @@ AccountController = Ember.ObjectController.extend({
   }.property("model.login"),
 
   inactive: function(){
-    var trial = this.get("model.details.trial")
-    return (trial == "expired" || !trial) && !this.get("trialing") && !this.get("active");
-  }.property("model.details.trial", "active", "trialing"),
+    var trial = this.get("model.details.trial");
+    return this.get("plan.status") == "inactive" && trial == "expired";
+  }.property("plan.status", "model.details.trial"),
   trialing: function(){
     return this.get("plan.status") == "trialing" && !this.get("trialExpired");
   }.property("plan.status", "trialExpired"),
   trialingExpired: function(){
-    return this.get("plan.status") == "trialing" && this.get("trialExpired");
+    return this.get("plan.status") != "active" && this.get("trialExpired");
   }.property("plan.status", "trialExpired"),
   active: function(){
     return this.get("plan.status") == "active";

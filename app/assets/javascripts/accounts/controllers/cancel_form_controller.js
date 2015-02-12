@@ -10,8 +10,8 @@ CancelFormController = Ember.Controller.extend({
     }
   },
   didCancel: function() {
-    this.set('model.details.plans.firstObject.status', 'canceled');
-    this.set('model.details.trial', null);
+    this.set('model.details.plans.firstObject.status', 'inactive');
+    this.set('model.details.trial', "expired");
     this.set('model.details.has_plan', false);
     this.set('model.details.discount', null);
     this.set('processingAction', false);
