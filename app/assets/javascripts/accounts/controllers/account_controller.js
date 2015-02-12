@@ -1,15 +1,20 @@
 AccountController = Ember.ObjectController.extend({
   needs: ["purchaseForm","cancelForm", "updateCard", "applyCoupon"],  
   plan: function(){
-    plans = this.get("model.details.plans")
+    var plans = this.get("model.details.plans")
     this.set("model.details.plans", Em.A(plans));
     return this.get("model.details.plans.firstObject");
   }.property("model.details.plans"),
+  activateTrial: function(){
+    var redirect = "?forward_to=" + encodeURIComponent(window.location.pathname);
+    var user = this.get("model.login");
+    return "/settings/profile/" + user + "/trial/activate"  + redirect
+  }.property("model.login"),
 
   inactive: function(){
-    var status =  this.get("plan.status");
-    return status == "inactive" || status == "canceled"
-  }.property("plan.status"),
+    var trial = this.get("model.details.trial")
+    return (trial == "expired" || !trial);
+  }.property("model.details.trial"),
   trialing: function(){
     return this.get("plan.status") == "trialing" && !this.get("trialExpired");
   }.property("plan.status", "trialExpired"),
@@ -19,9 +24,10 @@ AccountController = Ember.ObjectController.extend({
   active: function(){
     return this.get("plan.status") == "active";
   }.property("plan.status"),
-  newAccount: function(){
-    return !this.get("model.details.has_plan");
-  }.property("model.details.has_plan"),
+  noAccount: function(){
+    var trial = this.get("model.details.trial")
+    return !this.get("model.details.has_plan") && trial == "available";
+  }.property("model.details.has_plan", "model.details.trial"),
   trialExpired: function(){
     var end_time = new Date(this.get("plan.trial_end") * 1000);
     var now = new Date;

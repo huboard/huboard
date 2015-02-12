@@ -48,7 +48,7 @@ module HuBoard
           couch.customers.save doc
         end
 
-        redirect session[:forward_to]
+        redirect (params[:forward_to] || session[:forward_to])
       end
 
       get "/settings/profile/?" do
@@ -132,6 +132,7 @@ module HuBoard
             halt(json(success: false, message: "No Stripe Customer: #{plan_doc.id}"))
 
           plan_doc.stripe.customer = customer
+          plan_doc.trial = "expired"
           couch.customers.save plan_doc
 
           json success: true, message: "Sorry to see you go"

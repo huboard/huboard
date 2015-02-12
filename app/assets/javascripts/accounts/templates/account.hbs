@@ -1,17 +1,22 @@
-<div class="alert alert-success">
+<div {{bind-attr class=":alert trialingExpired:alert-error:alert-success"}}>
   <div {{bind-attr class="trialing:trialing:disabled"}}>
     <p><strong> Free Trial is Active! </strong><p>
     <p>Expires: {{stripe-date plan.trial_end}} </p>
   </div>
   <div {{bind-attr class="trialingExpired:trialing-expired:disabled"}}>
     <p><strong> Free Trial is Expired! </strong><p>
-    <p> Subscribe to a plan to enable Private access </p>
+    <p> Upgrade your plan to enable private access </p>
   </div>
-  <div {{bind-attr class="noAccount:newAccount:disabled"}}>
+  <div {{bind-attr class="noAccount:new-account:disabled"}}>
     <p>
-      <strong>All plans</strong> receive a <strong>15 day free trial</strong>.
+      <strong>All Accounts</strong> receive a <strong>15 day free trial</strong>.
     </p>
-    <p> Visit any Private Board to activate your trial </p>
+    <p>
+      <form {{bind-attr action=activateTrial}} method="post">
+        <input type="email" placeholder="Email Address" name="billing_email" required>
+        <input class="hb-button" type="submit" value="Activate Trial"/>
+      </form>
+    </p>
   </div>
   <div {{bind-attr class="active:active:disabled"}}>
     <p><strong> Subscription Active </strong><p>

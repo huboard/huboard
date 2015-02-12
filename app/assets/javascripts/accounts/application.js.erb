@@ -118,15 +118,20 @@ App.Router.map(function(){
 AccountController = Ember.ObjectController.extend({
   needs: ["purchaseForm","cancelForm", "updateCard", "applyCoupon"],  
   plan: function(){
-    plans = this.get("model.details.plans")
+    var plans = this.get("model.details.plans")
     this.set("model.details.plans", Em.A(plans));
     return this.get("model.details.plans.firstObject");
   }.property("model.details.plans"),
+  activateTrial: function(){
+    var redirect = "?forward_to=" + encodeURIComponent(window.location.pathname);
+    var user = this.get("model.login");
+    return "/settings/profile/" + user + "/trial/activate"  + redirect
+  }.property("model.login"),
 
   inactive: function(){
-    var status =  this.get("plan.status");
-    return status == "inactive" || status == "canceled"
-  }.property("plan.status"),
+    var trial = this.get("model.details.trial")
+    return (trial == "expired" || !trial);
+  }.property("model.details.trial"),
   trialing: function(){
     return this.get("plan.status") == "trialing" && !this.get("trialExpired");
   }.property("plan.status", "trialExpired"),
@@ -136,9 +141,10 @@ AccountController = Ember.ObjectController.extend({
   active: function(){
     return this.get("plan.status") == "active";
   }.property("plan.status"),
-  newAccount: function(){
-    return !this.get("model.details.has_plan");
-  }.property("model.details.has_plan"),
+  noAccount: function(){
+    var trial = this.get("model.details.trial")
+    return !this.get("model.details.has_plan") && trial == "available";
+  }.property("model.details.has_plan", "model.details.trial"),
   trialExpired: function(){
     var end_time = new Date(this.get("plan.trial_end") * 1000);
     var now = new Date;
@@ -813,7 +819,13 @@ function program10(depth0,data) {
   return buffer;
   }
 
-  data.buffer.push("<div class=\"alert alert-success\">\n  <div ");
+  data.buffer.push("<div ");
+  hashContexts = {'class': depth0};
+  hashTypes = {'class': "STRING"};
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'class': (":alert trialingExpired:alert-error:alert-success")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">\n  <div ");
   hashContexts = {'class': depth0};
   hashTypes = {'class': "STRING"};
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
@@ -830,13 +842,19 @@ function program10(depth0,data) {
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
     'class': ("trialingExpired:trialing-expired:disabled")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(">\n    <p><strong> Free Trial is Expired! </strong><p>\n    <p> Subscribe to a plan to enable Private access </p>\n  </div>\n  <div ");
+  data.buffer.push(">\n    <p><strong> Free Trial is Expired! </strong><p>\n    <p> Upgrade your plan to enable private access </p>\n  </div>\n  <div ");
   hashContexts = {'class': depth0};
   hashTypes = {'class': "STRING"};
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
-    'class': ("noAccount:newAccount:disabled")
+    'class': ("noAccount:new-account:disabled")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(">\n    <p>\n      <strong>All plans</strong> receive a <strong>15 day free trial</strong>.\n    </p>\n    <p> Visit any Private Board to activate your trial </p>\n  </div>\n  <div ");
+  data.buffer.push(">\n    <p>\n      <strong>All Accounts</strong> receive a <strong>15 day free trial</strong>.\n    </p>\n    <p>\n      <form ");
+  hashContexts = {'action': depth0};
+  hashTypes = {'action': "ID"};
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'action': ("activateTrial")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" method=\"post\">\n        <input type=\"email\" placeholder=\"Email Address\" name=\"billing_email\" required>\n        <input class=\"hb-button\" type=\"submit\" value=\"Activate Trial\"/>\n      </form>\n    </p>\n  </div>\n  <div ");
   hashContexts = {'class': depth0};
   hashTypes = {'class': "STRING"};
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
