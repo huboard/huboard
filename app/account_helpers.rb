@@ -25,7 +25,8 @@ module HuBoard
     def create_new_account(user, account=nil)
       account = account ? account : user
 
-      customer = Stripe::Customer.create(email: "trial@huboard.com")
+      email = account['email'].empty? ? "trial@huboard.com" : account['email']
+      customer = Stripe::Customer.create(email: email)
       customer_data = {
         "id" => customer.id,
         github: {
