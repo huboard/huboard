@@ -1,4 +1,4 @@
-<div {{bind-attr class=":alert trialingExpired:alert-error:alert-success"}}>
+<div {{bind-attr class=":alert errorState:alert-error:alert-success"}}>
   <div {{bind-attr class="trialing:trialing:disabled"}}>
     <p><strong> Free Trial is Active! </strong><p>
     <p>Expires: {{stripe-date plan.trial_end}} </p>
@@ -23,6 +23,12 @@
   </div>
   <div {{bind-attr class="inactive:active:disabled"}}>
     <p><strong> No Subscription Active </strong><p>
+  </div>
+  <div {{bind-attr class="failure:active:disabled"}}>
+    <p><strong> Something went wrong retrieving your account information! </strong><p>
+    <p> 
+      Please try again later, or <a href="mailto:support@huboard.com">Contact Support </a>
+    </p>
   </div>
   <div {{bind-attr class="purchaseWithTrial:active:disabled"}}>
     <p><strong> Subscription Active! </strong><p>

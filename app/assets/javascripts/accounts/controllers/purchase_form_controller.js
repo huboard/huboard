@@ -85,9 +85,11 @@ PurchaseFormController =  CreditCardForm.extend({
   trialing: function(){
     return this.get("plan.status") == "trialing" && !this.get("trialExpired");
   }.property("plan.status", "trialExpired"),
-  trialingExpired: function(){
-    return this.get("plan.status") != "active" && this.get("trialExpired");
-  }.property("plan.status", "trialExpired"),
+  trialExpired: function(){
+    var end_time = new Date(this.get("plan.trial_end") * 1000);
+    var now = new Date;
+    return (end_time - now) < 1
+  }.property("plan.trial_end"),
 
   actions: {
     couponChanged: function() {

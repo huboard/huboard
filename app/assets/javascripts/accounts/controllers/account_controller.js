@@ -11,7 +11,13 @@ AccountController = Ember.ObjectController.extend({
     var user = this.get("model.login");
     return "/settings/profile/" + user + "/trial/activate"  + redirect
   }.property("model.login"),
+  errorState: function(){
+    return this.get("failure") || this.get("trialingExpired");
+  }.property("failure", "trialingExpired"),
 
+  failure: function(){
+    return this.get("model.details.success") == false;
+  }.property("model.details.success"),
   inactive: function(){
     var trial = this.get("model.details.trial");
     return this.get("plan.status") == "inactive" && trial == "expired";

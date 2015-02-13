@@ -1,21 +1,8 @@
 {{#x-tabs}}
   {{#x-pane title="Plans"}}
-      <div class="nav-section">
-
+    <div class="nav-section">
       <div class="widget-body">
-        {{#if model.details.org.is_owner }}
-
-          {{ render 'account' model }}
-
-        {{else}}
-          <div class="alert">
-            <h5>You must be an owner to purchase</h5>
-            It appears like you are not a member of the owners team for {{ model.login }}. 
-            We strongly encourage that only members of the &quot;Owners&quot; team have access to subscription
-            information. If you have any questions feel free to email customer support at
-            <a href="mailto:support@huboard.com">support@huboard.com</a>. 
-          </div>
-        {{/if}}
+        {{ render 'account' model }}
       </div>
     </div>
   {{/x-pane}}

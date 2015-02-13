@@ -21,7 +21,7 @@ module HuBoard
           user = gh.user
 
           query = Queries::CouchCustomer.get(user["id"], couch)
-          doc = QueryHandler.exec(&query) || halt(json(success: false, message: "Couldn't find couch record: #{plan_doc.id}"))
+          doc = QueryHandler.exec(&query) || halt(json(success: false, message: "Couldn't find couch record: #{user['id']}"))
           customer = account_exists?(doc) ?
             doc.rows.first.value : create_new_account(user)
 
@@ -49,7 +49,7 @@ module HuBoard
           org.merge! is_owner: user["role"] == "admin"
 
           query = Queries::CouchCustomer.get(org["id"], couch)
-          doc = QueryHandler.exec(&query) || halt(json(success: false, message: "Couldn't find couch record: #{plan_doc.id}"))
+          doc = QueryHandler.exec(&query) || halt(json(success: false, message: "Couldn't find couch record: #{user['id']}"))
  
           customer = account_exists?(doc) ?
             doc.rows.first.value : create_new_account(gh.user, org)
@@ -71,7 +71,10 @@ module HuBoard
 
         get '/api/profiles/:org/history' do
           org = gh.users(params[:org])
-          customer = couch.customers.findPlanById(org['id'])
+
+          query = Queries::CouchCustomer.get(org["id"], couch)
+          customer = QueryHandler.exec(&query) || halt(json(success: false, message: "Couldn't find couch record: #{org['id']}"))
+
           if customer.rows && customer.rows.size > 0
             customer_doc = customer.rows.first.value
             begin
