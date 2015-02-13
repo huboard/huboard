@@ -35,7 +35,11 @@ PurchaseFormController =  CreditCardForm.extend({
     }).then(this.didPurchase.bind(this), this.purchaseDidError.bind(this));
   },
   didPurchase: function(response) {
-    this.set('model.details.plans.firstObject.status', 'active');
+    if (this.get("trialing")){
+      this.set("plan.status", "purchase_with_trial");
+    } else {
+      this.set('plan.status', 'active');
+    }
     this.set('processingCard', false);
     this.set("model.plan.purchased", true);
     this.set("model.details.card", response.card);
@@ -72,6 +76,19 @@ PurchaseFormController =  CreditCardForm.extend({
       return Ember.$.ajax(hash);
     });
   },
+
+  plan: function(){
+    var plans = this.get("model.details.plans")
+    this.set("model.details.plans", Em.A(plans));
+    return this.get("model.details.plans.firstObject");
+  }.property("model.details.plans"),
+  trialing: function(){
+    return this.get("plan.status") == "trialing" && !this.get("trialExpired");
+  }.property("plan.status", "trialExpired"),
+  trialingExpired: function(){
+    return this.get("plan.status") != "active" && this.get("trialExpired");
+  }.property("plan.status", "trialExpired"),
+
   actions: {
     couponChanged: function() {
       var coupon_id, success;

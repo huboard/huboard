@@ -24,6 +24,12 @@
   <div {{bind-attr class="inactive:active:disabled"}}>
     <p><strong> No Subscription Active </strong><p>
   </div>
+  <div {{bind-attr class="purchaseWithTrial:active:disabled"}}>
+    <p><strong> Subscription Active! </strong><p>
+    <p> 
+      As your trial is still in effect, you will not be charged until: {{stripe-date plan.trial_end}}
+    </p>
+  </div>
 </div>
 
 <div class='account-details'>

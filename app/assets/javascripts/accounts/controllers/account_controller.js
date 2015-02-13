@@ -29,6 +29,9 @@ AccountController = Ember.ObjectController.extend({
     var trial = this.get("model.details.trial")
     return !this.get("model.details.has_plan") && trial == "available";
   }.property("model.details.has_plan", "model.details.trial"),
+  purchaseWithTrial: function(){
+    return this.get("plan.status") == "purchase_with_trial";
+  }.property("plan.status"),
   trialExpired: function(){
     var end_time = new Date(this.get("plan.trial_end") * 1000);
     var now = new Date;

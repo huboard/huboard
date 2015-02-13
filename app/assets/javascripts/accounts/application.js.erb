@@ -146,6 +146,9 @@ AccountController = Ember.ObjectController.extend({
     var trial = this.get("model.details.trial")
     return !this.get("model.details.has_plan") && trial == "available";
   }.property("model.details.has_plan", "model.details.trial"),
+  purchaseWithTrial: function(){
+    return this.get("plan.status") == "purchase_with_trial";
+  }.property("plan.status"),
   trialExpired: function(){
     var end_time = new Date(this.get("plan.trial_end") * 1000);
     var now = new Date;
@@ -428,7 +431,11 @@ PurchaseFormController =  CreditCardForm.extend({
     }).then(this.didPurchase.bind(this), this.purchaseDidError.bind(this));
   },
   didPurchase: function(response) {
-    this.set('model.details.plans.firstObject.status', 'active');
+    if (this.get("trialing")){
+      this.set("plan.status", "purchase_with_trial");
+    } else {
+      this.set('plan.status', 'active');
+    }
     this.set('processingCard', false);
     this.set("model.plan.purchased", true);
     this.set("model.details.card", response.card);
@@ -465,6 +472,19 @@ PurchaseFormController =  CreditCardForm.extend({
       return Ember.$.ajax(hash);
     });
   },
+
+  plan: function(){
+    var plans = this.get("model.details.plans")
+    this.set("model.details.plans", Em.A(plans));
+    return this.get("model.details.plans.firstObject");
+  }.property("model.details.plans"),
+  trialing: function(){
+    return this.get("plan.status") == "trialing" && !this.get("trialExpired");
+  }.property("plan.status", "trialExpired"),
+  trialingExpired: function(){
+    return this.get("plan.status") != "active" && this.get("trialExpired");
+  }.property("plan.status", "trialExpired"),
+
   actions: {
     couponChanged: function() {
       var coupon_id, success;
@@ -868,7 +888,18 @@ function program10(depth0,data) {
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
     'class': ("inactive:active:disabled")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(">\n    <p><strong> No Subscription Active </strong><p>\n  </div>\n</div>\n\n<div class='account-details'>\n  <div class='email'>\n    <p><strong>Email: </strong>");
+  data.buffer.push(">\n    <p><strong> No Subscription Active </strong><p>\n  </div>\n  <div ");
+  hashContexts = {'class': depth0};
+  hashTypes = {'class': "STRING"};
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'class': ("purchaseWithTrial:active:disabled")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">\n    <p><strong> Subscription Active! </strong><p>\n    <p> \n      As your trial is still in effect, you will not be charged until: ");
+  hashTypes = {};
+  hashContexts = {};
+  options = {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['stripe-date'] || depth0['stripe-date']),stack1 ? stack1.call(depth0, "plan.trial_end", options) : helperMissing.call(depth0, "stripe-date", "plan.trial_end", options))));
+  data.buffer.push("\n    </p>\n  </div>\n</div>\n\n<div class='account-details'>\n  <div class='email'>\n    <p><strong>Email: </strong>");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "details.account_email", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
