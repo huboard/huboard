@@ -125,6 +125,12 @@ module HuBoard
           end
           customer.save
 
+          #Couch needs the newest stripe data, no simple way around this without some intense mapping
+          #On Upgrade we can move this kind of things into background jobs..
+          query = Queries::StripeCustomer.get(plan_doc.id)
+          customer = QueryHandler.exec(&query) || 
+            halt(json(success: false, message: "No Stripe Customer: #{plan_doc.id}"))
+
           plan_doc.stripe.customer = customer
           plan_doc.trial = "expired"
           couch.customers.save plan_doc
