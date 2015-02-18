@@ -20,12 +20,5 @@ ddoc.views.findByLogin = {
   }
 }
 
-ddoc.views.findByCustomerId = {
-  map: function(doc) {
-    if(doc.meta.type === "customer") {
-      emit(doc.id, doc);
-    }
-  }
-}
 
 module.exports = ddoc;
