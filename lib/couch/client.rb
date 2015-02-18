@@ -102,7 +102,13 @@ class Huboard
           builder.use     FaradayMiddleware::EncodeJson
           builder.use     FaradayMiddleware::Mashify
           builder.use     FaradayMiddleware::ParseJson
-          builder.request :retry, 3
+          conn.request :retry, max: 4,
+                               exceptions: [
+                                 Errno::ETIMEDOUT,
+                                 'Timeout::Error',
+                                 Faraday::TimeoutError,
+                                 Faraday::ConnectionFailed,
+                                ]
           builder.use     Timeout
           #  builder.use     Ghee::Middleware::UriEscape
           builder.use Faraday::HttpCache, store: HuBoard.cache, logger: Logger.new(STDOUT), serializer: Marshal
