@@ -6,7 +6,7 @@ module Queries
     end
 
     def self.get_cust(id, connection)
-      -> { connection.customers.findByCustomerId(id) }
+      -> { connection.connection.get("Customers-#{id}").body }
     end
   end
 end
