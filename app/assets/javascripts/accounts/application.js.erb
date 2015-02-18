@@ -133,7 +133,7 @@ AccountController = Ember.ObjectController.extend({
   }.property("failure", "trialingExpired"),
 
   nonProfit: function(){
-    return this.get("model.details.non_profit") && !this.get("active")
+    return this.get("model.details.non_profit") && !this.get("plan");
   }.property("model.details.non_profit", "active"),
   failure: function(){
     return this.get("model.details.success") == false;
