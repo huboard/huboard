@@ -102,7 +102,7 @@ class Huboard
           builder.use     FaradayMiddleware::EncodeJson
           builder.use     FaradayMiddleware::Mashify
           builder.use     FaradayMiddleware::ParseJson
-          conn.request :retry, max: 4,
+            builder.request :retry, max: 4,
                                exceptions: [
                                  Errno::ETIMEDOUT,
                                  'Timeout::Error',
