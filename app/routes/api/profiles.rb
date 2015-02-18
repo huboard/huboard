@@ -34,7 +34,8 @@ module HuBoard
             account_email: customer["billing_email"],
             is_owner: true,
             trial: customer[:trial],
-            has_plan: plan[:purchased]
+            has_plan: plan[:purchased],
+            non_profit: non_profit?(customer)
           }
 
           json data
@@ -63,7 +64,8 @@ module HuBoard
             is_owner: true,
             account_email: customer["billing_email"],
             trial: customer[:trial],
-            has_plan: plan[:purchased]
+            has_plan: plan[:purchased],
+            non_profit: non_profit?(customer)
           }
 
           json data

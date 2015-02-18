@@ -15,6 +15,9 @@ AccountController = Ember.ObjectController.extend({
     return this.get("failure") || this.get("trialingExpired");
   }.property("failure", "trialingExpired"),
 
+  nonProfit: function(){
+    return this.get("model.details.non_profit") && !this.get("active")
+  }.property("model.details.non_profit", "active"),
   failure: function(){
     return this.get("model.details.success") == false;
   }.property("model.details.success"),
