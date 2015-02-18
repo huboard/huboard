@@ -10,6 +10,9 @@ module HuBoard
     end
 
     def subscription_active?(customer)
+      return true if customer[:stripe][:plan] && 
+        customer[:stripe][:plan][:plan_id] == "non_profit"
+
       cus = customer[:stripe][:customer]
       if cus[:subscriptions][:total_count] > 0
         sub = cus[:subscriptions][:data][0]
