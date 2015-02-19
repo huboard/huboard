@@ -1,0 +1,19 @@
+{{#x-tabs}}
+  {{#x-pane title="Plans"}}
+    <div class="nav-section">
+      <div class="widget-body">
+        {{ render 'account' model }}
+      </div>
+    </div>
+  {{/x-pane}}
+  {{#if model.details.org.is_owner }}
+    {{#x-pane title="Billing"}}
+        <div class="nav-section">
+
+        <div class="widget-body">
+          {{ render 'history' model }}
+        </div>
+      </div>
+    {{/x-pane}}
+  {{/if}}
+{{/x-tabs}}

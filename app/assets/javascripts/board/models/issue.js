@@ -100,6 +100,7 @@ var Issue = Ember.Object.extend(Serializable,{
      
      return Ember.$.getJSON("/api/" + full_name + "/issues/" + this.get("number") + "/details")
      .success(function(details){
+       this.set("repo", details.repo);
        this.set("activities", details.activities);
        this.set("processing", false);
      }.bind(this)).fail(function(e){

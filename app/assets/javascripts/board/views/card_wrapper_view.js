@@ -4,6 +4,9 @@ var CardWrapperView = Em.CloakedView.extend({
     colorLabel: function () {
       return "-x" + this.get("content.color");
     }.property("content.color"),
+    isCollaborator: function(){
+        return this.get("content.repo.is_collaborator");
+    }.property("content.repo.is_collaborator"),
     cardController: function(){
         var model = this.get('content'),
             container = this.get('container');
@@ -80,7 +83,7 @@ var CardWrapperView = Em.CloakedView.extend({
       }.bind(this))
     }.observes("content.isArchived"),
     isDraggable: function( ){
-      return App.get("loggedIn") && App.get("repo.is_collaborator");
+      return App.get("loggedIn") && this.get("isCollaborator");
     }.property("App.loggedIn","content.state"),
     isFiltered: function() {
       var dimFilters = App.get("dimFilters"),
@@ -117,22 +120,32 @@ var CardWrapperView = Em.CloakedView.extend({
       var view = Em.View.views[this.$().attr("id")];
       view.get("cardController").send("fullscreen")
     },
+    dragAuthorized: function(ev){
+      var contains_type =  ev.dataTransfer.types.contains("text/huboard-assignee")
+      return contains_type && this.get("isCollaborator")
+    },
     dragEnter: function(ev) {
       ev.preventDefault();
-      if(ev.dataTransfer.types.contains("text/huboard-assignee")){
+      if(this.dragAuthorized(ev)){
         this.$().addClass("assignee-accept");
+      } else {
+        this.$().addClass("assignee-error");
       }
     },
     dragOver: function(ev) {
       ev.preventDefault();
-      if(ev.dataTransfer.types.contains("text/huboard-assignee")){
+      if(this.dragAuthorized(ev)){
         this.$().addClass("assignee-accept");
+      } else {
+        this.$().addClass("assignee-error");
       }
     },
     dragLeave: function(ev) {
       ev.preventDefault();
-      if(ev.dataTransfer.types.contains("text/huboard-assignee")){
+      if(this.dragAuthorized(ev)){
         this.$().removeClass("assignee-accept");
+      } else {
+        this.$().removeClass("assignee-error");
       }
     },
     drop: function(ev){
@@ -140,13 +153,15 @@ var CardWrapperView = Em.CloakedView.extend({
         ev.stopPropagation();
       }
 
-      if(ev.dataTransfer.types.contains("text/huboard-assignee")){
+      if(this.dragAuthorized(ev)){
         var view = Em.View.views[this.$().find("> div").attr("id")];
         view.get("controller").send("assignUser", ev.dataTransfer.getData("text/huboard-assignee"));
-
-        ev.preventDefault();
         this.$().removeClass("assignee-accept");
+      } else {
+        this.$().removeClass("assignee-error");
       }
+      
+      ev.preventDefault();
     },
     _setHeights: null,
 

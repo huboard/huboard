@@ -1,5 +1,8 @@
 var IssuesEditController = Ember.ObjectController.extend({
   needs: ["application"],
+  isCollaborator: function(){
+    return this.get("model.repo.is_collaborator");
+  }.property("model.repo.is_collaborator"),
   board: Ember.computed.alias("controllers.application.model.board"),
   columns: Ember.computed.alias("board.columns"),
   isReady: function(key, value){
@@ -36,7 +39,7 @@ var IssuesEditController = Ember.ObjectController.extend({
        }.bind(this));
     },
     moveToColumn: function(column) {
-      if(!App.get("repo.is_collaborator")) {
+      if(!this.get("isCollaborator")) {
         return false;
       }
       this.get('board').moveIssue(this.get('cardController'), column, this.get('model._data.order'))

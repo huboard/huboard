@@ -58,8 +58,8 @@ var ApplicationRoute = Ember.Route.extend({
     this._super.apply(this, arguments);
     SocketMixin.apply(controller);
     controller.setUpSocketEvents();
-    $(document).ajaxError(function(){
-      if(App.loggedIn){
+    $(document).ajaxError(function(event, xhr){
+      if(App.loggedIn && xhr.status == 404){
         this.send("sessionErrorHandler");
       }
     }.bind(this));

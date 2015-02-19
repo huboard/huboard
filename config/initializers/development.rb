@@ -5,30 +5,32 @@ module HuBoard
       before "/:user/:repo/?*" do 
 
         return if RESERVED_URLS.include? params[:user]
+        repo = gh.repos params[:user], params[:repo]
+        raise Sinatra::NotFound if repo['message'] == "Not Found"
 
-        if authenticated? :private
-          repo = gh.repos params[:user], params[:repo]
+        if authenticated?(:private) && repo["private"]
+          private_repo = UseCase::PrivateRepo.new(gh, couch)
 
-          raise Sinatra::NotFound if repo.message == "Not Found"
+          private_repo.run(params).match do
+            success do
+              session[:forward_to] = "#{params[:user]}/#{params[:repo]}"
+              redirect "/settings/#{params[:user]}/trial" if params[:trial_available]
 
-          if repo.private 
-            user = gh.users params[:user]
-            customer = couch.customers.findPlanById user.id
-            session[:github_login] = user.login
-            session[:upgrade_url] = user.login == gh.user.login ? "/settings/profile" : "/settings/profile/#/#{user.login}"
-            return if customer.rows.any?
-            customer = couch.customers.findPlanById current_user.id
-            throw(:warden) if !customer.rows.any? #|| customer.rows.first.value.stripe.customer.delinquent
+              user = gh.users(params[:user])
+              session[:github_login] = user['login']
+            end
+
+            failure :pass_through do
+              return;
+            end
+
+            failure :unauthorized do
+              throw(:warden) 
+            end
           end
-
-        else
-          repo = gh.repos params[:user], params[:repo]
-          raise Sinatra::NotFound if repo.message == "Not Found"
         end
       end
-
     end
   end
 end
-
 

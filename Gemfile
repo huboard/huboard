@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
-ruby "2.1.2"
+ruby "2.2.0"
 
-gem 'sinatra', "~> 1.4.0"
+gem 'sinatra', "1.4.4"
 gem 'sinatra-contrib', github: 'maccman/sinatra-contrib'
 gem 'sprockets-memcache-store'
 gem 'rack-standards'
@@ -23,10 +23,10 @@ gem 'sinatra-pubsub'
 gem 'encryptor'
 gem 'rack-no-www'
 gem 'rdiscount'
-gem 'slim'
+gem 'slim', '2.0.3'
 gem 'warden-github', :github => "atmos/warden-github"
 gem 'warden_strategies'
-gem 'ghee'
+gem 'ghee', '~> 0.11.16'
 gem 'rack-ssl'
 gem 'addressable'
 gem 'kgio'
@@ -62,6 +62,7 @@ gem 'solid_use_case'
 group :development do
   gem 'shotgun'
   gem 'rspec'
+  gem 'couchrest'
   #gem 'librarian-puppet'
   #gem 'puppet'
 

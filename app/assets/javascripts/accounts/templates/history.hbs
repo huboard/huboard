@@ -1,0 +1,46 @@
+<div class="receipt-information">
+  <h3>Receipt info <small>(optional)</small></h3>
+  <p>
+  HuBoard does not provide invoices, but if you need additional contact or tax information added to your
+  receipts (business address, VAT number, etc.), enter it below and it will appear on all of your receipts.
+  </p>
+  <p>
+  {{ textarea value=model.history.additional_info }}
+
+  <button class="hb-button small"
+    {{action 'saveAdditionalInfo' this }} {{bind-attr disabled=processing }} >Update</button>
+  </p>
+
+</div>
+
+ <div class="table-wrapper">
+  <table class="table">
+    <thead>
+      <th>Date</th>
+      <th>Account</th>
+      <th>Amount</th>
+      <th></th>
+    </head>
+    <tbody>
+
+      {{#each model.history.charges }}
+      <tr>
+        <td>{{stripe-date created }}</td>
+        <td>{{ receipt_email }}</td>
+        <td>{{stripe-money amount }}</td>
+        <td class="text-right">    
+         {{#if paid}}
+          <a href="/settings/invoices/{{unbound invoice }}">HTML</a> | <a href="/settings/invoices/{{unbound invoice}}.pdf">PDF</a>
+         {{else}}
+          UNPAID
+         {{/if}}
+        </td>
+      </tr>
+      {{else}}
+      <tr>
+        <td colspan='4' class="empty">No charges yet</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

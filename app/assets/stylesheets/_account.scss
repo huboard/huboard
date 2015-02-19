@@ -1,4 +1,10 @@
 .account-details {
+  .email {
+    padding-left: 10px;
+  }
+  .coupon {
+    padding-left: 6px;
+  }
   margin: -5px -5px 0 -5px;
   padding: 20px;
   border-bottom: 1px solid #ccc;
@@ -8,3 +14,17 @@
   padding: 10px;
 }
 
+.alert {
+  .disabled {
+    display: none;
+  }
+
+  form {
+    margin-top: -31px;
+    float: right;
+    .hb-button {
+      margin-top: -8px;
+      margin-left: 6px;
+    }
+  }
+}

@@ -3,18 +3,18 @@ class Huboard
     module ColumnLabel
 
       def self.extended(l)
-        match = Huboard.column_pattern.match l.name
+        match = Huboard.column_pattern.match l['name']
         l[:id] = match[:id]
-        l[:text] = match[:name]
-        if Huboard.wip_pattern =~ l[:text]
-          m = Huboard.wip_pattern.match l[:text]
-          text = l[:text]
+        l['text'] = match[:name]
+        if Huboard.wip_pattern =~ l['text']
+          m = Huboard.wip_pattern.match l['text']
+          text = l['text']
           wip = m[:wip]
           all = m[:all]
-          l[:text] = text[0..text.length - all.length].strip
-          l[:wip] = wip
+          l['text'] = text[0..text.length - all.length].strip
+          l['wip'] = wip
         else
-          l[:wip] = 0
+          l['wip'] = 0
         end
       end
     end
@@ -25,23 +25,23 @@ class Huboard
     end
 
     def other_labels
-      labels.reject { |l| Huboard.all_patterns.any? {|p| p.match l.name } }
+      labels.reject { |l| Huboard.all_patterns.any? {|p| p.match l['name'] } }
     end
 
     def settings_labels
-      labels.select{|l| Huboard.settings_pattern.match l.name }
+      labels.select{|l| Huboard.settings_pattern.match l['name'] }
     end
 
     def column_labels
-      columns = labels.select{|l| Huboard.column_pattern.match l.name }.map do |l|
+      columns = labels.select{|l| Huboard.column_pattern.match l['name'] }.map do |l|
         l.extend(ColumnLabel)
       end
 
       columns = columns.sort_by {|i| i[:id] }
-      columns.each_with_index { |issue, i| issue[:index] = i }
+      columns.each_with_index { |issue, i| issue['index'] = i }
       if columns.any?
-        columns.first[:is_first] = true
-        columns.last[:is_last] = true
+        columns.first['is_first'] = true
+        columns.last['is_last'] = true
       end
       columns
     end
@@ -62,8 +62,8 @@ class Huboard
 
       if match and repo_exists?(match[:user_name], match[:repo])
         new_link = create_label name: label_name, color: random_color
-        new_link.user = match[:user_name]
-        new_link.repo = match[:repo]
+        new_link['user'] = match[:user_name]
+        new_link['repo'] = match[:repo]
         new_link
       else
         nil
@@ -86,10 +86,10 @@ class Huboard
     end
 
     def link_labels
-      labels.select{|l| Huboard.link_pattern.match l.name }.map do |l|
-        match = Huboard.link_pattern.match l.name
-        l.user = match[:user_name]
-        l.repo = match[:repo]
+      labels.select{|l| Huboard.link_pattern.match l['name'] }.map do |l|
+        match = Huboard.link_pattern.match l['name']
+        l['user'] = match[:user_name]
+        l['repo'] = match[:repo]
         l
       end
     end
