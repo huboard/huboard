@@ -72,6 +72,7 @@ Ember.onLoad("Ember.Application", function ($app) {
           correlationId : correlationId,
           sockets: {},
           subscribe: Ember.K,
+          unsubscribe: Ember.K,
           subscribeTo: Ember.K
         })
       }

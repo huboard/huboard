@@ -732,6 +732,7 @@ Ember.onLoad("Ember.Application", function ($app) {
           correlationId : correlationId,
           sockets: {},
           subscribe: Ember.K,
+          unsubscribe: Ember.K,
           subscribeTo: Ember.K
         })
       }
@@ -77360,6 +77361,10 @@ var CardWrapperView = Em.CloakedView.extend({
     colorLabel: function () {
       return "-x" + this.get("content.color");
     }.property("content.color"),
+    isCollaborator: function(){
+        return this.get("content.repo.is_collaborator");
+    }.property("content.repo.is_collaborator"),
+    cardController: function(){
         var model = this.get('content'),
             container = this.get('container');
 
@@ -77367,6 +77372,7 @@ var CardWrapperView = Em.CloakedView.extend({
 
         var controllerFullName = 'controller:' + controllerName,
         factory = container.lookupFactory(controllerFullName),
+        parentController = this.get('controller');
 
         // let ember generate controller if needed
         if (factory === undefined) {
@@ -77382,6 +77388,7 @@ var CardWrapperView = Em.CloakedView.extend({
           parentController: parentController,
           target: parentController
         });
+        this.set('cardController', controller);
     }.on('init'),
     uncloak: function() {
       var state = this._state || this.state;
