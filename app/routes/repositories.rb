@@ -2,7 +2,7 @@ module HuBoard
   module Routes
     class Repositories < Base
 
-      RESERVED_URLS = %w{ login repositories settings }
+      RESERVED_URLS = %w{ assets login repositories settings }
 
       before '/:user/:repo/?*' do
         return if RESERVED_URLS.include? params[:user]
