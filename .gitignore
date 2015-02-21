@@ -36,3 +36,21 @@ bower.json
 # Ignore puppet files
 .tmp/
 puppet/modules/
+
+
+## Ember cli 
+# compiled output
+ember-app/dist
+ember-app/tmp
+
+# dependencies
+ember-app/node_modules
+ember-app/bower_components
+
+# misc
+ember-app/.sass-cache
+ember-app/connect.lock
+ember-app/coverage/*
+ember-app/libpeerconnection.log
+ember-app/npm-debug.log
+ember-app/testem.log
