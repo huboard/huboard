@@ -5,5 +5,6 @@ Exec["apt-update"] -> Package <| |>
 class { 'nginx':}
 package {
   'nodejs': ensure => "present";
+  'npm': ensure => "present";
 } ->
 class { 'ruby_install':}
