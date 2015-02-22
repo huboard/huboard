@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  root 'marketing#index'
+  root to: 'dashboard#index', constraints: LoggedInConstraint.new 
+  root to: 'marketing#index', as: 'marketing_root'
+
   get 'integrations' => 'marketing#integrations'
   get 'pricing' => 'marketing#pricing'
   get 'login' => 'login#index'
