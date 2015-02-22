@@ -1,4 +1,4 @@
-class WelcomeController < ActionController::Base
+class MarketingController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
@@ -9,7 +9,10 @@ class WelcomeController < ActionController::Base
     if logged_in?
       render :index
     else
-      render template: "welcome/marketing", layout: "marketing"
+      render template: "marketing/marketing", layout: "marketing"
     end
+  end
+  def integrations
+      render template: "marketing/integrations", layout: "marketing"
   end
 end

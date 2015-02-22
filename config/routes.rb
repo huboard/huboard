@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  root 'welcome#index'
+  root 'marketing#index'
+  get 'integrations' => 'marketing#integrations'
   get 'login' => 'login#index'
 
   # The priority is based upon order of creation: first created -> highest priority.

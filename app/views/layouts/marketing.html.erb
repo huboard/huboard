@@ -25,7 +25,7 @@
 </head>
 <body>
 <!-- top container -->
-<div class="top top--<%= @controller %> <%= @controller == "integrations" ? "top--stars" : "" %>"> <div class="top-inner">
+<div class="top top--<%= params[:action] %> <%= params[:action] == "integrations" ? "top--stars" : "" %>"> <div class="top-inner">
   <%= render partial: 'shared/header' %>
   <%= content_for :marketing_hero %>
 
