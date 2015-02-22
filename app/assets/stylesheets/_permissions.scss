@@ -1,0 +1,64 @@
+.permissions{
+  .well {
+    h5 {
+      color: #999;
+      margin: -19px;
+      margin-bottom: 10px;
+      padding: 19px;
+      border-bottom: 1px solid #ccc;
+    }
+    .body {
+
+
+    }
+  }
+
+  .hb-button {
+    display:block;
+  }
+  .permission {
+
+    padding: 3px 0;
+  }
+
+  .group {
+    margin-bottom: 10px;
+    @include clearfix;
+  }
+
+  blockquote {
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-left-color: #2590D6;
+    padding: 10px 0 10px 10px;
+  }
+
+  .label {
+    display: inline-block;
+    font-weight: bold;
+    text-align: center;
+    font-size: 14px;
+    padding: 6px 16px;
+    margin-right: 4px;
+    border-radius: 3px;
+    border: 2px solid;
+    text-shadow: 0 1px 0 #fff;
+    &.read.on {
+      color: #7cc45c;
+      border: solid 2px #7cc45c;
+      background:rgba(124,196,92,0.2);
+
+    }
+    &.write.on {
+      color: #ee9c49;
+      background: rgba(238,156,73,0.2);
+      border-color: #ee9c49;
+    }
+    &.off {
+      color: #dddddd;
+      background: #eeeeee;
+      border-color: #dddddd;
+    }
+  }
+}

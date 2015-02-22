@@ -1,0 +1,35 @@
+
+
+.arrow {
+  margin-right: 20px;
+  position: relative;
+  box-sizing: border-box;
+  margin-top: 0;
+
+  &:before, &:after {
+    left: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-radius: 2px;
+  }                        
+  &:after {
+    border-left-color: #f3f3f3;
+    border-width: 21px;
+    top: 50%;
+    margin-top: -21px;
+  }
+
+  &:before {
+    border-left-color: #e5e5e5;
+    border-width: 22px;
+    top: 50%;
+    margin-top: -22px;
+  }
+
+}
+
+

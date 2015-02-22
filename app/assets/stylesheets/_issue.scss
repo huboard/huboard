@@ -1,0 +1,68 @@
+.js-task-list-field {
+  display: none;
+}
+
+.markdown-body .task-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    padding-left: 10px;
+}
+
+.task-list-item {
+  list-style-type: none;
+  padding-left: 20px;
+}
+.task-list-item label {
+    font-weight: normal;
+}
+.task-list-item + .task-list-item {
+  margin-top: 3px;
+}
+
+.task-list-item-checkbox[class] {
+  float: left;
+  margin-left: -20px;
+  margin-top: 4px;
+}
+.card-comment {
+  .author {
+    padding-bottom: 6px;
+    color: #999;
+  }
+  .hb-action {
+    cursor: pointer;
+    &:hover {
+      color: $hb-purple;
+
+    }
+
+  }
+}
+
+
+.card-event {
+   line-height: 40px;
+   .label {
+      display: inline-block;
+      width: 75px;
+      text-align: center;
+      padding: 6px;
+   }
+   
+   &.card-event-reopened {
+     .label {
+       background-color: $hb-red;
+     }
+   }
+
+   img {
+    border-radius: 3px;
+    margin: 0 3px;
+   }
+
+   & + .card-comment {
+     margin-top: 10px;
+   }
+
+}

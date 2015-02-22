@@ -1,0 +1,35 @@
+$footer-height: 81px;
+body, html {
+  height: 100%;
+
+}
+#wrapper {
+   height: auto !important;
+   height: 100%;
+   min-height: 100%;
+
+   margin-bottom: -$footer-height;
+}
+
+
+
+#footer-pusher {
+   min-height: $footer-height;
+}
+
+#footer {
+    background-color: $hb-grey-light;
+    @include linear-gradient(lighten($hb-grey-light,8%), darken($hb-grey-light,8%));
+    border-top: 1px solid $hb-grey-light;
+    padding-top:29px;
+    padding-bottom:20px;
+
+    &, a {
+      color: $hb-purple;  
+    }
+
+    .links {
+      a { margin: 0 10px;}
+      text-align: right;
+    }
+}

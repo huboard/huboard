@@ -1,0 +1,69 @@
+
+.vcard {
+   img {
+      @include box-sizing(border-box);
+   }
+   h1 {
+    small {
+     display:block;
+    }
+   }
+}
+
+.repo {
+  .icon {
+    line-height: 20px;
+
+    &.public {
+      color: #7cc45c;
+      color: rgba(#7cc45c, 0.7);
+      
+    }
+    &.private {
+      color:#ee9c49;
+      color:rgba(#ee9c49, 0.7);
+    }
+  }
+}
+
+ul.repos, ul.repos li {
+  list-style: none;
+  margin: 0;
+}
+ul.repos li {
+  margin: 0 0 8px 0;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid #ccc;
+}
+ul.repos li:last-child {
+  border:0;
+  margin-bottom: 3px;
+}
+ul.repos li a {
+ float:right;
+ padding-top: 30px;
+ position:relative;
+ margin: 0 3px;
+}
+ul.repos li > span a {
+  float:none;
+}
+ul.repos li a span {
+ color: gray;
+}
+ul.repos li > span {
+  font-size:1.4em;
+}
+ul.repos li a strong {
+  font-size:2em;
+  position:absolute;
+  top:3px;
+  left:10%;
+}
+ul.repos li a.btn {
+ padding-top: 7px;
+ margin-top:7px;
+}
+
+

@@ -1,0 +1,223 @@
+.navbar {
+
+  ul.nav.breadcrumbs {
+    > li {
+      > a, > span {
+        margin: 4px;
+        margin-left: -5px;
+      }
+    }
+    li:first-child {
+      > a:before, > a:after {
+        display:none;
+      }
+      + li a {
+        padding-left: 10px;
+      }
+    }
+  }
+}
+.flex-crumbs {
+
+  .breadcrumbs {
+    float:none;
+    @include display(flex);
+    li {
+      @include flex(1);
+
+    }
+
+  }
+  .card-states {
+
+  }
+}
+ul.nav.breadcrumbs {
+
+  .search {
+    position:relative;
+    padding: 3px 8px 3px 20px;
+    margin: 4px;
+    margin-left: -5px;
+    background: white;
+    border: 1px solid #ddd;
+    height: 26px;
+    .ui-icon {
+      color: $hb-purple-dark;
+      position: absolute;
+      top: 9px;
+    }
+    &.has-value {
+      input {
+        width: 210px;
+        outline: none;
+        @include transition(width 0.5s);
+      }
+
+    }
+    input {
+      height: auto;
+      box-shadow: none;
+      width: 0px;
+      padding: 3px;
+      padding-left: 24px;
+      border: none;
+      @include transition(width 0.5s);
+
+      &::-webkit-input-placeholder {
+        text-indent: 1px;
+      }
+      &:-moz-placeholder {
+        text-indent: 2px;
+        color:#fff;
+      }
+      &::-moz-placeholder {
+        text-indent: 2px;
+        color:#fff;
+      }
+      &:-ms-input-placeholder {
+        text-indent: 1px;
+      }
+
+      &:hover, &:focus, &.has-value {
+        width: 210px;
+        outline: none;
+        &:-moz-placeholder {
+          text-indent: 2px;
+          color:#666;
+        }
+        &::-moz-placeholder {
+          text-indent: 2px;
+          color:#666;
+        }
+        @include transition(width 0.5s);
+      }
+    }
+    &:hover input {
+      width: 210px;
+      @include transition(width 0.5s);
+      &:-moz-placeholder {
+        text-indent: 2px;
+        color:#666;
+      }
+      &::-moz-placeholder {
+        text-indent: 2px;
+        color:#666;
+      }
+    }
+  }
+
+  li + li a, .crumb--middle a, .crumb--last a {
+    padding-left: 25px;
+    &:hover {
+      padding-left: 25px;
+
+    }
+  }
+
+  li:last-child, .crumb--last {
+    > a:before, > a:after {
+      display:none;
+    }
+  }
+  &.disabled {
+    > li {
+      > a, > span {
+        cursor: default;
+        cursor: not-allowed;
+      }
+    }
+  }
+  .crumb a {
+
+  }
+
+  > li {
+    > a, > span {
+
+      font-family: $hb-font-headings;
+      font-size-adjust:0.5; 
+      font-weight:500;
+      color: $hb-purple-dark;
+      border: 1px solid #ddd;
+      padding: 6px;
+      padding-right: 15px;
+      background-color: #fff;
+      &.home {
+        padding: 8px 6px 4px 6px;
+        &:hover {
+          padding: 8px 6px 4px 6px;
+        }
+        .ui-icon {
+          height: auto;
+        }
+      }
+
+      span, small {
+        overflow:hidden;
+        width: 100%;
+        white-space: nowrap;
+      }
+
+      &:hover {
+        border: 1px solid #ddd;
+        padding-top: 6px;
+        padding-bottom: 6px;
+        background-color: #fff;
+      }
+
+      position: relative;
+
+
+      &:before, &:after {
+        z-index: 5;
+        left: 100%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+        border-radius: 2px;
+      }                        
+      &:after {
+        border-left-color: #fff;
+        border-width: 17px;
+        top: 50%;
+        margin-top: -17px;
+      }
+
+      &:before {
+        border-left-color: #ddd;
+        border-width: 18px;
+        top: 50%;
+        margin-top: -18px;
+      }
+
+    }
+    &.active {
+      position: relative;
+      &:before {
+        content: ' ';
+        width: 100%;
+        position: absolute;
+        bottom: -4px;
+        height: 3px;
+        background-color: $hb-purple;
+        display: inline-block;
+
+      }
+
+    }
+    &.active, &.dropdown.open {
+      > a, > a:hover, > .dropdown-toggle, > .dropdown-toggle:hover  {
+        background:#fff;
+        @include box-shadow(none);
+        &.avatar {
+          padding-top:2px;
+        }
+      }
+    }
+  }
+}
+

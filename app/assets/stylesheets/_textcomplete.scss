@@ -1,0 +1,18 @@
+.dropdown-menu {
+  .textcomplete-item {
+    @include clearfix;
+    position: relative;
+    img {
+      position: absolute;
+      left: 6px;
+      top: 5px;
+      border-radius: 3px;
+    }
+    a {
+      line-height: 36px;
+      padding-left: 45px !important;
+      font-weight: bold;
+    }
+
+  }
+}

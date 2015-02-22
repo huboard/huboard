@@ -1,0 +1,184 @@
+@import "bourbon/bourbon";
+@import "mixins";
+@import "colors";
+@import "font";
+@import "fonts";
+@import "buttons";
+@import "repos";
+@import "board";
+@import "card_states";
+@import "header";
+@import "footer";
+@import "overlay";
+@import "section";
+@import "credit_cards";
+@import "breadcrumbs";
+@import "account";
+
+form {
+  margin: 0;
+}
+.navbar {
+  &.navbar-fixed-top, &.navbar-static-top {
+    .navbar-inner {
+      @include box-shadow(none);
+    }
+  }
+  .navbar-inner {
+    @include linear-gradient(#F9F9F9, #F3F3F3);
+    border-bottom: 1px solid $hb-grey-light;
+   
+  }
+  .nav {
+    form {
+       padding: 0;
+       margin: 0;
+    }
+
+    .dropdown .avatar, .dropdown.open .avatar {
+      position: relative;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      padding-left: 10px;
+      margin-left: 10px;
+
+      &:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        content: ' ';
+        width: 1px;
+        height: 42px;
+        background-color: $hb-grey-light;
+        border-right: 1px solid #fff;
+      }
+      
+      &:hover {
+        border-top: none;
+      }
+
+      img {
+        border-radius: 50%;
+      }
+
+      .caret {
+        margin-top: 14px;
+      
+      }
+    }
+
+    > li {
+      > a {
+        &:hover {
+          border-top: 3px solid $hb-purple-dark;
+          padding-top: 7px;
+        }
+      }
+      &.active, &.dropdown.open {
+        > a, > a:hover, > .dropdown-toggle, > .dropdown-toggle:hover  {
+            border-top: 3px solid $hb-purple;
+            padding-top: 7px;
+            background:none;
+            @include box-shadow(none);
+            &.avatar {
+              padding-top:2px;
+            }
+        }
+      }
+
+    }
+  }
+
+}
+
+.nav-list {
+  > li {
+    margin-bottom: 3px;
+    > a {
+      padding: 3px 12px;
+      border-radius: 3px;
+      &.active, &.active:hover {
+        background: $hb-purple;
+        color: white;
+        text-shadow: none;
+      }
+    }
+  }
+    
+
+}
+
+  
+.tab-pane {
+  display: none;
+  margin-top: 1px;
+}
+
+.tab-pane.active {
+  display: block;
+}
+
+
+
+.dropdown-menu {
+  li {
+    > a {
+      &:hover, &:focus {
+           @include linear-gradient(lighten($hb-purple, 5%), $hb-purple);
+      }
+    }
+  }
+}
+
+.hide {display:none;}
+
+.breadcrumb {
+  margin: -43px 0 7px 0; 
+}
+
+#main-stage  { 
+  margin-bottom: 50px;
+  margin-top: 60px;
+}
+
+.container-fluid {
+  position:relative;
+  > .sidebar {
+     width: 230px;
+     position: absolute;
+     border-right: 1px solid #ccc;
+     @include box-sizing(border-box);
+  }
+  > .content {
+     margin-left: 250px;
+     position: relative;
+  }
+}
+
+
+.drop-shadow {
+  position:relative;
+  padding:1em; 
+  background:#fff;
+  border: 1px solid #f2f2f2;
+  border-bottom-color: darken(#f2f2f2, 5%);
+  @include box-shadow( 0 1px 2px rgba(0,0,0, 0.4));
+}
+
+
+.instructions {
+   text-align: center;
+   margin-top: 60px;
+}
+.instructions ol {
+   width: 30px;
+   text-align:left;
+   margin-left: auto;
+   margin-right: auto;
+}
+
+.trial_activate {
+  input {
+    vertical-align: top;
+  }
+}
