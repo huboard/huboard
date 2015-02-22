@@ -1,0 +1,24 @@
+
+    <div class="flex-form-bottom">
+      <form {{action submit on="submit"}} class="flex-form">
+        <h3>Instructions</h3>
+        <p>
+          Navigate to your <a href="https://gitter.im/{{unbound controllers.application.model.full_name}}" target="_blank">Gitter chatroom</a>. Click the gear icon at the top right of your chat log and then select Integrations.
+
+        </p>
+        <p>
+          Create a HuBoard integration and paste the webhook url below.
+        </p>
+        <p>
+
+          Click the Submit webhook button to create the integration.
+        </p>
+        <label>
+          {{input value=attrs.webhookURL placeholder="Gitter webhook url" }}
+        </label>
+        <button {{bind-attr disabled=disabled}} class="hb-button">Submit webhook</button>
+        <div class="with-line"><span>or</span></div>
+        <div class="cancel"> <a href="#" {{action cancel}}>Cancel</a> </div>
+      </form>
+    </div>
+

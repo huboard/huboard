@@ -1,0 +1,41 @@
+<div class="main-toolbar">
+  <div class="sidebar-toggle">
+    <a href="#" {{action "toggleSidebar" }}>Filters <i {{bind-attr class=":ui-icon isSidebarOpen:ui-icon-triangle-1-w:ui-icon-triangle-1-e"}} class="ui-icon ui-icon-triangle-1-e"></i></a>
+  </div>
+
+  {{#if filtersActive}}
+  <div class="filters-clear">
+    <a class="hb-icon-button hb-icon-button-purple" href="#" {{action "clearFilters"}}>
+      <i class="ui-icon ui-icon-filter ui-icon-16"></i>
+      <span class= "ui-text">Clear filters</span>
+    </a>
+  </div>
+  {{/if}}
+
+ {{#if App.repo.is_collaborator}}
+    <div class="create-button">
+    {{#link-to 'settings' class='hb-icon-link' }}
+        <i class="ui-icon ui-icon-18 ui-icon-gear"></i>
+    {{/link-to}}
+    </div>
+  {{/if}}
+
+</div>
+<div id="main-stage" {{bind-attr class=":main-content isSidebarOpen:sidebar-open"}}>
+  <div class="sidebar left">
+    <div class="sidebar-wrapper">
+      {{outlet sidebarTop}}
+      {{outlet sidebarMiddle}}
+    </div>
+  </div>
+  
+  <div id="content" class="content">
+    <div class="board">
+      {{ render 'milestone_column' left_column}}
+      {{#each column in milestone_columns}}
+        {{ render 'milestone_column' column}}
+      {{/each}}
+    </div>
+  </div>
+</div>
+

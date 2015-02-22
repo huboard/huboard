@@ -1,0 +1,62 @@
+<div class="fullscreen-credit-card">
+  <form {{action 'process' on=submit}}>
+    <div class="modal-header">
+      <button type="button" class="close" {{action 'close'}} data-dismiss="modal" aria-hidden="true">×</button>
+      Update credit card infomation 
+    </div>
+    <div class="modal-body">
+      <fieldset>
+
+        {{#if errors}}
+          <div class="alert alert-error">{{errors}}</div>
+        {{/if}}
+
+        <div class="form-row full">
+          <label>
+            <span>Card Number</span>
+          </label>
+          {{view App.CardNumberField valueBinding="number" size=20}}
+        </div>
+
+        <ul class="credit-cards">
+          <li {{bind-attr class=":card :card-visa cardType"}} >
+          </li>
+          <li {{bind-attr class=":card :card-master cardType"}} >
+          </li>
+          <li {{bind-attr class=":card :card-discover cardType"}} >
+          </li>
+          <li {{bind-attr class=":card :card-express cardType"}}>
+          </li>
+        </ul>
+
+        <div class="form-row">
+          <label>
+            <span>CVC</span>
+          </label>
+          {{view App.CvcField valueBinding="cvc" size="4" data-stripe="cvc"}}
+        </div>
+
+        <div class="form-row">
+          <label>
+            <span>Expiration ({{ expMonth }} / {{ expYear }})</span>
+          </label>
+          {{view App.CardExpiryField valueBinding="exp" }}
+        </div>
+
+
+      </fieldset>
+
+      <p>
+        Please review the <a href="/site/terms" target="_blank">terms of service</a>, and <a href="/site/privacy" target="_blank">privacy policy</a>.
+      </p>
+
+      {{#if processingCard }}
+        <div class="fullscreen-overlay">
+        </div>
+      {{/if}}
+    </div>
+    <div class="modal-footer">
+        <button href="#" class="stripe-connect light-blue" type="submit" {{bind-attr disabled="processingCard"}}><span>Update card</span></button>
+    </div>
+  </form>
+</div>

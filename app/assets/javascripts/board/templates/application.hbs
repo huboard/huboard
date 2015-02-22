@@ -1,0 +1,70 @@
+<div class="navbar navbar-static-top">
+ <div class="navbar-inner">
+   <div class="container-fluid">
+    <ul class="nav breadcrumbs">
+      <li><a href="/" class="home"><i class="ui-icon ui-icon-menu"></i></a></li>
+      <li><a {{bind-attr href="userUrl"}} >{{model.owner.login}}</a></li>
+      <li><a {{bind-attr href="betaUrl"}}>{{model.name}}</a></li>
+      <li>
+         {{render "search"}} 
+      </li>
+    </ul>
+     <ul class="nav pull-right">
+      {{#link-to 'milestones' tagName="li" href=false}}
+        {{#link-to 'milestones' bubbles=false}}
+          Milestones
+        {{/link-to}}
+      {{/link-to}}
+      {{#link-to 'index' tagName="li" href=false}}
+        {{#link-to 'index' bubbles=false}}
+          Tasks
+        {{/link-to}}
+      {{/link-to}}
+      {{#if App.loggedIn}}
+        <li class="dropdown">
+          <a class="dropdown-toggle avatar" data-toggle="dropdown" href="#">
+          
+          {{hb-avatar user=App.currentUser width="30"}} <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="/settings/profile">Account</a>
+            </li>
+            <li>
+              <a href="/logout">Logout</a>
+            </li>
+          </ul>
+        </li>
+      {{else}}
+         <li>
+           <form action="/login" method="GET">
+            <button class="hb-button"> Sign in </button>
+          </form>
+         </li>
+      {{/if}}
+     </ul>
+   </div>
+ </div>
+</div>
+<div class="application-outlet">
+{{outlet}}
+</div>
+
+<div id="footer">
+  <div class="container">
+    <div class="row">
+      <div class="span6">
+        <img class="animate-before" src="/img/LogoFullPurpleLight.png"/>
+      </div>
+      <div class="links span6">
+        <a href="/site/terms">terms</a>
+        <a href="/site/privacy">privacy</a>
+        <a href="https://github.com/rauhryan/huboard">github</a>
+      </div>
+    </div>
+  </div>
+</div>
+{{outlet loading}}
+{{outlet modal}}
+
+

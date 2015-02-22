@@ -1,0 +1,17 @@
+<div class="fullscreen-card fullscreen-card--center" style="padding:20px;">
+    <h2> This milestone is missing in {{cardController.model.repo.owner.login}}/{{cardController.model.repo.name}} </h2>
+    <div class="well">
+    <p>
+      You are attempting to assign an issue from {{cardController.model.repo.owner.login}}/{{cardController.model.repo.name}} into a milestone that exists in {{columnController.milestone.repo.owner.login}}/{{columnController.milestone.repo.name}}. HuBoard can merge milestones across your linked repositories as long as the titles are the same. 
+
+    </p>
+    <p>
+    Click the create button to copy this milestone into {{cardController.model.repo.owner.login}}/{{cardController.model.repo.name}} with the title <strong> {{columnController.title}} </strong>
+    </p>
+
+  </div>
+
+  <div class="flex-form-top">
+    <button class="hb-button" {{bind-attr disabled=disabled }} {{action 'createTheMilestone' }}> Create it for me </button> or <a {{action 'closeModal'}} href="#">Cancel</a>
+  </div>
+</div>

@@ -1,0 +1,26 @@
+<div class="card-header">
+  <div class="title" {{bind-attr title=title }}>
+    {{#if assignee}}
+      {{hb-avatar-tooltip user=assignee width="24" height="24"}}
+    {{/if}}
+    {{title}} 
+    <small>#{{number}}</small>
+  </div>
+</div>
+
+<div class="flex-crumbs">
+  {{hb-selected-column columns=columns issue=model}}
+</div>
+
+
+<div class="card-labels">
+    {{#each cardLabels }}
+      <div class="card-label-wrapper"> 
+         <div {{bind-attr class=":card-label :active :small customColor"}} ></div>
+         <div {{bind-attr class=":card-label :active :large customColor"}} >
+          <span>{{name}}</span>
+         </div>
+      </div>
+    {{/each}}
+</div>
+

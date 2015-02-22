@@ -1,0 +1,28 @@
+<a href="{{unbound view.content.html_url}}" target="_blank">
+  {{hb-avatar user=view.content.user height=30 width=30 }}
+</a>
+<div class="comment-body">
+  <div class="author">
+    {{#if view.content.canEdit }}
+      {{#if view.content.isEditing}}
+        <i title="Cancel editing" {{action "cancel" target=view.content }} class="hb-action pull-right ui-icon ui-icon-x-thin"></i>
+      {{else}}
+        {{#unless view.content.disabled}}
+          <i title="Edit comment" {{action "edit" target=view.content }} class="hb-action pull-right ui-icon ui-icon-pencil"></i>
+        {{/unless}}
+      {{/if}}
+    {{/if}}
+    <strong>{{view.content.user.login}}</strong> commented {{momentAgo view.content.created_at}} 
+
+  </div>
+  {{#if view.content.isEditing}}
+  <form {{action save on="submit" target=view.content }} class="flex-form">
+    {{hb-markdown-editor markdown=view.content.bufferedContent.body mentions=view.content.mentions}}
+    <button {{bind-attr disabled=view.content.disabled}} class="hb-button">Submit comment</button>
+  </form>
+  {{else}}
+    {{#with view.content}}
+      {{ hb-task-list body_html=body_html body=body taskChanged="taskChanged" targetObject=this canEdit=canEdit }}
+    {{/with}}
+  {{/if}}
+</div>

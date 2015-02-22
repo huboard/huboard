@@ -1,0 +1,19 @@
+<div class="fullscreen-card">
+  <form {{action submit on="submit"}} class="flex-form split-form">
+    <div class="flex-form-left"> 
+      <label>
+        {{input value=title placeholder="Title" }}
+      </label>
+      {{hb-markdown-editor markdown=body mentions=mentions}}
+      <button {{bind-attr disabled=disabled}} class="hb-button">Submit issue</button>
+    </div>
+    <div class="flex-form-right">
+      {{#if isCollaborator}}
+        {{hb-label-selector values=model.labels selected=model.labels title="Labels" labels=otherLabels}}
+        {{hb-assignee editable=true  selected=model.assignee assignees=controller.assignees}}
+        {{hb-milestone editable=true selected=model.milestone milestones=controller.milestones}}
+      {{/if}}
+    </div>
+  </form>
+</div>
+

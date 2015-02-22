@@ -5,11 +5,4 @@ class ApplicationController < ActionController::Base
 
   include ApplicationHelper
 
-  def index
-    if logged_in?
-      render :index
-    else
-      render template: "application/marketing", layout: "marketing"
-    end
-  end
 end

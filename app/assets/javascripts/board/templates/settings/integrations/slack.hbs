@@ -1,0 +1,31 @@
+
+    <div class="flex-form-bottom">
+      <form {{action submit on="submit"}} class="flex-form">
+        <h3>Instructions</h3>
+        <p>
+          Paste the incoming webhook url from Slack below
+        </p>
+        <label>
+          {{input value=attrs.webhookURL placeholder="Slack webhook url" }}
+        </label>
+        <p>
+          Enter the slack room channel that want the HuBoard bot to post into, you can leave this 
+          blank and HuBoard will post into the default room that you configured. If you need to override 
+          channel enter the channel name prefixed with a pound sign # i.e. #development
+        </p>
+        <p>
+          HuBoard can only post into one channel at a time, if you need to post into multiple rooms, create another 
+          incoming webhook for that room
+        </p>
+        <label>
+          {{input value=attrs.channel placeholder="Optional: #channel_name" }}
+        </label>
+        <p>
+          Click the Submit webhook button to create the integration.
+        </p>
+        <button {{bind-attr disabled=disabled}} class="hb-button">Submit webhook</button>
+        <div class="with-line"><span>or</span></div>
+        <div class="cancel"> <a href="#" {{action cancel}}>Cancel</a> </div>
+      </form>
+    </div>
+
