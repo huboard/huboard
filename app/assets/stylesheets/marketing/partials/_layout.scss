@@ -1,0 +1,94 @@
+/**
+ * Generic column containers
+ * Grid powered by Bourbon Neat
+ */
+
+.content {
+	float: left;
+	width: 75%;
+	@include rem((
+		padding-right: 70px,
+		margin-bottom: 75px
+	));
+
+	// Breakpoints
+	@include media($grande) {
+		@include rem((
+			padding-right: 40px
+		));
+	}
+	@include media($tall) {
+		border-right: 0;
+		float: none;
+		width: 100%;
+		@include rem((
+			margin-top: -30px,
+			padding-right: 0,
+			margin-bottom: 70px
+		));
+	}
+
+
+	/**
+	 * Full width content column
+	 */
+	@include m(full) {
+		@include rem((
+			padding-top: 60px
+		));
+
+		// Breakpoints
+		@include media($tall) {
+			@include rem((
+				padding-top: 30px
+			));
+		}
+	}
+}
+
+.sidebar {
+	float: right;
+	width: 25%;
+	@include rem((
+		margin-bottom: 75px
+	));
+
+	// Breakpoints
+	@include media($grande) {
+		@include rem((
+			padding-left: 20px
+		));
+	}
+	@include media($tall) {
+		float: none;
+		margin-top: 0;
+		padding: 0;
+		width: 100%;
+	}
+}
+
+.main {
+}
+
+
+/**
+ * Two column layout
+ */
+.two-col {
+	@include row();
+
+	@include e(col) {
+		@include span-columns(6);
+		@include pad(0 20px 0);
+
+		// Breakpoints
+		@include media($tall) {
+			@include span-columns(12);
+			@include pad(0 0 20px);
+
+			&:last-of-type {
+				padding-bottom: 0;
+			}
+		}
+	}
+}

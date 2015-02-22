@@ -1,0 +1,87 @@
+/**
+ * Header content / Hero feature
+ */
+.hero {
+	color: white;
+	text-align: center;
+	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+
+	// Breakpoints
+	@include media($tall) {
+		margin-bottom: 60px
+	}
+
+	.container {
+		@include slimContainer;
+		@include rem((
+			padding-bottom: 80px
+		));
+
+		// Breakpoints
+		@include media($grande) {
+			max-width: 100%;
+			@include rem((
+				margin: 0 20px
+			));
+		}
+		@include media($tall) {
+			@include rem((
+				padding-top: 20px
+			));
+		}
+	}
+
+	/**
+	 * Title
+	 */
+	@include e(title) {
+		color: white;
+		font-family: $alt-font-family;
+		font-weight: 300;
+		@include rem((
+			font-size: 52px,
+			margin-bottom: 17px
+		));
+
+		// Breakpoints
+		@include media($tall) {
+			@include rem((
+				font-size: 36px
+			));
+		}
+	}
+
+	/**
+	 * Content
+	 */
+	@include e(copy) {
+		font-family: $light-font-family;
+		padding: 0;
+		@include rem((
+			font-size: 18px,
+			margin: 0 0 50px
+		));
+
+		a {
+			color: white;
+			font-weight: bold;
+		}
+	}
+
+	/**
+	 * Button
+	 */
+	.btn {
+		@include box-shadow(0px 1px 0px 0px rgba(0,0,0,0.20), 0px 1px 10px 0px rgba(0,0,0,0.40));
+
+		.icon {
+
+			// Breakpoints
+			// Button on homepage is the exact length for only the icon to drop down to a new line
+			// so to save rewriting copy, just hide the icon
+			@include media($tall) {
+				display: none;
+			}
+		}
+	}
+}

@@ -1,0 +1,215 @@
+/**
+ * Homepage
+ */
+
+/**
+ * Features
+ */
+.features {
+	@include rem((
+		margin: 80px 0 0
+	));
+
+	// Breakpoints
+	@include media($tall) {
+		margin-top: 0;
+		@include rem((
+			margin-bottom: 50px,
+		));
+	}
+}
+
+/**
+ * Feature
+ */
+.feature {
+	color: #777;
+
+	/**
+	 * Image
+	 */
+	@include e(image) {
+
+		img {
+			background: white;
+			border-radius: 6px;
+			display: inline-block;
+      max-width: 357px;
+      cursor: -webkit-zoom-in;
+      cursor: -moz-zoom-in;
+      cursor: zoom-in;
+		}
+
+		// Breakpoints
+		@include media($tall) {
+      img {
+        max-width: 100%;
+
+      }
+
+			&,
+			.feature__copy + & {
+				text-align: center;
+			}
+		}
+	}
+
+	/**
+	 * Content
+	 */
+	@include e(copy) {
+	}
+
+	@include e(title) {
+		color: #5D5D61;
+		font-family: $alt-font-family;
+		@include rem((
+			font-size: 32px,
+			margin-bottom: 20px
+		));
+	}
+
+	p {
+		color: #979797;
+		padding: 0;
+		@include rem((
+			margin: 0 5px
+		));
+	}
+
+	strong {
+		color: #45444A;
+		font-weight: normal;
+	}
+
+
+	// Breakpoints
+	@include media($tall) {
+		@include span-columns(12);
+		@include omega(1n);
+
+		p {
+			margin: 0;
+		}
+	}
+}
+
+
+/**
+ * Horizontal
+ */
+.feature--row {
+	@include row();
+	margin: 0 auto;
+	width: 74.5%;
+	@include rem((
+		margin-bottom: 70px
+	));
+
+  .feature__image {
+    max-width: 100%;
+  }
+
+	.feature__image {
+		float: right;
+		@include rem((
+			margin-left: 30px
+		));
+	}
+	.feature__copy {
+	}
+
+	/**
+	 * Left aligned image
+	 */
+	@include m(alt) {
+
+		.feature__image  {
+			float: left;
+			@include rem((
+				margin: 0 30px 0 0
+			));
+		}
+	}
+
+	// Breakpoints
+	@include media($grande) {
+		width: 100%;
+	}
+	@include media($tall) {
+		text-align: center;
+		width: 100%;
+
+		.feature__image {
+			float: none;
+			@include rem((
+				margin: 0 0 25px
+			));
+		}
+	}
+}
+
+
+/**
+ * Vertical
+ */
+.feature__columns {
+	clear: both;
+	@include row();
+	border-top: 1px solid #D8D8D8;
+	@include rem((
+		margin: 80px auto,
+		max-width: 800px,	
+		padding-top: 80px
+	));
+
+	// Breakpoints
+	@include media($tall) {
+		@include rem((
+			margin-bottom: 0,
+			margin-top: 50px,
+			padding-top: 70px
+		));
+	}
+}
+
+.feature--column {
+	@include span-columns(4);
+	text-align: center;
+
+	.feature__image {
+    min-height: 221px;
+		@include rem((
+			margin-bottom: 40px
+		));
+	}
+
+	.feature__title {
+		line-height: 1;
+		@include rem((
+			font-size: 22px,
+			margin-bottom: 14px
+		));
+	}
+
+  img {
+    max-width: 240px;
+  }
+
+	// Breakpoints
+	@include media($tall) {
+		@include span-columns(12);
+		@include rem((
+			margin-bottom: 70px
+		));
+
+		&:last-of-type {
+			@include rem((
+				margin-bottom: 30px
+			));
+		}
+    img {
+      max-width: 100%;
+    }
+	}
+}

@@ -1,0 +1,60 @@
+/**
+ * Frequently Asked Questions
+ */
+.faq {
+	@include row();
+	margin: 0 auto;
+	@include rem((
+		max-width: 868px
+	));
+
+	/**
+	 * Container
+	 */
+	@include e(col) {
+		@include span-columns(4);
+		@include omega(3n);
+		@include pad(0 10px);
+		text-align: center;
+		@include rem((
+			margin-bottom: 40px
+		));
+
+		// Breakpoints
+		@include media($tall) {
+			@include span-columns(12);
+			@include omega(1n);
+		}
+	}
+
+	/**
+	 * Question
+	 */
+	img {
+		display: inline-block;
+		@include rem((
+			margin-bottom: 20px
+		));
+	}
+	@include e(question) {
+		font-weight: 300;
+		@include rem((
+			font-size: 22px,
+			margin: 0 0 11px
+		));
+	}
+
+	/**
+	 * Answer
+	 */
+	@include e(answer) {
+		color: #7B7B86;
+
+		p {
+			padding: 0;
+			@include rem((
+				margin: 0 0 20px
+			));
+		}
+	}
+}

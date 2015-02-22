@@ -1,0 +1,150 @@
+/**
+ * Components
+ *
+ * Container/wrapper boxes
+ */
+
+/**
+ * Buttons
+ */
+.btn {
+	@include linear-gradient(-179deg, #8A79D3 0%, #7965CC 100%, $fallback: #8A79D3);	
+	border: 0;
+	border-radius: 52px;
+	color: #FFFFFF;
+	display: inline-block;
+	font-weight: bold;
+	line-height: 1.2;
+	text-shadow: 0px -1px 1px rgba(0,0,0,0.20);
+	vertical-align: middle;
+	@include rem((
+		font-size: 16px,
+		padding: 18px 26px
+	));
+
+	&:hover {
+		background: #EFA01B;
+		text-decoration: none;
+	}
+
+	&:active {
+		background: #BA7C20;
+		text-decoration: none;
+	}
+
+	// Breakpoints
+	@include media($tall) {
+		display: block;
+		text-align: center;
+		width: 100%;
+	}
+
+
+	/**
+	 * <input>
+	 */
+	&.btn--input {
+		background: #669AC6;
+		border-radius: 5px;
+		color: #FFFFFF;
+		font-weight: normal;
+		@include rem((
+			font-size: 14px,
+			padding: 18px 41px
+		));
+
+		&.btn--input--bold {
+			background: #3669AA;
+			font-weight: bold;
+			@include rem((
+				font-size: 16px
+			));
+		}
+	}
+
+
+	/**
+	 * Large button
+	 */
+	@include m(alpha) {
+
+		// Breakpoints
+		@include media($tall) {
+			@include rem((
+				padding: 17px
+			));
+		}	
+	}
+
+
+	/**
+	 * Grey buttons
+	 */
+	@include m(beta) {
+		background: rgba(white, 0.8);
+		border-radius: 4px;
+		@include box-shadow(0 1px 3px rgba(black, 0.5));
+		color: #0C092D;
+		display: inline-block;
+		@include rem((
+			font-size: 16px,
+			line-height: 18px,
+			padding: 12px 38px
+		));
+
+		&,
+		&:hover {
+			text-decoration: none;
+		}
+		&:hover {
+			background: white;
+		}
+		&:active {
+			@include linear-gradient(rgba(white, 0.8) 0%, white 100%);
+		}
+
+		// Breakpoints
+		@include media($tall) {
+			display: block;
+			text-align: center;
+			width: 100%;
+		}
+	}
+
+
+	/**
+	 * Flat button
+	 */
+	&.btn--flat {
+		background: #4A3893;
+		border-radius: 4px;
+		@include box-shadow(0px 1px 0px 0px #33256B);
+		color: white;
+		text-shadow: none;
+		@include rem((
+			font-size: 14px
+		));
+	}
+
+
+	/**
+	 * Icons
+	 */
+	.icon {
+		font-style: normal;
+
+		&:after {
+			display: inline-block;
+			@include rem((
+				margin-left: 3px
+			));
+		}
+
+		@include m(lt) {
+
+			&:after {
+				content: "›";
+			}
+		}
+	}
+}

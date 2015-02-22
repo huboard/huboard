@@ -1,0 +1,205 @@
+/**
+ * Navigation
+ */
+
+.nav {
+	float: right;
+	line-height: 1;
+	text-shadow: 0 1px 2px rgba(black, 0.2);
+	@include rem((
+		font-size: 18px
+	));
+
+	ul {
+		list-style: none outside;
+		margin: 0;
+		padding: 0;
+	}
+
+	// Breakpoints
+	@include media($grande) {
+		@include rem((
+			font-size: 15px
+		));
+	}
+	@include media($tall) {
+		float: none;
+
+		ul {
+			display: none;
+			@include rem((
+				margin-top: 15px
+			));
+		}
+	}
+
+	/**
+	 * <li>
+	 */
+	@include e(item) {
+		float: left;
+		margin: 0;
+		padding: 0;
+
+		@include m(btn) {
+			@include rem((
+				margin-left: 30px
+			));
+
+			@include m(first) {
+				@include rem((
+					margin-left: 40px
+				));				
+			}
+		}
+
+		// Breakpoints
+		@include media($tall) {
+			float: none;
+			margin-left: 0;
+		}
+	}
+
+
+	/**
+	 * Text link
+	 */
+	@include e(link) {
+		color: #c0c0c0;
+		display: inline-block;
+		position: relative;
+		@include rem((
+			padding: 12px 16px 0
+		));
+
+		&:hover,
+		&:active {
+			color: white;
+			text-decoration: none;
+		}
+
+		// Breakpoints
+		@include media($tall) {
+			display: block;
+			text-align: center;
+		}
+
+		span {
+			border-bottom: 1px solid transparent;
+			display: inline-block;
+			padding-bottom: 6px;
+		}
+
+		// Breakpoints
+		@include media($grande) {
+			
+			span {
+				@include rem((
+					padding-bottom: 4px
+				));
+			}
+		}
+
+		/**
+		 * 'Current' state
+		 */
+		.nav__item--current & {
+			color: white;
+
+			span {
+				border-bottom: 1px solid rgba(white, 0.3);
+			}
+
+			// Breakpoints
+			@include media($tall) {
+
+				&:after {
+					display: none;
+				}
+			}
+		}
+	}
+
+
+	/**
+	 * Button links
+	 */
+	@include e(btn) {
+		background: rgba(white, 0.05);
+		border: 1px solid #BDBDBD;
+		border-radius: 23px;
+		color: white;
+		display: inline-block;
+		position: relative;
+		text-decoration: none;
+		@include rem((
+			padding: 11px 18px
+		));
+
+		.nav__item--current &,
+		&:hover {
+			background: rgba(white, 0.1);
+			text-decoration: none;
+		}
+
+		&.nav__btn--active {
+		}
+
+		&.nav__btn--active:hover {
+		}
+
+		// Breakpoints
+		@include media($tall) {
+			display: block;
+			text-align: center;
+			@include rem((
+				margin-top: 10px
+			));
+		}
+
+
+		/**
+		 * Decorational bullet point
+		 */
+		&:before {
+			background: #c0c0c0;
+			border-radius: 100%;
+			content: " ";
+			display: block;
+			height: 6px;
+			width: 6px;
+			position: absolute; top: 50%; left: -28px; margin-top: -3px;
+
+			// Breakpoints
+			@include media($tall) {
+				display: none;
+			}
+		}
+	}
+}
+
+/**
+ * Nav toggle button
+ */
+.nav-toggle {
+	background: rgba(white, 0.05);
+	border: 1px solid #BDBDBD;
+	border-radius: 23px;
+	color: white;
+	cursor: pointer;
+	display: none;
+	text-align: center;
+	position: absolute;
+
+	@include rem((
+		right: 0,
+		line-height: 36px,
+		padding: 0 18px,
+		top: 32px
+	));
+
+	// Breakpoints
+	@include media($tall) {
+		display: block;
+	}
+}

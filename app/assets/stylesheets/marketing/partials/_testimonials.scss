@@ -1,0 +1,159 @@
+/**
+ * Testimonials
+ */
+
+.testimonials {
+	background: url(asset-path('marketing/footer-bg--sea.png')) no-repeat bottom center #464646;
+	background-size: cover;
+	color: white;
+	overflow: auto;
+	position: relative;
+	@include rem((
+		padding: 80px 0
+	));
+
+	ul, li,
+	blockquote, p {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	ul,
+	ol {
+		@extend %clearfix;
+	}
+
+	// Breakpoints
+	@include media($tall) {
+		@include rem((
+			padding: 60px 0 0
+		));
+	}
+
+	/**
+	 * Title
+	 */
+	@include e(heading) {
+		text-align: center;
+		@extend %h1;
+		@include rem((
+			font-size: 52px,
+			margin-bottom: 60px
+		));
+
+		// Breakpoints
+		@include media($tall) {
+			@include rem((
+				font-size: 42px,
+				margin-bottom: 40px
+			));
+		}
+	}
+}
+
+/**
+ * Slide
+ */
+.testimonial {
+	float: left;
+	text-align: center;
+
+	
+	/**
+	 * Quote
+	 */
+	blockquote {
+		font-family: $alt-font-family;
+		line-height: 1.4;
+		@include rem((
+			font-size: 27px,
+			margin-bottom: 15px
+		));
+
+		// Breakpoints
+		@include media($tall) {
+			@include rem((
+				font-size: 22px
+			));
+		}
+	}
+
+
+	/**
+	 * Avatar
+	 */
+	@include e(avatar) {
+		@include rem((
+			margin-bottom: 20px
+		));
+
+		img {
+			border-radius: 100%;
+		}
+	}
+
+	/**
+	 * Citation
+	 */
+	cite {
+		font-style: normal;
+	}
+	@include e(name) {
+		display: block;
+		font-weight: normal;
+		@include rem((
+			font-size: 20px
+		));
+	}
+	@include e(title) {
+		color: #CDCDCD;
+		font-style: normal;
+	}
+}
+
+
+/**
+ * Slider controls
+ */
+.dots {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	position: absolute; width: 100%;
+	text-align: center;
+	@include rem((
+		top: 100%,
+		padding-top: 25px
+	));
+
+	li {
+		background: #7c7c7c;
+		border-radius: 100%;
+		cursor: pointer;
+		display: inline-block;
+		text-indent: -9999px; outline: none;
+		vertical-align: middle;
+		@include rem((
+			height: 6px,
+			margin: 0 10px,
+			width: 6px
+		));
+
+		&.active {
+			background: white;
+			@include rem((
+				height: 10px,
+				width: 10px
+			));
+		}
+		&:hover {
+			background: white;
+		}
+	}
+
+	// Breakpoints
+	@include media($tall) {
+		display: none
+	}
+}

@@ -1,0 +1,86 @@
+/**
+ * Global styles
+ */
+
+html {
+	font: normal 62.5%/#{$base-line-height} $base-font-family;
+}
+
+body {
+	background: #F2F2F2;
+	color: #605F67;
+	@include rem((
+		font-size: 14px
+	));
+}
+
+.main {
+	@include rem((
+		padding-top: 80px
+	));
+  @include m(features) {
+    background:white;
+  }
+}
+
+a {
+	color: #393939;
+	
+	&,
+	&:link,
+	&:visited {
+		text-decoration: none;
+	}
+
+	&:hover,
+	&:active {
+		text-decoration: underline;
+	}
+}
+
+.container {
+	@include outer-container();
+	position: relative;
+	max-width: $max-width;
+
+	// Breakpoints
+	@include media($grande) {
+		@include rem((
+			margin: 0 20px
+		));
+	}
+}
+
+%clearfix {
+	@include clearfix;
+}
+
+img {
+	max-width: 100%;
+}
+
+.alignleft {
+	float: left;
+}
+	img.alignleft {
+		@include rem((
+			margin: 0 20px 10px 0
+		));
+	}
+.alignright {
+	float: right;
+}
+	img.alignright {
+		@include rem((
+			margin: 0 0 10px 20px
+		));
+	}
+
+.row {
+	@include row();
+}
+
+.lower {
+	@extend %clearfix;
+	@include row();
+}

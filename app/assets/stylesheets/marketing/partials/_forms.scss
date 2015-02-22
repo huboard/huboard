@@ -1,0 +1,133 @@
+/**
+ * Contact Form
+ */
+input:focus,
+textarea:focus,
+select:focus {
+	outline: none;
+}
+
+.form {
+
+
+	ul {
+		list-style: none outside;
+		margin: 0;
+		padding: 0;
+	}
+
+
+	/**
+	 * Field containers
+	 */
+	@include e(field) {
+		@include rem((
+			margin-bottom: 27px
+		));
+
+		@include m(active) {
+			border-radius: 3px;
+			@include box-shadow(0px 0px 5px 0px rgba(116,172,214,0.40));
+		}
+
+
+		/**
+		 * Dimensions
+		 */
+		@include m(half) {
+			@include span-columns(4 of 8);
+			@include omega(2n);
+
+			// Breakpoints
+			@include media($tall) {
+				@include span-columns(8 of 8);
+			}
+		}
+		@include m(full) {
+			clear: both;
+		}
+	}
+
+	/**
+	 * Labels
+	 */
+	@include e(label) {
+		background: #fbfcfe;
+		border-radius: 3px 3px 0 0;
+		border: 1px solid #d8e0e7; border-top-color: #b6bec5; border-bottom: 0;
+		color: #7F8A93;
+		display: block;
+		line-height: 1.2;
+		@include rem((
+			padding: 13px 17px 0
+		));
+
+		.form__field--active & {
+			background: white;
+			border-color: #b9c4cd;
+			border-top-color: #959fa6;
+		}
+	}
+
+	/**
+	 * Text inputs
+	 */	
+	@include e(input) {
+		background: #fbfcfe;
+		border: 1px solid #d8e0e7; border-top: 0;
+		border-radius: 0 0 3px 3px;
+		color: #C7CFD7;
+		display: block;
+		font: normal #{$base-font-size}/1 $base-font-family;
+		width: 100%;
+		@include rem((
+			padding: 13px 17px
+		));
+
+		&:focus {
+			color: #2B2F32;
+		}
+
+		.form__field--active & {
+			background: white;
+			border-color: #b9c4cd;
+			border-bottom-color: #959fa6;
+		}
+	}
+
+
+	/**
+	 * Select fields
+	 */
+	@include e(select) {
+		@include appearance(none);
+		background: white;
+		background: white url(asset-path('marketing/select-arrow.png')) no-repeat center right 26px;
+		border: 0;
+		border-radius: 4px;
+		@include box-shadow(0px 1px 1px 0px rgba(182,190,195,0.20), inset 0px 0px 0px 1px #D9E0E6);
+		color: #7F8A93;
+		cursor: pointer;
+		display: block;
+		font: normal 16px/1 $base-font-family;
+		width: 100%;
+		@include rem((
+			padding: 17px
+		));
+
+		&:focus {
+			@include box-shadow(0px 1px 1px 0px rgba(182,190,195,0.20), 0px 0px 5px 0px rgba(116,172,214,0.40));
+		}
+	}
+
+
+	/**
+	 * Form footer
+	 */
+	@include e(footer) {
+		text-align: right;
+		@include rem((
+			margin-top: 30px
+		));
+	}
+}
