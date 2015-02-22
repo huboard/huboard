@@ -15,4 +15,7 @@ class MarketingController < ActionController::Base
   def integrations
       render template: "marketing/integrations", layout: "marketing"
   end
+  def pricing
+      render template: "marketing/pricing", layout: "marketing"
+  end
 end
