@@ -6,7 +6,8 @@ class Huboard
       end
 
       def call(env)
-        env[:request_headers].merge!('Accept' => "application/vnd.github.v3.full+json" )
+        #TODO Remove request headers check for moondragon once Github API come into effect ~Feb 20/15
+        env[:request_headers].merge!('Accept' => "application/vnd.github.v3.full+json" ) unless env[:request_headers]["Accept"] == "application/vnd.github.moondragon+json"
         env[:request][:timeout] = 3
         env[:request][:open_timeout] = HuboardApplication.production? ? 1.7 : 10
 

@@ -38,6 +38,30 @@ module HuBoard
           LogWebhookJob.new.log params
           json message: "Webhook received"
         end
+
+        #Thinking Ahead to API 2.0, all this logic should be encapsulated into an
+        #event handler / background job
+        post '/api/site/stripe/webhook' do
+          return json message: "Not Authorized" unless params[:token] == ENV["STRIPE_WEBHOOK_TOKEN"]
+
+          payload = Hashie::Mash.new(params)
+          id = payload.data.object.customer
+
+          if payload.type == "customer.subscription.updated" || payload.type == "customer.subscription.deleted"
+            query = Queries::CouchCustomer.get_cust(id, couch)
+            doc = QueryHandler.exec(&query)
+            halt(json(message: "Webhook received")) unless doc && doc.rows.size > 0
+
+            plan_doc = doc.rows.first.value
+            plan_doc.trial = "expired" if payload.data.object.status != "trialing"
+
+            customer = plan_doc.stripe.customer
+            customer.subscriptions.data[0] = payload.data.object
+            couch.customers.save plan_doc
+          end
+
+          json message: "Webhook received"
+        end
       end
     end
   end

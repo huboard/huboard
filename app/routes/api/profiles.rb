@@ -9,80 +9,74 @@ module HuBoard
 
         get '/api/profiles/?' do
           user = gh.user.to_hash
-          orgs = gh.orgs.to_a
+          orgs = gh.user.memberships.orgs("active").body
 
-          json user: user, orgs: orgs
+          orgs.select!{|org| org["role"] == "admin"}
+          orgs.map!{|org| org = org["organization"]}
+
+          json user: user, orgs: orgs.to_a
         end
 
         get '/api/profiles/user/?' do
           user = gh.user
-          user.merge! billing_email: user['email']
 
-          customer = couch.customers.findPlanById(user['id'])
-          plans_doc = couch.connection.get("./plans").body
+          query = Queries::CouchCustomer.get(user["id"], couch)
+          doc = QueryHandler.exec(&query) || halt(json(success: false, message: "Couldn't find couch record: #{user['id']}"))
+          customer = account_exists?(doc) ?
+            doc.rows.first.value : create_new_account(user)
 
-          plans = plans_doc.stripe[plans_doc.meta.mode]["User"]
-
-          plans = plans.map do |plan|
-            plan.merge! purchased: customer.rows.any? { |row| row.value.stripe.plan.plan_id == plan.plan_id }
-          end
-
-          card = nil
-
-          if customer.rows.any?
-            customer_doc = customer.rows.first.value
-            card = customer_doc.stripe.customer.cards.nil? ? nil : customer_doc.stripe.customer.cards.data.find {|card| card.id == customer_doc.stripe.customer.default_card }
-             discount = customer_doc.stripe.customer.discount
-          end
-
+          plan = plan_for("User", customer[:stripe][:customer])
           data = {
             org: user.to_hash,
-            plans: plans,
-            card: card,
-            discount: discount || {discount: { coupon: {id: ''} }},
+            plans: [plan],
+            card: plan[:card],
+            discount: customer[:stripe][:customer][:discount] || {discount: { coupon: {id: ''} }},
+            account_email: customer["billing_email"],
             is_owner: true,
-            has_plan: customer.rows.size > 0
+            trial: customer[:trial],
+            has_plan: plan[:purchased],
+            non_profit: non_profit?(customer)
           }
+
           json data
         end
 
         get '/api/profiles/:org/?' do
           org = gh.orgs(params[:org])
-          is_owner = gh.orgs(params[:org]).teams.any? { |t| t['name'] == "Owners" }
-          org.merge! is_owner: is_owner
 
-          customer = couch.customers.findPlanById(org['id'])
-          plans_doc = couch.connection.get("./plans").body
-
-          plans = plans_doc.stripe[plans_doc.meta.mode]["Organization"]
-
-          plans = plans.map do |plan|
-            plan.merge! purchased: customer.rows.any? { |row| row.value.stripe.plan.plan_id == plan.plan_id}
+          user = org.memberships(gh.user["login"]) do |req|
+            req.headers["Accept"] = "application/vnd.github.moondragon+json"
           end
+          org.merge! is_owner: user["role"] == "admin"
 
-          card = nil
+          query = Queries::CouchCustomer.get(org["id"], couch)
+          doc = QueryHandler.exec(&query) || halt(json(success: false, message: "Couldn't find couch record: #{user['id']}"))
+ 
+          customer = account_exists?(doc) ?
+            doc.rows.first.value : create_new_account(gh.user, org)
 
-          if customer.rows.any?
-            customer_doc = customer.rows.first.value
-            card = customer_doc.stripe.customer.cards.nil? ? nil : customer_doc.stripe.customer.cards.data.find {|card| card.id == customer_doc.stripe.customer.default_card }
-             discount = customer_doc.stripe.customer.discount
-          end
-          
+          plan = plan_for("Organization", customer[:stripe][:customer])
           data = {
-
             org: org.to_hash,
-            plans: plans,
-            card: card,
-            discount: discount || {discount: { coupon: {id: ''} }},
-            is_owner: is_owner,
-            has_plan: customer.rows.size > 0
+            plans: [plan],
+            card: plan[:card],
+            discount: customer[:stripe][:customer][:discount] || {discount: { coupon: {id: ''} }},
+            is_owner: true,
+            account_email: customer["billing_email"],
+            trial: customer[:trial],
+            has_plan: plan[:purchased],
+            non_profit: non_profit?(customer)
           }
+
           json data
         end
 
         get '/api/profiles/:org/history' do
           org = gh.users(params[:org])
-          customer = couch.customers.findPlanById(org['id'])
+
+          query = Queries::CouchCustomer.get(org["id"], couch)
+          customer = QueryHandler.exec(&query) || halt(json(success: false, message: "Couldn't find couch record: #{org['id']}"))
+
           if customer.rows && customer.rows.size > 0
             customer_doc = customer.rows.first.value
             begin

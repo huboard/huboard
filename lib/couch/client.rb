@@ -87,8 +87,8 @@ class Huboard
         end
 
         def call(env)
-          env[:request][:timeout] = 12
-          env[:request][:open_timeout] = 10
+          env[:request][:timeout] = 2
+          env[:request][:open_timeout] = 1
           @app.call env
         end
       end
@@ -102,7 +102,13 @@ class Huboard
           builder.use     FaradayMiddleware::EncodeJson
           builder.use     FaradayMiddleware::Mashify
           builder.use     FaradayMiddleware::ParseJson
-          builder.request :retry, 3
+            builder.request :retry, max: 4,
+                               exceptions: [
+                                 Errno::ETIMEDOUT,
+                                 'Timeout::Error',
+                                 Faraday::TimeoutError,
+                                 Faraday::ConnectionFailed,
+                                ]
           builder.use     Timeout
           #  builder.use     Ghee::Middleware::UriEscape
           builder.use Faraday::HttpCache, store: HuBoard.cache, logger: Logger.new(STDOUT), serializer: Marshal
@@ -221,6 +227,10 @@ class Huboard
 
       def findPlanById(id)
         query_view "findPlanById", :key => id
+      end
+
+      def findByCustomerId(id)
+        query_view "findByCustomerId", :key => "\"#{id}\""
       end
     end
 

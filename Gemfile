@@ -26,7 +26,7 @@ gem 'rdiscount'
 gem 'slim', '2.0.3'
 gem 'warden-github', :github => "atmos/warden-github"
 gem 'warden_strategies'
-gem 'ghee', '~> 0.10'
+gem 'ghee', '~> 0.11.16'
 gem 'rack-ssl'
 gem 'addressable'
 gem 'kgio'
@@ -63,6 +63,7 @@ gem 'solid_use_case'
 group :development do
   gem 'shotgun'
   gem 'rspec'
+  gem 'couchrest'
   #gem 'librarian-puppet'
   #gem 'puppet'
 

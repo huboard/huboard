@@ -78,6 +78,10 @@ GEM
     coffee-script-source (1.7.1)
     connection_pool (1.2.0)
     cookiejar (0.3.2)
+    couchrest (1.2.0)
+      mime-types (~> 1.15)
+      multi_json (~> 1.0)
+      rest-client (~> 1.6.1)
     daemons (1.1.9)
     dalli (2.7.2)
     debug_inspector (0.0.2)
@@ -195,7 +199,7 @@ GEM
       dotenv (~> 0.11.1)
       thor (~> 0.19.1)
     formatador (0.2.5)
-    ghee (0.10.15)
+    ghee (0.11.16)
       faraday (~> 0.9)
       faraday_middleware (~> 0.9)
       hashie (~> 3.3.2)
@@ -326,7 +330,7 @@ GEM
     tilt (1.4.1)
     timers (1.1.0)
     trollop (2.0)
-    typhoeus (0.7.0)
+    typhoeus (0.7.1)
       ethon (>= 0.7.1)
     tzinfo (1.2.1)
       thread_safe (~> 0.1)
@@ -359,6 +363,7 @@ DEPENDENCIES
   closure-compiler
   coffee-script
   connection_pool
+  couchrest
   dalli
   dotenv
   elasticsearch
@@ -370,7 +375,7 @@ DEPENDENCIES
   faye-huboard
   faye-redis
   foreman
-  ghee (~> 0.10)
+  ghee (~> 0.11.16)
   i18n
   kgio
   memcachier

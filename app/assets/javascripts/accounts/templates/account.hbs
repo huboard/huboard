@@ -1,0 +1,100 @@
+<div {{bind-attr class=":alert errorState:alert-error:alert-success"}}>
+  <div {{bind-attr class="trialing:trialing:disabled"}}>
+    <p><strong> Free Trial is Active! </strong><p>
+    <p>Expires: {{stripe-date plan.trial_end}} </p>
+  </div>
+  <div {{bind-attr class="trialingExpired:trialing-expired:disabled"}}>
+    <p><strong> Free Trial is Expired! </strong><p>
+    <p> Upgrade your plan to enable private access </p>
+  </div>
+  <div {{bind-attr class="noAccount:new-account:disabled"}}>
+    <p>
+      <strong>All Accounts</strong> receive a <strong>15 day free trial</strong>.
+    </p>
+    <p>
+      <form {{bind-attr action=activateTrial}} method="post">
+        <input type="email" placeholder="Email Address" name="billing_email" required>
+        <input class="hb-button" type="submit" value="Activate Trial"/>
+      </form>
+    </p>
+  </div>
+  <div {{bind-attr class="active:active:disabled"}}>
+    <p><strong> Subscription Active </strong><p>
+  </div>
+  <div {{bind-attr class="inactive:active:disabled"}}>
+    <p><strong> No Subscription Active </strong><p>
+  </div>
+  <div {{bind-attr class="nonProfit:active:disabled"}}>
+    <p><strong> Non-Profit Subscription </strong><p>
+  </div>
+  <div {{bind-attr class="failure:active:disabled"}}>
+    <p><strong> Something went wrong retrieving your account information! </strong><p>
+    <p> 
+      Please try again later, or <a href="mailto:support@huboard.com">Contact Support </a>
+    </p>
+  </div>
+  <div {{bind-attr class="purchaseWithTrial:active:disabled"}}>
+    <p><strong> Subscription Active! </strong><p>
+    <p> 
+      As your trial is still in effect, you will not be charged until: {{stripe-date plan.trial_end}}
+    </p>
+  </div>
+</div>
+
+<div class='account-details'>
+  <div class='email'>
+    <p><strong>Email: </strong>{{details.account_email}}</p> 
+  </div>
+  <div class='credit-card'>
+    {{#if model.details.card }}
+     <img src="<%= image_path 'Plain.png' %>" /> <strong>Credit card on file.</strong> Ending in {{ model.details.card.last4 }}
+     <button style="float: right" {{action 'updateCard' this }} class="hb-button small">Update card</button>
+    {{else}}
+     <img src="<%= image_path 'Plain.png' %>" /> <strong>No Credit card on file.</strong>
+
+    {{/if}}
+  </div>
+
+  <div class='coupon'>
+    {{#if model.details.has_plan }}
+      <img src="<%= image_path 'icn-coupon.png' %>" /> <strong> Coupon: {{{couponCode}}} </strong>
+    <button style="float: right"class="hb-button small"
+    {{action 'applyCoupon' this}}> Redeem Coupon </button>
+    {{/if}}
+  </div>
+</div>
+
+ <div class="table-wrapper">
+  <table class="table">
+    <thead>
+      <th>Plan</th>
+      <th>Price</th>
+      <th>Private repositories</th>
+      <th>Collaborators</th>
+      <th></th>
+    </head>
+    <tbody>
+
+      {{#each model.details.plans }}
+      <tr>
+        <td>{{ name }}</td>
+        <td>{{stripe-money amount }}/month</td>
+        <td>unlimited</td>
+        <td>unlimited</td>
+        <td class="text-right">    
+         {{#if purchased }} 
+            Your plan
+            <button class="hb-button hb-button-danger small"
+               {{action 'cancel' this }}>Cancel plan</button>
+          {{else}}
+            <button class="hb-button small"
+             {{action 'purchase' this }}>Upgrade</button>
+          {{/if}}
+
+        </td>
+      </tr>
+
+      {{/each}}
+    </tbody>
+  </table>
+</div>

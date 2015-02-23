@@ -1,0 +1,29 @@
+<div class="fullscreen-credit-card">
+  <form {{action 'apply_coupon' on=submit}}>
+    <div class="modal-header">
+      <div>
+        <button type="button" class="close" {{action 'close'}} data-dismiss="modal" aria-hidden="true">×</button>
+        Redeem a Coupon! 
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="form-row full">
+        <p> (applied against your next invoice of greater than $0.00) </p>
+          <label>
+            Coupon:
+          </label>
+         {{view App.CouponCodeField valueBinding="coupon"}}
+      </div>
+      {{#if errors}}
+        <div class="alert alert-error">{{errors}}</div>
+      {{/if}}
+      {{#if processingAction }}
+        <div class="fullscreen-overlay">
+        </div>
+      {{/if}}
+    </div>
+    <div class="modal-footer">
+      <button href="#" class="stripe-connect light-blue" type="submit" {{bind-attr disabled="isDisabled"}}><span> Redeem </span></button>
+    </div>
+  </form>
+</div>
