@@ -124,10 +124,13 @@
 
   > .sidebar {
      width: 0;
-     flex:0;
+     @include flex(0);
      border-right: 1px solid #ccc;
      @include box-sizing(border-box);
      @include transition(width,flex 0.2s ease-out);
+  }
+  .sidebar-wrapper {
+    width: 0px;
   }
   > .content {
      overflow-x: auto;
@@ -162,6 +165,9 @@
     width: auto;
     padding: 6px 0 6px 25px;
     @include flex(0 0 230px);
+  }
+  .sidebar-wrapper {
+    width: auto;
   }
   > .content {
     padding-left: 0;

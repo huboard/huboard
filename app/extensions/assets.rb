@@ -6,7 +6,7 @@ module HuBoard
     module Assets extend self
       class UnknownAsset < StandardError; end
 
-      PRECOMPILED_ASSETS = %w{ember-accounts.js vendor/jquery.js vendor/jquery-ui.js bootstrap.js marketing.js accounts/application.js /board/application.js marketing.css flex_layout.css application.css splash.css errors/main.css marketing/main.css bootstrap.css *.png *.jpg *.svg}
+      PRECOMPILED_ASSETS = %w{ember-accounts.js vendor/jquery.js vendor/jquery-ui.js bootstrap.js marketing.js accounts/application.js board/application.js marketing.css flex_layout.css application.css splash.css errors/main.css marketing/main.css bootstrap.css *.png *.jpg *.svg}
 
       module Helpers
         include Sprockets::Helpers
