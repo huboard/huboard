@@ -1373,7 +1373,7 @@ var BufferedController = require("../buffered_controller");
 
 var IssueActivityController = BufferedController.extend({
   needs: ["issue"],
-  isCollaboratorBinding: "model.repo.is_collaborator",
+  isCollaboratorBinding: "target.target.model.repo.is_collaborator",
   isLoggedInBinding: "App.loggedIn",
   currentUserBinding: "App.currentUser",
   mentions: Ember.computed.alias("controllers.issue.mentions"),
