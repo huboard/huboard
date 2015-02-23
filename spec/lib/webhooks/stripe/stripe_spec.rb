@@ -44,5 +44,27 @@ describe "Stripe Webhooks", :webhooks do
         expect(response).to eql({"message" => "Webhook received"})
       end
     end
+
+    context "customer has no trial key" do
+      before(:each) do
+        @no_trial_doc = seed("couch_trial_account_no_trial_key_seed.json")
+      end
+
+      after(:each) do
+        up_to_date_doc = @couch.get(@no_trial_doc["id"])
+        @couch.delete_doc(up_to_date_doc)
+      end
+
+      let(:stripe_data){ File.read("#{@fixtures_path}stripe_subscription_update_no_trial_key.json")}
+      let(:post_data) {{body: stripe_data, headers: content} }
+
+      it "Updates the customer data" do
+        HTTParty.post(api, post_data)
+
+        customer = @couch.get(@no_trial_doc["id"])
+        sub = customer["stripe"]["customer"]["subscriptions"]["data"][0]
+        expect(sub["status"]).to eql "active"
+      end
+    end
   end
 end
