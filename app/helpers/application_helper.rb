@@ -1,12 +1,24 @@
+require 'bridge/huboard'
 module ApplicationHelper
   def logged_in?
     github_authenticated?(:private) || github_authenticated?(:default)
   end
   def current_user
-    user = github_user(:private) || github_user(:default)
+    github_user(:private) || github_user(:default)
   end
   def controller? *controller
     (controller.include?(params[:controller]) || controller.include?(params[:action])) ? "nav__btn--active nav__item--current": ''
-    
+  end
+  def user_token
+    current_user ? current_user.token : nil
+  end
+  def github_config
+    {
+      client_id: ENV['GITHUB_CLIENT_ID'],
+      client_secret: ENV['GITHUB_SECRET'],
+    }
+  end
+  def huboard(token = nil)
+    Huboard::Client.new(token || user_token, github_config)
   end
 end
