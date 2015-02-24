@@ -1,14 +1,65 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>HuboardWeb</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-  <%= csrf_meta_tags %>
-</head>
-<body>
+  <head>
+    <title><%= content_for :title %>HuBoard</title>
+    <meta name="description" content="Instant project management for GitHub issues">
+    <link rel="shortcut icon" href="/favicon.ico?v=3" />
 
-<%= yield %>
+    <%= javascript_include_tag 'vendor/jquery' %>
+    <%= javascript_include_tag 'bootstrap' %>
 
-</body>
-</html>
+     <%= render partial: "shared/fontdeck" %>
+     <%= stylesheet_link_tag 'bootstrap' %>
+     <%= stylesheet_link_tag 'application' %>
+   </head>
+   <body>
+     <div id="wrapper">
+       <div class="navbar navbar-static-top">
+         <div class="navbar-inner">
+           <div class="container">
+            <ul class="nav breadcrumbs">
+              <li><a href="/" class="home"><i class="ui-icon ui-icon-menu"></i></a></li>
+              <%= content_for :breadcrumb %>
+            </ul>
+             <ul class="nav pull-right">
+               <%= content_for :navigation %>
+               <% if logged_in? %>
+                 <%= render partial: "shared/logged_in" %>
+               <% else %>
+                   <li>
+                   <form action="/login" method="GET">
+                    <button class="hb-button"> Sign in </button>
+                  </form>
+                   </li>
+               <% end %>
+             </ul>
+           </div>
+         </div>
+       </div>
+       <div class="container" id="main-stage">
+         <%= content_for :header %>
+         <%= yield %>
+
+       </div>
+       <div id="footer-pusher"></div>
+     </div>
+      <div id="footer">
+      <div class="container">
+        <div class="row">
+          <div class="span6">
+            <img class="animate-before" src="<%=image_path 'LogoFullPurpleLight.png' %>"/>
+          </div>
+          <div class="links span6">
+            <a href="/site/terms">terms</a>
+            <a href="/site/privacy">privacy</a>
+            <a href="https://github.com/rauhryan/huboard">github</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <%= content_for :overlay %>
+     <%= render partial: "shared/analytics" %>
+   </body>
+ </html>

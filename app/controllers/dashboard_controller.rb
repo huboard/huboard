@@ -1,5 +1,5 @@
 class DashboardController < ApplicationController
   def index
-    @repos = []
+    @repos = huboard.all_repos
   end
 end
