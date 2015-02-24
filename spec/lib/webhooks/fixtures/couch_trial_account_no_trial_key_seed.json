@@ -1,6 +1,6 @@
 {
-  "_id": "Customers-test_customer",
-  "id": "test_customer",
+  "_id": "Customers-test_customer_no_trial_key",
+  "id": "test_customer_no_trial_key",
   "github": {
     "user": {
       "login": "test",
@@ -44,7 +44,6 @@
       "subscription": null
     }
   },
-  "trial": "available",
   "meta": {
     "type": "customer"
   },
