@@ -1,12 +1,13 @@
 module HuBoard
   module AccountHelpers
+    extend self
 
     def trial_available?(customer)
-      customer[:trial] == "available"
+      customer == false || customer[:trial] == "available"
     end 
 
     def trial_active?(customer)
-      customer[:trial] == "active"
+      customer && customer[:trial] == "active"
     end
 
     def non_profit?(customer)
@@ -47,7 +48,7 @@ module HuBoard
         trial: "available"
       }
       couch.customers.save(customer_data)
-      return customer_data
+      return Hashie::Mash.new(customer_data)
     end
 
     def plan_for(user_or_org, customer)
@@ -63,6 +64,36 @@ module HuBoard
       plan[:purchased] = plan[:status] == "active" || trial_and_sub
       plan[:card] = customer.cards.data[0] rescue false
       plan
+    end
+
+    def default_org_mapping(org)
+      {
+        org: org.to_hash,
+        plans: [{
+          name: 'Organization',
+          id: 'org_basic_v1',
+          status: 'inactive',
+          amount: 2400
+        }],
+        trial: 'available',
+        has_plan: false,
+        non_profit: false
+      }
+    end
+
+    def default_user_mapping(user)
+      {
+        org: user.to_hash,
+        plans: [{
+          name: 'User',
+          id: 'user_basic_v1',
+          status: 'inactive',
+          amount: 700 
+        }],
+        trial: 'available',
+        has_plan: false,
+        non_profit: false
+      }
     end
   end
 end

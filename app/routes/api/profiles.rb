@@ -2,6 +2,7 @@ module HuBoard
   module Routes
     module Api
       class Profiles < Base
+        include AccountHelpers
 
         before '/api/profiles/?*' do
           raise Sinatra::NotFound unless authenticated? :private
@@ -21,9 +22,9 @@ module HuBoard
           user = gh.user
 
           query = Queries::CouchCustomer.get(user["id"], couch)
-          doc = QueryHandler.exec(&query) || halt(json(success: false, message: "Couldn't find couch record: #{user['id']}"))
-          customer = account_exists?(doc) ?
-            doc.rows.first.value : create_new_account(user)
+          plan_doc = QueryHandler.exec(&query)
+          customer = account_exists?(plan_doc) ? plan_doc[:rows].first.value : false
+          halt json(default_user_mapping(user)) unless customer
 
           plan = plan_for("User", customer[:stripe][:customer])
           data = {
@@ -32,7 +33,6 @@ module HuBoard
             card: plan[:card],
             discount: customer[:stripe][:customer][:discount] || {discount: { coupon: {id: ''} }},
             account_email: customer["billing_email"],
-            is_owner: true,
             trial: customer[:trial],
             has_plan: plan[:purchased],
             non_profit: non_profit?(customer)
@@ -43,25 +43,22 @@ module HuBoard
 
         get '/api/profiles/:org/?' do
           org = gh.orgs(params[:org])
-
           user = org.memberships(gh.user["login"]) do |req|
             req.headers["Accept"] = "application/vnd.github.moondragon+json"
           end
           org.merge! is_owner: user["role"] == "admin"
 
           query = Queries::CouchCustomer.get(org["id"], couch)
-          doc = QueryHandler.exec(&query) || halt(json(success: false, message: "Couldn't find couch record: #{user['id']}"))
- 
-          customer = account_exists?(doc) ?
-            doc.rows.first.value : create_new_account(gh.user, org)
-
+          plan_doc = QueryHandler.exec(&query)
+          customer = account_exists?(plan_doc) ? plan_doc[:rows].first.value : false
+          halt json(default_org_mapping(org)) unless customer
+          
           plan = plan_for("Organization", customer[:stripe][:customer])
           data = {
             org: org.to_hash,
             plans: [plan],
             card: plan[:card],
             discount: customer[:stripe][:customer][:discount] || {discount: { coupon: {id: ''} }},
-            is_owner: true,
             account_email: customer["billing_email"],
             trial: customer[:trial],
             has_plan: plan[:purchased],
