@@ -11,3 +11,6 @@ Warden::GitHub::Rails.setup do |config|
 
   config.default_scope = :default
 end
+Warden::Manager.serialize_from_session { |key| p Warden::GitHub::Verifier.load(key) }
+Warden::Manager.serialize_into_session { |user| p Warden::GitHub::Verifier.dump(user) }
+
