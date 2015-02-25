@@ -23,6 +23,8 @@ module HuBoard
 
           query = Queries::CouchCustomer.get(user["id"], couch)
           plan_doc = QueryHandler.exec(&query)
+          halt json({success: false, message: "Could Not Reach Couch"}) if plan_doc == false
+
           customer = account_exists?(plan_doc) ? plan_doc[:rows].first.value : false
           halt json(default_user_mapping(user)) unless customer
 
@@ -50,6 +52,8 @@ module HuBoard
 
           query = Queries::CouchCustomer.get(org["id"], couch)
           plan_doc = QueryHandler.exec(&query)
+          halt json({success: false, message: "Could Not Reach Couch"}) if plan_doc == false
+
           customer = account_exists?(plan_doc) ? plan_doc[:rows].first.value : false
           halt json(default_org_mapping(org)) unless customer
           
