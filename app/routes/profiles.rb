@@ -34,8 +34,8 @@ module HuBoard
 
       post '/settings/profile/:user/trial/activate' do
         user_or_org = gh.users(params[:user])
+        user_or_org["email"] = params[:billing_email]
         query = Queries::CouchCustomer.get(user_or_org["id"], couch)
-
         plan_doc = QueryHandler.exec(&query) 
         doc = account_exists?(plan_doc) ? plan_doc[:rows].first.value : create_new_account(gh.user, user_or_org)
 
@@ -56,7 +56,8 @@ module HuBoard
           couch.customers.save doc
         end
 
-        redirect (params[:forward_to] || session[:forward_to])
+        halt json(redirect: params[:forward_to]) if request.xhr?
+        redirect session[:forward_to]
       end
 
       get "/settings/profile/?" do
