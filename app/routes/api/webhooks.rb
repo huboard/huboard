@@ -42,7 +42,7 @@ module HuBoard
         #Thinking Ahead to API 2.0, all this logic should be encapsulated into an
         #event handler / background job
         post '/api/site/stripe/webhook' do
-          return json message: "Not Authorized" unless params[:token] == ENV["STRIPE_WEBHOOK_TOKEN"]
+          return json message: "Not Authorized" unless params[:stripe_token] == ENV["STRIPE_WEBHOOK_TOKEN"]
 
           payload = Hashie::Mash.new(params)
           id = payload.data.object.customer
