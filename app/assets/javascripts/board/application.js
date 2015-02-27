@@ -2412,6 +2412,7 @@ var Board = Ember.Object.extend({
       fromColumn.get('issues').removeObject(issue.get('model'));
       toColumn.get('issues').pushObject(issue.get('model'));
       issue.set("model._data.order", index);
+      issue.set("model.current_state", toColumn);
 
       fromColumn.get('issues').endPropertyChanges();
       toColumn.get('issues').endPropertyChanges();
