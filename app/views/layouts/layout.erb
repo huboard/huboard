@@ -8,7 +8,7 @@
     <%= javascript_tag 'vendor/jquery' %>
     <%= javascript_tag 'bootstrap' %>
 
-     <%= partial :fontdeck %>
+     <%= partial_erb :fontdeck %>
      <%= stylesheet_tag 'bootstrap' %>
      <%= stylesheet_tag 'application' %>
    </head>
@@ -24,7 +24,7 @@
              <ul class="nav pull-right">
                <%= yield_content :navigation %>
                <% if logged_in? %>
-                 <%= partial :logged_in %>
+                 <%= partial_erb :logged_in %>
                <% else %>
                    <li>
                    <form action="/login" method="GET">
