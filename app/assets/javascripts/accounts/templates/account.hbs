@@ -12,9 +12,9 @@
       <strong>All Accounts</strong> receive a <strong>15 day free trial</strong>.
     </p>
     <p>
-      <form>
+      <form {{action "activateTrial" on="submit"}}>
         {{input type="email" placeholder="Email Address" name="billing_email" value=emailBinding required="required"}}
-        <input class="hb-button" type="submit" value="Activate Trial" {{action "activateTrial"}} {{bind-attr disabled="trialButtonDisabled"}} />
+        {{input class="hb-button" type="submit" value="Activate Trial" disabled=trialButtonDisabled}}
       </form>
     </p>
   </div>

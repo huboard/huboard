@@ -26,9 +26,9 @@
       margin-top: -8px;
       margin-left: 6px;
     }
+    input[disabled] {
+      background-color: #7965cc;
+    }
   }
 }
 
-input[disabled] {
-  background-color: #7965cc;
-}
