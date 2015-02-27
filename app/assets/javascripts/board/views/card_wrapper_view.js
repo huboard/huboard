@@ -1,4 +1,4 @@
-var CardWrapperView = Em.CloakedView.extend({
+var CardWrapperView = Em.ContainerView.extend({
     classNames: ["card"],
     classNameBindings: ["isFiltered","isDraggable:is-draggable", "isClosable:closable", "colorLabel", "content.color:border"],
     colorLabel: function () {
@@ -7,7 +7,10 @@ var CardWrapperView = Em.CloakedView.extend({
     isCollaborator: function(){
         return this.get("content.repo.is_collaborator");
     }.property("content.repo.is_collaborator"),
-    cardController: function(){
+    onInit: function(){
+      Ember.run.next(this, "renderCard");
+    }.on("init"),
+    initCardController: function(){
         var model = this.get('content'),
             container = this.get('container');
 
@@ -33,7 +36,7 @@ var CardWrapperView = Em.CloakedView.extend({
         });
         this.set('cardController', controller);
     }.on('init'),
-    uncloak: function() {
+    renderCard: function() {
       var state = this._state || this.state;
       if (state !== 'inDOM' && state !== 'preRender') { return; }
 
@@ -55,7 +58,7 @@ var CardWrapperView = Em.CloakedView.extend({
           loading: false
         });
 
-        this.pushObject(this.createChildView(this.get('cloaks'), createArgs))
+        this.pushObject(this.createChildView("card", createArgs))
         this.rerender();
       }
     },

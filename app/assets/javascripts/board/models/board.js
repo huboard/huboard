@@ -50,30 +50,30 @@ var Board = Ember.Object.extend({
   moveIssue: function(issue, toColumn, index, dontSend){
     var fromColumn = issue.get('current_state');
     // begin editing ALL THE THINGS
-    Ember.beginPropertyChanges();
-    issue.beginPropertyChanges();
+ //   Ember.beginPropertyChanges();
+ //   issue.beginPropertyChanges();
 
     if(toColumn === fromColumn) {
       issue.set("model._data.order", index);
     } else {
-      fromColumn.get('issues').beginPropertyChanges();
-      toColumn.get('issues').beginPropertyChanges();
+     // fromColumn.get('issues').beginPropertyChanges();
+     // toColumn.get('issues').beginPropertyChanges();
 
       fromColumn.get('issues').removeObject(issue.get('model'));
-      toColumn.get('issues').pushObject(issue.get('model'));
       issue.set("model._data.order", index);
+      toColumn.get('issues').pushObject(issue.get('model'));
       issue.set("model.current_state", toColumn);
 
-      fromColumn.get('issues').endPropertyChanges();
-      toColumn.get('issues').endPropertyChanges();
+    //  fromColumn.get('issues').endPropertyChanges();
+    //  toColumn.get('issues').endPropertyChanges();
     }
     if(dontSend){
       // don't send to server
     } else {
       issue.send("moved", index, toColumn.get('model') || toColumn);
     }
-    Ember.endPropertyChanges();
-    issue.endPropertyChanges();
+  //  Ember.endPropertyChanges();
+   // issue.endPropertyChanges();
   }, 
   assignMilestone: function(issue, toMilestone, index, onCancel) {
     var fromMilestone = issue.get("current_milestone");

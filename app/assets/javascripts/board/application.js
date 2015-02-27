@@ -2400,30 +2400,30 @@ var Board = Ember.Object.extend({
   moveIssue: function(issue, toColumn, index, dontSend){
     var fromColumn = issue.get('current_state');
     // begin editing ALL THE THINGS
-    Ember.beginPropertyChanges();
-    issue.beginPropertyChanges();
+ //   Ember.beginPropertyChanges();
+ //   issue.beginPropertyChanges();
 
     if(toColumn === fromColumn) {
       issue.set("model._data.order", index);
     } else {
-      fromColumn.get('issues').beginPropertyChanges();
-      toColumn.get('issues').beginPropertyChanges();
+     // fromColumn.get('issues').beginPropertyChanges();
+     // toColumn.get('issues').beginPropertyChanges();
 
       fromColumn.get('issues').removeObject(issue.get('model'));
-      toColumn.get('issues').pushObject(issue.get('model'));
       issue.set("model._data.order", index);
+      toColumn.get('issues').pushObject(issue.get('model'));
       issue.set("model.current_state", toColumn);
 
-      fromColumn.get('issues').endPropertyChanges();
-      toColumn.get('issues').endPropertyChanges();
+    //  fromColumn.get('issues').endPropertyChanges();
+    //  toColumn.get('issues').endPropertyChanges();
     }
     if(dontSend){
       // don't send to server
     } else {
       issue.send("moved", index, toColumn.get('model') || toColumn);
     }
-    Ember.endPropertyChanges();
-    issue.endPropertyChanges();
+  //  Ember.endPropertyChanges();
+   // issue.endPropertyChanges();
   }, 
   assignMilestone: function(issue, toMilestone, index, onCancel) {
     var fromMilestone = issue.get("current_milestone");
@@ -77356,7 +77356,7 @@ module.exports = CardView;
 
 
 },{}],87:[function(require,module,exports){
-var CardWrapperView = Em.CloakedView.extend({
+var CardWrapperView = Em.ContainerView.extend({
     classNames: ["card"],
     classNameBindings: ["isFiltered","isDraggable:is-draggable", "isClosable:closable", "colorLabel", "content.color:border"],
     colorLabel: function () {
@@ -77365,7 +77365,10 @@ var CardWrapperView = Em.CloakedView.extend({
     isCollaborator: function(){
         return this.get("content.repo.is_collaborator");
     }.property("content.repo.is_collaborator"),
-    cardController: function(){
+    onInit: function(){
+      Ember.run.next(this, "renderCard");
+    }.on("init"),
+    initCardController: function(){
         var model = this.get('content'),
             container = this.get('container');
 
@@ -77391,7 +77394,7 @@ var CardWrapperView = Em.CloakedView.extend({
         });
         this.set('cardController', controller);
     }.on('init'),
-    uncloak: function() {
+    renderCard: function() {
       var state = this._state || this.state;
       if (state !== 'inDOM' && state !== 'preRender') { return; }
 
@@ -77413,7 +77416,7 @@ var CardWrapperView = Em.CloakedView.extend({
           loading: false
         });
 
-        this.pushObject(this.createChildView(this.get('cloaks'), createArgs))
+        this.pushObject(this.createChildView("card", createArgs))
         this.rerender();
       }
     },
@@ -77540,7 +77543,7 @@ module.exports = ColumnCountView;
 },{}],89:[function(require,module,exports){
 var WrapperView = require("./card_wrapper_view");
 
-var CollectionView = Ember.CloakedCollectionView.extend({
+var CollectionView = Ember.CollectionView.extend({
   tagName:"ul",
   classNames: ["sortable"],
   classNameBindings:["isHovering:ui-sortable-hover"],
@@ -77548,7 +77551,6 @@ var CollectionView = Ember.CloakedCollectionView.extend({
   style: Ember.computed.alias("controller.style"),
   content: Ember.computed.alias("controller.issues"),
   isHovering: false,
-  loadingHTML: null,
   setupDragging: function(){
     var that = this;
     this.$().sortable({
@@ -77623,24 +77625,7 @@ var CollectionView = Ember.CloakedCollectionView.extend({
     })
 
   }.on("didInsertElement"),
-  overrideViewClass: WrapperView,
-  //uncloakDefault: true,
-  cloakView: "card",
-  itemController: "card",
-  slackRatio: 1.2,
-  mouseEnter: function(){
-    this._uncloak = this.get("childViews")
-
-    this.uncloakQueue();
-
-  },
-  isFiltered: function() {
-    this._uncloak = this.get("childViews")
-
-    this.uncloakQueue();
-  }.observes("App.memberFilter.mode", "App.dimFilters", "App.hideFilters", "App.searchFilter")
-
-
+  itemViewClass: WrapperView,
 })
 
 var ColumnView = Ember.ContainerView.extend({
