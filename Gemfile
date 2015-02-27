@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 ruby "2.2.0"
 
-gem 'sinatra', "1.4.4"
+gem 'sinatra', github: 'sinatra/sinatra'
 gem 'sinatra-contrib', github: 'maccman/sinatra-contrib'
 gem 'sprockets-memcache-store'
 gem 'rack-standards'
@@ -23,7 +23,6 @@ gem 'sinatra-pubsub'
 gem 'encryptor'
 gem 'rack-no-www'
 gem 'rdiscount'
-gem 'slim', '2.0.3'
 gem 'warden-github', :github => "atmos/warden-github"
 gem 'warden_strategies'
 gem 'ghee', '~> 0.11.16'

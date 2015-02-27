@@ -22,7 +22,7 @@
       window.HUBOARD_ENV = <%= HuBoard.client_environment.to_json %>;
      </script>
      <%= yield_content :javascripts %>
-     <%= partial :fontdeck %>
+     <%= partial_erb :fontdeck %>
 
 
    </body>

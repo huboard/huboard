@@ -8,11 +8,11 @@
 
 <div class="row no-header">
   <div class="span3">
-    <%= partial :vcard, :locals => {:user => @user || current_user } %>
+    <%= partial_erb :vcard, :locals => {:user => @user || current_user } %>
   </div>
   <div class="span9">
     <div>
-      <%= partial :repo_filters, :locals => { :user => @user || current_user, :is_current_user => (params[:user].nil? or @user['login'] == current_user.login ) } %>
+      <%= partial_erb :repo_filters, :locals => { :user => @user || current_user, :is_current_user => (params[:user].nil? or @user['login'] == current_user.login ) } %>
       <ul class="repos drop-shadow ">
         <% if @repos.empty? %>
           <li class="empty">
