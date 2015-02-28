@@ -1,10 +1,11 @@
 var WrapperView = require("./card_wrapper_view");
 
 WrapperView = WrapperView.extend({
-  classNames: ["card", "card--milestone"]
+  classNames: ["card", "card--milestone"],
+  cardTemplate: "cardMilestone"
 })
 
-var CollectionView = Ember.CloakedCollectionView.extend({
+var CollectionView = Ember.CollectionView.extend({
   tagName:"ul",
   classNames: ["sortable"],
   classNameBindings:["isHovering:ui-sortable-hover"],
@@ -12,7 +13,6 @@ var CollectionView = Ember.CloakedCollectionView.extend({
   style: Ember.computed.alias("controller.style"),
   content: Ember.computed.alias("controller.issues"),
   isHovering: false,
-  loadingHTML: null,
   setupDraggable: function(){
     var that = this;
     this.$().sortable({
@@ -27,10 +27,6 @@ var CollectionView = Ember.CloakedCollectionView.extend({
         that.set("isHovering", false);
       },
       activate: function () {
-        // that.get("controller").set("isHovering", true);
-        that._uncloak = that.get("childViews")
-
-        that.uncloakQueue();
       },
       deactivate: function() {
         // that.get("controller").set("isHovering", false);
@@ -88,14 +84,7 @@ var CollectionView = Ember.CloakedCollectionView.extend({
     })
 
   }.on("didInsertElement"),
-  overrideViewClass: WrapperView,
-  cloakView: 'cardMilestone',
-  itemController: 'card',
-  isFiltered: function() {
-    this._uncloak = this.get("childViews")
-
-    this.uncloakQueue();
-  }.observes("App.memberFilter.mode", "App.dimFilters", "App.hideFilters", "App.searchFilter")
+  itemViewClass: WrapperView,
 })
 
 var ColumnView = Ember.ContainerView.extend({

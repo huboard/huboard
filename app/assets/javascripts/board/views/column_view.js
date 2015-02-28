@@ -23,10 +23,6 @@ var CollectionView = Ember.CollectionView.extend({
         that.set("isHovering", false);
       },
       activate: function () {
-        // that.get("controller").set("isHovering", true);
-        //that._uncloak = that.get("childViews")
-
-        //that.uncloakQueue();
       },
       deactivate: function() {
         // that.get("controller").set("isHovering", false);

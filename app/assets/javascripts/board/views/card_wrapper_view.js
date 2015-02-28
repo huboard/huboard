@@ -7,6 +7,7 @@ var CardWrapperView = Em.ContainerView.extend({
     isCollaborator: function(){
         return this.get("content.repo.is_collaborator");
     }.property("content.repo.is_collaborator"),
+    cardTemplate: "card",
     onInit: function(){
       Ember.run.next(this, "renderCard");
     }.on("init"),
@@ -58,7 +59,7 @@ var CardWrapperView = Em.ContainerView.extend({
           loading: false
         });
 
-        this.pushObject(this.createChildView("card", createArgs))
+        this.pushObject(this.createChildView(this.get("cardTemplate"), createArgs))
         this.rerender();
       }
     },

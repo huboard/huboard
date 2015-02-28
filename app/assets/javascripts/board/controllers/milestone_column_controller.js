@@ -28,7 +28,6 @@ var MilestoneColumnController = Ember.ObjectController.extend({
       App.get('loggedIn') && this.get('isFirstColumn');
   }.property('isFirstColumn'),
   cardMoved : function (cardController, index, onCancel){
-        return _.isEqual(a, b.repo);
     this.get("controllers.milestones.model").assignMilestone(cardController, this, index, onCancel)
   }
 })
