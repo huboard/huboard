@@ -1,6 +1,8 @@
 module HuBoard
   module Routes
     class Profiles < Base
+      include AccountHelpers
+
       set :stripe_key, ENV['STRIPE_API']
       set :stripe_publishable_key, ENV['STRIPE_PUBLISHABLE_API']
 
@@ -19,19 +21,25 @@ module HuBoard
 
       get "/settings/:user/trial" do
         @user = params[:user]
+        orgs = gh.user.memberships.orgs("active").body
+        not_admin = orgs.select!{|org| org["role"] == "admin"}.empty?
 
-        docs = couch.customers.findPlanById gh.users(@user)["id"]
-        trial = docs.rows.first.value.trial
+        query = Queries::CouchCustomer.get(gh.users(@user)["id"], couch)
+        plan_doc = QueryHandler.exec(&query)
+        customer = account_exists?(plan_doc) ? plan_doc[:rows].first.value : false
 
-        redirect session[:forward_to] if trial != "available"
+        redirect session[:forward_to] if !trial_available?(customer) || not_admin
         erb :activate_trial
       end
 
       post '/settings/profile/:user/trial/activate' do
-        docs = couch.customers.findPlanById gh.users(params[:user])["id"]
-        doc = docs.rows.first.value
+        user_or_org = gh.users(params[:user])
+        user_or_org["email"] = params[:billing_email]
+        query = Queries::CouchCustomer.get(user_or_org["id"], couch)
+        plan_doc = QueryHandler.exec(&query) 
+        doc = account_exists?(plan_doc) ? plan_doc[:rows].first.value : create_new_account(gh.user, user_or_org)
 
-        if doc.trial == "available"
+        if doc && doc.trial == "available"
           customer = Stripe::Customer.retrieve(doc.id)
           account_type = doc.github.account.type == "User" ? "user_basic_v1" : "org_basic_v1"
           customer.subscriptions.create({
@@ -48,7 +56,8 @@ module HuBoard
           couch.customers.save doc
         end
 
-        redirect (params[:forward_to] || session[:forward_to])
+        halt json(redirect: params[:forward_to]) if request.xhr?
+        redirect session[:forward_to]
       end
 
       get "/settings/profile/?" do
