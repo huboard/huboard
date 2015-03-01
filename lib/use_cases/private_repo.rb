@@ -37,7 +37,7 @@ module UseCase
 
     def has_subscription?(params)
       return continue(params) if params[:trial_available] || trial_active?(@customer)
-      if subscription_active?(@customer)
+      if @customer && subscription_active?(@customer)
         return continue(params)
       end
       return fail :unauthorized
