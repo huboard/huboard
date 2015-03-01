@@ -27,8 +27,6 @@ require 'app/helpers'
 require 'app/account_helpers'
 require 'app/routes'
 
-include HuBoard::AccountHelpers
-
 module HuBoard
   class EnsureEMRunning
     def initialize(app)

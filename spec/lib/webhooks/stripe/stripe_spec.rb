@@ -6,7 +6,7 @@ describe "Stripe Webhooks", :webhooks do
   let(:api_path) { "http://localhost:5000/api/site/stripe/webhook"}
   let(:stripe_token) { ENV["STRIPE_WEBHOOK_TOKEN"] }
 
-  let(:api) { "#{api_path}?token=#{stripe_token}" }
+  let(:api) { "#{api_path}?stripe_token=#{stripe_token}" }
   let(:content) { {"Content-Type" => "application/json"} }
 
   before(:each) do
