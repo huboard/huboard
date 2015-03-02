@@ -67,6 +67,7 @@ GEM
     connection_pool (2.1.1)
     dalli (2.7.2)
     debug_inspector (0.0.2)
+    deterministic (0.6.0)
     dotenv (1.0.2)
     dotenv-rails (1.0.2)
       dotenv (= 1.0.2)
@@ -262,6 +263,8 @@ GEM
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
     slop (3.6.0)
+    solid_use_case (2.1.1)
+      deterministic (~> 0.6.0)
     spring (1.2.0)
     sprockets (2.12.3)
       hike (~> 1.2)
@@ -321,6 +324,7 @@ DEPENDENCIES
   rails (= 4.2.0)
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
+  solid_use_case
   spring
   sqlite3
   turbolinks

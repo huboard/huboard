@@ -24,4 +24,7 @@ module ApplicationHelper
   def gh
     huboard.connection
   end
+  def emojis
+    @emojis ||= gh.connection.get('./emojis').body
+  end
 end

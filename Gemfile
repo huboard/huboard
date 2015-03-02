@@ -25,6 +25,7 @@ gem 'addressable'
 gem 'kgio'
 gem 'carrierwave_direct'
 gem 'memcachier'
+gem 'solid_use_case'
 
 
 group :development, :test do

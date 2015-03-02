@@ -6,15 +6,13 @@ class MarketingController < ActionController::Base
   include ApplicationHelper
 
   def index
-    if logged_in?
-      render :index
-    else
-      render template: "marketing/marketing", layout: "marketing"
-    end
+    render template: "marketing/marketing", layout: "marketing"
   end
+
   def integrations
       render template: "marketing/integrations", layout: "marketing"
   end
+
   def pricing
       render template: "marketing/pricing", layout: "marketing"
   end
