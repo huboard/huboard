@@ -14,6 +14,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "puppet", :module_path => [ "puppet/modules","puppet/local_modules" ] do |puppet|
     puppet.manifests_path = "puppet/manifests"
     puppet.manifest_file  = "base.pp"
+    #puppet.options = "--verbose --debug"
   end
 
 end

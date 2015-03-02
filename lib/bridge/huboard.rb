@@ -52,7 +52,7 @@ class Huboard
           conn.use Mimetype
           # conn.response :logger
           # disable cache because github api is broken
-          #conn.use Caching
+          conn.use Caching
 
         end
       }

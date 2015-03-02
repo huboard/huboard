@@ -8,13 +8,12 @@ class Huboard
   class Client
     class SimpleCache
 
-      def initialize(app, options)
-        @options = options
+      def initialize(app)
         @app = app
       end
 
       def cache
-        @dalli ||= HuBoard.cache
+        @dalli ||= Rails.cache
       end
 
       def logger
@@ -88,10 +87,9 @@ class Huboard
       #                            key (default: []).
       #
       # Yields if no cache is given. The block should return a cache object.
-      def initialize(app, options = {:namespace => "huboard_v1", :compress => true, :expires_in => 1.day,
-                                     :username => HuboardApplication.cache_config[:username], :password => HuboardApplication.cache_config[:password]})
+      def initialize(app, options={})
         super(app)
-        @cache = SimpleCache.new app, options
+        @cache = SimpleCache.new app
         @options = options
       end
 
@@ -121,7 +119,7 @@ class Huboard
           url.query = build_query params
         end
         url.normalize!
-        Digest::MD5.hexdigest(url.request_uri)
+        url.request_uri
       end
 
       def params_to_ignore

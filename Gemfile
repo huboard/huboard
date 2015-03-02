@@ -21,6 +21,10 @@ gem 'hashie'
 gem 'dalli'
 gem 'faraday'
 gem 'connection_pool'
+gem 'addressable'
+gem 'kgio'
+gem 'carrierwave_direct'
+gem 'memcachier'
 
 
 group :development, :test do
@@ -30,5 +34,6 @@ group :development, :test do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'meta_request'
+  gem 'pry'
 end
 
