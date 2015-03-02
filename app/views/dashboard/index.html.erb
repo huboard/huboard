@@ -2,7 +2,7 @@
 
 <% content_for :breadcrumb do %>
   <% unless params[:user].nil? %>
-    <li><a href="/<%= h @parameters[:user] %>"><%= h @parameters[:user] %></a></li>
+    <li><a href="/<%= params[:user] %>"><%= params[:user] %></a></li>
   <% end %>
 <% end %>
 

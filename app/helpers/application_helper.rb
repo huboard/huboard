@@ -21,4 +21,7 @@ module ApplicationHelper
   def huboard(token = nil)
     Huboard::Client.new(token || user_token, github_config)
   end
+  def gh
+    huboard.connection
+  end
 end

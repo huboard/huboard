@@ -9,6 +9,10 @@ Rails.application.routes.draw do
   get 'login/public' => 'login#public'
   get 'login/private' => 'login#private'
 
+  get '/repositories/private/:user' => 'dashboard#private', as: 'repositories_private'
+
+  get '/repositories/public/:user' => 'dashboard#public', as: 'repositories_public'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
