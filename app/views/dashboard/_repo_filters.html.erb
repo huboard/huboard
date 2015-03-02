@@ -8,14 +8,14 @@
 %>
 <ul class='nav nav-tabs'>
   <li class='pull-right <%= current_page_class :private %>'>
-    <a href="/repositories/private/<%= user['login'] %>">
+    <a href="<%= repositories_private_path user['login'] %>">
       <span class="label label-warning">
         Private
       </span>
     </a>
   </li>
   <li class='pull-right <%= current_page_class :public %>'>
-    <a href="/repositories/public/<%= user['login'] %>">
+    <a href="<%= repositories_public_path user['login'] %>">
       <span class="label label-success">
         Public
       </span>
@@ -23,7 +23,7 @@
   </li>
   <% if is_current_user %>
     <li class='pull-right <%= current_page_class :all %>'>
-      <a href="/">
+    <a href="<%= root_path %>">
         <span >
           All
         </span>
@@ -31,7 +31,7 @@
     </li>
   <% else %>
     <li class='pull-right <%= current_page_class :all %>'>
-      <a href="/<%= user['login'] %>">
+      <a href="<%= user_path user['login'] %>">
         <span >
           All
         </span>
@@ -40,7 +40,7 @@
   <% end %>
   <% if is_current_user %>
     <li class="active">
-      <a href="/">
+    <a href="<%= root_path %>">
         <span >
           Repositories
         </span>
@@ -48,7 +48,7 @@
     </li>
   <% else %>
     <li class="active">
-      <a href="/<%= user['login'] %>">
+      <a href="<%= user_path user['login'] %>">
         <span >
           Repositories
         </span>
