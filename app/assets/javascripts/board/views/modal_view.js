@@ -9,7 +9,13 @@ var ModalView = Em.View.extend({
     App.animateModalOpen();
 
     $('body').on('keyup.modal', function(event) {
-      if (event.keyCode === 27) this.get('controller').send('closeModal');
+      if (event.keyCode === 27) {
+        if (this.modalCloseCriteria()) {
+          this.send("modalCloseAction");
+        } else {
+          this.get('controller').send('closeModal');
+        }
+      }
     }.bind(this));
     
     this.$(".fullscreen-body").on('click.modal', function(event){
