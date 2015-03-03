@@ -10,7 +10,8 @@
   "scripts": {
     "start": "ember server",
     "build": "ember build",
-    "test": "ember test"
+    "test": "ember test",
+    "postinstall": "../node_modules/bower/bin/bower install"
   },
   "repository": "",
   "engines": {
@@ -34,4 +35,5 @@
     "glob": "^4.0.5",
     "ember-cli-rails-addon": "0.0.8"
   }
+
 }
