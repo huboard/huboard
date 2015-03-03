@@ -1,8 +1,11 @@
 {
   "scripts": {
-    "postinstall" : "cd ember-app && npm install"
+    "postinstall": "cd ember-app && npm install"
   },
   "dependencies": {
     "bower": "*"
+  },
+  "devDependencies": {
+    "ember-cli-rails-addon": "0.0.8"
   }
 }
