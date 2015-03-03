@@ -12,6 +12,8 @@ gem 'ember-rails-assets'
 gem "warden-github-rails" #, github: "huboard/warden-github-rails"
 gem 'dotenv-rails', :groups => [:development, :test]
 gem 'rails_12factor', group: :production
+gem 'puma'
+gem 'foreman'
 
 gem 'jquery-rails'
 gem 'turbolinks'
