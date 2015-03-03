@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "postinstall" : "cd ember-app && npm install"
+  },
   "dependencies": {
     "bower": "*"
   }
