@@ -77403,18 +77403,15 @@ var KeyPressHandlingMixin = require("../mixins/keypress_handling")
 var IssuesView = ModalView.extend(KeyPressHandlingMixin, {
   registerKeydownEvents: function(){
     var self = this;
-    this.$().find("textarea").keydown(function(e){
+    $("div.fullscreen-card").keydown(function(e){
       ctrl = self.get("controller");
       self.metaEnterHandler(e, function(pressed){
         if (pressed) ctrl.send("submitComment");
       })
-      self.enterHandler(e, function(pressed){
-        if (pressed) e.preventDefault();
-      })
     });
   }.on("didInsertElement"),
   tearDownEvents: function(){
-    this.$().off("keydown");
+    $("div.fullscreen-card").off("keydown");
   }.on("willDestroyElement"),
   modalCloseCriteria: function(){
     var textarea = this.$(".markdown-composer textarea")
@@ -77815,7 +77812,7 @@ var KeyboardShortcutsView = Ember.CollectionView.extend({
       default_enable: true
     },
     {
-      description: "Submit on Enter (not recommended)",
+      description: "Submit on Enter (not applicable to text areas)",
       key: "enterEnabled",
       default_enable: false
     }

@@ -8,7 +8,7 @@ var KeyboardShortcutsView = Ember.CollectionView.extend({
       default_enable: true
     },
     {
-      description: "Submit on Enter (not recommended)",
+      description: "Submit on Enter (not applicable to text areas)",
       key: "enterEnabled",
       default_enable: false
     }
