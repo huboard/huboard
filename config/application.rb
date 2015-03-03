@@ -26,5 +26,9 @@ module HuboardWeb
 
     # Configure dalli to use a connection pool
     config.cache_store = :dalli_store, nil, { :pool_size => 5 }
+
+    if ENV["SELF_HOST_FAYE"]
+      config.middleware.use Faye::RackAdapter, mount: '/site/pubsub', :timeout => 25
+    end
   end
 end

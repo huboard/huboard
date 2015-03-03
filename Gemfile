@@ -31,6 +31,7 @@ gem 'kgio'
 gem 'carrierwave_direct'
 gem 'memcachier'
 gem 'solid_use_case'
+gem 'faye'
 
 
 group :development, :test do
