@@ -27,9 +27,9 @@ pickle-email-*.html
 .rvmrc
 #
 # # if using bower-rails ignore default bower_components path bower.json files
-/vendor/assets/bower_components
+bower_components
 *.bowerrc
-bower.json
+public/assets
 #
 # #Ignore pow enironment settings
 .powenv
@@ -41,6 +41,7 @@ puppet/modules/
 
 ## Ember cli 
 # compiled output
+node_modules
 ember-app/dist
 ember-app/tmp
 
