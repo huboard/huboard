@@ -38,6 +38,14 @@ var Settings = Ember.Object.extend({
   },
   unknownProperty: function(key) {
     return this.get("data." + key);
+  },
+  available: function(){
+    try {
+      return 'localStorage' in window &&
+        window['localStorage'] !== null;
+    } catch (e) {
+      return false;
+    }
   }
 });
 
