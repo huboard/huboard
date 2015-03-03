@@ -11,7 +11,7 @@
     "start": "ember server",
     "build": "ember build",
     "test": "ember test",
-    "postinstall": "../node_modules/bower/bin/bower install"
+    "postinstall": "pwd && ../node_modules/.bin/bower install"
   },
   "repository": "",
   "engines": {
