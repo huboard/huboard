@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   namespace :api do
     get '/:user/:repo/board' => 'board#index', as: 'board'
     get '/:user/:repo/link_labels' => 'board#link_labels', as: 'link_labels'
+    get '/:user/:repo/linked/:linked_user/:linked_repo' => 'board#linked', as: 'linked_board'
   end
 
   # The priority is based upon order of creation: first created -> highest priority.
