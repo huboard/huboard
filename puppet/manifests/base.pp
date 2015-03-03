@@ -44,7 +44,8 @@ class { 'postgresql::globals':
     encoding            => 'UTF8',
   } ->
   class { 'postgresql::server': } ->
-  class { 'postgresql::lib::devel': }
+  class { 'postgresql::lib::devel': } ->
+  package { 'postgresql-server-dev-9.4': ensure => latest; }
 
   postgresql::server::pg_hba_rule { 'local-users-get-everything':
     type        => 'local',
