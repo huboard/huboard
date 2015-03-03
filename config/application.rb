@@ -29,7 +29,14 @@ module HuboardWeb
 
     if ENV["SELF_HOST_FAYE"]
       config.middleware.delete Rack::Lock
-      config.middleware.use Faye::RackAdapter, mount: '/site/pubsub', :timeout => 25
+      config.middleware.use Faye::RackAdapter, 
+        mount: '/site/pubsub', 
+        timeout: 25,
+        ping: 20,
+        engine: {
+          type: Faye::Redis,
+          uri: (ENV['REDIS_URL'] || 'redis://localhost:6379')
+        }
     end
   end
 end

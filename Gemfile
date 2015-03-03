@@ -32,6 +32,7 @@ gem 'carrierwave_direct'
 gem 'memcachier'
 gem 'solid_use_case'
 gem 'faye'
+gem 'faye-redis'
 
 
 group :development, :test do
