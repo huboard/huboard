@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+ruby '2.1.5'
 
 gem 'rails', '4.2.0'
 gem 'sqlite3'
@@ -10,6 +11,7 @@ gem "ember-cli-rails"
 gem 'ember-rails-assets'
 gem "warden-github-rails" #, github: "huboard/warden-github-rails"
 gem 'dotenv-rails', :groups => [:development, :test]
+gem 'rails_12factor', group: :production
 
 gem 'jquery-rails'
 gem 'turbolinks'
