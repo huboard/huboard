@@ -1,3 +1,9 @@
+PATH
+  remote: vendor/engines/saas
+  specs:
+    saas (0.0.1)
+      rails (~> 4.2.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -369,6 +375,7 @@ DEPENDENCIES
   puma
   rails (= 4.2.0)
   rails_12factor
+  saas!
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   solid_use_case
