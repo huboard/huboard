@@ -27,8 +27,8 @@ module HuBoard
           is_admin = gh.user["login"] == @user
         elsif account_type == "Organization"
           orgs = gh.user.memberships.orgs("active").body
-          orgs_list = orgs.select!{|org| org["role"] == "admin"}
-          is_admin = orgs_list ? orgs_list.any?{|org| org["organization"]["login"] == @user } : false
+          orgs_list = orgs.select{|org| org["role"] == "admin"}
+          is_admin = orgs_list.any?{|org| org["organization"]["login"] == @user }
         end
 
         query = Queries::CouchCustomer.get(gh.users(@user)["id"], couch)
