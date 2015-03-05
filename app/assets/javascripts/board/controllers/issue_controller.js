@@ -54,6 +54,7 @@ var IssuesEditController = Ember.ObjectController.extend({
       Ember.run.next(this, "send", "forceRepaint", "milestones")
     },
     submitComment: function () {
+      if (this.get("processing") || !this.get("commentBody")) return;
       var comments = this.get("model.activities.comments");
 
       this.set("processing", true);

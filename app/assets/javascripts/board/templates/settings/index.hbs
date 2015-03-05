@@ -1,11 +1,24 @@
-<div class="boxed-group">
-  <h3>Display preferences</h3>
-  <div class="boxed-group__content">
-    <div class="fields">
-      <label>
-        {{input type='checkbox' name='showCounts' checked=settings.showColumnCounts}}
-        Show running totals in the column headers
-      </label>
+{{#if storeAvailable}}
+  <div class="boxed-group">
+    <h3>Display preferences</h3>
+    <div class="boxed-group__content">
+      <div class="fields">
+        <label>
+          {{input type='checkbox' name='showCounts' checked=settings.showColumnCounts}}
+          Show running totals in the column headers
+        </label>
+      </div>
+    </div>
+    <h3>Keyboard Shortcuts</h3>
+    <div class="boxed-group__content">
+      <div class="fields">
+        {{view "settings.keyboard-shortcuts"}}
+      </div>
     </div>
   </div>
-</div>
+{{else}}
+ <div class="alert">
+   <p> <strong> It appears this browser does not support critical local storage features: </strong> </p>
+   <p> Please choose a browser that is HTML5 compliant to enable HuBoard general settings </p>
+ </div>
+{{/if}}
