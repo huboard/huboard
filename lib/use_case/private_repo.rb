@@ -1,5 +1,3 @@
-require "app/account_helpers"
-
 module UseCase
   class PrivateRepo
     include HuBoard::AccountHelpers

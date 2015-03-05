@@ -27,4 +27,7 @@ module ApplicationHelper
   def emojis
     @emojis ||= gh.connection.get('./emojis').body
   end
+  def couch
+    @couch ||= HuBoard::Couch.new :base_url => ENV["COUCH_URL"], :database => ENV["COUCH_DATABASE"]
+  end
 end

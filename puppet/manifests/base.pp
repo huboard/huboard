@@ -6,20 +6,10 @@ class { 'nginx':}
 package {
   'nodejs': ensure => "present";
   'npm': ensure => "present";
+  'couchdb': ensure => "present";
 } ->
 class { 'ruby_install':}
 
-class { 'memcached':
-  max_memory => '12%'
-}
-
-class { 'redis':
-  version            => '2.8.12',
-}
-
-package { 'couchdb':
-  ensure => installed,
-}
 
 service { 'couchdb':
   ensure      => running,
@@ -27,6 +17,32 @@ service { 'couchdb':
   hasstatus   => true,
   hasrestart  => true,
   require     => Package[ 'couchdb' ]
+}
+package { 'couchapp':
+  provider => npm,
+  require => Class['nodejs'],
+}
+exec { 'create_db':
+  command => '/bin/sleep 5 && /usr/bin/curl -X PUT http://127.0.0.1:5984/huboard',
+  require => Package['couchdb'],
+}
+
+exec { 'run-couchapp':
+  command => '/bin/sleep 5 && /usr/local/node/node-default/bin/couchapp -dc push /srv/huboard/couch/app http://127.0.0.1:5984/huboard',
+  path    => ["/bin", "/usr/bin", "/usr/local/node/node-default/bin"],
+  require => [
+    Package['couchapp'],
+    Exec['create_db'],
+  ],
+}
+
+
+class { 'memcached':
+  max_memory => '12%'
+}
+
+class { 'redis':
+  version            => '2.8.12',
 }
 
 class { 'nodejs':

@@ -4,7 +4,26 @@ module Saas
     
     module DoAThing
       def do_a_thing
-       return  unless params.has_key? :user && params.has_key? :repo
+       return  unless params.has_key?(:user) && params.has_key?(:repo)
+
+       repo = gh.repos(params[:user], params[:repo]).raw
+
+       not_found unless repo.status == 200
+
+       if github_authenticated?(:private) && repo.body["private"]
+         UseCase::PrivateRepo.new(gh, couch).run(params).match do
+           success do
+             return true
+           end
+            failure :pass_through do
+              return;
+            end
+
+            failure :unauthorized do
+              throw :warden, message:"Nope"
+            end
+         end
+       end
 
        # is repo private?
        #  do they have an account...

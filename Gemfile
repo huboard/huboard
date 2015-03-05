@@ -9,7 +9,7 @@ gem 'coffee-rails', '~> 4.1.0'
 # gem 'therubyracer', platforms: :ruby
 #gem "ember-cli-rails"
 gem 'ember-rails-assets'
-gem "warden-github-rails" #, github: "huboard/warden-github-rails"
+gem "warden-github-rails" , github: "huboard/warden-github-rails"
 gem 'dotenv-rails', :groups => [:development, :test]
 gem 'rails_12factor', group: :production
 gem 'puma'
@@ -25,6 +25,7 @@ gem 'ghee'
 gem 'hashie'
 gem 'dalli'
 gem 'faraday'
+gem 'faraday-http-cache'
 gem 'connection_pool'
 gem 'addressable'
 gem 'kgio'
@@ -35,7 +36,7 @@ gem 'faye'
 gem 'faye-redis'
 
 # BUNDLE_WITHOUT="development:test:saas"
-gem 'saas', path: "vendor/engines/saas", group: :saas
+gem 'saas', path: "vendor/engines/saas", group: [:saas, :development]
 
 group :development, :test do
   #gem 'byebug'
