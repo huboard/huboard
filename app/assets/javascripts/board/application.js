@@ -1972,7 +1972,7 @@ var SettingsController = Ember.Controller.extend({
   store: Ember.computed.alias("settings"),
   storeData: function(){
     return this.get("store").loadData()["settings"];
-  }.property("store"),
+  }.property("store.changed"),
   storeAvailable: function(){
     var store_data = this.get("storeData")
     return store_data != null && store_data != undefined
@@ -2945,6 +2945,7 @@ var Settings = Ember.Object.extend({
   },
   storageKey: Ember.computed.alias("repo.full_name"),
   dataKey: 'settings',
+  changed: 0,
   saveData: function(key, value) {
     this.set("data." + key, value)
 
@@ -2953,6 +2954,7 @@ var Settings = Ember.Object.extend({
     localStorageData[this.get('dataKey')] = this.get("data");
 
     localStorage.setItem("localStorage:" + this.get("storageKey"), JSON.stringify(localStorageData))
+    this.incrementProperty('changed');
   },
   setUnknownProperty: function(key, value) {
     Ember.defineProperty(this, key, attr(false));
@@ -77283,9 +77285,24 @@ var IntegrationsView = App.ModalView.extend({
 module.exports = IntegrationsView;
 
 },{}],92:[function(require,module,exports){
-var CommentView = Ember.View.extend({
+var KeyPressHandlingMixin = require("../../mixins/keypress_handling")
+
+var CommentView = Ember.View.extend(KeyPressHandlingMixin, {
   templateName: "issue/comment",
-  classNames: ["card-comment"]
+  classNames: ["card-comment"],
+  registerKeydownEvents: function(){
+    var self = this;
+    var ctrl = self.get("content");
+
+    this.$().keydown(function(e){
+      self.metaEnterHandler(e, function(enabled){
+        if (enabled) ctrl.send("save");
+      })
+    });
+  }.on("didInsertElement"),
+  tearDownEvents: function(){
+    this.$().off("keydown");
+  }.on("willDestroyElement"),
 })
 
 //var ActivitiesView = Ember.Handlebars.EachView.extend({
@@ -77307,14 +77324,29 @@ var ActivitiesView = Ember.CollectionView.extend({
 
 module.exports = ActivitiesView;
 
-},{}],93:[function(require,module,exports){
-var IssueBodyView = Ember.View.extend({
-  classNames: ["fullscreen-card-description","card-comment"]
+},{"../../mixins/keypress_handling":47}],93:[function(require,module,exports){
+var KeyPressHandlingMixin = require("../../mixins/keypress_handling")
+
+var IssueBodyView = Ember.View.extend(KeyPressHandlingMixin, {
+  classNames: ["fullscreen-card-description","card-comment"],
+  registerKeydownEvents: function(){
+    var self = this;
+    var ctrl = self.get("controller");
+
+    this.$().keydown(function(e){
+      self.metaEnterHandler(e, function(enabled){
+        if (enabled) ctrl.send("save");
+      })
+    });
+  }.on("didInsertElement"),
+  tearDownEvents: function(){
+    this.$().off("keydown");
+  }.on("willDestroyElement"),
 })
 
 module.exports = IssueBodyView;
 
-},{}],94:[function(require,module,exports){
+},{"../../mixins/keypress_handling":47}],94:[function(require,module,exports){
 var KeyPressHandlingMixin = require("../../mixins/keypress_handling")
 
 var IssuesCreateView = App.ModalView.extend(KeyPressHandlingMixin, {

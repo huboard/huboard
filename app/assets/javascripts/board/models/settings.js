@@ -23,6 +23,7 @@ var Settings = Ember.Object.extend({
   },
   storageKey: Ember.computed.alias("repo.full_name"),
   dataKey: 'settings',
+  changed: 0,
   saveData: function(key, value) {
     this.set("data." + key, value)
 
@@ -31,6 +32,7 @@ var Settings = Ember.Object.extend({
     localStorageData[this.get('dataKey')] = this.get("data");
 
     localStorage.setItem("localStorage:" + this.get("storageKey"), JSON.stringify(localStorageData))
+    this.incrementProperty('changed');
   },
   setUnknownProperty: function(key, value) {
     Ember.defineProperty(this, key, attr(false));

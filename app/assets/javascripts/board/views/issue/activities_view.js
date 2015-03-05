@@ -1,6 +1,21 @@
-var CommentView = Ember.View.extend({
+var KeyPressHandlingMixin = require("../../mixins/keypress_handling")
+
+var CommentView = Ember.View.extend(KeyPressHandlingMixin, {
   templateName: "issue/comment",
-  classNames: ["card-comment"]
+  classNames: ["card-comment"],
+  registerKeydownEvents: function(){
+    var self = this;
+    var ctrl = self.get("content");
+
+    this.$().keydown(function(e){
+      self.metaEnterHandler(e, function(enabled){
+        if (enabled) ctrl.send("save");
+      })
+    });
+  }.on("didInsertElement"),
+  tearDownEvents: function(){
+    this.$().off("keydown");
+  }.on("willDestroyElement"),
 })
 
 //var ActivitiesView = Ember.Handlebars.EachView.extend({
