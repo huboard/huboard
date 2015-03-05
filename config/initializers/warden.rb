@@ -32,7 +32,8 @@ Rails.application.middleware.insert_after ActionDispatch::Flash, Warden::Manager
 #    [403, {}, ["Unauthorized"]]
 #
 #  end
-   config.failure_app = Sinatra::Auth::Github::BadAuthentication
+   #config.failure_app = Sinatra::Auth::Github::BadAuthentication
+  config.failure_app = Rails.application.routes
 
 end
 
