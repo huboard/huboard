@@ -13,14 +13,14 @@ Rails.application.routes.draw do
 
   get '/repositories/public/:user' => 'dashboard#public', as: 'repositories_public'
 
-  get '/:user'       => 'dashboard#user', as: 'user'
-  get '/:user/:repo' => 'board#index', as: 'board'
-
   namespace :api do
     get '/:user/:repo/board' => 'board#index', as: 'board'
     get '/:user/:repo/link_labels' => 'board#link_labels', as: 'link_labels'
     get '/:user/:repo/linked/:linked_user/:linked_repo' => 'board#linked', as: 'linked_board'
   end
+
+  get '/:user'       => 'dashboard#user', as: 'user'
+  get '/:user/:repo' => 'board#index', as: 'board'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

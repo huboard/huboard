@@ -4,6 +4,10 @@ module Saas
     
     module DoAThing
       def do_a_thing
+       return  unless params.has_key? :user && params.has_key? :repo
+
+       # is repo private?
+       #  do they have an account...
       end
     end
 

@@ -34,8 +34,8 @@ gem 'solid_use_case'
 gem 'faye'
 gem 'faye-redis'
 
-gem 'saas', path: "vendor/engines/saas"
-
+# BUNDLE_WITHOUT="development:test:saas"
+gem 'saas', path: "vendor/engines/saas", group: :saas
 
 group :development, :test do
   #gem 'byebug'
