@@ -26,7 +26,7 @@ module HuBoard
         if account_type == "User"
           is_admin = gh.user["login"] == @user
         elsif account_type == "Organization"
-          orgs = gh.user.memberships.orgs("active").body
+          orgs = gh.user.memberships
           orgs_list = orgs.select{|org| org["role"] == "admin"}
           is_admin = orgs_list.any?{|org| org["organization"]["login"] == @user }
         end
