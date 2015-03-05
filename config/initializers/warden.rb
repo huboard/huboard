@@ -12,6 +12,8 @@
 #  config.default_scope = :default
 #end
 
+Rails.application.middleware.use Sinatra::Auth::Github::AccessDenied
+
 Rails.application.middleware.insert_after ActionDispatch::Flash, Warden::Manager do |config|
   config.scope_defaults :private, strategies: [:github],
     config: {
@@ -26,10 +28,11 @@ Rails.application.middleware.insert_after ActionDispatch::Flash, Warden::Manager
     scope:         'public_repo'
   }
 
-  config.failure_app = lambda do |env|
-    [403, {}, ["Unauthorized"]]
-
-  end
+#  config.failure_app = lambda do |env|
+#    [403, {}, ["Unauthorized"]]
+#
+#  end
+   config.failure_app = Sinatra::Auth::Github::BadAuthentication
 
 end
 

@@ -11,6 +11,8 @@ gem 'coffee-rails', '~> 4.1.0'
 gem 'ember-rails-assets'
 #gem "warden-github-rails" , github: "huboard/warden-github-rails"
 gem 'warden-github'
+# TODO: replace this
+gem 'sinatra_auth_github'
 gem 'dotenv-rails', :groups => [:development, :test]
 gem 'rails_12factor', group: :production
 gem 'puma'
