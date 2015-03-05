@@ -30,4 +30,27 @@ module ApplicationHelper
   def couch
     @couch ||= HuBoard::Couch.new :base_url => ENV["COUCH_URL"], :database => ENV["COUCH_DATABASE"]
   end
+
+  # Initiates the OAuth flow if not already authenticated for the
+  #         # specified scope.
+  def github_authenticate!(scope=:default)
+    request.env['warden'].authenticate!(scope: scope)
+  end
+
+  # Logs out a user if currently logged in for the specified scope.
+  def github_logout(scope=:default)
+    request.env['warden'].logout(scope)
+  end
+  def github_authenticated?(scope=:default)
+    request.env['warden'].authenticated?(scope)
+  end
+
+  def github_user(scope=:default)
+    request.env['warden'].user(scope)
+  end
+  def github_session(scope=:default)
+    request.env['warden'].session(scope)  if github_authenticated?(scope)
+  end
+
+
 end

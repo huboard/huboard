@@ -9,7 +9,8 @@ gem 'coffee-rails', '~> 4.1.0'
 # gem 'therubyracer', platforms: :ruby
 #gem "ember-cli-rails"
 gem 'ember-rails-assets'
-gem "warden-github-rails" , github: "huboard/warden-github-rails"
+#gem "warden-github-rails" , github: "huboard/warden-github-rails"
+gem 'warden-github'
 gem 'dotenv-rails', :groups => [:development, :test]
 gem 'rails_12factor', group: :production
 gem 'puma'
