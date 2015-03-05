@@ -5,9 +5,6 @@
     <meta name="description" content="Instant project management for GitHub issues">
     <link rel="shortcut icon" href="/favicon.ico?v=3" />
 
-    <%= javascript_include_tag 'vendor/jquery' %>
-    <%= javascript_include_tag 'bootstrap' %>
-
      <%= render partial: "shared/fontdeck" %>
      <%= stylesheet_link_tag 'bootstrap' %>
      <%= stylesheet_link_tag 'application' %>
@@ -36,9 +33,9 @@
            </div>
          </div>
        </div>
-       <div class="container" id="main-stage">
+       <div class="container" id="main-application">
          <%= content_for :header %>
-         <%= yield %>
+         <%= content_for?(:content) ? content_for(:content) : yield %>
 
        </div>
        <div id="footer-pusher"></div>
@@ -58,6 +55,13 @@
 
       </div>
     </div>
+
+    <%if content_for?(:javascript) %>
+      <%= content_for(:javascript) %>
+    <% else %>
+      <%= javascript_include_tag 'vendor/jquery' %>
+      <%= javascript_include_tag 'bootstrap' %>
+    <% end %>
 
     <%= content_for :overlay %>
      <%= render partial: "shared/analytics" %>
