@@ -13,12 +13,8 @@ var KeyboardShortcutsView = Ember.CollectionView.extend({
       default_enable: false
     }
   ],
+  
   itemViewClass: KeyboardShortcutView,
-
-  store: Ember.computed.alias("settings"),
-  storeData: function(){
-    return this.get("store").loadData()["settings"];
-  }.property("store"),
 });
 
 module.exports = KeyboardShortcutsView;

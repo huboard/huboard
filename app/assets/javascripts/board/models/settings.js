@@ -46,7 +46,7 @@ var Settings = Ember.Object.extend({
     } catch (e) {
       return false;
     }
-  }
+  }.property("")
 });
 
 module.exports = Settings;

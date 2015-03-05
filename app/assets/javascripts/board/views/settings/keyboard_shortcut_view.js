@@ -7,7 +7,7 @@ var KeyboardShortcutView = Ember.View.extend({
     this.$("input").change(function(){
       checked = $(this).is(":checked");
       var key = self.get("content.key");
-      self.get("parentView.store").saveData(key, checked);
+      self.get("controller.store").saveData(key, checked);
     });
   },
   willDestroyElement: function(){
@@ -17,7 +17,7 @@ var KeyboardShortcutView = Ember.View.extend({
   checkIfEnabled: function(){
     var key = this.get("content.key");
     var default_enable = this.get("content.default_enable")
-    var value = this.get("parentView.storeData")[key]
+    var value = this.get("controller.storeData")[key]
     var checked = (value == undefined || value == null) ?
       default_enable : value;
     this.set("checked", checked);
