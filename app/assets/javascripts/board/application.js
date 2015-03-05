@@ -77441,7 +77441,9 @@ var IssueSelectedColumnView = Ember.CollectionView.extend({
 module.exports = IssueSelectedColumnView;
 
 },{}],97:[function(require,module,exports){
-var IssueTitleView = Ember.View.extend({
+var KeyPressHandlingMixin = require("../../mixins/keypress_handling")
+
+var IssueTitleView = Ember.View.extend(KeyPressHandlingMixin, {
   classNames: ["fullscreen-header"],
   actions: {
     edit: function() {
@@ -77453,12 +77455,28 @@ var IssueTitleView = Ember.View.extend({
     var input = this.$('input');
     input.focus();
     input.val(input.val());
-  }
+  },
+  registerKeydownEvents: function(){
+    var self = this;
+    var ctrl = self.get("controller");
+
+    this.$().keydown(function(e){
+      self.metaEnterHandler(e, function(enabled){
+        if (enabled) ctrl.send("save");
+      })
+      self.enterHandler(e, function(enabled){
+        if (enabled) ctrl.send("save");
+      })
+    });
+  }.on("didInsertElement"),
+  tearDownEvents: function(){
+    this.$().off("keydown");
+  }.on("willDestroyElement"),
 })
 
 module.exports = IssueTitleView;
 
-},{}],98:[function(require,module,exports){
+},{"../../mixins/keypress_handling":47}],98:[function(require,module,exports){
 var ModalView = require("./modal_view")
 var KeyPressHandlingMixin = require("../mixins/keypress_handling")
 
