@@ -10,7 +10,7 @@ module HuBoard
 
         get '/api/profiles/?' do
           user = gh.user.to_hash
-          orgs = gh.user.memberships.orgs("active").body
+          orgs = gh.user.memberships
 
           orgs.select!{|org| org["role"] == "admin"}
           orgs.map!{|org| org = org["organization"]}

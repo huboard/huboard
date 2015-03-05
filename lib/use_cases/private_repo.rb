@@ -46,10 +46,9 @@ module UseCase
     :private
     def user_is_owner(params)
       if @repo_owner["type"] == "Organization"
-        @u ||= @gh.orgs(@repo_owner["login"]).memberships(@gh.user["login"]) do |req|
-          req.headers["Accept"] = "application/vnd.github.moondragon+json"
-        end
-        return @u["role"] == "admin"
+        @user ||= @gh.orgs(@repo_owner["login"])
+          .memberships(@gh.user["login"])
+        return @user["role"] == "admin"
       end
       @repo_owner['login'] == @gh.user['login']
     end
