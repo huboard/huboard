@@ -4,7 +4,8 @@ var SettingsController = Ember.Controller.extend({
     return this.get("store").loadData()["settings"];
   }.property("store"),
   storeAvailable: function(){
-    return this.get("store.available");
-  }.property("store.available")
+    var store_data = this.get("storeData")
+    return store_data != null && store_data != undefined
+  }.property("storeData")
 })
 module.exports = SettingsController;
