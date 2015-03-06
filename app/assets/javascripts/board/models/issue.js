@@ -118,7 +118,7 @@ var Issue = Ember.Object.extend(Serializable,{
       return Ember.$.post("/api/" + full_name + "/archiveissue", {
         number : this.get("number"),
         correlationId: this.get("correlationId")
-      }).then(function () {
+      }, function(){}, "json").then(function () {
         this.set("processing", false);
         this.set("isArchived", true);
       }.bind(this)).fail(function(e){

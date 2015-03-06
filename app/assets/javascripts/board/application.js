@@ -1910,16 +1910,12 @@ module.exports = MilestonesController = Ember.ObjectController.extend({
       owner = milestone.repo.owner.login,
       name = milestone.repo.name;
 
-    $.ajax({
-      url: "/api/" + owner + "/" + name + "/reordermilestone",
-      type: "POST",
-      data: {
+    Ember.$.post("/api/" + owner + "/" + name + "/reordermilestone",
+      {
         number: milestone.number,
         index: index
-      },
-      success: function(response){
+      }, function(){}, "json").then(function(response){
         milestoneController.set("model.milestone._data", response._data);
-      }
     })
   }
 });
@@ -2648,7 +2644,7 @@ var Issue = Ember.Object.extend(Serializable,{
       return Ember.$.post("/api/" + full_name + "/archiveissue", {
         number : this.get("number"),
         correlationId: this.get("correlationId")
-      }).then(function () {
+      }, function(){}, "json").then(function () {
         this.set("processing", false);
         this.set("isArchived", true);
       }.bind(this)).fail(function(e){
