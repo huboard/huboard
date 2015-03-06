@@ -2661,7 +2661,7 @@ var Issue = Ember.Object.extend(Serializable,{
       Ember.$.post("/api/" + full_name + "/close", {
         number : this.get("number"),
         correlationId: this.get("correlationId")
-      }).then(function() {
+      }, function(){}, "json").then(function() {
         this.set("state","closed")
         this.set("processing", false);
       }.bind(this));
@@ -2675,7 +2675,7 @@ var Issue = Ember.Object.extend(Serializable,{
         number : this.get("number"),
         assignee: login, 
         correlationId: this.get("correlationId")
-      }).then(function( response ){
+      }, function(){}, "json").then(function( response ){
           this.set("assignee", response.assignee);
           return this;
       }.bind(this));
@@ -2702,7 +2702,7 @@ var Issue = Ember.Object.extend(Serializable,{
       milestone: milestone ? milestone.number : null,
       changed_milestones: changedMilestones,
       correlationId: this.get("correlationId")
-    }).then(function( response ){
+    }, function(){}, "json").then(function( response ){
         this.set("_data.order", response._data.order);
         this.set("_data.milestone_order", response._data.milestone_order);
         return this;
