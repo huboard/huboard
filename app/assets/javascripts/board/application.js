@@ -5399,7 +5399,7 @@ function program1(depth0,data) {
 Ember.TEMPLATES['issue/selected_column'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', hashTypes, hashContexts, escapeExpression=this.escapeExpression;
+  var buffer = '', stack1, hashTypes, hashContexts, options, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
 
 
   data.buffer.push("<a ");
@@ -5410,7 +5410,22 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "view.content.text", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("</span>\n\n<div class=\"card-states\">\n   <img src=\"/img/check.png\" title=\"Issue is closed\" class=\"hb-state-closed\"/>\n   <img src=\"/img/arrow.png\" class=\"hb-state-ready\"/>\n   <img src=\"/img/x.png\" class=\"hb-state-blocked\"/>\n</div>\n</a>\n\n");
+  data.buffer.push("</span>\n\n<div class=\"card-states\">\n   <img src=\"");
+  hashTypes = {};
+  hashContexts = {};
+  options = {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['asset-path'] || depth0['asset-path']),stack1 ? stack1.call(depth0, "check.png", options) : helperMissing.call(depth0, "asset-path", "check.png", options))));
+  data.buffer.push("\" title=\"Issue is closed\" class=\"hb-state-closed\"/>\n   <img src=\"");
+  hashTypes = {};
+  hashContexts = {};
+  options = {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['asset-path'] || depth0['asset-path']),stack1 ? stack1.call(depth0, "arrow.png", options) : helperMissing.call(depth0, "asset-path", "arrow.png", options))));
+  data.buffer.push("\" class=\"hb-state-ready\"/>\n   <img src=\"");
+  hashTypes = {};
+  hashContexts = {};
+  options = {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['asset-path'] || depth0['asset-path']),stack1 ? stack1.call(depth0, "x.png", options) : helperMissing.call(depth0, "asset-path", "x.png", options))));
+  data.buffer.push("\" class=\"hb-state-blocked\"/>\n</div>\n</a>\n\n");
   return buffer;
   
 });
@@ -5919,14 +5934,29 @@ function program1(depth0,data) {
 Ember.TEMPLATES['components/hb-column-crumb'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', hashTypes, hashContexts, escapeExpression=this.escapeExpression;
+  var buffer = '', stack1, hashTypes, hashContexts, options, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
 
 
   data.buffer.push("\n  <a>\n    <small >");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "column.text", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("</small>\n\n    <div class=\"card-states\">\n      <img src=\"/img/check.png\" title=\"Issue is closed\" class=\"hb-state-closed\"/>\n      <img src=\"/img/arrow.png\" class=\"hb-state-ready\"/>\n      <img src=\"/img/x.png\" class=\"hb-state-blocked\"/>\n    </div>\n  </a>\n");
+  data.buffer.push("</small>\n\n    <div class=\"card-states\">\n      <img src=\"");
+  hashTypes = {};
+  hashContexts = {};
+  options = {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['asset-path'] || depth0['asset-path']),stack1 ? stack1.call(depth0, "check.png", options) : helperMissing.call(depth0, "asset-path", "check.png", options))));
+  data.buffer.push("\" title=\"Issue is closed\" class=\"hb-state-closed\"/>\n      <img src=\"");
+  hashTypes = {};
+  hashContexts = {};
+  options = {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['asset-path'] || depth0['asset-path']),stack1 ? stack1.call(depth0, "arrow.png", options) : helperMissing.call(depth0, "asset-path", "arrow.png", options))));
+  data.buffer.push("\" class=\"hb-state-ready\"/>\n      <img src=\"");
+  hashTypes = {};
+  hashContexts = {};
+  options = {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['asset-path'] || depth0['asset-path']),stack1 ? stack1.call(depth0, "x.png", options) : helperMissing.call(depth0, "asset-path", "x.png", options))));
+  data.buffer.push("\" class=\"hb-state-blocked\"/>\n    </div>\n  </a>\n");
   return buffer;
   
 });
