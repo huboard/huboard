@@ -199,7 +199,7 @@ var Issue = Ember.Object.extend(Serializable,{
         column: column.index.toString(),
         moved_columns: changedColumns,
         correlationId: this.get("correlationId")
-      }).then(function( response ){
+      }, function(){}, 'json').then(function( response ){
          this.set("_data.order", response._data.order);
          this.set("body", response.body);
          this.set("body_html", response.body_html);
