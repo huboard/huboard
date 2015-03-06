@@ -19,7 +19,7 @@ module Saas
 
         redirect_to session[:forward_to] && session[:forward_to] = "/" unless trial_available?(customer) && is_admin
     end
-    def new
+    def create
         user_or_org = gh.users(params[:user])
         user_or_org["email"] = params[:billing_email]
         query = Queries::CouchCustomer.get(user_or_org["id"], couch)

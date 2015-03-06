@@ -1,6 +1,6 @@
 module Saas
   class ChargesController < Saas::ApplicationController
-    def show
+    def create
       begin
         repo_user = gh.users(params[:id])
 
@@ -11,7 +11,8 @@ module Saas
         if plan_doc[:trial] && plan_doc.trial != "available"
           customer.update_subscription({
             plan: params[:plan][:id],
-            card: params[:card][:id]
+            card: params[:card][:id],
+            trial_end: 'now'
           })
         else
           customer.subscriptions.create({
