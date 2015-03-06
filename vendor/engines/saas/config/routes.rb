@@ -10,5 +10,7 @@ Rails.application.routes.draw do
   end
 end
 Saas::Engine.routes.draw do
-  resource :profile, :only => :show
+  resource :profile, :only     => :show
+  get '/:user/trial'           => 'trials#show'
+  post '/profile/:user/trial/activate' => 'trials#new'
 end

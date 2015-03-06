@@ -3,6 +3,7 @@
   <head>
     <title><%= content_for :title %>HuBoard</title>
     <meta name="description" content="Instant project management for GitHub issues">
+     <%= csrf_meta_tags %>
     <link rel="shortcut icon" href="/favicon.ico?v=3" />
 
      <%= render partial: "shared/fontdeck" %>

@@ -3,8 +3,9 @@
   <head>
     <title><%= content_for :title %>HuBoard</title>
     <meta name="description" content="Instant project management for GitHub issues">
-    <link rel="shortcut icon" href="/favicon.ico?v=3" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
+     <%= csrf_meta_tags %>
+    <link rel="shortcut icon" href="/favicon.ico?v=3" />
     
      <%= stylesheet_link_tag 'bootstrap' %>
      <%= stylesheet_link_tag 'flex_layout' %>

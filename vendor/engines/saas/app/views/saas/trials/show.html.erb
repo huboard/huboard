@@ -1,0 +1,22 @@
+<div class="trial_activate">
+  <div class="instructions drop-shadow">
+    <h2> Activate your 15 day free trial for <%= @user %> to Access this Board? </h2>
+    <div class="trial_form">
+      <%= form_tag("/settings/profile/#{@user}/trial/activate", method: :post) do %>
+        <input type="email" placeholder="Email Address" name="billing_email" required>
+        <input class="btn primary" type="submit" value="Do it!"/>
+      <% end %>
+    </div>
+    <br>
+    <a href="/"> No Thanks </a>
+  </div>
+</div>
+<% content_for :javascript do %>
+<%= javascript_include_tag 'vendor/jquery' %>
+<%= javascript_include_tag 'bootstrap' %>
+<script type="text/javascript">
+  $("div.trial_form form").submit(function(){
+    $(this).find('input[type=submit]').attr('disabled', true);
+  });
+</script>
+<% end %>

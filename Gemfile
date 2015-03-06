@@ -19,7 +19,6 @@ gem 'puma'
 gem 'foreman'
 
 gem 'jquery-rails'
-gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 
@@ -40,6 +39,7 @@ gem 'faye-redis'
 
 # BUNDLE_WITHOUT="development:test:saas"
 gem 'saas', path: "vendor/engines/saas", group: [:saas, :development]
+gem 'stripe-rails'
 
 group :development, :test do
   #gem 'byebug'
