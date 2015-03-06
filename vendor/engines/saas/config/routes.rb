@@ -10,7 +10,14 @@ Rails.application.routes.draw do
   end
 end
 Saas::Engine.routes.draw do
-  resource :profile, :only     => :show
-  get '/:user/trial'           => 'trials#show'
-  post '/profile/:user/trial/activate' => 'trials#new'
+  get '/charge/:id'                      => 'charges#show'
+  get '/coupon_valid/:coupon_id'         => 'coupons#valid'
+  put '/redeem_coupon/:id'               => 'coupons#redeem'
+  put '/profile/:name/additionalInfo'    => 'profiles#info'
+  put '/profile/:name/card'              => 'cards#update'
+  delete '/profile/:name/plans/:plan_id' => 'plans#destroy'
+  post '/profile/:user/trial/activate'   => 'trials#new'
+  get '/invoices/:invoice_id'            => 'invoices#show'
+  get '/:user/trial'                     => 'trials#show'
+  resource :profile, :only             => :show
 end

@@ -17,8 +17,7 @@ module Saas
         plan_doc = QueryHandler.exec(&query)
         customer = account_exists?(plan_doc) ? plan_doc[:rows].first.value : false
 
-        return redirect_to session[:forward_to] && session[:forward_to] = "/" unless trial_available?(customer) && is_admin
-
+        redirect_to session[:forward_to] && session[:forward_to] = "/" unless trial_available?(customer) && is_admin
     end
     def new
         user_or_org = gh.users(params[:user])
@@ -46,8 +45,6 @@ module Saas
 
         return render(json: { redirect: params[:forward_to] }) if request.xhr?
         redirect_to session[:forward_to]
-
-
     end
   end
 end

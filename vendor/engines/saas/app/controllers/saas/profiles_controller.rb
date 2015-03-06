@@ -37,7 +37,8 @@ module Saas
       org = gh.users(params[:org])
 
       query = Queries::CouchCustomer.get(org["id"], couch)
-      customer = QueryHandler.exec(&query) || halt(json(success: false, message: "Couldn't find couch record: #{org['id']}"))
+      customer = QueryHandler.exec(&query)
+      return json: {success: false, message: "Couldn't find couch record: #{org['id']}"} unless customer
 
       if customer.rows && customer.rows.size > 0
         customer_doc = customer.rows.first.value
@@ -49,12 +50,12 @@ module Saas
           }
           #json_error e, 400
         end
-        return render json: {
+        render json: {
           charges: charges,
           additional_info: customer_doc.additional_info
         }
       else
-        return render json: {
+        render json: {
           charges:[]
         }
       end
@@ -86,6 +87,19 @@ module Saas
       }
 
       return render json: data
+    end
+    def info
+      user = gh.users params[:name]
+      docs = couch.customers.findPlanById user['id']
+      if docs.rows.any?
+        plan_doc = docs.rows.first.value
+        plan_doc.additional_info = params[:additional_info]
+
+        couch.customers.save plan_doc
+        render json: {success: true, message: "Info updated"}
+      else
+        render json: {success: false, message: "Unable to find customer"}
+      end
     end
 
   end

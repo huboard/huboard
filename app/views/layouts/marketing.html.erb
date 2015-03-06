@@ -63,6 +63,14 @@
 <!-- / footer -->
   <%= javascript_include_tag 'marketing' %>
   <%= render partial: 'shared/analytics' %>
+   <script>
+      $(function() {
+        var token = $('meta[name="csrf-token"]').attr('content');
+        return $.ajaxPrefilter(function(options, originalOptions, xhr) {
+          return xhr.setRequestHeader('X-CSRF-Token', token);
+        });
+      });
+   </script>
 </body>
 </html>
 
