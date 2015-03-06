@@ -38,7 +38,7 @@ module Saas
 
       query = Queries::CouchCustomer.get(org["id"], couch)
       customer = QueryHandler.exec(&query)
-      return json: {success: false, message: "Couldn't find couch record: #{org['id']}"} unless customer
+      render json: {success: false, message: "Couldn't find couch record: #{org['id']}"} unless customer
 
       if customer.rows && customer.rows.size > 0
         customer_doc = customer.rows.first.value
