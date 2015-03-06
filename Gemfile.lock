@@ -204,7 +204,7 @@ GEM
       dotenv (~> 1.0.2)
       thor (~> 0.19.1)
     formatador (0.2.5)
-    ghee (0.12.16)
+    ghee (0.12.17)
       faraday (~> 0.9)
       faraday_middleware (~> 0.9)
       hashie (~> 3.3.2)

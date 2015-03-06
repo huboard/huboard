@@ -6,7 +6,6 @@ class Huboard
       end
 
       def call(env)
-        env[:request_headers].merge!('Accept' => "application/vnd.github.v3.full+json")
         env[:request][:timeout] = 3
         env[:request][:open_timeout] = Rails.env.production? ? 1.7 : 10
 
