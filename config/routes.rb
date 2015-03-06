@@ -14,9 +14,28 @@ Rails.application.routes.draw do
   get '/repositories/public/:user' => 'dashboard#public', as: 'repositories_public'
 
   namespace :api do
-    get '/:user/:repo/board' => 'board#index', as: 'board'
-    get '/:user/:repo/link_labels' => 'board#link_labels', as: 'link_labels'
-    get '/:user/:repo/linked/:linked_user/:linked_repo' => 'board#linked', as: 'linked_board'
+    scope '/:user/:repo' do
+      get 'board' => 'board#index', as: 'board'
+      get 'link_labels' => 'board#link_labels', as: 'link_labels'
+      get 'linked/:linked_user/:linked_repo' => 'board#linked', as: 'linked_board'
+
+      #Issues
+      get 'issues/:number/details' => 'issues#details'
+      post 'issues' => 'issues#create_issue'
+      post 'issues/:number/comment' => 'issues#create_comment'
+      put 'issues/comments/:id' => 'issues#update_issue'
+      put 'issues/:number' => 'issues#update_comment'
+      post 'close' => 'issues#close_issue'
+      put 'issues/:number/blocked' => 'issues#block_issue'
+      delete 'issues/:number/blocked' => 'issues#unblock_issue'
+      put 'issues/:number/ready' => 'issues#issue_ready'
+      delete 'issues/:number/ready' => 'issues#issue_unready'
+      post 'dragcard' => 'issues#drag_card'
+      post 'archiveissue' => 'issues#archive_issue'
+      post 'reordermilestone' => 'issues#reorder_milestone'
+      post 'assigncard' => 'issues#assign_card'
+      post 'assignmilestone' => 'issues#assign_milestone'
+    end
   end
 
   get '/:user'       => 'dashboard#user', as: 'user'

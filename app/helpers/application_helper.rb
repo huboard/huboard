@@ -51,6 +51,8 @@ module ApplicationHelper
   def github_session(scope=:default)
     request.env['warden'].session(scope)  if github_authenticated?(scope)
   end
-
+  def is_collaborator?(repo)
+    repo['permissions'] && repo['permissions']['push'] && logged_in?
+  end
 
 end

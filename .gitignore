@@ -1,4 +1,5 @@
 .env
+.vagrant
 production.env
 capybara-*.html
 .rspec
