@@ -2,6 +2,12 @@ Rails.application.routes.draw do
   root to: 'dashboard#index', constraints: LoggedInConstraint.new 
   root to: 'marketing#index', as: 'marketing_root'
 
+  # errors
+  match '/404', to: 'errors#not_found', constraints: { status: /\d{3}/ }, via: :all
+  match '/422', to: 'errors#unprocessable_entity', constraints: { status: /\d{3}/ }, via: :all
+  match '/500', to: 'errors#server_error', constraints: { status: /\d{3}/ }, via: :all
+  match 'unauthenticated', to: 'errors#unauthenticated', via: :all
+
   get 'integrations' => 'marketing#integrations'
   get 'pricing' => 'marketing#pricing'
   get 'login' => 'login#index'

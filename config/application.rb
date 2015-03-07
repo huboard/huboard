@@ -40,5 +40,7 @@ module HuboardWeb
           uri: (ENV['REDIS_URL'] || 'redis://localhost:6379')
         }
     end
+
+    config.exceptions_app = self.routes
   end
 end
