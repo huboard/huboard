@@ -41,6 +41,7 @@ gem 'faye-redis'
 gem 'saas', require: nil, path: "vendor/engines/saas"
 gem 'responders'
 gem 'stripe-rails'
+gem 'heroku-deflater', group: :production
 
 group :development, :test do
   #gem 'byebug'

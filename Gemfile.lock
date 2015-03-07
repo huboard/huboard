@@ -214,6 +214,8 @@ GEM
     globalid (0.3.3)
       activesupport (>= 4.1.0)
     hashie (3.3.2)
+    heroku-deflater (0.5.3)
+      rack (>= 1.4.5)
     highline (1.6.21)
     hike (1.2.3)
     hiredis (0.5.2)
@@ -385,6 +387,7 @@ DEPENDENCIES
   foreman
   ghee
   hashie
+  heroku-deflater
   jbuilder (~> 2.0)
   jquery-rails
   kgio
