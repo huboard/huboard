@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 ruby '2.1.5'
 
 gem 'rails', '4.2.0'
+gem 'dotenv-rails', '~> 2.0.0', :require => 'dotenv/rails-now'
 gem 'pg'
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
@@ -13,7 +14,6 @@ gem 'ember-rails-assets'
 gem 'warden-github'
 # TODO: replace this
 gem 'sinatra_auth_github'
-gem 'dotenv-rails', :groups => [:development, :test]
 gem 'rails_12factor', group: :production
 gem 'puma'
 gem 'foreman'
@@ -38,7 +38,7 @@ gem 'faye'
 gem 'faye-redis'
 
 # BUNDLE_WITHOUT="development:test:saas"
-gem 'saas', path: "vendor/engines/saas", group: [:saas, :development]
+gem 'saas', require: nil, path: "vendor/engines/saas"
 gem 'stripe-rails'
 
 group :development, :test do

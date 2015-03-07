@@ -5,6 +5,10 @@ require 'rails/all'
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
+Dotenv::Railtie.load
+if ENV["HUBOARD_ENV"] == 'production'
+  require 'saas'
+end
 
 module HuboardWeb
   class Application < Rails::Application
@@ -20,7 +24,9 @@ module HuboardWeb
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    config.railties_order = [Saas::Engine, :all]
+    if ENV["HUBOARD_ENV"] == 'production'
+      config.railties_order = [Saas::Engine, :all]
+    end
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
