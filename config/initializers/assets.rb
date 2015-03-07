@@ -10,6 +10,8 @@ Rails.application.config.assets.version = '1.0'
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
 Rails.application.config.assets.precompile += %w( ember-accounts.js  flex_layout.css marketing.js marketing/main.css vendor/jquery.js bootstrap.css bootstrap.js board/application.js vendor/jquery-ui.js )
 
+Rails.application.config.assets.precompile += %w( errors/main.css )
+
 precompile_whitelist = %w(
   .html .erb .haml
   .png  .jpg .gif .jpeg .ico
