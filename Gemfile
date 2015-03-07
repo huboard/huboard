@@ -39,6 +39,7 @@ gem 'faye-redis'
 
 # BUNDLE_WITHOUT="development:test:saas"
 gem 'saas', require: nil, path: "vendor/engines/saas"
+gem 'responders'
 gem 'stripe-rails'
 
 group :development, :test do

@@ -299,6 +299,8 @@ GEM
     rake (10.4.2)
     rdoc (4.2.0)
       json (~> 1.4)
+    responders (2.1.0)
+      railties (>= 4.2.0, < 5)
     rest-client (1.7.3)
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
@@ -393,6 +395,7 @@ DEPENDENCIES
   puma
   rails (= 4.2.0)
   rails_12factor
+  responders
   saas!
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
