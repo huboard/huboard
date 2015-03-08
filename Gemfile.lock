@@ -44,6 +44,9 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     addressable (2.3.7)
+    annotate (2.6.6)
+      activerecord (>= 2.3.0)
+      rake (~> 10.4.2, >= 10.4.2)
     arel (6.0.0)
     better_errors (2.1.1)
       coderay (>= 1.0.0)
@@ -372,6 +375,7 @@ PLATFORMS
 
 DEPENDENCIES
   addressable
+  annotate
   better_errors
   binding_of_caller
   carrierwave_direct
