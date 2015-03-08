@@ -13,8 +13,8 @@ module Api
 
     def update_issue
       api = huboard.board(params[:user], params[:repo])
-      comment = api.comments(params[:comment][:id]).patch body: params[:comment][:body]
-      render json: comment
+      @issue = api.issue(params[:number]).update(params)
+      render json: @issue
     end
 
     def close_issue
@@ -33,8 +33,8 @@ module Api
 
     def update_comment
       api = huboard.board(params[:user], params[:repo])
-      issue = api.issue(params[:number]).update(params)
-      render json: issue
+      comment = api.comments(params[:comment][:id]).patch body: params[:comment][:body]
+      render json: comment
     end
 
     def block_issue
