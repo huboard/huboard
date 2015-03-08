@@ -304,6 +304,7 @@ GEM
     rake (10.4.2)
     rdoc (4.2.0)
       json (~> 1.4)
+    redis (3.2.1)
     responders (2.1.0)
       railties (>= 4.2.0, < 5)
     rest-client (1.7.3)
@@ -402,6 +403,7 @@ DEPENDENCIES
   puma
   rails (= 4.2.0)
   rails_12factor
+  redis
   responders
   saas!
   sass-rails (~> 5.0)
