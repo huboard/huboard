@@ -1,5 +1,6 @@
 module Api
   class IssuesDragCardJob < IssueEventJob
+    include IsPublishable
     action "moved"
     timestamp Proc.new { Time.now.utc.iso8601}
 

@@ -40,7 +40,9 @@ class IssueEventJob < ActiveJob::Base
   end
 
   def perform(params)
-    deliver payload(params)
+    message = deliver payload(params)
+
+    PublishWebhookJob.perform_later message if self.class.included_modules.include? IsPublishable
   end
 
   def deliver(payload)
@@ -51,5 +53,6 @@ class IssueEventJob < ActiveJob::Base
     client = ::Faye::Redis::Publisher.new({})
     Rails.logger.debug ["/" + message[:meta][:repo_full_name], message]
     client.publish "/" + message[:meta][:repo_full_name], message
+    return message
   end
 end
