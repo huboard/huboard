@@ -188,10 +188,12 @@ module HuBoard
 
       post "/settings/charge/:id/?" do
         begin
-          repo_user = gh.users(params[:id])
+          repo_owner = gh.users(params[:id])
 
-          docs = couch.customers.findPlanById repo_user["id"]
-          plan_doc = docs.rows.first.value
+          query = Queries::CouchCustomer.get(repo_owner["id"], couch)
+          plan_doc = QueryHandler.exec(&query)
+          plan_doc = account_exists?(plan_doc) ?
+            plan_doc[:rows].first.value : create_new_account(gh.user, repo_owner)
           
           customer = Stripe::Customer.retrieve(plan_doc.id)
           if plan_doc[:trial] && plan_doc.trial != "available"
