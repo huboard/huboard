@@ -5659,11 +5659,11 @@ function program6(depth0,data) {
 function program8(depth0,data) {
   
   var buffer = '', stack1, hashTypes, hashContexts;
-  data.buffer.push("\n    ");
+  data.buffer.push("\n    <div class=\"flex-issue-title\">\n      ");
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "title", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\n    <a class=\"number\" href=\"");
+  data.buffer.push("\n      <a class=\"number\" href=\"");
   hashTypes = {};
   hashContexts = {};
   stack1 = helpers.unbound.call(depth0, "html_url", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
@@ -5678,15 +5678,25 @@ function program8(depth0,data) {
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "number", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("</small></a>\n  ");
+  data.buffer.push("</small></a>\n      ");
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers['if'].call(depth0, "target.isClosed", {hash:{},inverse:self.noop,fn:self.program(9, program9, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n    </div>\n  ");
   return buffer;
+  }
+function program9(depth0,data) {
+  
+  
+  data.buffer.push("\n        <span class=\"issue-closed-badge\"><p> Closed </p></span>\n      ");
   }
 
   hashTypes = {};
   hashContexts = {};
   stack1 = helpers['if'].call(depth0, "canEdit", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n<h2>\n  ");
+  data.buffer.push("\n\n<h2>\n  ");
   hashTypes = {};
   hashContexts = {};
   stack1 = helpers['if'].call(depth0, "isEditing", {hash:{},inverse:self.program(8, program8, data),fn:self.program(6, program6, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
