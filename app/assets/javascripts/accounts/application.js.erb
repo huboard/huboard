@@ -895,12 +895,33 @@ function program10(depth0,data) {
     'class': ("noAccount:new-account:disabled")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(">\n    <p>\n      <strong>All Accounts</strong> receive a <strong>15 day free trial</strong>.\n    </p>\n    <p>\n      <form ");
-  hashContexts = {'action': depth0};
-  hashTypes = {'action': "ID"};
-  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
-    'action': ("activateTrial")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(" method=\"post\">\n        <input type=\"email\" placeholder=\"Email Address\" name=\"billing_email\" required>\n        <input class=\"hb-button\" type=\"submit\" value=\"Activate Trial\"/>\n      </form>\n    </p>\n  </div>\n  <div ");
+  hashContexts = {'on': depth0};
+  hashTypes = {'on': "STRING"};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "activateTrial", {hash:{
+    'on': ("submit")
+  },contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">\n        ");
+  hashContexts = {'type': depth0,'placeholder': depth0,'name': depth0,'value': depth0,'required': depth0};
+  hashTypes = {'type': "STRING",'placeholder': "STRING",'name': "STRING",'value': "ID",'required': "STRING"};
+  options = {hash:{
+    'type': ("email"),
+    'placeholder': ("Email Address"),
+    'name': ("billing_email"),
+    'value': ("emailBinding"),
+    'required': ("required")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
+  data.buffer.push("\n        ");
+  hashContexts = {'class': depth0,'type': depth0,'value': depth0,'disabled': depth0};
+  hashTypes = {'class': "STRING",'type': "STRING",'value': "STRING",'disabled': "ID"};
+  options = {hash:{
+    'class': ("hb-button"),
+    'type': ("submit"),
+    'value': ("Activate Trial"),
+    'disabled': ("trialButtonDisabled")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
+  data.buffer.push("\n      </form>\n    </p>\n  </div>\n  <div ");
   hashContexts = {'class': depth0};
   hashTypes = {'class': "STRING"};
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
