@@ -21,6 +21,10 @@ Rails.application.routes.draw do
 
   namespace :api do
     scope '/:user/:repo' do
+      resources :integrations, only: [:index, :create, :destroy]
+      resources :links, only: [:index, :create, :destroy]
+      put 'columns' => 'columns#update'
+      get 'settings' => 'settings#index'
       get 'board' => 'board#index', as: 'board'
       get 'link_labels' => 'board#link_labels', as: 'link_labels'
       get 'linked/:linked_user/:linked_repo' => 'board#linked', as: 'linked_board'
