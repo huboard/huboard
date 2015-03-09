@@ -4,6 +4,7 @@ module Api
     action "issue_updated"
 
     def payload(params)
+      { issue: params[:issue] }
     end
   end
 end

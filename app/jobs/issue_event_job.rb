@@ -14,20 +14,12 @@ class IssueEventJob < ActiveJob::Base
       @_timestamp
     end
   end
-  @_timestamp = Proc.new { Time.now.utc.iso8601 }
-  def self.timestamp(override=nil)
-    if override
-      @_timestamp = override
-    else
-      @_timestamp
-    end
-  end
 
   def self.build_meta(params)
     issue = params['issue']
     HashWithIndifferentAccess.new(
       action: @_action,
-      timestamp: @_timestamp.call(params),
+      timestamp: (@_timestamp || Proc.new{Time.now.utc.iso8601}).call(params),
       correlationId: params['action_controller.params']['correlationId'],
       user: params['current_user'],
       repo_full_name: "#{issue[:repo][:owner][:login]}/#{issue[:repo][:name]}"
@@ -53,6 +45,7 @@ class IssueEventJob < ActiveJob::Base
       payload: payload
     }
     client = ::Faye::Redis::Publisher.new({})
+    Rails.logger.debug ["/" + message[:meta][:repo_full_name], message]
     client.publish "/" + message[:meta][:repo_full_name], message
   end
 end

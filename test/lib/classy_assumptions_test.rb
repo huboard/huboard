@@ -6,8 +6,16 @@ class ClassyAssumptionsTest < ActiveSupport::TestCase
     def self.bob
       @bob ||= "bob"
     end
+    def self.set_bob(bob)
+      @bob = bob
+    end
     def perform
       payload
+    end
+  end
+  class Frank < BobBase
+    def get_bob_class
+      self.class.bob
     end
   end
   class Bill < BobBase
@@ -30,9 +38,18 @@ class ClassyAssumptionsTest < ActiveSupport::TestCase
     assert Bill.new.perform == "payload"
   end
 
-  test 'class variable different from instance variable' do
+  test 'class variables arent altered' do
     bill = Bill.new
     assert bill.get_bob_class == "bob"
     assert bill.get_bob == 'bill'
+
+    frank = Frank.new
+    assert frank.get_bob_class == "bob"
+
+    bill.class.set_bob "bill"
+
+    assert frank.get_bob_class != bill.get_bob_class
   end
+
+
 end

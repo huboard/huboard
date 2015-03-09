@@ -37,28 +37,28 @@ module Api
       render json: comment
     end
 
-    def block_issue
+    def block
       api = huboard.board(params[:user], params[:repo])
-      issue = api.issue(params[:number]).blocked
-      render json: issue
+      @issue = api.issue(params[:number]).blocked
+      render json: @issue
     end
 
-    def unblock_issue
+    def unblock
       api = huboard.board(params[:user], params[:repo])
-      issue = api.issue(params[:number]).unblocked
-      render json: issue
+      @issue = api.issue(params[:number]).unblocked
+      render json: @issue
     end
 
-    def issue_ready
+    def ready
       api = huboard.board(params[:user], params[:repo])
-      issue = api.issue(params[:number]).ready
-      render json: issue
+      @issue = api.issue(params[:number]).ready
+      render json: @issue
     end
 
-    def issue_unready
+    def unready
       api = huboard.board(params[:user], params[:repo])
-      issue = api.issue(params[:number]).unready
-      render json: issue
+      @issue = api.issue(params[:number]).unready
+      render json: @issue
     end
 
     #Skipping quite a bit of event code on this one since the 
@@ -67,7 +67,8 @@ module Api
       user, repo, number, order, column = params[:user], params[:repo], params[:number], params[:order], params[:column]
       moved = params[:moved_columns] == 'true'
       issue = huboard.board(user, repo).issue(number)
-        .move(column, order, moved)
+      @previous_column = issue['current_state']
+      @issue = issue.move(column, order, moved)
       render json: issue
     end
 
