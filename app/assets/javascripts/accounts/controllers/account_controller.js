@@ -61,7 +61,7 @@ AccountController = Ember.ObjectController.extend({
         data: {billing_email: self.get("emailBinding")},
         type: "POST"})
         .then(function(response){
-          window.location.href = response.redirect;
+          location.reload();
         });
     },
     purchase: function (model) {
