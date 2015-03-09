@@ -36,7 +36,7 @@ module HuboardWeb
     config.cache_store = :dalli_store, nil, { :pool_size => 5 }
 
     if ENV["SELF_HOST_FAYE"]
-      config.middleware.delete Rack::Lock
+      #config.middleware.delete Rack::Lock
       config.middleware.use Faye::RackAdapter, 
         mount: '/site/pubsub', 
         timeout: 25,
