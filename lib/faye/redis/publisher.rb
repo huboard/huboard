@@ -24,7 +24,7 @@ module Faye
         @timeout = @options[:timeout] || 60
 
         if uri
-          @redis = ::Redis.connect(uri)
+          @redis = ::Redis.connect(url:uri)
         else
           @redis = ::Redis.connect({
             host:host, 
