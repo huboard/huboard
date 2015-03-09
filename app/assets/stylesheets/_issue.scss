@@ -66,3 +66,17 @@
    }
 
 }
+
+.submit-comment-buttons {
+  @include display(flex);
+  justify-content: flex-end;
+
+  .hb-button {
+    margin: 0 2px;
+   }
+
+  .spinner {
+    position: relative;
+    margin: 2px 2px;
+  }
+}

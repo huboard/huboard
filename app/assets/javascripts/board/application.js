@@ -1644,6 +1644,9 @@ var IssuesEditController = Ember.ObjectController.extend({
       return this.get("model.customState") == "blocked";
     }
   }.property("model.customState", "model._data.custom_state"),
+  isClosed: function(){
+    return this.get("model.state") == "closed";
+  }.property("model.state"),
   actions: {
     labelsChanged: function () {
        Ember.run.once(function () {
@@ -1683,6 +1686,15 @@ var IssuesEditController = Ember.ObjectController.extend({
 
           return comment;
          }.bind(this))
+    },
+    close: function(){
+      if (this.get("commentBody")){
+        this.send("submitComment");
+      }
+      this.get("model").close();
+    },
+    reopen: function(){
+      this.get("model").reopen();
     }
   },
   commentBody: null,
@@ -2724,6 +2736,21 @@ var Issue = Ember.Object.extend(Serializable,{
         correlationId: this.get("correlationId")
       }).then(function() {
         this.set("state","closed")
+        this.set("processing", false);
+      }.bind(this));
+  },
+  reopen: function(){
+     this.set("processing", true);
+
+      var user = this.get("repo.owner.login"),
+          repo = this.get("repo.name"),
+          full_name = user + "/" + repo;
+
+      Ember.$.post("/api/" + full_name + "/open", {
+        number : this.get("number"),
+        correlationId: this.get("correlationId")
+      }).then(function() {
+        this.set("state", "open")
         this.set("processing", false);
       }.bind(this));
   },
@@ -4128,7 +4155,7 @@ function program2(depth0,data) {
 
 function program4(depth0,data) {
   
-  var buffer = '', stack1, hashContexts, hashTypes, options;
+  var buffer = '', stack1, stack2, hashContexts, hashTypes, options;
   data.buffer.push("\n  <hr></hr>\n  <form ");
   hashContexts = {'on': depth0};
   hashTypes = {'on': "STRING"};
@@ -4143,13 +4170,69 @@ function program4(depth0,data) {
     'mentions': ("mentions")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers['hb-markdown-editor'] || depth0['hb-markdown-editor']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-markdown-editor", options))));
-  data.buffer.push("\n    <button ");
+  data.buffer.push("\n    <div class=\"submit-comment-buttons\">\n      ");
+  hashTypes = {};
+  hashContexts = {};
+  stack2 = helpers['if'].call(depth0, "isClosed", {hash:{},inverse:self.program(7, program7, data),fn:self.program(5, program5, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+  data.buffer.push("\n      <button ");
   hashContexts = {'disabled': depth0};
   hashTypes = {'disabled': "ID"};
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
     'disabled': ("disabled")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(" class=\"hb-button\">Submit comment</button>\n  </form>\n  ");
+  data.buffer.push(" class=\"hb-button\">Submit comment</button>\n      ");
+  hashTypes = {};
+  hashContexts = {};
+  stack2 = helpers['if'].call(depth0, "processing", {hash:{},inverse:self.noop,fn:self.program(9, program9, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+  data.buffer.push("\n    </div>\n  </form>\n  ");
+  return buffer;
+  }
+function program5(depth0,data) {
+  
+  var buffer = '', hashContexts, hashTypes;
+  data.buffer.push("\n        <button class=\"hb-button hb-button-grey\" ");
+  hashContexts = {'on': depth0};
+  hashTypes = {'on': "STRING"};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "reopen", {hash:{
+    'on': ("click")
+  },contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  hashContexts = {'disabled': depth0};
+  hashTypes = {'disabled': "ID"};
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'disabled': ("processing")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">Reopen issue </button>\n      ");
+  return buffer;
+  }
+
+function program7(depth0,data) {
+  
+  var buffer = '', hashContexts, hashTypes;
+  data.buffer.push("\n        <button class=\"hb-button hb-button-grey\" ");
+  hashContexts = {'on': depth0};
+  hashTypes = {'on': "STRING"};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "close", {hash:{
+    'on': ("click")
+  },contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  hashContexts = {'disabled': depth0};
+  hashTypes = {'disabled': "ID"};
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'disabled': ("processing")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">Close issue </button>\n      ");
+  return buffer;
+  }
+
+function program9(depth0,data) {
+  
+  var buffer = '', hashTypes, hashContexts;
+  data.buffer.push("\n      <div class=\"spinner\">\n        ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "hb-spinner", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n      </div>\n      ");
   return buffer;
   }
 

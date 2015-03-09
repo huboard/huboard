@@ -146,6 +146,15 @@ module HuBoard
 
           json(issue)
         end
+
+        post '/api/:user/:repo/open' do
+          user, repo, number = params[:user], params[:repo], params[:number]
+          issue = huboard.board(user, repo).issue(number).open
+
+          IssueReopenedEvent.new.publish issue, current_user.attribs, params[:correlationId]
+
+          json(issue)
+        end
       end
     end
   end

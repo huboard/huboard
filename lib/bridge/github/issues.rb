@@ -181,6 +181,10 @@ class Huboard
         patch state: "closed"
       end
 
+      def open 
+        patch state: "open"
+      end
+
       def reorder(index)
         embed_data({"order" => index.to_f, "custom_state" => ""})
 
