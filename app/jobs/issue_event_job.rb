@@ -14,6 +14,9 @@ class IssueEventJob < ActiveJob::Base
       @_timestamp
     end
   end
+  def self.identifier(override=nil)
+    @_identifier = override
+  end
 
   def self.build_meta(params)
     issue = params['issue']
@@ -22,6 +25,7 @@ class IssueEventJob < ActiveJob::Base
       timestamp: (@_timestamp || Proc.new{Time.now.utc.iso8601}).call(params),
       correlationId: params['action_controller.params']['correlationId'],
       user: params['current_user'],
+      identifier: (@_identifier || ->(p){ p['issue']['number']}).call(params),
       repo_full_name: "#{issue[:repo][:owner][:login]}/#{issue[:repo][:name]}"
     )
   end
