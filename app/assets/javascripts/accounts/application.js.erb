@@ -122,12 +122,6 @@ AccountController = Ember.ObjectController.extend({
     this.set("model.details.plans", Em.A(plans));
     return this.get("model.details.plans.firstObject");
   }.property("model.details.plans"),
-  activateTrial: function(){
-    var path = encodeURIComponent(window.location.pathname + window.location.hash);
-    var redirect = "?forward_to=" + path;
-    var user = this.get("model.login");
-    return "/settings/profile/" + user + "/trial/activate"  + redirect
-  }.property("model.login"),
   errorState: function(){
     return this.get("failure") || this.get("trialingExpired");
   }.property("failure", "trialingExpired"),
@@ -168,7 +162,25 @@ AccountController = Ember.ObjectController.extend({
   couponCode: function(){
     return this.get("model.details.discount.coupon.id");
   }.property("model.details.discount","model.details.discount.coupon", "model.details.discount.coupon.id"),
+  trialButtonDisabled: false,
+  trialActivationUrl: function(){
+    var path = encodeURIComponent(window.location.pathname + window.location.hash);
+    var redirect = "?forward_to=" + path;
+    var user = this.get("model.login");
+    return "/settings/profile/" + user + "/trial/activate"  + redirect
+  }.property("model.login"),
   actions: {
+    activateTrial: function(){
+      self = this
+      this.set("trialButtonDisabled", true)
+      Ember.$.ajax( {
+        url: self.get("trialActivationUrl"),
+        data: {billing_email: self.get("emailBinding")},
+        type: "POST"})
+        .then(function(response){
+          location.reload();
+        });
+    },
     purchase: function (model) {
       var org = this.get("model.details.org");
       var details = this.get('model.details');
