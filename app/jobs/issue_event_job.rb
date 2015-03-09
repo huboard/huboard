@@ -50,7 +50,7 @@ class IssueEventJob < ActiveJob::Base
       meta: self.class.build_meta(arguments.first),
       payload: payload
     }
-    client = ::Faye::Redis::Publisher.new({})
+    client = ::Faye::Redis::Publisher.new({uri: ENV["REDIS_URL"] || nil})
     Rails.logger.debug ["/" + message[:meta][:repo_full_name], message]
     client.publish "/" + message[:meta][:repo_full_name], message
     return message
