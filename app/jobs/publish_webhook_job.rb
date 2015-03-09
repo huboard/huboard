@@ -14,7 +14,10 @@ class PublishWebhookJob < ActiveJob::Base
         srv = service.new payload[:meta][:action], r.value.integration.data, payload
         srv.receive_event()
       rescue => e
-        Rails.logger.error "error publishing event #{r} \n    Backtrace:\n    #{e.backtrace * "\n"}"
+        bc = ActiveSupport::BacktraceCleaner.new
+        bc.add_silencer { |line| line =~ /mongrel|rubygems|\.rbenv/ }
+        bc.add_filter   { |line| line.gsub(Rails.root.to_s, '') }
+        Rails.logger.error "error publishing event \n    Exception: #{e}\n    Backtrace:\n        #{bc.clean(e.backtrace) * "\n        "}"
       end
     end
 
