@@ -79,6 +79,7 @@ var IssuesEditController = Ember.ObjectController.extend({
         this.send("submitComment");
       }
       this.get("model").close();
+      this.send("moveToColumn", this.get("columns.lastObject"));
     },
     reopen: function(){
       this.get("model").reopen();
