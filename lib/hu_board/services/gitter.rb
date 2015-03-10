@@ -1,5 +1,5 @@
 module HuBoard
-  class Gitter < Service
+  class Gitter < Services
     def connection
       @connection ||= Faraday.new do |builder|
         builder.response :logger

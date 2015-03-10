@@ -23,7 +23,9 @@ module Faye
         @ns      = @options[:namespace] || ''
         @timeout = @options[:timeout] || 60
 
-        if uri
+        if @options.empty?
+          @redis = ::Redis.current
+        elsif uri
           @redis = ::Redis.connect(url:uri)
         else
           @redis = ::Redis.connect({

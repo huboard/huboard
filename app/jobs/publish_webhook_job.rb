@@ -10,7 +10,7 @@ class PublishWebhookJob < ActiveJob::Base
 
     result.rows.each do |r|
       begin
-        service = HuBoard::Service.services.detect { |srv| srv.to_s == r.value.integration.name }
+        service = HuBoard::Services.services.detect { |srv| srv.to_s == "HuBoard::#{r.value.integration.name}" }
         srv = service.new payload[:meta][:action], r.value.integration.data, payload
         srv.receive_event()
       rescue => e

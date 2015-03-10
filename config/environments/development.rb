@@ -38,4 +38,6 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+  defined?(Redis) and
+    $redis = Redis.current = ConnectionPool::Wrapper.new { Redis.new( url: ENV['REDIS_URL'] ) }
 end
