@@ -3665,7 +3665,7 @@ function program10(depth0,data) {
   hashTypes = {'bubbles': "BOOLEAN"};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "archive", "", {hash:{
     'bubbles': (false)
-  },contexts:[depth0,depth0],types:["ID","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  },contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("><i class=\"ui-icon ui-icon-box-add\"></i>Archive</button>\n</div>                                                      \n");
   return buffer;
   }
