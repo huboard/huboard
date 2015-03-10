@@ -2736,8 +2736,11 @@ var Issue = Ember.Object.extend(Serializable,{
         number : this.get("number"),
         correlationId: this.get("correlationId")
       }).then(function() {
-        this.set("state","closed")
-        this.set("processing", false);
+          this.set("state","closed")
+          this.set("processing", false)
+        .fail(function(e){
+          this.set("processing", false)
+        });
       }.bind(this));
   },
   reopen: function(){
@@ -2751,8 +2754,11 @@ var Issue = Ember.Object.extend(Serializable,{
         number : this.get("number"),
         correlationId: this.get("correlationId")
       }).then(function() {
-        this.set("state", "open")
-        this.set("processing", false);
+          this.set("state", "open")
+          this.set("processing", false)
+        .fail(function(e){
+          this.set("processing", false)
+        });
       }.bind(this));
   },
   assignUser: function(login){
