@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   namespace :api do
     scope '/:user/:repo' do
       resources :integrations, only: [:index, :create, :destroy]
+      resources :milestones, only: [:create, :update]
       resources :links, only: [:index, :create, :destroy]
       put 'columns' => 'columns#update'
       get 'settings' => 'settings#index'

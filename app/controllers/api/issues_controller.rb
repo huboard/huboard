@@ -7,8 +7,8 @@ module Api
     end
 
     def create_issue
-      issue = huboard.board(params[:user],params[:repo]).create_issue params
-      render json: issue
+      @issue = huboard.board(params[:user],params[:repo]).create_issue params
+      render json: @issue
     end
 
     def update_issue
@@ -65,7 +65,7 @@ module Api
     #implementation is going to be a lot different
     def drag_card
       user, repo, number, order, column = params[:user], params[:repo], params[:number], params[:order], params[:column]
-      moved = params[:moved_columns] == 'true'
+      @moved = params[:moved_columns] == 'true'
       issue = huboard.board(user, repo).issue(number)
       @previous_column = issue['current_state']
       @issue = issue.move(column, order, moved)

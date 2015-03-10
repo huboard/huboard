@@ -47,23 +47,25 @@ module Faye
         keys = channels.map { |c| @ns + "/channels#{c}" }
 
       
-        clients = @redis.sunion(*keys)
-        clients.each do |client_id|
-          queue = @ns + "/clients/#{client_id}/messages"
+        @redis.with do |redis|
+          clients = @redis.sunion(*keys)
+          clients.each do |client_id|
+            queue = @ns + "/clients/#{client_id}/messages"
 
-          @redis.rpush(queue, json_message)
-          @redis.publish(@message_channel, client_id)
+            redis.rpush(queue, json_message)
+            redis.publish(@message_channel, client_id)
 
-          client_exists(client_id) do |exists|
-            @redis.del(queue) unless exists
+            client_exists(redis, client_id) do |exists|
+              redis.del(queue) unless exists
+            end
           end
         end
       end
 
-      def client_exists(client_id, &callback)
+      def client_exists(redis, client_id, &callback)
         cutoff = get_current_time - (1000 * 1.6 * @timeout)
 
-        score = @redis.zscore(@ns + '/clients', client_id)
+        score = redis.zscore(@ns + '/clients', client_id)
         callback.call(score.to_i > cutoff)
       end
 

@@ -20,8 +20,9 @@ class IssueEventJob < ActiveJob::Base
 
   def self.build_meta(params)
     issue = params['issue']
+    action = @_action.is_a?(String) ? @_action : @_action.call(params)
     HashWithIndifferentAccess.new(
-      action: @_action,
+      action: action,
       timestamp: (@_timestamp || Proc.new{Time.now.utc.iso8601}).call(params),
       correlationId: params['action_controller.params']['correlationId'],
       user: params['current_user'],

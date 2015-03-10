@@ -1,7 +1,7 @@
 module Api
   class IssuesDragCardJob < IssueEventJob
     include IsPublishable
-    action "moved"
+    action ->(params) { params[:moved] ? "moved" : "reordered" }
     timestamp Proc.new { Time.now.utc.iso8601}
 
     def payload(params)
