@@ -55,7 +55,6 @@ Rails.application.routes.draw do
     post '/api/site/webhook/comment' => 'webhooks#log_comment'
     post '/api/site/stripe/webhook' => 'webhooks#stripe'
       
-    end
   end
 
   get '/:user'       => 'dashboard#user', as: 'user'
