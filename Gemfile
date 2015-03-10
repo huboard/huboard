@@ -37,6 +37,7 @@ gem 'solid_use_case'
 gem 'faye'
 gem 'faye-redis'
 gem 'redis'
+gem 'sucker_punch'
 
 # BUNDLE_WITHOUT="development:test:saas"
 gem 'saas', require: nil, path: "vendor/engines/saas"

@@ -48,5 +48,7 @@ module HuboardWeb
     end
 
     config.exceptions_app = self.routes
+
+    config.active_job.queue_adapter = :sucker_punch
   end
 end
