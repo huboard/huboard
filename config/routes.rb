@@ -51,9 +51,9 @@ Rails.application.routes.draw do
 
     #Webhooks
     get '/:user/:repo/hooks' => 'webhooks#hooks'
-    post '/api/site/webhook/issue' => 'webhooks#publish_issue_event'
-    post '/api/site/webhook/comment' => 'webhooks#log_comment'
-    post '/api/site/stripe/webhook' => 'webhooks#stripe'
+    post '/site/webhook/issue' => 'webhooks#publish_issue_event'
+    post '/site/webhook/comment' => 'webhooks#log_comment'
+    post '/site/stripe/webhook' => 'webhooks#stripe'
       
   end
 
