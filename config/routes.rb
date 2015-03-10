@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   get '/repositories/public/:user' => 'dashboard#public', as: 'repositories_public'
 
   namespace :api do
+    get 'uploads/asset' => 'uploads#asset_uploader'
     scope '/:user/:repo' do
       resources :integrations, only: [:index, :create, :destroy]
       resources :milestones, only: [:create, :update]
