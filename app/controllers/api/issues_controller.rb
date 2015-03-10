@@ -19,8 +19,8 @@ module Api
 
     def close_issue
       user, repo, number = params[:user], params[:repo], params[:number]
-      issue = huboard.board(user, repo).issue(number).close
-      render json: issue
+      @issue = huboard.board(user, repo).issue(number).close
+      render json: @issue
     end
 
     #TODO original api checks if comment['message'] exists
@@ -74,8 +74,8 @@ module Api
 
     def archive_issue
       user, repo, number = params[:user], params[:repo], params[:number]
-      issue = huboard.board(user, repo).archive_issue(number)
-      render json: issue
+      @issue = huboard.board(user, repo).archive_issue(number)
+      render json: @issue
     end
 
     def reorder_milestone
@@ -85,18 +85,19 @@ module Api
     end
 
     def assign_card
-      user, repo, number, assignee = params[:user], params[:repo], params[:number], params[:assignee]
-      issue = huboard.board(user, repo).issue(number)
-        .patch 'assignee' => assignee
-      render json: issue
+      user, repo, number, @assignee = params[:user], params[:repo], params[:number], params[:assignee]
+      @issue = huboard.board(user, repo).issue(number)
+        .patch 'assignee' => @assignee
+      render json: @issue
     end
 
     def assign_milestone
       user, repo, number, milestone = params[:user], params[:repo], params[:issue], params[:milestone]
       issue = huboard.board(user, repo).issue(number)
       issue.embed_data('milestone_order' => params[:order].to_f) if params[:order].to_f > 0
-      issue = issue.patch 'milestone' => milestone, 'body' => issue['body']
-      render json: issue
+      @issue = issue.patch 'milestone' => milestone, 'body' => issue['body']
+      @changed_milestones = params[:changed_milestones] == "true"
+      render json: @issue
     end
 
   end
