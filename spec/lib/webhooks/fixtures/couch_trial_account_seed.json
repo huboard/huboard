@@ -1,0 +1,52 @@
+{
+  "_id": "Customers-test_customer",
+  "id": "test_customer",
+  "github": {
+    "user": {
+      "login": "test",
+      "id": 1234567
+    },
+    "account": {
+      "login": "test",
+      "id": 1234567
+    }
+  },
+  "stripe": {
+    "customer": {
+      "id": "testing",
+      "object": "customer",
+      "created": 1422551849,
+      "livemode": false,
+      "description": null,
+      "email": "trial@huboard.com",
+      "delinquent": false,
+      "metadata": {},
+      "subscriptions": {
+        "object": "list",
+        "total_count": 0,
+        "has_more": false,
+        "url": "/v1/customers/test/subscriptions",
+        "data": [],
+        "count": 0
+      },
+      "discount": null,
+      "account_balance": 0,
+      "currency": null,
+      "cards": {
+        "object": "list",
+        "total_count": 0,
+        "has_more": false,
+        "url": "/v1/customers/test/cards",
+        "data": [],
+        "count": 0
+      },
+      "default_card": null,
+      "subscription": null
+    }
+  },
+  "trial": "available",
+  "meta": {
+    "type": "customer"
+  },
+  "timestamp": "2015-01-29T17:17:30Z"
+}

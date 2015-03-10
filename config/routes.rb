@@ -48,6 +48,14 @@ Rails.application.routes.draw do
       post 'assigncard' => 'issues#assign_card'
       post 'assignmilestone' => 'issues#assign_milestone'
     end
+
+    #Webhooks
+    get '/:user/:repo/hooks' => 'webhooks#hooks'
+    post '/api/site/webhook/issue' => 'webhooks#publish_issue_event'
+    post '/api/site/webhook/comment' => 'webhooks#log_comment'
+    post '/api/site/stripe/webhook' => 'webhooks#stripe'
+      
+    end
   end
 
   get '/:user'       => 'dashboard#user', as: 'user'
