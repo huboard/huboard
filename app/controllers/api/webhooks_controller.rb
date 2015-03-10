@@ -41,7 +41,7 @@ module Api
       if payload.type == "customer.subscription.updated" || payload.type == "customer.subscription.deleted"
         query = Queries::CouchCustomer.get_cust(id, couch)
         plan_doc = QueryHandler.exec(&query)
-        halt(json(message: "Webhook received")) unless plan_doc && plan_doc.id == id
+        return render json: { message: "Webhook received" } unless plan_doc && plan_doc.id == id
 
         plan_doc.trial = "expired" if payload.data.object.status != "trialing"
 

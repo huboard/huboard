@@ -1,9 +1,9 @@
 require "spec_helper"
-#requires that the webapp is running on port 5000
+#requires that rails is running on port 3000 and RAILS_ENV=test
 
 describe "Stripe Webhooks", :webhooks do
 
-  let(:api_path) { "http://localhost:5000/api/site/stripe/webhook"}
+  let(:api_path) { "http://localhost:3000/api/site/stripe/webhook"}
   let(:stripe_token) { ENV["STRIPE_WEBHOOK_TOKEN"] }
 
   let(:api) { "#{api_path}?stripe_token=#{stripe_token}" }
