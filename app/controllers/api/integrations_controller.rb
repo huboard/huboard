@@ -23,8 +23,8 @@ module Api
         render json: result.body
       end
     end
-  end
-  def destroy
-    render json: couch.connection.delete("./#{params[:id]}",{rev: params[:rev]}).body
+    def destroy
+      render json: couch.connection.delete("./#{params[:id]}",{rev: params[:rev]}).body
+    end
   end
 end

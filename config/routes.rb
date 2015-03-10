@@ -23,7 +23,8 @@ Rails.application.routes.draw do
     scope '/:user/:repo' do
       resources :integrations, only: [:index, :create, :destroy]
       resources :milestones, only: [:create, :update]
-      resources :links, only: [:index, :create, :destroy]
+      resources :links, only: [:index, :create]
+      delete 'links' => 'links#destroy'
       put 'columns' => 'columns#update'
       get 'settings' => 'settings#index'
       get 'board' => 'board#index', as: 'board'

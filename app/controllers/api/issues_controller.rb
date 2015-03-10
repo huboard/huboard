@@ -68,8 +68,8 @@ module Api
       @moved = params[:moved_columns] == 'true'
       issue = huboard.board(user, repo).issue(number)
       @previous_column = issue['current_state']
-      @issue = issue.move(column, order, moved)
-      render json: issue
+      @issue = issue.move(column, order, @moved)
+      render json: @issue
     end
 
     def archive_issue
