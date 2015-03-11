@@ -23,6 +23,12 @@ module Api
       render json: @issue
     end
 
+    def open_issue
+      user, repo, number = params[:user], params[:repo], params[:number]
+      @issue = huboard.board(user, repo).issue(number).open
+      render json: @issue
+    end
+
     #TODO original api checks if comment['message'] exists
     def create_comment
       data = {body: params['markdown']}
