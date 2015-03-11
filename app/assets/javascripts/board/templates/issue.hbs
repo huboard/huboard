@@ -37,10 +37,12 @@
   <form {{action submitComment on="submit"}} class="flex-form">
     {{hb-markdown-editor markdown=controller.commentBody mentions=mentions}}
     <div class="submit-comment-buttons">
-      {{#if isClosed}}
-        <button class="hb-button hb-button-grey" {{action "reopen" on="click"}}{{bind-attr disabled=processing}}>Reopen issue </button>
-      {{else}}
-        <button class="hb-button hb-button-grey" {{action "close" on="click"}}{{bind-attr disabled=processing}}>Close issue </button>
+      {{#if isCollaborator}}
+        {{#if isClosed}}
+          <button class="hb-button hb-button-grey" {{action "reopen" on="click"}}{{bind-attr disabled=processing}}>Reopen issue </button>
+        {{else}}
+          <button class="hb-button hb-button-grey" {{action "close" on="click"}}{{bind-attr disabled=processing}}>Close issue </button>
+        {{/if}}
       {{/if}}
       <button {{bind-attr disabled=disabled}} class="hb-button">Submit comment</button>
       {{#if processing}}

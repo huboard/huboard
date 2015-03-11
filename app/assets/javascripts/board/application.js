@@ -4178,7 +4178,7 @@ function program4(depth0,data) {
   data.buffer.push("\n    <div class=\"submit-comment-buttons\">\n      ");
   hashTypes = {};
   hashContexts = {};
-  stack2 = helpers['if'].call(depth0, "isClosed", {hash:{},inverse:self.program(7, program7, data),fn:self.program(5, program5, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack2 = helpers['if'].call(depth0, "isCollaborator", {hash:{},inverse:self.noop,fn:self.program(5, program5, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n      <button ");
   hashContexts = {'disabled': depth0};
@@ -4189,15 +4189,26 @@ function program4(depth0,data) {
   data.buffer.push(" class=\"hb-button\">Submit comment</button>\n      ");
   hashTypes = {};
   hashContexts = {};
-  stack2 = helpers['if'].call(depth0, "processing", {hash:{},inverse:self.noop,fn:self.program(9, program9, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  stack2 = helpers['if'].call(depth0, "processing", {hash:{},inverse:self.noop,fn:self.program(10, program10, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n    </div>\n  </form>\n  ");
   return buffer;
   }
 function program5(depth0,data) {
   
+  var buffer = '', stack1, hashTypes, hashContexts;
+  data.buffer.push("\n        ");
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers['if'].call(depth0, "isClosed", {hash:{},inverse:self.program(8, program8, data),fn:self.program(6, program6, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n      ");
+  return buffer;
+  }
+function program6(depth0,data) {
+  
   var buffer = '', hashContexts, hashTypes;
-  data.buffer.push("\n        <button class=\"hb-button hb-button-grey\" ");
+  data.buffer.push("\n          <button class=\"hb-button hb-button-grey\" ");
   hashContexts = {'on': depth0};
   hashTypes = {'on': "STRING"};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "reopen", {hash:{
@@ -4208,14 +4219,14 @@ function program5(depth0,data) {
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
     'disabled': ("processing")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(">Reopen issue </button>\n      ");
+  data.buffer.push(">Reopen issue </button>\n        ");
   return buffer;
   }
 
-function program7(depth0,data) {
+function program8(depth0,data) {
   
   var buffer = '', hashContexts, hashTypes;
-  data.buffer.push("\n        <button class=\"hb-button hb-button-grey\" ");
+  data.buffer.push("\n          <button class=\"hb-button hb-button-grey\" ");
   hashContexts = {'on': depth0};
   hashTypes = {'on': "STRING"};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "close", {hash:{
@@ -4226,11 +4237,11 @@ function program7(depth0,data) {
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
     'disabled': ("processing")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push(">Close issue </button>\n      ");
+  data.buffer.push(">Close issue </button>\n        ");
   return buffer;
   }
 
-function program9(depth0,data) {
+function program10(depth0,data) {
   
   var buffer = '', hashTypes, hashContexts;
   data.buffer.push("\n      <div class=\"spinner\">\n        ");
