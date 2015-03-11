@@ -1,15 +1,29 @@
 class ErrorsController < ApplicationController
   layout false
   def unauthenticated
-    render :unauthenticated, status: 403
+    respond_to do |format|
+      format.html {render :unauthenticated, status: 403}
+      format.json { render json: { status: 403, error: "Unauthenticated" }}
+    end
   end
   def not_found
-    render [:not_found, :not_found_b].sample, status: 404
+    respond_to do |format|
+      format.html {render [:not_found, :not_found_b].sample, status: 404}
+      format.json { render json: { status: 404, error: "Not found" }}
+    end
   end
   def unprocessable_entity
-    render :server_error, status: 422
+    @exception = env["action_dispatch.exception"]
+    respond_to do |format|
+      format.html {render :server_error, status: 422 }
+      format.json { render json: { status: 422, error: @exception.message }}
+    end
   end
   def server_error
-    render :server_error, status: 500
+    @exception = env["action_dispatch.exception"]
+    respond_to do |format|
+      format.html {render :server_error, status: 500 }
+      format.json { render json: { status: 500, error: @exception.message }}
+    end
   end
 end

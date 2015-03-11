@@ -47,6 +47,9 @@ module HuboardWeb
         }
     end
 
+    Faraday::Response::RaiseGheeError.const_get("ERROR_MAP").each do |status, exception|
+      config.action_dispatch.rescue_responses[exception.to_s] = status
+    end
     config.exceptions_app = self.routes
 
     config.active_job.queue_adapter = :sucker_punch
