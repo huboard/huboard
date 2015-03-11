@@ -54,5 +54,8 @@ group :development, :test do
   gem 'meta_request'
   gem 'pry'
   gem 'annotate'
+  gem 'rspec'
+  gem 'couchrest'
+  gem 'httparty'
 end
 
