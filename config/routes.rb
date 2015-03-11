@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   namespace :api do
     get 'uploads/asset' => 'uploads#asset_uploader'
     scope '/:user/:repo' do
+      get 'hooks' => 'webhooks#hooks'
       resources :integrations, only: [:index, :create, :destroy]
       resources :milestones, only: [:create, :update]
       resources :links, only: [:index, :create]
@@ -51,7 +52,6 @@ Rails.application.routes.draw do
     end
 
     #Webhooks
-    get '/:user/:repo/hooks' => 'webhooks#hooks'
     post '/site/webhook/issue' => 'webhooks#publish_issue_event'
     post '/site/webhook/comment' => 'webhooks#log_comment'
     post '/site/stripe/webhook' => 'webhooks#stripe'
