@@ -23,7 +23,7 @@ module Api
       render json: @issue
     end
 
-    def open_issue
+    def reopen_issue
       user, repo, number = params[:user], params[:repo], params[:number]
       @issue = huboard.board(user, repo).issue(number).open
       render json: @issue
