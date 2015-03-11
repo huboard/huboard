@@ -1,5 +1,6 @@
 module Saas
   class ChargesController < Saas::ApplicationController
+    include ::HuBoard::AccountHelpers
     def create
       begin
         repo_owner = gh.users(params[:id])

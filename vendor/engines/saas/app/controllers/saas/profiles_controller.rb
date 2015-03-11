@@ -22,7 +22,7 @@ module Saas
       return render json: default_user_mapping(user) unless customer
 
       plan = plan_for("User", customer[:stripe][:customer])
-      @data = {
+      data = {
         org: user.to_hash,
         plans: [plan],
         card: plan[:card],
@@ -32,13 +32,14 @@ module Saas
         has_plan: plan[:purchased],
         non_profit: non_profit?(customer)
       }
+      render json: data
     end
     def history
       org = gh.users(params[:org])
 
       query = Queries::CouchCustomer.get(org["id"], couch)
       customer = QueryHandler.exec(&query)
-      render json: {success: false, message: "Couldn't find couch record: #{org['id']}"} unless customer
+      return render json: {success: false, message: "Couldn't find couch record: #{org['id']}"} unless customer
 
       if customer.rows && customer.rows.size > 0
         customer_doc = customer.rows.first.value
@@ -85,8 +86,7 @@ module Saas
         has_plan: plan[:purchased],
         non_profit: non_profit?(customer)
       }
-
-      return render json: data
+      render json: data
     end
     def info
       user = gh.users params[:name]
