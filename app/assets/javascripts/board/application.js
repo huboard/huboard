@@ -2803,12 +2803,6 @@ var Repo = Ember.Object.extend(Serializable,{
   repoUrl :function () {
     return this.get("userUrl") + "/" + this.get("name");
   }.property("name", "userUrl"),
-  backlogUrl: function () {
-     return this.get("repoUrl") + "/backlog";
-  }.property("repoUrl"),
-  betaUrl: function () {
-     return this.get("repoUrl") + "/beta";
-  }.property("repoUrl"),
   fetchBoard: function(linkedBoards){
     if(this._board) {return this._board;}
     return Ember.$.getJSON("/api/" + this.get("full_name") + "/board").then(function(board){
@@ -3381,7 +3375,7 @@ function program9(depth0,data) {
   hashContexts = {'href': depth0};
   hashTypes = {'href': "STRING"};
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
-    'href': ("betaUrl")
+    'href': ("repoUrl")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(">");
   hashTypes = {};
