@@ -21,7 +21,7 @@
         <% end %>
         <% @repos.each do |repo| %>
           <li class="repo">
-        <a href="<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/backlog" %>"><span>backlog</span></a> 
+        <a href="<%= "/#{repo["owner"]["login"]}/#{repo["name"]}/#/milestones" %>"><span>backlog</span></a> 
         <a class="board" href="<%= "/#{repo["owner"]["login"]}/#{repo["name"]}" %>"><span>open issues</span><strong><%=repo["open_issues"]%></strong></a> 
         <span>
           <% if repo['private'] %>
