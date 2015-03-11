@@ -31,6 +31,9 @@ var IssuesEditController = Ember.ObjectController.extend({
       return this.get("model.customState") == "blocked";
     }
   }.property("model.customState", "model._data.custom_state"),
+  isClosed: function(){
+    return this.get("model.state") == "closed";
+  }.property("model.state"),
   actions: {
     labelsChanged: function () {
        Ember.run.once(function () {
@@ -70,6 +73,16 @@ var IssuesEditController = Ember.ObjectController.extend({
 
           return comment;
          }.bind(this))
+    },
+    close: function(){
+      if (this.get("commentBody")){
+        this.send("submitComment");
+      }
+      this.get("model").close();
+      this.send("moveToColumn", this.get("columns.lastObject"));
+    },
+    reopen: function(){
+      this.get("model").reopen();
     }
   },
   commentBody: null,

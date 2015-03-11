@@ -137,6 +137,25 @@ var Issue = Ember.Object.extend(Serializable,{
         correlationId: this.get("correlationId")
       }).then(function() {
         this.set("state","closed")
+        this.set("processing", false)
+      }.bind(this)).fail(function(e){
+        this.set("processing", false);
+      }.bind(this));
+  },
+  reopen: function(){
+     this.set("processing", true);
+
+      var user = this.get("repo.owner.login"),
+          repo = this.get("repo.name"),
+          full_name = user + "/" + repo;
+
+      Ember.$.post("/api/" + full_name + "/open", {
+        number : this.get("number"),
+        correlationId: this.get("correlationId")
+      }).then(function() {
+        this.set("state","open")
+        this.set("processing", false)
+      }.bind(this)).fail(function(e){
         this.set("processing", false);
       }.bind(this));
   },

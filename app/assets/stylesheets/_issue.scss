@@ -66,3 +66,30 @@
    }
 
 }
+
+.submit-comment-buttons {
+  @include display(flex);
+  justify-content: flex-end;
+
+  .hb-button {
+    margin: 0 2px;
+   }
+
+  .spinner {
+    position: relative;
+    margin: 2px 2px;
+  }
+}
+
+.flex-issue-title {
+  @include display(flex);
+  .issue-closed-badge p {
+    margin: 4px 4px;
+    color: #ffffff;
+    background-color: $hb-purple-dark;
+    border: 4px solid $hb-purple-dark;
+    border-radius: 4px;
+    line-height: 1em;
+    font-size: 12px;
+  }
+}
