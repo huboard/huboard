@@ -15,15 +15,15 @@ class ErrorsController < ApplicationController
   def unprocessable_entity
     @exception = env["action_dispatch.exception"]
     respond_to do |format|
-      format.html {render :server_error, status: 422 }
-      format.json { render json: { status: 422, error: @exception.message }}
+      format.html { render :server_error, status: 422 }
+      format.json { render json: { status: 422, error: @exception.message, message: @exception.message}, status: 422  }
     end
   end
   def server_error
     @exception = env["action_dispatch.exception"]
     respond_to do |format|
       format.html {render :server_error, status: 500 }
-      format.json { render json: { status: 500, error: @exception.message }}
+      format.json { render json: { status: 500, error: @exception.message, message: @exception.message}, status: 500  }
     end
   end
 end
