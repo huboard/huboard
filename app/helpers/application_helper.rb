@@ -4,7 +4,7 @@ module ApplicationHelper
     github_authenticated?(:private) || github_authenticated?(:default)
   end
   def current_user
-    github_user(:private) || github_user(:default)
+    github_user(:private) || github_user(:default) || OpenStruct.new
   end
   def controller? *controller
     (controller.include?(params[:controller]) || controller.include?(params[:action])) ? "nav__btn--active nav__item--current": ''
