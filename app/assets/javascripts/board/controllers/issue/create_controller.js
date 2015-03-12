@@ -25,6 +25,7 @@ var IssuesCreateController = Ember.ObjectController.extend({
   }.property('controllers.application.model.board.assignees'),
   order: {},
   createIssue: function(order){
+    if (this.get("processing")) return;
     var controller = this;
     this.set("processing",true)
     this.get("model").saveNew(order).then(function(issue){

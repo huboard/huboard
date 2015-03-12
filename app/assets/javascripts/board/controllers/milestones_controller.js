@@ -45,12 +45,16 @@ module.exports = MilestonesController = Ember.ObjectController.extend({
       owner = milestone.repo.owner.login,
       name = milestone.repo.name;
 
-    Ember.$.post("/api/" + owner + "/" + name + "/reordermilestone",
-      {
+    $.ajax({
+      url: "/api/" + owner + "/" + name + "/reordermilestone",
+      type: "POST",
+      data: {
         number: milestone.number,
         index: index
-      }, function(){}, "json").then(function(response){
+      },
+      success: function(response){
         milestoneController.set("model.milestone._data", response._data);
+      }
     })
   }
 });
