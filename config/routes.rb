@@ -19,6 +19,9 @@ Rails.application.routes.draw do
 
   get '/repositories/public/:user' => 'dashboard#public', as: 'repositories_public'
 
+  get '/:user/:repo/board/create' => 'board#create_board'
+  post '/:user/:repo/board/create' => 'board#create'
+
   namespace :api do
     scope '/:user/:repo' do
       get 'board' => 'board#index', as: 'board'
