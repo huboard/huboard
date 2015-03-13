@@ -2,4 +2,4 @@
 
 Rails.application.config.session_store :cookie_store, 
   key: '_huboard-web_session',
-  expire_after: 5.days
+  expire_after: 3.months
