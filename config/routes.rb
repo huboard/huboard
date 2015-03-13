@@ -22,6 +22,12 @@ Rails.application.routes.draw do
 
   get '/repositories/public/:user' => 'dashboard#public', as: 'repositories_public'
 
+  get '/:user/:repo/board/create' => 'board#create_board'
+  post '/:user/:repo/board/create' => 'board#create'
+  
+  get '/:user/:repo/board/enable_issues' => 'board#enable_issues?'
+  post '/:user/:repo/board/enable_issues' => 'board#enable_issues'
+
   namespace :api do
     get 'uploads/asset' => 'uploads#asset_uploader'
     scope '/:user/:repo' do
