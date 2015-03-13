@@ -40,4 +40,17 @@ class BoardController < ApplicationController
       redirect_to "/#{params[:user]}/#{params[:repo]}/"
     end
   end
+
+  def enable_issues?
+    not_found unless logged_in?
+    @parameters = params
+    @repo = gh.repos(params[:user],params[:repo])
+    render :enable_issues
+  end
+
+  def enable_issues
+    huboard.board(params[:user], params[:repo]).enable_issues
+    redirect_to "/#{params[:user]}/#{params[:repo]}/"
+  end
 end
+

@@ -21,6 +21,9 @@ Rails.application.routes.draw do
 
   get '/:user/:repo/board/create' => 'board#create_board'
   post '/:user/:repo/board/create' => 'board#create'
+  
+  get '/:user/:repo/board/enable_issues' => 'board#enable_issues?'
+  post '/:user/:repo/board/enable_issues' => 'board#enable_issues'
 
   namespace :api do
     scope '/:user/:repo' do
