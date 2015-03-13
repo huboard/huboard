@@ -4,7 +4,7 @@ function attr(defaultValue) {
       this.saveData(key, value);
       return value;
     } else {
-      return this.get("data." + key) || defaultValue;
+      return this.get("data." + key) == undefined ? defaultValue : this.get("data." + key);
     }
   });
 }
@@ -15,6 +15,8 @@ var Settings = Ember.Object.extend({
     this._super.apply(this, arguments);
     this.set("data", this.loadData()[this.get('dataKey')] || {});
   },
+  metaEnterEnabled: attr(true),
+  enterEnabled: attr(false),
   showColumnCounts: attr(false),
   data: {},
   loadData: function () {

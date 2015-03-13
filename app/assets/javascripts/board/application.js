@@ -600,7 +600,7 @@ var HbSpinnerComponent = Ember.Component.extend({
 
 module.exports = HbSpinnerComponent;
 
-},{"../../spin.js":111}],14:[function(require,module,exports){
+},{"../../spin.js":109}],14:[function(require,module,exports){
 var HbTabsComponent = Ember.Component.extend({
     classNames: ["tabbable"],
     init: function() {
@@ -790,7 +790,7 @@ App.deferReadiness();
 module.exports = App;
 
 
-},{"../../vendor/jquery.color":112,"../utilities/correlationId":70,"../utilities/observers":71,"../vendor/autoresize":73,"../vendor/ember":75,"../vendor/handlebars":77,"../vendor/jquery":78,"../vendor/jquery.textcomplete":79,"../vendor/lodash":80,"../vendor/marked":81,"../vendor/task_list.js":83}],17:[function(require,module,exports){
+},{"../../vendor/jquery.color":110,"../utilities/correlationId":70,"../utilities/observers":71,"../vendor/autoresize":73,"../vendor/ember":75,"../vendor/handlebars":77,"../vendor/jquery":78,"../vendor/jquery.textcomplete":79,"../vendor/lodash":80,"../vendor/marked":81,"../vendor/task_list.js":83}],17:[function(require,module,exports){
 var App = require('./app');
 
 App.Router.map(function() {
@@ -1982,14 +1982,7 @@ module.exports = SearchController;
 
 },{"../vendor/fuse.min":76}],38:[function(require,module,exports){
 var SettingsController = Ember.Controller.extend({
-  store: Ember.computed.alias("settings"),
-  storeData: function(){
-    return this.get("store").loadData()["settings"];
-  }.property("store.changed"),
-  storeAvailable: function(){
-    var store_data = this.get("storeData")
-    return store_data != null && store_data != undefined
-  }.property("storeData")
+  storeAvailable:Ember.computed.alias("settings.available") 
 })
 module.exports = SettingsController;
 
@@ -2352,8 +2345,6 @@ App.MilestoneColumnView = require('./views/milestone_column_view');
 App.MilestonesView = require('./views/milestones_view');
 App.ModalView = require('./views/modal_view');
 App.SearchView = require('./views/search_view');
-App.SettingsKeyboardShortcutView = require('./views/settings/keyboard_shortcut_view');
-App.SettingsKeyboardShortcutsView = require('./views/settings/keyboard_shortcuts_view');
 App.SettingsLinkView = require('./views/settings/link_view');
 App.SettingsShowCountsView = require('./views/settings/show_counts_view');
 App.MilestonesMissingView = require('./views/milestones/missing_view');
@@ -2374,7 +2365,7 @@ require('./config/routes');
 module.exports = App;
 
 
-},{"./components/hb_assignee_component":1,"./components/hb_avatar_component":2,"./components/hb_avatar_tooltip_component":3,"./components/hb_board_columns_component":4,"./components/hb_column_crumb_component":5,"./components/hb_label_component":6,"./components/hb_label_selector_component":7,"./components/hb_markdown_composer_component":8,"./components/hb_markdown_editor_component":9,"./components/hb_milestone_component":10,"./components/hb_pane_component":11,"./components/hb_selected_column_component":12,"./components/hb_spinner_component":13,"./components/hb_tabs_component":14,"./components/hb_task_list_component":15,"./config/app":16,"./config/routes":17,"./controllers/application_controller":18,"./controllers/assignee_controller":19,"./controllers/buffered_controller":20,"./controllers/card_controller":21,"./controllers/column_controller":22,"./controllers/column_count_controller":23,"./controllers/filters_controller":24,"./controllers/index_controller":25,"./controllers/issue/activities_controller":26,"./controllers/issue/activity_controller":27,"./controllers/issue/body_controller":28,"./controllers/issue/create_controller":29,"./controllers/issue/quick_create_controller":30,"./controllers/issue/title_controller":31,"./controllers/issue_controller":32,"./controllers/login_controller":33,"./controllers/milestone_column_controller":34,"./controllers/milestones/missing_controller":35,"./controllers/milestones_controller":36,"./controllers/search_controller":37,"./controllers/settings/index_controller":38,"./controllers/settings/integrations/index_controller":39,"./controllers/settings/integrations/new_controller":40,"./controllers/settings/integrations_controller":41,"./controllers/settings/link_controller":42,"./controllers/settings/links/index_controller":43,"./controllers/settings/links_controller":44,"./helpers/asset-path":45,"./helpers/moment_ago":46,"./mixins/keypress_handling":48,"./mixins/serializable":49,"./mixins/socket":50,"./mixins/wip_limit":51,"./models/board":52,"./models/global":53,"./models/integration":54,"./models/issue":55,"./models/link":56,"./models/repo":57,"./models/settings":58,"./routes/application_route":59,"./routes/index/issue_route":60,"./routes/index_route":61,"./routes/issue_route":62,"./routes/milestones/issue_route":63,"./routes/milestones_route":64,"./routes/settings/integrations/new_route":65,"./routes/settings/integrations_route":66,"./routes/settings/links_route":67,"./routes/settings_route":68,"./templates":69,"./views/assignee_filter_view":84,"./views/card_milestone_view":85,"./views/card_view":86,"./views/card_wrapper_view":87,"./views/column_count_view":88,"./views/column_view":89,"./views/css_view":90,"./views/filter_view":91,"./views/integrations/integrations_view":92,"./views/issue/activities_view":93,"./views/issue/body_view":94,"./views/issue/create_view":95,"./views/issue/quick_create_view":96,"./views/issue/selected_column_view":97,"./views/issue/title_view":98,"./views/issue_view":99,"./views/loading_view":100,"./views/login_view":101,"./views/milestone_column_view":102,"./views/milestones/missing_view":103,"./views/milestones_view":104,"./views/modal_view":105,"./views/search_view":106,"./views/settings/keyboard_shortcut_view":107,"./views/settings/keyboard_shortcuts_view":108,"./views/settings/link_view":109,"./views/settings/show_counts_view":110}],48:[function(require,module,exports){
+},{"./components/hb_assignee_component":1,"./components/hb_avatar_component":2,"./components/hb_avatar_tooltip_component":3,"./components/hb_board_columns_component":4,"./components/hb_column_crumb_component":5,"./components/hb_label_component":6,"./components/hb_label_selector_component":7,"./components/hb_markdown_composer_component":8,"./components/hb_markdown_editor_component":9,"./components/hb_milestone_component":10,"./components/hb_pane_component":11,"./components/hb_selected_column_component":12,"./components/hb_spinner_component":13,"./components/hb_tabs_component":14,"./components/hb_task_list_component":15,"./config/app":16,"./config/routes":17,"./controllers/application_controller":18,"./controllers/assignee_controller":19,"./controllers/buffered_controller":20,"./controllers/card_controller":21,"./controllers/column_controller":22,"./controllers/column_count_controller":23,"./controllers/filters_controller":24,"./controllers/index_controller":25,"./controllers/issue/activities_controller":26,"./controllers/issue/activity_controller":27,"./controllers/issue/body_controller":28,"./controllers/issue/create_controller":29,"./controllers/issue/quick_create_controller":30,"./controllers/issue/title_controller":31,"./controllers/issue_controller":32,"./controllers/login_controller":33,"./controllers/milestone_column_controller":34,"./controllers/milestones/missing_controller":35,"./controllers/milestones_controller":36,"./controllers/search_controller":37,"./controllers/settings/index_controller":38,"./controllers/settings/integrations/index_controller":39,"./controllers/settings/integrations/new_controller":40,"./controllers/settings/integrations_controller":41,"./controllers/settings/link_controller":42,"./controllers/settings/links/index_controller":43,"./controllers/settings/links_controller":44,"./helpers/asset-path":45,"./helpers/moment_ago":46,"./mixins/keypress_handling":48,"./mixins/serializable":49,"./mixins/socket":50,"./mixins/wip_limit":51,"./models/board":52,"./models/global":53,"./models/integration":54,"./models/issue":55,"./models/link":56,"./models/repo":57,"./models/settings":58,"./routes/application_route":59,"./routes/index/issue_route":60,"./routes/index_route":61,"./routes/issue_route":62,"./routes/milestones/issue_route":63,"./routes/milestones_route":64,"./routes/settings/integrations/new_route":65,"./routes/settings/integrations_route":66,"./routes/settings/links_route":67,"./routes/settings_route":68,"./templates":69,"./views/assignee_filter_view":84,"./views/card_milestone_view":85,"./views/card_view":86,"./views/card_wrapper_view":87,"./views/column_count_view":88,"./views/column_view":89,"./views/css_view":90,"./views/filter_view":91,"./views/integrations/integrations_view":92,"./views/issue/activities_view":93,"./views/issue/body_view":94,"./views/issue/create_view":95,"./views/issue/quick_create_view":96,"./views/issue/selected_column_view":97,"./views/issue/title_view":98,"./views/issue_view":99,"./views/loading_view":100,"./views/login_view":101,"./views/milestone_column_view":102,"./views/milestones/missing_view":103,"./views/milestones_view":104,"./views/modal_view":105,"./views/search_view":106,"./views/settings/link_view":107,"./views/settings/show_counts_view":108}],48:[function(require,module,exports){
 var KeypressHandlingMixin = Ember.Mixin.create({
   store: Ember.computed.alias("settings"),
   storeData: function(){
@@ -2960,7 +2951,7 @@ function attr(defaultValue) {
       this.saveData(key, value);
       return value;
     } else {
-      return this.get("data." + key) || defaultValue;
+      return this.get("data." + key) == undefined ? defaultValue : this.get("data." + key);
     }
   });
 }
@@ -2971,6 +2962,8 @@ var Settings = Ember.Object.extend({
     this._super.apply(this, arguments);
     this.set("data", this.loadData()[this.get('dataKey')] || {});
   },
+  metaEnterEnabled: attr(true),
+  enterEnabled: attr(false),
   showColumnCounts: attr(false),
   data: {},
   loadData: function () {
@@ -4665,11 +4658,25 @@ function program1(depth0,data) {
     'checked': ("settings.showColumnCounts")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
-  data.buffer.push("\n          Show running totals in the column headers\n        </label>\n      </div>\n    </div>\n    <h3>Keyboard Shortcuts</h3>\n    <div class=\"boxed-group__content\">\n      <div class=\"fields\">\n        ");
-  hashTypes = {};
-  hashContexts = {};
-  data.buffer.push(escapeExpression(helpers.view.call(depth0, "settings.keyboard-shortcuts", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("\n      </div>\n    </div>\n  </div>\n");
+  data.buffer.push("\n          Show running totals in the column headers\n        </label>\n      </div>\n    </div>\n    <h3>Keyboard Shortcuts</h3>\n    <div class=\"boxed-group__content\">\n      <div class=\"fields\">\n        <label>\n          ");
+  hashContexts = {'type': depth0,'name': depth0,'checked': depth0};
+  hashTypes = {'type': "STRING",'name': "STRING",'checked': "ID"};
+  options = {hash:{
+    'type': ("checkbox"),
+    'name': ("metaEnterEnabled"),
+    'checked': ("settings.metaEnterEnabled")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
+  data.buffer.push("\n          Submit on Meta + Enter\n        </label>\n        <label>\n          ");
+  hashContexts = {'type': depth0,'name': depth0,'checked': depth0};
+  hashTypes = {'type': "STRING",'name': "STRING",'checked': "ID"};
+  options = {hash:{
+    'type': ("checkbox"),
+    'name': ("enterEnabled"),
+    'checked': ("settings.enterEnabled")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
+  data.buffer.push("\n          Submit on Enter (not applicable to text areas)\n        </label>\n      </div>\n    </div>\n  </div>\n");
   return buffer;
   }
 
@@ -77701,7 +77708,7 @@ var LoadingView = Ember.View.extend({
 
 module.exports = LoadingView;
 
-},{"../../spin":111}],101:[function(require,module,exports){
+},{"../../spin":109}],101:[function(require,module,exports){
 var ModalView = require("./modal_view")
 var LoginView = ModalView.extend({
   modalSize: "slimmer",
@@ -78014,57 +78021,6 @@ var SearchView = Ember.View.extend({
 module.exports = SearchView;
 
 },{}],107:[function(require,module,exports){
-var KeyboardShortcutView = Ember.View.extend({
-  templateName: "settings/keyboard_shortcut_item",
-  checked: false,
-  didInsertElement: function(){
-    var self = this
-    this.checkIfEnabled()
-    this.$("input").change(function(){
-      checked = $(this).is(":checked");
-      var key = self.get("content.key");
-      self.get("controller.store").saveData(key, checked);
-    });
-  },
-  willDestroyElement: function(){
-    this.$("input").off("change");
-  },
-
-  checkIfEnabled: function(){
-    var key = this.get("content.key");
-    var default_enable = this.get("content.default_enable")
-    var value = this.get("controller.storeData")[key]
-    var checked = (value == undefined || value == null) ?
-      default_enable : value;
-    this.set("checked", checked);
-  }
-});
-
-module.exports = KeyboardShortcutView
-
-},{}],108:[function(require,module,exports){
-var KeyboardShortcutView = require("./keyboard_shortcut_view");
-
-var KeyboardShortcutsView = Ember.CollectionView.extend({
-  content: [
-    {
-      description: "Submit on Meta + Enter",
-      key: "metaEnterEnabled",
-      default_enable: true
-    },
-    {
-      description: "Submit on Enter (not applicable to text areas)",
-      key: "enterEnabled",
-      default_enable: false
-    }
-  ],
-  
-  itemViewClass: KeyboardShortcutView,
-});
-
-module.exports = KeyboardShortcutsView;
-
-},{"./keyboard_shortcut_view":107}],109:[function(require,module,exports){
 var SettingsLinkView = Ember.View.extend({
   tagName: 'li',
   classNameBindings: [":hb-widget-link","content.isLinked:hb-state-link:hb-state-unlink"],
@@ -78074,7 +78030,7 @@ var SettingsLinkView = Ember.View.extend({
 });
 module.exports = SettingsLinkView;
 
-},{}],110:[function(require,module,exports){
+},{}],108:[function(require,module,exports){
 var ShowCountsView = Ember.View.extend({
   classNameBindings: ["showColumnCounts:checked"],
   showColumnCounts: Ember.computed.alias("settings.showColumnCounts"),
@@ -78095,7 +78051,7 @@ var ShowCountsView = Ember.View.extend({
 
 module.exports = ShowCountsView;
 
-},{}],111:[function(require,module,exports){
+},{}],109:[function(require,module,exports){
 //fgnass.github.com/spin.js#v1.3
 
 /**
@@ -78446,7 +78402,7 @@ module.exports = ShowCountsView;
 
 }));
 
-},{}],112:[function(require,module,exports){
+},{}],110:[function(require,module,exports){
 /*!
  * jQuery Color Animations v@VERSION
  * https://github.com/jquery/jquery-color
