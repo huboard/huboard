@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
       hash
     end
 
-    job_params['current_user'] = current_user.to_h
+    job_params['current_user'] = (current_user.attribs || {}).to_h
     job_params['action_controller.params'] = params
 
     #TODO: make sure you can safely serialize the params
