@@ -48,7 +48,7 @@ module Faye
 
       
         @redis.with do |redis|
-          clients = @redis.sunion(*keys)
+          clients = redis.sunion(*keys)
           clients.each do |client_id|
             queue = @ns + "/clients/#{client_id}/messages"
 
@@ -59,6 +59,8 @@ module Faye
               redis.del(queue) unless exists
             end
           end
+          redis.publish("pubsub.#{channel.slice(1..-1)}", MultiJson.dump(payload))
+
         end
       end
 
