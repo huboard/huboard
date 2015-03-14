@@ -38,6 +38,7 @@ gem 'faye'
 gem 'faye-redis'
 gem 'redis'
 gem 'sucker_punch'
+gem 'raygun4ruby'
 
 # BUNDLE_WITHOUT="development:test:saas"
 gem 'saas', require: nil, path: "vendor/engines/saas"
