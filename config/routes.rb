@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   match '/404', to: 'errors#not_found', constraints: { status: /\d{3}/ }, via: :all
   match '/422', to: 'errors#unprocessable_entity', constraints: { status: /\d{3}/ }, via: :all
   match '/500', to: 'errors#server_error', constraints: { status: /\d{3}/ }, via: :all
+  match '/403', to: 'errors#server_error', constraints: { status: /\d{3}/ }, via: :all
   match 'unauthenticated', to: 'errors#unauthenticated', via: :all
 
   get 'integrations' => 'marketing#integrations'
