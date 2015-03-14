@@ -28,7 +28,7 @@ module ApplicationHelper
     @emojis ||= gh.connection.get('./emojis').body
   end
   def couch
-    @couch ||= HuBoard::Couch.new :base_url => ENV["COUCH_URL"], :database => ENV["COUCH_DATABASE"]
+    @_couch ||= HuBoard::Couch.new :base_url => ENV["COUCH_URL"], :database => ENV["COUCH_DATABASE"]
   end
 
   # Initiates the OAuth flow if not already authenticated for the
