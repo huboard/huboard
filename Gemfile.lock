@@ -314,6 +314,10 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     rake (10.4.2)
+    raygun4ruby (1.1.5)
+      httparty (~> 0.11)
+      json
+      rack
     rdoc (4.2.0)
       json (~> 1.4)
     redis (3.2.1)
@@ -434,6 +438,7 @@ DEPENDENCIES
   puma
   rails (= 4.2.0)
   rails_12factor
+  raygun4ruby
   redis
   responders
   rspec
