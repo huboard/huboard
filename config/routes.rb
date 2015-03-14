@@ -23,11 +23,6 @@ Rails.application.routes.draw do
 
   get '/repositories/public/:user' => 'dashboard#public', as: 'repositories_public'
 
-  get '/:user/:repo/board/create' => 'board#create_board'
-  post '/:user/:repo/board/create' => 'board#create'
-  
-  get '/:user/:repo/board/enable_issues' => 'board#enable_issues?'
-  post '/:user/:repo/board/enable_issues' => 'board#enable_issues'
 
   namespace :api do
     get 'uploads/asset' => 'uploads#asset_uploader'
@@ -69,8 +64,17 @@ Rails.application.routes.draw do
       
   end
 
+
   get '/:user'       => 'dashboard#user', as: 'user'
+
+  get '/:user/:repo/board/create' => 'board#create_board'
+  post '/:user/:repo/board/create' => 'board#create'
+  
+  get '/:user/:repo/board/enable_issues' => 'board#enable_issues?'
+  post '/:user/:repo/board/enable_issues' => 'board#enable_issues'
+
   get '/:user/:repo' => 'board#index', as: 'board'
+
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
