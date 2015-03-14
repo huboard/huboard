@@ -1,0 +1,3 @@
+https://huboard.com/api/aspnet/Mvc/board
+https://huboard.com/api/aspnet/EntityFramework/board
+https://huboard.com/api/aspnet/Razor/board

@@ -1,3 +1,4 @@
+*.env
 .env
 .vagrant
 production.env
