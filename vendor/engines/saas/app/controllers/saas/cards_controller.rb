@@ -15,6 +15,11 @@ module Saas
         customer.card = params[:card][:id]
         updated = customer.save
 
+        invoices = Stripe::Invoice.all(customer: customer.id)
+        if invoices.first
+          invoices.first.pay unless invoices.first.closed
+        end
+
         plan_doc.stripe.customer = customer
         couch.customers.save plan_doc
 
