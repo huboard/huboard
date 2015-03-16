@@ -4,6 +4,7 @@ module Saas
     def create
       begin
         repo_owner = gh.users(params[:id])
+        repo_owner['email'] = params[:email]
 
         query = Queries::CouchCustomer.get(repo_owner["id"], couch)
         plan_doc = QueryHandler.exec(&query)
@@ -17,6 +18,11 @@ module Saas
             card: params[:card][:id],
             trial_end: 'now'
           })
+
+          invoices = Stripe::Invoice.all(customer: customer.id)
+          if invoices.first
+            invoices.first.pay unless invoices.first.closed
+          end
         else
           customer.subscriptions.create({
             plan: params[:plan][:id],
@@ -27,8 +33,6 @@ module Saas
         if !params[:coupon].nil? && !params[:coupon].empty?
           customer.coupon = params[:coupon]
         end
-
-        customer.email = params[:email]
         customer.save
 
         plan_doc.stripe.customer = customer
