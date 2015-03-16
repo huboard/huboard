@@ -27,34 +27,38 @@ Rails.application.routes.draw do
   namespace :api do
     get 'uploads/asset' => 'uploads#asset_uploader'
     scope '/:user/:repo' do
-      get 'hooks' => 'webhooks#hooks'
-      resources :integrations, only: [:index, :create, :destroy]
-      resources :milestones, only: [:create, :update]
-      resources :links, only: [:index, :create]
-      delete 'links' => 'links#destroy'
-      put 'columns' => 'columns#update'
-      get 'settings' => 'settings#index'
-      get 'board' => 'board#index', as: 'board'
-      get 'link_labels' => 'board#link_labels', as: 'link_labels'
-      get 'linked/:linked_user/:linked_repo' => 'board#linked', as: 'linked_board'
+      constraints(:user => /[^\/]+/, :repo => /[^\/]+/) do
+        get 'hooks' => 'webhooks#hooks'
+        resources :integrations, only: [:index, :create, :destroy]
+        resources :milestones, only: [:create, :update]
+        resources :links, only: [:index, :create]
+        delete 'links' => 'links#destroy'
+        put 'columns' => 'columns#update'
+        get 'settings' => 'settings#index'
+        get 'board' => 'board#index', as: 'board'
+        get 'link_labels' => 'board#link_labels', as: 'link_labels'
+        constraints(:linked_user => /[^\/]+/, :linked_repo => /[^\/]+/) do
+          get 'linked/:linked_user/:linked_repo' => 'board#linked', as: 'linked_board'
+        end
 
-      #Issues
-      get 'issues/:number/details' => 'issues#details'
-      post 'issues' => 'issues#create_issue'
-      post 'issues/:number/comment' => 'issues#create_comment'
-      put 'issues/comments/:id' => 'issues#update_comment'
-      put 'issues/:number' => 'issues#update_issue'
-      post 'close' => 'issues#close_issue'
-      post 'open' => 'issues#reopen_issue'
-      put 'issues/:number/blocked' => 'issues#block'
-      delete 'issues/:number/blocked' => 'issues#unblock'
-      put 'issues/:number/ready' => 'issues#ready'
-      delete 'issues/:number/ready' => 'issues#unready'
-      post 'dragcard' => 'issues#drag_card'
-      post 'archiveissue' => 'issues#archive_issue'
-      post 'reordermilestone' => 'issues#reorder_milestone'
-      post 'assigncard' => 'issues#assign_card'
-      post 'assignmilestone' => 'issues#assign_milestone'
+        #Issues
+        get 'issues/:number/details' => 'issues#details'
+        post 'issues' => 'issues#create_issue'
+        post 'issues/:number/comment' => 'issues#create_comment'
+        put 'issues/comments/:id' => 'issues#update_comment'
+        put 'issues/:number' => 'issues#update_issue'
+        post 'close' => 'issues#close_issue'
+        post 'open' => 'issues#reopen_issue'
+        put 'issues/:number/blocked' => 'issues#block'
+        delete 'issues/:number/blocked' => 'issues#unblock'
+        put 'issues/:number/ready' => 'issues#ready'
+        delete 'issues/:number/ready' => 'issues#unready'
+        post 'dragcard' => 'issues#drag_card'
+        post 'archiveissue' => 'issues#archive_issue'
+        post 'reordermilestone' => 'issues#reorder_milestone'
+        post 'assigncard' => 'issues#assign_card'
+        post 'assignmilestone' => 'issues#assign_milestone'
+      end
     end
 
     #Webhooks
@@ -65,15 +69,19 @@ Rails.application.routes.draw do
   end
 
 
-  get '/:user'       => 'dashboard#user', as: 'user'
+  constraints(:user => /[^\/]+/) do
+    get '/:user'       => 'dashboard#user', as: 'user'
+  end
 
-  get '/:user/:repo/board/create' => 'board#create_board'
-  post '/:user/:repo/board/create' => 'board#create'
-  
-  get '/:user/:repo/board/enable_issues' => 'board#enable_issues?'
-  post '/:user/:repo/board/enable_issues' => 'board#enable_issues'
+  constraints(:user => /[^\/]+/, :repo => /[^\/]+/) do
+    get '/:user/:repo/board/create' => 'board#create_board'
+    post '/:user/:repo/board/create' => 'board#create'
 
-  get '/:user/:repo' => 'board#index', as: 'board'
+    get '/:user/:repo/board/enable_issues' => 'board#enable_issues?'
+    post '/:user/:repo/board/enable_issues' => 'board#enable_issues'
+
+    get '/:user/:repo' => 'board#index', as: 'board'
+  end
 
 
   # The priority is based upon order of creation: first created -> highest priority.
