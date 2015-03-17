@@ -16,26 +16,50 @@
       <div class="flex-wrap--left">
         <div class="message">
           <div class="message__top">
-            <h1>403</h1>
+          <% if is_owner %>
+            <h1> ! </h1>
             <h2> HOLD UP! </h2>
-            <h3> That page is forbidden. </h3>
+            <h3> That page is unauthorized. </h3>
           </div>
           <div class="message__middle">
             <p>
             You'll need to upgrade your account to get those kinds of permissions.
             </p>
-            <% if session.has_key? :message %>
-              <p>
-                <%= session[:message] %>
-              </p>
-            <% end %>
           </div>
           <div class="message__bottom">
             <a href="/settings/profile" class="call-to-action">
               UPGRADE ACCOUNT
             </a>
+          <% else %>
+            <h1> ! </h1>
+            <h2> HOLD UP! </h2>
+            <h3> That page is unauthorized. </h3>
           </div>
-
+          <div class="message__middle">
+            <% if issues_enabled %>
+              <p>
+                Click <a href="https://github.com/<%= params[:user] %>/<%= params[:repo] %>/issues/new?title=HuBoard%20Subscription%20Request&body=@<%= params[:user] %>%20please%20visit%20https://huboard.com/settings/profile%20to%20enable%20HuBoard%20for%20this%20repo" target="_blank"> here </a> if you would like to open an issue on <%= "#{params[:user]}/#{params[:repo]}" %> requesting access to HuBoard from this account
+              </p>
+            <% else %>
+              <div class="message-resolution">
+                <p>
+                  Please notify an admin for <a href="https://github.com/<%= params[:user] %>" target="_blank"> <%= params[:user] %> </a> to: 
+                </p>
+              </div>
+              <div class="message-steps">
+                <ul>
+                  <li> Enable Issue Tracking for <%= "#{params[:user]}/#{params[:repo]}" %> </li>
+                  <li> Activate a HuBoard Subscription </li>
+                </ul>
+              </div>
+            <% end %>
+          </div>
+          <div class="message__bottom">
+            <a href="/" class="call-to-action">
+             BACK HOME 
+            </a>
+          <% end %>
+          </div>
         </div>
       </div>
       <div class="flex-wrap--right illustration illustration--policeman">
