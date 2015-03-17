@@ -58,5 +58,4 @@ module HuboardWeb
     # Ricki Mar 17 2015
     config.action_dispatch.perform_deep_munge = false
   end
-
 end
