@@ -93,12 +93,13 @@ module HuBoard
       }
     end
 
-  def transform_issue_reopened(hash)
-    {
-      color: "purple",
-      message: "#{avatar(mash)} <a href='#{URI.join(github_url,mash.meta.user.login)}'> #{mash.meta.user.login} </a> reopend <a href='#{mash.payload.issue.html_url}'>#{mash.meta.repo_full_name}##{mash.payload.issue.number}</a> <br><b>#{mash.payload.issue.title}</b><br>#{mash.payload.issue.body}",
-      notify: true,
-      message_format: 'text'
-    }
+    def transform_issue_reopened(hash)
+      {
+        color: "purple",
+        message: "#{avatar(mash)} <a href='#{URI.join(github_url,mash.meta.user.login)}'> #{mash.meta.user.login} </a> reopend <a href='#{mash.payload.issue.html_url}'>#{mash.meta.repo_full_name}##{mash.payload.issue.number}</a> <br><b>#{mash.payload.issue.title}</b><br>#{mash.payload.issue.body}",
+        notify: true,
+        message_format: 'text'
+      }
+    end
   end
 end
