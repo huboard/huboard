@@ -53,5 +53,7 @@ module HuboardWeb
     config.exceptions_app = self.routes
 
     config.active_job.queue_adapter = :sucker_punch
+    
+    config.middleware.use Rack::Attack
   end
 end
