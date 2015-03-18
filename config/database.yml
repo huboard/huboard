@@ -6,7 +6,7 @@
 #
 default: &default
   adapter: postgresql
-  pool: 5
+  pool: 1
   timeout: 5000
 
 development:
