@@ -86,11 +86,14 @@ var IssuesEditController = Ember.ObjectController.extend({
     }
   },
   commentBody: null,
+  isEmpty: function(){
+    return !this.get("commentBody").trim().length
+  }.property("commentBody"),
   isValid: function () {
     return this.get("commentBody");
   }.property("commentBody"),
   disabled: function () {
-      return this.get("processing") || !this.get("isValid");
+      return this.get("processing") || !this.get("isValid") || this.get("isEmpty");
   }.property("processing","isValid"),
   _events : function () {
      var events = this.get("model.activities.events");
