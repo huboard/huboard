@@ -55,6 +55,7 @@ module HuboardWeb
     config.active_job.queue_adapter = :sucker_punch
     
     config.middleware.use Rack::Attack
+    config.middleware.use PDFKit::Middleware, {print_media_type: true}, only: %r[^/settings]
     
     # !!! This addresses a Rails Behaviour that coaxes empty arrays in the params hash into nils 
     # see https://github.com/rails/rails/pull/13188

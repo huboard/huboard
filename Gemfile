@@ -41,6 +41,9 @@ gem 'sucker_punch'
 gem 'raygun4ruby'
 gem 'rack-attack'
 
+gem 'pdfkit'
+gem 'wkhtmltopdf-heroku'
+
 # BUNDLE_WITHOUT="development:test:saas"
 gem 'saas', require: nil, path: "vendor/engines/saas"
 gem 'responders'

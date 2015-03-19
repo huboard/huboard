@@ -10,6 +10,10 @@ package {
 } ->
 class { 'ruby_install':}
 
+class { 'wkhtmltox':
+  ensure => 'present' 
+}
+
 
 service { 'couchdb':
   ensure      => running,
