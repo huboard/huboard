@@ -28,7 +28,9 @@ var IssueActivityController = BufferedController.extend({
       this.set("isEditing", true);
     },
     save: function() {
-      if (!this.get("bufferedContent.body").trim().length) return;
+      if (!this.get("bufferedContent.body").trim().length) {
+        return;
+      }
       var controller = this,
         model = controller.get('model'),
         url = "/api/" + this.get("controllers.issue.model.repo.full_name") + "/issues/comments/" + this.get("model.id");
@@ -52,7 +54,7 @@ var IssueActivityController = BufferedController.extend({
           controller.set("disabled", false);
           controller.set("isEditing", false);
           controller._last = null;
-        },
+        }
       })
     },
 

@@ -25,7 +25,9 @@ var IssueBodyController = BufferedController.extend({
       !this.get('disabled') && this.set("isEditing", true);
     },
     save: function() {
-      if (!this.get("bufferedContent.body").trim().length) return;
+      if (!this.get("bufferedContent.body").trim().length) {
+        return;
+      }
       var controller = this,
         model = controller.get("model"),
         url = "/api/" + this.get("controllers.issue.model.repo.full_name") + "/issues/" + this.get("model.number");
