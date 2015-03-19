@@ -1398,7 +1398,9 @@ var IssueActivityController = BufferedController.extend({
       this.set("isEditing", true);
     },
     save: function() {
-      if (!this.get("bufferedContent.body").trim().length) return;
+      if (!this.get("bufferedContent.body").trim().length) {
+        return;
+      }
       var controller = this,
         model = controller.get('model'),
         url = "/api/" + this.get("controllers.issue.model.repo.full_name") + "/issues/comments/" + this.get("model.id");
@@ -1422,7 +1424,7 @@ var IssueActivityController = BufferedController.extend({
           controller.set("disabled", false);
           controller.set("isEditing", false);
           controller._last = null;
-        },
+        }
       })
     },
 
@@ -1463,7 +1465,9 @@ var IssueBodyController = BufferedController.extend({
       !this.get('disabled') && this.set("isEditing", true);
     },
     save: function() {
-      if (!this.get("bufferedContent.body").trim().length) return;
+      if (!this.get("bufferedContent.body").trim().length) {
+        return;
+      }
       var controller = this,
         model = controller.get("model"),
         url = "/api/" + this.get("controllers.issue.model.repo.full_name") + "/issues/" + this.get("model.number");
@@ -1682,7 +1686,10 @@ var IssuesEditController = Ember.ObjectController.extend({
       Ember.run.next(this, "send", "forceRepaint", "milestones")
     },
     submitComment: function () {
-      if (this.get("processing") || this.get("isEmpty")) return;
+      if (this.get("processing") || this.get("isEmpty")) {
+        return;
+      }
+
       var comments = this.get("model.activities.comments");
 
       this.set("processing", true);
