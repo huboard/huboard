@@ -9,6 +9,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "puppetlabs/ubuntu-14.04-64-puppet"
 
   config.vm.synced_folder ".", "/srv/huboard", type: "nfs"
+  config.vm.network "private_network", ip: "192.168.50.10"
+
   config.vm.network "forwarded_port", guest: 3000, host: 3001
   config.vm.network "forwarded_port", guest: 5984, host: 5984
 
