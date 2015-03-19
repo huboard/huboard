@@ -9,7 +9,7 @@ var IssueBodyController = BufferedController.extend({
   mentions: Ember.computed.alias("controllers.issue.mentions"),
   isEditing: false,
   disabled: function(){
-    return this.get("isEmpty");
+    return !this.get("bufferedContent.body").trim().length
   }.property('isEmpty'),
   canEdit: function(){
     return this.get("isLoggedIn") &&

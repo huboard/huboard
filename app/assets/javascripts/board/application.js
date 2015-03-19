@@ -1447,7 +1447,7 @@ var IssueBodyController = BufferedController.extend({
   mentions: Ember.computed.alias("controllers.issue.mentions"),
   isEditing: false,
   disabled: function(){
-    return this.get("isEmpty");
+    return !this.get("bufferedContent.body").trim().length
   }.property('isEmpty'),
   canEdit: function(){
     return this.get("isLoggedIn") &&
@@ -1655,6 +1655,10 @@ var IssuesEditController = Ember.ObjectController.extend({
   isClosed: function(){
     return this.get("model.state") == "closed";
   }.property("model.state"),
+  isEmpty: function(){
+    return !this.get("commentBody") ||
+      !this.get("commentBody").trim().length
+  }.property("commentBody"),
   actions: {
     labelsChanged: function () {
        Ember.run.once(function () {
@@ -1678,7 +1682,7 @@ var IssuesEditController = Ember.ObjectController.extend({
       Ember.run.next(this, "send", "forceRepaint", "milestones")
     },
     submitComment: function () {
-      if (this.get("processing") || !this.get("commentBody")) return;
+      if (this.get("processing") || this.get("isEmpty")) return;
       var comments = this.get("model.activities.comments");
 
       this.set("processing", true);
