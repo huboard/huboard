@@ -55,5 +55,10 @@ module HuboardWeb
     config.active_job.queue_adapter = :sucker_punch
     
     config.middleware.use Rack::Attack
+    
+    # !!! This addresses a Rails Behaviour that coaxes empty arrays in the params hash into nils 
+    # see https://github.com/rails/rails/pull/13188
+    # Ricki Mar 17 2015
+    config.action_dispatch.perform_deep_munge = false
   end
 end
