@@ -64,6 +64,7 @@ var IssuesEditController = Ember.ObjectController.extend({
       if (this.get("processing") || this.get("isEmpty")) {
         return;
       }
+
       var comments = this.get("model.activities.comments");
 
       this.set("processing", true);
