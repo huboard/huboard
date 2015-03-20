@@ -1,4 +1,5 @@
 class DashboardController < ApplicationController
+  before_action :login, only: :private
   def index
     @private = nil
     @user = gh.users(current_user.login)
@@ -41,4 +42,10 @@ class DashboardController < ApplicationController
     render :index
 
   end
+  :protected
+    def login
+      request.env['warden'].logout if github_authenticated? :default
+      github_authenticate! :private
+    end
+
 end
