@@ -32,5 +32,23 @@ module Api
         status: link 
       }
     end
+
+    def validate
+      repo = params[:link].split("/")
+      board = huboard.board(repo[0], repo[1])
+
+      unless board.repo_exists?
+        return render json: {
+          message: "Could not find repo: #{params[:link]}"
+        }, status: 400
+      end
+      unless board.issues_enabled?
+        return render json: {
+          message: "Please enable GitHub issues for #{params[:link]}!"
+        }, status: 403
+      end
+
+      render json: {}
+    end
   end
 end
