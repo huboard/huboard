@@ -1,7 +1,9 @@
+import Ember from 'ember';
+
 var IssueActivitiesController = Ember.ArrayController.extend({
   sortProperties: ["created_at"],
   itemController: "issueActivity"
 
 })
 
-module.exports = IssueActivitiesController;
+export default IssueActivitiesController;

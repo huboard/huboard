@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var HbAssigneeComponent = Ember.Component.extend({
   classNameBindings: [":hb-selector-component", ":dropdown"],
   isOpen: function(){
@@ -82,4 +84,4 @@ var HbAssigneeComponent = Ember.Component.extend({
 
 });
 
-module.exports = HbAssigneeComponent;
+export default HbAssigneeComponent;

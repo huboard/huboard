@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var IndexController = Ember.ObjectController.extend({
   needs: ["application", "filters", "assignee", "search"],
   isSidebarOpen: Ember.computed.alias("controllers.application.isSidebarOpen"),
@@ -13,4 +15,4 @@ var IndexController = Ember.ObjectController.extend({
   forceRedraw: 0
 });
 
-module.exports = IndexController;
+export default IndexController;

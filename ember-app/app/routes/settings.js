@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var SettingsRoute = Ember.Route.extend({
   model: function(){
     // hacks!
@@ -7,5 +9,4 @@ var SettingsRoute = Ember.Route.extend({
   }
 });
 
-module.exports = SettingsRoute;
-
+export default SettingsRoute;

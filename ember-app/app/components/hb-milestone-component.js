@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var HbMilestoneComponent = Ember.Component.extend({
   classNameBindings: [":hb-selector-component", ":dropdown"],
   isOpen: function(){
@@ -82,4 +84,4 @@ var HbMilestoneComponent = Ember.Component.extend({
 
 });
 
-module.exports = HbMilestoneComponent;
+export default HbMilestoneComponent;

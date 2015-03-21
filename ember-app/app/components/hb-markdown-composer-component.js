@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var HbMarkdownComposerComponent = Ember.Component.extend({
   classNames: ["markdown-composer"],
   classNameBindings: ["uploading:hb-state-uploading", "uploadsEnabled"],
@@ -109,4 +111,4 @@ var HbMarkdownComposerComponent = Ember.Component.extend({
   }
 })
 
-module.exports = HbMarkdownComposerComponent;
+export default HbMarkdownComposerComponent;

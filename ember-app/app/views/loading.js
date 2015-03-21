@@ -1,4 +1,6 @@
-var Spinner = require('../../spin');
+import Ember from 'ember';
+
+
 var LoadingView = Ember.View.extend({
   didInsertElement: function(){
     $("body").addClass("fullscreen-open")
@@ -31,4 +33,4 @@ var LoadingView = Ember.View.extend({
     }
 });
 
-module.exports = LoadingView;
+export default LoadingView;

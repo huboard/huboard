@@ -1,75 +1,73 @@
-  "use strict";
+import Ember from 'ember';
 
-  function empty(obj) {
-    var key;
-    for (key in obj) if (obj.hasOwnProperty(key)) return false;
-    return true;
-  }
+"use strict";
+function empty(obj) {
+  var key;
+  for (key in obj) if (obj.hasOwnProperty(key)) return false;
+  return true;
+}
+var get = Ember.get, set = Ember.set;
+var BufferedProxy = Ember.Mixin.create({
+  buffer: null,
 
-  var Ember = global.Ember,
-      get = Ember.get, set = Ember.set;
+  hasBufferedChanges: false,
 
-  var BufferedProxy = Ember.Mixin.create({
-    buffer: null,
+  unknownProperty: function (key) {
+    var buffer = this.buffer;
+    return buffer && buffer.hasOwnProperty(key) ? buffer[key] : this._super(key);
+  },
 
-    hasBufferedChanges: false,
+  setUnknownProperty: function (key, value) {
+    if (!this.buffer) this.buffer = {};
 
-    unknownProperty: function (key) {
-      var buffer = this.buffer;
-      return buffer && buffer.hasOwnProperty(key) ? buffer[key] : this._super(key);
-    },
+    var buffer = this.buffer,
+        content = this.get('content'),
+        current = content && get(content, key),
+        previous = buffer.hasOwnProperty(key) ? buffer[key] : current;
 
-    setUnknownProperty: function (key, value) {
-      if (!this.buffer) this.buffer = {};
+    if (previous === value) return;
 
-      var buffer = this.buffer,
-          content = this.get('content'),
-          current = content && get(content, key),
-          previous = buffer.hasOwnProperty(key) ? buffer[key] : current;
+    this.propertyWillChange(key);
 
-      if (previous === value) return;
+    if (current === value) {
+      delete buffer[key];
+      if (empty(buffer)) {
+        this.set('hasBufferedChanges', false);
+      }
+    } else {
+      buffer[key] = value;
+      this.set('hasBufferedChanges', true);
+    }
+
+    this.propertyDidChange(key);
+    return value;
+  },
+
+  applyBufferedChanges: function() {
+    var buffer = this.buffer,
+        content = this.get('content'),
+        key;
+    for (key in buffer) {
+      if (!buffer.hasOwnProperty(key)) continue;
+      set(content, key, buffer[key]);
+    }
+    this.buffer = {};
+    this.set('hasBufferedChanges', false);
+  },
+
+  discardBufferedChanges: function() {
+    var buffer = this.buffer,
+        content = this.get('content'),
+        key;
+    for (key in buffer) {
+      if (!buffer.hasOwnProperty(key)) continue;
 
       this.propertyWillChange(key);
-
-      if (current === value) {
-        delete buffer[key];
-        if (empty(buffer)) {
-          this.set('hasBufferedChanges', false);
-        }
-      } else {
-        buffer[key] = value;
-        this.set('hasBufferedChanges', true);
-      }
-
+      delete buffer[key];
       this.propertyDidChange(key);
-      return value;
-    },
-
-    applyBufferedChanges: function() {
-      var buffer = this.buffer,
-          content = this.get('content'),
-          key;
-      for (key in buffer) {
-        if (!buffer.hasOwnProperty(key)) continue;
-        set(content, key, buffer[key]);
-      }
-      this.buffer = {};
-      this.set('hasBufferedChanges', false);
-    },
-
-    discardBufferedChanges: function() {
-      var buffer = this.buffer,
-          content = this.get('content'),
-          key;
-      for (key in buffer) {
-        if (!buffer.hasOwnProperty(key)) continue;
-
-        this.propertyWillChange(key);
-        delete buffer[key];
-        this.propertyDidChange(key);
-      }
-      this.set('hasBufferedChanges', false);
     }
-  });
+    this.set('hasBufferedChanges', false);
+  }
+});
 
-  module.exports = BufferedProxy;
+export default BufferedProxy;

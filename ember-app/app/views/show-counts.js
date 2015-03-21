@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var ShowCountsView = Ember.View.extend({
   classNameBindings: ["showColumnCounts:checked"],
   showColumnCounts: Ember.computed.alias("settings.showColumnCounts"),
@@ -15,5 +17,4 @@ var ShowCountsView = Ember.View.extend({
   }
 })
 
-
-module.exports = ShowCountsView;
+export default ShowCountsView;

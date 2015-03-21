@@ -1,4 +1,6 @@
-var KeyPressHandlingMixin = require("../../mixins/keypress_handling")
+import KeyPressHandlingMixin from 'app/mixins/key-press-handling';
+import Ember from 'ember';
+
 
 var CommentView = Ember.View.extend(KeyPressHandlingMixin, {
   templateName: "issue/comment",
@@ -17,7 +19,6 @@ var CommentView = Ember.View.extend(KeyPressHandlingMixin, {
     this.$().off("keydown");
   }.on("willDestroyElement"),
 })
-
 //var ActivitiesView = Ember.Handlebars.EachView.extend({
 var ActivitiesView = Ember.CollectionView.extend({
   content: Ember.computed.alias("controller"),
@@ -35,4 +36,4 @@ var ActivitiesView = Ember.CollectionView.extend({
 
 })
 
-module.exports = ActivitiesView;
+export default ActivitiesView;

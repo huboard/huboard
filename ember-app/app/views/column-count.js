@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var ColumnCountView = Ember.View.extend({
   tagName: "span",
   templateName: "column_count",
@@ -5,4 +7,4 @@ var ColumnCountView = Ember.View.extend({
   isOverWip: Ember.computed.alias('controller.isOverWip')
 });
 
-module.exports = ColumnCountView;
+export default ColumnCountView;

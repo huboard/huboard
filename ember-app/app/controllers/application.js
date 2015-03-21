@@ -1,3 +1,6 @@
+import Ember from 'ember';
+import Issue from 'app/models/issue';
+
 var ApplicationController = Ember.ObjectController.extend({
   isSidebarOpen: false,
   queryParams: ["assignee", "repo", "milestone", "label", "search"],
@@ -17,7 +20,7 @@ var ApplicationController = Ember.ObjectController.extend({
       if(issue) {
         issue.set("state", "closed");
       } else {
-        this.get("model.board.issues").pushObject(App.Issue.create(message.issue));
+        this.get("model.board.issues").pushObject(Issue.create(message.issue));
         this.send("forceRepaint");
       }
     },
@@ -27,7 +30,7 @@ var ApplicationController = Ember.ObjectController.extend({
       if(issue) {
         issue.set("state", "open");
       } else {
-        var model = App.Issue.create(message.issue);
+        var model = Issue.create(message.issue);
         if(message.issue.current_state.name === "__nil__") {
           model.set("current_state", this.get("model.board.columns.firstObject"));
         }else {
@@ -46,7 +49,7 @@ var ApplicationController = Ember.ObjectController.extend({
       if(issue) {
         issue.set("state", "open");
       } else {
-        this.get("model.board.issues").pushObject(App.Issue.create(message.issue));
+        this.get("model.board.issues").pushObject(Issue.create(message.issue));
         this.send("forceRepaint");
       }
     }
@@ -59,4 +62,4 @@ var ApplicationController = Ember.ObjectController.extend({
   }.property("model.full_name"),
 })
 
-module.exports = ApplicationController;
+export default ApplicationController;

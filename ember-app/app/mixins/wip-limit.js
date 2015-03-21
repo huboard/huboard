@@ -1,6 +1,7 @@
+import Ember from 'ember';
+
 var WipLimit = Ember.Mixin.create({
 
 });
 
-module.exports = WipLimit;
-
+export default WipLimit;

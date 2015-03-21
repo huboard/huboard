@@ -1,4 +1,6 @@
-var KeyPressHandlingMixin = require("../../mixins/keypress_handling")
+import KeyPressHandlingMixin from 'app/mixins/key-press-handling';
+import Ember from 'ember';
+
 
 var IssueTitleView = Ember.View.extend(KeyPressHandlingMixin, {
   classNames: ["fullscreen-header"],
@@ -31,4 +33,4 @@ var IssueTitleView = Ember.View.extend(KeyPressHandlingMixin, {
   }.on("willDestroyElement"),
 })
 
-module.exports = IssueTitleView;
+export default IssueTitleView;

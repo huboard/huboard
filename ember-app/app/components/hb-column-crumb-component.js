@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var HbColumnCrumbComponent = Ember.Component.extend({
   tagName: "li",
   classNames: ['crumb'],
@@ -31,5 +33,4 @@ var HbColumnCrumbComponent = Ember.Component.extend({
 
 })
 
-module.exports = HbColumnCrumbComponent;
-
+export default HbColumnCrumbComponent;

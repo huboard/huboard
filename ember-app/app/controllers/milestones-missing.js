@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var MilestonesMissingController = Ember.ObjectController.extend({
   disabled: false,
   actions: {
@@ -39,4 +41,4 @@ var MilestonesMissingController = Ember.ObjectController.extend({
 
 });
 
-module.exports = MilestonesMissingController;
+export default MilestonesMissingController;

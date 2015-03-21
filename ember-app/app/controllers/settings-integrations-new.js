@@ -1,3 +1,6 @@
+import Ember from 'ember';
+import Integration from 'app/models/integration';
+
 var SettingsIntegrationsNewController = Ember.ObjectController.extend({
   needs: ['application', "settingsIntegrations"],
   disabled: function(){
@@ -17,7 +20,7 @@ var SettingsIntegrationsNewController = Ember.ObjectController.extend({
           }
         }, "json").then(function(result) {
           controller.get("model.integrations")
-            .pushObject(App.Integration.create(result));
+            .pushObject(Integration.create(result));
           controller.transitionToRoute("settings.integrations.index");
           controller.set("processing", false);
         });
@@ -26,4 +29,4 @@ var SettingsIntegrationsNewController = Ember.ObjectController.extend({
   }
 })
 
-module.exports = SettingsIntegrationsNewController;
+export default SettingsIntegrationsNewController;

@@ -1,4 +1,2 @@
-var guid = require('./uuid');
-
-module.exports = guid();
-
+import guid from './uuid';
+export default guid();

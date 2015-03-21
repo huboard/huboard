@@ -2,7 +2,7 @@
 
 module.exports = function(environment) {
   var ENV = {
-    modulePrefix: 'huboard',
+    modulePrefix: 'app',
     environment: environment,
     baseURL: '/',
     locationType: 'auto',

@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var HbLabelSelectorComponent = Ember.Component.extend({
   classNames: ["hb-selector-component", "dropdown"],
   isOpen: function(){
@@ -36,5 +38,4 @@ var HbLabelSelectorComponent = Ember.Component.extend({
   }
 });
 
-module.exports = HbLabelSelectorComponent;
-
+export default HbLabelSelectorComponent;

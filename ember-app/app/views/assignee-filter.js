@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var AssigneeFilterView = Ember.View.extend({
   templateName : "assignee/filter",
   classNames: ["assignee"],
@@ -79,4 +81,4 @@ var AssigneeFilterView = Ember.View.extend({
   gravatarId: null
 });
 
-module.exports = AssigneeFilterView;
+export default AssigneeFilterView;

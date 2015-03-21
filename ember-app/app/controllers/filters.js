@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var FiltersController = Ember.ObjectController.extend({
   needs: ["application"],
 
@@ -46,14 +48,14 @@ var FiltersController = Ember.ObjectController.extend({
   }.observes("lastMilestoneFilterClicked"),
   init: function(){
     var self = this;
-    if(App.get("loggedIn")){
+    if(get("loggedIn")){
       this.set("userFilters", [
         {
           name: "Assigned to me",
           queryParam: "assignee",
           mode: 0,
           condition: function(i){
-            return i.assignee && i.assignee.login === App.get("currentUser").login;
+            return i.assignee && i.assignee.login === get("currentUser").login;
           }
         },
 
@@ -62,7 +64,7 @@ var FiltersController = Ember.ObjectController.extend({
           queryParam: "assignee",
           mode: 0,
           condition: function(i){
-            return i.assignee && i.assignee.login !== App.get("currentUser").login;
+            return i.assignee && i.assignee.login !== get("currentUser").login;
           }
         },
         {
@@ -133,12 +135,12 @@ var FiltersController = Ember.ObjectController.extend({
        })
     }));
     this.get("boardFilters").insertAt(0, Ember.Object.create({
-      name: App.get('repo.name'),
+      name: get('repo.name'),
       queryParam: "repo",
       mode:0,
       color: "7965cc",
       condition:function(i){
-        return i.repo.name == App.get('repo.name');
+        return i.repo.name == get('repo.name');
       }
     }));
   },
@@ -168,8 +170,8 @@ var FiltersController = Ember.ObjectController.extend({
     }.bind(this))
 
   }.observes("allFilters").on("init"),
-  dimFiltersBinding: "App.dimFilters",
-  hideFiltersBinding: "App.hideFilters",
+  dimFiltersBinding: "dimFilters",
+  hideFiltersBinding: "hideFilters",
   filtersActive: function(){
     var allFilters = this.get("allFilters");
     var active =  _.any(allFilters, function(f){
@@ -193,4 +195,4 @@ var FiltersController = Ember.ObjectController.extend({
   }
 });
 
-module.exports = FiltersController;
+export default FiltersController;

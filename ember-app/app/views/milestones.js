@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var MilestonesView = Ember.View.extend({
   classNameBindings: ["dragging:board-dragging:board-not-dragging"],
   dragging: false,
@@ -30,7 +32,7 @@ var MilestonesView = Ember.View.extend({
       update: function (ev, ui) {
 
         var findViewData = function (element){
-           return Em.View.views[$(element).attr("id")]
+           return Ember.View.views[$(element).attr("id")]
              .get("controller");
         };
 
@@ -74,4 +76,5 @@ var MilestonesView = Ember.View.extend({
 
   }.on("didInsertElement"),
 })
-module.exports = MilestonesView;
+
+export default MilestonesView;

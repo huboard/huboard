@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var SettingsLinksIndexController = Ember.ObjectController.extend({
   needs: ['application', 'settingsLinks'],
   repoFullName: '',
@@ -30,4 +32,4 @@ var SettingsLinksIndexController = Ember.ObjectController.extend({
   }
 });
 
-module.exports = SettingsLinksIndexController;
+export default SettingsLinksIndexController;

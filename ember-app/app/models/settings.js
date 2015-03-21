@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 function attr(defaultValue) {
   return Ember.computed('data', function (key, value){
     if(arguments.length > 1) {
@@ -8,8 +10,6 @@ function attr(defaultValue) {
     }
   });
 }
-
-
 var Settings = Ember.Object.extend({
   init: function (){
     this._super.apply(this, arguments);
@@ -53,4 +53,4 @@ var Settings = Ember.Object.extend({
   }.property("")
 });
 
-module.exports = Settings;
+export default Settings;

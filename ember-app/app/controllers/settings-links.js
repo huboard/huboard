@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var SettingsLinksController = Ember.ArrayController.extend({
   needs: ["settings"],
   repository: Ember.computed.alias("controllers.settings.repository"),
@@ -8,4 +10,4 @@ var SettingsLinksController = Ember.ArrayController.extend({
   }.property('content.length')
 });
 
-module.exports = SettingsLinksController;
+export default SettingsLinksController;

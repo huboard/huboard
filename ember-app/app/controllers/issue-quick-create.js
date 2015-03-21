@@ -1,9 +1,11 @@
-var IssueCreateController = require("./create_controller.js");
+import IssueCreateController from 'app/controllers/issue-create';
+import Issue from 'app/models/issue';
+
 
 var IssueQuickCreateController = IssueCreateController.extend({
   actions: {
     openFullScreen: function(){
-      var model = App.Issue.createNew();
+      var model = Issue.createNew();
       model.set('title', this.get('title'));
       model.set('milestone', this.get('milestone'));
       var leOrder = this.get("target.topOrderNumber")
@@ -21,4 +23,4 @@ var IssueQuickCreateController = IssueCreateController.extend({
   }
 });
 
-module.exports = IssueQuickCreateController;
+export default IssueQuickCreateController;

@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var KeypressHandlingMixin = Ember.Mixin.create({
   store: Ember.computed.alias("settings"),
   storeData: function(){
@@ -41,4 +43,4 @@ var KeypressHandlingMixin = Ember.Mixin.create({
   }
 })
 
-module.exports = KeypressHandlingMixin
+export default KeypressHandlingMixin;

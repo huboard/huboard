@@ -1,4 +1,6 @@
-var CardWrapperView = Em.View.extend({
+import Ember from 'ember';
+
+var CardWrapperView = Ember.View.extend({
     templateName: "cardItem",
     classNames: ["card"],
     classNameBindings: ["isFiltered","isDraggable:is-draggable", "isClosable:closable", "colorLabel", "content.color:border"],
@@ -11,8 +13,8 @@ var CardWrapperView = Em.View.extend({
     isClosable: function () {
      var currentState = this.get("content.current_state");
 
-     return App.get("loggedIn") && currentState.is_last && this.get("content.state") === "open";
-    }.property("App.loggedIn", "content.current_state","content.state"),
+     return get("loggedIn") && currentState.is_last && this.get("content.state") === "open";
+    }.property("loggedIn", "content.current_state","content.state"),
     onDestroy: function (){
       Ember.run.once(function () {
         var view = this;
@@ -29,13 +31,13 @@ var CardWrapperView = Em.View.extend({
       }.bind(this))
     }.observes("content.isArchived"),
     isDraggable: function( ){
-      return App.get("loggedIn") && this.get("isCollaborator");
-    }.property("App.loggedIn","content.state"),
+      return get("loggedIn") && this.get("isCollaborator");
+    }.property("loggedIn","content.state"),
     isFiltered: function() {
-      var dimFilters = App.get("dimFilters"),
-          hideFilters = App.get("hideFilters"),
-          searchFilter = App.get("searchFilter"),
-          memberFilter = App.get("memberFilter"),
+      var dimFilters = get("dimFilters"),
+          hideFilters = get("hideFilters"),
+          searchFilter = get("searchFilter"),
+          memberFilter = get("memberFilter"),
           that = this;
 
       if(searchFilter) {
@@ -61,9 +63,9 @@ var CardWrapperView = Em.View.extend({
 
       return "";
 
-    }.property("App.memberFilter.mode", "App.dimFilters", "App.hideFilters", "App.searchFilter", "App.eventReceived"),
+    }.property("memberFilter.mode", "dimFilters", "hideFilters", "searchFilter", "eventReceived"),
     click: function(){
-      var view = Em.View.views[this.$().find("> div").attr("id")];
+      var view = Ember.View.views[this.$().find("> div").attr("id")];
       view.get("controller").send("fullscreen")
     },
     dragAuthorized: function(ev){
@@ -100,7 +102,7 @@ var CardWrapperView = Em.View.extend({
       }
 
       if(this.dragAuthorized(ev)){
-        var view = Em.View.views[this.$().find("> div").attr("id")];
+        var view = Ember.View.views[this.$().find("> div").attr("id")];
         view.get("controller").send("assignUser", ev.dataTransfer.getData("text/huboard-assignee"));
         this.$().removeClass("assignee-accept");
       } else {
@@ -111,4 +113,4 @@ var CardWrapperView = Em.View.extend({
     }
 });
 
-module.exports = CardWrapperView;
+export default CardWrapperView;

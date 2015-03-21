@@ -1,5 +1,10 @@
-var Serializable = require("../mixins/serializable");
-var SocketMixin = require("../mixins/socket");
+import Serializable from 'app/mixins/serializable';
+import SocketMixin from 'app/mixins/socket';
+import Ember from 'ember';
+import Repo from 'app/models/repo';
+
+
+
 var ApplicationRoute = Ember.Route.extend({
   actions: {
     sessionErrorHandler: function(){
@@ -25,7 +30,7 @@ var ApplicationRoute = Ember.Route.extend({
       })
     },
     closeModal: function() {
-      App.animateModalClose().then(function() {
+      animateModalClose().then(function() {
         this.render('empty', {
           into: 'application',
           outlet: 'modal'
@@ -39,10 +44,11 @@ var ApplicationRoute = Ember.Route.extend({
     }
   },
   model: function () {
-    return Em.Deferred.promise(function(p){
+    return Ember.Deferred.promise(function(p){
        Ember.run.once(function(){
+        console.log("TODO: fix this call to App")
         var repo = App.get("repo");
-        p.resolve(App.Repo.create(repo.serialize()));
+        p.resolve(Repo.create(repo.serialize()));
        })
     });
   },
@@ -51,11 +57,11 @@ var ApplicationRoute = Ember.Route.extend({
     SocketMixin.apply(controller);
     controller.setUpSocketEvents();
     $(document).ajaxError(function(event, xhr){
-      if(App.loggedIn && xhr.status == 404){
+      if(loggedIn && xhr.status == 404){
         this.send("sessionErrorHandler");
       }
     }.bind(this));
   }
 })
 
-module.exports = ApplicationRoute;
+export default ApplicationRoute;

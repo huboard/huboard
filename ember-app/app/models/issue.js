@@ -1,6 +1,8 @@
+import correlationId from 'app/utilities/correlation-id';
+import Serializable from 'app/mixins/serializable';
+import Ember from 'ember';
 
-var correlationId = require("../utilities/correlationId")
-var Serializable = require("../mixins/serializable");
+
 
 var Issue = Ember.Object.extend(Serializable,{
   correlationId: correlationId,
@@ -191,7 +193,6 @@ var Issue = Ember.Object.extend(Serializable,{
     return Ember.$.post("/api/" + full_name + "/assignmilestone", {
       issue : this.get("number"),
       order: index.toString(),
-      changed_milestones: changedMilestones,
       milestone: milestone ? milestone.number : null,
       changed_milestones: changedMilestones,
       correlationId: this.get("correlationId")
@@ -227,7 +228,6 @@ var Issue = Ember.Object.extend(Serializable,{
   }
 
 });
-
 Issue.reopenClass({
   createNew: function(){
      return Issue.create({
@@ -236,11 +236,10 @@ Issue.reopenClass({
        body: "",
        assignee: null,
        milestone: null,
-       repo: App.get("repo"),
+       repo: get("repo"),
        labels: []
      })
   }
 });
 
-module.exports = Issue;
-
+export default Issue;

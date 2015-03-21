@@ -1,5 +1,7 @@
+import Ember from 'ember';
+
 var Link = Ember.Object.extend({
 
 });
 
-module.exports = Link;
+export default Link;

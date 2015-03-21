@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var HbPaneComponent = Ember.Component.extend({
     classNameBindings: [":tab-pane","selected:active"],
     didInsertElement: function() {
@@ -9,5 +11,4 @@ var HbPaneComponent = Ember.Component.extend({
     }.property('parentView.selected')
 });
 
-module.exports = HbPaneComponent;
-
+export default HbPaneComponent;

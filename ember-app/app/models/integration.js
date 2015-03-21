@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var Integration = Ember.Object.extend({
   keys: function() {
     if (!this.get("integration.data")){
@@ -13,4 +15,4 @@ var Integration = Ember.Object.extend({
 
 });
 
-module.exports = Integration;
+export default Integration;

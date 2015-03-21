@@ -1,3 +1,4 @@
+import Ember from 'ember';
 
 var SocketMixin = Ember.Mixin.create({
   setUpSocketEvents: function () {
@@ -30,7 +31,7 @@ var SocketMixin = Ember.Mixin.create({
 
           if(eventNames.hasOwnProperty(message.meta.action)){
             eventNames[message.meta.action].call(controller, message.payload);
-            App.incrementProperty("eventReceived")
+            incrementProperty("eventReceived")
           }
       });
     });
@@ -41,4 +42,4 @@ var SocketMixin = Ember.Mixin.create({
   }
 });
 
-module.exports = SocketMixin;
+export default SocketMixin;

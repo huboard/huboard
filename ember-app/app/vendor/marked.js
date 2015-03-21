@@ -4,7 +4,7 @@
  * https://github.com/chjj/marked
  */
 
-;(function() {
+
 
 /**
  * Block-Level Grammar
@@ -1106,7 +1106,7 @@ function marked(src, opt, callback) {
     return Parser.parse(Lexer.lex(src, opt), opt);
   } catch (e) {
     e.message += '\nPlease report this to https://github.com/chjj/marked.';
-    if ((opt || marked.defaults).silent) {
+    if (((opt || marked.defaults)).silent) {
       return '<p>An error occured:</p><pre>'
         + escape(e.message + '', true)
         + '</pre>';
@@ -1154,14 +1154,5 @@ marked.inlineLexer = InlineLexer.output;
 
 marked.parse = marked;
 
-if (typeof exports === 'object') {
-  module.exports = marked;
-} else if (typeof define === 'function' && define.amd) {
-  define(function() { return marked; });
-} else {
-  this.marked = marked;
-}
+export default marked;
 
-}).call(function() {
-  return this || (typeof window !== 'undefined' ? window : global);
-}());

@@ -1,4 +1,6 @@
-var WrapperView = require("./card_wrapper_view");
+import WrapperView from 'app/views/card-wrapper';
+import Ember from 'ember';
+
 
 var CollectionView = Ember.CollectionView.extend({
   tagName:"ul",
@@ -30,7 +32,7 @@ var CollectionView = Ember.CollectionView.extend({
       update: function (ev, ui) {
 
         var findViewData = function (element){
-           return Em.View.views[$(element).find("> div").attr("id")]
+           return Ember.View.views[$(element).find("> div").attr("id")]
              .get("controller");
         };
 
@@ -76,7 +78,6 @@ var CollectionView = Ember.CollectionView.extend({
   },
   itemViewClass: WrapperView
 })
-
 var ColumnView = Ember.ContainerView.extend({
   classNameBindings:[":hb-task-column",":column",":task-column","isCollapsed:hb-state-collapsed","isHovering:hovering"],
   isCollapsed: Ember.computed.alias("controller.isCollapsed"),
@@ -93,7 +94,7 @@ var ColumnView = Ember.ContainerView.extend({
     templateName: "quickIssue",
     classNames: ["create-issue"],
     isVisible: function(){
-      return this.get('controller.isFirstColumn') && App.get('loggedIn');
+      return this.get('controller.isFirstColumn') && get('loggedIn');
     }.property('controller.isFirstColumn'),
   }),
   collapsedView: Ember.View.extend({
@@ -105,4 +106,4 @@ var ColumnView = Ember.ContainerView.extend({
 
 });
 
-module.exports = ColumnView;
+export default ColumnView;

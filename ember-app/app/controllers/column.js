@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var ColumnController = Ember.ObjectController.extend({
   needs: ["index", "application"],
   style: Ember.computed.alias("controllers.index.column_style"),
@@ -51,8 +53,8 @@ var ColumnController = Ember.ObjectController.extend({
     }
   }.property("issues.@each", "controllers.index.forceRedraw"),
   newIssue: function(){
-    return App.Issue.createNew();
+    return Issue.createNew();
   }.property()
 })
 
-module.exports = ColumnController;
+export default ColumnController;

@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var SettingsLinksRoute = Ember.Route.extend({
   model: function(){
     // hacks!
@@ -7,5 +9,4 @@ var SettingsLinksRoute = Ember.Route.extend({
   }
 });
 
-module.exports = SettingsLinksRoute;
-
+export default SettingsLinksRoute;

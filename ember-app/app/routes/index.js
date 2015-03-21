@@ -1,5 +1,9 @@
-var CssView = require("../views/css_view");
-var Board = require("../models/board");
+import CssView from 'app/views/css';
+import Board from 'app/models/board';
+import Ember from 'ember';
+import Issue from 'app/models/issue';
+
+
 
 var IndexRoute = Ember.Route.extend({
   model: function(){
@@ -8,7 +12,7 @@ var IndexRoute = Ember.Route.extend({
     return repo.fetchBoard(linked_boards);
   },
   afterModel: function (model){
-    if(App.get("isLoaded")) {
+    if(get("isLoaded")) {
       return;
     }
     var cssView = CssView.create({
@@ -16,14 +20,14 @@ var IndexRoute = Ember.Route.extend({
     });
     cssView.appendTo("head")
     return model.linkedBoardsPreload.done(function(linkedBoardsPromise){
-     App.set("isLoaded", true); 
+     set("isLoaded", true); 
      var socket = this.get("socket");
      return linkedBoardsPromise.then(function(boards){
        boards.forEach(function(b) {
         if(b.failure) {return;}
          var issues = Ember.A();
          b.issues.forEach(function(i){
-           issues.pushObject(App.Issue.create(i));
+           issues.pushObject(Issue.create(i));
          })
          var board = Board.create(_.extend(b, {issues: issues}));
          model.linkedRepos.pushObject(board);
@@ -41,7 +45,7 @@ var IndexRoute = Ember.Route.extend({
   },
   actions : {
     createNewIssue : function (model, order) {
-      this.controllerFor("issue.create").set("model", model || App.Issue.createNew());
+      this.controllerFor("issue.create").set("model", model || Issue.createNew());
       this.controllerFor("issue.create").set("order", order || {});
       this.send("openModal","issue.create")
     },
@@ -70,4 +74,4 @@ var IndexRoute = Ember.Route.extend({
   }
 });
 
-module.exports = IndexRoute;
+export default IndexRoute;

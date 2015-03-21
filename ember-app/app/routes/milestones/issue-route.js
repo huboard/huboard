@@ -1,4 +1,5 @@
-var Route = require("../issue_route");
+import Route from 'app/routes/';
+
 
 module.exports = Route.extend({
   model : function (params, transition){
@@ -18,3 +19,5 @@ module.exports = Route.extend({
     }
   }
 });
+
+export default undefined;

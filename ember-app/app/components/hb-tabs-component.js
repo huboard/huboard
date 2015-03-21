@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var HbTabsComponent = Ember.Component.extend({
     classNames: ["tabbable"],
     init: function() {
@@ -17,5 +19,4 @@ var HbTabsComponent = Ember.Component.extend({
     }
 });
 
-module.exports = HbTabsComponent;
-
+export default HbTabsComponent;

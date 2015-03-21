@@ -1,12 +1,13 @@
-var BufferedProxy = require("../vendor/buffered-proxy");
+import BufferedProxy from 'app/"../vendor/buffered-proxy"';
+import Ember from 'ember';
+
 
 var BufferController = Ember.ObjectController.extend({
   bufferedContent: function() {
-    return Em.ObjectProxy.extend(BufferedProxy).create({
+    return Ember.ObjectProxy.extend(BufferedProxy).create({
       content: this.get('content')
     });
   }.property('content')
 })
 
-module.exports = BufferController;
-
+export default BufferController;

@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var SettingsLinkController = Ember.ObjectController.extend({
   needs: ["settings", "settingsLinks"],
   isLinked: function(){
@@ -43,5 +45,4 @@ var SettingsLinkController = Ember.ObjectController.extend({
   }
 });
 
-module.exports = SettingsLinkController;
-
+export default SettingsLinkController;

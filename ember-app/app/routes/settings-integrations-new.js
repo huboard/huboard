@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var SettingsIntegrationsNewRoute = Ember.Route.extend({
   model: function(params, transition){
     return this.controllerFor('settingsIntegrations')
@@ -14,4 +16,4 @@ var SettingsIntegrationsNewRoute = Ember.Route.extend({
 
 });
 
-module.exports = SettingsIntegrationsNewRoute;
+export default SettingsIntegrationsNewRoute;

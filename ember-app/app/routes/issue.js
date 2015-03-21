@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var IssueRoute = Ember.Route.extend({
   setupController: function(controller, model) {
     controller.set("model", model);
@@ -26,7 +28,7 @@ var IssueRoute = Ember.Route.extend({
   },
   actions: {
     error: function(error, transition){
-      if (App.loggedIn && error.status === 404) {
+      if (loggedIn && error.status === 404) {
         var controller = this.controllerFor("application");
         this.render("empty", {
           into:"application",
@@ -39,4 +41,4 @@ var IssueRoute = Ember.Route.extend({
   }
 });
 
-module.exports = IssueRoute;
+export default IssueRoute;

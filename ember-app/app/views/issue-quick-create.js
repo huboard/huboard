@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var IssueQuickCreateView = Ember.View.extend({
   placeholderText: "Add issue",
   bindToFocus: function(){
@@ -13,4 +15,5 @@ var IssueQuickCreateView = Ember.View.extend({
     this.$('input').off('blur.huboard focus.huboard');
   }.on('willDestroyElement')
 })
-module.exports = IssueQuickCreateView;
+
+export default IssueQuickCreateView;

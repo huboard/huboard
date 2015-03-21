@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var HbAvatarComponent = Ember.Component.extend({
    tagName: 'img',
  
@@ -21,5 +23,4 @@ var HbAvatarComponent = Ember.Component.extend({
   }
 });
 
-module.exports = HbAvatarComponent;
-
+export default HbAvatarComponent;

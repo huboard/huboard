@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var HbLabelComponent = Ember.Component.extend({
   tagName: "div",
   classNameBindings: [":hb-menu-item", "colorClass", "selected:active"],
@@ -20,5 +22,4 @@ var HbLabelComponent = Ember.Component.extend({
 
 });
 
-module.exports = HbLabelComponent;
-
+export default HbLabelComponent;

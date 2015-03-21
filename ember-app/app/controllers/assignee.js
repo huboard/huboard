@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var AssigneeController = Ember.ObjectController.extend({
   needs: ["application"],
   actions: {
@@ -19,7 +21,7 @@ var AssigneeController = Ember.ObjectController.extend({
   showMode: "less",
   assigneesBinding: "controllers.application.model.board.assignees",
   assigneeBinding: "controllers.application.assignee",
-  memberFilterBinding: "App.memberFilter",
+  memberFilterBinding: "memberFilter",
   lastClicked: null,
   filterChanged : function(){
     Ember.run.once(function(){
@@ -64,4 +66,4 @@ var AssigneeController = Ember.ObjectController.extend({
   }.property("filters.@each.mode"),
 });
 
-module.exports = AssigneeController;
+export default AssigneeController;

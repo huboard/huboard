@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var MilestoneColumnController = Ember.ObjectController.extend({
   needs: ["milestones", "application", "index"],
   getIssues: function () {
@@ -43,13 +45,13 @@ var MilestoneColumnController = Ember.ObjectController.extend({
     }
   }.property("issues.@each", "controllers.milestones.forceRedraw"),
   newIssue: function(){
-    var newModel = App.Issue.createNew();
+    var newModel = Issue.createNew();
     newModel.set('milestone', this.get("model.milestone"));
     return newModel;
   }.property(),
   isCreateVisible: function(){
-    return App.get("repo.is_collaborator") || 
-      App.get('loggedIn') && this.get('isFirstColumn');
+    return get("repo.is_collaborator") || 
+      get('loggedIn') && this.get('isFirstColumn');
   }.property('isFirstColumn'),
   cardMoved : function (cardController, index, onCancel){
     if (this.get('model.noMilestone')) {
@@ -87,4 +89,5 @@ var MilestoneColumnController = Ember.ObjectController.extend({
     }
   }
 })
-module.exports = MilestoneColumnController;
+
+export default MilestoneColumnController;

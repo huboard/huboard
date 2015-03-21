@@ -1,16 +1,15 @@
-var BufferedController = require("../buffered_controller");
+import BufferedController from 'app/controllers/buffered';
+import Ember from 'ember';
 
 
 var IssueBodyController = BufferedController.extend({
   needs: ["issue"],
   isCollaboratorBinding: "model.repo.is_collaborator",
-  isLoggedInBinding: "App.loggedIn",
-  currentUserBinding: "App.currentUser",
+  isLoggedInBinding: "loggedIn",
+  currentUserBinding: "currentUser",
   mentions: Ember.computed.alias("controllers.issue.mentions"),
   isEditing: false,
-  disabled: function(){
-    return !this.get("bufferedContent.body").trim().length
-  }.property('isEmpty'),
+  disabled: false,
   canEdit: function(){
     return this.get("isLoggedIn") &&
       ( this.get("isCollaborator") || (this.get("currentUser.id") === this.get("model.user.id")) );
@@ -25,9 +24,7 @@ var IssueBodyController = BufferedController.extend({
       !this.get('disabled') && this.set("isEditing", true);
     },
     save: function() {
-      if (!this.get("bufferedContent.body").trim().length) {
-        return;
-      }
+
       var controller = this,
         model = controller.get("model"),
         url = "/api/" + this.get("controllers.issue.model.repo.full_name") + "/issues/" + this.get("model.number");
@@ -62,4 +59,4 @@ var IssueBodyController = BufferedController.extend({
   }
 })
 
-module.exports = IssueBodyController;
+export default IssueBodyController;

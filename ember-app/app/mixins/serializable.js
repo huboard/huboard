@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 function serialize() {
     var result = {};
     for (var key in $.extend(true, {}, this))
@@ -23,11 +25,10 @@ function serialize() {
     return result;
 
 }
-
 var Serializable = Ember.Mixin.create({
   serialize: function () {
     return serialize.call(this);
   }
 });
 
-module.exports = Serializable;
+export default Serializable;

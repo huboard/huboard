@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var IssueSelectedColumnView = Ember.CollectionView.extend({
   tagName: "ul",
   classNames: ["nav","breadcrumbs"],
@@ -27,4 +29,4 @@ var IssueSelectedColumnView = Ember.CollectionView.extend({
 
 });
 
-module.exports = IssueSelectedColumnView;
+export default IssueSelectedColumnView;

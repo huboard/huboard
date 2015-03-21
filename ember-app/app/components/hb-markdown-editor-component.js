@@ -1,4 +1,5 @@
-var Markdown = require("../vendor/marked");
+import Markdown from 'app/"../vendor/marked"';
+import Ember from 'ember';
 
 
 var HbMarkdownEditorComponent = Ember.Component.extend({
@@ -67,5 +68,4 @@ var HbMarkdownEditorComponent = Ember.Component.extend({
   }.on('willDestroyElement')
 });
 
-module.exports = HbMarkdownEditorComponent;
-
+export default HbMarkdownEditorComponent;

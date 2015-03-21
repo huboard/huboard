@@ -1,11 +1,12 @@
-var BufferedController = require("../buffered_controller");
+import BufferedController from 'app/controllers/buffered';
+import Ember from 'ember';
 
 
 var IssueTitleController = BufferedController.extend({
   needs: ["issue"],
   isCollaboratorBinding: "model.repo.is_collaborator",
-  isLoggedInBinding: "App.loggedIn",
-  currentUserBinding: "App.currentUser",
+  isLoggedInBinding: "loggedIn",
+  currentUserBinding: "currentUser",
   isEditing: false,
   disabled: false,
   canEdit: function(){
@@ -46,4 +47,4 @@ var IssueTitleController = BufferedController.extend({
   }
 })
 
-module.exports = IssueTitleController;
+export default IssueTitleController;

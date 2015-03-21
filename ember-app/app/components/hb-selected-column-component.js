@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var HbSelectedColumnComponent = Ember.Component.extend({
   tagName: "ul",
   classNames: ["nav","breadcrumbs"],
@@ -6,8 +8,8 @@ var HbSelectedColumnComponent = Ember.Component.extend({
     return this.get("stateClass") !== "hb-state-open";
   }.property("stateClass"),
   isEnabled: function() {
-    return App.get("repo.is_collaborator");
-  }.property("App.repo.is_collaborator"),
+    return get("repo.is_collaborator");
+  }.property("repo.is_collaborator"),
   stateClass: function(){
     var github_state = this.get("issue.state");
     if(github_state === "closed"){
@@ -39,4 +41,4 @@ var HbSelectedColumnComponent = Ember.Component.extend({
   }.property("selectedColumn")
 })
 
-module.exports = HbSelectedColumnComponent;
+export default HbSelectedColumnComponent;

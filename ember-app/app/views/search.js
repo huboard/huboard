@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var SearchView = Ember.View.extend({
   classNames: ["search"],
   classNameBindings: ["hasValue:has-value"],
@@ -17,4 +19,4 @@ var SearchView = Ember.View.extend({
   }
 })
 
-module.exports = SearchView;
+export default SearchView;

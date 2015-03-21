@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var SettingsLinkView = Ember.View.extend({
   tagName: 'li',
   classNameBindings: [":hb-widget-link","content.isLinked:hb-state-link:hb-state-unlink"],
@@ -5,4 +7,5 @@ var SettingsLinkView = Ember.View.extend({
 
   }.on("willDeleteElement")
 });
-module.exports = SettingsLinkView;
+
+export default SettingsLinkView;

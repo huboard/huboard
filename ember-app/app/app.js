@@ -1,17 +1,13 @@
-// require other, dependencies here, ie:
-// require('./vendor/moment');
+import Ember from 'ember';
+import Resolver from 'ember/resolver';
+import loadInitializers from 'ember/load-initializers';
+import config from './config/environment';
+import correlationId from './utilities/correlation-id';
+import Repo from 'app/models/repo';
+import Settings from 'app/models/settings';
+import Global from 'app/models/global';
 
-require('../vendor/lodash');
-require('../vendor/jquery');
-require('../vendor/handlebars');
-require('../vendor/ember');
-require("../vendor/autoresize");
-require("../vendor/jquery.textcomplete");
-require("../vendor/task_list.js");
-var color = require('../../vendor/jquery.color');
-require('../utilities/observers');
-
-var Markdown = require("../vendor/marked")
+Ember.MODEL_FACTORY_INJECTIONS = true;
 
 Ember.LinkView.reopen({
   init: function(){
@@ -26,8 +22,6 @@ Ember.LinkView.reopen({
     this.$().parents(".dropdown").removeClass("open")
   }
 })
-
-var correlationId = require("../utilities/correlationId")
 
 Ember.onLoad("Ember.Application", function ($app) {
   $app.initializer({
@@ -81,51 +75,32 @@ Ember.onLoad("Ember.Application", function ($app) {
     name: "settings",
     before: "sockets",
     initialize: function(container, application) {
+      console.log("TODO: hardcoded rauhryan/skipping...");
+      application.set("repo", Repo.create({full_name: "rauhryan/skipping_stones_repo"}));
       application.register('repo:main', application.get("repo"), {instantiate: false});
-      application.register('settings:main', application.Settings);
+      application.register('settings:main', Settings);
       application.inject('settings:main', 'repo', 'repo:main');
       application.inject('controller', 'settings', 'settings:main');
       application.inject('view', 'settings', 'settings:main');
 
-      application.register('global:main', application.Global);
+      application.register('global:main', Global);
       application.inject('controller', 'global', 'global:main');
       application.inject('view', 'global', 'global:main');
     }
   })
 })
 
-var App = Ember.Application.create({
-  rootElement: "#application",
-    dimFilters: [],
-    hideFilters: [],
-    searchFilter: null,
-    memberFilter: null
+var App = Ember.Application.extend({
+  modulePrefix: config.modulePrefix,
+  podModulePrefix: config.podModulePrefix,
+  Resolver: Resolver,
+  //rootElement: "#application",
+  dimFilters: [],
+  hideFilters: [],
+  searchFilter: null,
+  memberFilter: null
 });
 
-App.Markdown = Markdown;
+loadInitializers(App, config.modulePrefix);
 
-App.animateModalClose = function() {
-  var promise = new Ember.RSVP.defer();
-
-  $('body').removeClass("fullscreen-open");
-  promise.resolve();
-
-
-  return promise.promise;
-};
-
-App.animateModalOpen = function() {
-  var promise = new Ember.RSVP.defer();
-
-   $('body').addClass("fullscreen-open");
-  promise.resolve();
-  
-
-  return promise.promise;
-};
-
-
-App.deferReadiness();
-
-module.exports = App;
-
+export default App;

@@ -5,5 +5,4 @@ function guid() {
    return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
 }
 
-module.exports = guid;
-
+export default guid;

@@ -1,4 +1,6 @@
-var hbSelectColumnComponent = require('./hb_selected_column_component');
+import hbSelectColumnComponent from 'app/components/hb-selected-column-component';
+import Ember from 'ember';
+
 
 var HbBoardColumnsComponent = hbSelectColumnComponent.extend({
   stateClass: '',
@@ -6,4 +8,4 @@ var HbBoardColumnsComponent = hbSelectColumnComponent.extend({
   visibleColumns: Ember.computed.alias('columns')
 })
 
-module.exports = HbBoardColumnsComponent;
+export default HbBoardColumnsComponent;

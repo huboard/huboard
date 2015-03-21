@@ -1,4 +1,6 @@
-var KeyPressHandlingMixin = require("../../mixins/keypress_handling")
+import KeyPressHandlingMixin from 'app/mixins/key-press-handling';
+import Ember from 'ember';
+
 
 var IssueBodyView = Ember.View.extend(KeyPressHandlingMixin, {
   classNames: ["fullscreen-card-description","card-comment"],
@@ -17,4 +19,4 @@ var IssueBodyView = Ember.View.extend(KeyPressHandlingMixin, {
   }.on("willDestroyElement"),
 })
 
-module.exports = IssueBodyView;
+export default IssueBodyView;

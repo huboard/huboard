@@ -6,7 +6,8 @@
  * Author:      Yuku Takahashi
  */
 
-;(function ($) {
+
+(function ($) {
 
   'use strict';
 
@@ -743,3 +744,5 @@
   };
 
 })(window.jQuery || window.Zepto);
+
+export default undefined;

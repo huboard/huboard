@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var IntegrationsController = Ember.ObjectController.extend({
   needs: ['settingsIntegrations'],
   possibleIntegrations: Ember.computed.alias('controllers.settingsIntegrations.possibleIntegrations'),
@@ -20,5 +22,4 @@ var IntegrationsController = Ember.ObjectController.extend({
   }
 });
 
-module.exports = IntegrationsController;
-
+export default IntegrationsController;

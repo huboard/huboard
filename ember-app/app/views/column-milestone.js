@@ -1,6 +1,7 @@
-var WrapperView = require("./card_wrapper_view");
+import Ember from 'ember';
+import WrapperView from 'app/views/card-wrapper'
 
-WrapperView = WrapperView.extend({
+MilestoneWrapperView = WrapperView.extend({
   templateName: "milestoneItem",
   classNames: ["card", "card--milestone"]
 })
@@ -83,7 +84,7 @@ var CollectionView = Ember.CollectionView.extend({
     })
 
   }.on("didInsertElement"),
-  itemViewClass: WrapperView
+  itemViewClass: MilestoneWrapperView
 })
 
 var ColumnView = Ember.ContainerView.extend({
@@ -114,4 +115,4 @@ var ColumnView = Ember.ContainerView.extend({
 
 });
 
-module.exports = ColumnView;
+export default ColumnView;

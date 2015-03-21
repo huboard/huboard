@@ -1,8 +1,11 @@
-var ModalView = require("./modal_view")
+import ModalView from 'app/views/modal';
+import animateModalOpen from 'app/config/animate-modal-open';
+
+
 var LoginView = ModalView.extend({
   modalSize: "slimmer",
   didInsertElement: function() {
-    App.animateModalOpen();
+    animateModalOpen();
     this.$(".fullscreen-body").on('click.modal', function(event){
        if(!$(event.target).parents(".hb-selector-component").length) {
         this.$(".open")
@@ -18,4 +21,4 @@ var LoginView = ModalView.extend({
   },
 });
 
-module.exports = LoginView;
+export default LoginView;

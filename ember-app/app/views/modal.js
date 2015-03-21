@@ -1,4 +1,7 @@
-var ModalView = Em.View.extend({
+import Ember from 'ember';
+import animateModalOpen from 'app/config/animate-modal-open';
+
+var ModalView = Ember.View.extend({
   layoutName: "layouts/modal",
   modalSize: "",
   modalCloseCriteria: function(){
@@ -6,7 +9,7 @@ var ModalView = Em.View.extend({
   },
 
   didInsertElement: function() {
-    App.animateModalOpen();
+    animateModalOpen();
 
     $('body').on('keyup.modal', function(event) {
       if (event.keyCode === 27) {
@@ -55,4 +58,4 @@ var ModalView = Em.View.extend({
   }
 });
 
-module.exports = ModalView;
+export default ModalView;

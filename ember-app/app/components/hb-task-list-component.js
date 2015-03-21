@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var HbTaskListComponent = Ember.Component.extend({
   classNames: ["js-task-list-container"],
   onBodyChange: function(){
@@ -29,4 +31,4 @@ var HbTaskListComponent = Ember.Component.extend({
   }.on('willDestroyElement')
 });
 
-module.exports = HbTaskListComponent
+export default HbTaskListComponent;

@@ -1,4 +1,7 @@
-var Spinner = require('../../spin.js');
+import Spinner from 'app/vendor/spin';
+import Ember from 'ember';
+
+
 var HbSpinnerComponent = Ember.Component.extend({
   classNames: ["hb-spinner"],
   spinner: function(){
@@ -26,4 +29,4 @@ var HbSpinnerComponent = Ember.Component.extend({
   }.on('didInsertElement')
 });
 
-module.exports = HbSpinnerComponent;
+export default HbSpinnerComponent;

@@ -1,5 +1,6 @@
 // Last commit: 0ba0d24 (2013-11-06 10:53:04 -0500)
 
+import Ember from 'ember';
 
 (function() {
 var metricsCalculationElement = null,

@@ -1,7 +1,8 @@
-var ModalView = require("../modal_view")
+import ModalView from 'app/views/modal';
+
 
 var MilestonesMissingView = ModalView.extend({
   modalSize: 'slim'
 });
 
-module.exports = MilestonesMissingView;
+export default MilestonesMissingView;

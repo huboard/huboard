@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var FilterView = Ember.View.extend({
   tagName: "li",
   templateName: "filter",
@@ -64,4 +66,4 @@ var FilterView = Ember.View.extend({
   lastClicked: null,
 })
 
-module.exports = FilterView;
+export default FilterView;

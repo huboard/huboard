@@ -1,7 +1,11 @@
-var Board = require("./board");
-var Issue = require("./issue");
+import Board from 'app/models/board';
+import Issue from 'app/models/issue';
+import Serializable from 'app/mixins/serializable';
+import Ember from 'ember';
 
-var Serializable = require("../mixins/serializable");
+
+
+
 var Repo = Ember.Object.extend(Serializable,{
   userUrl :function () {
     return "/" + this.get("owner.login");
@@ -44,7 +48,7 @@ var Repo = Ember.Object.extend(Serializable,{
       .then(function(integrations){
         var results = Ember.A();
         integrations.rows.forEach(function(i){
-          results.pushObject(App.Integration.create(i.value));
+          results.pushObject(Integration.create(i.value));
         })
         this._integrations = Ember.Object.create({ 
           integrations: results 
@@ -63,7 +67,7 @@ var Repo = Ember.Object.extend(Serializable,{
       .then(function(links){
         var results = Ember.A();
         links.forEach(function(l){
-          results.pushObject(App.Link.create(l));
+          results.pushObject(Link.create(l));
         })
         this._links = results; 
         return this._links;
@@ -88,4 +92,4 @@ var Repo = Ember.Object.extend(Serializable,{
   }
 });
 
-module.exports = Repo;
+export default Repo;

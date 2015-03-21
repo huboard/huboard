@@ -1,7 +1,8 @@
-var Settings = require('./settings');
+import Settings from 'app/models/settings';
+
 
 var Global = Settings.extend({
   storageKey: 'global'
 })
 
-module.exports = Global;
+export default Global;

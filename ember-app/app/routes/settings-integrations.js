@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var SettingsIntegrationsRoute = Ember.Route.extend({
   model : function (params, transition){
     // hacks!
@@ -6,4 +8,4 @@ var SettingsIntegrationsRoute = Ember.Route.extend({
   }
 });
 
-module.exports = SettingsIntegrationsRoute;
+export default SettingsIntegrationsRoute;

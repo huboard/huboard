@@ -1,4 +1,4 @@
-
+import Ember from 'ember';
 
 var CssView = Ember.View.extend({
   tagName:"style",
@@ -87,4 +87,4 @@ var CssView = Ember.View.extend({
   }
 });
 
-module.exports = CssView;
+export default CssView;

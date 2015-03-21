@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var IssuesCreateController = Ember.ObjectController.extend({
   needs: ["application"],
   actions: {
@@ -5,7 +7,7 @@ var IssuesCreateController = Ember.ObjectController.extend({
       this.createIssue(this.get("order"));
     }
   },
-  isCollaboratorBinding: "App.repo.is_collaborator",
+  isCollaboratorBinding: "repo.is_collaborator",
   otherLabels: function(){
     return Ember.copy(this.get("controllers.application.model.board.other_labels"));
   }.property("model","controllers.application.model.board.other_labels"),
@@ -35,5 +37,4 @@ var IssuesCreateController = Ember.ObjectController.extend({
   }
 });
 
-module.exports = IssuesCreateController;
-
+export default IssuesCreateController;

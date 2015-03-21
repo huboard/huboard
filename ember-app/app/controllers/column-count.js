@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var ColumnCountController = Ember.ObjectController.extend({
   needs: ["index"],
   issuesCount: function(){
@@ -14,5 +16,4 @@ var ColumnCountController = Ember.ObjectController.extend({
   }.property("issuesCount")
 })
 
-module.exports = ColumnCountController;
-
+export default ColumnCountController;

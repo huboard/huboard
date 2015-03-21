@@ -1,6 +1,8 @@
-var KeyPressHandlingMixin = require("../../mixins/keypress_handling")
+import KeyPressHandlingMixin from 'app/mixins/key-press-handling';
+import ModalView from 'app/views/modal';
 
-var IssuesCreateView = App.ModalView.extend(KeyPressHandlingMixin, {
+
+var IssuesCreateView = ModalView.extend(KeyPressHandlingMixin, {
   registerKeydownEvents: function(){
     self = this;
     ctrl = self.get("controller");
@@ -39,4 +41,4 @@ var IssuesCreateView = App.ModalView.extend(KeyPressHandlingMixin, {
   }
 });
 
-module.exports = IssuesCreateView;
+export default IssuesCreateView;
