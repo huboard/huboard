@@ -1713,8 +1713,8 @@ var IssuesEditController = Ember.ObjectController.extend({
       this.get("model").close();
       this.send("moveToColumn", this.get("columns.lastObject"));
     },
-    reopen: function(){
-      this.get("model").reopen();
+    reopenCard: function(){
+      this.get("model").reopenCard();
     }
   },
   commentBody: null,
@@ -2763,7 +2763,7 @@ var Issue = Ember.Object.extend(Serializable,{
         this.set("processing", false);
       }.bind(this));
   },
-  reopen: function(){
+  reopenCard: function(){
      this.set("processing", true);
 
       var user = this.get("repo.owner.login"),
@@ -4248,7 +4248,7 @@ function program6(depth0,data) {
   data.buffer.push("\n          <button class=\"hb-button hb-button-grey\" ");
   hashContexts = {'on': depth0};
   hashTypes = {'on': "STRING"};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "reopen", {hash:{
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "reopenCard", {hash:{
     'on': ("click")
   },contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   hashContexts = {'disabled': depth0};
