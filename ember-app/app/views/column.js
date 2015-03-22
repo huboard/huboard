@@ -94,7 +94,7 @@ var ColumnView = Ember.ContainerView.extend({
     templateName: "quickIssue",
     classNames: ["create-issue"],
     isVisible: function(){
-      return this.get('controller.isFirstColumn') && get('loggedIn');
+      return this.get('controller.isFirstColumn') && App.get('loggedIn');
     }.property('controller.isFirstColumn'),
   }),
   collapsedView: Ember.View.extend({

@@ -5,7 +5,8 @@
   <% unless ENV["SOCKET_BACKEND"].nil? %>
   <script src='<%= ENV['SOCKET_BACKEND']%>/client.js'></script>
   <% end %>
-  <%= javascript_include_tag 'board/application' %>
+  <%= javascript_include_tag 'vendor' %>
+  <%= javascript_include_tag 'app' %>
   <%= javascript_include_tag 'bootstrap' %>
   <%= javascript_include_tag 'vendor/jquery-ui' %>
   <script>
@@ -32,31 +33,37 @@
      };
 
     })(jQuery);
-    App.set("repo", Ember.Object.createWithMixins(App.Serializable,<%= @repo.to_hash.to_json.html_safe %>));
-    <% if logged_in? %>
-      App.set("loggedIn", true);
-      App.set("authLevel", "<%= @auth_level %>")
-      App.set("currentUser",<%= current_user.attribs.to_json.html_safe %>);
-      <% if Rails.application.config.sockets.socket_backend %>
-        App.set("socketBackend", "<%= Rails.application.config.sockets.socket_backend %>");
-      <% end %>
-    <% else %>
-      App.set("loggedIn", false);
-    <% end %>
+    Ember.Application.initializer({
+      name: 'advanceReadiness',
+      after: 'deferReadiness',
+      initialize: function(container, application){
+        application.set("repo", Ember.Object.create(<%= @repo.to_hash.to_json.html_safe %>));
+        <% if logged_in? %>
+          application.set("loggedIn", true);
+          application.set("authLevel", "<%= @auth_level %>")
+          application.set("currentUser",<%= current_user.attribs.to_json.html_safe %>);
+          <% if Rails.application.config.sockets.socket_backend %>
+            App.set("socketBackend", "<%= Rails.application.config.sockets.socket_backend %>");
+          <% end %>
+        <% else %>
+          application.set("loggedIn", false);
+        <% end %>
 
-    if(window.analytics) {
-      App.Router.reopen({
-        notifySegmentIo: function(){
-          return window.analytics.page(this.get('url'),{
-            page: this.get('url'),
-            title: this.get('url')
-          }) 
-        }.on("didTransition")
+        if(window.analytics) {
+          application.Router.reopen({
+            notifySegmentIo: function(){
+              return window.analytics.page(this.get('url'),{
+                page: this.get('url'),
+                title: this.get('url')
+              }) 
+            }.on("didTransition")
 
-      });
+          });
 
-    }
+        }
+        application.advanceReadiness();
+      }
+    });
 
-    App.advanceReadiness();
   </script>
 <% end %>

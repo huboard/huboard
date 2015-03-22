@@ -13,7 +13,7 @@ var CardWrapperView = Ember.View.extend({
     isClosable: function () {
      var currentState = this.get("content.current_state");
 
-     return get("loggedIn") && currentState.is_last && this.get("content.state") === "open";
+     return App.get("loggedIn") && currentState.is_last && this.get("content.state") === "open";
     }.property("loggedIn", "content.current_state","content.state"),
     onDestroy: function (){
       Ember.run.once(function () {
@@ -31,13 +31,13 @@ var CardWrapperView = Ember.View.extend({
       }.bind(this))
     }.observes("content.isArchived"),
     isDraggable: function( ){
-      return get("loggedIn") && this.get("isCollaborator");
+      return App.get("loggedIn") && this.get("isCollaborator");
     }.property("loggedIn","content.state"),
     isFiltered: function() {
-      var dimFilters = get("dimFilters"),
-          hideFilters = get("hideFilters"),
-          searchFilter = get("searchFilter"),
-          memberFilter = get("memberFilter"),
+      var dimFilters = App.get("dimFilters"),
+          hideFilters = App.get("hideFilters"),
+          searchFilter = App.get("searchFilter"),
+          memberFilter = App.get("memberFilter"),
           that = this;
 
       if(searchFilter) {
@@ -63,7 +63,7 @@ var CardWrapperView = Ember.View.extend({
 
       return "";
 
-    }.property("memberFilter.mode", "dimFilters", "hideFilters", "searchFilter", "eventReceived"),
+    }.property("App.memberFilter.mode", "App.dimFilters", "App.hideFilters", "App.searchFilter", "App.eventReceived"),
     click: function(){
       var view = Ember.View.views[this.$().find("> div").attr("id")];
       view.get("controller").send("fullscreen")

@@ -12,15 +12,15 @@ var IndexRoute = Ember.Route.extend({
     return repo.fetchBoard(linked_boards);
   },
   afterModel: function (model){
-    if(get("isLoaded")) {
+    if(App.get("isLoaded")) {
       return;
     }
-    var cssView = CssView.create({
-      content: model
-    });
-    cssView.appendTo("head")
+   // var cssView = CssView.create({
+   //   content: model
+   // });
+   // cssView.appendTo("head")
     return model.linkedBoardsPreload.done(function(linkedBoardsPromise){
-     set("isLoaded", true); 
+     App.set("isLoaded", true); 
      var socket = this.get("socket");
      return linkedBoardsPromise.then(function(boards){
        boards.forEach(function(b) {

@@ -1,6 +1,6 @@
 <div class="main-toolbar">
   <div class="sidebar-toggle">
-    <a href="#" {{action "toggleSidebar" }}>Filters <i {{bind-attr class=":ui-icon isSidebarOpen:ui-icon-triangle-1-w:ui-icon-triangle-1-e"}} class="ui-icon ui-icon-triangle-1-e"></i></a>
+    <a href="#" {{action "toggleSidebar" }}>Filters <i {{bind-attr class=":ui-icon isSidebarOpen:ui-icon-triangle-1-w:ui-icon-triangle-1-e"}} ></i></a>
   </div>
 
   {{#if filtersActive}}
@@ -24,8 +24,8 @@
 <div id="main-stage" {{bind-attr class=":main-content isSidebarOpen:sidebar-open"}}>
   <div class="sidebar left">
     <div class="sidebar-wrapper">
-      {{outlet sidebarTop}}
-      {{outlet sidebarMiddle}}
+      {{outlet "sidebarTop"}}
+      {{outlet "sidebarMiddle"}}
     </div>
   </div>
   

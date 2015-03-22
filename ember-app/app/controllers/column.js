@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import Issue from 'app/models/issue';
 
 var ColumnController = Ember.ObjectController.extend({
   needs: ["index", "application"],

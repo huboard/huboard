@@ -29,7 +29,7 @@ var Repo = Ember.Object.extend(Serializable,{
     var self = this;
     return Ember.$.getJSON("/api/" + self.get("full_name") + "/link_labels")
     .then(function(link_labels){
-      urls = link_labels.map(function (l) {
+      var urls = link_labels.map(function (l) {
         return "/api/" + self.get("full_name") + "/linked/" + l.user + "/" + l.repo  
       })
 

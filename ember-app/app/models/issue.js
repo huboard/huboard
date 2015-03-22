@@ -236,7 +236,7 @@ Issue.reopenClass({
        body: "",
        assignee: null,
        milestone: null,
-       repo: get("repo"),
+       repo: App.get("repo"),
        labels: []
      })
   }

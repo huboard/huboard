@@ -1,5 +1,5 @@
-import Fuse from 'app/"../vendor/fuse.min"';
 import Ember from 'ember';
+import { debouncedObserver } from 'app/utilities/observers';
 
 
 var SearchController = Ember.Controller.extend({
@@ -18,7 +18,7 @@ var SearchController = Ember.Controller.extend({
     }
   }.on("init"),
   term: "",
-  termChanged : Ember.debouncedObserver(function(){
+  termChanged : debouncedObserver(function(){
     var term = this.get("term");
     var issues = this.get("controllers.application.model.board.combinedIssues");
     var threshold = isNaN(term) ? 0.4 : 0.1;

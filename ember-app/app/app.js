@@ -25,6 +25,12 @@ Ember.LinkView.reopen({
 
 Ember.onLoad("Ember.Application", function ($app) {
   $app.initializer({
+    name: 'deferReadiness',
+    initialize: function(container, application){
+      application.deferReadiness();
+    }
+  });
+  $app.initializer({
     name: "sockets",
     initialize : function (container, application){
       if(application.get("socketBackend")){
@@ -74,9 +80,8 @@ Ember.onLoad("Ember.Application", function ($app) {
   $app.initializer({
     name: "settings",
     before: "sockets",
+    after: 'advanceReadiness',
     initialize: function(container, application) {
-      console.log("TODO: hardcoded rauhryan/skipping...");
-      application.set("repo", Repo.create({full_name: "rauhryan/skipping_stones_repo"}));
       application.register('repo:main', application.get("repo"), {instantiate: false});
       application.register('settings:main', Settings);
       application.inject('settings:main', 'repo', 'repo:main');
@@ -94,11 +99,12 @@ var App = Ember.Application.extend({
   modulePrefix: config.modulePrefix,
   podModulePrefix: config.podModulePrefix,
   Resolver: Resolver,
-  //rootElement: "#application",
+  rootElement: "#application",
   dimFilters: [],
   hideFilters: [],
   searchFilter: null,
-  memberFilter: null
+  memberFilter: null,
+  
 });
 
 loadInitializers(App, config.modulePrefix);

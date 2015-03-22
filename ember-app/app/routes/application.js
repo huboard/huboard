@@ -48,7 +48,7 @@ var ApplicationRoute = Ember.Route.extend({
        Ember.run.once(function(){
         console.log("TODO: fix this call to App")
         var repo = App.get("repo");
-        p.resolve(Repo.create(repo.serialize()));
+        p.resolve(Repo.create(repo));
        })
     });
   },
