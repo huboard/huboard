@@ -118,7 +118,7 @@ var Issue = Ember.Object.extend(Serializable,{
       return Ember.$.post("/api/" + full_name + "/archiveissue", {
         number : this.get("number"),
         correlationId: this.get("correlationId")
-      }).then(function () {
+      }, "json").then(function () {
         this.set("processing", false);
         this.set("isArchived", true);
       }.bind(this)).fail(function(e){
@@ -135,7 +135,7 @@ var Issue = Ember.Object.extend(Serializable,{
       Ember.$.post("/api/" + full_name + "/close", {
         number : this.get("number"),
         correlationId: this.get("correlationId")
-      }).then(function() {
+      }, "json").then(function() {
         this.set("state","closed")
         this.set("processing", false)
       }.bind(this)).fail(function(e){
@@ -152,7 +152,7 @@ var Issue = Ember.Object.extend(Serializable,{
       Ember.$.post("/api/" + full_name + "/open", {
         number : this.get("number"),
         correlationId: this.get("correlationId")
-      }).then(function() {
+      }, "json").then(function() {
         this.set("state","open")
         this.set("processing", false)
       }.bind(this)).fail(function(e){
@@ -168,7 +168,7 @@ var Issue = Ember.Object.extend(Serializable,{
         number : this.get("number"),
         assignee: login, 
         correlationId: this.get("correlationId")
-      }).then(function( response ){
+      }, "json").then(function( response ){
           this.set("assignee", response.assignee);
           return this;
       }.bind(this));
