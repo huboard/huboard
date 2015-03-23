@@ -1,6 +1,6 @@
 
     <div class="flex-form-bottom">
-      <form {{action submit on="submit"}} class="flex-form">
+      <form {{action 'submit' on="submit"}} class="flex-form">
         <h3>Instructions</h3>
         <p>
           Paste the incoming webhook url from Slack below
@@ -25,7 +25,7 @@
         </p>
         <button {{bind-attr disabled=disabled}} class="hb-button">Submit webhook</button>
         <div class="with-line"><span>or</span></div>
-        <div class="cancel"> <a href="#" {{action cancel}}>Cancel</a> </div>
+        <div class="cancel"> <a href="#" {{action 'cancel'}}>Cancel</a> </div>
       </form>
     </div>
 

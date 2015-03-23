@@ -1,7 +1,7 @@
 import Ember from 'ember';
 
 var SettingsLinkController = Ember.ObjectController.extend({
-  needs: ["settings", "settingsLinks"],
+  needs: ["settings", "settings/links"],
   isLinked: function(){
     return this.get("controllers.settings.column_labels.length") === this.get("columns.length")
 
@@ -9,7 +9,7 @@ var SettingsLinkController = Ember.ObjectController.extend({
   isDisabled: false,
   actions: {
     remove: function(link) {
-      this.get("controllers.settingsLinks.model").removeObject(link);
+      this.get("controllers.settings/links.model").removeObject(link);
       Ember.$.ajax({
         url: "/api/"+ this.get('controllers.settings.model.repository.full_name') + "/links",
         data: {

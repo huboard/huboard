@@ -39,7 +39,7 @@
     <div class="submit-comment-buttons">
       {{#if isCollaborator}}
         {{#if isClosed}}
-          <button class="hb-button hb-button-grey" {{action "reopen" on="click"}}{{bind-attr disabled=processing}}>Reopen issue </button>
+          <button class="hb-button hb-button-grey" {{action "reopenCard" on="click"}}{{bind-attr disabled=processing}}>Reopen issue </button>
         {{else}}
           <button class="hb-button hb-button-grey" {{action "close" on="click"}}{{bind-attr disabled=processing}}>Close issue </button>
         {{/if}}

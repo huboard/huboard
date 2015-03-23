@@ -1,4 +1,6 @@
 import Board from 'app/models/board';
+import Link from 'app/models/link';
+import Integration from 'app/models/integration';
 import Issue from 'app/models/issue';
 import Serializable from 'app/mixins/serializable';
 import Ember from 'ember';

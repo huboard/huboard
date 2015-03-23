@@ -1,8 +1,8 @@
 import Ember from 'ember';
 
-var IntegrationsController = Ember.ObjectController.extend({
-  needs: ['settingsIntegrations'],
-  possibleIntegrations: Ember.computed.alias('controllers.settingsIntegrations.possibleIntegrations'),
+var SettingsIntegrationsIndexController = Ember.ObjectController.extend({
+  needs: ['settings/integrations'],
+  possibleIntegrations: Ember.computed.alias('controllers.settings/integrations.possibleIntegrations'),
   disabled: function(){
     return this.get("processing") || this.get("editing.disabled");
   }.property("processing","editing.disabled"),
@@ -22,4 +22,4 @@ var IntegrationsController = Ember.ObjectController.extend({
   }
 });
 
-export default IntegrationsController;
+export default SettingsIntegrationsIndexController;

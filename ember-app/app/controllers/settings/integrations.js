@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-var IntegrationsController = Ember.ObjectController.extend({
+var SettingsIntegrationsController = Ember.ObjectController.extend({
   needs: ['application'],
   possibleIntegrations: [
     Ember.Object.extend({
@@ -103,4 +103,4 @@ var IntegrationsController = Ember.ObjectController.extend({
   }
 });
 
-export default IntegrationsController;
+export default SettingsIntegrationsController;

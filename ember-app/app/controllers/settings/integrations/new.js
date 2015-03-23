@@ -2,13 +2,13 @@ import Ember from 'ember';
 import Integration from 'app/models/integration';
 
 var SettingsIntegrationsNewController = Ember.ObjectController.extend({
-  needs: ['application', "settingsIntegrations"],
+  needs: ['application', "settings/integrations"],
   disabled: function(){
     return this.get("processing") || this.get("model.disabled");
   }.property("processing","model.disabled"),
   actions: {
     submit: function(){
-      var controller = this.get("controllers.settingsIntegrations"),
+      var controller = this.get("controllers.settings/integrations"),
         endpoint = "/api/" + this.get("controllers.application.model.full_name") + "/integrations";
 
         this.set("processing", true);

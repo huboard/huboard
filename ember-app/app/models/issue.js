@@ -144,7 +144,7 @@ var Issue = Ember.Object.extend(Serializable,{
         this.set("processing", false);
       }.bind(this));
   },
-  reopen: function(){
+  reopenCard: function(){
      this.set("processing", true);
 
       var user = this.get("repo.owner.login"),

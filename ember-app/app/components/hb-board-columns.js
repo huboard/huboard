@@ -1,4 +1,4 @@
-import hbSelectColumnComponent from 'app/components/hb-selected-column-component';
+import hbSelectColumnComponent from 'app/components/hb-selected-column';
 import Ember from 'ember';
 
 
