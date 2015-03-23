@@ -1,8 +1,9 @@
 import Ember from 'ember';
 import animateModalOpen from 'app/config/animate-modal-open';
+import layout from 'app/templates/layouts/modal';
 
 var ModalView = Ember.View.extend({
-  layoutName: "layouts/modal",
+  layout: layout,
   modalSize: "",
   modalCloseCriteria: function(){
     return false;

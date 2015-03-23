@@ -3,7 +3,7 @@ import Board from 'app/models/board';
 
 
 
-module.exports = Ember.Route.extend({
+var MilestonesRoute = Ember.Route.extend({
   model: function() {
     var repo = this.modelFor("application");
     var linked_boards = repo.fetchLinkedBoards();
@@ -109,4 +109,4 @@ module.exports = Ember.Route.extend({
   }
 })
 
-export default undefined;
+export default MilestonesRoute;

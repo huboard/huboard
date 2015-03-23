@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-var IssuesEditController = Ember.ObjectController.extend({
+var IssueController = Ember.ObjectController.extend({
   needs: ["application"],
   isCollaborator: function(){
     return this.get("model.repo.is_collaborator");
@@ -111,4 +111,4 @@ var IssuesEditController = Ember.ObjectController.extend({
   }.property('controllers.application.model.board.assignees','allActivities')
 });
 
-export default IssuesEditController;
+export default IssueController;

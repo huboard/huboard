@@ -3,7 +3,7 @@ import KeyPressHandlingMixin from 'app/mixins/key-press-handling';
 
 
 
-var IssuesView = ModalView.extend(KeyPressHandlingMixin, {
+var IssueView = ModalView.extend(KeyPressHandlingMixin, {
   registerKeydownEvents: function(){
     var self = this;
     $("div.fullscreen-card").keydown(function(e){
@@ -25,4 +25,4 @@ var IssuesView = ModalView.extend(KeyPressHandlingMixin, {
   }
 });
 
-export default IssuesView;
+export default IssueView;

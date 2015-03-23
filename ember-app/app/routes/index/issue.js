@@ -1,7 +1,7 @@
-import Route from 'app/routes/';
+import Route from 'app/routes/issue';
 
 
-module.exports = Route.extend({
+var IndexIssueRoute = Route.extend({
   model : function (params, transition){
     // hacks!
     var issue = this.modelFor("application")
@@ -20,4 +20,4 @@ module.exports = Route.extend({
   }
 });
 
-export default undefined;
+export default IndexIssueRoute;

@@ -2,7 +2,7 @@
   <div class="fullscreen-card-preamble clearfix">
     {{render 'issue.title' model }}
       <div class="flex-crumbs">
-        {{view App.IssueSelectedColumnView content=columns}}
+        {{view "issue.selected-column" content=columns}}
       </div>
   </div>
   <div class="fullscreen-card-right">

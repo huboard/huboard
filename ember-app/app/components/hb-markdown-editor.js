@@ -1,4 +1,4 @@
-import Markdown from 'app/"../vendor/marked"';
+var Markdown = marked;
 import Ember from 'ember';
 
 
