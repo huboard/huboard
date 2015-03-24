@@ -48,7 +48,7 @@ module Api
         }, status: 403
       end
 
-      render json: {}
+      render json: { link: params[:link] }, status: 200
     end
   end
 end
