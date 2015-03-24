@@ -1885,6 +1885,7 @@ var MilestonesMissingController = Ember.ObjectController.extend({
       $.ajax({
         url: "/api/" + owner + "/" + name + "/milestones",
         type: "POST",
+        dataType: 'json',
         data: {milestone: milestone},
         success: function(response) {
           controller.get("model.onAccept").call(controller.get("columnController"), response)
@@ -2739,7 +2740,7 @@ var Issue = Ember.Object.extend(Serializable,{
       return Ember.$.post("/api/" + full_name + "/archiveissue", {
         number : this.get("number"),
         correlationId: this.get("correlationId")
-      }).then(function () {
+      }, function(){}, "json").then(function () {
         this.set("processing", false);
         this.set("isArchived", true);
       }.bind(this)).fail(function(e){
@@ -2756,7 +2757,7 @@ var Issue = Ember.Object.extend(Serializable,{
       Ember.$.post("/api/" + full_name + "/close", {
         number : this.get("number"),
         correlationId: this.get("correlationId")
-      }).then(function() {
+      }, function(){}, "json").then(function() {
         this.set("state","closed")
         this.set("processing", false)
       }.bind(this)).fail(function(e){
@@ -2773,7 +2774,7 @@ var Issue = Ember.Object.extend(Serializable,{
       Ember.$.post("/api/" + full_name + "/open", {
         number : this.get("number"),
         correlationId: this.get("correlationId")
-      }).then(function() {
+      }, function(){}, "json").then(function() {
         this.set("state","open")
         this.set("processing", false)
       }.bind(this)).fail(function(e){
@@ -2789,7 +2790,7 @@ var Issue = Ember.Object.extend(Serializable,{
         number : this.get("number"),
         assignee: login, 
         correlationId: this.get("correlationId")
-      }).then(function( response ){
+      }, function(){}, "json").then(function( response ){
           this.set("assignee", response.assignee);
           return this;
       }.bind(this));
@@ -2816,7 +2817,7 @@ var Issue = Ember.Object.extend(Serializable,{
       milestone: milestone ? milestone.number : null,
       changed_milestones: changedMilestones,
       correlationId: this.get("correlationId")
-    }).then(function( response ){
+    }, function(){}, "json").then(function( response ){
         this.set("_data.order", response._data.order);
         this.set("_data.milestone_order", response._data.milestone_order);
         return this;
@@ -2839,12 +2840,12 @@ var Issue = Ember.Object.extend(Serializable,{
         column: column.index.toString(),
         moved_columns: changedColumns,
         correlationId: this.get("correlationId")
-      }).then(function( response ){
+      }, function( response ){
          this.set("_data.order", response._data.order);
          this.set("body", response.body);
          this.set("body_html", response.body_html);
          return this;
-      }.bind(this));
+      }.bind(this), "json");
   }
 
 });
@@ -3080,6 +3081,15 @@ var ApplicationRoute = Ember.Route.extend({
     $(document).ajaxError(function(event, xhr){
       if(App.loggedIn && xhr.status == 404){
         this.send("sessionErrorHandler");
+      }
+      if(App.loggedIn && xhr.status == 422){
+        var contentType = xhr.getResponseHeader("Content-Type"),
+            isJson = contentType.indexOf("application/json") === 0;
+
+        if(isJson) {
+          var message = JSON.parse(xhr.responseText);
+          message.error === "CSRF token is expired" && this.send("sessionErrorHandler");
+        }
       }
     }.bind(this));
   }

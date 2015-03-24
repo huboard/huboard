@@ -27,6 +27,7 @@ var MilestonesMissingController = Ember.ObjectController.extend({
       $.ajax({
         url: "/api/" + owner + "/" + name + "/milestones",
         type: "POST",
+        dataType: 'json',
         data: {milestone: milestone},
         success: function(response) {
           controller.get("model.onAccept").call(controller.get("columnController"), response)

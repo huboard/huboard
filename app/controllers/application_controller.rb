@@ -2,12 +2,20 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
+  rescue_from ActionController::InvalidAuthenticityToken, :with => :csrf_failed
+
 
   include ApplicationHelper
 
   after_action :queue_job
 
   protected
+  def csrf_failed
+    respond_to do |format|
+      format.html { render :server_error, status: 422 }
+      format.json { render json: { status: 422, error: "CSRF token is expired", message:"CSRF token is expired" }, status: 422  }
+    end
+  end
   def queue_job
     instance_variable_names = self.instance_variable_names.reject do |name|
       name.start_with? "@_"
