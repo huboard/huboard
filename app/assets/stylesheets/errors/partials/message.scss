@@ -108,6 +108,23 @@
     cursor: pointer;
   }
 
+  .message-resolution {
+    width: 100%;
+    p {
+      text-align: left;
+      margin-bottom: 2px;
+    }
+    a {
+      color: #F69333;
+    }
+  }
+  .message-steps {
+    float: left;
+    position: relative;
+    bottom: 12px;
+    color: #ffffff;
+  }
+
 }
 
 .illustration {
