@@ -33,6 +33,7 @@ Rails.application.routes.draw do
         resources :milestones, only: [:create, :update]
         resources :links, only: [:index, :create]
         delete 'links' => 'links#destroy'
+        post 'links/validate' => 'links#validate'
         put 'columns' => 'columns#update'
         get 'settings' => 'settings#index'
         get 'board' => 'board#index', as: 'board'
