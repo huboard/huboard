@@ -1,4 +1,5 @@
 Rails.application.routes.draw do 
+  match 'unauthenticated_saas' => 'saas/errors#unauthenticated_saas', via: :all
   mount Saas::Engine => "/settings"
   scope "/api" do
     get '/profiles'      => "saas/profiles#index"

@@ -1,7 +1,8 @@
 module Saas
   module BeforeAction
     def check_account
-      return if params[:controller] == 'errors'
+      ## HACKS:? SPECIAL CHECK
+      return if ["errors","saas/errors"].include? params[:controller]
       return  unless params.has_key?(:user) && params.has_key?(:repo)
 
       repo = gh.repos(params[:user], params[:repo]).raw
@@ -22,7 +23,7 @@ module Saas
           end
 
           failure :unauthorized do
-            throw :warden, message:"Nope"
+            throw :warden, action: 'unauthenticated_saas'
           end
         end
       end
