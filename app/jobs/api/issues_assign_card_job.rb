@@ -6,7 +6,7 @@ module Api
     def payload(params)
       {
         issue: params[:issue],
-        assignee: params[:assignee]
+        assignee: params[:issue]["assignee"]
       }
     end
   end

@@ -1,6 +1,7 @@
 module Saas
   class ProfilesController < Saas::ApplicationController
     include ::HuBoard::AccountHelpers
+    before_action :login, only: :show
     def show
       render :show, layout: "application"
     end
@@ -101,6 +102,12 @@ module Saas
         render json: {success: false, message: "Unable to find customer"}
       end
     end
+
+    :protected
+      def login
+        request.env['warden'].logout if github_authenticated? :default
+        github_authenticate! :private
+      end
 
   end
 end

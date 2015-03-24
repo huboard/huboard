@@ -1378,12 +1378,17 @@ var IssueActivityController = BufferedController.extend({
   currentUserBinding: "App.currentUser",
   mentions: Ember.computed.alias("controllers.issue.mentions"),
   isEditing: false,
-  disabled: false,
+  disabled: function(){
+    return this.get("isEmpty");
+  }.property('isEmpty'),
   canEdit: function(){
     return this.get("isLoggedIn") &&
       ( this.get("isCollaborator") || (this.get("currentUser.id") === this.get("model.user.id")) );
 
   }.property('{isCollaborator,isLoggedIn,currentUser}'),
+  isEmpty: function(){
+    return !this.get("bufferedContent.body").trim().length
+  }.property("bufferedContent.body"),
   actions: {
     taskChanged: function(body){
       this.set('bufferedContent.body', body);
@@ -1393,6 +1398,9 @@ var IssueActivityController = BufferedController.extend({
       this.set("isEditing", true);
     },
     save: function() {
+      if (!this.get("bufferedContent.body").trim().length) {
+        return;
+      }
       var controller = this,
         model = controller.get('model'),
         url = "/api/" + this.get("controllers.issue.model.repo.full_name") + "/issues/comments/" + this.get("model.id");
@@ -1440,7 +1448,9 @@ var IssueBodyController = BufferedController.extend({
   currentUserBinding: "App.currentUser",
   mentions: Ember.computed.alias("controllers.issue.mentions"),
   isEditing: false,
-  disabled: false,
+  disabled: function(){
+    return !this.get("bufferedContent.body").trim().length
+  }.property('isEmpty'),
   canEdit: function(){
     return this.get("isLoggedIn") &&
       ( this.get("isCollaborator") || (this.get("currentUser.id") === this.get("model.user.id")) );
@@ -1455,7 +1465,9 @@ var IssueBodyController = BufferedController.extend({
       !this.get('disabled') && this.set("isEditing", true);
     },
     save: function() {
-
+      if (!this.get("bufferedContent.body").trim().length) {
+        return;
+      }
       var controller = this,
         model = controller.get("model"),
         url = "/api/" + this.get("controllers.issue.model.repo.full_name") + "/issues/" + this.get("model.number");
@@ -1647,6 +1659,10 @@ var IssuesEditController = Ember.ObjectController.extend({
   isClosed: function(){
     return this.get("model.state") == "closed";
   }.property("model.state"),
+  isEmpty: function(){
+    return !this.get("commentBody") ||
+      !this.get("commentBody").trim().length
+  }.property("commentBody"),
   actions: {
     labelsChanged: function () {
        Ember.run.once(function () {
@@ -1670,7 +1686,10 @@ var IssuesEditController = Ember.ObjectController.extend({
       Ember.run.next(this, "send", "forceRepaint", "milestones")
     },
     submitComment: function () {
-      if (this.get("processing") || !this.get("commentBody")) return;
+      if (this.get("processing") || this.get("isEmpty")) {
+        return;
+      }
+
       var comments = this.get("model.activities.comments");
 
       this.set("processing", true);
@@ -1694,16 +1713,19 @@ var IssuesEditController = Ember.ObjectController.extend({
       this.get("model").close();
       this.send("moveToColumn", this.get("columns.lastObject"));
     },
-    reopen: function(){
-      this.get("model").reopen();
+    reopenCard: function(){
+      this.get("model").reopenCard();
     }
   },
   commentBody: null,
+  isEmpty: function(){
+    return !this.get("commentBody").trim().length
+  }.property("commentBody"),
   isValid: function () {
     return this.get("commentBody");
   }.property("commentBody"),
   disabled: function () {
-      return this.get("processing") || !this.get("isValid");
+      return this.get("processing") || !this.get("isValid") || this.get("isEmpty");
   }.property("processing","isValid"),
   _events : function () {
      var events = this.get("model.activities.events");
@@ -1863,6 +1885,7 @@ var MilestonesMissingController = Ember.ObjectController.extend({
       $.ajax({
         url: "/api/" + owner + "/" + name + "/milestones",
         type: "POST",
+        dataType: 'json',
         data: {milestone: milestone},
         success: function(response) {
           controller.get("model.onAccept").call(controller.get("columnController"), response)
@@ -2222,10 +2245,14 @@ var SettingsLinksIndexController = Ember.ObjectController.extend({
           controller.set("errorMessage", '');
           controller.set("repoFullName","")
         }, function(jqXHR){
-          var response = JSON.parse(jqXHR.responseText);
           controller.set("shouldDisplayError", true);
-          controller.set("errorMessage", response.message);
           controller.set("isDisabled", false);
+          try {
+            var response = JSON.parse(jqXHR.responseText);
+            controller.set("errorMessage", response.message);
+          } catch(err) {
+            controller.set("errorMessage", "Could Not Link Board: Unspecified Error");
+          }
         });
     }
   }
@@ -2717,7 +2744,7 @@ var Issue = Ember.Object.extend(Serializable,{
       return Ember.$.post("/api/" + full_name + "/archiveissue", {
         number : this.get("number"),
         correlationId: this.get("correlationId")
-      }).then(function () {
+      }, function(){}, "json").then(function () {
         this.set("processing", false);
         this.set("isArchived", true);
       }.bind(this)).fail(function(e){
@@ -2734,14 +2761,14 @@ var Issue = Ember.Object.extend(Serializable,{
       Ember.$.post("/api/" + full_name + "/close", {
         number : this.get("number"),
         correlationId: this.get("correlationId")
-      }).then(function() {
+      }, function(){}, "json").then(function() {
         this.set("state","closed")
         this.set("processing", false)
       }.bind(this)).fail(function(e){
         this.set("processing", false);
       }.bind(this));
   },
-  reopen: function(){
+  reopenCard: function(){
      this.set("processing", true);
 
       var user = this.get("repo.owner.login"),
@@ -2751,7 +2778,7 @@ var Issue = Ember.Object.extend(Serializable,{
       Ember.$.post("/api/" + full_name + "/open", {
         number : this.get("number"),
         correlationId: this.get("correlationId")
-      }).then(function() {
+      }, function(){}, "json").then(function() {
         this.set("state","open")
         this.set("processing", false)
       }.bind(this)).fail(function(e){
@@ -2767,7 +2794,7 @@ var Issue = Ember.Object.extend(Serializable,{
         number : this.get("number"),
         assignee: login, 
         correlationId: this.get("correlationId")
-      }).then(function( response ){
+      }, function(){}, "json").then(function( response ){
           this.set("assignee", response.assignee);
           return this;
       }.bind(this));
@@ -2794,7 +2821,7 @@ var Issue = Ember.Object.extend(Serializable,{
       milestone: milestone ? milestone.number : null,
       changed_milestones: changedMilestones,
       correlationId: this.get("correlationId")
-    }).then(function( response ){
+    }, function(){}, "json").then(function( response ){
         this.set("_data.order", response._data.order);
         this.set("_data.milestone_order", response._data.milestone_order);
         return this;
@@ -2817,12 +2844,12 @@ var Issue = Ember.Object.extend(Serializable,{
         column: column.index.toString(),
         moved_columns: changedColumns,
         correlationId: this.get("correlationId")
-      }).then(function( response ){
+      }, function( response ){
          this.set("_data.order", response._data.order);
          this.set("body", response.body);
          this.set("body_html", response.body_html);
          return this;
-      }.bind(this));
+      }.bind(this), "json");
   }
 
 });
@@ -2926,19 +2953,34 @@ var Repo = Ember.Object.extend(Serializable,{
   },
   createLink: function(name){
     var board = this;
-    return this.fetchLinks().then(function(links){
-      var api = "/api/" + board.get("full_name") + "/links";
-      return Ember.$.ajax({
-        url: api,
-        type: 'POST',
-        dataType: 'json',
-        data: {link: name},
-        success: function(response){
-          links.pushObject(Ember.Object.create(response));
-        }
-      })
-    })
-
+    return new Ember.RSVP.Promise(function(resolve, reject){
+      board.validateLink(name).then(function(){
+        board.fetchLinks().then(function(links){
+          var api = "/api/" + board.get("full_name") + "/links";
+          return Ember.$.ajax({
+            url: api,
+            type: 'POST',
+            dataType: 'json',
+            data: {link: name},
+            success: function(response){
+              links.pushObject(Ember.Object.create(response));
+              resolve(response);
+            },
+            error: function(jqXHR){
+              reject(jqXHR);
+            }
+          })
+        })
+      }, function(error){
+        reject(jqXHR);
+      });
+    });
+  },
+  validateLink: function(name){
+    var api = "/api/" + this.get("full_name") + "/links/validate";
+    return Ember.$.post(api, {
+      link: name,
+    },'json')
   }
 });
 
@@ -3058,6 +3100,15 @@ var ApplicationRoute = Ember.Route.extend({
     $(document).ajaxError(function(event, xhr){
       if(App.loggedIn && xhr.status == 404){
         this.send("sessionErrorHandler");
+      }
+      if(App.loggedIn && xhr.status == 422){
+        var contentType = xhr.getResponseHeader("Content-Type"),
+            isJson = contentType.indexOf("application/json") === 0;
+
+        if(isJson) {
+          var message = JSON.parse(xhr.responseText);
+          message.error === "CSRF token is expired" && this.send("sessionErrorHandler");
+        }
       }
     }.bind(this));
   }
@@ -4226,7 +4277,7 @@ function program6(depth0,data) {
   data.buffer.push("\n          <button class=\"hb-button hb-button-grey\" ");
   hashContexts = {'on': depth0};
   hashTypes = {'on': "STRING"};
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "reopen", {hash:{
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "reopenCard", {hash:{
     'on': ("click")
   },contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   hashContexts = {'disabled': depth0};

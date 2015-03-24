@@ -34,6 +34,10 @@ var IssuesEditController = Ember.ObjectController.extend({
   isClosed: function(){
     return this.get("model.state") == "closed";
   }.property("model.state"),
+  isEmpty: function(){
+    return !this.get("commentBody") ||
+      !this.get("commentBody").trim().length
+  }.property("commentBody"),
   actions: {
     labelsChanged: function () {
        Ember.run.once(function () {
@@ -57,7 +61,10 @@ var IssuesEditController = Ember.ObjectController.extend({
       Ember.run.next(this, "send", "forceRepaint", "milestones")
     },
     submitComment: function () {
-      if (this.get("processing") || !this.get("commentBody")) return;
+      if (this.get("processing") || this.get("isEmpty")) {
+        return;
+      }
+
       var comments = this.get("model.activities.comments");
 
       this.set("processing", true);
@@ -81,16 +88,19 @@ var IssuesEditController = Ember.ObjectController.extend({
       this.get("model").close();
       this.send("moveToColumn", this.get("columns.lastObject"));
     },
-    reopen: function(){
-      this.get("model").reopen();
+    reopenCard: function(){
+      this.get("model").reopenCard();
     }
   },
   commentBody: null,
+  isEmpty: function(){
+    return !this.get("commentBody").trim().length
+  }.property("commentBody"),
   isValid: function () {
     return this.get("commentBody");
   }.property("commentBody"),
   disabled: function () {
-      return this.get("processing") || !this.get("isValid");
+      return this.get("processing") || !this.get("isValid") || this.get("isEmpty");
   }.property("processing","isValid"),
   _events : function () {
      var events = this.get("model.activities.events");

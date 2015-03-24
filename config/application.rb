@@ -50,8 +50,17 @@ module HuboardWeb
     Faraday::Response::RaiseGheeError.const_get("ERROR_MAP").each do |status, exception|
       config.action_dispatch.rescue_responses[exception.to_s] = status
     end
+    config.action_dispatch.rescue_responses["HuBoard::Error"] = 422
     config.exceptions_app = self.routes
 
     config.active_job.queue_adapter = :sucker_punch
+    
+    config.middleware.use Rack::Attack
+    config.middleware.use PDFKit::Middleware, {print_media_type: true}, only: %r[^/settings]
+    
+    # !!! This addresses a Rails Behaviour that coaxes empty arrays in the params hash into nils 
+    # see https://github.com/rails/rails/pull/13188
+    # Ricki Mar 17 2015
+    config.action_dispatch.perform_deep_munge = false
   end
 end

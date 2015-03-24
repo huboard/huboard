@@ -3,5 +3,5 @@ Rails.application.config.sockets = OpenStruct.new(
 )
 
 if ENV["SELF_HOST_FAYE"]
-  Faye.logger = Rails.logger
+  #Faye.logger = Rails.logger
 end
