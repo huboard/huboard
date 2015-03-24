@@ -16,7 +16,9 @@ module Saas
           customer.cards.retrieve(customer.default_card).delete
         end
         if customer.subscriptions.total_count > 0
-          customer.cancel_subscription at_period_end: false
+          customer.subscriptions.each do |sub|
+            sub.delete at_period_end: false
+          end
         end
         customer.save
 
