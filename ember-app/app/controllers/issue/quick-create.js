@@ -1,4 +1,4 @@
-import IssueCreateController from 'app/controllers/issue-create';
+import IssueCreateController from 'app/controllers/issue/create';
 import Issue from 'app/models/issue';
 
 

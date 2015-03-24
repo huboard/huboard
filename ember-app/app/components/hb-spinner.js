@@ -1,4 +1,3 @@
-import Spinner from 'app/vendor/spin';
 import Ember from 'ember';
 
 

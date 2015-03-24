@@ -22,6 +22,7 @@ app.import('bower_components/underscore/underscore.js')
 app.import('bower_components/fuse.js/src/fuse.js')
 app.import('bower_components/marked/marked.min.js')
 app.import('bower_components/jquery-textcomplete/dist/jquery.textcomplete.min.js')
+app.import('app/vendor/task-list.js')
 
 
 
