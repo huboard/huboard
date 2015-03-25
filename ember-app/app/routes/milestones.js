@@ -1,7 +1,6 @@
 import CssView from 'app/views/css';
 import Board from 'app/models/board';
-
-
+import Issue from 'app/models/issue';
 
 var MilestonesRoute = Ember.Route.extend({
   model: function() {
@@ -11,7 +10,7 @@ var MilestonesRoute = Ember.Route.extend({
   },
 
   afterModel: function(model) {
-    if (get("isLoaded")) {
+    if (App.get("isLoaded")) {
       return;
     }
 
@@ -22,7 +21,7 @@ var MilestonesRoute = Ember.Route.extend({
     cssView.appendTo("head");
 
     return model.linkedBoardsPreload.done(function(linkedBoardsPromise) {
-      set("isLoaded", true);
+      App.set("isLoaded", true);
       var socket = this.get("socket");
 
       return linkedBoardsPromise.then(function(boards) {

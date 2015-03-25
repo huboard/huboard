@@ -1,8 +1,8 @@
 import Ember from 'ember';
 import WrapperView from 'app/views/card-wrapper'
 
-MilestoneWrapperView = WrapperView.extend({
-  templateName: "milestoneItem",
+var MilestoneWrapperView = WrapperView.extend({
+  templateName: "milestone-item",
   classNames: ["card", "card--milestone"]
 })
 

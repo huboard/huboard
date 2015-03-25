@@ -1,7 +1,7 @@
 import CardView from 'app/views/card';
 
-CardMilestoneView = CardView.extend({
-  templateName: 'cardMilestone'
+var CardMilestoneView = CardView.extend({
+  templateName: 'card-milestone'
 })
 
 export default CardMilestoneView;

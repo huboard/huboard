@@ -1,4 +1,6 @@
-module.exports = Ember.ObjectController.extend({
+import Ember from 'ember';
+
+var MilestonesController = Ember.ObjectController.extend({
   needs: ["application", "filters", "assignee", "search"],
 
   filtersActive: function() {
@@ -66,4 +68,4 @@ module.exports = Ember.ObjectController.extend({
   }
 });
 
-export default undefined;
+export default MilestonesController;

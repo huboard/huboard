@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import Issue from 'app/models/issue';
 
 var MilestoneColumnController = Ember.ObjectController.extend({
   needs: ["milestones", "application", "index"],
@@ -50,8 +51,8 @@ var MilestoneColumnController = Ember.ObjectController.extend({
     return newModel;
   }.property(),
   isCreateVisible: function(){
-    return get("repo.is_collaborator") || 
-      get('loggedIn') && this.get('isFirstColumn');
+    return App.get("repo.is_collaborator") || 
+      App.get('loggedIn') && this.get('isFirstColumn');
   }.property('isFirstColumn'),
   cardMoved : function (cardController, index, onCancel){
     if (this.get('model.noMilestone')) {
