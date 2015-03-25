@@ -170,8 +170,8 @@ var FiltersController = Ember.ObjectController.extend({
     }.bind(this))
 
   }.observes("allFilters").on("init"),
-  dimFiltersBinding: "dimFilters",
-  hideFiltersBinding: "hideFilters",
+  dimFiltersBinding: "App.dimFilters",
+  hideFiltersBinding: "App.hideFilters",
   filtersActive: function(){
     var allFilters = this.get("allFilters");
     var active =  _.any(allFilters, function(f){

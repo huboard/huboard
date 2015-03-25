@@ -21,7 +21,7 @@ var AssigneeController = Ember.ObjectController.extend({
   showMode: "less",
   assigneesBinding: "controllers.application.model.board.assignees",
   assigneeBinding: "controllers.application.assignee",
-  memberFilterBinding: "memberFilter",
+  memberFilterBinding: "App.memberFilter",
   lastClicked: null,
   filterChanged : function(){
     Ember.run.once(function(){

@@ -24,7 +24,7 @@ var SearchController = Ember.Controller.extend({
     var threshold = isNaN(term) ? 0.4 : 0.1;
     var Searcher = new Fuse(issues, {keys: ["title","number_searchable"], id: "id", threshold: threshold});
     var results = Searcher.search(term);
-    set("searchFilter", {condition: function(i){
+    App.set("searchFilter", {condition: function(i){
        return term.length == 0 || results.indexOf(i.id) !== -1;
     }});
 
