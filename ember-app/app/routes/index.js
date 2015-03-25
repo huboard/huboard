@@ -15,10 +15,10 @@ var IndexRoute = Ember.Route.extend({
     if(App.get("isLoaded")) {
       return;
     }
-   // var cssView = CssView.create({
-   //   content: model
-   // });
-   // cssView.appendTo("head")
+   var cssView = CssView.create({
+      content: model
+   });
+   cssView.appendTo("head")
     return model.linkedBoardsPreload.done(function(linkedBoardsPromise){
      App.set("isLoaded", true); 
      var socket = this.get("socket");

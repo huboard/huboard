@@ -1,0 +1,55 @@
+{{#each label in view.combinedLabels}}
+.-x{{label.color}}.background {
+  background-color: #{{label.color}};
+  color: {{label.contrastColor}};
+  }
+.-x{{label.color}}.border {
+  border-left-color: #{{label.color}};
+}
+.-x{{label.color}}.active {
+  background-color: {{label.activeColor}};
+  color: {{label.contrastColor}};
+}
+.-x{{label.color}}.font-color {
+  color: #{{label.color}};
+}
+.filter.-x{{label.color}} > a, .card-label.-x{{label.color}} > a {
+  border-left-color: #{{label.color}};
+}
+.filter.-x{{label.color}} .dim, .card-label.-x{{label.color}} .dim {
+  color: {{label.contrastColor}};
+  background-color: #{{label.color}};
+  background-color: {{label.dimColor}};
+}
+.filter.-x{{label.color}} .dim:hover, .card-label.-x{{label.color}} .dim:hover {
+  color: {{label.contrastColor}};
+  background-color: #{{label.color}};
+  background-color: {{label.dimColor}};
+}
+.filter.-x{{label.color}} .active, .card-label.-x{{label.color}} .active {
+  color: {{label.contrastColor}};
+  background-color: #{{label.color}};
+}
+.filter.-x{{label.color}} .active:hover, .card-label.-x{{label.color}} .active:hover {
+  color: {{label.contrastColor}};
+  background-color: #{{label.color}};
+}
+.filter.-x{{label.color}}.dim, .card-label.-x{{label.color}}.dim {
+  color: {{label.contrastColor}};
+  background-color: #{{label.color}};
+  background-color: {{label.dimColor}};
+}
+.filter.-x{{label.color}}.dim:hover, .card-label.-x{{label.color}}.dim:hover {
+  color: {{label.contrastColor}};
+  background-color: #{{label.color}};
+  background-color: {{label.dimColor}};
+}
+.filter.-x{{label.color}}.active, .card-label.-x{{label.color}}.active {
+  color: {{label.contrastColor}};
+  background-color: #{{label.color}};
+}
+.filter.-x{{label.color}}.active:hover, .card-label.-x{{label.color}}.active:hover {
+  color: {{label.contrastColor}};
+  background-color: #{{label.color}};
+}
+{{/each}}

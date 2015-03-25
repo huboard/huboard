@@ -2,7 +2,9 @@
 
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
-var app = new EmberApp();
+var app = new EmberApp({
+  storeConfigInMeta: false
+});
 
 // Use `app.import` to add additional libraries to the generated
 // output files.
@@ -22,6 +24,7 @@ app.import('bower_components/underscore/underscore.js')
 app.import('bower_components/fuse.js/src/fuse.js')
 app.import('bower_components/marked/marked.min.js')
 app.import('bower_components/jquery-textcomplete/dist/jquery.textcomplete.min.js')
+app.import('bower_components/jquery-color/jquery.color.js')
 app.import('app/vendor/task-list.js')
 
 
