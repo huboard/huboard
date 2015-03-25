@@ -14,11 +14,11 @@
 
 
 <div class="card-labels">
-    {{#each cardLabels }}
+    {{#each label in cardLabels }}
       <div class="card-label-wrapper"> 
-         <div {{bind-attr class=":card-label :active :small customColor"}} ></div>
-         <div {{bind-attr class=":card-label :active :large customColor"}} >
-          <span>{{name}}</span>
+         <div {{bind-attr class=":card-label :active :small label.customColor"}} ></div>
+         <div {{bind-attr class=":card-label :active :large label.customColor"}} >
+          <span>{{label.name}}</span>
          </div>
       </div>
     {{/each}}

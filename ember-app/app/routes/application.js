@@ -45,11 +45,11 @@ var ApplicationRoute = Ember.Route.extend({
     }
   },
   model: function () {
-    return Ember.Deferred.promise(function(p){
+    return new Ember.RSVP.Promise(function(resolve, reject){
        Ember.run.once(function(){
         console.log("TODO: fix this call to App")
         var repo = App.get("repo");
-        p.resolve(Repo.create(repo));
+        resolve(Repo.create(repo));
        })
     });
   },

@@ -31,7 +31,7 @@ var SocketMixin = Ember.Mixin.create({
 
           if(eventNames.hasOwnProperty(message.meta.action)){
             eventNames[message.meta.action].call(controller, message.payload);
-            incrementProperty("eventReceived")
+            App.incrementProperty("eventReceived")
           }
       });
     });

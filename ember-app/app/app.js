@@ -104,7 +104,7 @@ var App = Ember.Application.extend({
   hideFilters: [],
   searchFilter: null,
   memberFilter: null,
-  
+  eventReceived: 0
 });
 
 loadInitializers(App, config.modulePrefix);
