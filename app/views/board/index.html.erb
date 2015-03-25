@@ -37,13 +37,14 @@
       name: 'advanceReadiness',
       after: 'deferReadiness',
       initialize: function(container, application){
+        window.App = application;
         application.set("repo", Ember.Object.create(<%= @repo.to_hash.to_json.html_safe %>));
         <% if logged_in? %>
           application.set("loggedIn", true);
           application.set("authLevel", "<%= @auth_level %>")
           application.set("currentUser",<%= current_user.attribs.to_json.html_safe %>);
           <% if Rails.application.config.sockets.socket_backend %>
-            App.set("socketBackend", "<%= Rails.application.config.sockets.socket_backend %>");
+            application.set("socketBackend", "<%= Rails.application.config.sockets.socket_backend %>");
           <% end %>
         <% else %>
           application.set("loggedIn", false);
