@@ -19,8 +19,8 @@ var HbSpinnerComponent = Ember.Component.extend({
       hwaccel: true, // Whether to use hardware acceleration
       className: 'spinner', // The CSS class to assign to the spinner
       zIndex: 2e9, // The z-index (defaults to 2000000000)
-      left: '0px', // Left position relative to parent in px
-      top: '0px',
+      left: '14px', // Left position relative to parent in px
+      top: '14px',
       position: "absolute"
     };
 
