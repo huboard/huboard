@@ -58,10 +58,10 @@ var ApplicationRoute = Ember.Route.extend({
     SocketMixin.apply(controller);
     controller.setUpSocketEvents();
     $(document).ajaxError(function(event, xhr){
-      if(loggedIn && xhr.status == 404){
+      if(App.get('loggedIn') && xhr.status == 404){
         this.send("sessionErrorHandler");
       }
-      if(App.loggedIn && xhr.status == 422){
+      if(App.get('loggedIn') && xhr.status == 422){
         var contentType = xhr.getResponseHeader("Content-Type"),
             isJson = contentType.indexOf("application/json") === 0;
 

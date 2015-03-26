@@ -96,7 +96,7 @@ var Repo = Ember.Object.extend(Serializable,{
             }
           })
         })
-      }, function(error){
+      }, function(jqXHR){
         reject(jqXHR);
       });
     });
