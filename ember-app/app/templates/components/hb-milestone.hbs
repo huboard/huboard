@@ -34,11 +34,11 @@
       </div>
     </div>
     {{/if}}
-    {{#each listItems}}
+    {{#each listItem in listItems}}
     <div {{bind-attr class=":hb-menu-item selected:checked"}} >
-      <div {{action "assignTo" item}} >
+      <div {{action "assignTo" listItem.item}} >
         <i class="ui-icon ui-icon-checkmark"></i>
-        {{item.title}}
+        {{listItem.item.title}}
       </div>
     </div>
     {{/each}}
