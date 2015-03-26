@@ -28,6 +28,7 @@ var Repo = Ember.Object.extend(Serializable,{
     }.bind(this));
   },
   fetchLinkedBoards: function(){
+    if(this._linkedBoards) {return this._linkedBoards;}
     var self = this;
     return Ember.$.getJSON("/api/" + self.get("full_name") + "/link_labels")
     .then(function(link_labels){
@@ -40,6 +41,7 @@ var Repo = Ember.Object.extend(Serializable,{
       });
 
       return Ember.RSVP.all(requests).then(function(boards){
+        self._linkedBoards = boards;
         return boards;
       });
     });

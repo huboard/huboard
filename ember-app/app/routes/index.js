@@ -15,30 +15,30 @@ var IndexRoute = Ember.Route.extend({
     if(App.get("isLoaded")) {
       return;
     }
-   var cssView = CssView.create({
+    var cssView = CssView.create({
       content: model
-   });
-   cssView.appendTo("head")
+    });
+    cssView.appendTo("head")
     return model.linkedBoardsPreload.done(function(linkedBoardsPromise){
-     App.set("isLoaded", true); 
-     var socket = this.get("socket");
-     return linkedBoardsPromise.then(function(boards){
-       boards.forEach(function(b) {
-        if(b.failure) {return;}
-         var issues = Ember.A();
-         b.issues.forEach(function(i){
-           issues.pushObject(Issue.create(i));
-         })
-         var board = Board.create(_.extend(b, {issues: issues}));
-         model.linkedRepos.pushObject(board);
-         socket.subscribeTo(b.full_name);
-       });
-       return boards;
-     });
+      App.set("isLoaded", true); 
+      var socket = this.get("socket");
+      return linkedBoardsPromise.then(function(boards){
+        boards.forEach(function(b) {
+          if(b.failure) {return;}
+          var issues = Ember.A();
+          b.issues.forEach(function(i){
+            issues.pushObject(Issue.create(i));
+          })
+          var board = Board.create(_.extend(b, {issues: issues}));
+          model.linkedRepos.pushObject(board);
+          socket.subscribeTo(b.full_name);
+        });
+        return boards;
+      });
     }.bind(this));
   },
   renderTemplate: function() {
-    
+
     this._super.apply(this, arguments);
     this.render('assignee', {into: 'index', outlet: 'sidebarTop'})
     this.render('filters', {into: 'index', outlet: 'sidebarMiddle'})
