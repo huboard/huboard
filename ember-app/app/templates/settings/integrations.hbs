@@ -8,8 +8,8 @@
               <div class="title">
                 {{ integration.integration.name }}
               </div>
-              {{#each integration.keys }}
-              <em>{{key}}</em>: {{value}}
+              {{#each key in integration.keys }}
+              <em>{{key.key}}</em>: {{key.value}}
               {{/each}}
             </div>
           </li>
