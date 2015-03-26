@@ -78,19 +78,34 @@ var Repo = Ember.Object.extend(Serializable,{
   },
   createLink: function(name){
     var board = this;
-    return this.fetchLinks().then(function(links){
-      var api = "/api/" + board.get("full_name") + "/links";
-      return Ember.$.ajax({
-        url: api,
-        type: 'POST',
-        dataType: 'json',
-        data: {link: name},
-        success: function(response){
-          links.pushObject(Ember.Object.create(response));
-        }
-      })
-    })
-
+    return new Ember.RSVP.Promise(function(resolve, reject){
+      board.validateLink(name).then(function(){
+        board.fetchLinks().then(function(links){
+          var api = "/api/" + board.get("full_name") + "/links";
+          return Ember.$.ajax({
+            url: api,
+            type: 'POST',
+            dataType: 'json',
+            data: {link: name},
+            success: function(response){
+              links.pushObject(Ember.Object.create(response));
+              resolve(response);
+            },
+            error: function(jqXHR){
+              reject(jqXHR);
+            }
+          })
+        })
+      }, function(error){
+        reject(jqXHR);
+      });
+    });
+  },
+  validateLink: function(name){
+    var api = "/api/" + this.get("full_name") + "/links/validate";
+    return Ember.$.post(api, {
+      link: name,
+    },'json')
   }
 });
 

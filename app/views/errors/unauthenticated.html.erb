@@ -16,26 +16,20 @@
       <div class="flex-wrap--left">
         <div class="message">
           <div class="message__top">
-            <h1>403</h1>
+            <h1> ! </h1>
             <h2> HOLD UP! </h2>
-            <h3> That page is forbidden. </h3>
+            <h3> That page is unauthorized. </h3>
           </div>
           <div class="message__middle">
             <p>
-            You'll need to upgrade your account to get those kinds of permissions.
+            You'll need to go to GitHub to get those kinds of permissions.
             </p>
-            <% if session.has_key? :message %>
-              <p>
-                <%= session[:message] %>
-              </p>
-            <% end %>
           </div>
           <div class="message__bottom">
-            <a href="/settings/profile" class="call-to-action">
-              UPGRADE ACCOUNT
+            <a href="/" class="call-to-action">
+              GO HOME
             </a>
           </div>
-
         </div>
       </div>
       <div class="flex-wrap--right illustration illustration--policeman">
@@ -43,7 +37,5 @@
     </div>
      <%= render partial: 'shared/fontdeck' %>
   </body>
-
-</body>
 </html>
 

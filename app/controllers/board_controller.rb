@@ -4,6 +4,7 @@ class BoardController < ApplicationController
       success do
         @repo = gh.repos(params[:user],params[:repo])
         @repo.merge!(is_collaborator: is_collaborator?(@repo))
+        @auth_level = github_authenticated?(:private) ? "private" : "public"
         render :index, layout: "ember"
       end
 

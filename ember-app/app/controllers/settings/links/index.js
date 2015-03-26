@@ -23,10 +23,14 @@ var SettingsLinksIndexController = Ember.ObjectController.extend({
           controller.set("errorMessage", '');
           controller.set("repoFullName","")
         }, function(jqXHR){
-          var response = JSON.parse(jqXHR.responseText);
           controller.set("shouldDisplayError", true);
-          controller.set("errorMessage", response.message);
           controller.set("isDisabled", false);
+          try {
+            var response = JSON.parse(jqXHR.responseText);
+            controller.set("errorMessage", response.message);
+          } catch(err) {
+            controller.set("errorMessage", "Could Not Link Board: Unspecified Error");
+          }
         });
     }
   }

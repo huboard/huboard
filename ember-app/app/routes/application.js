@@ -61,6 +61,15 @@ var ApplicationRoute = Ember.Route.extend({
       if(loggedIn && xhr.status == 404){
         this.send("sessionErrorHandler");
       }
+      if(App.loggedIn && xhr.status == 422){
+        var contentType = xhr.getResponseHeader("Content-Type"),
+            isJson = contentType.indexOf("application/json") === 0;
+
+        if(isJson) {
+          var message = JSON.parse(xhr.responseText);
+          message.error === "CSRF token is expired" && this.send("sessionErrorHandler");
+        }
+      }
     }.bind(this));
   }
 })
