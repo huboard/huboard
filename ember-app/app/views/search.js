@@ -14,9 +14,9 @@ var SearchView = Ember.View.extend({
     return this._super();
   },
   didDestroyElement: function () {
-    this.$().find(".ui-icon-search").off("click.hbsearch")
+    this.$().find(".ui-icon-search").off("click.hbsearch");
     return this._super();
   }
-})
+});
 
 export default SearchView;

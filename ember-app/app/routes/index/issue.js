@@ -9,12 +9,12 @@ var IndexIssueRoute = Route.extend({
                   .findBy('id', parseInt(params.issue_id));
     if(issue) { return issue; }
 
-    transition.abort()
-    this.transitionTo("index")
+    transition.abort();
+    this.transitionTo("index");
   },
   actions: {
     closeModal: function () {
-        this.transitionTo("index")
+        this.transitionTo("index");
         return true;
     }
   }

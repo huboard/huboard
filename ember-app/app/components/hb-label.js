@@ -5,11 +5,11 @@ var HbLabelComponent = Ember.Component.extend({
   classNameBindings: [":hb-menu-item", "colorClass", "selected:active"],
   didInsertElement: function () {
      this.$().on("click.label", function () {
-       this.get("parentView.controller").send("select", this.get("label"))
-     }.bind(this))
+       this.get("parentView.controller").send("select", this.get("label"));
+     }.bind(this));
   },
   willDestroyElement: function () {
-    this.$().off("click.label")
+    this.$().off("click.label");
     this._super.apply(this, arguments);
   },
   colorClass: function () {
@@ -17,7 +17,7 @@ var HbLabelComponent = Ember.Component.extend({
   }.property(),
   selected: function () {
     
-    return this.get("parentView.selected").any(function (l){return l.name == this.get("label.name")}.bind(this))
+    return this.get("parentView.selected").any(function (l){return l.name === this.get("label.name");}.bind(this));
   }.property("parentView.selected.@each")
 
 });

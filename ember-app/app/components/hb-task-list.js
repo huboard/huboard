@@ -13,7 +13,7 @@ var HbTaskListComponent = Ember.Component.extend({
       Ember.run.schedule('afterRender', this, "wireUp");
       return value;
     } else {
-      return this.get("body_html")
+      return this.get("body_html");
     }
   }.property(),
   wireUp: function(){

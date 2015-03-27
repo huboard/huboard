@@ -17,7 +17,7 @@ var CardView = Ember.View.extend({
   }.property("controller.model.current_state", "controller.model.customState", "controller.model.state"),
   didInsertElement: function () {
     this._super();
-    this.$("a, .clickable").on("click.hbcard", function (ev){ console.log(arguments); ev.stopPropagation(); } )
+    this.$("a, .clickable").on("click.hbcard", function (ev){ ev.stopPropagation(); } );
   },
   willDestroyElement : function () {
     this.$("a, .clickable").off("click.hbcard");

@@ -32,31 +32,28 @@ var CollectionView = Ember.CollectionView.extend({
       update: function (ev, ui) {
 
         var findViewData = function (element){
-           return Ember.View.views[$(element).find("> div").attr("id")]
+           return Ember.View.views[Ember.$(element).find("> div").attr("id")]
              .get("controller");
         };
 
-        var elements = $("> li", that.$()),
+        var elements = Ember.$("> li", that.$()),
         index = elements.index(ui.item);
 
         if(index === -1) { return; }
 
         var first = index === 0,
         last = index === elements.size() - 1,
-        currentElement = $(ui.item),
+        currentElement = Ember.$(ui.item),
         currentData = findViewData(currentElement),
         beforeElement = elements.get(index ? index - 1 : index),
-        beforeIndex = elements.index(beforeElement),
         beforeData = findViewData(beforeElement),
         afterElement = elements.get(elements.size() - 1 > index ? index + 1 : index),
-        afterIndex = elements.index(afterElement),
         afterData = findViewData(afterElement),
-        current = currentData.get("model._data.order") || currentData.get("model.number"),
         before = beforeData.get("model._data.order") || beforeData.get("model.number"),
         after = afterData.get("model._data.order") || afterData.get("model.number");
 
         if(first && last) {
-          that.get("controller").cardMoved(currentData, currentData.get("model.number"))
+          that.get("controller").cardMoved(currentData, currentData.get("model.number"));
           return;
         }
         
@@ -72,12 +69,12 @@ var CollectionView = Ember.CollectionView.extend({
           that.get("controller").cardMoved(currentData, (((after + before) || 1)/2));
         }
       }
-    })
+    });
     this._super();
 
   },
   itemViewClass: WrapperView
-})
+});
 var ColumnView = Ember.ContainerView.extend({
   classNameBindings:[":hb-task-column",":column",":task-column","isCollapsed:hb-state-collapsed","isHovering:hovering"],
   isCollapsed: Ember.computed.alias("controller.isCollapsed"),
@@ -87,7 +84,7 @@ var ColumnView = Ember.ContainerView.extend({
     tagName: "h3",
     templateName: "columnHeader",
     click: function(){
-      this.get("controller").toggleProperty('isCollapsed')
+      this.get("controller").toggleProperty('isCollapsed');
     }
   }),
   quickIssueView: Ember.View.extend({
@@ -100,7 +97,7 @@ var ColumnView = Ember.ContainerView.extend({
   collapsedView: Ember.View.extend({
     classNames:["collapsed"],
     click: function(){
-      this.get("controller").toggleProperty('isCollapsed')
+      this.get("controller").toggleProperty('isCollapsed');
     }
   }),
 

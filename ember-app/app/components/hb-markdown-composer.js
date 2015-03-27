@@ -27,32 +27,32 @@ var HbMarkdownComposerComponent = Ember.Component.extend({
 
     Ember.$.getJSON("/api/uploads/asset")
     .then(function(response){
-      response = response.uploader
+      response = response.uploader;
       var fd = new FormData();
-      fd.append('utf8', '✓')
-      fd.append('key', response.key)
-      fd.append('acl', response.acl)
-      fd.append('Content-Type', file.type)
-      fd.append('AWSAccessKeyId', response.aws_access_key_id)
-      fd.append('policy', response.policy)
-      fd.append('signature', response.signature)
-      fd.append('success_action_status', "201")
-      fd.append('file', file)
+      fd.append('utf8', '✓');
+      fd.append('key', response.key);
+      fd.append('acl', response.acl);
+      fd.append('Content-Type', file.type);
+      fd.append('AWSAccessKeyId', response.aws_access_key_id);
+      fd.append('policy', response.policy);
+      fd.append('signature', response.signature);
+      fd.append('success_action_status', "201");
+      fd.append('file', file);
 
       var request = new XMLHttpRequest();
       request.addEventListener('readystatechange', function(){
         if(request.readyState === 4) {
 
-          var $xml = $(request.responseXML),
+          var $xml = Ember.$(request.responseXML),
           location = $xml.find("Location").text(),
           key = $xml.find("Key").text();
 
-          var imgMarkdown = "\n![" + key + "]("+ location + ")\n"
+          var imgMarkdown = "\n![" + key + "]("+ location + ")\n";
           component.set("markdown", (component.get("markdown") || "") + imgMarkdown);
           holder.find("textarea").focus().val(holder.find("textarea").val());
           component.set('uploading', false);
         }
-      })
+      });
 
       request.open('POST', response.upload_url, true);
       request.send(fd);
@@ -71,7 +71,7 @@ var HbMarkdownComposerComponent = Ember.Component.extend({
           }
         });
       }
-    })
+    });
 
     this.$().on('paste', function(ev){
       if(ev.originalEvent.clipboardData.items.length) {
@@ -79,9 +79,9 @@ var HbMarkdownComposerComponent = Ember.Component.extend({
           if(component.get("acceptedTypes")[item.type] === true) {
             component.uploadFile(item.getAsFile());
           }
-        })
+        });
       }
-    })
+    });
   }.on('didInsertElement'),
   tearDown: function(){
     if(!this.get("uploadsEnabled")) {
@@ -99,8 +99,7 @@ var HbMarkdownComposerComponent = Ember.Component.extend({
     }
     ev.preventDefault();
     if(ev.dataTransfer.files.length){
-      var component = this,
-      holder = this.$();
+      var component = this;
 
       _.each(ev.dataTransfer.files,function(file) {
         if(component.get("acceptedTypes")[file.type] === true) {
@@ -109,6 +108,6 @@ var HbMarkdownComposerComponent = Ember.Component.extend({
       });
     }
   }
-})
+});
 
 export default HbMarkdownComposerComponent;

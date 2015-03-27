@@ -35,7 +35,7 @@ var ApplicationController = Ember.ObjectController.extend({
           model.set("current_state", this.get("model.board.columns.firstObject"));
         }else {
           var column = this.get("model.board.columns").find(function(c) {
-            return c.name == message.issue.current_state.name;
+            return c.name === message.issue.current_state.name;
           });
           model.set("current_state", column);
         }
@@ -60,6 +60,6 @@ var ApplicationController = Ember.ObjectController.extend({
   repositoryName: function () {
     return this.get("model.full_name");
   }.property("model.full_name"),
-})
+});
 
 export default ApplicationController;

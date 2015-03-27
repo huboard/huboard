@@ -1,14 +1,15 @@
-;
-LoginController = Ember.ObjectController.extend({
+import Ember from 'ember';
+
+var LoginController = Ember.ObjectController.extend({
   authLevel: function(){
-    return get("authLevel").capitalize();
+    return App.get("authLevel").capitalize();
   }.property("authLevel"),
 
   loginUrl: function(){
-    var url = "/login/" + get("authLevel") + "?redirect_to=";
+    var url = "/login/" + App.get("authLevel") + "?redirect_to=";
     var location = window.location.pathname + window.location.hash;
     var redirectParam = encodeURIComponent(location);
-    return url + redirectParam  
+    return url + redirectParam;
   }.property("authLevel"),
 });
 

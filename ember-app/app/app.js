@@ -3,7 +3,6 @@ import Resolver from 'ember/resolver';
 import loadInitializers from 'ember/load-initializers';
 import config from './config/environment';
 import correlationId from './utilities/correlation-id';
-import Repo from 'app/models/repo';
 import Settings from 'app/models/settings';
 import Global from 'app/models/global';
 
@@ -18,10 +17,10 @@ Ember.LinkView.reopen({
   tearDownEvent: function(){
     this.off("click");
   }.on("willDestroyElement"),
-  _closeDropdown : function(ev) {
-    this.$().parents(".dropdown").removeClass("open")
+  _closeDropdown : function() {
+    this.$().parents(".dropdown").removeClass("open");
   }
-})
+});
 
 Ember.onLoad("Ember.Application", function ($app) {
   $app.initializer({
@@ -33,8 +32,16 @@ Ember.onLoad("Ember.Application", function ($app) {
   $app.initializer({
     name: "sockets",
     initialize : function (container, application){
+
+      let socket = Ember.Object.extend({
+        correlationId : correlationId,
+        sockets: {},
+        subscribe: Ember.K,
+        subscribeTo: Ember.K
+      });
+
       if(application.get("socketBackend")){
-        var socket = Ember.Object.extend({
+        socket = Ember.Object.extend({
           correlationId : correlationId,
           sockets: {},
           client: new Faye.Client(application.get('socketBackend')),
@@ -43,8 +50,8 @@ Ember.onLoad("Ember.Application", function ($app) {
           },
           subscribeTo: function(channel) {
             var client = this.get('client'), 
-              callbacks = Ember.$.Callbacks();
-              client.disable("eventsource");
+            callbacks = Ember.$.Callbacks();
+            client.disable("eventsource");
             var source = client.subscribe("/" + channel, function(event){
               callbacks.fire(event);
             });
@@ -58,25 +65,17 @@ Ember.onLoad("Ember.Application", function ($app) {
             this.subscribeTo(this.get("repo.full_name"));
           }
         });
-      } else {
-        var socket = Ember.Object.extend({
-          correlationId : correlationId,
-          sockets: {},
-          subscribe: Ember.K,
-          subscribeTo: Ember.K
-        })
-      }
+      } 
+      application.set("Socket", socket);
 
-        application.set("Socket", socket);
+      application.register('socket:main',application.Socket, {singleton: true});
+      application.inject('socket:main', 'repo', 'repo:main');
 
-        application.register('socket:main',application.Socket, {singleton: true});
-        application.inject('socket:main', 'repo', 'repo:main');
-
-        application.inject("controller","socket", "socket:main");
-        application.inject("model", "socket", "socket:main");
-        application.inject("route", "socket", "socket:main");
+      application.inject("controller","socket", "socket:main");
+      application.inject("model", "socket", "socket:main");
+      application.inject("route", "socket", "socket:main");
     }
-  })
+  });
   $app.initializer({
     name: "settings",
     before: "sockets",
@@ -92,10 +91,10 @@ Ember.onLoad("Ember.Application", function ($app) {
       application.inject('controller', 'global', 'global:main');
       application.inject('view', 'global', 'global:main');
     }
-  })
-})
+  });
+});
 
-var App = Ember.Application.extend({
+var HuBoard = Ember.Application.extend({
   modulePrefix: config.modulePrefix,
   podModulePrefix: config.podModulePrefix,
   Resolver: Resolver,
@@ -107,6 +106,6 @@ var App = Ember.Application.extend({
   eventReceived: 0
 });
 
-loadInitializers(App, config.modulePrefix);
+loadInitializers(HuBoard, config.modulePrefix);
 
-export default App;
+export default HuBoard;

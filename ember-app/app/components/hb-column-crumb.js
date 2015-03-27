@@ -31,6 +31,6 @@ var HbColumnCrumbComponent = Ember.Component.extend({
     return "hb-state-open";
   }.property("issue.current_state", "issue.customState", "issue.state")
 
-})
+});
 
 export default HbColumnCrumbComponent;

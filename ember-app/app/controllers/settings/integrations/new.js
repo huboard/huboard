@@ -27,6 +27,6 @@ var SettingsIntegrationsNewController = Ember.ObjectController.extend({
         this.get('model').clearForm();
     },
   }
-})
+});
 
 export default SettingsIntegrationsNewController;

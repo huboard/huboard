@@ -8,13 +8,13 @@ var IssueRoute = Ember.Route.extend({
       board = appModel.fetchBoard(appModel);
 
     var repo = board.get("allRepos").find(function (r){
-      return (r.full_name).toLowerCase() == model.repo.owner.login.toLowerCase() + "/" + model.repo.name.toLowerCase();
-    })
+      return (r.full_name).toLowerCase() === model.repo.owner.login.toLowerCase() + "/" + model.repo.name.toLowerCase();
+    });
     controller.set("repository", { 
       other_labels: Ember.get(repo, "other_labels"), 
       assignees: Ember.get(repo, "assignees"), 
       milestones: Ember.get(repo, "milestones")
-    })
+    });
   },
   controllerFor: function(name, _skipAssert) {
     return this._super("issue", _skipAssert);
@@ -24,11 +24,11 @@ var IssueRoute = Ember.Route.extend({
   },
   renderTemplate: function () {
     this.set("controller.commentBody", null);
-    this.render("issue",{into:'application',outlet:'modal'})
+    this.render("issue",{into:'application',outlet:'modal'});
   },
   actions: {
-    error: function(error, transition){
-      if (loggedIn && error.status === 404) {
+    error: function(error){
+      if (App.loggedIn && error.status === 404) {
         var controller = this.controllerFor("application");
         this.render("empty", {
           into:"application",

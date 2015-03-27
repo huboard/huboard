@@ -14,6 +14,6 @@ var IssueQuickCreateView = Ember.View.extend({
   releaseEvents: function(){
     this.$('input').off('blur.huboard focus.huboard');
   }.on('willDestroyElement')
-})
+});
 
 export default IssueQuickCreateView;

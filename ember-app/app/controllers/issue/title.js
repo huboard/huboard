@@ -37,7 +37,7 @@ var IssueTitleController = BufferedController.extend({
           controller.set("model.title", response.title);
           controller.set("isEditing", false);
         }
-      })
+      });
     },
 
     cancel: function() {
@@ -45,6 +45,6 @@ var IssueTitleController = BufferedController.extend({
       this.set("isEditing", false);
     }
   }
-})
+});
 
 export default IssueTitleController;

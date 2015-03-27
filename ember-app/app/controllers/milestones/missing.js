@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import ajax from 'ic-ajax';
 
 var MilestonesMissingController = Ember.ObjectController.extend({
   disabled: false,
@@ -7,7 +8,7 @@ var MilestonesMissingController = Ember.ObjectController.extend({
       if (this.get('disabled')) {
         return false;
       }
-      this.get("model.onReject").call(this.get("columnController"), this)
+      this.get("model.onReject").call(this.get("columnController"), this);
       return true;
     },
     createTheMilestone: function() {
@@ -21,20 +22,20 @@ var MilestonesMissingController = Ember.ObjectController.extend({
 
       // GH API freaks out if you send a null due_on date
       if (this.get("columnController.milestone.due_on")) {
-        milestone.due_on = this.get("columnController.milestone.due_on")
+        milestone.due_on = this.get("columnController.milestone.due_on");
       }
           
       controller.set("disabled", true);
 
-      $.ajax({
+      ajax({
         url: "/api/" + owner + "/" + name + "/milestones",
         type: "POST",
         dataType: 'json',
         data: {milestone: milestone},
         success: function(response) {
-          controller.get("model.onAccept").call(controller.get("columnController"), response)
+          controller.get("model.onAccept").call(controller.get("columnController"), response);
           controller.set("disabled", false);
-          controller.get('target').send('closeModal')
+          controller.get('target').send('closeModal');
         }
       });
     }

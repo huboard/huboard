@@ -18,10 +18,10 @@ var MilestonesView = Ember.View.extend({
         that.set("isHovering", false);
       },
       start: function(){
-        that.set('dragging', true)
+        that.set('dragging', true);
       },
       stop: function() {
-        that.set('dragging', false)
+        that.set('dragging', false);
       },
       activate: function () {
         // that.get("controller").set("isHovering", true);
@@ -32,31 +32,28 @@ var MilestonesView = Ember.View.extend({
       update: function (ev, ui) {
 
         var findViewData = function (element){
-           return Ember.View.views[$(element).attr("id")]
+           return Ember.View.views[Ember.$(element).attr("id")]
              .get("controller");
         };
 
-        var elements = $(".milestone:not(.no-milestone)", that.$()),
+        var elements = Ember.$(".milestone:not(.no-milestone)", that.$()),
         index = elements.index(ui.item);
 
         if(index === -1) { return; }
 
         var first = index === 0,
         last = index === elements.size() - 1,
-        currentElement = $(ui.item),
+        currentElement = Ember.$(ui.item),
         currentData = findViewData(currentElement),
         beforeElement = elements.get(index ? index - 1 : index),
-        beforeIndex = elements.index(beforeElement),
         beforeData = findViewData(beforeElement),
         afterElement = elements.get(elements.size() - 1 > index ? index + 1 : index),
-        afterIndex = elements.index(afterElement),
         afterData = findViewData(afterElement),
-        current = currentData.get("model.milestone._data.order") || currentData.get("model.milestone.number"),
         before = beforeData.get("model.milestone._data.order") || beforeData.get("model.milestone.number"),
         after = afterData.get("model.milestone._data.order") || afterData.get("model.milestone.number");
 
         if(first && last) {
-          that.get("controller").milestoneMoved(currentData, currentData.get("model.milestone.number"))
+          that.get("controller").milestoneMoved(currentData, currentData.get("model.milestone.number"));
           return;
         }
         
@@ -72,9 +69,9 @@ var MilestonesView = Ember.View.extend({
           that.get("controller").milestoneMoved(currentData, (((after + before) || 1)/2));
         }
       }
-    })
+    });
 
   }.on("didInsertElement"),
-})
+});
 
 export default MilestonesView;

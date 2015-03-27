@@ -3,7 +3,7 @@ import Ember from 'ember';
 var animateModalClose = function() {
   var promise = new Ember.RSVP.defer();
 
-  $('body').removeClass("fullscreen-open");
+  Ember.$('body').removeClass("fullscreen-open");
   promise.resolve();
 
 

@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import ajax from 'ic-ajax';
 
 var SettingsIntegrationsController = Ember.ObjectController.extend({
   needs: ['application'],
@@ -9,7 +10,7 @@ var SettingsIntegrationsController = Ember.ObjectController.extend({
         webhookURL: ""
       },
       disabled: function(){
-        return !this.get("attrs.webhookURL")
+        return !this.get("attrs.webhookURL");
       }.property("attrs.webhookURL"),
       clearForm: function(){
         this.set("attrs.webhookURL", "");
@@ -21,8 +22,7 @@ var SettingsIntegrationsController = Ember.ObjectController.extend({
         webhookURL: ""
       },
       disabled: function(){
-        return !this.get("attrs.webhookURL")
-
+        return !this.get("attrs.webhookURL");
       }.property("attrs.webhookURL"),
       clearForm: function(){
         this.set("attrs.webhookURL", "");
@@ -36,7 +36,7 @@ var SettingsIntegrationsController = Ember.ObjectController.extend({
         channel: ""
       },
       disabled: function(){
-        return !this.get("attrs.webhookURL")
+        return !this.get("attrs.webhookURL");
       }.property("attrs.webhookURL"),
       clearForm: function(){
         this.set("attrs.webhookURL", "");
@@ -51,13 +51,13 @@ var SettingsIntegrationsController = Ember.ObjectController.extend({
       attrs: function(){
         return {
           webhookURL: this.get('webhookURL'),
-        }
+        };
       }.property('room', 'authToken'),
       webhookURL: function(){
         return "https://api.hipchat.com/v2/room/" + this.get('room') + "/notification?auth_token=" + this.get('authToken');
       }.property('room', 'authToken'),
       disabled: function(){
-        return !this.get("attrs.webhookURL")
+        return !this.get("attrs.webhookURL");
       }.property("attrs.webhookURL"),
       clearForm: function(){
         this.set("room", "");
@@ -80,25 +80,23 @@ var SettingsIntegrationsController = Ember.ObjectController.extend({
             into:"integrations.integrations",
             controller: this
           }
-        )
+        );
 
       this.set("editing", integration);
     },
     cancel: function() {
-      this.send("transitionTo", {name: "index"})
-
+      this.send("transitionTo", {name: "index"});
     },
     removeWebhook: function(hook){
-      this.get("model.integrations").removeObject(hook)
-      var controller = this,
-        endpoint = "/api/" + this.get("controllers.application.model.full_name") + "/integrations";
-      Ember.$.ajax({
+      this.get("model.integrations").removeObject(hook);
+      var endpoint = "/api/" + this.get("controllers.application.model.full_name") + "/integrations";
+      ajax({
         url: endpoint + "/" + hook.get("_id"),
         type: "DELETE",
         data: {
           rev: hook.get("_rev")
         }
-      })
+      });
     }
   }
 });

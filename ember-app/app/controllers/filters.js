@@ -17,11 +17,11 @@ var FiltersController = Ember.ObjectController.extend({
     Ember.run.once(function(){
       var self = this;
       this.get("userFilters").filter(function(f){
-        return f.name != self.get("lastUserFilterClicked");
+        return f.name !== self.get("lastUserFilterClicked");
       }).forEach(function(f){
         Ember.set(f,"mode", 0);
-      })
-    }.bind(this))
+      });
+    }.bind(this));
   }.observes("lastUserFilterClicked"),
   userFilters: null,
   milestoneFilters: null,
@@ -30,24 +30,23 @@ var FiltersController = Ember.ObjectController.extend({
     Ember.run.once(function(){
       var self = this;
       this.get("boardFilters").filter(function(f){
-        return f.name != self.get("lastBoardFilterClicked");
+        return f.name !== self.get("lastBoardFilterClicked");
       }).forEach(function(f){
         Ember.set(f,"mode", 0);
-      })
-    }.bind(this))
+      });
+    }.bind(this));
   }.observes("lastBoardFilterClicked"),
   lastMilestoneFilterClickedChanged: function(){
     Ember.run.once(function(){
       var self = this;
       this.get("milestoneFilters").filter(function(f){
-        return f.name != self.get("lastMilestoneFilterClicked");
+        return f.name !== self.get("lastMilestoneFilterClicked");
       }).forEach(function(f){
         Ember.set(f,"mode", 0);
-      })
-    }.bind(this))
+      });
+    }.bind(this));
   }.observes("lastMilestoneFilterClicked"),
   init: function(){
-    var self = this;
     if(App.get("loggedIn")){
       this.set("userFilters", [
         {
@@ -97,7 +96,7 @@ var FiltersController = Ember.ObjectController.extend({
         condition:function(i){
          return i.milestone && i.milestone.title.toLocaleLowerCase() === m.title.toLocaleLowerCase();
         }
-       })
+       });
     }));
     this.get("milestoneFilters").insertAt(0, Ember.Object.create({
       name: 'No milestone',
@@ -119,20 +118,20 @@ var FiltersController = Ember.ObjectController.extend({
              return l.name.toLocaleLowerCase() === label.name.toLocaleLowerCase();
           });
         }
-       })
+       });
     }));
     var parentBoardOwner = this.get("controllers.application.model.board.full_name").split("/")[0];
     this.set("boardFilters", this.get("linkLabels").map(function(l){
-       var name = parentBoardOwner == l.user ? l.repo : l.user + "/" + l.repo;
+       var name = parentBoardOwner === l.user ? l.repo : l.user + "/" + l.repo;
        return Ember.Object.create({
         name: name,
         queryParam: "repo",
         mode:0,
         color: l.color,
         condition:function(i){
-          return i.repo.name == l.repo && i.repo.owner.login == l.user;
+          return i.repo.name === l.repo && i.repo.owner.login === l.user;
         }
-       })
+       });
     }));
     this.get("boardFilters").insertAt(0, Ember.Object.create({
       name: App.get('repo.name'),
@@ -140,7 +139,7 @@ var FiltersController = Ember.ObjectController.extend({
       mode:0,
       color: "7965cc",
       condition:function(i){
-        return i.repo.name == App.get('repo.name');
+        return i.repo.name === App.get('repo.name');
       }
     }));
   },
@@ -154,20 +153,20 @@ var FiltersController = Ember.ObjectController.extend({
               .concat(this.get("labelFilters"));
   }.property("milestoneFilters.@each.mode", "userFilters.@each.mode","labelFilters.@each.mode", "boardFilters.@each.mode"),
   dimFiltersChanged: function(){
-    self = this;
+    var self = this;
     Ember.run.once(function(){
       var allFilters = self.get("allFilters");
 
       this.set("dimFilters", allFilters.filter(function(f){
-        return f.mode == 1;
+        return f.mode === 1;
       }));
 
       this.set("hideFilters", allFilters.filter(function(f){
         var formattedParam = f.name.replace(/\s+/g, '');
         var isQueryParamFiltered = self.get(f.queryParam).contains(formattedParam);
-        return f.mode == 2 || isQueryParamFiltered;
+        return f.mode === 2 || isQueryParamFiltered;
       }));
-    }.bind(this))
+    }.bind(this));
 
   }.observes("allFilters").on("init"),
   dimFiltersBinding: "App.dimFilters",
@@ -187,7 +186,7 @@ var FiltersController = Ember.ObjectController.extend({
         var params = ["repo", "assignee", "milestone", "label"];
         _.each(params, function(p){ self.get(p).clear(); });
         var allFilters = self.get("allFilters");
-        var active =  _.each(allFilters, function(f){
+        _.each(allFilters, function(f){
           Ember.set(f,"mode",0);
         });
       });

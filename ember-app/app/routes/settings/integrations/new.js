@@ -1,7 +1,7 @@
 import Ember from 'ember';
 
 var SettingsIntegrationsNewRoute = Ember.Route.extend({
-  model: function(params, transition){
+  model: function(params){
     return this.controllerFor('settings/integrations')
       .get("possibleIntegrations").findBy("name", params.name);
   }, 

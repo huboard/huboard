@@ -21,7 +21,7 @@ var IssueBodyController = BufferedController.extend({
       this.send('save');
     },
     edit: function(){
-      !this.get('disabled') && this.set("isEditing", true);
+      if(this.get('disabled')) { this.set("isEditing", true); }
     },
     save: function() {
 
@@ -33,7 +33,7 @@ var IssueBodyController = BufferedController.extend({
 
       controller.set("disabled", true);
 
-      if(this._last) { this._last.abort() };
+      if(this._last) { this._last.abort(); }
       this._last = Ember.$.ajax({
         url: url,
         type: "PUT",
@@ -49,7 +49,7 @@ var IssueBodyController = BufferedController.extend({
           controller.set("isEditing", false);
           controller._last = null;
         }
-      })
+      });
     },
 
     cancel: function() {
@@ -57,6 +57,6 @@ var IssueBodyController = BufferedController.extend({
       this.set("isEditing", false);
     }
   }
-})
+});
 
 export default IssueBodyController;

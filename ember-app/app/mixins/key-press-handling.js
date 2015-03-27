@@ -1,46 +1,41 @@
 import Ember from 'ember';
 
 var KeypressHandlingMixin = Ember.Mixin.create({
-  store: Ember.computed.alias("settings"),
-  storeData: function(){
-    return this.get("store").loadData()["settings"];
-  }.property("store"),
 
   // Handler for Meta Enter - Default: Enabled
   metaEnterHandler: function(event, handler){
     var enabled = this.metaEnterEnabled();
-    var pressed = this.metaEnter(event)
-    if (pressed) handler(enabled);
+    var pressed = this.metaEnter(event);
+    if (pressed){ handler(enabled); }
   },
   metaEnterEnabled: function(){
-    if(this.get("store.available")) {
-      var enabled = this.get('storeData')["metaEnterEnabled"];
-      return (enabled == null && enabled == undefined) ? true : enabled
+    if(this.get("settings.available")) {
+      var enabled = this.get('settings.metaEnterEnabled');
+      return enabled;
     } else {
       return true;
     }
   },
   metaEnter: function(e){
-    return e.keyCode == 13 && e.metaKey;
+    return e.keyCode === 13 && e.metaKey;
   },
 
   // Handler for Enter - Default: Disabled
   enterHandler: function(event, handler){
     var enabled = this.enterEnabled();
-    var pressed = this.enter(event)
-    if (pressed) handler(enabled);
+    var pressed = this.enter(event);
+    if (pressed){ handler(enabled); }
   },
   enterEnabled: function(){
-    if(this.get("store.available")) {
-      var enabled = this.get('storeData')["enterEnabled"];
-      return (enabled == null || enabled == undefined) ? false : enabled;
+    if(this.get("settings.available")) {
+      return this.get('settings.enterEnabled');
     } else {
       return false;
     }
   },
   enter: function(e){
-    return e.keyCode == 13;
+    return e.keyCode === 13;
   }
-})
+});
 
 export default KeypressHandlingMixin;

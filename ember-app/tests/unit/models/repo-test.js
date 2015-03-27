@@ -1,4 +1,5 @@
 import Repo from 'app/models/repo';
+import Ember from 'ember'; 
 
 import request from 'ic-ajax';
 import { defineFixture as fixture } from 'ic-ajax';
@@ -35,7 +36,7 @@ test('fetched board should contain issues', (assert) => {
   });
   
   model.fetchBoard([]).then(response => {
-    assert.ok(response.issues.length)
-  })
+    assert.ok(response.issues.length);
+  });
 
 });

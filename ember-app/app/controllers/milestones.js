@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import ajax from 'ic-ajax';
 
 var MilestonesController = Ember.ObjectController.extend({
   needs: ["application", "filters", "assignee", "search"],
@@ -36,7 +37,7 @@ var MilestonesController = Ember.ObjectController.extend({
         orderable: true,
 
         filterBy: function(i) {
-          return i.milestone && i.milestone.title.toLocaleLowerCase() == m.title.toLocaleLowerCase();
+          return i.milestone && i.milestone.title.toLocaleLowerCase() === m.title.toLocaleLowerCase();
         },
 
         milestone: m,
@@ -52,7 +53,7 @@ var MilestonesController = Ember.ObjectController.extend({
   milestoneMoved: function(milestoneController, index) {
     var milestone = milestoneController.get("model.milestone"), owner = milestone.repo.owner.login, name = milestone.repo.name;
 
-    $.ajax({
+    ajax({
       url: "/api/" + owner + "/" + name + "/reordermilestone",
       type: "POST",
 
