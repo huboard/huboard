@@ -11,7 +11,7 @@
     {{content-for 'test-head'}}
 
     <link rel="stylesheet" href="assets/vendor.css">
-    <link rel="stylesheet" href="assets/dest.css">
+    <link rel="stylesheet" href="assets/app.css">
     <link rel="stylesheet" href="assets/test-support.css">
 
     {{content-for 'head-footer'}}
@@ -19,11 +19,10 @@
   </head>
   <body>
 
-    {{content-for 'body'}}
     {{content-for 'test-body'}}
     <script src="assets/vendor.js"></script>
     <script src="assets/test-support.js"></script>
-    <script src="assets/dest.js"></script>
+    <script src="assets/app.js"></script>
     <script src="testem.js"></script>
     <script src="assets/test-loader.js"></script>
 

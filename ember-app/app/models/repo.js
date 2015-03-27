@@ -4,6 +4,7 @@ import Integration from 'app/models/integration';
 import Issue from 'app/models/issue';
 import Serializable from 'app/mixins/serializable';
 import Ember from 'ember';
+import ajax from 'ic-ajax';
 
 
 
@@ -17,7 +18,7 @@ var Repo = Ember.Object.extend(Serializable,{
   }.property("name", "userUrl"),
   fetchBoard: function(linkedBoards){
     if(this._board) {return this._board;}
-    return Ember.$.getJSON("/api/" + this.get("full_name") + "/board").then(function(board){
+    return ajax("/api/" + this.get("full_name") + "/board").then(function(board){
        var issues = Ember.A();
        board.issues.forEach(function(i){
          issues.pushObject(Issue.create(i));
