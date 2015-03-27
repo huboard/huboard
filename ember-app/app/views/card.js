@@ -1,6 +1,8 @@
 import Ember from 'ember';
+import template from 'app/templates/card';
 
 var CardView = Ember.View.extend({
+  template: template,
   classNameBindings:["stateClass"],
   stateClass: function(){
      var github_state = this.get("controller.model.state");
@@ -21,8 +23,6 @@ var CardView = Ember.View.extend({
     this.$("a, .clickable").off("click.hbcard");
     return this._super();
   }
-
-  
 });
 
 export default CardView;

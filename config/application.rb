@@ -6,6 +6,7 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 Dotenv::Railtie.load
+
 if ENV["HUBOARD_ENV"] == 'production'
   require 'saas'
 end
