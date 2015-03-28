@@ -1,5 +1,5 @@
 class ruby_install(
-  $version = "2.1.5",
+  $ruby_version = "2.1.5",
   $user = "vagrant"
 ){
 
@@ -7,9 +7,9 @@ class ruby_install(
     user    => $user,
   }
 
-  rbenv::compile { "${user}/${version}":
+  rbenv::compile { "${user}/${ruby_version}":
     user    => $user,
-    ruby   => $version,
+    ruby   => $ruby_version,
     require => [
       Rbenv::Install["${user} rbenv"],
     ]
