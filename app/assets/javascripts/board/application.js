@@ -2394,43 +2394,24 @@ module.exports = App;
 
 },{"./components/hb_assignee_component":1,"./components/hb_avatar_component":2,"./components/hb_avatar_tooltip_component":3,"./components/hb_board_columns_component":4,"./components/hb_column_crumb_component":5,"./components/hb_label_component":6,"./components/hb_label_selector_component":7,"./components/hb_markdown_composer_component":8,"./components/hb_markdown_editor_component":9,"./components/hb_milestone_component":10,"./components/hb_pane_component":11,"./components/hb_selected_column_component":12,"./components/hb_spinner_component":13,"./components/hb_tabs_component":14,"./components/hb_task_list_component":15,"./config/app":16,"./config/routes":17,"./controllers/application_controller":18,"./controllers/assignee_controller":19,"./controllers/buffered_controller":20,"./controllers/card_controller":21,"./controllers/column_controller":22,"./controllers/column_count_controller":23,"./controllers/filters_controller":24,"./controllers/index_controller":25,"./controllers/issue/activities_controller":26,"./controllers/issue/activity_controller":27,"./controllers/issue/body_controller":28,"./controllers/issue/create_controller":29,"./controllers/issue/quick_create_controller":30,"./controllers/issue/title_controller":31,"./controllers/issue_controller":32,"./controllers/login_controller":33,"./controllers/milestone_column_controller":34,"./controllers/milestones/missing_controller":35,"./controllers/milestones_controller":36,"./controllers/search_controller":37,"./controllers/settings/index_controller":38,"./controllers/settings/integrations/index_controller":39,"./controllers/settings/integrations/new_controller":40,"./controllers/settings/integrations_controller":41,"./controllers/settings/link_controller":42,"./controllers/settings/links/index_controller":43,"./controllers/settings/links_controller":44,"./helpers/asset-path":45,"./helpers/moment_ago":46,"./mixins/keypress_handling":48,"./mixins/serializable":49,"./mixins/socket":50,"./mixins/wip_limit":51,"./models/board":52,"./models/global":53,"./models/integration":54,"./models/issue":55,"./models/link":56,"./models/repo":57,"./models/settings":58,"./routes/application_route":59,"./routes/index/issue_route":60,"./routes/index_route":61,"./routes/issue_route":62,"./routes/milestones/issue_route":63,"./routes/milestones_route":64,"./routes/settings/integrations/new_route":65,"./routes/settings/integrations_route":66,"./routes/settings/links_route":67,"./routes/settings_route":68,"./templates":69,"./views/assignee_filter_view":84,"./views/card_milestone_view":85,"./views/card_view":86,"./views/card_wrapper_view":87,"./views/column_count_view":88,"./views/column_view":89,"./views/css_view":90,"./views/filter_view":91,"./views/integrations/integrations_view":92,"./views/issue/activities_view":93,"./views/issue/body_view":94,"./views/issue/create_view":95,"./views/issue/quick_create_view":96,"./views/issue/selected_column_view":97,"./views/issue/title_view":98,"./views/issue_view":99,"./views/loading_view":100,"./views/login_view":101,"./views/milestone_column_view":102,"./views/milestones/missing_view":103,"./views/milestones_view":104,"./views/modal_view":105,"./views/search_view":106,"./views/settings/link_view":107,"./views/settings/show_counts_view":108}],48:[function(require,module,exports){
 var KeypressHandlingMixin = Ember.Mixin.create({
-  store: Ember.computed.alias("settings"),
-  storeData: function(){
-    return this.get("store").loadData()["settings"];
-  }.property("store"),
-
   // Handler for Meta Enter - Default: Enabled
   metaEnterHandler: function(event, handler){
-    var enabled = this.metaEnterEnabled();
+    var enabled = this.get('metaEnterEnabled');
     var pressed = this.metaEnter(event)
     if (pressed) handler(enabled);
   },
-  metaEnterEnabled: function(){
-    if(this.get("store.available")) {
-      var enabled = this.get('storeData')["metaEnterEnabled"];
-      return (enabled == null && enabled == undefined) ? true : enabled
-    } else {
-      return true;
-    }
-  },
+  metaEnterEnabled: Ember.computed.alias("settings.metaEnterEnabled"),  
   metaEnter: function(e){
     return e.keyCode == 13 && e.metaKey;
   },
 
   // Handler for Enter - Default: Disabled
   enterHandler: function(event, handler){
-    var enabled = this.enterEnabled();
+    var enabled = this.get('enterEnabled');
     var pressed = this.enter(event)
     if (pressed) handler(enabled);
   },
-  enterEnabled: function(){
-    if(this.get("store.available")) {
-      var enabled = this.get('storeData')["enterEnabled"];
-      return (enabled == null || enabled == undefined) ? false : enabled;
-    } else {
-      return false;
-    }
-  },
+  enterEnabled: Ember.computed.alias("settings.enterEnabled"),  
   enter: function(e){
     return e.keyCode == 13;
   }
