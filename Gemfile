@@ -41,6 +41,7 @@ gem 'redis'
 gem 'sucker_punch'
 gem 'raygun4ruby'
 gem 'rack-attack'
+gem 'redcarpet'
 
 gem 'pdfkit'
 gem 'wkhtmltopdf-heroku'
