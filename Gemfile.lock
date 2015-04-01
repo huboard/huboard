@@ -362,6 +362,8 @@ GEM
     sinatra_auth_github (1.2.0)
       sinatra (~> 1.0)
       warden-github (~> 1.2.0)
+    skylight (0.6.0)
+      activesupport (>= 3.0.0)
     slop (3.6.0)
     solid_use_case (2.1.1)
       deterministic (~> 0.6.0)
@@ -453,6 +455,7 @@ DEPENDENCIES
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   sinatra_auth_github
+  skylight
   solid_use_case
   spring
   sprockets-rails (= 3.0.0.beta1)
