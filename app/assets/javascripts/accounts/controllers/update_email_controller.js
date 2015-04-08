@@ -1,5 +1,5 @@
 UpdateEmailForm = Ember.Controller.extend({
-  customer: Ember.computed.alias('model.details.card.customer'),
+  customer: Ember.computed.alias('model.details.plans.firstObject.customer'),
   onChange: (function() {
     var errors;
     errors = this.get('errors');
@@ -19,8 +19,9 @@ UpdateEmailForm = Ember.Controller.extend({
         data: {billing_email: self.get('email')},
         type: "PUT"})
         .then(function(response){
-          self.set('model.details.billing_email', self.get('email'))
+          self.set('model.details.account_email', self.get('email'));
           self.set('processing', false);
+          self.set('email', '');
           self.send('close');
         })
         .fail(function(){
