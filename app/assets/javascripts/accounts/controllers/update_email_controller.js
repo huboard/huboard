@@ -25,7 +25,7 @@ UpdateEmailForm = Ember.Controller.extend({
           self.send('close');
         })
         .fail(function(){
-          self.set('errors', 'Your email address could not be updated');
+          self.set('errors', 'Your email address could not be updated, please try again.');
           self.set('processing', false);
         });
     },
