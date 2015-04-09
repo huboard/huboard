@@ -103,6 +103,26 @@ module Saas
       end
     end
 
+    def update_email
+      query = Queries::CouchCustomer.get_cust(params[:id], couch)
+      doc = QueryHandler.exec(&query)
+      return render json: {success: false, message: "Couldn't find couch record: #{params[:id]}"} unless doc
+
+      begin
+        customer = Stripe::Customer.retrieve(params[:id])
+        customer.email = params[:billing_email]
+        saved = customer.save
+
+        doc.stripe.customer = customer
+        doc['billing_email'] = params[:billing_email]
+        couch.customers.save doc
+
+        render json: saved
+      rescue Stripe::InvalidRequestError => e
+        render json: e.json_body, status: 422
+      end
+    end
+
     :protected
       def login
         request.env['warden'].logout if github_authenticated? :default

@@ -1,5 +1,5 @@
 AccountController = Ember.ObjectController.extend({
-  needs: ["purchaseForm","cancelForm", "updateCard", "applyCoupon"],  
+  needs: ["purchaseForm","cancelForm", "updateCard", "applyCoupon", "updateEmail"],  
   plan: function(){
     var plans = this.get("model.details.plans")
     this.set("model.details.plans", Em.A(plans));
@@ -88,6 +88,10 @@ AccountController = Ember.ObjectController.extend({
     applyCoupon: function (model) {
       this.set("controllers.applyCoupon.model", model)
       this.send("openModal","applyCoupon");
+    },
+    updateEmail: function (model) {
+      this.set("controllers.updateEmail.model", model);
+      this.send("openModal","updateEmail");
     }
   }  
 });

@@ -12,6 +12,7 @@ Saas::Engine.routes.draw do
   post '/charge/:id'                      => 'charges#create'
   get '/coupon_valid/:coupon_id'         => 'coupons#valid'
   put '/redeem_coupon/:id'               => 'coupons#redeem'
+  put '/email/:id'               => 'profiles#update_email'
   put '/profile/:name/additionalInfo'    => 'profiles#info'
   put '/profile/:name/card'              => 'cards#update'
   delete '/profile/:name/plans/:plan_id' => 'plans#destroy'
