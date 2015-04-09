@@ -7,6 +7,7 @@ package {
   'nodejs': ensure => "present";
   'npm': ensure => "present";
   'couchdb': ensure => "present";
+  'libffi-dev': ensure => "present";
   } ->
   class { 'ruby_install': 
     ruby_version => "2.2.1",
