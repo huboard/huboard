@@ -60,7 +60,7 @@ group :development, :test do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'meta_request'
-  gem 'pry'
+  gem 'pry-byebug'
   gem 'annotate'
   gem 'rspec'
   gem 'couchrest'
