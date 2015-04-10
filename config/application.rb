@@ -39,7 +39,7 @@ module HuboardWeb
     if ENV["SELF_HOST_FAYE"]
       #config.middleware.delete Rack::Lock
       config.middleware.use Faye::RackAdapter, 
-        mount: '/site/pubsub', 
+        mount: (ENV['SOCKET_BACKEND'] || '/site/pubsub'), 
         timeout: 25,
         ping: 20,
         engine: {
