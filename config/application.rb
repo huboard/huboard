@@ -36,10 +36,10 @@ module HuboardWeb
     # Configure dalli to use a connection pool
     config.cache_store = :dalli_store, nil, { :pool_size => 5 }
 
-    if ENV["SELF_HOST_FAYE"]
+    if ENV["SELF_HOST_FAYE"] && ENV['SOCKET_BACKEND'] == '/site/pubsub'
       #config.middleware.delete Rack::Lock
       config.middleware.use Faye::RackAdapter, 
-        mount: (ENV['SOCKET_BACKEND'] || '/site/pubsub'), 
+        mount: (ENV['SOCKET_BACKEND']), 
         timeout: 25,
         ping: 20,
         engine: {
