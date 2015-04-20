@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  constraints subdomain: 'www' do
+      get ':any', to: redirect(subdomain: nil, path: '/%{any}'), any: /.*/
+  end
   root to: 'dashboard#index', constraints: LoggedInConstraint.new 
   root to: 'marketing#index', as: 'marketing_root'
 
