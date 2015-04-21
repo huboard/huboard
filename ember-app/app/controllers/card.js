@@ -8,7 +8,7 @@ var CardController = Ember.ObjectController.extend(SocketMixin,{
     return this.get("model.repo.is_collaborator");
   }.property("model.repo.is_collaborator"),
   columns: function() {
-    return this.get("controllers.application.model.board.columns")
+    return this.get("controllers.application.model.board.columns");
   }.property("controllers.application.model.board.columns"),
   sockets: {
     config: {
@@ -16,33 +16,33 @@ var CardController = Ember.ObjectController.extend(SocketMixin,{
       channelPath: "repositoryName"
     },
     milestone_changed: function(message) {
-       this.get("model").set("milestone", message.issue.milestone)
+       this.get("model").set("milestone", message.issue.milestone);
        Ember.run.once(function () {
          this.send("forceRepaint", "milestones");
        }.bind(this));
     },
     issue_status_changed: function(message){
-       this.get("model").set("_data", message.issue._data)
+       this.get("model").set("_data", message.issue._data);
     },
     issue_archived: function(){
       this.get('model').set('isArchived', true);
     },
     issue_closed: function(message) {
-       this.get("model").set("state", message.issue.state)
+       this.get("model").set("state", message.issue.state);
     },
     assigned: function(message) {
-       this.get("model").set("assignee", message.issue.assignee)
+       this.get("model").set("assignee", message.issue.assignee);
     },
     moved: function (message) {
-       this.get("model").set("current_state", message.issue.current_state)
-       this.get("model").set("_data", message.issue._data)
+       this.get("model").set("current_state", message.issue.current_state);
+       this.get("model").set("_data", message.issue._data);
        Ember.run.once(function () {
          this.send("forceRepaint", "index");
        }.bind(this));
     },
     reordered: function (message) {
-       this.get("model").set("current_state", message.issue.current_state)
-       this.get("model").set("_data", message.issue._data)
+       this.get("model").set("current_state", message.issue.current_state);
+       this.get("model").set("_data", message.issue._data);
        Ember.run.once(function () {
          this.send("forceRepaint", "index");
        }.bind(this));
@@ -71,17 +71,17 @@ var CardController = Ember.ObjectController.extend(SocketMixin,{
       this.send("openIssueFullscreen", this.get("model"));
     },
     close: function (issue){
-      return this.get("model").close();
+      return issue.close();
     }
   },
   isLast: function(){
     return this.get("model.current_state.is_last") &&
-      this.get("isCollaborator")
+      this.get("isCollaborator");
   }.property("model.current_state", "isCollaborator"),
   canArchive: function () {
     this.get("isCollaborator");
-    return this.get("model.state") === "closed"
-      && App.get("loggedIn") && this.get("isCollaborator");
+    return this.get("model.state") === "closed" &&
+      App.get("loggedIn") && this.get("isCollaborator");
   }.property("model.state", "isCollaborator"),
   cardLabels: function () {
       return this.get("model.other_labels").map(function(l){

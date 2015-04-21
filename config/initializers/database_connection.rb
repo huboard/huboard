@@ -9,3 +9,5 @@ Rails.application.config.after_initialize do
     end
   end
 end
+defined?(Redis) and
+  $redis = Redis.current = ConnectionPool::Wrapper.new( size: (ENV['MAX_THREADS'] || 5) ) { Redis.new( url: ENV['REDIS_URL'] ) }

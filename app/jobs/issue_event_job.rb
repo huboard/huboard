@@ -1,6 +1,6 @@
 class IssueEventJob < ActiveJob::Base
 
-  before_enqueue :guard_against_double_events
+  around_perform :guard_against_double_events
 
   def self.action(action)
     @_action = action
@@ -33,11 +33,13 @@ class IssueEventJob < ActiveJob::Base
 
   def guard_against_double_events
     payload = { meta:  self.class.build_meta(self.arguments.first) }
+    willPublish = true
     Rails.cache.with do |dalli|
       key = "#{payload[:meta][:action]}.#{payload[:meta][:user]["login"]}.#{payload[:meta][:identifier]}.#{payload[:meta][:timestamp]}"
-      return false if dalli.get(key)
+      willPublish = false if dalli.get(key)
       dalli.set(key, payload.to_s)
     end
+    yield if willPublish
   end
 
   def perform(params)

@@ -1,0 +1,29 @@
+<div class="fullscreen-credit-card">
+  <form {{action 'update' on=submit}}>
+    <div class="modal-header">
+      <button type="button" class="close" {{action 'close'}} data-dismiss="modal" aria-hidden="true">×</button>
+      Update Account Email
+    </div>
+    <div class="modal-body">
+      <fieldset>
+        <div class="form-row full">
+          <label>
+            <span>Email Address</span>
+          </label>
+          {{input valueBinding="email" type="email" required=true}}
+        </div>
+        {{#if errors}}
+          <div class="alert alert-error">{{errors}}</div>
+        {{/if}}
+      </fieldset>
+
+      {{#if processing}}
+        <div class="fullscreen-overlay">
+        </div>
+      {{/if}}
+    </div>
+    <div class="modal-footer">
+        <button href="#" class="stripe-connect light-blue" type="submit" {{bind-attr disabled="processing"}}><span>Save</span></button>
+    </div>
+  </form>
+</div>

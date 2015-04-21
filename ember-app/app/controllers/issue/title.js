@@ -5,8 +5,8 @@ import Ember from 'ember';
 var IssueTitleController = BufferedController.extend({
   needs: ["issue"],
   isCollaboratorBinding: "model.repo.is_collaborator",
-  isLoggedInBinding: "loggedIn",
-  currentUserBinding: "currentUser",
+  isLoggedInBinding: "App.loggedIn",
+  currentUserBinding: "App.currentUser",
   isEditing: false,
   disabled: false,
   canEdit: function(){
@@ -37,7 +37,7 @@ var IssueTitleController = BufferedController.extend({
           controller.set("model.title", response.title);
           controller.set("isEditing", false);
         }
-      })
+      });
     },
 
     cancel: function() {
@@ -45,6 +45,6 @@ var IssueTitleController = BufferedController.extend({
       this.set("isEditing", false);
     }
   }
-})
+});
 
 export default IssueTitleController;

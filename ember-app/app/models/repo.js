@@ -4,6 +4,7 @@ import Integration from 'app/models/integration';
 import Issue from 'app/models/issue';
 import Serializable from 'app/mixins/serializable';
 import Ember from 'ember';
+import ajax from 'ic-ajax';
 
 
 
@@ -17,15 +18,16 @@ var Repo = Ember.Object.extend(Serializable,{
   }.property("name", "userUrl"),
   fetchBoard: function(linkedBoards){
     if(this._board) {return this._board;}
-    return Ember.$.getJSON("/api/" + this.get("full_name") + "/board").then(function(board){
+    var self = this;
+    return ajax("/api/" + this.get("full_name") + "/board").then(function(board){
        var issues = Ember.A();
        board.issues.forEach(function(i){
          issues.pushObject(Issue.create(i));
-       })
-       this._board =  Board.create(_.extend(board, {issues: issues, linkedBoardsPreload: linkedBoards}));
-       this.set("board", this._board);
-       return this._board;
-    }.bind(this));
+       });
+       self._board =  Board.create(_.extend(board, {issues: issues, linkedBoardsPreload: linkedBoards}));
+       self.set("board", self._board);
+       return self._board;
+    });
   },
   fetchLinkedBoards: function(){
     if(this._linkedBoards) {return this._linkedBoards;}
@@ -33,8 +35,8 @@ var Repo = Ember.Object.extend(Serializable,{
     return Ember.$.getJSON("/api/" + self.get("full_name") + "/link_labels")
     .then(function(link_labels){
       var urls = link_labels.map(function (l) {
-        return "/api/" + self.get("full_name") + "/linked/" + l.user + "/" + l.repo  
-      })
+        return "/api/" + self.get("full_name") + "/linked/" + l.user + "/" + l.repo;
+      });
 
       var requests = urls.map(function (url){
         return Ember.$.getJSON(url);
@@ -53,17 +55,17 @@ var Repo = Ember.Object.extend(Serializable,{
         var results = Ember.A();
         integrations.rows.forEach(function(i){
           results.pushObject(Integration.create(i.value));
-        })
+        });
         this._integrations = Ember.Object.create({ 
           integrations: results 
-        })
+        });
         return this._integrations;
       }.bind(this));
 
   },
   fetchSettings: function(){
     if(this._settings) {return this._settings;}
-    return Ember.$.getJSON("/api/" + this.get("full_name") + "/settings")
+    return Ember.$.getJSON("/api/" + this.get("full_name") + "/settings");
   },
   fetchLinks: function() {
     if(this._links) {return Ember.RSVP.resolve(this._links,"Already fetched links");}
@@ -72,7 +74,7 @@ var Repo = Ember.Object.extend(Serializable,{
         var results = Ember.A();
         links.forEach(function(l){
           results.pushObject(Link.create(l));
-        })
+        });
         this._links = results; 
         return this._links;
       }.bind(this));
@@ -96,8 +98,8 @@ var Repo = Ember.Object.extend(Serializable,{
             error: function(jqXHR){
               reject(jqXHR);
             }
-          })
-        })
+          });
+        });
       }, function(jqXHR){
         reject(jqXHR);
       });
@@ -107,7 +109,7 @@ var Repo = Ember.Object.extend(Serializable,{
     var api = "/api/" + this.get("full_name") + "/links/validate";
     return Ember.$.post(api, {
       link: name,
-    },'json')
+    },'json');
   }
 });
 

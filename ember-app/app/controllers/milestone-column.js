@@ -64,7 +64,7 @@ var MilestoneColumnController = Ember.ObjectController.extend({
     var equalsA = function(a) {
       return function(b) {
         return _.isEqual(a.name, b.repo.name);
-      }
+      };
     }(cardController.get("model.repo"));
 
     var milestone = this.get('model.group').find(equalsA);
@@ -86,9 +86,9 @@ var MilestoneColumnController = Ember.ObjectController.extend({
           // move the card to where it came from
           onCancel();
         }
-      })
+      });
     }
   }
-})
+});
 
 export default MilestoneColumnController;

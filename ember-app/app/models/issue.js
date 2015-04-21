@@ -22,19 +22,19 @@ var Issue = Ember.Object.extend(Serializable,{
             Ember.$.extend(options, {
               url: "/api/" + full_name + "/issues/" + this.get("number") + "/ready",
               type: "PUT"
-            })
+            });
             break;
           case "blocked":
             Ember.$.extend(options, {
               url: "/api/" + full_name + "/issues/" + this.get("number") + "/blocked",
               type: "PUT"
-            })
+            });
             break;
           case "":
             Ember.$.extend(options, {
               url: "/api/" + full_name + "/issues/" + this.get("number") + "/" + previousState,
               type: "DELETE"
-            })
+            });
             break;
 
 
@@ -43,8 +43,8 @@ var Issue = Ember.Object.extend(Serializable,{
         Ember.$.ajax(options)
         .then(function(response){
           this.set("processing", false);
-          this.set("body", response.body)
-          this.set("body_html", response.body_html)
+          this.set("body", response.body);
+          this.set("body_html", response.body_html);
         }.bind(this));
         return value;
     }
@@ -90,11 +90,11 @@ var Issue = Ember.Object.extend(Serializable,{
       dataType: 'json',
       type: "PUT",
       contentType: "application/json"})
-      .then(function(response){
+      .then(function(){
         this.set("processing", false);
       }.bind(this));
   },
-  loadDetails: function (route, transition) {
+  loadDetails: function () {
      this.set("processing", true);
       var user = this.get("repo.owner.login"),
           repo = this.get("repo.name"),
@@ -105,7 +105,7 @@ var Issue = Ember.Object.extend(Serializable,{
        this.set("repo", details.repo);
        this.set("activities", details.activities);
        this.set("processing", false);
-     }.bind(this)).fail(function(e){
+     }.bind(this)).fail(function(){
        this.set("processing", false);
      }.bind(this));
   },
@@ -123,7 +123,7 @@ var Issue = Ember.Object.extend(Serializable,{
       }, function(){}, "json").then(function () {
         this.set("processing", false);
         this.set("isArchived", true);
-      }.bind(this)).fail(function(e){
+      }.bind(this)).fail(function(){
        this.set("processing", false);
       }.bind(this));
   },
@@ -138,9 +138,9 @@ var Issue = Ember.Object.extend(Serializable,{
         number : this.get("number"),
         correlationId: this.get("correlationId")
       }, function(){}, "json").then(function() {
-        this.set("state","closed")
-        this.set("processing", false)
-      }.bind(this)).fail(function(e){
+        this.set("state","closed");
+        this.set("processing", false);
+      }.bind(this)).fail(function(){
         this.set("processing", false);
       }.bind(this));
   },
@@ -155,9 +155,9 @@ var Issue = Ember.Object.extend(Serializable,{
         number : this.get("number"),
         correlationId: this.get("correlationId")
       }, function(){}, "json").then(function() {
-        this.set("state","open")
-        this.set("processing", false)
-      }.bind(this)).fail(function(e){
+        this.set("state","open");
+        this.set("processing", false);
+      }.bind(this)).fail(function(){
         this.set("processing", false);
       }.bind(this));
   },
@@ -182,7 +182,7 @@ var Issue = Ember.Object.extend(Serializable,{
     } else if(!milestone && this.get("milestone")){
       changedMilestones = true;
     } else if (milestone) {
-      changedMilestones = this.get("milestone.number") != milestone.number;
+      changedMilestones = this.get("milestone.number") !== milestone.number;
     }
     this.set("milestone", milestone);
 
@@ -204,9 +204,10 @@ var Issue = Ember.Object.extend(Serializable,{
   },
   reorder: function (index, column) {
       var changedColumns = this.get("current_state") !== column;
-      changedColumns && this.set("_data.custom_state", "");
-        
-      this.set("current_state", column)
+      if(changedColumns){
+        this.set("_data.custom_state", "");
+      }
+      this.set("current_state", column);
       this.set("_data.order", index);
 
       var user = this.get("repo.owner.login"),
@@ -238,7 +239,7 @@ Issue.reopenClass({
        milestone: null,
        repo: App.get("repo"),
        labels: []
-     })
+     });
   }
 });
 

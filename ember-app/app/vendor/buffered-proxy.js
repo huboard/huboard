@@ -1,3 +1,4 @@
+/* jshint ignore:start */
 import Ember from 'ember';
 
 "use strict";
@@ -71,3 +72,4 @@ var BufferedProxy = Ember.Mixin.create({
 });
 
 export default BufferedProxy;
+/* jshint ignore:end */

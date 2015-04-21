@@ -5,8 +5,8 @@ import Ember from 'ember';
 var IssueActivityController = BufferedController.extend({
   needs: ["issue"],
   isCollaboratorBinding: "target.target.model.repo.is_collaborator",
-  isLoggedInBinding: "loggedIn",
-  currentUserBinding: "currentUser",
+  isLoggedInBinding: "App.loggedIn",
+  currentUserBinding: "App.currentUser",
   mentions: Ember.computed.alias("controllers.issue.mentions"),
   isEditing: false,
   disabled: false,
@@ -32,7 +32,7 @@ var IssueActivityController = BufferedController.extend({
 
       controller.set("disabled", true);
 
-      if(this._last) { this._last.abort() };
+      if(this._last) { this._last.abort(); }
       this._last = Ember.$.ajax({
         url: url,
         type: "PUT",
@@ -48,7 +48,7 @@ var IssueActivityController = BufferedController.extend({
           controller.set("isEditing", false);
           controller._last = null;
         }
-      })
+      });
     },
 
     cancel: function() {
@@ -56,6 +56,6 @@ var IssueActivityController = BufferedController.extend({
       this.set("isEditing", false);
     }
   }
-})
+});
 
 export default IssueActivityController;

@@ -6,7 +6,7 @@ function attr(defaultValue) {
       this.saveData(key, value);
       return value;
     } else {
-      return this.get("data." + key) == undefined ? defaultValue : this.get("data." + key);
+      return this.get("data." + key) === undefined ? defaultValue : this.get("data." + key);
     }
   });
 }
@@ -20,25 +20,25 @@ var Settings = Ember.Object.extend({
   showColumnCounts: attr(false),
   data: {},
   loadData: function () {
-    var storage = localStorage.getItem("localStorage:" + this.get("storageKey"))
+    var storage = localStorage.getItem("localStorage:" + this.get("storageKey"));
     return storage ? JSON.parse(storage) : {};
   },
   storageKey: Ember.computed.alias("repo.full_name"),
   dataKey: 'settings',
   changed: 0,
   saveData: function(key, value) {
-    this.set("data." + key, value)
+    this.set("data." + key, value);
 
     var localStorageData = this.loadData();
 
     localStorageData[this.get('dataKey')] = this.get("data");
 
-    localStorage.setItem("localStorage:" + this.get("storageKey"), JSON.stringify(localStorageData))
+    localStorage.setItem("localStorage:" + this.get("storageKey"), JSON.stringify(localStorageData));
     this.incrementProperty('changed');
   },
   setUnknownProperty: function(key, value) {
     Ember.defineProperty(this, key, attr(false));
-    this.set(key, value)
+    this.set(key, value);
   },
   unknownProperty: function(key) {
     return this.get("data." + key);

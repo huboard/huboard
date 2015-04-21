@@ -43,7 +43,7 @@ var ColumnController = Ember.ObjectController.extend({
   }.property("controllers.index.forceRedraw"),
   dragging: false,
   cardMoved : function (cardController, index){
-    cardController.send("moved", index, this.get("model"))
+    cardController.send("moved", index, this.get("model"));
   },
   topOrderNumber: function(){
     var issues = this.get("issues");
@@ -56,6 +56,6 @@ var ColumnController = Ember.ObjectController.extend({
   newIssue: function(){
     return Issue.createNew();
   }.property()
-})
+});
 
 export default ColumnController;

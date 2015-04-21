@@ -1,4 +1,3 @@
-var Markdown = marked;
 import Ember from 'ember';
 
 
@@ -7,7 +6,7 @@ var HbMarkdownEditorComponent = Ember.Component.extend({
   init: function () {
     this._super.apply(this, arguments);
     var that = this;
-    Markdown(this.get('markdown') || "Nothing to preview",{gfm: true},function (err, content) {
+    marked(this.get('markdown') || "Nothing to preview",{gfm: true},function (err, content) {
       that.set("preview",content);
     });
   },
@@ -19,7 +18,7 @@ var HbMarkdownEditorComponent = Ember.Component.extend({
     return Ember.run.once(function () {
        var markdown = that.get("markdown");
 
-       Markdown(markdown || "Nothing to preview",{gfm: true},function (err, content) {
+       marked(markdown || "Nothing to preview",{gfm: true},function (err, content) {
          that.set("preview",content);
        });
     });
@@ -29,7 +28,7 @@ var HbMarkdownEditorComponent = Ember.Component.extend({
     var emojiStrategy = { 
       match: /\B:([\-+\w]*)$/,
       search: function (term, callback) {
-        callback($.map(_.pairs(window.EMOJIS), function (emoji) {
+        callback(Ember.$.map(_.pairs(window.EMOJIS), function (emoji) {
           return emoji[0].indexOf(term) === 0 ? {key:emoji[0], value:emoji[1]} : null;
         }));
       },
@@ -41,14 +40,14 @@ var HbMarkdownEditorComponent = Ember.Component.extend({
       },
       index: 1,
       maxCount: 5
-    }
+    };
 
     var mentionStrategy =  { 
       match: /(^|\s)@(\w*)$/,
       search: function (term, callback) {
         callback(component.get('mentions').filter(function(a){
           return a.login.indexOf(term) === 0;
-        }))
+        }));
       },
       template: function (value) {
         return '<img style="height:32px;" src="' + value.avatar_url + '"></img>' + value.login;
@@ -58,9 +57,9 @@ var HbMarkdownEditorComponent = Ember.Component.extend({
       },
       cache: true,
       maxCount: 5
-    }
+    };
 
-    this.$('textarea').textcomplete([ emojiStrategy, mentionStrategy ])
+    this.$('textarea').textcomplete([ emojiStrategy, mentionStrategy ]);
 
   }.on('didInsertElement'),
   cleanUpTextcomplete: function(){

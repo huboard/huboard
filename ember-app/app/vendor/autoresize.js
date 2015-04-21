@@ -1,4 +1,5 @@
 // Last commit: 0ba0d24 (2013-11-06 10:53:04 -0500)
+/* jshint ignore:start */
 
 import Ember from 'ember';
 
@@ -791,3 +792,4 @@ Ember.TextArea.reopen(Ember.AutoResize, /** @scope Ember.TextArea.prototype */{
 
 })();
 
+/* jshint ignore:end */

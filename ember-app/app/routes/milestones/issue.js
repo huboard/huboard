@@ -9,12 +9,12 @@ var MilestonesIssueRoute = Route.extend({
                   .findBy('id', parseInt(params.issue_id));
     if(issue) { return issue; }
 
-    transition.abort()
-    this.transitionTo("milestones")
+    transition.abort();
+    this.transitionTo("milestones");
   },
   actions: {
     closeModal: function () {
-      this.transitionTo("milestones")
+      this.transitionTo("milestones");
       return true;
     }
   }

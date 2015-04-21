@@ -27,8 +27,8 @@ var CardWrapperView = Ember.View.extend({
 
           issues.removeObject(issue);
 
-        })
-      }.bind(this))
+        });
+      }.bind(this));
     }.observes("content.isArchived"),
     isDraggable: function( ){
       return App.get("loggedIn") && this.get("isCollaborator");
@@ -45,8 +45,12 @@ var CardWrapperView = Ember.View.extend({
       }
 
       if(memberFilter) {
-        memberFilter.mode === 1 && (dimFilters = dimFilters.concat([memberFilter]))
-        memberFilter.mode === 2 && (hideFilters = hideFilters.concat([memberFilter]));
+        if(memberFilter.mode === 1) {
+           (dimFilters = dimFilters.concat([memberFilter]));
+        }
+        if(memberFilter.mode === 2) {
+          (hideFilters = hideFilters.concat([memberFilter]));
+        }
       }
 
       if(hideFilters.any(function(f){
@@ -66,11 +70,11 @@ var CardWrapperView = Ember.View.extend({
     }.property("App.memberFilter.mode", "App.dimFilters", "App.hideFilters", "App.searchFilter", "App.eventReceived"),
     click: function(){
       var view = Ember.View.views[this.$().find("> div").attr("id")];
-      view.get("controller").send("fullscreen")
+      view.get("controller").send("fullscreen");
     },
     dragAuthorized: function(ev){
-      var contains_type =  ev.dataTransfer.types.contains("text/huboard-assignee")
-      return contains_type && this.get("isCollaborator")
+      var contains_type =  ev.dataTransfer.types.contains("text/huboard-assignee");
+      return contains_type && this.get("isCollaborator");
     },
     dragEnter: function(ev) {
       ev.preventDefault();

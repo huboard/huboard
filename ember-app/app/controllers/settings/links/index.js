@@ -3,12 +3,6 @@ import Ember from 'ember';
 var SettingsLinksIndexController = Ember.ObjectController.extend({
   needs: ['application', 'settings/links'],
   repoFullName: '',
-  validateRepo: function(){
-    console.log(this.get('repoFullName'));
-  },
-  observesFullName: function(){
-    Ember.run.debounce(this, this.validateRepo, 400);
-  }.observes('repoFullName'),
   shouldDisplayWarning: Ember.computed.alias("controllers.settings/links.shouldDisplayWarning"),
   shouldDisplayError: false,
   errorMessage: '',
@@ -21,7 +15,7 @@ var SettingsLinksIndexController = Ember.ObjectController.extend({
           controller.set("isDisabled", false);
           controller.set("shouldDisplayError", false);
           controller.set("errorMessage", '');
-          controller.set("repoFullName","")
+          controller.set("repoFullName","");
         }, function(jqXHR){
           controller.set("shouldDisplayError", true);
           controller.set("isDisabled", false);

@@ -13,7 +13,7 @@ var FilterView = Ember.View.extend({
   }.property("color"),
   click: function(ev){
     ev.preventDefault();
-    var $target = $(ev.target);
+    var $target = Ember.$(ev.target);
     this.set("lastClicked", this.get("name"));
     var formattedParam = this.get("name").replace(/\s+/g, '');
     var queryParams = this.get("controller").get(this.get("queryParam"));
@@ -29,28 +29,25 @@ var FilterView = Ember.View.extend({
     switch(this.get("mode")){
       case 0:
         return "";
-      break;
       case 1:
         return "dim";
-      break;
       case 2:
         return "active";
-      break;
     }
     return "";
   }.property("mode"),
   queryParamsHandler: function(params, formattedParam){
-    if(this.get("mode") == 0) {
+    if(this.get("mode") === 0) {
       params.removeObject(formattedParam);
       return;
     }
     //If this is not a label and is dimmed,
     //remove any filters of this type from the URL's 's
-    if(this.get("mode") == 1 && this.get("queryParam") != "label") {
+    if(this.get("mode") === 1 && this.get("queryParam") !== "label") {
       params.clear();
       return;
     }
-    if (this.get("mode") == 2 && !params.contains(formattedParam)){
+    if (this.get("mode") === 2 && !params.contains(formattedParam)){
       params.pushObject(formattedParam);
       return;
     }
@@ -64,6 +61,6 @@ var FilterView = Ember.View.extend({
   modes:[0,1,2,0],
   name: null,
   lastClicked: null,
-})
+});
 
 export default FilterView;

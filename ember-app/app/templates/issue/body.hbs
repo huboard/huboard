@@ -16,7 +16,7 @@
 
   </div>
   {{#if isEditing}}
-  <form {{action save on="submit" }} class="flex-form">
+  <form {{action 'save' on="submit" }} class="flex-form">
     {{hb-markdown-editor markdown=bufferedContent.body mentions=mentions}}
     <button {{bind-attr disabled=disabled}} class="hb-button">Submit comment</button>
   </form>

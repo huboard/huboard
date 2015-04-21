@@ -8,11 +8,11 @@ var Router = Ember.Router.extend({
 Router.map(function() {
   this.resource("index",{path: "/"},function(){
     this.resource("index.issue",{path:"/issues/:issue_id"});
-  })
+  });
 
   this.resource("milestones", function(){
     this.resource("milestones.issue",{path:"/issues/:issue_id"});
-  })
+  });
 
   this.resource("settings", function(){
 

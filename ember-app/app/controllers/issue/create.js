@@ -22,17 +22,17 @@ var IssuesCreateController = Ember.ObjectController.extend({
   }.property("model.title"),
   mentions: function(){
     return _.uniq(_.compact(this.get('controllers.application.model.board.assignees')), function(i){
-      return i.login 
+      return i.login;
     });
   }.property('controllers.application.model.board.assignees'),
   order: {},
   createIssue: function(order){
-    if (this.get("processing")) return;
+    if (this.get("processing")){ return; }
     var controller = this;
-    this.set("processing",true)
+    this.set("processing",true);
     this.get("model").saveNew(order).then(function(issue){
-       controller.send("issueCreated", issue)
-       controller.set("processing",false)
+       controller.send("issueCreated", issue);
+       controller.set("processing",false);
     });
   }
 });

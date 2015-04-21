@@ -21,16 +21,16 @@ var IssueTitleView = Ember.View.extend(KeyPressHandlingMixin, {
 
     this.$().keydown(function(e){
       self.metaEnterHandler(e, function(enabled){
-        if (enabled) ctrl.send("save");
-      })
+        if (enabled) { ctrl.send("save"); }
+      });
       self.enterHandler(e, function(enabled){
-        if (enabled) ctrl.send("save");
-      })
+        if (enabled){ ctrl.send("save"); }
+      });
     });
   }.on("didInsertElement"),
   tearDownEvents: function(){
     this.$().off("keydown");
   }.on("willDestroyElement"),
-})
+});
 
 export default IssueTitleView;

@@ -8,6 +8,6 @@ var BufferedController = Ember.ObjectController.extend({
       content: this.get('content')
     });
   }.property('content')
-})
+});
 
 export default BufferedController;

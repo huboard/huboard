@@ -3,7 +3,7 @@ import Ember from 'ember';
 
 var LoadingView = Ember.View.extend({
   didInsertElement: function(){
-    $("body").addClass("fullscreen-open")
+    Ember.$("body").addClass("fullscreen-open");
     var opts = {
         lines: 13, // The number of lines to draw
         length: 0, // The length of each line
@@ -28,7 +28,7 @@ var LoadingView = Ember.View.extend({
     return this._super();
   },
     willDestroyElement: function(){
-      $("body").removeClass("fullscreen-open")
+      Ember.$("body").removeClass("fullscreen-open");
         return this._super();
     }
 });

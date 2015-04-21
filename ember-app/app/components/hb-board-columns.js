@@ -6,6 +6,6 @@ var HbBoardColumnsComponent = hbSelectColumnComponent.extend({
   stateClass: '',
   selectedColumn: null,
   visibleColumns: Ember.computed.alias('columns')
-})
+});
 
 export default HbBoardColumnsComponent;

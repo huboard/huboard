@@ -1,5 +1,6 @@
 import ModalView from 'app/views/modal';
 import animateModalOpen from 'app/config/animate-modal-open';
+import Ember from 'ember';
 
 
 var LoginView = ModalView.extend({
@@ -7,15 +8,15 @@ var LoginView = ModalView.extend({
   didInsertElement: function() {
     animateModalOpen();
     this.$(".fullscreen-body").on('click.modal', function(event){
-       if(!$(event.target).parents(".hb-selector-component").length) {
+       if(!Ember.$(event.target).parents(".hb-selector-component").length) {
         this.$(".open")
-          .not($(event.target).parents(".hb-selector-component"))
-          .removeClass("open")
+          .not(Ember.$(event.target).parents(".hb-selector-component"))
+          .removeClass("open");
        }
-       if($(event.target).is("[data-ember-action],[data-toggle]")){return;}
-       if($(event.target).parents("[data-ember-action],[data-toggle]").length){return;}
+       if(Ember.$(event.target).is("[data-ember-action],[data-toggle]")){return;}
+       if(Ember.$(event.target).parents("[data-ember-action],[data-toggle]").length){return;}
        event.stopPropagation();    
-    }.bind(this))
+    }.bind(this));
 
     this.$(':input:not(.close):not([type="checkbox"])').first().focus();
   },

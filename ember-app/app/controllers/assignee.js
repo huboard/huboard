@@ -12,7 +12,7 @@ var AssigneeController = Ember.ObjectController.extend({
         var params = ["assignee"];
         _.each(params, function(p){ self.get(p).clear(); });
         var allFilters = self.get("filters");
-        var active =  _.each(allFilters, function(f){
+        _.each(allFilters, function(f){
           Ember.set(f,"mode",0);
         });
       });
@@ -25,12 +25,12 @@ var AssigneeController = Ember.ObjectController.extend({
   lastClicked: null,
   filterChanged : function(){
     Ember.run.once(function(){
-      var filter = this.get("lastClicked").get("content");
+      this.get("lastClicked").get("content");
       this.set("memberFilter", {
         mode: this.get("lastClicked.mode"),
         condition: this.get("lastClicked.content.condition")
-      })
-    }.bind(this))
+      });
+    }.bind(this));
   }.observes("lastClicked.mode"),
   displayShowMore: function(){
     return this.get("assignees").length > 24;
@@ -41,11 +41,9 @@ var AssigneeController = Ember.ObjectController.extend({
   avatars : function () {
     switch (this.get("showMode")){
       case "less":
-        return _.take(this.get("assignees"), 24)
-        break;
+        return _.take(this.get("assignees"), 24);
       case "more":
         return this.get("assignees");
-        break;
     }
   }.property("showMode"),
   filters : function () {
@@ -56,7 +54,7 @@ var AssigneeController = Ember.ObjectController.extend({
            condition: function (i) {
               return i.assignee && i.assignee.login === a.login;
            }
-         })
+         });
      });
   }.property("avatars"),
   filtersActive: function(){

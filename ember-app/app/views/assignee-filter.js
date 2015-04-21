@@ -19,7 +19,7 @@ var AssigneeFilterView = Ember.View.extend({
     if(previous && previous !== this){
       Ember.run.once(function(){
         previous.set("mode", 0);
-      })
+      });
     }
 
     this.set("mode", this.get("modes")[this.get("mode") + 1]);
@@ -31,39 +31,33 @@ var AssigneeFilterView = Ember.View.extend({
   modeClass : function() {
     var lastClicked = this.get("lastClicked");
     
-    if(!lastClicked) return "";
+    if(!lastClicked){ return ""; }
 
     if (lastClicked === this){
       switch(this.get("mode")) {
         case 0:
           return "";
-        break;
         case 1:
           return "active";
-        break;
         case 2:
           return "active";
-        break;
       }
     }
     switch(lastClicked.get("mode")) {
       case 0:
         return "";
-      break;
       case 1:
         return "dim";
-      break;
       case 2:
         return "inactive";
-      break;
     }
   }.property("lastClicked.mode"),
   queryParamsHandler: function(params, formattedParam){
-    if(this.get("mode") == 0 || this.get("mode") == 1) {
+    if(this.get("mode") === 0 || this.get("mode") === 1) {
       params.clear();
       return;
     }
-    if (this.get("mode") == 2 && !params.contains(formattedParam)){
+    if (this.get("mode") === 2 && !params.contains(formattedParam)){
       params.pushObject(formattedParam);
       return;
     }

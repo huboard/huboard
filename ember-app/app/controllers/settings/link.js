@@ -3,7 +3,7 @@ import Ember from 'ember';
 var SettingsLinkController = Ember.ObjectController.extend({
   needs: ["settings", "settings/links"],
   isLinked: function(){
-    return this.get("controllers.settings.column_labels.length") === this.get("columns.length")
+    return this.get("controllers.settings.column_labels.length") === this.get("columns.length");
 
   }.property("controllers.settings.column_labels.@each","columns.@each"),
   isDisabled: false,
@@ -17,9 +17,9 @@ var SettingsLinkController = Ember.ObjectController.extend({
         },
         type: 'DELETE',
 
-      })
+      });
     },
-    copy: function(parent){
+    copy: function(){
 
       var controller = this,
         apiUrl = "/api/" + this.get("label.user") + "/" + this.get("label.repo") + "/columns";
@@ -35,12 +35,10 @@ var SettingsLinkController = Ember.ObjectController.extend({
           columns: this.get("controllers.settings.model.column_labels")
         }),
         success: function(response) {
-          controller.set("columns", Ember.A(response.columns))
+          controller.set("columns", Ember.A(response.columns));
           controller.set('isDisabled', false);
         }
-      })
-
-
+      });
     }
   }
 });

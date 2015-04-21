@@ -1,6 +1,7 @@
 import CssView from 'app/views/css';
 import Board from 'app/models/board';
 import Issue from 'app/models/issue';
+import Ember from 'ember';
 
 var MilestonesRoute = Ember.Route.extend({
   model: function() {
@@ -106,6 +107,6 @@ var MilestonesRoute = Ember.Route.extend({
       }.bind(this));
     }
   }
-})
+});
 
 export default MilestonesRoute;

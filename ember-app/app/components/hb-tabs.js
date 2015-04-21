@@ -8,7 +8,7 @@ var HbTabsComponent = Ember.Component.extend({
     },
 
     addPane: function(pane) {
-      if (this.get('panes.length') == 0) this.set("selected", pane);
+      if (this.get('panes.length') === 0){ this.set("selected", pane); }
       this.panes.pushObject(pane);
     },
     actions: {

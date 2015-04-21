@@ -43,7 +43,10 @@
 
 <div class='account-details'>
   <div class='email'>
-    <p><strong>Email: </strong>{{details.account_email}}</p> 
+    {{#if model.details.account_email}}
+      <strong>Email: </strong>{{details.account_email}} 
+      <button style="float: right" {{action 'updateEmail' this }} class="hb-button small">Update Email</button>
+    {{/if}}
   </div>
   <div class='credit-card'>
     {{#if model.details.card }}
