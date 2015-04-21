@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.1.5'
+ruby '2.2.1'
 
 gem 'rails', '4.2.0'
 gem 'dotenv-rails', '~> 2.0.0', :require => 'dotenv/rails-now'
@@ -41,6 +41,7 @@ gem 'redis'
 gem 'sucker_punch'
 gem 'raygun4ruby'
 gem 'rack-attack'
+gem 'redcarpet'
 
 gem 'pdfkit'
 gem 'wkhtmltopdf-heroku'
@@ -50,6 +51,7 @@ gem 'saas', require: nil, path: "vendor/engines/saas"
 gem 'responders'
 gem 'stripe-rails'
 gem 'heroku-deflater', group: :production
+gem 'skylight', require: nil
 
 group :development, :test do
   #gem 'byebug'
@@ -58,7 +60,7 @@ group :development, :test do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'meta_request'
-  gem 'pry'
+  gem 'pry-byebug'
   gem 'annotate'
   gem 'rspec'
   gem 'couchrest'

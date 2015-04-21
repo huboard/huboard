@@ -1,18 +1,14 @@
 .account-details {
-  .email {
-    padding-left: 10px;
+
+  .credit-card, .coupon, .email {
+    padding: 10px;
   }
-  .coupon {
-    padding-left: 6px;
-  }
+
   margin: -5px -5px 0 -5px;
   padding: 20px;
   border-bottom: 1px solid #ccc;
 }
 
-.credit-card, .coupon {
-  padding: 10px;
-}
 
 .alert {
   .disabled {

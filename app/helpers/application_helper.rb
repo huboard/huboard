@@ -54,5 +54,7 @@ module ApplicationHelper
   def is_collaborator?(repo)
     repo['permissions'] && repo['permissions']['push'] && logged_in?
   end
-
+  def markdown(text)
+   Redcarpet::Markdown.new(Redcarpet::Render::Safe).render(text).html_safe
+  end
 end

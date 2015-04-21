@@ -41,9 +41,10 @@ PurchaseFormController =  CreditCardForm.extend({
       this.set('plan.status', 'active');
     }
     this.set('processingCard', false);
-    this.set("model.plan.purchased", true);
+    this.set("model.details.account_email", this.get('model.org.billing_email'));
     this.set("model.details.card", response.card);
     this.set('model.details.discount', response.discount);
+    this.set("model.plan.purchased", true);
     this.set('model.details.has_plan', true);
     return this.send("close");
   },
