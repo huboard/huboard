@@ -5,8 +5,8 @@ import Ember from 'ember';
 var IssueActivityController = BufferedController.extend({
   needs: ["issue"],
   isCollaboratorBinding: "target.target.model.repo.is_collaborator",
-  isLoggedInBinding: "loggedIn",
-  currentUserBinding: "currentUser",
+  isLoggedInBinding: "App.loggedIn",
+  currentUserBinding: "App.currentUser",
   mentions: Ember.computed.alias("controllers.issue.mentions"),
   isEditing: false,
   disabled: false,

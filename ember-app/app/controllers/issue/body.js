@@ -5,8 +5,8 @@ import Ember from 'ember';
 var IssueBodyController = BufferedController.extend({
   needs: ["issue"],
   isCollaboratorBinding: "model.repo.is_collaborator",
-  isLoggedInBinding: "loggedIn",
-  currentUserBinding: "currentUser",
+  isLoggedInBinding: "App.loggedIn",
+  currentUserBinding: "App.currentUser",
   mentions: Ember.computed.alias("controllers.issue.mentions"),
   isEditing: false,
   disabled: false,
@@ -21,7 +21,9 @@ var IssueBodyController = BufferedController.extend({
       this.send('save');
     },
     edit: function(){
-      if(this.get('disabled')) { this.set("isEditing", true); }
+      Ember.run(function(){
+        this.set("isEditing", true); 
+      }.bind(this));
     },
     save: function() {
 

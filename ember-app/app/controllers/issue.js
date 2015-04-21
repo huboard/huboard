@@ -84,6 +84,9 @@ var IssueController = Ember.ObjectController.extend({
       this.send("moveToColumn", this.get("columns.lastObject"));
     },
     reopenCard: function(){
+      if (this.get("commentBody")){
+        this.send("submitComment");
+      }
       this.get("model").reopenCard();
     }
   },

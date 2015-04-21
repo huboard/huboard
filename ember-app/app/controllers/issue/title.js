@@ -5,8 +5,8 @@ import Ember from 'ember';
 var IssueTitleController = BufferedController.extend({
   needs: ["issue"],
   isCollaboratorBinding: "model.repo.is_collaborator",
-  isLoggedInBinding: "loggedIn",
-  currentUserBinding: "currentUser",
+  isLoggedInBinding: "App.loggedIn",
+  currentUserBinding: "App.currentUser",
   isEditing: false,
   disabled: false,
   canEdit: function(){
