@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import ajax from 'ic-ajax';
 
 var MilestonesMissingController = Ember.ObjectController.extend({
   disabled: false,
@@ -27,7 +26,7 @@ var MilestonesMissingController = Ember.ObjectController.extend({
           
       controller.set("disabled", true);
 
-      ajax({
+      Ember.$.ajax({
         url: "/api/" + owner + "/" + name + "/milestones",
         type: "POST",
         dataType: 'json',

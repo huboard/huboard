@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import ajax from 'ic-ajax';
 
 var MilestonesController = Ember.ObjectController.extend({
   needs: ["application", "filters", "assignee", "search"],
@@ -53,7 +52,7 @@ var MilestonesController = Ember.ObjectController.extend({
   milestoneMoved: function(milestoneController, index) {
     var milestone = milestoneController.get("model.milestone"), owner = milestone.repo.owner.login, name = milestone.repo.name;
 
-    ajax({
+    Ember.$.ajax({
       url: "/api/" + owner + "/" + name + "/reordermilestone",
       type: "POST",
 
