@@ -13,12 +13,23 @@ var HbMarkdownEditorComponent = Ember.Component.extend({
   markdown: "",
   preview: "",
   mentions: [],
+  commitBlacklist: ["acceded", "defaced", "effaced", "facaded", "deedeed"]
+  commits: [],
   onMarkdownChange: function () {
     var that = this;
     return Ember.run.once(function () {
        var markdown = that.get("markdown");
-
        marked(markdown || "Nothing to preview",{gfm: true},function (err, content) {
+         var possible_commits = content.match(/([a-f0-9]{7})/g);
+         _.each(possible_commits, function(hit){
+           var match = that.get("commits").filter(function(commit){
+             return commit.sha.substring(0,7) === hit;
+           });
+           if (match.length) {
+             var url = "<a href='" + match[0].html_url + "'>" + match[0].sha.substring(0,7) + "</a>";
+             content = content.replace(hit, url)
+           }
+         })
          that.set("preview",content);
        });
     });
@@ -60,10 +71,22 @@ var HbMarkdownEditorComponent = Ember.Component.extend({
     };
 
     var commitStrategy = {
-    
+      match: /(^|\s)([a-z0-9]{0,6})$/,
+      search: function (term, callback) {
+        callback(component.get("commits").filter(function(a){
+          return a.sha.substring(0,7).indexOf(term) === 0 && 
+            term.length >= 2;
+        }));
+      },
+      template: function (value) {
+        return "#" + value.sha.substring(0,7);
+      },
+      replace: function(value){
+        return value.sha.substring(0,7);
+      }
     };
 
-    this.$('textarea').textcomplete([ emojiStrategy, mentionStrategy ]);
+    this.$('textarea').textcomplete([ emojiStrategy, mentionStrategy, commitStrategy]);
 
   }.on('didInsertElement'),
   cleanUpTextcomplete: function(){

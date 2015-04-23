@@ -8,6 +8,7 @@ var IssueActivityController = BufferedController.extend({
   isLoggedInBinding: "App.loggedIn",
   currentUserBinding: "App.currentUser",
   mentions: Ember.computed.alias("controllers.issue.mentions"),
+  commits: Ember.computed.alias("controllers.issue.commits"),
   isEditing: false,
   disabled: false,
   canEdit: function(){

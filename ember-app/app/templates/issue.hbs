@@ -35,7 +35,7 @@
   {{#if App.loggedIn }}
   <hr>
   <form {{action "submitComment" on="submit"}} class="flex-form">
-    {{hb-markdown-editor markdown=controller.commentBody mentions=mentions}}
+    {{hb-markdown-editor markdown=controller.commentBody mentions=mentions commits=controller.repository.commits}}
     <div class="submit-comment-buttons">
       {{#if isCollaborator}}
         {{#if isClosed}}

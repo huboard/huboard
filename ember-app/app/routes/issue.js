@@ -10,10 +10,16 @@ var IssueRoute = Ember.Route.extend({
     var repo = board.get("allRepos").find(function (r){
       return (r.full_name).toLowerCase() === model.repo.owner.login.toLowerCase() + "/" + model.repo.name.toLowerCase();
     });
+
     controller.set("repository", { 
       other_labels: Ember.get(repo, "other_labels"), 
       assignees: Ember.get(repo, "assignees"), 
-      milestones: Ember.get(repo, "milestones")
+      milestones: Ember.get(repo, "milestones"),
+      commits: []
+    });
+
+    appModel.fetchCommits().then(function(commits){
+      controller.set("repository.commits", commits);
     });
   },
   controllerFor: function(name, _skipAssert) {
