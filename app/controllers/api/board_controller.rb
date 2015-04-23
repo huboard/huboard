@@ -5,6 +5,10 @@ module Api
       render json: huboard.board(params[:user], params[:repo]).meta
     end
 
+    def commits
+      render json: huboard.board(params[:user], params[:repo]).commits
+    end
+
     def link_labels
       render json: huboard.board(params[:user], params[:repo]).link_labels
     end

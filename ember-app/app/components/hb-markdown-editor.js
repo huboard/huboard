@@ -59,6 +59,10 @@ var HbMarkdownEditorComponent = Ember.Component.extend({
       maxCount: 5
     };
 
+    var commitStrategy = {
+    
+    };
+
     this.$('textarea').textcomplete([ emojiStrategy, mentionStrategy ]);
 
   }.on('didInsertElement'),
