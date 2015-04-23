@@ -1,7 +1,8 @@
 import Ember from 'ember';
-
+import config from '../config/environment';
 
 var HbMarkdownEditorComponent = Ember.Component.extend({
+  needs: ["application"],
   classNames: ["markdown-editor"],
   init: function () {
     this._super.apply(this, arguments);
@@ -12,28 +13,26 @@ var HbMarkdownEditorComponent = Ember.Component.extend({
   },
   markdown: "",
   preview: "",
+  githubUrl: config.github, 
   mentions: [],
-  commitBlacklist: ["acceded", "defaced", "effaced", "facaded", "deedeed"]
   commits: [],
+  commitBlacklist: ["acceded", "defaced", "effaced", "facaded", "deedeed"],
   onMarkdownChange: function () {
-    var that = this;
+    var self = this;
     return Ember.run.once(function () {
-       var markdown = that.get("markdown");
-       marked(markdown || "Nothing to preview",{gfm: true},function (err, content) {
-         var possible_commits = content.match(/([a-f0-9]{7})/g);
-         _.each(possible_commits, function(hit){
-           var match = that.get("commits").filter(function(commit){
-             return commit.sha.substring(0,7) === hit;
-           });
-           if (match.length) {
-             var url = "<a href='" + match[0].html_url + "'>" + match[0].sha.substring(0,7) + "</a>";
-             content = content.replace(hit, url)
-           }
-         })
-         that.set("preview",content);
-       });
+       var markdown = self.get("markdown");
+       marked(markdown || "Nothing to preview",{gfm: true}, self.markdownHandler.bind(self));
     });
   }.observes("markdown"),
+  markdownHandler: function(err, content){
+    var commit_shas = _.difference(content.match(/([a-f0-9]{7})/g), this.get("commitBlacklist"));
+    var url_prefix = this.get('githubUrl') + App.get("repo.full_name") + "/commit/";
+    _.each(commit_shas, function(commit){
+      var url = "<a href='" + url_prefix + commit + "'>" + commit + "</a>";
+      content = content.replace(commit, url)
+    })
+    this.set("preview",content);
+  },
   setupTextcomplete: function(){
     var component = this;
     var emojiStrategy = { 
