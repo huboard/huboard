@@ -20,7 +20,7 @@ var HbMarkdownEditorComponent = Ember.Component.extend(MarkdownParsing, {
     var self = this;
     return Ember.run.once(function () {
        var markdown = self.get("markdown");
-       marked(markdown || "Nothing to preview",{gfm: true}, self.markdownHandler);
+       marked(markdown || "Nothing to preview",{gfm: true}, self.markdownHandler.bind(self));
     });
   }.observes("markdown"),
   markdownHandler: function(err, content){
