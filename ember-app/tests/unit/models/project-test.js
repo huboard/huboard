@@ -38,7 +38,7 @@ test('links should reference parent repo', function(assert) {
   //act
   model.fetchLinks().then(function(response) {
     //assert
-    assert.ok(response)
+    assert.ok(response);
     assert.equal(response[0].get('repo'), model);
   });
 });
