@@ -18,7 +18,8 @@ var IssueRoute = Ember.Route.extend({
       commits: []
     });
 
-    appModel.fetchCommits().then(function(commits){
+    var repo_name = controller.model.repo.full_name;
+    appModel.fetchCommits(repo_name).then(function(commits){
       controller.set("repository.commits", commits);
     });
   },
