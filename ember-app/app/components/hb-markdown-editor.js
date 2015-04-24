@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import config from '../config/environment';
+import config from '../config/environment'; //jshint ignore:line
 import MarkdownParsing from '../mixins/markdown-parsing';
 
 var HbMarkdownEditorComponent = Ember.Component.extend(MarkdownParsing, {

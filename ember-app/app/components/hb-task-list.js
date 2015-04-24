@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import config from '../config/environment';
+import config from '../config/environment'; //jshint ignore:line
 import MarkdownParsing from '../mixins/markdown-parsing';
 
 var HbTaskListComponent = Ember.Component.extend(MarkdownParsing, {
@@ -15,6 +15,7 @@ var HbTaskListComponent = Ember.Component.extend(MarkdownParsing, {
       Ember.run.schedule('afterRender', this, "wireUp");
       return value;
     } else {
+      console.log("hello")
       return this.commitParser(this.get("body_html"));
     }
   }.property(),
