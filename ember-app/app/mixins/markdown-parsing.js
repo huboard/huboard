@@ -25,6 +25,12 @@ var MarkdownParsingMixin = Ember.Mixin.create({
     var regexp = this.get("shortSha");
     var commit_shas = _.difference(body.match(regexp), blacklist);
     return _.uniq(commit_shas);
+  },
+  matchLongSha: function(body){
+    var blacklist = this.get("commitShaBlacklist");
+    var regexp = this.get("longSha");
+    var commit_shas = _.difference(body.match(regexp), blacklist);
+    return _.uniq(commit_shas);
   }
 });
 
