@@ -13,9 +13,9 @@ var HbTaskListComponent = Ember.Component.extend(MarkdownParsing, {
     if(arguments.length > 1){
       this.cleanUp();
       Ember.run.schedule('afterRender', this, "wireUp");
-      return value;
+      return this.commitParser(value);
     } else {
-      return this.commitParser(this.get("body_html"));
+      return this.get("body_html");
     }
   }.property(),
   wireUp: function(){
