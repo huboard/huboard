@@ -10,18 +10,14 @@ var MarkdownParsingMixin = Ember.Mixin.create({
   longSha: /(^|\b|\w+"><)([a-f0-9]{40})(?!<\/tt)(?![a-zA-Z0-9])/g,
 
   commitParser: function(body){
-    this.set("parsedBody", body);
-    var self = this;
-    var url_prefix = this.get('githubUrl') + App.get("repo.full_name") + "/commit/";
-
     body = this.stashUrls(body);
-    var commit_shas = this.matchShortSha(body);
+    var commit_shas = _.union(this.matchShortSha(body), this.matchLongSha(body));
     _.each(commit_shas, function(commit){
-      var url = "<a href='" + url_prefix + commit + "' class='commit-link'>" + commit + "</a>";
-      self.set("parsedBody", body.replace(new RegExp(commit, "g"), url));
+      var url = "<a href='' class='commit-link'>" + commit.substr(0,7) + "</a>";
+      body = body.replace(new RegExp(commit, "g"), url);
     });
-    this.restoreUrls();
-    return this.get("parsedBody");
+    body = this.restoreUrls(body);
+    return body;
   },
   matchShortSha: function(body){
     var blacklist = this.get("commitShaBlacklist");
@@ -48,14 +44,14 @@ var MarkdownParsingMixin = Ember.Mixin.create({
     this.set("urlStash", stash);
     return body;
   },
-  restoreUrls: function(){
+  restoreUrls: function(body){
     var stash = this.get("urlStash");
     var stash_keys = _.keys(stash);
-    var body = this.get("parsedBody");
     _.each(stash_keys, function(key){
       body = body.replace(key, stash[key]);
     });
-    this.set("parsedBody", body);
+    this.set("urlStash", {});
+    return body;
   },
   urlStash: {},
 
