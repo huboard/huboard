@@ -13,7 +13,7 @@ var MarkdownParsingMixin = Ember.Mixin.create({
     body = this.stashUrls(body);
     var commit_shas = _.union(this.matchShortSha(body), this.matchLongSha(body));
     _.each(commit_shas, function(commit){
-      var url = "<a href='' class='commit-link'>" + commit.substr(0,7) + "</a>";
+      var url = "<a href='submit-to-validate-commit' onclick='return false;' class='commit-link'>" + commit.substr(0,7) + "</a>";
       body = body.replace(new RegExp(commit, "g"), url);
     });
     body = this.restoreUrls(body);
