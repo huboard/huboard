@@ -3,7 +3,6 @@ import config from '../config/environment'; //jshint ignore:line
 import MarkdownParsing from '../mixins/markdown-parsing';
 
 var HbMarkdownEditorComponent = Ember.Component.extend(MarkdownParsing, {
-  needs: ["application"],
   classNames: ["markdown-editor"],
   init: function () {
     this._super.apply(this, arguments);
