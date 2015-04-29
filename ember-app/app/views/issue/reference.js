@@ -18,12 +18,12 @@ var ReferenceView = Ember.View.extend({
     this.set("model", this.get("parentView.content.model"));
 
     var self = this;
-    var reference = this.$().closest(".card-event");
-    reference.hover(function(){
+    var container = this.$().closest(".card-event");
+    container.hover(function(){
+      self.set("isVisible", true);
       if (self.get("commit") === null) {
         self.fetchCommit();
       }
-      self.set("isVisible", true);
     });
   },
   fetchCommit: function(){
@@ -35,12 +35,18 @@ var ReferenceView = Ember.View.extend({
     var commit = this.get("model.commit_id");
     this.get("controller").fetchCommit(commit)
       .then(function(commit){
+        self.doubleContainerHeight();
         self.set("isProcessing", false);
         self.set("commit", commit);
       })
       .fail(function(){
         self.set("isProcessing", false);
       });
+  },
+  doubleContainerHeight: function(){
+    var container = this.$().closest(".card-event");
+    var height = (container.height() * 2)
+    container.height(height);
   }
 });
 
