@@ -1,14 +1,15 @@
 import Ember from 'ember';
+import ajax from 'ic-ajax';
 
 var IssueReferenceController = Ember.ObjectController.extend({
   needs: ["issue"],
 
   fetchCommit: function(commit){
     var repo = this.get("controllers.issue.repo.full_name");
-    return Ember.$.getJSON("/api/" + repo + "/commit/" + commit)
-      .then(function(commit){
-        return commit;
-      }.bind(this));
+    return ajax("/api/" + repo + "/commit/" + commit)
+      .then(function(response){
+        return response;
+      });
   }
 });
 
