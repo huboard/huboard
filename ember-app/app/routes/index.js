@@ -46,8 +46,8 @@ var IndexRoute = Ember.Route.extend({
   actions : {
     createNewIssue : function (model, order) {
       var self = this;
-      var appModel = this.modelFor("application"),
-        board = appModel.fetchBoard(appModel);
+      var appModel = this.modelFor("application");
+      //board = appModel.fetchBoard(appModel);
       
       self.controllerFor("issue.create").set("commits", []);
       appModel.fetchCommits().then(function(commits){

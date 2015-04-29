@@ -1,0 +1,12 @@
+{{#if view.isProcessing}}
+  <div class="spinner">
+    {{hb-spinner}}
+  </div>
+{{else}}
+  <span class="commit-info"> 
+    - {{hb-avatar user=view.model.actor width=16 height=16 }} {{view.message}} 
+    <a class="commit" target="_blank" {{bind-attr href=view.commitUrl}}>
+      {{view.shortSha }}
+    </a> 
+  </span>
+{{/if}}

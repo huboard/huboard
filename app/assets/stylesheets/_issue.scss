@@ -93,3 +93,20 @@
     font-size: 12px;
   }
 }
+
+.issue-reference-info {
+  width: 100%;
+  float: right;
+  .commit-info {
+    margin-left: 15%;
+    .commit {
+      float: right;
+    }
+  }
+  .spinner {
+    position: relative;
+    float: right;
+    margin-right: 30px;
+    bottom: 32px;
+  }
+}
