@@ -14,7 +14,6 @@ var HbMarkdownEditorComponent = Ember.Component.extend(MarkdownParsing, {
   markdown: "",
   preview: "",
   mentions: [],
-  commits: [],
   onMarkdownChange: function () {
     var self = this;
     return Ember.run.once(function () {
@@ -61,24 +60,7 @@ var HbMarkdownEditorComponent = Ember.Component.extend(MarkdownParsing, {
       cache: true,
       maxCount: 5
     };
-
-    var commitStrategy = {
-      match: /(^|\s)([a-z0-9]{0,6})$/,
-      search: function (term, callback) {
-        callback(component.get("commits").filter(function(a){
-          return a.sha.substring(0,7).indexOf(term) === 0 && 
-            term.length >= 2;
-        }));
-      },
-      template: function (value) {
-        return "#" + value.sha.substring(0,7);
-      },
-      replace: function(value){
-        return value.sha.substring(0,7);
-      }
-    };
-
-    this.$('textarea').textcomplete([ emojiStrategy, mentionStrategy, commitStrategy]);
+    this.$('textarea').textcomplete([ emojiStrategy, mentionStrategy ]);
 
   }.on('didInsertElement'),
   cleanUpTextcomplete: function(){

@@ -15,12 +15,6 @@ var IssueRoute = Ember.Route.extend({
       other_labels: Ember.get(repo, "other_labels"), 
       assignees: Ember.get(repo, "assignees"), 
       milestones: Ember.get(repo, "milestones"),
-      commits: []
-    });
-
-    var repo_name = controller.model.repo.full_name;
-    appModel.fetchCommits(repo_name).then(function(commits){
-      controller.set("repository.commits", commits);
     });
   },
   controllerFor: function(name, _skipAssert) {
