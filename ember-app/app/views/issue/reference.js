@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-var ReferenceView = Ember.View.extend({
+var IssueReferenceView = Ember.View.extend({
   classNames: ["issue-reference-info"],
   isVisible: false,
   isProcessing: false,
@@ -45,9 +45,9 @@ var ReferenceView = Ember.View.extend({
   },
   doubleContainerHeight: function(){
     var container = this.$().closest(".card-event");
-    var height = (container.height() * 2)
+    var height = (container.height() * 2);
     container.height(height);
   }
 });
 
-export default ReferenceView;
+export default IssueReferenceView;
