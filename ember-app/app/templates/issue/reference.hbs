@@ -4,7 +4,7 @@
   </div>
 {{else}}
   <span class="commit-info"> 
-    - {{hb-avatar user=view.model.actor width=16 height=16 }} {{view.message}} 
+   <span class="commit-link">-o-</span> {{hb-avatar user=view.model.actor width=16 height=16 }} {{view.message}} 
     <a class="commit" target="_blank" {{bind-attr href=view.commitUrl}}>
       {{view.shortSha }}
     </a> 
