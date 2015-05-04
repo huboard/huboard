@@ -10,8 +10,9 @@ module HuBoard
         end
 
         post '/api/:user/:repo/milestones/:number' do
+          client_data = JSON.parse(request.body.read)
           milestone = huboard.board(params[:user],params[:repo])
-            .milestone(params[:number]).patch(params[:milestone])
+            .milestone(params[:number]).patch(client_data)
 
           json milestone
         end

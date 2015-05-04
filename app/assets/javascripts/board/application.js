@@ -411,7 +411,11 @@ var HbMarkdownEditorComponent = Ember.Component.extend({
 module.exports = HbMarkdownEditorComponent;
 
 
+<<<<<<< HEAD
 },{"../vendor/marked":79}],10:[function(require,module,exports){
+=======
+},{"../vendor/marked":57}],6:[function(require,module,exports){
+>>>>>>> milestone-editing
 var HbMilestoneComponent = Ember.Component.extend({
   classNameBindings: [":hb-selector-component", ":dropdown"],
   isOpen: function(){
@@ -778,7 +782,11 @@ App.deferReadiness();
 module.exports = App;
 
 
+<<<<<<< HEAD
 },{"../../vendor/jquery.color":108,"../utilities/correlationId":68,"../utilities/observers":69,"../vendor/autoresize":71,"../vendor/ember":73,"../vendor/handlebars":75,"../vendor/jquery":76,"../vendor/jquery.textcomplete":77,"../vendor/lodash":78,"../vendor/marked":79,"../vendor/task_list.js":81}],17:[function(require,module,exports){
+=======
+},{"../../vendor/jquery.color":79,"../utilities/correlationId":47,"../utilities/observers":48,"../vendor/autoresize":50,"../vendor/ember":52,"../vendor/handlebars":54,"../vendor/jquery":55,"../vendor/lodash":56,"../vendor/marked":57}],10:[function(require,module,exports){
+>>>>>>> milestone-editing
 var App = require('./app');
 
 App.Router.map(function() {
@@ -874,7 +882,11 @@ var ApplicationController = Ember.ObjectController.extend({
 
 module.exports = ApplicationController;
 
+<<<<<<< HEAD
 },{}],19:[function(require,module,exports){
+=======
+},{"../mixins/socket":30}],12:[function(require,module,exports){
+>>>>>>> milestone-editing
 var AssigneeController = Ember.ObjectController.extend({
   needs: ["application"],
   actions: {
@@ -1042,7 +1054,11 @@ var CardController = Ember.ObjectController.extend(SocketMixin,{
 
 module.exports = CardController;
 
+<<<<<<< HEAD
 },{"../mixins/socket":47}],22:[function(require,module,exports){
+=======
+},{"../mixins/socket":30}],14:[function(require,module,exports){
+>>>>>>> milestone-editing
 var ColumnController = Ember.ObjectController.extend({
   needs: ["index", "application"],
   style: Ember.computed.alias("controllers.index.column_style"),
@@ -1686,7 +1702,11 @@ var IssuesEditController = Ember.ObjectController.extend({
 module.exports = IssuesEditController;
 
 
+<<<<<<< HEAD
 },{}],33:[function(require,module,exports){
+=======
+},{}],21:[function(require,module,exports){
+>>>>>>> milestone-editing
 var MilestonesCreateController = Ember.ObjectController.extend({
   needs: ["application"],
   actions: {
@@ -1712,7 +1732,37 @@ var MilestonesCreateController = Ember.ObjectController.extend({
 module.exports = MilestonesCreateController;
 
 
+<<<<<<< HEAD
 },{}],34:[function(require,module,exports){
+=======
+},{}],22:[function(require,module,exports){
+var MilestonesEditController = Ember.ObjectController.extend({
+  needs: ["application"],
+  actions: {
+    submit: function() {
+      var controller = this;
+      this.set("processing",true);
+
+      this.get("model").saveEdit().then(function(milestone){
+         controller.send("milestoneUpdated", milestone)
+         controller.set("processing",false)
+      });
+    }
+  },
+  isCollaboratorBinding: "App.repo.is_collaborator",
+  disabled: function () {
+      return this.get("processing") || !this.get("isValid");
+  }.property("processing","isValid"),
+  isValid: function () {
+    return this.get("model.title");
+  }.property("model.title")
+
+});
+
+module.exports = MilestonesEditController;
+
+},{}],23:[function(require,module,exports){
+>>>>>>> milestone-editing
 var MilestoneColumnController = Ember.ObjectController.extend({
   needs: ["milestones", "application", "index"],
   getIssues: function () {
@@ -1804,6 +1854,7 @@ var MilestoneColumnController = Ember.ObjectController.extend({
 })
 module.exports = MilestoneColumnController;
 
+<<<<<<< HEAD
 },{}],35:[function(require,module,exports){
 var MilestonesMissingController = Ember.ObjectController.extend({
   disabled: false,
@@ -1849,6 +1900,9 @@ var MilestonesMissingController = Ember.ObjectController.extend({
 module.exports = MilestonesMissingController;
 
 },{}],36:[function(require,module,exports){
+=======
+},{}],24:[function(require,module,exports){
+>>>>>>> milestone-editing
 module.exports = MilestonesController = Ember.ObjectController.extend({
   needs: ["application", "filters", "assignee", "search"],
   filtersActive: function(){
@@ -1895,6 +1949,7 @@ module.exports = MilestonesController = Ember.ObjectController.extend({
       owner = milestone.repo.owner.login,
       name = milestone.repo.name;
 
+<<<<<<< HEAD
     $.ajax({
       url: "/api/" + owner + "/" + name + "/reordermilestone",
       type: "POST",
@@ -1910,6 +1965,13 @@ module.exports = MilestonesController = Ember.ObjectController.extend({
 });
 
 },{}],37:[function(require,module,exports){
+=======
+  }.property("forceRedraw"),
+  forceRedraw: 0
+});
+
+},{}],25:[function(require,module,exports){
+>>>>>>> milestone-editing
 var Fuse = require("../vendor/fuse.min");
 var SearchController = Ember.Controller.extend({
   needs:["application"],
@@ -1950,6 +2012,7 @@ var SearchController = Ember.Controller.extend({
 
 module.exports = SearchController;
 
+<<<<<<< HEAD
 },{"../vendor/fuse.min":74}],38:[function(require,module,exports){
 var IntegrationsController = Ember.ObjectController.extend({
   needs: ['settingsIntegrations'],
@@ -2211,6 +2274,36 @@ var SettingsLinksController = Ember.ArrayController.extend({
 module.exports = SettingsLinksController;
 
 },{}],44:[function(require,module,exports){
+=======
+},{"../vendor/fuse.min":53}],26:[function(require,module,exports){
+var moment = require("../vendor/bootstrap-datepicker");
+App.ApplicationController = Ember.Controller.extend({
+    today: new Date()
+  });
+
+  App.DatePicker = Ember.TextField.extend({
+    classNames: ['date-picker'],
+    format: "yyyy-mm-dd",
+    size: 8,
+    didInsertElement: function() {
+      return this.$().datepicker({
+        format: this.get('format'),
+        autoclose: true,
+        todayHighlight: true,
+        keyboardNavigation: false
+      }).on('changeDate', (function(_this) {
+        return function(ev) {
+          return _this.$().trigger("change");
+        };
+      })(this));
+    },
+    close: function() {
+      return this.$().datepicker('hide');
+    }
+  });
+
+},{"../vendor/bootstrap-datepicker":51}],27:[function(require,module,exports){
+>>>>>>> milestone-editing
 var moment = require("../vendor/moment.min");
 Ember.Handlebars.registerBoundHelper('momentAgo', function(date) {
   var escaped = Handlebars.Utils.escapeExpression(moment(date).fromNow());
@@ -2218,12 +2311,17 @@ Ember.Handlebars.registerBoundHelper('momentAgo', function(date) {
 });
 
 
+<<<<<<< HEAD
 },{"../vendor/moment.min":80}],45:[function(require,module,exports){
+=======
+},{"../vendor/moment.min":58}],28:[function(require,module,exports){
+>>>>>>> milestone-editing
 // This file is auto-generated by `ember build`.
 // You should not modify it.
 
 var App = window.App = require('./config/app');
 require('./templates');
+require('./helpers/date_picker');
 require('./helpers/moment_ago');
 
 
@@ -2254,6 +2352,7 @@ App.IssueController = require('./controllers/issue_controller');
 App.MilestoneColumnController = require('./controllers/milestone_column_controller');
 App.MilestonesController = require('./controllers/milestones_controller');
 App.SearchController = require('./controllers/search_controller');
+<<<<<<< HEAD
 App.SettingsIntegrationsController = require('./controllers/settings/integrations_controller');
 App.SettingsLinkController = require('./controllers/settings/link_controller');
 App.SettingsLinksController = require('./controllers/settings/links_controller');
@@ -2265,6 +2364,10 @@ App.MilestoneCreateController = require('./controllers/milestone/create_controll
 App.IssueActivitiesController = require('./controllers/issue/activities_controller');
 App.IssueActivityController = require('./controllers/issue/activity_controller');
 App.IssueBodyController = require('./controllers/issue/body_controller');
+=======
+App.MilestoneCreateController = require('./controllers/milestone/create_controller');
+App.MilestoneEditController = require('./controllers/milestone/edit_controller');
+>>>>>>> milestone-editing
 App.IssueCreateController = require('./controllers/issue/create_controller');
 App.IssueQuickCreateController = require('./controllers/issue/quick_create_controller');
 App.IssueTitleController = require('./controllers/issue/title_controller');
@@ -2272,7 +2375,10 @@ App.Board = require('./models/board');
 App.Global = require('./models/global');
 App.Integration = require('./models/integration');
 App.Issue = require('./models/issue');
+<<<<<<< HEAD
 App.Link = require('./models/link');
+=======
+>>>>>>> milestone-editing
 App.Milestone = require('./models/milestone');
 App.Repo = require('./models/repo');
 App.Settings = require('./models/settings');
@@ -2302,8 +2408,13 @@ App.ModalView = require('./views/modal_view');
 App.SearchView = require('./views/search_view');
 App.SettingsLinkView = require('./views/settings/link_view');
 App.SettingsShowCountsView = require('./views/settings/show_counts_view');
+<<<<<<< HEAD
 App.MilestonesMissingView = require('./views/milestones/missing_view');
 App.MilestoneCreateView = require('./views/milestone/create_view');
+=======
+App.MilestoneCreateView = require('./views/milestone/create_view');
+App.MilestoneEditView = require('./views/milestone/edit_view');
+>>>>>>> milestone-editing
 App.IssueActivitiesView = require('./views/issue/activities_view');
 App.IssueBodyView = require('./views/issue/body_view');
 App.IssueCreateView = require('./views/issue/create_view');
@@ -2320,7 +2431,11 @@ require('./config/routes');
 module.exports = App;
 
 
+<<<<<<< HEAD
 },{"./components/hb_assignee_component":1,"./components/hb_avatar_component":2,"./components/hb_avatar_tooltip_component":3,"./components/hb_board_columns_component":4,"./components/hb_column_crumb_component":5,"./components/hb_label_component":6,"./components/hb_label_selector_component":7,"./components/hb_markdown_composer_component":8,"./components/hb_markdown_editor_component":9,"./components/hb_milestone_component":10,"./components/hb_pane_component":11,"./components/hb_selected_column_component":12,"./components/hb_spinner_component":13,"./components/hb_tabs_component":14,"./components/hb_task_list_component":15,"./config/app":16,"./config/routes":17,"./controllers/application_controller":18,"./controllers/assignee_controller":19,"./controllers/buffered_controller":20,"./controllers/card_controller":21,"./controllers/column_controller":22,"./controllers/column_count_controller":23,"./controllers/filters_controller":24,"./controllers/index_controller":25,"./controllers/issue/activities_controller":26,"./controllers/issue/activity_controller":27,"./controllers/issue/body_controller":28,"./controllers/issue/create_controller":29,"./controllers/issue/quick_create_controller":30,"./controllers/issue/title_controller":31,"./controllers/issue_controller":32,"./controllers/milestone/create_controller":33,"./controllers/milestone_column_controller":34,"./controllers/milestones/missing_controller":35,"./controllers/milestones_controller":36,"./controllers/search_controller":37,"./controllers/settings/integrations/index_controller":38,"./controllers/settings/integrations/new_controller":39,"./controllers/settings/integrations_controller":40,"./controllers/settings/link_controller":41,"./controllers/settings/links/index_controller":42,"./controllers/settings/links_controller":43,"./helpers/moment_ago":44,"./mixins/serializable":46,"./mixins/socket":47,"./mixins/wip_limit":48,"./models/board":49,"./models/global":50,"./models/integration":51,"./models/issue":52,"./models/link":53,"./models/milestone":54,"./models/repo":55,"./models/settings":56,"./routes/application_route":57,"./routes/index/issue_route":58,"./routes/index_route":59,"./routes/issue_route":60,"./routes/milestones/issue_route":61,"./routes/milestones_route":62,"./routes/settings/integrations/new_route":63,"./routes/settings/integrations_route":64,"./routes/settings/links_route":65,"./routes/settings_route":66,"./templates":67,"./views/assignee_filter_view":82,"./views/card_milestone_view":83,"./views/card_view":84,"./views/card_wrapper_view":85,"./views/column_count_view":86,"./views/column_view":87,"./views/css_view":88,"./views/filter_view":89,"./views/integrations/integrations_view":90,"./views/issue/activities_view":91,"./views/issue/body_view":92,"./views/issue/create_view":93,"./views/issue/quick_create_view":94,"./views/issue/selected_column_view":95,"./views/issue/title_view":96,"./views/issue_view":97,"./views/loading_view":98,"./views/milestone/create_view":99,"./views/milestone_column_view":100,"./views/milestones/missing_view":101,"./views/milestones_view":102,"./views/modal_view":103,"./views/search_view":104,"./views/settings/link_view":105,"./views/settings/show_counts_view":106}],46:[function(require,module,exports){
+=======
+},{"./components/hb_assignee_component":1,"./components/hb_avatar_component":2,"./components/hb_label_component":3,"./components/hb_label_selector_component":4,"./components/hb_markdown_editor_component":5,"./components/hb_milestone_component":6,"./components/hb_pane_component":7,"./components/hb_tabs_component":8,"./config/app":9,"./config/routes":10,"./controllers/application_controller":11,"./controllers/assignee_controller":12,"./controllers/card_controller":13,"./controllers/column_controller":14,"./controllers/column_count_controller":15,"./controllers/filters_controller":16,"./controllers/index_controller":17,"./controllers/integrations/integrations_controller":18,"./controllers/issue/create_controller":19,"./controllers/issue_controller":20,"./controllers/milestone/create_controller":21,"./controllers/milestone/edit_controller":22,"./controllers/milestone_column_controller":23,"./controllers/milestones_controller":24,"./controllers/search_controller":25,"./helpers/date_picker":26,"./helpers/moment_ago":27,"./mixins/serializable":29,"./mixins/socket":30,"./mixins/wip_limit":31,"./models/board":32,"./models/integration":33,"./models/issue":34,"./models/milestone":35,"./models/repo":36,"./models/settings":37,"./routes/application_route":38,"./routes/index/integrations_route":39,"./routes/index/issue_route":40,"./routes/index_route":41,"./routes/issue_route":42,"./routes/milestones/integrations_route":43,"./routes/milestones/issue_route":44,"./routes/milestones_route":45,"./templates":46,"./views/assignee_filter_view":59,"./views/card_view":60,"./views/card_wrapper_view":61,"./views/column_count_view":62,"./views/column_view":63,"./views/css_view":64,"./views/filter_view":65,"./views/integrations/integrations_view":66,"./views/issue/activities_view":67,"./views/issue/create_view":68,"./views/issue/selected_column_view":69,"./views/issue_view":70,"./views/loading_view":71,"./views/milestone/create_view":72,"./views/milestone/edit_view":73,"./views/milestone_column_view":74,"./views/modal_view":75,"./views/search_view":76,"./views/settings/show_counts_view":77}],29:[function(require,module,exports){
+>>>>>>> milestone-editing
 function serialize() {
     var result = {};
     for (var key in $.extend(true, {}, this))
@@ -2355,7 +2470,11 @@ var Serializable = Ember.Mixin.create({
 
 module.exports = Serializable;
 
+<<<<<<< HEAD
 },{}],47:[function(require,module,exports){
+=======
+},{}],30:[function(require,module,exports){
+>>>>>>> milestone-editing
 
 var SocketMixin = Ember.Mixin.create({
   setUpSocketEvents: function () {
@@ -2401,7 +2520,11 @@ var SocketMixin = Ember.Mixin.create({
 
 module.exports = SocketMixin;
 
+<<<<<<< HEAD
 },{}],48:[function(require,module,exports){
+=======
+},{}],31:[function(require,module,exports){
+>>>>>>> milestone-editing
 var WipLimit = Ember.Mixin.create({
 
 });
@@ -2409,7 +2532,11 @@ var WipLimit = Ember.Mixin.create({
 module.exports = WipLimit;
 
 
+<<<<<<< HEAD
 },{}],49:[function(require,module,exports){
+=======
+},{}],32:[function(require,module,exports){
+>>>>>>> milestone-editing
 var Board = Ember.Object.extend({
   allRepos: function () {
     return _.union([this],this.get("linkedRepos"))
@@ -2478,6 +2605,7 @@ Board.reopenClass({
 module.exports = Board;
 
 
+<<<<<<< HEAD
 },{}],50:[function(require,module,exports){
 var Settings = require('./settings');
 
@@ -2488,6 +2616,9 @@ var Global = Settings.extend({
 module.exports = Global;
 
 },{"./settings":56}],51:[function(require,module,exports){
+=======
+},{}],33:[function(require,module,exports){
+>>>>>>> milestone-editing
 var Integration = Ember.Object.extend({
   keys: function() {
     if (!this.get("integration.data")){
@@ -2505,7 +2636,11 @@ var Integration = Ember.Object.extend({
 
 module.exports = Integration;
 
+<<<<<<< HEAD
 },{}],52:[function(require,module,exports){
+=======
+},{}],34:[function(require,module,exports){
+>>>>>>> milestone-editing
 
 var correlationId = require("../utilities/correlationId")
 var Serializable = require("../mixins/serializable");
@@ -2733,6 +2868,7 @@ Issue.reopenClass({
 module.exports = Issue;
 
 
+<<<<<<< HEAD
 },{"../mixins/serializable":46,"../utilities/correlationId":68}],53:[function(require,module,exports){
 var Link = Ember.Object.extend({
 
@@ -2741,6 +2877,9 @@ var Link = Ember.Object.extend({
 module.exports = Link;
 
 },{}],54:[function(require,module,exports){
+=======
+},{"../mixins/serializable":29,"../utilities/correlationId":47}],35:[function(require,module,exports){
+>>>>>>> milestone-editing
 var correlationId = require("../utilities/correlationId")
 var Serializable = require("../mixins/serializable");
 
@@ -2756,6 +2895,23 @@ var Milestone = Ember.Object.extend(Serializable,{
       return Milestone.create(response);
     })
   },
+<<<<<<< HEAD
+=======
+  saveEdit: function () {
+    var user = this.get("repo.owner.login"),
+        repo = this.get("repo.name"),
+        full_name = user + "/" + repo;
+
+    return Ember.$.ajax( {
+      url: "/api/" + full_name + "/milestones/" + this.get("number"),
+      data: JSON.stringify({milestone: this.serialize(), correlationId: this.get("correlationId") }),
+      dataType: 'json',
+      type: "POST",
+      contentType: "application/json"}).then(function(response){
+      return Milestone.create(response);
+    })
+  },
+>>>>>>> milestone-editing
   processing: false,
   loaded: false
 });
@@ -2765,6 +2921,11 @@ Milestone.reopenClass({
      return Milestone.create({
        id: null,
        title: "",
+<<<<<<< HEAD
+=======
+       description: "",
+       due_on: "",
+>>>>>>> milestone-editing
        repo: App.get("repo")
      })
   }
@@ -2772,7 +2933,11 @@ Milestone.reopenClass({
 
 module.exports = Milestone;
 
+<<<<<<< HEAD
 },{"../mixins/serializable":46,"../utilities/correlationId":68}],55:[function(require,module,exports){
+=======
+},{"../mixins/serializable":29,"../utilities/correlationId":47}],36:[function(require,module,exports){
+>>>>>>> milestone-editing
 var Board = require("./board");
 var Issue = require("./issue");
 
@@ -2871,7 +3036,11 @@ var Repo = Ember.Object.extend(Serializable,{
 
 module.exports = Repo;
 
+<<<<<<< HEAD
 },{"../mixins/serializable":46,"./board":49,"./issue":52}],56:[function(require,module,exports){
+=======
+},{"../mixins/serializable":29,"./board":32,"./issue":34}],37:[function(require,module,exports){
+>>>>>>> milestone-editing
 function attr(defaultValue) {
   return Ember.computed('data', function (key, value){
     if(arguments.length > 1) {
@@ -2917,7 +3086,11 @@ var Settings = Ember.Object.extend({
 
 module.exports = Settings;
 
+<<<<<<< HEAD
 },{}],57:[function(require,module,exports){
+=======
+},{}],38:[function(require,module,exports){
+>>>>>>> milestone-editing
 var Serializable = require("../mixins/serializable");
 var SocketMixin = require("../mixins/socket");
 var ApplicationRoute = Ember.Route.extend({
@@ -2973,7 +3146,36 @@ var ApplicationRoute = Ember.Route.extend({
 
 module.exports = ApplicationRoute;
 
+<<<<<<< HEAD
 },{"../mixins/serializable":46,"../mixins/socket":47}],58:[function(require,module,exports){
+=======
+},{"../mixins/serializable":29}],39:[function(require,module,exports){
+
+var IntegrationsRoute = Ember.Route.extend({
+  model : function (params, transition){
+    // hacks!
+    var appModel = this.modelFor("application");
+    return appModel.fetchIntegrations();
+  },
+  controllerFor: function(name, assert){
+    return this._super("integrations.integrations", assert);
+  },
+  renderTemplate: function () {
+    this.render("integrations.integrations",{into:'application',outlet:'modal'})
+    //this.render("integrations.index",{into:'integrations.integrations'})
+  },
+  actions: {
+    closeModal: function () {
+        this.transitionTo("index")
+        return true;
+    }
+  }
+});
+
+module.exports = IntegrationsRoute;
+
+},{}],40:[function(require,module,exports){
+>>>>>>> milestone-editing
 var Route = require("../issue_route");
 
 module.exports = Route.extend({
@@ -2995,7 +3197,11 @@ module.exports = Route.extend({
   }
 });
 
+<<<<<<< HEAD
 },{"../issue_route":60}],59:[function(require,module,exports){
+=======
+},{"../issue_route":42}],41:[function(require,module,exports){
+>>>>>>> milestone-editing
 var CssView = require("../views/css_view");
 var Board = require("../models/board");
 
@@ -3070,7 +3276,11 @@ var IndexRoute = Ember.Route.extend({
 
 module.exports = IndexRoute;
 
+<<<<<<< HEAD
 },{"../models/board":49,"../views/css_view":88}],60:[function(require,module,exports){
+=======
+},{"../views/css_view":64}],42:[function(require,module,exports){
+>>>>>>> milestone-editing
 var IssueRoute = Ember.Route.extend({
   setupController: function(controller, model) {
     controller.set("model", model);
@@ -3100,7 +3310,35 @@ var IssueRoute = Ember.Route.extend({
 
 module.exports = IssueRoute;
 
+<<<<<<< HEAD
 },{}],61:[function(require,module,exports){
+=======
+},{}],43:[function(require,module,exports){
+
+var IntegrationsRoute = Ember.Route.extend({
+  model : function (params, transition){
+    // hacks!
+    var appModel = this.modelFor("application");
+    return appModel.fetchIntegrations();
+  },
+  controllerFor: function(name, assert){
+    return this._super("integrations.integrations", assert);
+  },
+  renderTemplate: function () {
+    this.render("integrations.integrations",{into:'application',outlet:'modal'})
+  },
+  actions: {
+    closeModal: function () {
+        this.transitionTo("milestones")
+        return true;
+    }
+  }
+});
+
+module.exports = IntegrationsRoute;
+
+},{}],44:[function(require,module,exports){
+>>>>>>> milestone-editing
 var Route = require("../issue_route");
 
 module.exports = Route.extend({
@@ -3122,7 +3360,11 @@ module.exports = Route.extend({
   }
 });
 
+<<<<<<< HEAD
 },{"../issue_route":60}],62:[function(require,module,exports){
+=======
+},{"../issue_route":42}],45:[function(require,module,exports){
+>>>>>>> milestone-editing
 var CssView = require("../views/css_view");
 var Board = require("../models/board");
 
@@ -3174,6 +3416,13 @@ module.exports = MilestonesRoute =  Ember.Route.extend({
       this.controllerFor("milestone.create").set("model", App.Milestone.createNew());
       this.send("openModal","milestone.create")
     },
+<<<<<<< HEAD
+=======
+    editMilestone : function (milestone) {
+      this.controllerFor("milestone.edit").set("model", App.Milestone.create(milestone));
+      this.send("openModal","milestone.edit")
+    },
+>>>>>>> milestone-editing
     archive: function (issue) {
       issue.archive();
     },
@@ -3211,11 +3460,23 @@ module.exports = MilestonesRoute =  Ember.Route.extend({
         controller.incrementProperty("forceRedraw");
         this.send("closeModal")
       }.bind(this))
+<<<<<<< HEAD
+=======
+    },
+    milestoneUpdated: function(milestone){
+      var controller = this.controllerFor("milestones");
+      var milestones = controller.get("model.milestones");
+      Ember.run.schedule('afterRender', controller, function () {
+        controller.incrementProperty("forceRedraw");
+        this.send("closeModal")
+      }.bind(this))
+>>>>>>> milestone-editing
     }
   }
 
 })
 
+<<<<<<< HEAD
 },{"../models/board":49,"../views/css_view":88}],63:[function(require,module,exports){
 var SettingsIntegrationsNewRoute = Ember.Route.extend({
   model: function(params, transition){
@@ -3273,6 +3534,9 @@ module.exports = SettingsRoute;
 
 
 },{}],67:[function(require,module,exports){
+=======
+},{"../views/css_view":64}],46:[function(require,module,exports){
+>>>>>>> milestone-editing
 
 Ember.TEMPLATES['application'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
@@ -3343,9 +3607,10 @@ function program9(depth0,data) {
   data.buffer.push("<div class=\"navbar navbar-static-top\">\n <div class=\"navbar-inner\">\n   <div class=\"container-fluid\">\n    <ul class=\"nav breadcrumbs\">\n      <li><a href=\"/\" class=\"home\"><i class=\"ui-icon ui-icon-menu\"></i></a></li>\n      <li><a ");
   hashContexts = {'href': depth0};
   hashTypes = {'href': "STRING"};
-  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+  options = {hash:{
     'href': ("userUrl")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
   data.buffer.push(" >");
   hashTypes = {};
   hashContexts = {};
@@ -3353,9 +3618,10 @@ function program9(depth0,data) {
   data.buffer.push("</a></li>\n      <li><a ");
   hashContexts = {'href': depth0};
   hashTypes = {'href': "STRING"};
-  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+  options = {hash:{
     'href': ("betaUrl")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
   data.buffer.push(">");
   hashTypes = {};
   hashContexts = {};
@@ -3481,7 +3747,7 @@ function program6(depth0,data) {
 Ember.TEMPLATES['card'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, hashContexts, hashTypes, self=this, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  var buffer = '', stack1, stack2, hashContexts, hashTypes, options, self=this, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
 
 function program1(depth0,data) {
   
@@ -3518,19 +3784,21 @@ function program4(depth0,data) {
 
 function program6(depth0,data) {
   
-  var buffer = '', hashContexts, hashTypes;
+  var buffer = '', stack1, hashContexts, hashTypes, options;
   data.buffer.push("\n      <div class=\"card-label-wrapper\"> \n         <div ");
   hashContexts = {'class': depth0};
   hashTypes = {'class': "STRING"};
-  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+  options = {hash:{
     'class': (":card-label :active :small customColor")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
   data.buffer.push(" ></div>\n         <div ");
   hashContexts = {'class': depth0};
   hashTypes = {'class': "STRING"};
-  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+  options = {hash:{
     'class': (":card-label :active :large customColor")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
   data.buffer.push(" >\n          <span>");
   hashTypes = {};
   hashContexts = {};
@@ -3541,13 +3809,14 @@ function program6(depth0,data) {
 
 function program8(depth0,data) {
   
-  var buffer = '', hashContexts, hashTypes;
+  var buffer = '', stack1, hashContexts, hashTypes, options;
   data.buffer.push("\n\n<div class=\"hb-action actions-close\">\n  <button class=\"hb-button\" ");
   hashContexts = {'disabled': depth0};
   hashTypes = {'disabled': "ID"};
-  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+  options = {hash:{
     'disabled': ("processing")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
   data.buffer.push(" ");
   hashContexts = {'bubbles': depth0};
   hashTypes = {'bubbles': "BOOLEAN"};
@@ -3560,13 +3829,14 @@ function program8(depth0,data) {
 
 function program10(depth0,data) {
   
-  var buffer = '', hashContexts, hashTypes;
+  var buffer = '', stack1, hashContexts, hashTypes, options;
   data.buffer.push("\n\n<div class=\"hb-action actions-archive\">\n  <button class=\"hb-button-icon hb-button hb-button-grey\" ");
   hashContexts = {'disabled': depth0};
   hashTypes = {'disabled': "ID"};
-  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+  options = {hash:{
     'disabled': ("processing")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
   data.buffer.push(" ");
   hashContexts = {'bubbles': depth0};
   hashTypes = {'bubbles': "BOOLEAN"};
@@ -3580,9 +3850,10 @@ function program10(depth0,data) {
   data.buffer.push("<div class=\"card-header\">\n  <div class=\"title\" ");
   hashContexts = {'title': depth0};
   hashTypes = {'title': "ID"};
-  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+  options = {hash:{
     'title': ("title")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
   data.buffer.push(">\n    ");
   hashTypes = {};
   hashContexts = {};
@@ -3590,9 +3861,10 @@ function program10(depth0,data) {
   data.buffer.push("\n  </div>\n  <div class=\"number\">\n    <small>#</small>\n    <a class=\"xnumber\" ");
   hashContexts = {'href': depth0};
   hashTypes = {'href': "ID"};
-  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+  options = {hash:{
     'href': ("html_url")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
   data.buffer.push(" target=\"_blank\" title=\"View issue on github.com\">\n      ");
   hashTypes = {};
   hashContexts = {};
@@ -3600,28 +3872,28 @@ function program10(depth0,data) {
   data.buffer.push("\n    </a>\n    ");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers['if'].call(depth0, "pull_request", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  stack2 = helpers['if'].call(depth0, "pull_request", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n  </div>\n</div>\n\n");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers['if'].call(depth0, "assignee", {hash:{},inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  stack2 = helpers['if'].call(depth0, "assignee", {hash:{},inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n\n<div class=\"card-labels\">\n    ");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers.each.call(depth0, "cardLabels", {hash:{},inverse:self.noop,fn:self.program(6, program6, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  stack2 = helpers.each.call(depth0, "cardLabels", {hash:{},inverse:self.noop,fn:self.program(6, program6, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n</div>\n\n");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers['if'].call(depth0, "current_state.is_last", {hash:{},inverse:self.noop,fn:self.program(8, program8, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  stack2 = helpers['if'].call(depth0, "current_state.is_last", {hash:{},inverse:self.noop,fn:self.program(8, program8, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n\n");
   hashTypes = {};
   hashContexts = {};
-  stack1 = helpers['if'].call(depth0, "canArchive", {hash:{},inverse:self.noop,fn:self.program(10, program10, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  stack2 = helpers['if'].call(depth0, "canArchive", {hash:{},inverse:self.noop,fn:self.program(10, program10, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
   data.buffer.push("\n\n<div class=\"card-states\">\n   <img src=\"/img/check.png\" title=\"Issue is closed\" class=\"hb-state-closed\"/>\n   <img src=\"/img/arrow.png\" class=\"hb-state-ready\"/>\n   <img src=\"/img/x.png\" class=\"hb-state-blocked\"/>\n</div>\n");
   return buffer;
   
@@ -3807,15 +4079,16 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 Ember.TEMPLATES['filter'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', hashContexts, hashTypes, escapeExpression=this.escapeExpression;
+  var buffer = '', stack1, hashContexts, hashTypes, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
 
 
   data.buffer.push("  <a href=\"#\" ");
   hashContexts = {'class': depth0};
   hashTypes = {'class': "ID"};
-  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+  options = {hash:{
     'class': ("view.modeClass")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
   data.buffer.push(">\n    ");
   hashTypes = {};
   hashContexts = {};
@@ -3979,8 +4252,9 @@ function program6(depth0,data) {
   data.buffer.push(">Filters <i ");
   hashContexts = {'class': depth0};
   hashTypes = {'class': "STRING"};
-  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+  options = {hash:{
     'class': (":ui-icon isSidebarOpen:ui-icon-triangle-1-w:ui-icon-triangle-1-e")
+<<<<<<< HEAD
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(" class=\"ui-icon ui-icon-triangle-1-e\"></i></a>\n\n  </div>\n  ");
   hashTypes = {};
@@ -3992,12 +4266,22 @@ function program6(depth0,data) {
   hashContexts = {};
   stack1 = helpers['if'].call(depth0, "App.repo.is_collaborator", {hash:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+=======
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
+  data.buffer.push(" class=\"ui-icon ui-icon-triangle-1-e\"></i></a>\n  </div>\n\n  ");
+  hashTypes = {};
+  hashContexts = {};
+  stack2 = helpers['if'].call(depth0, "App.repo.is_collaborator", {hash:{},inverse:self.program(6, program6, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+>>>>>>> milestone-editing
   data.buffer.push("\n\n</div>\n<div id=\"main-stage\" ");
   hashContexts = {'class': depth0};
   hashTypes = {'class': "STRING"};
-  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+  options = {hash:{
     'class': (":main-content isSidebarOpen:sidebar-open")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
   data.buffer.push(">\n  <div class=\"sidebar left\">\n    <div class=\"sidebar-wrapper\">\n      ");
   hashTypes = {};
   hashContexts = {};
@@ -4079,9 +4363,10 @@ function program4(depth0,data) {
   data.buffer.push("\n    <button ");
   hashContexts = {'disabled': depth0};
   hashTypes = {'disabled': "ID"};
-  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+  options = {hash:{
     'disabled': ("disabled")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
   data.buffer.push(" class=\"hb-button\">Submit comment</button>\n  </form>\n  ");
   return buffer;
   }
@@ -4089,9 +4374,30 @@ function program4(depth0,data) {
   data.buffer.push("<div class=\"fullscreen-card\">\n  <div class=\"fullscreen-card-preamble clearfix\">\n    ");
   hashTypes = {};
   hashContexts = {};
+<<<<<<< HEAD
   options = {hash:{},contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.render || depth0.render),stack1 ? stack1.call(depth0, "issue.title", "model", options) : helperMissing.call(depth0, "render", "issue.title", "model", options))));
   data.buffer.push("\n    <div class=\"flex-crumbs\">\n      ");
+=======
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "title", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n      <a class=\"number\" href=\"");
+  hashTypes = {};
+  hashContexts = {};
+  stack1 = helpers.unbound.call(depth0, "html_url", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\" target=\"_blank\" ");
+  hashContexts = {'title': depth0};
+  hashTypes = {'title': "STRING"};
+  options = {hash:{
+    'title': ("title")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
+  data.buffer.push("><small>#");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "number", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("</small></a>\n      </h2>\n    </div>\n    <div class=\"flex-crumbs\">\n      ");
+>>>>>>> milestone-editing
   hashContexts = {'content': depth0};
   hashTypes = {'content': "ID"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.IssueSelectedColumnView", {hash:{
@@ -4219,7 +4525,13 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "title", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("</span>\n\n");
+  data.buffer.push("</span>\n<i class=\"ui-icon ui-icon-gear\" ");
+  hashContexts = {'bubbles': depth0};
+  hashTypes = {'bubbles': "BOOLEAN"};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "editMilestone", "controller.model.milestone", {hash:{
+    'bubbles': (false)
+  },contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("></i>\n");
   return buffer;
   
 });
@@ -4252,6 +4564,7 @@ function program1(depth0,data) {
   data.buffer.push("\n  <div class=\"filters-clear\">\n    <a class=\"hb-icon-button hb-icon-button-purple\" href=\"#\" ");
   hashTypes = {};
   hashContexts = {};
+<<<<<<< HEAD
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "clearFilters", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(">\n      <i class=\"ui-icon ui-icon-filter ui-icon-16\"></i>\n      <span class= \"ui-text\">Clear filters</span>\n    </a>\n  </div>\n  ");
   return buffer;
@@ -4261,6 +4574,23 @@ function program3(depth0,data) {
   
   var buffer = '', stack1, stack2, hashTypes, hashContexts, options;
   data.buffer.push("\n    <div class=\"create-button\">\n      <a class=\"hb-icon-button hb-icon-button-purple\" href=\"#\" ");
+=======
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "createNewIssue", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" class=\"hb-button small\">Create new issue</button>\n      <button ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "createNewMilestone", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" class=\"hb-button small\">Create new milestone</button>\n      <span class=\"dropdown\">\n        <a data-toggle=\"dropdown\" class=\"dropdown-toggle hb-icon-link\" href=\"#\">\n          <i class=\"ui-icon ui-icon-18 ui-icon-gear\"></i>\n        </a>\n        <ul class=\"dropdown-menu dropdown-menu-right\">\n          <li>\n              ");
+  hashContexts = {'title': depth0,'bubbles': depth0};
+  hashTypes = {'title': "STRING",'bubbles': "BOOLEAN"};
+  options = {hash:{
+    'title': ("Settings"),
+    'bubbles': (true)
+  },inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  stack2 = ((stack1 = helpers['link-to'] || depth0['link-to']),stack1 ? stack1.call(depth0, "milestones.integrations", options) : helperMissing.call(depth0, "link-to", "milestones.integrations", options));
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+  data.buffer.push("\n          </li>\n          <li class=\"divider\"></li>\n          ");
+>>>>>>> milestone-editing
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "createNewMilestone", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
@@ -4300,8 +4630,9 @@ function program6(depth0,data) {
   data.buffer.push(">Filters <i ");
   hashContexts = {'class': depth0};
   hashTypes = {'class': "STRING"};
-  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+  options = {hash:{
     'class': (":ui-icon isSidebarOpen:ui-icon-triangle-1-w:ui-icon-triangle-1-e")
+<<<<<<< HEAD
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(" class=\"ui-icon ui-icon-triangle-1-e\"></i></a>\n  </div>\n\n  ");
   hashTypes = {};
@@ -4313,12 +4644,22 @@ function program6(depth0,data) {
   hashContexts = {};
   stack1 = helpers['if'].call(depth0, "App.repo.is_collaborator", {hash:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+=======
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
+  data.buffer.push(" class=\"ui-icon ui-icon-triangle-1-e\"></i></a>\n  </div>\n ");
+  hashTypes = {};
+  hashContexts = {};
+  stack2 = helpers['if'].call(depth0, "App.repo.is_collaborator", {hash:{},inverse:self.program(6, program6, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+>>>>>>> milestone-editing
   data.buffer.push("\n\n</div>\n<div id=\"main-stage\" ");
   hashContexts = {'class': depth0};
   hashTypes = {'class': "STRING"};
-  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+  options = {hash:{
     'class': (":main-content isSidebarOpen:sidebar-open")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
   data.buffer.push(">\n  <div class=\"sidebar left\">\n    <div class=\"sidebar-wrapper\">\n      ");
   hashTypes = {};
   hashContexts = {};
@@ -4378,10 +4719,111 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   
 });
 
+<<<<<<< HEAD
 Ember.TEMPLATES['settings'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   var buffer = '', stack1, stack2, hashTypes, hashContexts, options, self=this, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+=======
+Ember.TEMPLATES['milestone/create'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', stack1, hashContexts, hashTypes, options, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
+
+
+  data.buffer.push("<div class=\"fullscreen-card\">\n  <form ");
+  hashContexts = {'on': depth0};
+  hashTypes = {'on': "STRING"};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "submit", {hash:{
+    'on': ("submit")
+  },contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" class=\"flex-form split-form\">\n    <div class=\"flex-form-left\">\n      <label>\n        ");
+  hashContexts = {'value': depth0,'placeholder': depth0};
+  hashTypes = {'value': "ID",'placeholder': "STRING"};
+  options = {hash:{
+    'value': ("title"),
+    'placeholder': ("Title")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
+  data.buffer.push("\n      </label>\n      <label>\n        ");
+  hashContexts = {'value': depth0,'placeholder': depth0};
+  hashTypes = {'value': "ID",'placeholder': "STRING"};
+  options = {hash:{
+    'value': ("description"),
+    'placeholder': ("Description")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
+  data.buffer.push("\n      </label>\n      <label>\n        ");
+  hashContexts = {'valueBinding': depth0,'placeholder': depth0};
+  hashTypes = {'valueBinding': "STRING",'placeholder': "STRING"};
+  data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.DatePicker", {hash:{
+    'valueBinding': ("due_on"),
+    'placeholder': ("Due on: yyyy-mm-dd")
+  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n      </label>\n      <button ");
+  hashContexts = {'disabled': depth0};
+  hashTypes = {'disabled': "ID"};
+  options = {hash:{
+    'disabled': ("disabled")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
+  data.buffer.push(" class=\"hb-button\">Create milestone</button>\n    </div>\n  </form>\n</div>\n");
+  return buffer;
+  
+});
+
+Ember.TEMPLATES['milestone/edit'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', stack1, hashContexts, hashTypes, options, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
+
+
+  data.buffer.push("<div class=\"fullscreen-card\">\n  <form ");
+  hashContexts = {'on': depth0};
+  hashTypes = {'on': "STRING"};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "submit", {hash:{
+    'on': ("submit")
+  },contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" class=\"flex-form split-form\">\n    <div class=\"flex-form-left\">\n      <label>\n        ");
+  hashContexts = {'value': depth0,'placeholder': depth0};
+  hashTypes = {'value': "ID",'placeholder': "STRING"};
+  options = {hash:{
+    'value': ("title"),
+    'placeholder': ("Title")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
+  data.buffer.push("\n      </label>\n      <label>\n        ");
+  hashContexts = {'value': depth0,'placeholder': depth0};
+  hashTypes = {'value': "ID",'placeholder': "STRING"};
+  options = {hash:{
+    'value': ("description"),
+    'placeholder': ("Description")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
+  data.buffer.push("\n      </label>\n      <label>\n        ");
+  hashContexts = {'valueBinding': depth0,'placeholder': depth0};
+  hashTypes = {'valueBinding': "STRING",'placeholder': "STRING"};
+  data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.DatePicker", {hash:{
+    'valueBinding': ("due_on"),
+    'placeholder': ("Due on: yyyy-mm-dd")
+  },contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n      </label>\n      <button ");
+  hashContexts = {'disabled': depth0};
+  hashTypes = {'disabled': "ID"};
+  options = {hash:{
+    'disabled': ("disabled")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
+  data.buffer.push(" class=\"hb-button\">Update milestone</button>\n    </div>\n  </form>\n</div>\n");
+  return buffer;
+  
+});
+
+Ember.TEMPLATES['layouts/modal'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', stack1, hashContexts, hashTypes, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+>>>>>>> milestone-editing
 
 function program1(depth0,data) {
   
@@ -4389,7 +4831,23 @@ function program1(depth0,data) {
   data.buffer.push("\n  <div>\n  </div>\n  <div class=\"create-button\">\n    <span class=\"dropdown\">\n      <a data-toggle=\"dropdown\" class=\"dropdown-toggle hb-icon-link\" href=\"#/settings\">\n        <i class=\"ui-icon ui-icon-18 ui-icon-gear\"></i>\n      </a>\n    </span>\n  </div>\n  ");
   }
 
+<<<<<<< HEAD
 function program3(depth0,data) {
+=======
+  data.buffer.push("<div class=\"fullscreen-overlay fixed\">\n  <div class=\"fullscreen-wrapper\">\n    <div ");
+  hashContexts = {'class': depth0};
+  hashTypes = {'class': "STRING"};
+  options = {hash:{
+    'class': (":fullscreen-body view.modalSize")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
+  data.buffer.push(" >\n      ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "yield", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n    </div>\n  </div>\n</div>\n");
+  return buffer;
+>>>>>>> milestone-editing
   
   
   data.buffer.push("\n            General\n          ");
@@ -4454,7 +4912,30 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
     'checked': ("settings.showColumnCounts")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.input || depth0.input),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "input", options))));
+<<<<<<< HEAD
   data.buffer.push("\n        Show running totals in the column headers\n      </label>\n    </div>\n  </div>\n</div>\n");
+=======
+  data.buffer.push("\n      </label>\n      ");
+  hashContexts = {'markdown': depth0};
+  hashTypes = {'markdown': "ID"};
+  options = {hash:{
+    'markdown': ("body")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['hb-markdown-editor'] || depth0['hb-markdown-editor']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "hb-markdown-editor", options))));
+  data.buffer.push("\n      <button ");
+  hashContexts = {'disabled': depth0};
+  hashTypes = {'disabled': "ID"};
+  options = {hash:{
+    'disabled': ("disabled")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
+  data.buffer.push(" class=\"hb-button\">Submit issue</button>\n    </div>\n    <div class=\"flex-form-right\">\n      ");
+  hashTypes = {};
+  hashContexts = {};
+  stack2 = helpers['if'].call(depth0, "isCollaborator", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack2 || stack2 === 0) { data.buffer.push(stack2); }
+  data.buffer.push("\n    </div>\n  </form>\n</div>\n\n");
+>>>>>>> milestone-editing
   return buffer;
   
 });
@@ -4747,9 +5228,10 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   data.buffer.push("\n        </label>\n        <button ");
   hashContexts = {'disabled': depth0};
   hashTypes = {'disabled': "ID"};
-  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+  options = {hash:{
     'disabled': ("disabled")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
   data.buffer.push(" class=\"hb-button\">Submit webhook</button>\n        <div class=\"with-line\"><span>or</span></div>\n        <div class=\"cancel\"> <a href=\"#\" ");
   hashTypes = {};
   hashContexts = {};
@@ -4875,9 +5357,10 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   data.buffer.push("\n        </label>\n        <p>\n          Click the Submit webhook button to create the integration.\n        </p>\n        <button ");
   hashContexts = {'disabled': depth0};
   hashTypes = {'disabled': "ID"};
-  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+  options = {hash:{
     'disabled': ("disabled")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
   data.buffer.push(" class=\"hb-button\">Submit webhook</button>\n        <div class=\"with-line\"><span>or</span></div>\n        <div class=\"cancel\"> <a href=\"#\" ");
   hashTypes = {};
   hashContexts = {};
@@ -4910,9 +5393,10 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   data.buffer.push("\n        </label>\n        <button ");
   hashContexts = {'disabled': depth0};
   hashTypes = {'disabled': "ID"};
-  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+  options = {hash:{
     'disabled': ("disabled")
-  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
   data.buffer.push(" class=\"hb-button\">Submit webhook</button>\n        <div class=\"with-line\"><span>or</span></div>\n        <div class=\"cancel\"> <a href=\"#\" ");
   hashTypes = {};
   hashContexts = {};
@@ -4939,8 +5423,27 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   data.buffer.push(" </h2>\n    <div class=\"well\">\n    <p>\n      You are attempting to assign an issue from ");
   hashTypes = {};
   hashContexts = {};
+<<<<<<< HEAD
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "cardController.model.repo.owner.login", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push("/");
+=======
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "clearAssignee", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(" >\n        <i class=\"ui-icon ui-icon-x-thin\"></i>\n        Clear assignee\n      </div>\n    </div>\n    ");
+  return buffer;
+  }
+
+function program11(depth0,data) {
+  
+  var buffer = '', stack1, hashContexts, hashTypes, options;
+  data.buffer.push("\n    <div ");
+  hashContexts = {'class': depth0};
+  hashTypes = {'class': "STRING"};
+  options = {hash:{
+    'class': (":hb-menu-item selected:checked")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
+  data.buffer.push(" >\n      <div ");
+>>>>>>> milestone-editing
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "cardController.model.repo.name", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
@@ -5153,9 +5656,40 @@ function program9(depth0,data) {
   data.buffer.push("</strong> commented ");
   hashTypes = {};
   hashContexts = {};
+<<<<<<< HEAD
   options = {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.momentAgo || depth0.momentAgo),stack1 ? stack1.call(depth0, "created_at", options) : helperMissing.call(depth0, "momentAgo", "created_at", options))));
   data.buffer.push(" \n\n  </div>\n  ");
+=======
+  stack1 = helpers['if'].call(depth0, "editable", {hash:{},inverse:self.noop,fn:self.program(9, program9, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n\n");
+  return buffer;
+  
+});
+
+Ember.TEMPLATES['components/hb-label'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', stack1, hashContexts, hashTypes, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+
+
+  data.buffer.push("<i ");
+  hashContexts = {'class': depth0};
+  hashTypes = {'class': "STRING"};
+  options = {hash:{
+    'class': ("colorClass :font-color :ui-icon :ui-icon-checkmark")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
+  data.buffer.push("></i> \n<span ");
+  hashContexts = {'class': depth0};
+  hashTypes = {'class': "STRING"};
+  options = {hash:{
+    'class': ("colorClass :color :background")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
+  data.buffer.push("></span> \n");
+>>>>>>> milestone-editing
   hashTypes = {};
   hashContexts = {};
   stack2 = helpers['if'].call(depth0, "isEditing", {hash:{},inverse:self.program(9, program9, data),fn:self.program(7, program7, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
@@ -5200,9 +5734,32 @@ function program4(depth0,data) {
   data.buffer.push("\n        ");
   hashTypes = {};
   hashContexts = {};
+<<<<<<< HEAD
   stack1 = helpers.unless.call(depth0, "view.content.disabled", {hash:{},inverse:self.noop,fn:self.program(5, program5, data),contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n      ");
+=======
+  if (!helpers['hb-tabs']) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n\n\n");
+  return buffer;
+  
+});
+
+Ember.TEMPLATES['components/hb-milestone'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', stack1, stack2, hashTypes, hashContexts, options, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, self=this;
+
+function program1(depth0,data) {
+  
+  var buffer = '', hashTypes, hashContexts;
+  data.buffer.push("\n<h5 ");
+  hashTypes = {};
+  hashContexts = {};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "toggleSelector", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push("> \n  <i  class=\"pull-right ui-icon ui-icon-gear\"></i>\n  Milestone\n</h5>\n");
+>>>>>>> milestone-editing
   return buffer;
   }
 function program5(depth0,data) {
@@ -5260,6 +5817,7 @@ function program9(depth0,data) {
 function program10(depth0,data) {
   
   var buffer = '', stack1, hashContexts, hashTypes, options;
+<<<<<<< HEAD
   data.buffer.push("\n      ");
   hashContexts = {'body_html': depth0,'body': depth0,'taskChanged': depth0,'targetObject': depth0,'canEdit': depth0};
   hashTypes = {'body_html': "ID",'body': "ID",'taskChanged': "STRING",'targetObject': "ID",'canEdit': "ID"};
@@ -5276,6 +5834,16 @@ function program10(depth0,data) {
   }
 
   data.buffer.push("<a href=\"");
+=======
+  data.buffer.push("\n    <div ");
+  hashContexts = {'class': depth0};
+  hashTypes = {'class': "STRING"};
+  options = {hash:{
+    'class': (":hb-menu-item selected:checked")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
+  data.buffer.push(" >\n      <div ");
+>>>>>>> milestone-editing
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.unbound.call(depth0, "view.content.html_url", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
@@ -5412,6 +5980,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 Ember.TEMPLATES['issue/title'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+<<<<<<< HEAD
   var buffer = '', stack1, hashTypes, hashContexts, escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
 
 function program1(depth0,data) {
@@ -5439,6 +6008,27 @@ function program2(depth0,data) {
     'disabled': ("disabled")
   },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
   data.buffer.push(" ");
+=======
+  var buffer = '', stack1, hashTypes, hashContexts, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, self=this;
+
+function program1(depth0,data) {
+  
+  var buffer = '', stack1, hashContexts, hashTypes, options;
+  data.buffer.push("\n  <li ");
+  hashContexts = {'class': depth0};
+  hashTypes = {'class': "STRING"};
+  options = {hash:{
+    'class': ("pane.selected:active")
+  },contexts:[],types:[],hashContexts:hashContexts,hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers['bind-attr'] || depth0['bind-attr']),stack1 ? stack1.call(depth0, options) : helperMissing.call(depth0, "bind-attr", options))));
+  data.buffer.push(">\n    <a href=\"#\" ");
+  hashContexts = {'bubbles': depth0};
+  hashTypes = {'bubbles': "BOOLEAN"};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "select", "pane", {hash:{
+    'bubbles': (false)
+  },contexts:[depth0,depth0],types:["STRING","ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
+  data.buffer.push(">");
+>>>>>>> milestone-editing
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "save", {hash:{},contexts:[depth0],types:["STRING"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
@@ -5556,34 +6146,65 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   var buffer = '';
 
 
+<<<<<<< HEAD
   return buffer;
   
 });
+=======
+},{}],47:[function(require,module,exports){
+var guid = require('./uuid');
+
+module.exports = guid();
+>>>>>>> milestone-editing
 
 Ember.TEMPLATES['issue/events/head_ref_deleted'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   var buffer = '';
 
+<<<<<<< HEAD
+=======
+},{"./uuid":49}],48:[function(require,module,exports){
+Ember.debouncedObserver = function(func, key, time){
+  return Em.observer(function(){
+    Em.run.debounce(this, func, time)
+  }, key)
+};
+>>>>>>> milestone-editing
 
   return buffer;
   
 });
 
+<<<<<<< HEAD
 Ember.TEMPLATES['issue/events/head_ref_restored'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   var buffer = '';
+=======
+},{}],49:[function(require,module,exports){
+function S4() {
+   return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+}
+function guid() {
+   return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+}
+>>>>>>> milestone-editing
 
 
   return buffer;
   
 });
 
+<<<<<<< HEAD
 Ember.TEMPLATES['issue/events/labeled'] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   var buffer = '';
+=======
+},{}],50:[function(require,module,exports){
+// Last commit: 0ba0d24 (2013-11-06 10:53:04 -0500)
+>>>>>>> milestone-editing
 
 
   return buffer;
@@ -10148,9 +10769,1695 @@ define("ember-application/system/application",
         Set this to provide an alternate class to `Ember.DefaultResolver`
 
 
+<<<<<<< HEAD
         @property resolver
       */
       resolver: null,
+=======
+},{}],51:[function(require,module,exports){
+/* =========================================================
+ * bootstrap-datepicker.js
+ * Repo: https://github.com/eternicode/bootstrap-datepicker/
+ * Demo: http://eternicode.github.io/bootstrap-datepicker/
+ * Docs: http://bootstrap-datepicker.readthedocs.org/
+ * Forked from http://www.eyecon.ro/bootstrap-datepicker
+ * =========================================================
+ * Started by Stefan Petre; improvements by Andrew Rowls + contributors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ========================================================= */
+
+(function($, undefined){
+
+    var $window = $(window);
+
+    function UTCDate(){
+        return new Date(Date.UTC.apply(Date, arguments));
+    }
+    function UTCToday(){
+        var today = new Date();
+        return UTCDate(today.getFullYear(), today.getMonth(), today.getDate());
+    }
+    function alias(method){
+        return function(){
+            return this[method].apply(this, arguments);
+        };
+    }
+
+    var DateArray = (function(){
+        var extras = {
+            get: function(i){
+                return this.slice(i)[0];
+            },
+            contains: function(d){
+                // Array.indexOf is not cross-browser;
+                // $.inArray doesn't work with Dates
+                var val = d && d.valueOf();
+                for (var i=0, l=this.length; i < l; i++)
+                    if (this[i].valueOf() === val)
+                        return i;
+                return -1;
+            },
+            remove: function(i){
+                this.splice(i,1);
+            },
+            replace: function(new_array){
+                if (!new_array)
+                    return;
+                if (!$.isArray(new_array))
+                    new_array = [new_array];
+                this.clear();
+                this.push.apply(this, new_array);
+            },
+            clear: function(){
+                this.length = 0;
+            },
+            copy: function(){
+                var a = new DateArray();
+                a.replace(this);
+                return a;
+            }
+        };
+
+        return function(){
+            var a = [];
+            a.push.apply(a, arguments);
+            $.extend(a, extras);
+            return a;
+        };
+    })();
+
+
+    // Picker object
+
+    var Datepicker = function(element, options){
+        this.dates = new DateArray();
+        this.viewDate = UTCToday();
+        this.focusDate = null;
+
+        this._process_options(options);
+
+        this.element = $(element);
+        this.isInline = false;
+        this.isInput = this.element.is('input');
+        this.component = this.element.is('.date') ? this.element.find('.add-on, .input-group-addon, .btn') : false;
+        this.hasInput = this.component && this.element.find('input').length;
+        if (this.component && this.component.length === 0)
+            this.component = false;
+
+        this.picker = $(DPGlobal.template);
+        this._buildEvents();
+        this._attachEvents();
+
+        if (this.isInline){
+            this.picker.addClass('datepicker-inline').appendTo(this.element);
+        }
+        else {
+            this.picker.addClass('datepicker-dropdown dropdown-menu');
+        }
+
+        if (this.o.rtl){
+            this.picker.addClass('datepicker-rtl');
+        }
+
+        this.viewMode = this.o.startView;
+
+        if (this.o.calendarWeeks)
+            this.picker.find('tfoot th.today')
+                        .attr('colspan', function(i, val){
+                            return parseInt(val) + 1;
+                        });
+
+        this._allow_update = false;
+
+        this.setStartDate(this._o.startDate);
+        this.setEndDate(this._o.endDate);
+        this.setDaysOfWeekDisabled(this.o.daysOfWeekDisabled);
+
+        this.fillDow();
+        this.fillMonths();
+
+        this._allow_update = true;
+
+        this.update();
+        this.showMode();
+
+        if (this.isInline){
+            this.show();
+        }
+    };
+
+    Datepicker.prototype = {
+        constructor: Datepicker,
+
+        _process_options: function(opts){
+            // Store raw options for reference
+            this._o = $.extend({}, this._o, opts);
+            // Processed options
+            var o = this.o = $.extend({}, this._o);
+
+            // Check if "de-DE" style date is available, if not language should
+            // fallback to 2 letter code eg "de"
+            var lang = o.language;
+            if (!dates[lang]){
+                lang = lang.split('-')[0];
+                if (!dates[lang])
+                    lang = defaults.language;
+            }
+            o.language = lang;
+
+            switch (o.startView){
+                case 2:
+                case 'decade':
+                    o.startView = 2;
+                    break;
+                case 1:
+                case 'year':
+                    o.startView = 1;
+                    break;
+                default:
+                    o.startView = 0;
+            }
+
+            switch (o.minViewMode){
+                case 1:
+                case 'months':
+                    o.minViewMode = 1;
+                    break;
+                case 2:
+                case 'years':
+                    o.minViewMode = 2;
+                    break;
+                default:
+                    o.minViewMode = 0;
+            }
+
+            o.startView = Math.max(o.startView, o.minViewMode);
+
+            // true, false, or Number > 0
+            if (o.multidate !== true){
+                o.multidate = Number(o.multidate) || false;
+                if (o.multidate !== false)
+                    o.multidate = Math.max(0, o.multidate);
+                else
+                    o.multidate = 1;
+            }
+            o.multidateSeparator = String(o.multidateSeparator);
+
+            o.weekStart %= 7;
+            o.weekEnd = ((o.weekStart + 6) % 7);
+
+            var format = DPGlobal.parseFormat(o.format);
+            if (o.startDate !== -Infinity){
+                if (!!o.startDate){
+                    if (o.startDate instanceof Date)
+                        o.startDate = this._local_to_utc(this._zero_time(o.startDate));
+                    else
+                        o.startDate = DPGlobal.parseDate(o.startDate, format, o.language);
+                }
+                else {
+                    o.startDate = -Infinity;
+                }
+            }
+            if (o.endDate !== Infinity){
+                if (!!o.endDate){
+                    if (o.endDate instanceof Date)
+                        o.endDate = this._local_to_utc(this._zero_time(o.endDate));
+                    else
+                        o.endDate = DPGlobal.parseDate(o.endDate, format, o.language);
+                }
+                else {
+                    o.endDate = Infinity;
+                }
+            }
+
+            o.daysOfWeekDisabled = o.daysOfWeekDisabled||[];
+            if (!$.isArray(o.daysOfWeekDisabled))
+                o.daysOfWeekDisabled = o.daysOfWeekDisabled.split(/[,\s]*/);
+            o.daysOfWeekDisabled = $.map(o.daysOfWeekDisabled, function(d){
+                return parseInt(d, 10);
+            });
+
+            var plc = String(o.orientation).toLowerCase().split(/\s+/g),
+                _plc = o.orientation.toLowerCase();
+            plc = $.grep(plc, function(word){
+                return (/^auto|left|right|top|bottom$/).test(word);
+            });
+            o.orientation = {x: 'auto', y: 'auto'};
+            if (!_plc || _plc === 'auto')
+                ; // no action
+            else if (plc.length === 1){
+                switch (plc[0]){
+                    case 'top':
+                    case 'bottom':
+                        o.orientation.y = plc[0];
+                        break;
+                    case 'left':
+                    case 'right':
+                        o.orientation.x = plc[0];
+                        break;
+                }
+            }
+            else {
+                _plc = $.grep(plc, function(word){
+                    return (/^left|right$/).test(word);
+                });
+                o.orientation.x = _plc[0] || 'auto';
+
+                _plc = $.grep(plc, function(word){
+                    return (/^top|bottom$/).test(word);
+                });
+                o.orientation.y = _plc[0] || 'auto';
+            }
+        },
+        _events: [],
+        _secondaryEvents: [],
+        _applyEvents: function(evs){
+            for (var i=0, el, ch, ev; i < evs.length; i++){
+                el = evs[i][0];
+                if (evs[i].length === 2){
+                    ch = undefined;
+                    ev = evs[i][1];
+                }
+                else if (evs[i].length === 3){
+                    ch = evs[i][1];
+                    ev = evs[i][2];
+                }
+                el.on(ev, ch);
+            }
+        },
+        _unapplyEvents: function(evs){
+            for (var i=0, el, ev, ch; i < evs.length; i++){
+                el = evs[i][0];
+                if (evs[i].length === 2){
+                    ch = undefined;
+                    ev = evs[i][1];
+                }
+                else if (evs[i].length === 3){
+                    ch = evs[i][1];
+                    ev = evs[i][2];
+                }
+                el.off(ev, ch);
+            }
+        },
+        _buildEvents: function(){
+            if (this.isInput){ // single input
+                this._events = [
+                    [this.element, {
+                        focus: $.proxy(this.show, this),
+                        keyup: $.proxy(function(e){
+                            if ($.inArray(e.keyCode, [27,37,39,38,40,32,13,9]) === -1)
+                                this.update();
+                        }, this),
+                        keydown: $.proxy(this.keydown, this)
+                    }]
+                ];
+            }
+            else if (this.component && this.hasInput){ // component: input + button
+                this._events = [
+                    // For components that are not readonly, allow keyboard nav
+                    [this.element.find('input'), {
+                        focus: $.proxy(this.show, this),
+                        keyup: $.proxy(function(e){
+                            if ($.inArray(e.keyCode, [27,37,39,38,40,32,13,9]) === -1)
+                                this.update();
+                        }, this),
+                        keydown: $.proxy(this.keydown, this)
+                    }],
+                    [this.component, {
+                        click: $.proxy(this.show, this)
+                    }]
+                ];
+            }
+            else if (this.element.is('div')){  // inline datepicker
+                this.isInline = true;
+            }
+            else {
+                this._events = [
+                    [this.element, {
+                        click: $.proxy(this.show, this)
+                    }]
+                ];
+            }
+            this._events.push(
+                // Component: listen for blur on element descendants
+                [this.element, '*', {
+                    blur: $.proxy(function(e){
+                        this._focused_from = e.target;
+                    }, this)
+                }],
+                // Input: listen for blur on element
+                [this.element, {
+                    blur: $.proxy(function(e){
+                        this._focused_from = e.target;
+                    }, this)
+                }]
+            );
+
+            this._secondaryEvents = [
+                [this.picker, {
+                    click: $.proxy(this.click, this)
+                }],
+                [$(window), {
+                    resize: $.proxy(this.place, this)
+                }],
+                [$(document), {
+                    'mousedown touchstart': $.proxy(function(e){
+                        // Clicked outside the datepicker, hide it
+                        if (!(
+                            this.element.is(e.target) ||
+                            this.element.find(e.target).length ||
+                            this.picker.is(e.target) ||
+                            this.picker.find(e.target).length
+                        )){
+                            this.hide();
+                        }
+                    }, this)
+                }]
+            ];
+        },
+        _attachEvents: function(){
+            this._detachEvents();
+            this._applyEvents(this._events);
+        },
+        _detachEvents: function(){
+            this._unapplyEvents(this._events);
+        },
+        _attachSecondaryEvents: function(){
+            this._detachSecondaryEvents();
+            this._applyEvents(this._secondaryEvents);
+        },
+        _detachSecondaryEvents: function(){
+            this._unapplyEvents(this._secondaryEvents);
+        },
+        _trigger: function(event, altdate){
+            var date = altdate || this.dates.get(-1),
+                local_date = this._utc_to_local(date);
+
+            this.element.trigger({
+                type: event,
+                date: local_date,
+                dates: $.map(this.dates, this._utc_to_local),
+                format: $.proxy(function(ix, format){
+                    if (arguments.length === 0){
+                        ix = this.dates.length - 1;
+                        format = this.o.format;
+                    }
+                    else if (typeof ix === 'string'){
+                        format = ix;
+                        ix = this.dates.length - 1;
+                    }
+                    format = format || this.o.format;
+                    var date = this.dates.get(ix);
+                    return DPGlobal.formatDate(date, format, this.o.language);
+                }, this)
+            });
+        },
+
+        show: function(){
+            if (!this.isInline)
+                this.picker.appendTo('body');
+            this.picker.show();
+            this.place();
+            this._attachSecondaryEvents();
+            this._trigger('show');
+        },
+
+        hide: function(){
+            if (this.isInline)
+                return;
+            if (!this.picker.is(':visible'))
+                return;
+            this.focusDate = null;
+            this.picker.hide().detach();
+            this._detachSecondaryEvents();
+            this.viewMode = this.o.startView;
+            this.showMode();
+
+            if (
+                this.o.forceParse &&
+                (
+                    this.isInput && this.element.val() ||
+                    this.hasInput && this.element.find('input').val()
+                )
+            )
+                this.setValue();
+            this._trigger('hide');
+        },
+
+        remove: function(){
+            this.hide();
+            this._detachEvents();
+            this._detachSecondaryEvents();
+            this.picker.remove();
+            delete this.element.data().datepicker;
+            if (!this.isInput){
+                delete this.element.data().date;
+            }
+        },
+
+        _utc_to_local: function(utc){
+            return utc && new Date(utc.getTime() + (utc.getTimezoneOffset()*60000));
+        },
+        _local_to_utc: function(local){
+            return local && new Date(local.getTime() - (local.getTimezoneOffset()*60000));
+        },
+        _zero_time: function(local){
+            return local && new Date(local.getFullYear(), local.getMonth(), local.getDate());
+        },
+        _zero_utc_time: function(utc){
+            return utc && new Date(Date.UTC(utc.getUTCFullYear(), utc.getUTCMonth(), utc.getUTCDate()));
+        },
+
+        getDates: function(){
+            return $.map(this.dates, this._utc_to_local);
+        },
+
+        getUTCDates: function(){
+            return $.map(this.dates, function(d){
+                return new Date(d);
+            });
+        },
+
+        getDate: function(){
+            return this._utc_to_local(this.getUTCDate());
+        },
+
+        getUTCDate: function(){
+            return new Date(this.dates.get(-1));
+        },
+
+        setDates: function(){
+            var args = $.isArray(arguments[0]) ? arguments[0] : arguments;
+            this.update.apply(this, args);
+            this._trigger('changeDate');
+            this.setValue();
+        },
+
+        setUTCDates: function(){
+            var args = $.isArray(arguments[0]) ? arguments[0] : arguments;
+            this.update.apply(this, $.map(args, this._utc_to_local));
+            this._trigger('changeDate');
+            this.setValue();
+        },
+
+        setDate: alias('setDates'),
+        setUTCDate: alias('setUTCDates'),
+
+        setValue: function(){
+            var formatted = this.getFormattedDate();
+            if (!this.isInput){
+                if (this.component){
+                    this.element.find('input').val(formatted).change();
+                }
+            }
+            else {
+                this.element.val(formatted).change();
+            }
+        },
+
+        getFormattedDate: function(format){
+            if (format === undefined)
+                format = this.o.format;
+
+            var lang = this.o.language;
+            return $.map(this.dates, function(d){
+                return DPGlobal.formatDate(d, format, lang);
+            }).join(this.o.multidateSeparator);
+        },
+
+        setStartDate: function(startDate){
+            this._process_options({startDate: startDate});
+            this.update();
+            this.updateNavArrows();
+        },
+
+        setEndDate: function(endDate){
+            this._process_options({endDate: endDate});
+            this.update();
+            this.updateNavArrows();
+        },
+
+        setDaysOfWeekDisabled: function(daysOfWeekDisabled){
+            this._process_options({daysOfWeekDisabled: daysOfWeekDisabled});
+            this.update();
+            this.updateNavArrows();
+        },
+
+        place: function(){
+            if (this.isInline)
+                return;
+            var calendarWidth = this.picker.outerWidth(),
+                calendarHeight = this.picker.outerHeight(),
+                visualPadding = 10,
+                windowWidth = $window.width(),
+                windowHeight = $window.height(),
+                scrollTop = $window.scrollTop();
+
+            var zIndex = parseInt(this.element.parents().filter(function(){
+                    return $(this).css('z-index') !== 'auto';
+                }).first().css('z-index'))+10;
+            var offset = this.component ? this.component.parent().offset() : this.element.offset();
+            var height = this.component ? this.component.outerHeight(true) : this.element.outerHeight(false);
+            var width = this.component ? this.component.outerWidth(true) : this.element.outerWidth(false);
+            var left = offset.left,
+                top = offset.top;
+
+            this.picker.removeClass(
+                'datepicker-orient-top datepicker-orient-bottom '+
+                'datepicker-orient-right datepicker-orient-left'
+            );
+
+            if (this.o.orientation.x !== 'auto'){
+                this.picker.addClass('datepicker-orient-' + this.o.orientation.x);
+                if (this.o.orientation.x === 'right')
+                    left -= calendarWidth - width;
+            }
+            // auto x orientation is best-placement: if it crosses a window
+            // edge, fudge it sideways
+            else {
+                // Default to left
+                this.picker.addClass('datepicker-orient-left');
+                if (offset.left < 0)
+                    left -= offset.left - visualPadding;
+                else if (offset.left + calendarWidth > windowWidth)
+                    left = windowWidth - calendarWidth - visualPadding;
+            }
+
+            // auto y orientation is best-situation: top or bottom, no fudging,
+            // decision based on which shows more of the calendar
+            var yorient = this.o.orientation.y,
+                top_overflow, bottom_overflow;
+            if (yorient === 'auto'){
+                top_overflow = -scrollTop + offset.top - calendarHeight;
+                bottom_overflow = scrollTop + windowHeight - (offset.top + height + calendarHeight);
+                if (Math.max(top_overflow, bottom_overflow) === bottom_overflow)
+                    yorient = 'top';
+                else
+                    yorient = 'bottom';
+            }
+            this.picker.addClass('datepicker-orient-' + yorient);
+            if (yorient === 'top')
+                top += height;
+            else
+                top -= calendarHeight + parseInt(this.picker.css('padding-top'));
+
+            this.picker.css({
+                top: top,
+                left: left,
+                zIndex: zIndex
+            });
+        },
+
+        _allow_update: true,
+        update: function(){
+            if (!this._allow_update)
+                return;
+
+            var oldDates = this.dates.copy(),
+                dates = [],
+                fromArgs = false;
+            if (arguments.length){
+                $.each(arguments, $.proxy(function(i, date){
+                    if (date instanceof Date)
+                        date = this._local_to_utc(date);
+                    dates.push(date);
+                }, this));
+                fromArgs = true;
+            }
+            else {
+                dates = this.isInput
+                        ? this.element.val()
+                        : this.element.data('date') || this.element.find('input').val();
+                if (dates && this.o.multidate)
+                    dates = dates.split(this.o.multidateSeparator);
+                else
+                    dates = [dates];
+                delete this.element.data().date;
+            }
+
+            dates = $.map(dates, $.proxy(function(date){
+                return DPGlobal.parseDate(date, this.o.format, this.o.language);
+            }, this));
+            dates = $.grep(dates, $.proxy(function(date){
+                return (
+                    date < this.o.startDate ||
+                    date > this.o.endDate ||
+                    !date
+                );
+            }, this), true);
+            this.dates.replace(dates);
+
+            if (this.dates.length)
+                this.viewDate = new Date(this.dates.get(-1));
+            else if (this.viewDate < this.o.startDate)
+                this.viewDate = new Date(this.o.startDate);
+            else if (this.viewDate > this.o.endDate)
+                this.viewDate = new Date(this.o.endDate);
+
+            if (fromArgs){
+                // setting date by clicking
+                this.setValue();
+            }
+            else if (dates.length){
+                // setting date by typing
+                if (String(oldDates) !== String(this.dates))
+                    this._trigger('changeDate');
+            }
+            if (!this.dates.length && oldDates.length)
+                this._trigger('clearDate');
+
+            this.fill();
+        },
+
+        fillDow: function(){
+            var dowCnt = this.o.weekStart,
+                html = '<tr>';
+            if (this.o.calendarWeeks){
+                var cell = '<th class="cw">&nbsp;</th>';
+                html += cell;
+                this.picker.find('.datepicker-days thead tr:first-child').prepend(cell);
+            }
+            while (dowCnt < this.o.weekStart + 7){
+                html += '<th class="dow">'+dates[this.o.language].daysMin[(dowCnt++)%7]+'</th>';
+            }
+            html += '</tr>';
+            this.picker.find('.datepicker-days thead').append(html);
+        },
+
+        fillMonths: function(){
+            var html = '',
+            i = 0;
+            while (i < 12){
+                html += '<span class="month">'+dates[this.o.language].monthsShort[i++]+'</span>';
+            }
+            this.picker.find('.datepicker-months td').html(html);
+        },
+
+        setRange: function(range){
+            if (!range || !range.length)
+                delete this.range;
+            else
+                this.range = $.map(range, function(d){
+                    return d.valueOf();
+                });
+            this.fill();
+        },
+
+        getClassNames: function(date){
+            var cls = [],
+                year = this.viewDate.getUTCFullYear(),
+                month = this.viewDate.getUTCMonth(),
+                today = new Date();
+            if (date.getUTCFullYear() < year || (date.getUTCFullYear() === year && date.getUTCMonth() < month)){
+                cls.push('old');
+            }
+            else if (date.getUTCFullYear() > year || (date.getUTCFullYear() === year && date.getUTCMonth() > month)){
+                cls.push('new');
+            }
+            if (this.focusDate && date.valueOf() === this.focusDate.valueOf())
+                cls.push('focused');
+            // Compare internal UTC date with local today, not UTC today
+            if (this.o.todayHighlight &&
+                date.getUTCFullYear() === today.getFullYear() &&
+                date.getUTCMonth() === today.getMonth() &&
+                date.getUTCDate() === today.getDate()){
+                cls.push('today');
+            }
+            if (this.dates.contains(date) !== -1)
+                cls.push('active');
+            if (date.valueOf() < this.o.startDate || date.valueOf() > this.o.endDate ||
+                $.inArray(date.getUTCDay(), this.o.daysOfWeekDisabled) !== -1){
+                cls.push('disabled');
+            }
+            if (this.range){
+                if (date > this.range[0] && date < this.range[this.range.length-1]){
+                    cls.push('range');
+                }
+                if ($.inArray(date.valueOf(), this.range) !== -1){
+                    cls.push('selected');
+                }
+            }
+            return cls;
+        },
+
+        fill: function(){
+            var d = new Date(this.viewDate),
+                year = d.getUTCFullYear(),
+                month = d.getUTCMonth(),
+                startYear = this.o.startDate !== -Infinity ? this.o.startDate.getUTCFullYear() : -Infinity,
+                startMonth = this.o.startDate !== -Infinity ? this.o.startDate.getUTCMonth() : -Infinity,
+                endYear = this.o.endDate !== Infinity ? this.o.endDate.getUTCFullYear() : Infinity,
+                endMonth = this.o.endDate !== Infinity ? this.o.endDate.getUTCMonth() : Infinity,
+                todaytxt = dates[this.o.language].today || dates['en'].today || '',
+                cleartxt = dates[this.o.language].clear || dates['en'].clear || '',
+                tooltip;
+            this.picker.find('.datepicker-days thead th.datepicker-switch')
+                        .text(dates[this.o.language].months[month]+' '+year);
+            this.picker.find('tfoot th.today')
+                        .text(todaytxt)
+                        .toggle(this.o.todayBtn !== false);
+            this.picker.find('tfoot th.clear')
+                        .text(cleartxt)
+                        .toggle(this.o.clearBtn !== false);
+            this.updateNavArrows();
+            this.fillMonths();
+            var prevMonth = UTCDate(year, month-1, 28),
+                day = DPGlobal.getDaysInMonth(prevMonth.getUTCFullYear(), prevMonth.getUTCMonth());
+            prevMonth.setUTCDate(day);
+            prevMonth.setUTCDate(day - (prevMonth.getUTCDay() - this.o.weekStart + 7)%7);
+            var nextMonth = new Date(prevMonth);
+            nextMonth.setUTCDate(nextMonth.getUTCDate() + 42);
+            nextMonth = nextMonth.valueOf();
+            var html = [];
+            var clsName;
+            while (prevMonth.valueOf() < nextMonth){
+                if (prevMonth.getUTCDay() === this.o.weekStart){
+                    html.push('<tr>');
+                    if (this.o.calendarWeeks){
+                        // ISO 8601: First week contains first thursday.
+                        // ISO also states week starts on Monday, but we can be more abstract here.
+                        var
+                            // Start of current week: based on weekstart/current date
+                            ws = new Date(+prevMonth + (this.o.weekStart - prevMonth.getUTCDay() - 7) % 7 * 864e5),
+                            // Thursday of this week
+                            th = new Date(Number(ws) + (7 + 4 - ws.getUTCDay()) % 7 * 864e5),
+                            // First Thursday of year, year from thursday
+                            yth = new Date(Number(yth = UTCDate(th.getUTCFullYear(), 0, 1)) + (7 + 4 - yth.getUTCDay())%7*864e5),
+                            // Calendar week: ms between thursdays, div ms per day, div 7 days
+                            calWeek =  (th - yth) / 864e5 / 7 + 1;
+                        html.push('<td class="cw">'+ calWeek +'</td>');
+
+                    }
+                }
+                clsName = this.getClassNames(prevMonth);
+                clsName.push('day');
+
+                if (this.o.beforeShowDay !== $.noop){
+                    var before = this.o.beforeShowDay(this._utc_to_local(prevMonth));
+                    if (before === undefined)
+                        before = {};
+                    else if (typeof(before) === 'boolean')
+                        before = {enabled: before};
+                    else if (typeof(before) === 'string')
+                        before = {classes: before};
+                    if (before.enabled === false)
+                        clsName.push('disabled');
+                    if (before.classes)
+                        clsName = clsName.concat(before.classes.split(/\s+/));
+                    if (before.tooltip)
+                        tooltip = before.tooltip;
+                }
+
+                clsName = $.unique(clsName);
+                html.push('<td class="'+clsName.join(' ')+'"' + (tooltip ? ' title="'+tooltip+'"' : '') + '>'+prevMonth.getUTCDate() + '</td>');
+                if (prevMonth.getUTCDay() === this.o.weekEnd){
+                    html.push('</tr>');
+                }
+                prevMonth.setUTCDate(prevMonth.getUTCDate()+1);
+            }
+            this.picker.find('.datepicker-days tbody').empty().append(html.join(''));
+
+            var months = this.picker.find('.datepicker-months')
+                        .find('th:eq(1)')
+                            .text(year)
+                            .end()
+                        .find('span').removeClass('active');
+
+            $.each(this.dates, function(i, d){
+                if (d.getUTCFullYear() === year)
+                    months.eq(d.getUTCMonth()).addClass('active');
+            });
+
+            if (year < startYear || year > endYear){
+                months.addClass('disabled');
+            }
+            if (year === startYear){
+                months.slice(0, startMonth).addClass('disabled');
+            }
+            if (year === endYear){
+                months.slice(endMonth+1).addClass('disabled');
+            }
+
+            html = '';
+            year = parseInt(year/10, 10) * 10;
+            var yearCont = this.picker.find('.datepicker-years')
+                                .find('th:eq(1)')
+                                    .text(year + '-' + (year + 9))
+                                    .end()
+                                .find('td');
+            year -= 1;
+            var years = $.map(this.dates, function(d){
+                    return d.getUTCFullYear();
+                }),
+                classes;
+            for (var i = -1; i < 11; i++){
+                classes = ['year'];
+                if (i === -1)
+                    classes.push('old');
+                else if (i === 10)
+                    classes.push('new');
+                if ($.inArray(year, years) !== -1)
+                    classes.push('active');
+                if (year < startYear || year > endYear)
+                    classes.push('disabled');
+                html += '<span class="' + classes.join(' ') + '">'+year+'</span>';
+                year += 1;
+            }
+            yearCont.html(html);
+        },
+
+        updateNavArrows: function(){
+            if (!this._allow_update)
+                return;
+
+            var d = new Date(this.viewDate),
+                year = d.getUTCFullYear(),
+                month = d.getUTCMonth();
+            switch (this.viewMode){
+                case 0:
+                    if (this.o.startDate !== -Infinity && year <= this.o.startDate.getUTCFullYear() && month <= this.o.startDate.getUTCMonth()){
+                        this.picker.find('.prev').css({visibility: 'hidden'});
+                    }
+                    else {
+                        this.picker.find('.prev').css({visibility: 'visible'});
+                    }
+                    if (this.o.endDate !== Infinity && year >= this.o.endDate.getUTCFullYear() && month >= this.o.endDate.getUTCMonth()){
+                        this.picker.find('.next').css({visibility: 'hidden'});
+                    }
+                    else {
+                        this.picker.find('.next').css({visibility: 'visible'});
+                    }
+                    break;
+                case 1:
+                case 2:
+                    if (this.o.startDate !== -Infinity && year <= this.o.startDate.getUTCFullYear()){
+                        this.picker.find('.prev').css({visibility: 'hidden'});
+                    }
+                    else {
+                        this.picker.find('.prev').css({visibility: 'visible'});
+                    }
+                    if (this.o.endDate !== Infinity && year >= this.o.endDate.getUTCFullYear()){
+                        this.picker.find('.next').css({visibility: 'hidden'});
+                    }
+                    else {
+                        this.picker.find('.next').css({visibility: 'visible'});
+                    }
+                    break;
+            }
+        },
+
+        click: function(e){
+            e.preventDefault();
+            var target = $(e.target).closest('span, td, th'),
+                year, month, day;
+            if (target.length === 1){
+                switch (target[0].nodeName.toLowerCase()){
+                    case 'th':
+                        switch (target[0].className){
+                            case 'datepicker-switch':
+                                this.showMode(1);
+                                break;
+                            case 'prev':
+                            case 'next':
+                                var dir = DPGlobal.modes[this.viewMode].navStep * (target[0].className === 'prev' ? -1 : 1);
+                                switch (this.viewMode){
+                                    case 0:
+                                        this.viewDate = this.moveMonth(this.viewDate, dir);
+                                        this._trigger('changeMonth', this.viewDate);
+                                        break;
+                                    case 1:
+                                    case 2:
+                                        this.viewDate = this.moveYear(this.viewDate, dir);
+                                        if (this.viewMode === 1)
+                                            this._trigger('changeYear', this.viewDate);
+                                        break;
+                                }
+                                this.fill();
+                                break;
+                            case 'today':
+                                var date = new Date();
+                                date = UTCDate(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
+
+                                this.showMode(-2);
+                                var which = this.o.todayBtn === 'linked' ? null : 'view';
+                                this._setDate(date, which);
+                                break;
+                            case 'clear':
+                                var element;
+                                if (this.isInput)
+                                    element = this.element;
+                                else if (this.component)
+                                    element = this.element.find('input');
+                                if (element)
+                                    element.val("").change();
+                                this.update();
+                                this._trigger('changeDate');
+                                if (this.o.autoclose)
+                                    this.hide();
+                                break;
+                        }
+                        break;
+                    case 'span':
+                        if (!target.is('.disabled')){
+                            this.viewDate.setUTCDate(1);
+                            if (target.is('.month')){
+                                day = 1;
+                                month = target.parent().find('span').index(target);
+                                year = this.viewDate.getUTCFullYear();
+                                this.viewDate.setUTCMonth(month);
+                                this._trigger('changeMonth', this.viewDate);
+                                if (this.o.minViewMode === 1){
+                                    this._setDate(UTCDate(year, month, day));
+                                }
+                            }
+                            else {
+                                day = 1;
+                                month = 0;
+                                year = parseInt(target.text(), 10)||0;
+                                this.viewDate.setUTCFullYear(year);
+                                this._trigger('changeYear', this.viewDate);
+                                if (this.o.minViewMode === 2){
+                                    this._setDate(UTCDate(year, month, day));
+                                }
+                            }
+                            this.showMode(-1);
+                            this.fill();
+                        }
+                        break;
+                    case 'td':
+                        if (target.is('.day') && !target.is('.disabled')){
+                            day = parseInt(target.text(), 10)||1;
+                            year = this.viewDate.getUTCFullYear();
+                            month = this.viewDate.getUTCMonth();
+                            if (target.is('.old')){
+                                if (month === 0){
+                                    month = 11;
+                                    year -= 1;
+                                }
+                                else {
+                                    month -= 1;
+                                }
+                            }
+                            else if (target.is('.new')){
+                                if (month === 11){
+                                    month = 0;
+                                    year += 1;
+                                }
+                                else {
+                                    month += 1;
+                                }
+                            }
+                            this._setDate(UTCDate(year, month, day));
+                        }
+                        break;
+                }
+            }
+            if (this.picker.is(':visible') && this._focused_from){
+                $(this._focused_from).focus();
+            }
+            delete this._focused_from;
+        },
+
+        _toggle_multidate: function(date){
+            var ix = this.dates.contains(date);
+            if (!date){
+                this.dates.clear();
+            }
+            else if (ix !== -1){
+                this.dates.remove(ix);
+            }
+            else {
+                this.dates.push(date);
+            }
+            if (typeof this.o.multidate === 'number')
+                while (this.dates.length > this.o.multidate)
+                    this.dates.remove(0);
+        },
+
+        _setDate: function(date, which){
+            if (!which || which === 'date')
+                this._toggle_multidate(date && new Date(date));
+            if (!which || which  === 'view')
+                this.viewDate = date && new Date(date);
+
+            this.fill();
+            this.setValue();
+            this._trigger('changeDate');
+            var element;
+            if (this.isInput){
+                element = this.element;
+            }
+            else if (this.component){
+                element = this.element.find('input');
+            }
+            if (element){
+                element.change();
+            }
+            if (this.o.autoclose && (!which || which === 'date')){
+                this.hide();
+            }
+        },
+
+        moveMonth: function(date, dir){
+            if (!date)
+                return undefined;
+            if (!dir)
+                return date;
+            var new_date = new Date(date.valueOf()),
+                day = new_date.getUTCDate(),
+                month = new_date.getUTCMonth(),
+                mag = Math.abs(dir),
+                new_month, test;
+            dir = dir > 0 ? 1 : -1;
+            if (mag === 1){
+                test = dir === -1
+                    // If going back one month, make sure month is not current month
+                    // (eg, Mar 31 -> Feb 31 == Feb 28, not Mar 02)
+                    ? function(){
+                        return new_date.getUTCMonth() === month;
+                    }
+                    // If going forward one month, make sure month is as expected
+                    // (eg, Jan 31 -> Feb 31 == Feb 28, not Mar 02)
+                    : function(){
+                        return new_date.getUTCMonth() !== new_month;
+                    };
+                new_month = month + dir;
+                new_date.setUTCMonth(new_month);
+                // Dec -> Jan (12) or Jan -> Dec (-1) -- limit expected date to 0-11
+                if (new_month < 0 || new_month > 11)
+                    new_month = (new_month + 12) % 12;
+            }
+            else {
+                // For magnitudes >1, move one month at a time...
+                for (var i=0; i < mag; i++)
+                    // ...which might decrease the day (eg, Jan 31 to Feb 28, etc)...
+                    new_date = this.moveMonth(new_date, dir);
+                // ...then reset the day, keeping it in the new month
+                new_month = new_date.getUTCMonth();
+                new_date.setUTCDate(day);
+                test = function(){
+                    return new_month !== new_date.getUTCMonth();
+                };
+            }
+            // Common date-resetting loop -- if date is beyond end of month, make it
+            // end of month
+            while (test()){
+                new_date.setUTCDate(--day);
+                new_date.setUTCMonth(new_month);
+            }
+            return new_date;
+        },
+
+        moveYear: function(date, dir){
+            return this.moveMonth(date, dir*12);
+        },
+
+        dateWithinRange: function(date){
+            return date >= this.o.startDate && date <= this.o.endDate;
+        },
+
+        keydown: function(e){
+            if (this.picker.is(':not(:visible)')){
+                if (e.keyCode === 27) // allow escape to hide and re-show picker
+                    this.show();
+                return;
+            }
+            var dateChanged = false,
+                dir, newDate, newViewDate,
+                focusDate = this.focusDate || this.viewDate;
+            switch (e.keyCode){
+                case 27: // escape
+                    if (this.focusDate){
+                        this.focusDate = null;
+                        this.viewDate = this.dates.get(-1) || this.viewDate;
+                        this.fill();
+                    }
+                    else
+                        this.hide();
+                    e.preventDefault();
+                    break;
+                case 37: // left
+                case 39: // right
+                    if (!this.o.keyboardNavigation)
+                        break;
+                    dir = e.keyCode === 37 ? -1 : 1;
+                    if (e.ctrlKey){
+                        newDate = this.moveYear(this.dates.get(-1) || UTCToday(), dir);
+                        newViewDate = this.moveYear(focusDate, dir);
+                        this._trigger('changeYear', this.viewDate);
+                    }
+                    else if (e.shiftKey){
+                        newDate = this.moveMonth(this.dates.get(-1) || UTCToday(), dir);
+                        newViewDate = this.moveMonth(focusDate, dir);
+                        this._trigger('changeMonth', this.viewDate);
+                    }
+                    else {
+                        newDate = new Date(this.dates.get(-1) || UTCToday());
+                        newDate.setUTCDate(newDate.getUTCDate() + dir);
+                        newViewDate = new Date(focusDate);
+                        newViewDate.setUTCDate(focusDate.getUTCDate() + dir);
+                    }
+                    if (this.dateWithinRange(newDate)){
+                        this.focusDate = this.viewDate = newViewDate;
+                        this.setValue();
+                        this.fill();
+                        e.preventDefault();
+                    }
+                    break;
+                case 38: // up
+                case 40: // down
+                    if (!this.o.keyboardNavigation)
+                        break;
+                    dir = e.keyCode === 38 ? -1 : 1;
+                    if (e.ctrlKey){
+                        newDate = this.moveYear(this.dates.get(-1) || UTCToday(), dir);
+                        newViewDate = this.moveYear(focusDate, dir);
+                        this._trigger('changeYear', this.viewDate);
+                    }
+                    else if (e.shiftKey){
+                        newDate = this.moveMonth(this.dates.get(-1) || UTCToday(), dir);
+                        newViewDate = this.moveMonth(focusDate, dir);
+                        this._trigger('changeMonth', this.viewDate);
+                    }
+                    else {
+                        newDate = new Date(this.dates.get(-1) || UTCToday());
+                        newDate.setUTCDate(newDate.getUTCDate() + dir * 7);
+                        newViewDate = new Date(focusDate);
+                        newViewDate.setUTCDate(focusDate.getUTCDate() + dir * 7);
+                    }
+                    if (this.dateWithinRange(newDate)){
+                        this.focusDate = this.viewDate = newViewDate;
+                        this.setValue();
+                        this.fill();
+                        e.preventDefault();
+                    }
+                    break;
+                case 32: // spacebar
+                    // Spacebar is used in manually typing dates in some formats.
+                    // As such, its behavior should not be hijacked.
+                    break;
+                case 13: // enter
+                    focusDate = this.focusDate || this.dates.get(-1) || this.viewDate;
+                    this._toggle_multidate(focusDate);
+                    dateChanged = true;
+                    this.focusDate = null;
+                    this.viewDate = this.dates.get(-1) || this.viewDate;
+                    this.setValue();
+                    this.fill();
+                    if (this.picker.is(':visible')){
+                        e.preventDefault();
+                        if (this.o.autoclose)
+                            this.hide();
+                    }
+                    break;
+                case 9: // tab
+                    this.focusDate = null;
+                    this.viewDate = this.dates.get(-1) || this.viewDate;
+                    this.fill();
+                    this.hide();
+                    break;
+            }
+            if (dateChanged){
+                if (this.dates.length)
+                    this._trigger('changeDate');
+                else
+                    this._trigger('clearDate');
+                var element;
+                if (this.isInput){
+                    element = this.element;
+                }
+                else if (this.component){
+                    element = this.element.find('input');
+                }
+                if (element){
+                    element.change();
+                }
+            }
+        },
+
+        showMode: function(dir){
+            if (dir){
+                this.viewMode = Math.max(this.o.minViewMode, Math.min(2, this.viewMode + dir));
+            }
+            this.picker
+                .find('>div')
+                .hide()
+                .filter('.datepicker-'+DPGlobal.modes[this.viewMode].clsName)
+                    .css('display', 'block');
+            this.updateNavArrows();
+        }
+    };
+
+    var DateRangePicker = function(element, options){
+        this.element = $(element);
+        this.inputs = $.map(options.inputs, function(i){
+            return i.jquery ? i[0] : i;
+        });
+        delete options.inputs;
+
+        $(this.inputs)
+            .datepicker(options)
+            .bind('changeDate', $.proxy(this.dateUpdated, this));
+
+        this.pickers = $.map(this.inputs, function(i){
+            return $(i).data('datepicker');
+        });
+        this.updateDates();
+    };
+    DateRangePicker.prototype = {
+        updateDates: function(){
+            this.dates = $.map(this.pickers, function(i){
+                return i.getUTCDate();
+            });
+            this.updateRanges();
+        },
+        updateRanges: function(){
+            var range = $.map(this.dates, function(d){
+                return d.valueOf();
+            });
+            $.each(this.pickers, function(i, p){
+                p.setRange(range);
+            });
+        },
+        dateUpdated: function(e){
+            // `this.updating` is a workaround for preventing infinite recursion
+            // between `changeDate` triggering and `setUTCDate` calling.  Until
+            // there is a better mechanism.
+            if (this.updating)
+                return;
+            this.updating = true;
+
+            var dp = $(e.target).data('datepicker'),
+                new_date = dp.getUTCDate(),
+                i = $.inArray(e.target, this.inputs),
+                l = this.inputs.length;
+            if (i === -1)
+                return;
+
+            $.each(this.pickers, function(i, p){
+                if (!p.getUTCDate())
+                    p.setUTCDate(new_date);
+            });
+
+            if (new_date < this.dates[i]){
+                // Date being moved earlier/left
+                while (i >= 0 && new_date < this.dates[i]){
+                    this.pickers[i--].setUTCDate(new_date);
+                }
+            }
+            else if (new_date > this.dates[i]){
+                // Date being moved later/right
+                while (i < l && new_date > this.dates[i]){
+                    this.pickers[i++].setUTCDate(new_date);
+                }
+            }
+            this.updateDates();
+
+            delete this.updating;
+        },
+        remove: function(){
+            $.map(this.pickers, function(p){ p.remove(); });
+            delete this.element.data().datepicker;
+        }
+    };
+
+    function opts_from_el(el, prefix){
+        // Derive options from element data-attrs
+        var data = $(el).data(),
+            out = {}, inkey,
+            replace = new RegExp('^' + prefix.toLowerCase() + '([A-Z])');
+        prefix = new RegExp('^' + prefix.toLowerCase());
+        function re_lower(_,a){
+            return a.toLowerCase();
+        }
+        for (var key in data)
+            if (prefix.test(key)){
+                inkey = key.replace(replace, re_lower);
+                out[inkey] = data[key];
+            }
+        return out;
+    }
+
+    function opts_from_locale(lang){
+        // Derive options from locale plugins
+        var out = {};
+        // Check if "de-DE" style date is available, if not language should
+        // fallback to 2 letter code eg "de"
+        if (!dates[lang]){
+            lang = lang.split('-')[0];
+            if (!dates[lang])
+                return;
+        }
+        var d = dates[lang];
+        $.each(locale_opts, function(i,k){
+            if (k in d)
+                out[k] = d[k];
+        });
+        return out;
+    }
+
+    var old = $.fn.datepicker;
+    $.fn.datepicker = function(option){
+        var args = Array.apply(null, arguments);
+        args.shift();
+        var internal_return;
+        this.each(function(){
+            var $this = $(this),
+                data = $this.data('datepicker'),
+                options = typeof option === 'object' && option;
+            if (!data){
+                var elopts = opts_from_el(this, 'date'),
+                    // Preliminary otions
+                    xopts = $.extend({}, defaults, elopts, options),
+                    locopts = opts_from_locale(xopts.language),
+                    // Options priority: js args, data-attrs, locales, defaults
+                    opts = $.extend({}, defaults, locopts, elopts, options);
+                if ($this.is('.input-daterange') || opts.inputs){
+                    var ropts = {
+                        inputs: opts.inputs || $this.find('input').toArray()
+                    };
+                    $this.data('datepicker', (data = new DateRangePicker(this, $.extend(opts, ropts))));
+                }
+                else {
+                    $this.data('datepicker', (data = new Datepicker(this, opts)));
+                }
+            }
+            if (typeof option === 'string' && typeof data[option] === 'function'){
+                internal_return = data[option].apply(data, args);
+                if (internal_return !== undefined)
+                    return false;
+            }
+        });
+        if (internal_return !== undefined)
+            return internal_return;
+        else
+            return this;
+    };
+
+    var defaults = $.fn.datepicker.defaults = {
+        autoclose: false,
+        beforeShowDay: $.noop,
+        calendarWeeks: false,
+        clearBtn: false,
+        daysOfWeekDisabled: [],
+        endDate: Infinity,
+        forceParse: true,
+        format: 'mm/dd/yyyy',
+        keyboardNavigation: true,
+        language: 'en',
+        minViewMode: 0,
+        multidate: false,
+        multidateSeparator: ',',
+        orientation: "auto",
+        rtl: false,
+        startDate: -Infinity,
+        startView: 0,
+        todayBtn: false,
+        todayHighlight: false,
+        weekStart: 0
+    };
+    var locale_opts = $.fn.datepicker.locale_opts = [
+        'format',
+        'rtl',
+        'weekStart'
+    ];
+    $.fn.datepicker.Constructor = Datepicker;
+    var dates = $.fn.datepicker.dates = {
+        en: {
+            days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+            daysShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+            daysMin: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
+            months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+            monthsShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            today: "Today",
+            clear: "Clear"
+        }
+    };
+
+    var DPGlobal = {
+        modes: [
+            {
+                clsName: 'days',
+                navFnc: 'Month',
+                navStep: 1
+            },
+            {
+                clsName: 'months',
+                navFnc: 'FullYear',
+                navStep: 1
+            },
+            {
+                clsName: 'years',
+                navFnc: 'FullYear',
+                navStep: 10
+        }],
+        isLeapYear: function(year){
+            return (((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0));
+        },
+        getDaysInMonth: function(year, month){
+            return [31, (DPGlobal.isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
+        },
+        validParts: /dd?|DD?|mm?|MM?|yy(?:yy)?/g,
+        nonpunctuation: /[^ -\/:-@\[\u3400-\u9fff-`{-~\t\n\r]+/g,
+        parseFormat: function(format){
+            // IE treats \0 as a string end in inputs (truncating the value),
+            // so it's a bad format delimiter, anyway
+            var separators = format.replace(this.validParts, '\0').split('\0'),
+                parts = format.match(this.validParts);
+            if (!separators || !separators.length || !parts || parts.length === 0){
+                throw new Error("Invalid date format.");
+            }
+            return {separators: separators, parts: parts};
+        },
+        parseDate: function(date, format, language){
+            if (!date)
+                return undefined;
+            if (date instanceof Date)
+                return date;
+            if (typeof format === 'string')
+                format = DPGlobal.parseFormat(format);
+            var part_re = /([\-+]\d+)([dmwy])/,
+                parts = date.match(/([\-+]\d+)([dmwy])/g),
+                part, dir, i;
+            if (/^[\-+]\d+[dmwy]([\s,]+[\-+]\d+[dmwy])*$/.test(date)){
+                date = new Date();
+                for (i=0; i < parts.length; i++){
+                    part = part_re.exec(parts[i]);
+                    dir = parseInt(part[1]);
+                    switch (part[2]){
+                        case 'd':
+                            date.setUTCDate(date.getUTCDate() + dir);
+                            break;
+                        case 'm':
+                            date = Datepicker.prototype.moveMonth.call(Datepicker.prototype, date, dir);
+                            break;
+                        case 'w':
+                            date.setUTCDate(date.getUTCDate() + dir * 7);
+                            break;
+                        case 'y':
+                            date = Datepicker.prototype.moveYear.call(Datepicker.prototype, date, dir);
+                            break;
+                    }
+                }
+                return UTCDate(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0);
+            }
+            parts = date && date.match(this.nonpunctuation) || [];
+            date = new Date();
+            var parsed = {},
+                setters_order = ['yyyy', 'yy', 'M', 'MM', 'm', 'mm', 'd', 'dd'],
+                setters_map = {
+                    yyyy: function(d,v){
+                        return d.setUTCFullYear(v);
+                    },
+                    yy: function(d,v){
+                        return d.setUTCFullYear(2000+v);
+                    },
+                    m: function(d,v){
+                        if (isNaN(d))
+                            return d;
+                        v -= 1;
+                        while (v < 0) v += 12;
+                        v %= 12;
+                        d.setUTCMonth(v);
+                        while (d.getUTCMonth() !== v)
+                            d.setUTCDate(d.getUTCDate()-1);
+                        return d;
+                    },
+                    d: function(d,v){
+                        return d.setUTCDate(v);
+                    }
+                },
+                val, filtered;
+            setters_map['M'] = setters_map['MM'] = setters_map['mm'] = setters_map['m'];
+            setters_map['dd'] = setters_map['d'];
+            date = UTCDate(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
+            var fparts = format.parts.slice();
+            // Remove noop parts
+            if (parts.length !== fparts.length){
+                fparts = $(fparts).filter(function(i,p){
+                    return $.inArray(p, setters_order) !== -1;
+                }).toArray();
+            }
+            // Process remainder
+            function match_part(){
+                var m = this.slice(0, parts[i].length),
+                    p = parts[i].slice(0, m.length);
+                return m === p;
+            }
+            if (parts.length === fparts.length){
+                var cnt;
+                for (i=0, cnt = fparts.length; i < cnt; i++){
+                    val = parseInt(parts[i], 10);
+                    part = fparts[i];
+                    if (isNaN(val)){
+                        switch (part){
+                            case 'MM':
+                                filtered = $(dates[language].months).filter(match_part);
+                                val = $.inArray(filtered[0], dates[language].months) + 1;
+                                break;
+                            case 'M':
+                                filtered = $(dates[language].monthsShort).filter(match_part);
+                                val = $.inArray(filtered[0], dates[language].monthsShort) + 1;
+                                break;
+                        }
+                    }
+                    parsed[part] = val;
+                }
+                var _date, s;
+                for (i=0; i < setters_order.length; i++){
+                    s = setters_order[i];
+                    if (s in parsed && !isNaN(parsed[s])){
+                        _date = new Date(date);
+                        setters_map[s](_date, parsed[s]);
+                        if (!isNaN(_date))
+                            date = _date;
+                    }
+                }
+            }
+            return date;
+        },
+        formatDate: function(date, format, language){
+            if (!date)
+                return '';
+            if (typeof format === 'string')
+                format = DPGlobal.parseFormat(format);
+            var val = {
+                d: date.getUTCDate(),
+                D: dates[language].daysShort[date.getUTCDay()],
+                DD: dates[language].days[date.getUTCDay()],
+                m: date.getUTCMonth() + 1,
+                M: dates[language].monthsShort[date.getUTCMonth()],
+                MM: dates[language].months[date.getUTCMonth()],
+                yy: date.getUTCFullYear().toString().substring(2),
+                yyyy: date.getUTCFullYear()
+            };
+            val.dd = (val.d < 10 ? '0' : '') + val.d;
+            val.mm = (val.m < 10 ? '0' : '') + val.m;
+            date = [];
+            var seps = $.extend([], format.separators);
+            for (var i=0, cnt = format.parts.length; i <= cnt; i++){
+                if (seps.length)
+                    date.push(seps.shift());
+                date.push(val[format.parts[i]]);
+            }
+            return date.join('');
+        },
+        headTemplate: '<thead>'+
+                            '<tr>'+
+                                '<th class="prev">&laquo;</th>'+
+                                '<th colspan="5" class="datepicker-switch"></th>'+
+                                '<th class="next">&raquo;</th>'+
+                            '</tr>'+
+                        '</thead>',
+        contTemplate: '<tbody><tr><td colspan="7"></td></tr></tbody>',
+        footTemplate: '<tfoot>'+
+                            '<tr>'+
+                                '<th colspan="7" class="today"></th>'+
+                            '</tr>'+
+                            '<tr>'+
+                                '<th colspan="7" class="clear"></th>'+
+                            '</tr>'+
+                        '</tfoot>'
+    };
+    DPGlobal.template = '<div class="datepicker">'+
+                            '<div class="datepicker-days">'+
+                                '<table class=" table-condensed">'+
+                                    DPGlobal.headTemplate+
+                                    '<tbody></tbody>'+
+                                    DPGlobal.footTemplate+
+                                '</table>'+
+                            '</div>'+
+                            '<div class="datepicker-months">'+
+                                '<table class="table-condensed">'+
+                                    DPGlobal.headTemplate+
+                                    DPGlobal.contTemplate+
+                                    DPGlobal.footTemplate+
+                                '</table>'+
+                            '</div>'+
+                            '<div class="datepicker-years">'+
+                                '<table class="table-condensed">'+
+                                    DPGlobal.headTemplate+
+                                    DPGlobal.contTemplate+
+                                    DPGlobal.footTemplate+
+                                '</table>'+
+                            '</div>'+
+                        '</div>';
+
+    $.fn.datepicker.DPGlobal = DPGlobal;
+
+
+    /* DATEPICKER NO CONFLICT
+    * =================== */
+
+    $.fn.datepicker.noConflict = function(){
+        $.fn.datepicker = old;
+        return this;
+    };
+
+
+    /* DATEPICKER DATA-API
+    * ================== */
+
+    $(document).on(
+        'focus.datepicker.data-api click.datepicker.data-api',
+        '[data-provide="datepicker"]',
+        function(e){
+            var $this = $(this);
+            if ($this.data('datepicker'))
+                return;
+            e.preventDefault();
+            // component click requires us to explicitly show it
+            $this.datepicker('show');
+        }
+    );
+    $(function(){
+        $('[data-provide="datepicker-inline"]').datepicker();
+    });
+
+}(window.jQuery));
+
+},{}],52:[function(require,module,exports){
+/*!
+ * @overview  Ember - JavaScript Application Framework
+ * @copyright Copyright 2011-2014 Tilde Inc. and contributors
+ *            Portions Copyright 2006-2011 Strobe Inc.
+ *            Portions Copyright 2008-2011 Apple Inc. All rights reserved.
+ * @license   Licensed under MIT license
+ *            See https://raw.github.com/emberjs/ember.js/master/LICENSE
+ * @version   1.4.1+pre.af87bd20
+ */
+>>>>>>> milestone-editing
 
       /**
         Set this to provide an alternate class to `Ember.DefaultResolver`
@@ -55537,7 +57844,12 @@ define("rsvp/utils",
 requireModule("ember");
 
 })();
+<<<<<<< HEAD
 },{}],74:[function(require,module,exports){
+=======
+
+},{}],53:[function(require,module,exports){
+>>>>>>> milestone-editing
 /**
  * Fuse - Lightweight fuzzy-search
  *
@@ -55547,7 +57859,11 @@ requireModule("ember");
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 !function(){function Searcher(pattern,options){options=options||{};var MATCH_LOCATION=options.location||0,MATCH_DISTANCE=options.distance||100,MATCH_THRESHOLD=options.threshold||.6,pattern=options.caseSensitive?pattern:pattern.toLowerCase(),patternLen=pattern.length;if(patternLen>32){throw new Error("Pattern length is too long")}var matchmask=1<<patternLen-1;var pattern_alphabet=function(){var mask={},i=0;for(i=0;i<patternLen;i++){mask[pattern.charAt(i)]=0}for(i=0;i<patternLen;i++){mask[pattern.charAt(i)]|=1<<pattern.length-i-1}return mask}();function match_bitapScore(e,x){var accuracy=e/patternLen,proximity=Math.abs(MATCH_LOCATION-x);if(!MATCH_DISTANCE){return proximity?1:accuracy}return accuracy+proximity/MATCH_DISTANCE}this.search=function(text){text=options.caseSensitive?text:text.toLowerCase();if(pattern===text){return{isMatch:true,score:0}}var i,j,textLen=text.length,scoreThreshold=MATCH_THRESHOLD,bestLoc=text.indexOf(pattern,MATCH_LOCATION),binMin,binMid,binMax=patternLen+textLen,lastRd,start,finish,rd,charMatch,score=1,locations=[];if(bestLoc!=-1){scoreThreshold=Math.min(match_bitapScore(0,bestLoc),scoreThreshold);bestLoc=text.lastIndexOf(pattern,MATCH_LOCATION+patternLen);if(bestLoc!=-1){scoreThreshold=Math.min(match_bitapScore(0,bestLoc),scoreThreshold)}}bestLoc=-1;for(i=0;i<patternLen;i++){binMin=0;binMid=binMax;while(binMin<binMid){if(match_bitapScore(i,MATCH_LOCATION+binMid)<=scoreThreshold){binMin=binMid}else{binMax=binMid}binMid=Math.floor((binMax-binMin)/2+binMin)}binMax=binMid;start=Math.max(1,MATCH_LOCATION-binMid+1);finish=Math.min(MATCH_LOCATION+binMid,textLen)+patternLen;rd=Array(finish+2);rd[finish+1]=(1<<i)-1;for(j=finish;j>=start;j--){charMatch=pattern_alphabet[text.charAt(j-1)];if(i===0){rd[j]=(rd[j+1]<<1|1)&charMatch}else{rd[j]=(rd[j+1]<<1|1)&charMatch|((lastRd[j+1]|lastRd[j])<<1|1)|lastRd[j+1]}if(rd[j]&matchmask){score=match_bitapScore(i,j-1);if(score<=scoreThreshold){scoreThreshold=score;bestLoc=j-1;locations.push(bestLoc);if(bestLoc>MATCH_LOCATION){start=Math.max(1,2*MATCH_LOCATION-bestLoc)}else{break}}}}if(match_bitapScore(i+1,MATCH_LOCATION)>scoreThreshold){break}lastRd=rd}return{isMatch:bestLoc>=0,score:score}}}function Fuse(list,options){options=options||{};var keys=options.keys;this.search=function(pattern){var searcher=new Searcher(pattern,options),i,j,item,text,dataLen=list.length,bitapResult,rawResults=[],resultMap={},rawResultsLen,existingResult,results=[],compute=null;function analyzeText(text,entity,index){if(text!==undefined&&text!==null&&typeof text==="string"){bitapResult=searcher.search(text);if(bitapResult.isMatch){existingResult=resultMap[index];if(existingResult){existingResult.score=Math.min(existingResult.score,bitapResult.score)}else{resultMap[index]={item:entity,score:bitapResult.score};rawResults.push(resultMap[index])}}}}if(typeof list[0]==="string"){for(i=0;i<dataLen;i++){analyzeText(list[i],i,i)}}else{for(i=0;i<dataLen;i++){item=list[i];for(j=0;j<keys.length;j++){analyzeText(item[keys[j]],item,i)}}}rawResults.sort(function(a,b){return a.score-b.score});rawResultsLen=rawResults.length;for(i=0;i<rawResultsLen;i++){results.push(options.id?rawResults[i].item[options.id]:rawResults[i].item)}return results}}if(typeof module!=="undefined"&&typeof module.exports!=="undefined"){if(typeof module.setExports==="function"){module.setExports(Fuse)}else{module.exports=Fuse}}else{window.Fuse=Fuse}}();
+<<<<<<< HEAD
 },{}],75:[function(require,module,exports){
+=======
+},{}],54:[function(require,module,exports){
+>>>>>>> milestone-editing
 /*!
 
  handlebars v1.3.0
@@ -58295,7 +60611,11 @@ var __module0__ = (function(__dependency1__, __dependency2__, __dependency3__, _
   return __module0__;
 })();
 
+<<<<<<< HEAD
 },{}],76:[function(require,module,exports){
+=======
+},{}],55:[function(require,module,exports){
+>>>>>>> milestone-editing
 /*!
  * jQuery JavaScript Library v1.9.1
  * http://jquery.com/
@@ -67893,6 +70213,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 }
 
 })( window );
+<<<<<<< HEAD
 },{}],77:[function(require,module,exports){
 /*!
  * jQuery.textcomplete.js
@@ -68641,6 +70962,9 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 })(window.jQuery || window.Zepto);
 
 },{}],78:[function(require,module,exports){
+=======
+},{}],56:[function(require,module,exports){
+>>>>>>> milestone-editing
 var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};/**
  * @license
  * Lo-Dash 2.2.1 (Custom Build) <http://lodash.com/>
@@ -75351,7 +77675,11 @@ var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? 
   }
 }.call(this));
 
+<<<<<<< HEAD
 },{}],79:[function(require,module,exports){
+=======
+},{}],57:[function(require,module,exports){
+>>>>>>> milestone-editing
 var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};/**
  * marked - a markdown parser
  * Copyright (c) 2011-2013, Christopher Jeffrey. (MIT Licensed)
@@ -76520,13 +78848,18 @@ if (typeof exports === 'object') {
   return this || (typeof window !== 'undefined' ? window : global);
 }());
 
+<<<<<<< HEAD
 },{}],80:[function(require,module,exports){
+=======
+},{}],58:[function(require,module,exports){
+>>>>>>> milestone-editing
 //! moment.js
 //! version : 2.4.0
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
 //! license : MIT
 //! momentjs.com
 (function(a){function b(a,b){return function(c){return i(a.call(this,c),b)}}function c(a,b){return function(c){return this.lang().ordinal(a.call(this,c),b)}}function d(){}function e(a){u(a),g(this,a)}function f(a){var b=o(a),c=b.year||0,d=b.month||0,e=b.week||0,f=b.day||0,g=b.hour||0,h=b.minute||0,i=b.second||0,j=b.millisecond||0;this._input=a,this._milliseconds=+j+1e3*i+6e4*h+36e5*g,this._days=+f+7*e,this._months=+d+12*c,this._data={},this._bubble()}function g(a,b){for(var c in b)b.hasOwnProperty(c)&&(a[c]=b[c]);return b.hasOwnProperty("toString")&&(a.toString=b.toString),b.hasOwnProperty("valueOf")&&(a.valueOf=b.valueOf),a}function h(a){return 0>a?Math.ceil(a):Math.floor(a)}function i(a,b){for(var c=a+"";c.length<b;)c="0"+c;return c}function j(a,b,c,d){var e,f,g=b._milliseconds,h=b._days,i=b._months;g&&a._d.setTime(+a._d+g*c),(h||i)&&(e=a.minute(),f=a.hour()),h&&a.date(a.date()+h*c),i&&a.month(a.month()+i*c),g&&!d&&bb.updateOffset(a),(h||i)&&(a.minute(e),a.hour(f))}function k(a){return"[object Array]"===Object.prototype.toString.call(a)}function l(a){return"[object Date]"===Object.prototype.toString.call(a)||a instanceof Date}function m(a,b,c){var d,e=Math.min(a.length,b.length),f=Math.abs(a.length-b.length),g=0;for(d=0;e>d;d++)(c&&a[d]!==b[d]||!c&&q(a[d])!==q(b[d]))&&g++;return g+f}function n(a){if(a){var b=a.toLowerCase().replace(/(.)s$/,"$1");a=Kb[a]||Lb[b]||b}return a}function o(a){var b,c,d={};for(c in a)a.hasOwnProperty(c)&&(b=n(c),b&&(d[b]=a[c]));return d}function p(b){var c,d;if(0===b.indexOf("week"))c=7,d="day";else{if(0!==b.indexOf("month"))return;c=12,d="month"}bb[b]=function(e,f){var g,h,i=bb.fn._lang[b],j=[];if("number"==typeof e&&(f=e,e=a),h=function(a){var b=bb().utc().set(d,a);return i.call(bb.fn._lang,b,e||"")},null!=f)return h(f);for(g=0;c>g;g++)j.push(h(g));return j}}function q(a){var b=+a,c=0;return 0!==b&&isFinite(b)&&(c=b>=0?Math.floor(b):Math.ceil(b)),c}function r(a,b){return new Date(Date.UTC(a,b+1,0)).getUTCDate()}function s(a){return t(a)?366:365}function t(a){return 0===a%4&&0!==a%100||0===a%400}function u(a){var b;a._a&&-2===a._pf.overflow&&(b=a._a[gb]<0||a._a[gb]>11?gb:a._a[hb]<1||a._a[hb]>r(a._a[fb],a._a[gb])?hb:a._a[ib]<0||a._a[ib]>23?ib:a._a[jb]<0||a._a[jb]>59?jb:a._a[kb]<0||a._a[kb]>59?kb:a._a[lb]<0||a._a[lb]>999?lb:-1,a._pf._overflowDayOfYear&&(fb>b||b>hb)&&(b=hb),a._pf.overflow=b)}function v(a){a._pf={empty:!1,unusedTokens:[],unusedInput:[],overflow:-2,charsLeftOver:0,nullInput:!1,invalidMonth:null,invalidFormat:!1,userInvalidated:!1,iso:!1}}function w(a){return null==a._isValid&&(a._isValid=!isNaN(a._d.getTime())&&a._pf.overflow<0&&!a._pf.empty&&!a._pf.invalidMonth&&!a._pf.nullInput&&!a._pf.invalidFormat&&!a._pf.userInvalidated,a._strict&&(a._isValid=a._isValid&&0===a._pf.charsLeftOver&&0===a._pf.unusedTokens.length)),a._isValid}function x(a){return a?a.toLowerCase().replace("_","-"):a}function y(a,b){return b.abbr=a,mb[a]||(mb[a]=new d),mb[a].set(b),mb[a]}function z(a){delete mb[a]}function A(a){var b,c,d,e,f=0,g=function(a){if(!mb[a]&&nb)try{require("./lang/"+a)}catch(b){}return mb[a]};if(!a)return bb.fn._lang;if(!k(a)){if(c=g(a))return c;a=[a]}for(;f<a.length;){for(e=x(a[f]).split("-"),b=e.length,d=x(a[f+1]),d=d?d.split("-"):null;b>0;){if(c=g(e.slice(0,b).join("-")))return c;if(d&&d.length>=b&&m(e,d,!0)>=b-1)break;b--}f++}return bb.fn._lang}function B(a){return a.match(/\[[\s\S]/)?a.replace(/^\[|\]$/g,""):a.replace(/\\/g,"")}function C(a){var b,c,d=a.match(rb);for(b=0,c=d.length;c>b;b++)d[b]=Pb[d[b]]?Pb[d[b]]:B(d[b]);return function(e){var f="";for(b=0;c>b;b++)f+=d[b]instanceof Function?d[b].call(e,a):d[b];return f}}function D(a,b){return a.isValid()?(b=E(b,a.lang()),Mb[b]||(Mb[b]=C(b)),Mb[b](a)):a.lang().invalidDate()}function E(a,b){function c(a){return b.longDateFormat(a)||a}var d=5;for(sb.lastIndex=0;d>=0&&sb.test(a);)a=a.replace(sb,c),sb.lastIndex=0,d-=1;return a}function F(a,b){var c;switch(a){case"DDDD":return vb;case"YYYY":case"GGGG":case"gggg":return wb;case"YYYYY":case"GGGGG":case"ggggg":return xb;case"S":case"SS":case"SSS":case"DDD":return ub;case"MMM":case"MMMM":case"dd":case"ddd":case"dddd":return zb;case"a":case"A":return A(b._l)._meridiemParse;case"X":return Cb;case"Z":case"ZZ":return Ab;case"T":return Bb;case"SSSS":return yb;case"MM":case"DD":case"YY":case"GG":case"gg":case"HH":case"hh":case"mm":case"ss":case"M":case"D":case"d":case"H":case"h":case"m":case"s":case"w":case"ww":case"W":case"WW":case"e":case"E":return tb;default:return c=new RegExp(N(M(a.replace("\\","")),"i"))}}function G(a){var b=(Ab.exec(a)||[])[0],c=(b+"").match(Hb)||["-",0,0],d=+(60*c[1])+q(c[2]);return"+"===c[0]?-d:d}function H(a,b,c){var d,e=c._a;switch(a){case"M":case"MM":null!=b&&(e[gb]=q(b)-1);break;case"MMM":case"MMMM":d=A(c._l).monthsParse(b),null!=d?e[gb]=d:c._pf.invalidMonth=b;break;case"D":case"DD":null!=b&&(e[hb]=q(b));break;case"DDD":case"DDDD":null!=b&&(c._dayOfYear=q(b));break;case"YY":e[fb]=q(b)+(q(b)>68?1900:2e3);break;case"YYYY":case"YYYYY":e[fb]=q(b);break;case"a":case"A":c._isPm=A(c._l).isPM(b);break;case"H":case"HH":case"h":case"hh":e[ib]=q(b);break;case"m":case"mm":e[jb]=q(b);break;case"s":case"ss":e[kb]=q(b);break;case"S":case"SS":case"SSS":case"SSSS":e[lb]=q(1e3*("0."+b));break;case"X":c._d=new Date(1e3*parseFloat(b));break;case"Z":case"ZZ":c._useUTC=!0,c._tzm=G(b);break;case"w":case"ww":case"W":case"WW":case"d":case"dd":case"ddd":case"dddd":case"e":case"E":a=a.substr(0,1);case"gg":case"gggg":case"GG":case"GGGG":case"GGGGG":a=a.substr(0,2),b&&(c._w=c._w||{},c._w[a]=b)}}function I(a){var b,c,d,e,f,g,h,i,j,k,l=[];if(!a._d){for(d=K(a),a._w&&null==a._a[hb]&&null==a._a[gb]&&(f=function(b){return b?b.length<3?parseInt(b,10)>68?"19"+b:"20"+b:b:null==a._a[fb]?bb().weekYear():a._a[fb]},g=a._w,null!=g.GG||null!=g.W||null!=g.E?h=X(f(g.GG),g.W||1,g.E,4,1):(i=A(a._l),j=null!=g.d?T(g.d,i):null!=g.e?parseInt(g.e,10)+i._week.dow:0,k=parseInt(g.w,10)||1,null!=g.d&&j<i._week.dow&&k++,h=X(f(g.gg),k,j,i._week.doy,i._week.dow)),a._a[fb]=h.year,a._dayOfYear=h.dayOfYear),a._dayOfYear&&(e=null==a._a[fb]?d[fb]:a._a[fb],a._dayOfYear>s(e)&&(a._pf._overflowDayOfYear=!0),c=S(e,0,a._dayOfYear),a._a[gb]=c.getUTCMonth(),a._a[hb]=c.getUTCDate()),b=0;3>b&&null==a._a[b];++b)a._a[b]=l[b]=d[b];for(;7>b;b++)a._a[b]=l[b]=null==a._a[b]?2===b?1:0:a._a[b];l[ib]+=q((a._tzm||0)/60),l[jb]+=q((a._tzm||0)%60),a._d=(a._useUTC?S:R).apply(null,l)}}function J(a){var b;a._d||(b=o(a._i),a._a=[b.year,b.month,b.day,b.hour,b.minute,b.second,b.millisecond],I(a))}function K(a){var b=new Date;return a._useUTC?[b.getUTCFullYear(),b.getUTCMonth(),b.getUTCDate()]:[b.getFullYear(),b.getMonth(),b.getDate()]}function L(a){a._a=[],a._pf.empty=!0;var b,c,d,e,f,g=A(a._l),h=""+a._i,i=h.length,j=0;for(d=E(a._f,g).match(rb)||[],b=0;b<d.length;b++)e=d[b],c=(F(e,a).exec(h)||[])[0],c&&(f=h.substr(0,h.indexOf(c)),f.length>0&&a._pf.unusedInput.push(f),h=h.slice(h.indexOf(c)+c.length),j+=c.length),Pb[e]?(c?a._pf.empty=!1:a._pf.unusedTokens.push(e),H(e,c,a)):a._strict&&!c&&a._pf.unusedTokens.push(e);a._pf.charsLeftOver=i-j,h.length>0&&a._pf.unusedInput.push(h),a._isPm&&a._a[ib]<12&&(a._a[ib]+=12),a._isPm===!1&&12===a._a[ib]&&(a._a[ib]=0),I(a),u(a)}function M(a){return a.replace(/\\(\[)|\\(\])|\[([^\]\[]*)\]|\\(.)/g,function(a,b,c,d,e){return b||c||d||e})}function N(a){return a.replace(/[-\/\\^$*+?.()|[\]{}]/g,"\\$&")}function O(a){var b,c,d,e,f;if(0===a._f.length)return a._pf.invalidFormat=!0,a._d=new Date(0/0),void 0;for(e=0;e<a._f.length;e++)f=0,b=g({},a),v(b),b._f=a._f[e],L(b),w(b)&&(f+=b._pf.charsLeftOver,f+=10*b._pf.unusedTokens.length,b._pf.score=f,(null==d||d>f)&&(d=f,c=b));g(a,c||b)}function P(a){var b,c=a._i,d=Db.exec(c);if(d){for(a._pf.iso=!0,b=4;b>0;b--)if(d[b]){a._f=Fb[b-1]+(d[6]||" ");break}for(b=0;4>b;b++)if(Gb[b][1].exec(c)){a._f+=Gb[b][0];break}Ab.exec(c)&&(a._f+="Z"),L(a)}else a._d=new Date(c)}function Q(b){var c=b._i,d=ob.exec(c);c===a?b._d=new Date:d?b._d=new Date(+d[1]):"string"==typeof c?P(b):k(c)?(b._a=c.slice(0),I(b)):l(c)?b._d=new Date(+c):"object"==typeof c?J(b):b._d=new Date(c)}function R(a,b,c,d,e,f,g){var h=new Date(a,b,c,d,e,f,g);return 1970>a&&h.setFullYear(a),h}function S(a){var b=new Date(Date.UTC.apply(null,arguments));return 1970>a&&b.setUTCFullYear(a),b}function T(a,b){if("string"==typeof a)if(isNaN(a)){if(a=b.weekdaysParse(a),"number"!=typeof a)return null}else a=parseInt(a,10);return a}function U(a,b,c,d,e){return e.relativeTime(b||1,!!c,a,d)}function V(a,b,c){var d=eb(Math.abs(a)/1e3),e=eb(d/60),f=eb(e/60),g=eb(f/24),h=eb(g/365),i=45>d&&["s",d]||1===e&&["m"]||45>e&&["mm",e]||1===f&&["h"]||22>f&&["hh",f]||1===g&&["d"]||25>=g&&["dd",g]||45>=g&&["M"]||345>g&&["MM",eb(g/30)]||1===h&&["y"]||["yy",h];return i[2]=b,i[3]=a>0,i[4]=c,U.apply({},i)}function W(a,b,c){var d,e=c-b,f=c-a.day();return f>e&&(f-=7),e-7>f&&(f+=7),d=bb(a).add("d",f),{week:Math.ceil(d.dayOfYear()/7),year:d.year()}}function X(a,b,c,d,e){var f,g,h=new Date(Date.UTC(a,0)).getUTCDay();return c=null!=c?c:e,f=e-h+(h>d?7:0),g=7*(b-1)+(c-e)+f+1,{year:g>0?a:a-1,dayOfYear:g>0?g:s(a-1)+g}}function Y(a){var b=a._i,c=a._f;return"undefined"==typeof a._pf&&v(a),null===b?bb.invalid({nullInput:!0}):("string"==typeof b&&(a._i=b=A().preparse(b)),bb.isMoment(b)?(a=g({},b),a._d=new Date(+b._d)):c?k(c)?O(a):L(a):Q(a),new e(a))}function Z(a,b){bb.fn[a]=bb.fn[a+"s"]=function(a){var c=this._isUTC?"UTC":"";return null!=a?(this._d["set"+c+b](a),bb.updateOffset(this),this):this._d["get"+c+b]()}}function $(a){bb.duration.fn[a]=function(){return this._data[a]}}function _(a,b){bb.duration.fn["as"+a]=function(){return+this/b}}function ab(a){var b=!1,c=bb;"undefined"==typeof ender&&(this.moment=a?function(){return!b&&console&&console.warn&&(b=!0,console.warn("Accessing Moment through the global scope is deprecated, and will be removed in an upcoming release.")),c.apply(null,arguments)}:bb)}for(var bb,cb,db="2.4.0",eb=Math.round,fb=0,gb=1,hb=2,ib=3,jb=4,kb=5,lb=6,mb={},nb="undefined"!=typeof module&&module.exports,ob=/^\/?Date\((\-?\d+)/i,pb=/(\-)?(?:(\d*)\.)?(\d+)\:(\d+)(?:\:(\d+)\.?(\d{3})?)?/,qb=/^(-)?P(?:(?:([0-9,.]*)Y)?(?:([0-9,.]*)M)?(?:([0-9,.]*)D)?(?:T(?:([0-9,.]*)H)?(?:([0-9,.]*)M)?(?:([0-9,.]*)S)?)?|([0-9,.]*)W)$/,rb=/(\[[^\[]*\])|(\\)?(Mo|MM?M?M?|Do|DDDo|DD?D?D?|ddd?d?|do?|w[o|w]?|W[o|W]?|YYYYY|YYYY|YY|gg(ggg?)?|GG(GGG?)?|e|E|a|A|hh?|HH?|mm?|ss?|S{1,4}|X|zz?|ZZ?|.)/g,sb=/(\[[^\[]*\])|(\\)?(LT|LL?L?L?|l{1,4})/g,tb=/\d\d?/,ub=/\d{1,3}/,vb=/\d{3}/,wb=/\d{1,4}/,xb=/[+\-]?\d{1,6}/,yb=/\d+/,zb=/[0-9]*['a-z\u00A0-\u05FF\u0700-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+|[\u0600-\u06FF\/]+(\s*?[\u0600-\u06FF]+){1,2}/i,Ab=/Z|[\+\-]\d\d:?\d\d/i,Bb=/T/i,Cb=/[\+\-]?\d+(\.\d{1,3})?/,Db=/^\s*\d{4}-(?:(\d\d-\d\d)|(W\d\d$)|(W\d\d-\d)|(\d\d\d))((T| )(\d\d(:\d\d(:\d\d(\.\d+)?)?)?)?([\+\-]\d\d:?\d\d|Z)?)?$/,Eb="YYYY-MM-DDTHH:mm:ssZ",Fb=["YYYY-MM-DD","GGGG-[W]WW","GGGG-[W]WW-E","YYYY-DDD"],Gb=[["HH:mm:ss.SSSS",/(T| )\d\d:\d\d:\d\d\.\d{1,3}/],["HH:mm:ss",/(T| )\d\d:\d\d:\d\d/],["HH:mm",/(T| )\d\d:\d\d/],["HH",/(T| )\d\d/]],Hb=/([\+\-]|\d\d)/gi,Ib="Date|Hours|Minutes|Seconds|Milliseconds".split("|"),Jb={Milliseconds:1,Seconds:1e3,Minutes:6e4,Hours:36e5,Days:864e5,Months:2592e6,Years:31536e6},Kb={ms:"millisecond",s:"second",m:"minute",h:"hour",d:"day",D:"date",w:"week",W:"isoWeek",M:"month",y:"year",DDD:"dayOfYear",e:"weekday",E:"isoWeekday",gg:"weekYear",GG:"isoWeekYear"},Lb={dayofyear:"dayOfYear",isoweekday:"isoWeekday",isoweek:"isoWeek",weekyear:"weekYear",isoweekyear:"isoWeekYear"},Mb={},Nb="DDD w W M D d".split(" "),Ob="M D H h m s w W".split(" "),Pb={M:function(){return this.month()+1},MMM:function(a){return this.lang().monthsShort(this,a)},MMMM:function(a){return this.lang().months(this,a)},D:function(){return this.date()},DDD:function(){return this.dayOfYear()},d:function(){return this.day()},dd:function(a){return this.lang().weekdaysMin(this,a)},ddd:function(a){return this.lang().weekdaysShort(this,a)},dddd:function(a){return this.lang().weekdays(this,a)},w:function(){return this.week()},W:function(){return this.isoWeek()},YY:function(){return i(this.year()%100,2)},YYYY:function(){return i(this.year(),4)},YYYYY:function(){return i(this.year(),5)},gg:function(){return i(this.weekYear()%100,2)},gggg:function(){return this.weekYear()},ggggg:function(){return i(this.weekYear(),5)},GG:function(){return i(this.isoWeekYear()%100,2)},GGGG:function(){return this.isoWeekYear()},GGGGG:function(){return i(this.isoWeekYear(),5)},e:function(){return this.weekday()},E:function(){return this.isoWeekday()},a:function(){return this.lang().meridiem(this.hours(),this.minutes(),!0)},A:function(){return this.lang().meridiem(this.hours(),this.minutes(),!1)},H:function(){return this.hours()},h:function(){return this.hours()%12||12},m:function(){return this.minutes()},s:function(){return this.seconds()},S:function(){return q(this.milliseconds()/100)},SS:function(){return i(q(this.milliseconds()/10),2)},SSS:function(){return i(this.milliseconds(),3)},SSSS:function(){return i(this.milliseconds(),3)},Z:function(){var a=-this.zone(),b="+";return 0>a&&(a=-a,b="-"),b+i(q(a/60),2)+":"+i(q(a)%60,2)},ZZ:function(){var a=-this.zone(),b="+";return 0>a&&(a=-a,b="-"),b+i(q(10*a/6),4)},z:function(){return this.zoneAbbr()},zz:function(){return this.zoneName()},X:function(){return this.unix()}},Qb=["months","monthsShort","weekdays","weekdaysShort","weekdaysMin"];Nb.length;)cb=Nb.pop(),Pb[cb+"o"]=c(Pb[cb],cb);for(;Ob.length;)cb=Ob.pop(),Pb[cb+cb]=b(Pb[cb],2);for(Pb.DDDD=b(Pb.DDD,3),g(d.prototype,{set:function(a){var b,c;for(c in a)b=a[c],"function"==typeof b?this[c]=b:this["_"+c]=b},_months:"January_February_March_April_May_June_July_August_September_October_November_December".split("_"),months:function(a){return this._months[a.month()]},_monthsShort:"Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec".split("_"),monthsShort:function(a){return this._monthsShort[a.month()]},monthsParse:function(a){var b,c,d;for(this._monthsParse||(this._monthsParse=[]),b=0;12>b;b++)if(this._monthsParse[b]||(c=bb.utc([2e3,b]),d="^"+this.months(c,"")+"|^"+this.monthsShort(c,""),this._monthsParse[b]=new RegExp(d.replace(".",""),"i")),this._monthsParse[b].test(a))return b},_weekdays:"Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"),weekdays:function(a){return this._weekdays[a.day()]},_weekdaysShort:"Sun_Mon_Tue_Wed_Thu_Fri_Sat".split("_"),weekdaysShort:function(a){return this._weekdaysShort[a.day()]},_weekdaysMin:"Su_Mo_Tu_We_Th_Fr_Sa".split("_"),weekdaysMin:function(a){return this._weekdaysMin[a.day()]},weekdaysParse:function(a){var b,c,d;for(this._weekdaysParse||(this._weekdaysParse=[]),b=0;7>b;b++)if(this._weekdaysParse[b]||(c=bb([2e3,1]).day(b),d="^"+this.weekdays(c,"")+"|^"+this.weekdaysShort(c,"")+"|^"+this.weekdaysMin(c,""),this._weekdaysParse[b]=new RegExp(d.replace(".",""),"i")),this._weekdaysParse[b].test(a))return b},_longDateFormat:{LT:"h:mm A",L:"MM/DD/YYYY",LL:"MMMM D YYYY",LLL:"MMMM D YYYY LT",LLLL:"dddd, MMMM D YYYY LT"},longDateFormat:function(a){var b=this._longDateFormat[a];return!b&&this._longDateFormat[a.toUpperCase()]&&(b=this._longDateFormat[a.toUpperCase()].replace(/MMMM|MM|DD|dddd/g,function(a){return a.slice(1)}),this._longDateFormat[a]=b),b},isPM:function(a){return"p"===(a+"").toLowerCase().charAt(0)},_meridiemParse:/[ap]\.?m?\.?/i,meridiem:function(a,b,c){return a>11?c?"pm":"PM":c?"am":"AM"},_calendar:{sameDay:"[Today at] LT",nextDay:"[Tomorrow at] LT",nextWeek:"dddd [at] LT",lastDay:"[Yesterday at] LT",lastWeek:"[Last] dddd [at] LT",sameElse:"L"},calendar:function(a,b){var c=this._calendar[a];return"function"==typeof c?c.apply(b):c},_relativeTime:{future:"in %s",past:"%s ago",s:"a few seconds",m:"a minute",mm:"%d minutes",h:"an hour",hh:"%d hours",d:"a day",dd:"%d days",M:"a month",MM:"%d months",y:"a year",yy:"%d years"},relativeTime:function(a,b,c,d){var e=this._relativeTime[c];return"function"==typeof e?e(a,b,c,d):e.replace(/%d/i,a)},pastFuture:function(a,b){var c=this._relativeTime[a>0?"future":"past"];return"function"==typeof c?c(b):c.replace(/%s/i,b)},ordinal:function(a){return this._ordinal.replace("%d",a)},_ordinal:"%d",preparse:function(a){return a},postformat:function(a){return a},week:function(a){return W(a,this._week.dow,this._week.doy).week},_week:{dow:0,doy:6},_invalidDate:"Invalid date",invalidDate:function(){return this._invalidDate}}),bb=function(b,c,d,e){return"boolean"==typeof d&&(e=d,d=a),Y({_i:b,_f:c,_l:d,_strict:e,_isUTC:!1})},bb.utc=function(b,c,d,e){var f;return"boolean"==typeof d&&(e=d,d=a),f=Y({_useUTC:!0,_isUTC:!0,_l:d,_i:b,_f:c,_strict:e}).utc()},bb.unix=function(a){return bb(1e3*a)},bb.duration=function(a,b){var c,d,e,g=bb.isDuration(a),h="number"==typeof a,i=g?a._input:h?{}:a,j=null;return h?b?i[b]=a:i.milliseconds=a:(j=pb.exec(a))?(c="-"===j[1]?-1:1,i={y:0,d:q(j[hb])*c,h:q(j[ib])*c,m:q(j[jb])*c,s:q(j[kb])*c,ms:q(j[lb])*c}):(j=qb.exec(a))&&(c="-"===j[1]?-1:1,e=function(a){var b=a&&parseFloat(a.replace(",","."));return(isNaN(b)?0:b)*c},i={y:e(j[2]),M:e(j[3]),d:e(j[4]),h:e(j[5]),m:e(j[6]),s:e(j[7]),w:e(j[8])}),d=new f(i),g&&a.hasOwnProperty("_lang")&&(d._lang=a._lang),d},bb.version=db,bb.defaultFormat=Eb,bb.updateOffset=function(){},bb.lang=function(a,b){var c;return a?(b?y(x(a),b):null===b?(z(a),a="en"):mb[a]||A(a),c=bb.duration.fn._lang=bb.fn._lang=A(a),c._abbr):bb.fn._lang._abbr},bb.langData=function(a){return a&&a._lang&&a._lang._abbr&&(a=a._lang._abbr),A(a)},bb.isMoment=function(a){return a instanceof e},bb.isDuration=function(a){return a instanceof f},cb=Qb.length-1;cb>=0;--cb)p(Qb[cb]);for(bb.normalizeUnits=function(a){return n(a)},bb.invalid=function(a){var b=bb.utc(0/0);return null!=a?g(b._pf,a):b._pf.userInvalidated=!0,b},bb.parseZone=function(a){return bb(a).parseZone()},g(bb.fn=e.prototype,{clone:function(){return bb(this)},valueOf:function(){return+this._d+6e4*(this._offset||0)},unix:function(){return Math.floor(+this/1e3)},toString:function(){return this.clone().lang("en").format("ddd MMM DD YYYY HH:mm:ss [GMT]ZZ")},toDate:function(){return this._offset?new Date(+this):this._d},toISOString:function(){return D(bb(this).utc(),"YYYY-MM-DD[T]HH:mm:ss.SSS[Z]")},toArray:function(){var a=this;return[a.year(),a.month(),a.date(),a.hours(),a.minutes(),a.seconds(),a.milliseconds()]},isValid:function(){return w(this)},isDSTShifted:function(){return this._a?this.isValid()&&m(this._a,(this._isUTC?bb.utc(this._a):bb(this._a)).toArray())>0:!1},parsingFlags:function(){return g({},this._pf)},invalidAt:function(){return this._pf.overflow},utc:function(){return this.zone(0)},local:function(){return this.zone(0),this._isUTC=!1,this},format:function(a){var b=D(this,a||bb.defaultFormat);return this.lang().postformat(b)},add:function(a,b){var c;return c="string"==typeof a?bb.duration(+b,a):bb.duration(a,b),j(this,c,1),this},subtract:function(a,b){var c;return c="string"==typeof a?bb.duration(+b,a):bb.duration(a,b),j(this,c,-1),this},diff:function(a,b,c){var d,e,f=this._isUTC?bb(a).zone(this._offset||0):bb(a).local(),g=6e4*(this.zone()-f.zone());return b=n(b),"year"===b||"month"===b?(d=432e5*(this.daysInMonth()+f.daysInMonth()),e=12*(this.year()-f.year())+(this.month()-f.month()),e+=(this-bb(this).startOf("month")-(f-bb(f).startOf("month")))/d,e-=6e4*(this.zone()-bb(this).startOf("month").zone()-(f.zone()-bb(f).startOf("month").zone()))/d,"year"===b&&(e/=12)):(d=this-f,e="second"===b?d/1e3:"minute"===b?d/6e4:"hour"===b?d/36e5:"day"===b?(d-g)/864e5:"week"===b?(d-g)/6048e5:d),c?e:h(e)},from:function(a,b){return bb.duration(this.diff(a)).lang(this.lang()._abbr).humanize(!b)},fromNow:function(a){return this.from(bb(),a)},calendar:function(){var a=this.diff(bb().zone(this.zone()).startOf("day"),"days",!0),b=-6>a?"sameElse":-1>a?"lastWeek":0>a?"lastDay":1>a?"sameDay":2>a?"nextDay":7>a?"nextWeek":"sameElse";return this.format(this.lang().calendar(b,this))},isLeapYear:function(){return t(this.year())},isDST:function(){return this.zone()<this.clone().month(0).zone()||this.zone()<this.clone().month(5).zone()},day:function(a){var b=this._isUTC?this._d.getUTCDay():this._d.getDay();return null!=a?(a=T(a,this.lang()),this.add({d:a-b})):b},month:function(a){var b,c=this._isUTC?"UTC":"";return null!=a?"string"==typeof a&&(a=this.lang().monthsParse(a),"number"!=typeof a)?this:(b=this.date(),this.date(1),this._d["set"+c+"Month"](a),this.date(Math.min(b,this.daysInMonth())),bb.updateOffset(this),this):this._d["get"+c+"Month"]()},startOf:function(a){switch(a=n(a)){case"year":this.month(0);case"month":this.date(1);case"week":case"isoWeek":case"day":this.hours(0);case"hour":this.minutes(0);case"minute":this.seconds(0);case"second":this.milliseconds(0)}return"week"===a?this.weekday(0):"isoWeek"===a&&this.isoWeekday(1),this},endOf:function(a){return a=n(a),this.startOf(a).add("isoWeek"===a?"week":a,1).subtract("ms",1)},isAfter:function(a,b){return b="undefined"!=typeof b?b:"millisecond",+this.clone().startOf(b)>+bb(a).startOf(b)},isBefore:function(a,b){return b="undefined"!=typeof b?b:"millisecond",+this.clone().startOf(b)<+bb(a).startOf(b)},isSame:function(a,b){return b="undefined"!=typeof b?b:"millisecond",+this.clone().startOf(b)===+bb(a).startOf(b)},min:function(a){return a=bb.apply(null,arguments),this>a?this:a},max:function(a){return a=bb.apply(null,arguments),a>this?this:a},zone:function(a){var b=this._offset||0;return null==a?this._isUTC?b:this._d.getTimezoneOffset():("string"==typeof a&&(a=G(a)),Math.abs(a)<16&&(a=60*a),this._offset=a,this._isUTC=!0,b!==a&&j(this,bb.duration(b-a,"m"),1,!0),this)},zoneAbbr:function(){return this._isUTC?"UTC":""},zoneName:function(){return this._isUTC?"Coordinated Universal Time":""},parseZone:function(){return"string"==typeof this._i&&this.zone(this._i),this},hasAlignedHourOffset:function(a){return a=a?bb(a).zone():0,0===(this.zone()-a)%60},daysInMonth:function(){return r(this.year(),this.month())},dayOfYear:function(a){var b=eb((bb(this).startOf("day")-bb(this).startOf("year"))/864e5)+1;return null==a?b:this.add("d",a-b)},weekYear:function(a){var b=W(this,this.lang()._week.dow,this.lang()._week.doy).year;return null==a?b:this.add("y",a-b)},isoWeekYear:function(a){var b=W(this,1,4).year;return null==a?b:this.add("y",a-b)},week:function(a){var b=this.lang().week(this);return null==a?b:this.add("d",7*(a-b))},isoWeek:function(a){var b=W(this,1,4).week;return null==a?b:this.add("d",7*(a-b))},weekday:function(a){var b=(this.day()+7-this.lang()._week.dow)%7;return null==a?b:this.add("d",a-b)},isoWeekday:function(a){return null==a?this.day()||7:this.day(this.day()%7?a:a-7)},get:function(a){return a=n(a),this[a]()},set:function(a,b){return a=n(a),"function"==typeof this[a]&&this[a](b),this},lang:function(b){return b===a?this._lang:(this._lang=A(b),this)}}),cb=0;cb<Ib.length;cb++)Z(Ib[cb].toLowerCase().replace(/s$/,""),Ib[cb]);Z("year","FullYear"),bb.fn.days=bb.fn.day,bb.fn.months=bb.fn.month,bb.fn.weeks=bb.fn.week,bb.fn.isoWeeks=bb.fn.isoWeek,bb.fn.toJSON=bb.fn.toISOString,g(bb.duration.fn=f.prototype,{_bubble:function(){var a,b,c,d,e=this._milliseconds,f=this._days,g=this._months,i=this._data;i.milliseconds=e%1e3,a=h(e/1e3),i.seconds=a%60,b=h(a/60),i.minutes=b%60,c=h(b/60),i.hours=c%24,f+=h(c/24),i.days=f%30,g+=h(f/30),i.months=g%12,d=h(g/12),i.years=d},weeks:function(){return h(this.days()/7)},valueOf:function(){return this._milliseconds+864e5*this._days+2592e6*(this._months%12)+31536e6*q(this._months/12)},humanize:function(a){var b=+this,c=V(b,!a,this.lang());return a&&(c=this.lang().pastFuture(b,c)),this.lang().postformat(c)},add:function(a,b){var c=bb.duration(a,b);return this._milliseconds+=c._milliseconds,this._days+=c._days,this._months+=c._months,this._bubble(),this},subtract:function(a,b){var c=bb.duration(a,b);return this._milliseconds-=c._milliseconds,this._days-=c._days,this._months-=c._months,this._bubble(),this},get:function(a){return a=n(a),this[a.toLowerCase()+"s"]()},as:function(a){return a=n(a),this["as"+a.charAt(0).toUpperCase()+a.slice(1)+"s"]()},lang:bb.fn.lang,toIsoString:function(){var a=Math.abs(this.years()),b=Math.abs(this.months()),c=Math.abs(this.days()),d=Math.abs(this.hours()),e=Math.abs(this.minutes()),f=Math.abs(this.seconds()+this.milliseconds()/1e3);return this.asSeconds()?(this.asSeconds()<0?"-":"")+"P"+(a?a+"Y":"")+(b?b+"M":"")+(c?c+"D":"")+(d||e||f?"T":"")+(d?d+"H":"")+(e?e+"M":"")+(f?f+"S":""):"P0D"}});for(cb in Jb)Jb.hasOwnProperty(cb)&&(_(cb,Jb[cb]),$(cb.toLowerCase()));_("Weeks",6048e5),bb.duration.fn.asMonths=function(){return(+this-31536e6*this.years())/2592e6+12*this.years()},bb.lang("en",{ordinal:function(a){var b=a%10,c=1===q(a%100/10)?"th":1===b?"st":2===b?"nd":3===b?"rd":"th";return a+c}}),nb?(module.exports=bb,ab(!0)):"function"==typeof define&&define.amd?define("moment",function(b,c,d){return d.config().noGlobal!==!0&&ab(d.config().noGlobal===a),bb}):ab()}).call(this);
+<<<<<<< HEAD
 },{}],81:[function(require,module,exports){
 // Generated by CoffeeScript 1.8.0
 (function() {
@@ -76654,6 +78987,9 @@ if (typeof exports === 'object') {
 }).call(this);
 
 },{}],82:[function(require,module,exports){
+=======
+},{}],59:[function(require,module,exports){
+>>>>>>> milestone-editing
 var AssigneeFilterView = Ember.View.extend({
   templateName : "assignee/filter",
   classNames: ["assignee"],
@@ -76737,6 +79073,7 @@ var AssigneeFilterView = Ember.View.extend({
 
 module.exports = AssigneeFilterView;
 
+<<<<<<< HEAD
 },{}],83:[function(require,module,exports){
 var CardView = require("./card_view");
 
@@ -76749,6 +79086,9 @@ module.exports = CardView;
 
 
 },{"./card_view":84}],84:[function(require,module,exports){
+=======
+},{}],60:[function(require,module,exports){
+>>>>>>> milestone-editing
 var CardView = Ember.View.extend({
   classNameBindings:["stateClass"],
   stateClass: function(){
@@ -76777,7 +79117,11 @@ var CardView = Ember.View.extend({
 module.exports = CardView;
 
 
+<<<<<<< HEAD
 },{}],85:[function(require,module,exports){
+=======
+},{}],61:[function(require,module,exports){
+>>>>>>> milestone-editing
 var CardWrapperView = Em.View.extend({
     templateName: "cardItem",
     classNames: ["card"],
@@ -76878,7 +79222,11 @@ var CardWrapperView = Em.View.extend({
 
 module.exports = CardWrapperView;
 
+<<<<<<< HEAD
 },{}],86:[function(require,module,exports){
+=======
+},{}],62:[function(require,module,exports){
+>>>>>>> milestone-editing
 var ColumnCountView = Ember.View.extend({
   tagName: "span",
   templateName: "column_count",
@@ -76888,7 +79236,11 @@ var ColumnCountView = Ember.View.extend({
 
 module.exports = ColumnCountView;
 
+<<<<<<< HEAD
 },{}],87:[function(require,module,exports){
+=======
+},{}],63:[function(require,module,exports){
+>>>>>>> milestone-editing
 var WrapperView = require("./card_wrapper_view");
 
 var CollectionView = Ember.CollectionView.extend({
@@ -76998,7 +79350,11 @@ var ColumnView = Ember.ContainerView.extend({
 
 module.exports = ColumnView;
 
+<<<<<<< HEAD
 },{"./card_wrapper_view":85}],88:[function(require,module,exports){
+=======
+},{"./card_wrapper_view":61}],64:[function(require,module,exports){
+>>>>>>> milestone-editing
 
 
 var CssView = Ember.View.extend({
@@ -77089,7 +79445,11 @@ var CssView = Ember.View.extend({
 
 module.exports = CssView;
 
+<<<<<<< HEAD
 },{}],89:[function(require,module,exports){
+=======
+},{}],65:[function(require,module,exports){
+>>>>>>> milestone-editing
 var FilterView = Ember.View.extend({
   tagName: "li",
   templateName: "filter",
@@ -77158,7 +79518,11 @@ var FilterView = Ember.View.extend({
 
 module.exports = FilterView;
 
+<<<<<<< HEAD
 },{}],90:[function(require,module,exports){
+=======
+},{}],66:[function(require,module,exports){
+>>>>>>> milestone-editing
 var IntegrationsView = App.ModalView.extend({
   modalSize: "slim",
   setupIndex: function(){
@@ -77168,7 +79532,11 @@ var IntegrationsView = App.ModalView.extend({
 
 module.exports = IntegrationsView;
 
+<<<<<<< HEAD
 },{}],91:[function(require,module,exports){
+=======
+},{}],67:[function(require,module,exports){
+>>>>>>> milestone-editing
 var CommentView = Ember.View.extend({
   templateName: "issue/comment",
   classNames: ["card-comment"]
@@ -77193,6 +79561,7 @@ var ActivitiesView = Ember.CollectionView.extend({
 
 module.exports = ActivitiesView;
 
+<<<<<<< HEAD
 },{}],92:[function(require,module,exports){
 var IssueBodyView = Ember.View.extend({
   classNames: ["fullscreen-card-description","card-comment"]
@@ -77201,6 +79570,9 @@ var IssueBodyView = Ember.View.extend({
 module.exports = IssueBodyView;
 
 },{}],93:[function(require,module,exports){
+=======
+},{}],68:[function(require,module,exports){
+>>>>>>> milestone-editing
 var IssuesCreateView = App.ModalView.extend({
   focusTitleField: function(){
       Ember.run.schedule('afterRender', this, 'focusTextbox');
@@ -77214,6 +79586,7 @@ var IssuesCreateView = App.ModalView.extend({
 
 module.exports = IssuesCreateView;
 
+<<<<<<< HEAD
 },{}],94:[function(require,module,exports){
 var IssueQuickCreateView = Ember.View.extend({
   placeholderText: "Add issue",
@@ -77233,6 +79606,9 @@ var IssueQuickCreateView = Ember.View.extend({
 module.exports = IssueQuickCreateView;
 
 },{}],95:[function(require,module,exports){
+=======
+},{}],69:[function(require,module,exports){
+>>>>>>> milestone-editing
 var IssueSelectedColumnView = Ember.CollectionView.extend({
   tagName: "ul",
   classNames: ["nav","breadcrumbs"],
@@ -77264,6 +79640,7 @@ var IssueSelectedColumnView = Ember.CollectionView.extend({
 
 module.exports = IssueSelectedColumnView;
 
+<<<<<<< HEAD
 },{}],96:[function(require,module,exports){
 var IssueTitleView = Ember.View.extend({
   classNames: ["fullscreen-header"],
@@ -77283,6 +79660,9 @@ var IssueTitleView = Ember.View.extend({
 module.exports = IssueTitleView;
 
 },{}],97:[function(require,module,exports){
+=======
+},{}],70:[function(require,module,exports){
+>>>>>>> milestone-editing
 var ModalView = require("./modal_view")
 
 var IssuesView = ModalView.extend({
@@ -77290,7 +79670,11 @@ var IssuesView = ModalView.extend({
 
 module.exports = IssuesView;
 
+<<<<<<< HEAD
 },{"./modal_view":103}],98:[function(require,module,exports){
+=======
+},{"./modal_view":75}],71:[function(require,module,exports){
+>>>>>>> milestone-editing
 var Spinner = require('../../spin');
 var LoadingView = Ember.View.extend({
   didInsertElement: function(){
@@ -77326,13 +79710,27 @@ var LoadingView = Ember.View.extend({
 
 module.exports = LoadingView;
 
+<<<<<<< HEAD
 },{"../../spin":107}],99:[function(require,module,exports){
+=======
+},{"../../spin":78}],72:[function(require,module,exports){
+>>>>>>> milestone-editing
 var MilestonesCreateView = App.ModalView.extend({
 });
 
 module.exports = MilestonesCreateView;
 
+<<<<<<< HEAD
 },{}],100:[function(require,module,exports){
+=======
+},{}],73:[function(require,module,exports){
+var MilestonesEditView = App.ModalView.extend({
+});
+
+module.exports = MilestonesEditView;
+
+},{}],74:[function(require,module,exports){
+>>>>>>> milestone-editing
 var WrapperView = require("./card_wrapper_view");
 
 WrapperView = WrapperView.extend({
@@ -77429,6 +79827,8 @@ var ColumnView = Ember.ContainerView.extend({
   headerView: Ember.View.extend({
     tagName: "h3",
     templateName: "milestoneColumnHeader",
+    attributeBindings: ["milestoneTitle:title"],
+    milestoneTitle: Ember.computed.alias("controller.model.title"),
     click: function(){
       this.get("controller").toggleProperty('isCollapsed')
     }
@@ -77451,6 +79851,7 @@ var ColumnView = Ember.ContainerView.extend({
 
 module.exports = ColumnView;
 
+<<<<<<< HEAD
 },{"./card_wrapper_view":85}],101:[function(require,module,exports){
 var ModalView = require("../modal_view")
 
@@ -77540,6 +79941,9 @@ var MilestonesView = Ember.View.extend({
 module.exports = MilestonesView;
 
 },{}],103:[function(require,module,exports){
+=======
+},{"./card_wrapper_view":61}],75:[function(require,module,exports){
+>>>>>>> milestone-editing
 var ModalView = Em.View.extend({
   layoutName: "layouts/modal",
   modalSize: "",
@@ -77579,7 +79983,11 @@ var ModalView = Em.View.extend({
 
 module.exports = ModalView;
 
+<<<<<<< HEAD
 },{}],104:[function(require,module,exports){
+=======
+},{}],76:[function(require,module,exports){
+>>>>>>> milestone-editing
 var SearchView = Ember.View.extend({
   classNames: ["search"],
   classNameBindings: ["hasValue:has-value"],
@@ -77601,6 +80009,7 @@ var SearchView = Ember.View.extend({
 
 module.exports = SearchView;
 
+<<<<<<< HEAD
 },{}],105:[function(require,module,exports){
 var SettingsLinkView = Ember.View.extend({
   tagName: 'li',
@@ -77612,6 +80021,9 @@ var SettingsLinkView = Ember.View.extend({
 module.exports = SettingsLinkView;
 
 },{}],106:[function(require,module,exports){
+=======
+},{}],77:[function(require,module,exports){
+>>>>>>> milestone-editing
 var ShowCountsView = Ember.View.extend({
   classNameBindings: ["showColumnCounts:checked"],
   showColumnCounts: Ember.computed.alias("settings.showColumnCounts"),
@@ -77632,7 +80044,11 @@ var ShowCountsView = Ember.View.extend({
 
 module.exports = ShowCountsView;
 
+<<<<<<< HEAD
 },{}],107:[function(require,module,exports){
+=======
+},{}],78:[function(require,module,exports){
+>>>>>>> milestone-editing
 //fgnass.github.com/spin.js#v1.3
 
 /**
@@ -77983,7 +80399,11 @@ module.exports = ShowCountsView;
 
 }));
 
+<<<<<<< HEAD
 },{}],108:[function(require,module,exports){
+=======
+},{}],79:[function(require,module,exports){
+>>>>>>> milestone-editing
 /*!
  * jQuery Color Animations v@VERSION
  * https://github.com/jquery/jquery-color
@@ -78648,5 +81068,9 @@ colors = jQuery.Color.names = {
 
 })( jQuery );
 
+<<<<<<< HEAD
 },{}]},{},[45])
+=======
+},{}]},{},[28])
+>>>>>>> milestone-editing
 ;

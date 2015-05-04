@@ -187,6 +187,57 @@
 .board-dragging {
   .column.milestone {
     min-width: 230px;
+    @include display(block);
+    &.hb-state-collapsed {
+      .text {
+        display: inline-block;
+      }
+    }
+  }
+  .collapsed {
+    min-height: 100vh;
+  }
+
+  @include transition(all 0s);
+}
+
+.milestone {
+
+  > h3 {
+
+    line-height: 16px;
+
+    .ui-icon {
+      float:left;
+      padding-right: 6px !important;
+
+      &.ui-icon-gear {
+        float:right;
+      }
+    }
+
+    .text {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      display: inline-block;
+      max-width: calc(100% - 30px);
+
+    }
+  }
+}
+
+.milestone-placeholder {
+  @include display(flex);
+  @include flex(0 0 230px);
+  &.hb-state-collapsed {
+    @include flex(0 0 90px);
+  }
+}
+
+.board-dragging {
+  .column.milestone {
+    min-width: 230px;
     max-width: 230px;
     @include display(block);
     &.hb-state-collapsed {
@@ -245,7 +296,7 @@
       @include justify-content(flex-start);
       @include align-items(flex-start);
       @include align-content(flex-start);
-      
+
       li {
         margin-right: 5px;
         max-width: 400px;
@@ -297,7 +348,7 @@
     .collapsed {
       @include display(flex);
     }
-    > h3 span, > h3 .ui-icon-minus, > h3 small {
+    > h3 span, > h3 .ui-icon-minus, > h3 small, > h3 .ui-icon-gear {
       display:none;
     }
 
@@ -376,7 +427,7 @@
           min-height: 0;
         }
 
-       
+
         &.hovering {
           ul {
             display:none;
@@ -385,7 +436,7 @@
         .collapsed {
           display:none;
         }
-        
+
       }
     }
   }
@@ -402,7 +453,7 @@
   .navbar-inner {
     @include linear-gradient(#F9F9F9, #F3F3F3);
     border-bottom: 1px solid $hb-grey-light;
-   
+
   }
   .nav {
     form {
@@ -427,7 +478,7 @@
         background-color: $hb-grey-light;
         border-right: 1px solid #fff;
       }
-      
+
       &:hover {
         border-top: none;
       }
@@ -438,7 +489,7 @@
 
       .caret {
         margin-top: 14px;
-      
+
       }
     }
 
@@ -479,11 +530,11 @@
       }
     }
   }
-    
+
 
 }
 
-  
+
 .tab-pane {
   display: none;
   margin-top: 1px;
@@ -508,5 +559,5 @@
 .hide {display:none;}
 
 .breadcrumb {
-  margin: -43px 0 7px 0; 
+  margin: -43px 0 7px 0;
 }

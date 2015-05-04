@@ -49,6 +49,10 @@ module.exports = MilestonesRoute =  Ember.Route.extend({
       this.controllerFor("milestone.create").set("model", App.Milestone.createNew());
       this.send("openModal","milestone.create")
     },
+    editMilestone : function (milestone) {
+      this.controllerFor("milestone.edit").set("model", App.Milestone.create(milestone));
+      this.send("openModal","milestone.edit")
+    },
     archive: function (issue) {
       issue.archive();
     },
@@ -82,6 +86,14 @@ module.exports = MilestonesRoute =  Ember.Route.extend({
       var controller = this.controllerFor("milestones");
       var milestones = controller.get("model.milestones");
       milestones.pushObject(milestone);
+      Ember.run.schedule('afterRender', controller, function () {
+        controller.incrementProperty("forceRedraw");
+        this.send("closeModal")
+      }.bind(this))
+    },
+    milestoneUpdated: function(milestone){
+      var controller = this.controllerFor("milestones");
+      var milestones = controller.get("model.milestones");
       Ember.run.schedule('afterRender', controller, function () {
         controller.incrementProperty("forceRedraw");
         this.send("closeModal")

@@ -94,6 +94,8 @@ var ColumnView = Ember.ContainerView.extend({
   headerView: Ember.View.extend({
     tagName: "h3",
     templateName: "milestoneColumnHeader",
+    attributeBindings: ["milestoneTitle:title"],
+    milestoneTitle: Ember.computed.alias("controller.model.title"),
     click: function(){
       this.get("controller").toggleProperty('isCollapsed')
     }
