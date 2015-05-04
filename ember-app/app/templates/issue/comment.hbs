@@ -17,7 +17,7 @@
   </div>
   {{#if view.content.isEditing}}
   <form {{action "save" on="submit" target=view.content }} class="flex-form">
-    {{hb-markdown-editor markdown=view.content.bufferedContent.body mentions=view.content.mentions commits=view.content.commits}}
+    {{hb-markdown-editor markdown=view.content.bufferedContent.body mentions=view.content.mentions }}
     <button {{bind-attr disabled=view.content.disabled}} class="hb-button">Submit comment</button>
   </form>
   {{else}}

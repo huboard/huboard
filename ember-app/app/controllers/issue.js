@@ -111,10 +111,7 @@ var IssueController = Ember.ObjectController.extend({
     return _.uniq(_.compact(union), function(i){
       return i.login;
     });
-  }.property('controllers.application.model.board.assignees','allActivities'),
-  commits: function(){
-    return this.get('repository.commits');
-  }.property('repository.commits')
+  }.property('controllers.application.model.board.assignees','allActivities')
 });
 
 export default IssueController;
