@@ -1,0 +1,16 @@
+<div class="fullscreen-card">
+  <form {{action "submit" on="submit"}} class="flex-form split-form">
+    <div class="flex-form-left">
+      <label>
+        {{input value=title placeholder="Title"}}
+      </label>
+      <label>
+        {{input value=description placeholder="Description"}}
+      </label>
+      <label>
+        {{view App.DatePicker valueBinding="due_on" placeholder="Due on: yyyy-mm-dd"}}
+      </label>
+      <button {{bind-attr disabled=disabled}} class="hb-button">Update milestone</button>
+    </div>
+  </form>
+</div>

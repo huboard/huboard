@@ -218,6 +218,10 @@
     .ui-icon {
       float:left;
       padding-right: 6px !important;
+
+      &.ui-icon-gear {
+        float:right;
+      }
     }
 
     .text {
@@ -235,6 +239,9 @@
   @include display(flex);
   @include flex(0 0 230px);
   border: 1px dotted #ccc;
+  &.hb-state-collapsed {
+    @include flex(0 0 90px);
+  }
 }
 
 .milestones {
@@ -336,7 +343,7 @@
     .collapsed {
       display: block;
     }
-    > h3 span, > h3 .ui-icon-minus, > h3 small {
+    > h3 span, > h3 .ui-icon-minus, > h3 small,  > h3 .ui-icon-gear {
       display:none;
     }
   }
