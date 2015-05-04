@@ -276,7 +276,6 @@ GEM
     octokit (3.8.0)
       sawyer (~> 0.6.0, >= 0.5.3)
     pdfkit (0.6.2)
-    pg (0.18.1)
     pry (0.10.1)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -450,7 +449,6 @@ DEPENDENCIES
   memcachier
   meta_request
   pdfkit
-  pg
   pry-byebug
   puma
   rack-attack
