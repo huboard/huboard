@@ -1,6 +1,7 @@
 import CssView from 'app/views/css';
 import Board from 'app/models/board';
 import Issue from 'app/models/issue';
+import Milestone from 'app/models/milestone';
 import Ember from 'ember';
 
 var MilestonesRoute = Ember.Route.extend({
@@ -72,13 +73,13 @@ var MilestonesRoute = Ember.Route.extend({
     },
 
     createNewMilestone : function () {
-      this.controllerFor("milestone.create").set("model", App.Milestone.createNew());
-      this.send("openModal","milestone.create")
+      this.controllerFor("milestones.create").set("model", Milestone.createNew());
+      this.send("openModal","milestones.create")
     },
 
     editMilestone : function (milestone) {
-      this.controllerFor("milestone.edit").set("model", App.Milestone.create(milestone));
-      this.send("openModal","milestone.edit")
+      this.controllerFor("milestones.edit").set("model", Milestone.create(milestone));
+      this.send("openModal","milestones.edit")
     },
 
     archive: function(issue) {

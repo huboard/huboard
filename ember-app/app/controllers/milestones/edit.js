@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var MilestonesEditController = Ember.ObjectController.extend({
   needs: ["application"],
   actions: {
@@ -6,8 +8,8 @@ var MilestonesEditController = Ember.ObjectController.extend({
       this.set("processing",true);
 
       this.get("model").saveEdit().then(function(milestone){
-         controller.send("milestoneUpdated", milestone)
-         controller.set("processing",false)
+         controller.send("milestoneUpdated", milestone);
+         controller.set("processing",false);
       });
     }
   },
@@ -21,4 +23,4 @@ var MilestonesEditController = Ember.ObjectController.extend({
 
 });
 
-module.exports = MilestonesEditController;
+export default MilestonesEditController;

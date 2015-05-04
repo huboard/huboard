@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var MilestonesCreateController = Ember.ObjectController.extend({
   needs: ["application"],
   actions: {
@@ -5,8 +7,8 @@ var MilestonesCreateController = Ember.ObjectController.extend({
       var controller = this;
       this.set("processing",true);
       this.get("model").saveNew().then(function(milestone){
-         controller.send("milestoneCreated", milestone)
-         controller.set("processing",false)
+         controller.send("milestoneCreated", milestone);
+         controller.set("processing",false);
       });
     }
   },
@@ -20,4 +22,4 @@ var MilestonesCreateController = Ember.ObjectController.extend({
 
 });
 
-module.exports = MilestonesCreateController;
+export default MilestonesCreateController;

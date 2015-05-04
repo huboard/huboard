@@ -1,5 +1,6 @@
-var correlationId = require("../utilities/correlationId")
-var Serializable = require("../mixins/serializable");
+import correlationId from 'app/utilities/correlation-id';
+import Serializable from 'app/mixins/serializable';
+import Ember from 'ember';
 
 var Milestone = Ember.Object.extend(Serializable,{
   correlationId: correlationId,
@@ -11,7 +12,7 @@ var Milestone = Ember.Object.extend(Serializable,{
       type: "POST",
       contentType: "application/json"}).then(function(response){
       return Milestone.create(response);
-    })
+    });
   },
   saveEdit: function () {
     var user = this.get("repo.owner.login"),
@@ -25,7 +26,7 @@ var Milestone = Ember.Object.extend(Serializable,{
       type: "POST",
       contentType: "application/json"}).then(function(response){
       return Milestone.create(response);
-    })
+    });
   },
   processing: false,
   loaded: false
@@ -39,8 +40,8 @@ Milestone.reopenClass({
        description: "",
        due_on: "",
        repo: App.get("repo")
-     })
+     });
   }
 });
 
-module.exports = Milestone;
+export default Milestone;

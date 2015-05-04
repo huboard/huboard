@@ -8,7 +8,7 @@
         {{input value=description placeholder="Description"}}
       </label>
       <label>
-        {{view App.DatePicker valueBinding="due_on" placeholder="Due on: yyyy-mm-dd"}}
+        {{hb-date-picker valueBinding="due_on" placeholder="Due on: yyyy-mm-dd"}}
       </label>
       <button {{bind-attr disabled=disabled}} class="hb-button">Update milestone</button>
     </div>
