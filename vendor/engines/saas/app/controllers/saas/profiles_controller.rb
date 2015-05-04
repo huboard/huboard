@@ -22,13 +22,14 @@ module Saas
       customer = account_exists?(plan_doc) ? plan_doc[:rows].first.value : false
       return render json: default_user_mapping(user) unless customer
 
+      stripe_email = customer[:stripe][:customer][:email]
       plan = plan_for("User", customer[:stripe][:customer])
       data = {
         org: user.to_hash,
         plans: [plan],
         card: plan[:card],
         discount: customer[:stripe][:customer][:discount] || {discount: { coupon: {id: ''} }},
-        account_email: customer["billing_email"],
+        account_email: customer["billing_email"] || stripe_email,
         trial: customer[:trial],
         has_plan: plan[:purchased],
         non_profit: non_profit?(customer)
@@ -76,13 +77,14 @@ module Saas
       customer = account_exists?(plan_doc) ? plan_doc[:rows].first.value : false
       return render json: default_org_mapping(org) unless customer
 
+      stripe_email = customer[:stripe][:customer][:email]
       plan = plan_for("Organization", customer[:stripe][:customer])
       data = {
         org: org.to_hash,
         plans: [plan],
         card: plan[:card],
         discount: customer[:stripe][:customer][:discount] || {discount: { coupon: {id: ''} }},
-        account_email: customer["billing_email"],
+        account_email: customer["billing_email"] || stripe_email,
         trial: customer[:trial],
         has_plan: plan[:purchased],
         non_profit: non_profit?(customer)
