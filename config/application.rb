@@ -49,7 +49,7 @@ module HuboardWeb
         }
     elsif !ENV['SELF_HOST_FAYE'] && ENV['HUBOARD_ENV'] == "production"
       config.middleware.use Faye::RackAdapter, 
-        mount: (ENV['SOCKET_BACKEND']), 
+        mount:"/site/pubsub", 
         timeout: 25,
         ping: 20,
         extensions: [FayeExtensions::Disconnect.new]
