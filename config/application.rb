@@ -47,6 +47,12 @@ module HuboardWeb
           type: Faye::Redis,
           uri: (ENV['REDIS_URL'] || 'redis://localhost:6379')
         }
+    elsif !ENV['SELF_HOST_FAYE'] && ENV['HUBOARD_ENV'] == "production"
+      config.middleware.use Faye::RackAdapter, 
+        mount: (ENV['SOCKET_BACKEND']), 
+        timeout: 25,
+        ping: 20,
+        extensions: [FayeExtensions::Disconnect.new]
     end
 
     Faraday::Response::RaiseGheeError.const_get("ERROR_MAP").each do |status, exception|
