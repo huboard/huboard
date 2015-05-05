@@ -8,7 +8,10 @@
         {{input value=description placeholder="Description"}}
       </label>
       <label>
-        {{hb-date-picker valueBinding="due_on" placeholder="Due on: yyyy-mm-dd"}}
+        {{input valueBinding="dueDate" placeholder="Due on: yyyy-mm-dd"}}
+      </label>
+      <label>
+        {{hb-date-picker dueDateBinding="dueDate"}}
       </label>
       <button {{bind-attr disabled=disabled}} class="hb-button">Create milestone</button>
     </div>

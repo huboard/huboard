@@ -2,6 +2,7 @@ import Ember from 'ember';
 
 var MilestonesCreateController = Ember.ObjectController.extend({
   needs: ["application"],
+  dueDate: "",
   actions: {
     submit: function() {
       var controller = this;
