@@ -33,7 +33,7 @@ var AssigneeController = Ember.ObjectController.extend({
     }.bind(this));
   }.observes("lastClicked.mode"),
   avatars : function () {
-    var issues = this.get("issues")
+    var issues = this.get("issues");
     return this.get("assignees").filter(function(assignee){
       return _.find(issues, function(issue){
         return issue.assignee &&

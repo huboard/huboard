@@ -74,12 +74,12 @@ var MilestonesRoute = Ember.Route.extend({
 
     createNewMilestone : function () {
       this.controllerFor("milestones.create").set("model", Milestone.createNew());
-      this.send("openModal","milestones.create")
+      this.send("openModal","milestones.create");
     },
 
     editMilestone : function (milestone) {
       this.controllerFor("milestones.edit").set("model", Milestone.create(milestone));
-      this.send("openModal","milestones.edit")
+      this.send("openModal","milestones.edit");
     },
 
     archive: function(issue) {
@@ -124,8 +124,8 @@ var MilestonesRoute = Ember.Route.extend({
       milestones.pushObject(milestone);
       Ember.run.schedule('afterRender', controller, function () {
         controller.incrementProperty("forceRedraw");
-        this.send("closeModal")
-      }.bind(this))
+        this.send("closeModal");
+      }.bind(this));
     },
 
     milestoneUpdated: function(milestone){
@@ -133,8 +133,8 @@ var MilestonesRoute = Ember.Route.extend({
       var milestones = controller.get("model.milestones");
       Ember.run.schedule('afterRender', controller, function () {
         controller.incrementProperty("forceRedraw");
-        this.send("closeModal")
-      }.bind(this))
+        this.send("closeModal");
+      }.bind(this));
     }
   }
 });
