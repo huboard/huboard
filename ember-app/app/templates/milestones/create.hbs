@@ -1,19 +1,26 @@
 <div class="fullscreen-card">
+  <div class="milestone-due-date">
+    <h5> due date: {{dateText}} </h5>
+    <small> <a href="#" {{action "clearDueDate"}}> clear </a> </small>
+  </div>
+  <div class="milestone-title">
+    <h3> New Milestone </h3>
+    <hr>
+  </div>
   <form {{action "submit" on="submit"}} class="flex-form split-form">
     <div class="flex-form-left">
       <label>
         {{input value=title placeholder="Title"}}
       </label>
       <label>
-        {{input value=description placeholder="Description"}}
+        {{textarea value=description placeholder="Description"}}
       </label>
+      <button {{bind-attr disabled=disabled}} class="hb-button submit-button">Create milestone</button>
+    </div>
+    <div class="flex-form-right">
       <label>
-        {{input valueBinding="dueDate" placeholder="Due on: yyyy-mm-dd"}}
+        {{hb-date-picker dueDateBinding="dueDate" dateTextBinding="dateText"}}
       </label>
-      <label>
-        {{hb-date-picker dueDateBinding="dueDate"}}
-      </label>
-      <button {{bind-attr disabled=disabled}} class="hb-button">Create milestone</button>
     </div>
   </form>
 </div>

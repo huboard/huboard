@@ -1,17 +1,19 @@
 import Ember from 'ember';
 
-export default Ember.View.extend({
+export default Ember.Component.extend({
   classNames: ['date-picker'],
-  format: "yyyy-mm-dd",
-  size: 8,
+  dateText: "",
   didInsertElement: function() {
     var self = this;
     return this.$().datepicker({
-      format: this.get('format'),
+      defaultDate: 0,
       todayHighlight: true,
       keyboardNavigation: false,
+      changeYear: true,
       onSelect: function(dateText){
-        self.set("dueDate", dateText);
+        var date = new Date(dateText);
+        self.set("dueDate", date.toISOString());
+        self.set("dateText", dateText);
       }
     });
   }

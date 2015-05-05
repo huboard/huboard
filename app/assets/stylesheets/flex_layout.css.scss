@@ -23,6 +23,8 @@
 @import 'textcomplete';
 @import "tooltips";
 @import "markdown";
+@import "milestone";
+@import "date_picker";
 
 #application > .ember-view {
    @include display(flex);

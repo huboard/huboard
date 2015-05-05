@@ -2,7 +2,7 @@ module Api
   class MilestonesController < ApplicationController
     def create
       milestone = huboard.board(params[:user],params[:repo])
-        .create_milestone params[:milestone]
+        .create_milestone params
 
       render json: milestone
     end

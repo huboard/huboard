@@ -1,0 +1,46 @@
+.milestone-create, .milestone-edit {
+  .fullscreen-card {
+    margin: 100px;
+
+    .milestone-due-date {
+      float: right;
+      position: relative;
+      margin-right: 10px;
+      bottom: 6px;
+      h5 {
+        margin-bottom: 0px;
+        float: left;
+      }
+      a {
+        float: right;
+        top: 10px;
+        position: relative;
+        margin-left: 5px;
+        color: $hb-purple-dark;
+      }
+    }
+
+    .milestone-title {
+      padding: 0 0 0 15px;
+      hr {
+        margin: 5px 10px 10px 0;
+      }
+
+    }
+
+    textarea {
+      border: 1px solid #ccc;
+      width: auto;
+      resize: none;
+      height: 126px;
+    }
+
+    .submit-button {
+      margin-top: 12px;
+    }
+
+    .split-form {
+      width: 725px;
+    }
+  }
+}

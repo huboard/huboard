@@ -2,7 +2,11 @@ import Ember from 'ember';
 
 var MilestonesCreateController = Ember.ObjectController.extend({
   needs: ["application"],
+  dateText: "( optional )",
   dueDate: "",
+  dueDateChanged: function(){
+    this.set("model.due_on", this.get("dueDate"));
+  }.observes("dueDate"),
   actions: {
     submit: function() {
       var controller = this;
@@ -11,6 +15,9 @@ var MilestonesCreateController = Ember.ObjectController.extend({
          controller.send("milestoneCreated", milestone);
          controller.set("processing",false);
       });
+    },
+    clearDueDate: function(){
+      this.set("dateText", "( optional )");
     }
   },
   isCollaboratorBinding: "App.repo.is_collaborator",
@@ -20,7 +27,6 @@ var MilestonesCreateController = Ember.ObjectController.extend({
   isValid: function () {
     return this.get("model.title");
   }.property("model.title")
-
 });
 
 export default MilestonesCreateController;
