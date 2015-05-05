@@ -48,6 +48,7 @@ gem 'wkhtmltopdf-heroku'
 
 # BUNDLE_WITHOUT="development:test:saas"
 gem 'saas', require: nil, path: "vendor/engines/saas"
+gem 'faye_extensions', path: 'vendor/gems/faye_extensions'
 gem 'responders'
 gem 'stripe-rails'
 gem 'heroku-deflater', group: :production
