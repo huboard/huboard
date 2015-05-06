@@ -6,15 +6,18 @@ export default Ember.Component.extend({
   didInsertElement: function() {
     var self = this;
     return this.$().datepicker({
-      defaultDate: 0,
+      defaultDate: new Date(self.get("dueDate")),
       todayHighlight: true,
       keyboardNavigation: false,
       changeYear: true,
       onSelect: function(dateText){
         var date = new Date(dateText);
-        self.set("dueDate", date.toISOString());
+        self.set("dueDate", date);
         self.set("dateText", dateText);
       }
     });
-  }
+  },
+  updatePicker: function(){
+    this.$().datepicker('setDate', this.get("dueDate"));
+  }.observes("dueDate")
 });

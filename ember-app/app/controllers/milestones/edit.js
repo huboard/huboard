@@ -2,6 +2,9 @@ import Ember from 'ember';
 
 var MilestonesEditController = Ember.ObjectController.extend({
   needs: ["application"],
+  dueDate: function(){
+    return this.get("model.due_on");
+  }.property("model.due_on", "model"),
   actions: {
     submit: function() {
       var controller = this;
@@ -11,6 +14,9 @@ var MilestonesEditController = Ember.ObjectController.extend({
          controller.send("milestoneUpdated", milestone);
          controller.set("processing",false);
       });
+    },
+    clearDueDate: function(){
+      this.set("model.due_on", null);
     }
   },
   isCollaboratorBinding: "App.repo.is_collaborator",
