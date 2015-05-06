@@ -30,6 +30,22 @@ function serialize() {
 var Serializable = Ember.Mixin.create({
   serialize: function () {
     return serialize.call(this);
+  },
+  
+  //Date string to ISO string
+  setDateToISO: function(key){
+    var date = this.get(key);
+    if (date !== null){
+      this.set(key, moment(date).toISOString());
+    }
+  },
+
+  //ISO string to Date string 
+  setISOToDate: function(key){
+    var date = this.get(key);
+    if (date !== null){
+      this.set(key, moment(date).toDate().toString());
+    }
   }
 });
 
