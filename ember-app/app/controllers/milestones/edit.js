@@ -4,7 +4,7 @@ var MilestonesEditController = Ember.ObjectController.extend({
   needs: ["application"],
   dueDate: function(){
     return this.get("model.due_on");
-  }.property("model.due_on", "model"),
+  }.property("model.due_on"),
   actions: {
     submit: function() {
       var controller = this;

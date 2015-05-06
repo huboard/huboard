@@ -12,10 +12,10 @@
     </div>
     <div class="flex-form-right">
       <h5> 
-        Due date: {{dateText}} 
+        Due date: {{format-date dueDate}} 
         <small> <a href="#" {{action "clearDueDate"}}> clear </a> </small>
       </h5>
-      {{hb-date-picker dueDateBinding="model.due_on" dateTextBinding="dateText"}}
+      {{hb-date-picker dueDateBinding="model.due_on"}}
     </div>
   </form>
 </div>
