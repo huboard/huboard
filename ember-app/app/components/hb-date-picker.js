@@ -10,6 +10,9 @@ export default Ember.Component.extend({
       todayHighlight: true,
       keyboardNavigation: false,
       changeYear: true,
+      changeMonth: true,
+      prevText: '◀',
+      nextText: '▶',
       onSelect: function(dateText){
         var date = new Date(dateText);
         self.set("dueDate", date);
