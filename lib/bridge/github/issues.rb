@@ -84,15 +84,15 @@ class Huboard
 
     def create_milestone(params)
       milestone = Hashie::Mash.new params["milestone"]
-      description = milestone.extend(Milestone)["description"]
 
       milestone = gh.milestones.create({
         title: milestone.title,
-        description: description,
+        description: milestone.description,
         due_on: milestone.due_on
       }).extend(Milestone)
 
-      milestone.merge!(repo: {owner: {login: user}, name: repo, full_name: "#{user}/#{repo}" })
+      milestone.attach_client connection_factory
+      milestone.merge!(repo: {owner: {login: user}, name: repo, full_name: "#{user}/#{repo}" }).reorder(milestone['number'])
     end
 
     module Card
