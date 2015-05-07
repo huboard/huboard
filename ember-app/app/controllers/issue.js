@@ -94,7 +94,7 @@ var IssueController = Ember.ObjectController.extend({
   },
   commentBody: null,
   isEmpty: function(){
-    return Ember.isEmpty(this.get('commentBody'));
+    return Ember.isBlank(this.get('commentBody'));
   }.property('commentBody'),
   isValid: function () {
     return this.get("commentBody");
