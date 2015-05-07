@@ -10,7 +10,7 @@ module Api
       milestone = huboard.board(params[:user],params[:repo])
       .milestone(params[:id]).patch(params[:milestone])
 
-      json milestone
+      render json: milestone
     end
   end
 end
