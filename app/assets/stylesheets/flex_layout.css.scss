@@ -102,10 +102,6 @@
         color: #666;
       }
     }
-    a{
-      line-height: 20px;
-      vertical-align: middle;
-    }
   }
    height: 40px;
    line-height: 40px;
@@ -216,14 +212,20 @@
   > h3 {
 
     line-height: 16px;
+    position: relative;
 
     .ui-icon {
       float:left;
       padding-right: 6px !important;
-
       &.ui-icon-gear {
-        float:right;
+        display:none;
+        color: $hb-purple;
+        position: absolute;
+        top: 11px;
+        right: 2px;
+        opacity: 1;
       }
+
     }
 
     .text {
@@ -232,7 +234,14 @@
       overflow: hidden;
       display: inline-block;
       max-width: calc(100% - 30px);
-
+    }
+    &:hover {
+      .ui-icon.ui-icon-gear {
+        display: block;
+      }
+      .text {
+        max-width: calc(100% - 40px);
+      }
     }
   }
 }
