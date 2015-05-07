@@ -45,7 +45,7 @@ var MilestonesController = Ember.ObjectController.extend({
     }).value().sort(function(a, b) {
       return a.milestone._data.order - b.milestone._data.order;
     });
-  }.property(),
+  }.property("forceRedraw"),
 
   forceRedraw: 0,
 

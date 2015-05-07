@@ -2,11 +2,9 @@ import Ember from 'ember';
 
 var MilestonesCreateController = Ember.ObjectController.extend({
   needs: ["application"],
-  dateText: "( optional )",
-  dueDate: "",
-  dueDateChanged: function(){
-    this.set("model.due_on", this.get("dueDate"));
-  }.observes("dueDate"),
+  dueDate: function(){
+    return this.get("model.due_on");
+  }.property("model.due_on"),
   actions: {
     submit: function() {
       var controller = this;
