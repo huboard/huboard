@@ -59,7 +59,9 @@ var IssueController = Ember.ObjectController.extend({
       Ember.run.next(this, "send", "forceRepaint", "milestones");
     },
     submitComment: function () {
-      if (this.get("processing") || !this.get("commentBody")){ return; }
+      if (this.get("processing") || this.get("isEmpty")) { 
+        return; 
+      }
       var comments = this.get("model.activities.comments");
 
       this.set("processing", true);
@@ -91,11 +93,14 @@ var IssueController = Ember.ObjectController.extend({
     }
   },
   commentBody: null,
+  isEmpty: function(){
+    return Ember.isEmpty(this.get('commentBody'));
+  }.property('commentBody'),
   isValid: function () {
     return this.get("commentBody");
   }.property("commentBody"),
   disabled: function () {
-      return this.get("processing") || !this.get("isValid");
+      return this.get("processing") || !this.get("isValid") || this.get('isEmpty');
   }.property("processing","isValid"),
   _events : function () {
      var events = this.get("model.activities.events");
