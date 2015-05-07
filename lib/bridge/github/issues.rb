@@ -89,7 +89,7 @@ class Huboard
         title: milestone.title,
         description: milestone.description,
         due_on: milestone.due_on
-      })
+      }).extend(Milestone).merge!(repo: {owner: {login: user}, name: repo, full_name: "#{user}/#{repo}" })
     end
 
     module Card
@@ -267,7 +267,7 @@ class Huboard
       end
 
       def patch(hash)
-        m = client.patch hash["milestone"]
+        m = client.patch hash
         m.extend(Milestone).merge! :repo => self[:repo]
       end
 
