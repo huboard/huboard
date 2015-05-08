@@ -154,10 +154,12 @@ var MilestonesRoute = Ember.Route.extend({
       });
       controller.set("model.issues", issues);
 
-      //Remove old milestone from columns
-      var combined = controller.get("model.combinedMilestones");
-      delete combined[milestone.originalTitle.toLowerCase()];
-      controller.set("model.combinedMilestones", combined);
+      //Remove old milestone from columns (unless title is the same)
+      if (milestone.title !== milestone.originalTitle){
+        var combined = controller.get("model.combinedMilestones");
+        delete combined[milestone.originalTitle.toLowerCase()];
+        controller.set("model.combinedMilestones", combined);
+      }
 
       Ember.run.schedule('afterRender', controller, function () {
         controller.incrementProperty("forceRedraw");
