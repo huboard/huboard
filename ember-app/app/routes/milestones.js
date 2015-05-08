@@ -137,6 +137,8 @@ var MilestonesRoute = Ember.Route.extend({
       var milestones = controller.get("model.milestones");
       milestones = milestones.map(m => {
         if (m.title === milestone.originalTitle){
+          m.description = milestone.description;
+          m.due_on = milestone.due_on;
           return milestone;
         }
         return m;
