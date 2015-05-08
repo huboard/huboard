@@ -31,7 +31,7 @@ var MilestonesCreateView = ModalView.extend(KeyPressHandlingMixin, {
     }
 
     var textarea = this.$(".markdown-composer textarea");
-    if (textarea.val().length){
+    if (textarea.val() && textarea.val().length){
       return true;
     }
 
