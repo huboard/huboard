@@ -78,6 +78,8 @@ var MilestonesRoute = Ember.Route.extend({
     },
 
     editMilestone : function (milestone) {
+      milestone.originalTitle = milestone.title;
+      var controller = this.controllerFor("milestones");
       this.controllerFor("milestones.edit").set("model", Milestone.create(milestone));
       this.send("openModal","milestones.edit");
     },
@@ -130,7 +132,33 @@ var MilestonesRoute = Ember.Route.extend({
 
     milestoneUpdated: function(milestone){
       var controller = this.controllerFor("milestones");
+
+      //Replace old milestone data with new
       var milestones = controller.get("model.milestones");
+      milestones = milestones.map(m => {
+        if (m.title === milestone.originalTitle){
+          return milestone;
+        }
+        return m;
+      });
+      controller.set("model.milestones", milestones);
+
+      //Remap issues to new milestone title (if changed)
+      var issues = controller.get("model.combinedIssues");
+      issues = issues.map(issue => {
+        if (issue.milestone && (issue.milestone.title === milestone.originalTitle)){
+          issue.milestone.title = milestone.title;
+          return issue
+        }
+        return issue;
+      });
+      controller.set("model.issues", issues);
+
+      //Remove old milestone from columns
+      var combined = controller.get("model.combinedMilestones");
+      delete combined[milestone.originalTitle.toLowerCase()];
+      controller.set("model.combinedMilestones", combined);
+
       Ember.run.schedule('afterRender', controller, function () {
         controller.incrementProperty("forceRedraw");
         this.send("closeModal");

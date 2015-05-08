@@ -12,7 +12,7 @@ var Milestone = Ember.Object.extend(Serializable,{
       dataType: 'json',
       type: "POST",
       contentType: "application/json"}).then(function(response){
-      return Milestone.create(response);
+        return Milestone.create(response);
     });
   },
   saveEdit: function () {
@@ -25,10 +25,22 @@ var Milestone = Ember.Object.extend(Serializable,{
       url: "/api/" + full_name + "/milestones/" + this.get("number"),
       data: JSON.stringify({milestone: this.serialize(), correlationId: this.get("correlationId") }),
       dataType: 'json',
-      type: "POST",
+      type: "PUT",
       contentType: "application/json"}).then(function(response){
       return Milestone.create(response);
     });
+  },
+  saveLinkedEdit: function(board, title){
+    var milestone = _.find(board.milestones, milestone => {
+      return milestone.title === title;
+    });
+
+    return Ember.$.ajax( {
+      url: "/api/" + board.full_name + "/milestones/" + milestone.number,
+      data: JSON.stringify({milestone: this.serialize(), correlationId: this.get("correlationId") }),
+      dataType: 'json',
+      type: "PUT",
+      contentType: "application/json"});
   },
   processing: false,
   loaded: false,

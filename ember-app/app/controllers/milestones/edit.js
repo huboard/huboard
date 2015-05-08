@@ -9,8 +9,10 @@ var MilestonesEditController = Ember.ObjectController.extend({
     submit: function() {
       var controller = this;
       this.set("processing",true);
+      this.editLinkedMilestones();
 
       this.get("model").saveEdit().then(function(milestone){
+         milestone.originalTitle = controller.get("model.originalTitle");
          controller.send("milestoneUpdated", milestone);
          controller.set("processing",false);
       });
@@ -25,8 +27,21 @@ var MilestonesEditController = Ember.ObjectController.extend({
   }.property("processing","isValid"),
   isValid: function () {
     return this.get("model.title");
-  }.property("model.title")
+  }.property("model.title"),
 
+  editLinkedMilestones: function(){
+    var self = this;
+    var boards = this.get("controllers.application.model._linkedBoards");
+    var matches = _.filter(boards, board => {
+      return _.find(board.milestones, milestone => {
+        return self.get("model.originalTitle") === milestone.title;
+      });
+    });
+
+    matches.forEach(board => {
+      this.get("model").saveLinkedEdit(board, this.get("model.originalTitle"));
+    });
+  }
 });
 
 export default MilestonesEditController;
