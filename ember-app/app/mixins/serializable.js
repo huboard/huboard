@@ -35,6 +35,9 @@ var Serializable = Ember.Mixin.create({
   //Date string to ISO string
   setDateToISO: function(key){
     var date = this.get(key);
+    if (date === "Invalid Date"){
+      return this.set(key, null);
+    }
     if (date !== null){
       this.set(key, moment(date).toISOString());
     }
