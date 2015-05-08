@@ -26,21 +26,25 @@ var MilestonesEditView = ModalView.extend(KeyPressHandlingMixin, {
     this.$().off("keydown");
   }.on("willDestroyElement"),
   modalCloseCriteria: function(){
+    if (this.get("controller.processing")){
+      return true;
+    }
     var textarea = this.$(".markdown-composer textarea");
     if (textarea.val().length){
       return true;
     }
 
-    var date = Ember.$(".date-picker").datepicker("getDate");
-    var today = new Date().toDateString();
-    var date_today = date ? new Date(date).toDateString() :
-      today;
-    console.log(today);
-    console.log(date_today);
-    if (date !== null && today !== date_today){
-      return true;
-    }
     return false;
+  },
+  actions: {
+    modalCloseAction: function(){
+      var processing = this.get("controller.processing");
+        if(processing){
+          return;
+        }
+        var closeModal = confirm("Any unsaved work may be lost! Continue?");
+        if(closeModal){ this.get('controller').send('closeModal'); }
+    }
   }
 });
 
