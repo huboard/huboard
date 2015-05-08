@@ -15,6 +15,7 @@ var MilestonesCreateController = Ember.ObjectController.extend({
       });
     },
     clearDueDate: function(){
+      //Fixme
       this.set("dateText", "( optional )");
     }
   },

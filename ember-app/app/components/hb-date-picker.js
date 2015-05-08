@@ -19,6 +19,8 @@ export default Ember.Component.extend({
     });
   },
   updatePicker: function(){
-    this.$().datepicker('setDate', this.get("dueDate"));
+    if (this.get("processing") !== true) {
+      this.$().datepicker('setDate', this.get("dueDate"));
+    }
   }.observes("dueDate")
 });
