@@ -15,6 +15,8 @@ var MilestonesEditController = Ember.ObjectController.extend({
          milestone.originalTitle = controller.get("model.originalTitle");
          controller.send("milestoneUpdated", milestone);
          controller.set("processing",false);
+      }).fail(function(){
+         controller.set("processing",false);
       });
     },
     clearDueDate: function(){
