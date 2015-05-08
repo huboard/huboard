@@ -1,3 +1,4 @@
+import Ember from 'ember';
 import ModalView from 'app/views/modal';
 import KeyPressHandlingMixin from 'app/mixins/key-press-handling';
 
@@ -30,9 +31,13 @@ var MilestonesEditView = ModalView.extend(KeyPressHandlingMixin, {
       return true;
     }
 
+    var date = Ember.$(".date-picker").datepicker("getDate");
     var today = new Date().toDateString();
-    var datepicker_today = new Date(datepicker).toDateString();
-    if (datepicker !== null && today !== datepicker_today){
+    var date_today = date ? new Date(date).toDateString() :
+      today;
+    console.log(today);
+    console.log(date_today);
+    if (date !== null && today !== date_today){
       return true;
     }
     return false;

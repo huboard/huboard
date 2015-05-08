@@ -31,12 +31,6 @@ var MilestonesCreateView = ModalView.extend(KeyPressHandlingMixin, {
       return true;
     }
 
-    var datepicker = Ember.$(".date-picker").datepicker("getDate");
-    var today = new Date().toDateString();
-    var datepicker_today = new Date(datepicker).toDateString();
-    if (datepicker !== null && today !== datepicker_today){
-      return true;
-    }
     return false;
   }
 });
