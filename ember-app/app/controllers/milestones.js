@@ -62,6 +62,7 @@ var MilestonesController = Ember.ObjectController.extend({
       },
 
       success: function(response) {
+        milestoneController.set("model.milestone.description", response.description);
         milestoneController.set("model.milestone._data", response._data);
       }
     });
