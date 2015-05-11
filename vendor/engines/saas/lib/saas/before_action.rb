@@ -5,6 +5,8 @@ module Saas
       return if ["errors","saas/errors"].include? params[:controller]
       return  unless params.has_key?(:user) && params.has_key?(:repo)
 
+      not_found if params[:user] == "site" && params[:repo] == "pubsub"
+
       repo = gh.repos(params[:user], params[:repo]).raw
 
       not_found unless repo.status == 200

@@ -4,6 +4,12 @@ PATH
     saas (0.0.1)
       rails (~> 4.2.0)
 
+PATH
+  remote: vendor/gems/faye_extensions
+  specs:
+    faye_extensions (0.0.1)
+      rails (~> 4.2.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -439,6 +445,7 @@ DEPENDENCIES
   faraday-http-cache
   faye
   faye-redis
+  faye_extensions!
   foreman
   ghee
   hashie
