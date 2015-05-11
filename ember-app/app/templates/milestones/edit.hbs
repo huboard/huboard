@@ -4,6 +4,11 @@
   </div>
   <form {{action "submit" on="submit"}} class="flex-form split-form">
     <div class="flex-form-left">
+      {{#if errors}}
+        <div class="alert alert-error">
+          The milestone could not be changed! Ensure the title is unique.
+        </div>
+      {{/if}}
       <label>
         {{input value=title placeholder="Title"}}
       </label>

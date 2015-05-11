@@ -2,6 +2,10 @@ import Ember from 'ember';
 
 var MilestonesCreateController = Ember.ObjectController.extend({
   needs: ["application"],
+  errors: false,
+  clearErrors: function(){
+    this.set("errors", false);
+  }.observes('model.title', 'model.description', 'model.due_on'),
   dueDate: function(){
     return this.get("model.due_on");
   }.property("model.due_on"),
@@ -12,8 +16,9 @@ var MilestonesCreateController = Ember.ObjectController.extend({
       this.get("model").saveNew().then(function(milestone){
          controller.send("milestoneCreated", milestone);
          controller.set("processing",false);
-      }).fail(function(){
+      }).fail(function(e){
          controller.set("processing",false);
+         controller.set("errors", true);
       });
     },
     clearDueDate: function(){

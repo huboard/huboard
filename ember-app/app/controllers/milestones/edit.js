@@ -2,6 +2,10 @@ import Ember from 'ember';
 
 var MilestonesEditController = Ember.ObjectController.extend({
   needs: ["application"],
+  errors: false,
+  clearErrors: function(){
+    this.set("errors", false);
+  }.observes('model.title', 'model.description', 'model.due_on'),
   dueDate: function(){
     return this.get("model.due_on");
   }.property("model.due_on"),
@@ -17,6 +21,7 @@ var MilestonesEditController = Ember.ObjectController.extend({
          controller.set("processing",false);
       }).fail(function(){
          controller.set("processing",false);
+         controller.set("errors", true);
       });
     },
     clearDueDate: function(){
