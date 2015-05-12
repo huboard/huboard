@@ -10,6 +10,12 @@ var CollectionView = Ember.CollectionView.extend({
   style: Ember.computed.alias("controller.style"),
   content: Ember.computed.alias("controller.issues"),
   isHovering: false,
+  visibleElements: function(){
+    var issues = _.filter(this.get("content"), function(view){
+      return !view.get("isFiltered");
+    });
+    this.set("controller.visibleIssues", issues);
+  }.observes('@each.isFiltered', 'controller.combinedIssues'),
   didInsertElement: function(){
     var that = this;
     this.$().sortable({

@@ -1,7 +1,15 @@
 {{#if wip}}
-  {{issuesCount}} of {{wip}}
+  {{#if issuesAreFiltered}}
+    {{issuesCurrentlyVisible}}/{{issuesCount}} of {{wip}}
+  {{else}}
+    {{issuesCount}} of {{wip}}
+  {{/if}}
 {{else}}
   {{#if settings.showColumnCounts}}
-    {{issuesCount}}
+    {{#if issuesAreFiltered}}
+      {{issuesCurrentlyVisible}}/{{issuesCount}}
+    {{else}}
+      {{issuesCount}}
+    {{/if}}
   {{/if}}
 {{/if}}

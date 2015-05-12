@@ -13,7 +13,13 @@ var ColumnCountController = Ember.ObjectController.extend({
   isOverWip: function(){
     var wip = this.get('model.wip');
     return wip && this.get("issuesCount") > wip;
-  }.property("issuesCount")
+  }.property("issuesCount"),
+  issuesAreFiltered: function(){
+    return this.get("issuesCount") !== this.get("parentController.visibleIssues.length");
+  }.property("issuesCount", "parentController.visibleIssues.length"),
+  issuesCurrentlyVisible: function(){
+    return this.get("parentController.visibleIssues.length");
+  }.property("parentController.visibleIssues.length")
 });
 
 export default ColumnCountController;
