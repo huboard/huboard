@@ -16,7 +16,7 @@ var MilestonesCreateController = Ember.ObjectController.extend({
       this.get("model").saveNew().then(function(milestone){
          controller.send("milestoneCreated", milestone);
          controller.set("processing",false);
-      }).fail(function(e){
+      }).fail(function(){
          controller.set("processing",false);
          controller.set("errors", true);
       });

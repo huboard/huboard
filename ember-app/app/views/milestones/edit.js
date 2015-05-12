@@ -1,4 +1,3 @@
-import Ember from 'ember';
 import ModalView from 'app/views/modal';
 import KeyPressHandlingMixin from 'app/mixins/key-press-handling';
 

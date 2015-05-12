@@ -79,7 +79,7 @@ var MilestonesRoute = Ember.Route.extend({
 
     editMilestone : function (milestone) {
       milestone.originalTitle = milestone.title;
-      var controller = this.controllerFor("milestones");
+      this.controllerFor("milestones");
       this.controllerFor("milestones.edit").set("model", Milestone.create(milestone));
       this.send("openModal","milestones.edit");
     },
@@ -150,7 +150,7 @@ var MilestonesRoute = Ember.Route.extend({
       issues = issues.map(issue => {
         if (issue.milestone && (issue.milestone.title === milestone.originalTitle)){
           issue.milestone.title = milestone.title;
-          return issue
+          return issue;
         }
         return issue;
       });
