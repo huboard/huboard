@@ -1,6 +1,8 @@
 import Ember from 'ember';
 
 var MilestonesMissingController = Ember.ObjectController.extend({
+  needs: ['milestones'],
+  linkedRepos: Ember.computed.alias("controllers.milestones.model.linkedRepos"),
   disabled: false,
   actions: {
     closeModal: function(){
@@ -32,6 +34,11 @@ var MilestonesMissingController = Ember.ObjectController.extend({
         dataType: 'json',
         data: {milestone: milestone},
         success: function(response) {
+          controller.get("linkedRepos").forEach(function(repo){
+            if (repo.full_name === controller.get("cardController.model.repo.full_name")){
+              repo.milestones.pushObject(response);
+            }
+          });
           controller.get("model.onAccept").call(controller.get("columnController"), response);
           controller.set("disabled", false);
           controller.get('target').send('closeModal');
