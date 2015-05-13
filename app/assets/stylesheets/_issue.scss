@@ -41,8 +41,64 @@
 }
 
 
+
+.submit-comment-buttons {
+  @include display(flex);
+  justify-content: flex-end;
+
+  .hb-button {
+    margin: 0 2px;
+   }
+
+  .spinner {
+    position: relative;
+    margin: 2px 2px;
+  }
+}
+
+.flex-issue-title {
+  @include display(flex);
+  .issue-closed-badge p {
+    margin: 4px 4px;
+    color: #ffffff;
+    background-color: $hb-purple-dark;
+    border: 4px solid $hb-purple-dark;
+    border-radius: 4px;
+    line-height: 1em;
+    font-size: 12px;
+  }
+}
+
+.issue-reference-info {
+  &.ui-blur {
+    .commit-info {
+      @include filter(blur(5px));
+    }
+  }
+  .commit-info {
+    margin-left: 60px;
+    .commit {
+      float: right;
+      margin-right: 6px;
+    }
+
+   .commit-link {
+     color: #999;
+     font-weight: bolder;
+     letter-spacing: -1px;
+    }
+  }
+  .spinner {
+    position: relative;
+    float: right;
+    margin-right: 30px;
+    bottom: 32px;
+  }
+}
+
 .card-event {
    line-height: 40px;
+   @include clearfix;
    .label {
       display: inline-block;
       width: 75px;
@@ -107,55 +163,4 @@
      border-color: #6cc644;
      background: #6cc644;
    }
-}
-
-.submit-comment-buttons {
-  @include display(flex);
-  justify-content: flex-end;
-
-  .hb-button {
-    margin: 0 2px;
-   }
-
-  .spinner {
-    position: relative;
-    margin: 2px 2px;
-  }
-}
-
-.flex-issue-title {
-  @include display(flex);
-  .issue-closed-badge p {
-    margin: 4px 4px;
-    color: #ffffff;
-    background-color: $hb-purple-dark;
-    border: 4px solid $hb-purple-dark;
-    border-radius: 4px;
-    line-height: 1em;
-    font-size: 12px;
-  }
-}
-
-.issue-reference-info {
-  width: 100%;
-  float: right;
-  .commit-info {
-    margin-left: 8%;
-    .commit {
-      float: right;
-      margin-right: 1%;
-    }
-
-   .commit-link {
-     color: #999;
-     font-weight: bolder;
-     letter-spacing: -1px;
-    }
-  }
-  .spinner {
-    position: relative;
-    float: right;
-    margin-right: 30px;
-    bottom: 32px;
-  }
 }

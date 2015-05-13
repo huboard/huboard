@@ -1,9 +1,9 @@
 import Ember from 'ember';
 
 var IssueReferenceView = Ember.View.extend({
-  classNames: ["issue-reference-info"],
-  isVisible: false,
+  classNameBindings: [":issue-reference-info", "isLoaded:hb-loaded:ui-blur"],
   isProcessing: false,
+  isLoaded: false,
   commit: null,
   commitUrl: Ember.computed.alias("commit.html_url"),
   message: Ember.computed.alias("commit.commit.message"),
@@ -13,18 +13,20 @@ var IssueReferenceView = Ember.View.extend({
     }
     return this.get("commit.sha").substr(0,7);
   }.property("commit.sha"),
-
   didInsertElement: function(){
     this.set("model", this.get("parentView.content.model"));
 
     var self = this;
     var container = this.$().closest(".card-event");
     container.hover(function(){
-      self.set("isVisible", true);
       if (self.get("commit") === null) {
         self.fetchCommit();
       }
     });
+  },
+  willDestroyElement: function(){
+    var container = this.$().closest(".card-event");
+    container.off('hover');
   },
   fetchCommit: function(){
     if(this.get("isProcessing")){
@@ -35,7 +37,8 @@ var IssueReferenceView = Ember.View.extend({
     var commit = this.get("model.commit_id");
     this.get("controller").fetchCommit(commit)
       .then(function(commit){
-        self.doubleContainerHeight();
+        //self.doubleContainerHeight();
+        self.set('isLoaded', true);
         self.set("isProcessing", false);
         self.set("commit", commit);
       })

@@ -1,12 +1,20 @@
-{{#if view.isProcessing}}
-  <div class="spinner">
-    {{hb-spinner}}
-  </div>
+{{#if view.isLoaded}}
+  {{#if view.isProcessing}}
+    <div class="spinner">
+      {{hb-spinner}}
+    </div>
+  {{/if}}
+    <div class="commit-info"> 
+      <a class="commit" target="_blank" {{bind-attr href=view.commitUrl}}>
+        {{view.shortSha }}
+      </a> 
+     <span class="commit-link">-o-</span> {{hb-avatar user=view.model.actor width=16 height=16 }} {{view.message}} 
+    </div>
 {{else}}
-  <span class="commit-info"> 
-   <span class="commit-link">-o-</span> {{hb-avatar user=view.model.actor width=16 height=16 }} {{view.message}} 
-    <a class="commit" target="_blank" {{bind-attr href=view.commitUrl}}>
-      {{view.shortSha }}
+  <div class="commit-info"> 
+    <a class="commit" target="_blank" href="#">
+      1337bada55
     </a> 
-  </span>
+   <span class="commit-link">-o-</span> {{hb-avatar user=view.model.actor width=16 height=16 }} Lorem ipsum dolar 
+  </div>
 {{/if}}
