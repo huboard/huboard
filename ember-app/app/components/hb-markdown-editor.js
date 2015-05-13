@@ -1,7 +1,8 @@
 import Ember from 'ember';
+import config from '../config/environment'; //jshint ignore:line
+import MarkdownParsing from '../mixins/markdown-parsing';
 
-
-var HbMarkdownEditorComponent = Ember.Component.extend({
+var HbMarkdownEditorComponent = Ember.Component.extend(MarkdownParsing, {
   classNames: ["markdown-editor"],
   init: function () {
     this._super.apply(this, arguments);
@@ -14,15 +15,16 @@ var HbMarkdownEditorComponent = Ember.Component.extend({
   preview: "",
   mentions: [],
   onMarkdownChange: function () {
-    var that = this;
+    var self = this;
     return Ember.run.once(function () {
-       var markdown = that.get("markdown");
-
-       marked(markdown || "Nothing to preview",{gfm: true},function (err, content) {
-         that.set("preview",content);
-       });
+       var markdown = self.get("markdown");
+       marked(markdown || "Nothing to preview",{gfm: true}, self.markdownHandler.bind(self));
     });
   }.observes("markdown"),
+  markdownHandler: function(err, content){
+    content = this.commitParser(content);
+    this.set("preview",content);
+  },
   setupTextcomplete: function(){
     var component = this;
     var emojiStrategy = { 
@@ -58,7 +60,6 @@ var HbMarkdownEditorComponent = Ember.Component.extend({
       cache: true,
       maxCount: 5
     };
-
     this.$('textarea').textcomplete([ emojiStrategy, mentionStrategy ]);
 
   }.on('didInsertElement'),

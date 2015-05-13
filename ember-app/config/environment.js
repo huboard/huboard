@@ -2,6 +2,7 @@
 
 module.exports = function(environment) {
   var ENV = {
+    github: 'https://github.com/',
     modulePrefix: 'app',
     environment: environment,
     baseURL: '/',

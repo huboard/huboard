@@ -110,6 +110,12 @@ var Repo = Ember.Object.extend(Serializable,{
     return Ember.$.post(api, {
       link: name,
     },'json');
+  },
+  fetchCommits: function(repo){
+    return Ember.$.getJSON("/api/" + repo + "/commits")
+      .then(function(commits){
+        return commits;
+      }.bind(this));
   }
 });
 

@@ -40,6 +40,8 @@ Rails.application.routes.draw do
         put 'columns' => 'columns#update'
         get 'settings' => 'settings#index'
         get 'board' => 'board#index', as: 'board'
+        get 'commits' => 'board#commits', as: 'commits'
+        get 'commit/:commit' => 'board#commit', as: 'commit'
         get 'link_labels' => 'board#link_labels', as: 'link_labels'
         constraints(:linked_user => /[^\/]+/, :linked_repo => /[^\/]+/) do
           get 'linked/:linked_user/:linked_repo' => 'board#linked', as: 'linked_board'
