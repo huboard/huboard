@@ -40,7 +40,16 @@ var Milestone = Ember.Object.extend(Serializable,{
       data: JSON.stringify({milestone: this.serialize(), correlationId: this.get("correlationId") }),
       dataType: 'json',
       type: "PUT",
-      contentType: "application/json"});
+      contentType: "application/json"}).then(function(milestone){
+        return milestone;
+      });
+  },
+  saveToBoard: function(board){
+    var self = this;
+    board.set("milestones", board.milestones.map(m => {
+      if (m.title === self.originalTitle){ return self; }
+      return m;
+    }));
   },
   processing: false,
   loaded: false,

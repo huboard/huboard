@@ -1,7 +1,7 @@
 import Ember from 'ember';
 
 var MilestonesEditController = Ember.ObjectController.extend({
-  needs: ["application"],
+  needs: ["milestones"],
   errors: false,
   clearErrors: function(){
     this.set("errors", false);
@@ -9,6 +9,7 @@ var MilestonesEditController = Ember.ObjectController.extend({
   dueDate: function(){
     return this.get("model.due_on");
   }.property("model.due_on"),
+  linkedRepos: Ember.computed.alias("controllers.milestones.model.linkedRepos"),
   actions: {
     submit: function() {
       var controller = this;
@@ -38,7 +39,7 @@ var MilestonesEditController = Ember.ObjectController.extend({
 
   editLinkedMilestones: function(){
     var self = this;
-    var boards = this.get("controllers.application.model._linkedBoards");
+    var boards = this.get("linkedRepos");
     var matches = _.filter(boards, board => {
       return _.find(board.milestones, milestone => {
         return self.get("model.originalTitle") === milestone.title;
@@ -46,7 +47,15 @@ var MilestonesEditController = Ember.ObjectController.extend({
     });
 
     matches.forEach(board => {
-      this.get("model").saveLinkedEdit(board, this.get("model.originalTitle"));
+      this.get("model")
+        .saveLinkedEdit(board, this.get("model.originalTitle"))
+        .then(function(milestone){
+          self.get("model").saveToBoard(board);
+          self.set("linkedRepos", boards.map(function(b){
+            if (b.title === board.title){ return board; }
+            return b;
+          }));
+        });
     });
   }
 });

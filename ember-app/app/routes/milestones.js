@@ -136,11 +136,7 @@ var MilestonesRoute = Ember.Route.extend({
       //Replace old milestone data with new
       var milestones = controller.get("model.milestones");
       milestones = milestones.map(m => {
-        if (m.title === milestone.originalTitle){
-          m.description = milestone.description;
-          m.due_on = milestone.due_on;
-          return milestone;
-        }
+        if (m.title === milestone.originalTitle){ return milestone;}
         return m;
       });
       controller.set("model.milestones", milestones);
@@ -155,13 +151,6 @@ var MilestonesRoute = Ember.Route.extend({
         return issue;
       });
       controller.set("model.issues", issues);
-
-      //Remove old milestone from columns (unless title is the same)
-      if (milestone.title !== milestone.originalTitle){
-        var combined = controller.get("model.combinedMilestones");
-        delete combined[milestone.originalTitle.toLowerCase()];
-        controller.set("model.combinedMilestones", combined);
-      }
 
       Ember.run.schedule('afterRender', controller, function () {
         controller.incrementProperty("forceRedraw");
