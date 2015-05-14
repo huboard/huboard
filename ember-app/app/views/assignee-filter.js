@@ -18,7 +18,9 @@ var AssigneeFilterView = Ember.View.extend({
 
     if(previous && previous !== this){
       Ember.run.once(function(){
-        previous.set("mode", 0);
+        if(!previous.isDestroyed){
+          previous.set("mode", 0);
+        }
       });
     }
 
