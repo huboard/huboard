@@ -98,7 +98,9 @@
 
 .card-event {
    line-height: 40px;
-   @include clearfix;
+   &.card-event-referenced {
+     @include clearfix;
+   }
    .label {
       display: inline-block;
       width: 75px;
