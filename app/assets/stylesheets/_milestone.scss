@@ -1,0 +1,7 @@
+.milestone-create, .milestone-edit {
+  .fullscreen-card {
+    .flex-form-right {
+      @include flex(0 0 260px);
+    }
+  }
+}

@@ -2,10 +2,10 @@ import Ember from 'ember';
 
 var AssigneeController = Ember.ObjectController.extend({
   needs: ["application"],
+  noActiveMembers: function(){
+    return this.get("avatars").length === 0;
+  }.property("avatars"),
   actions: {
-    toggleShowMode: function(mode){
-      this.set("showMode", mode);
-    },
     clearFilters: function(){
       var self = this;
       Ember.run.once(function(){
@@ -18,9 +18,9 @@ var AssigneeController = Ember.ObjectController.extend({
       });
     }
   },
-  showMode: "less",
   assigneesBinding: "controllers.application.model.board.assignees",
   assigneeBinding: "controllers.application.assignee",
+  issuesBinding: "controllers.application.model.board.issues",
   memberFilterBinding: "App.memberFilter",
   lastClicked: null,
   filterChanged : function(){
@@ -32,20 +32,15 @@ var AssigneeController = Ember.ObjectController.extend({
       });
     }.bind(this));
   }.observes("lastClicked.mode"),
-  displayShowMore: function(){
-    return this.get("assignees").length > 24;
-  }.property(),
-  shouldShowMore: function () {
-    return this.get("showMode") === "more";
-  }.property("showMode"),
   avatars : function () {
-    switch (this.get("showMode")){
-      case "less":
-        return _.take(this.get("assignees"), 24);
-      case "more":
-        return this.get("assignees");
-    }
-  }.property("showMode"),
+    var issues = this.get("issues");
+    return this.get("assignees").filter(function(assignee){
+      return _.find(issues, function(issue){
+        return issue.assignee &&
+          issue.assignee.login === assignee.login;
+      });
+    });
+  }.property("assignees", "issues.@each.assignee"),
   filters : function () {
      return this.get("avatars").map(function(a){
          return Ember.Object.create({

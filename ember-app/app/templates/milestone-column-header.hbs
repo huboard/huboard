@@ -2,3 +2,6 @@
 <i class="ui-icon ui-icon-minus"></i>
 <span class="text">{{title}}</span>
 
+{{#if controller.model.milestone }}
+<i class="ui-icon ui-icon-gear" title="Edit milestone" {{action 'editMilestone' controller.model.milestone bubbles=false}}></i>
+{{/if}}

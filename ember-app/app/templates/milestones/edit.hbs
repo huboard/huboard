@@ -1,0 +1,26 @@
+<div class="fullscreen-card">
+  <div class="fullscreen-card-preamble clearfix">
+    <h3> Edit Milestone </h3>
+  </div>
+  <form {{action "submit" on="submit"}} class="flex-form split-form">
+    <div class="flex-form-left">
+      {{#if errors}}
+        <div class="alert alert-error">
+          The milestone could not be changed! Ensure the title is unique.
+        </div>
+      {{/if}}
+      <label>
+        {{input value=title placeholder="Title"}}
+      </label>
+      {{hb-markdown-editor markdown=description }}
+      <button {{bind-attr disabled=disabled}} class="hb-button">Update milestone</button>
+    </div>
+    <div class="flex-form-right">
+      <h5> 
+        Due date: {{format-date dueDate}} 
+        <small> <a href="#" {{action "clearDueDate"}}> clear </a> </small>
+      </h5>
+      {{hb-date-picker dueDateBinding="model.due_on" processingBinding=processing}}
+    </div>
+  </form>
+</div>
