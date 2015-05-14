@@ -41,31 +41,6 @@
 }
 
 
-.card-event {
-   line-height: 40px;
-   .label {
-      display: inline-block;
-      width: 75px;
-      text-align: center;
-      padding: 6px;
-   }
-   
-   &.card-event-reopened {
-     .label {
-       background-color: $hb-red;
-     }
-   }
-
-   img {
-    border-radius: 3px;
-    margin: 0 3px;
-   }
-
-   & + .card-comment {
-     margin-top: 10px;
-   }
-
-}
 
 .submit-comment-buttons {
   @include display(flex);
@@ -92,4 +67,102 @@
     line-height: 1em;
     font-size: 12px;
   }
+}
+
+.issue-reference-info {
+  &.ui-blur {
+    .commit-info {
+      @include filter(blur(5px));
+    }
+  }
+  .commit-info {
+    margin-left: 60px;
+    .commit {
+      float: right;
+      margin-right: 6px;
+    }
+
+   .commit-link {
+     color: #999;
+     font-weight: bolder;
+     letter-spacing: -1px;
+    }
+  }
+  .spinner {
+    position: relative;
+    float: right;
+    margin-right: 30px;
+    bottom: 32px;
+  }
+}
+
+.card-event {
+   line-height: 40px;
+   &.card-event-referenced {
+     @include clearfix;
+   }
+   .label {
+      display: inline-block;
+      width: 75px;
+      text-align: center;
+      padding: 6px;
+   }
+   
+   &.card-event-reopened {
+     .label {
+       background-color: $hb-red;
+     }
+   }
+
+   img {
+    border-radius: 3px;
+    margin: 0 3px;
+   }
+
+   & + .card-comment {
+     margin-top: 10px;
+   }
+
+   .ui-icon-bookmark {
+     position: relative;
+     color: #999;
+     font-size: 16px;
+     top: 4px;
+     border-style: solid;
+     border-color: white;
+     background: white;
+     border-width: 6px;
+     border-radius: 18px;
+     width: 10px;
+   }
+
+   .commit-badge-circle {
+     position: relative;
+     margin-right: 2px;
+     top: 2px;
+     border-style: solid;
+     display: inline-block;
+     border-width: 8px;
+     border-top-width: 6px;
+     border-radius: 50%;
+     line-height: 10px;
+     text-align: center;
+     height: 10px;
+     width: 10px;
+   }
+
+   .circle-slash-icon {
+     font-size: 16px;
+     font-weight: bolder;
+     color: white;
+     border-color: #f9646e;
+     background: #f9646e;
+   }
+   .circle-icon {
+     font-size: 16px;
+     font-weight: bolder;
+     color: white;
+     border-color: #6cc644;
+     background: #6cc644;
+   }
 }

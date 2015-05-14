@@ -9,6 +9,7 @@ require_relative "github/hooks"
 require_relative "github/board"
 require_relative "github/user"
 require_relative "github/comments"
+require_relative "github/commits"
 require_relative "middleware"
 require "addressable/uri"
 
@@ -75,5 +76,6 @@ class Huboard
     include Backlog
     include Hooks
     include Comments
+    include Commits
   end
 end

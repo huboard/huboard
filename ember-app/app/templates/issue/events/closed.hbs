@@ -1,2 +1,2 @@
-<span class="label">Closed</span> {{hb-avatar user=view.content.actor }}
-<strong>{{view.content.actor.login}}</strong> closed the issue {{ago view.content.created_at }}
+<span class="commit-badge-circle circle-slash-icon">&#8856;</span> {{hb-avatar user=view.content.actor width=20 height=20 }}
+<strong> <a target="_blank" {{bindAttr href=view.content.actor.html_url}}> {{view.content.actor.login}}</a></strong> closed the issue {{ago view.content.created_at }}

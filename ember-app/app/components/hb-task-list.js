@@ -1,6 +1,8 @@
 import Ember from 'ember';
+import config from '../config/environment'; //jshint ignore:line
+import MarkdownParsing from '../mixins/markdown-parsing';
 
-var HbTaskListComponent = Ember.Component.extend({
+var HbTaskListComponent = Ember.Component.extend(MarkdownParsing, {
   classNames: ["js-task-list-container"],
   onBodyChange: function(){
     Ember.run(this, function(){
@@ -11,7 +13,7 @@ var HbTaskListComponent = Ember.Component.extend({
     if(arguments.length > 1){
       this.cleanUp();
       Ember.run.schedule('afterRender', this, "wireUp");
-      return value;
+      return this.commitParser(value);
     } else {
       return this.get("body_html");
     }

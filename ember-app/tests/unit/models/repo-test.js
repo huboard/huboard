@@ -38,5 +38,4 @@ test('fetched board should contain issues', (assert) => {
   model.fetchBoard([]).then(response => {
     assert.ok(response.issues.length);
   });
-
 });

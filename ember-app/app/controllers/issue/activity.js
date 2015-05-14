@@ -9,7 +9,12 @@ var IssueActivityController = BufferedController.extend({
   currentUserBinding: "App.currentUser",
   mentions: Ember.computed.alias("controllers.issue.mentions"),
   isEditing: false,
-  disabled: false,
+  disabled: function(){
+    return this.get('isEmpty');
+  }.property('isEmpty'),
+  isEmpty: function(){
+    return Ember.isBlank(this.get('bufferedContent.body'));
+  }.property('bufferedContent.body'),
   canEdit: function(){
     return this.get("isLoggedIn") &&
       ( this.get("isCollaborator") || (this.get("currentUser.id") === this.get("model.user.id")) );
@@ -24,6 +29,9 @@ var IssueActivityController = BufferedController.extend({
       this.set("isEditing", true);
     },
     save: function() {
+      if(this.get('isEmpty')){
+        return;
+      }
       var controller = this,
         model = controller.get('model'),
         url = "/api/" + this.get("controllers.issue.model.repo.full_name") + "/issues/comments/" + this.get("model.id");
