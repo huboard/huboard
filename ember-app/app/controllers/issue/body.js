@@ -13,8 +13,8 @@ var IssueBodyController = BufferedController.extend({
     return this.get('isEmpty');
   }.property('isEmpty'),
   isEmpty: function(){
-    return Ember.isBlank(this.get('model.bufferedContent.body'));
-  }.property('model.bufferedContent.body'),
+    return Ember.isBlank(this.get('bufferedContent.body'));
+  }.property('bufferedContent.body'),
   canEdit: function(){
     return this.get("isLoggedIn") &&
       ( this.get("isCollaborator") || (this.get("currentUser.id") === this.get("model.user.id")) );
