@@ -9,6 +9,7 @@ var IssuesCreateController = Ember.ObjectController.extend({
     assignRepo: function(repo){
       this.set("model.repo.full_name", repo.full_name);
       this.set("otherLabels", repo.other_labels);
+      this.set("model.labels", []);
       this.set("milestones", repo.milestones);
       this.set("assignees", repo.assignees);
     }
@@ -41,7 +42,8 @@ var IssuesCreateController = Ember.ObjectController.extend({
   },
   allRepos: function(){
     var linked = this.get("controllers.application.model.board.linkedRepos");
-    return _.union([_.clone(this.get("repo"))], linked);
+    var board = this.get("controllers.application.model.board");
+    return _.union([_.clone(board)], linked);
   }.property("controllers.application.model.board.linkedRepos"),
 });
 
