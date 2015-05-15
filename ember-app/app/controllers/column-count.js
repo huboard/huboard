@@ -14,6 +14,9 @@ var ColumnCountController = Ember.ObjectController.extend({
     return this.get('combinedIssues.length');
   }.property("combinedIssues"),
   isFiltered: function(){
+    return this.get('hideFilters.length');
+  }.property("hideFilters"),
+  hideFilters: function(){
     var hideFilters = App.get("hideFilters"),
     searchFilter = App.get("searchFilter"),
     memberFilter = App.get("memberFilter");
@@ -28,24 +31,12 @@ var ColumnCountController = Ember.ObjectController.extend({
       }
     }
 
-    return hideFilters.length;
+    return hideFilters;
   }.property("App.memberFilter.mode", "App.dimFilters", "App.hideFilters", "App.searchFilter", "App.eventReceived"),
   filteredCount: function() {
-    var hideFilters = App.get("hideFilters"),
-    searchFilter = App.get("searchFilter"),
-    memberFilter = App.get("memberFilter"),
+    var hideFilters = this.get("hideFilters"),
     issues = this.get('combinedIssues'),
     that = this;
-
-    if(searchFilter) {
-      hideFilters = hideFilters.concat([searchFilter]);
-    }
-
-    if(memberFilter) {
-      if(memberFilter.mode === 2) {
-        (hideFilters = hideFilters.concat([memberFilter]));
-      }
-    }
 
     var filteredCount = 0;
 
@@ -57,7 +48,7 @@ var ColumnCountController = Ember.ObjectController.extend({
       }
     });
     return issues.length - filteredCount;
-  }.property("combinedIssues","App.memberFilter.mode", "App.dimFilters", "App.hideFilters", "App.searchFilter", "App.eventReceived"),
+  }.property("combinedIssues","hideFilters"),
   isOverWip: function(){
     var wip = this.get('model.wip');
     return wip && this.get("issuesCount") > wip;
