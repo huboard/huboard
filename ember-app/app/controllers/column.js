@@ -55,8 +55,7 @@ var ColumnController = Ember.ObjectController.extend({
   }.property("issues.@each", "controllers.index.forceRedraw"),
   newIssue: function(){
     return Issue.createNew();
-  }.property(),
-  visibleIssues: []
+  }.property()
 });
 
 export default ColumnController;
