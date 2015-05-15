@@ -8,37 +8,25 @@
   Repo
 </h5>
 {{/if}}
-{{#if selected}}
+
 <div class="hb-selected">
-  {{selected.title }}
+  {{selected.full_name }}
 </div>
-{{else}}
-<div class="hb-selected empty">
-  No milestone
-</div>
-{{/if}}
+
 <div class="hb-flyout">
   <div class="hb-header">
-    Create on this repo
+    Create for this repo
   </div>
   <div class="hb-text-filter">
     {{input placeholder="Filter Repos" value=filterRepos}}
   </div>
 
   <div class="hb-menu-items">
-    {{#if selected}}
-    <div class="hb-menu-item">
-      <div {{action "clearMilestone" }} >
-        <i class="ui-icon ui-icon-x-thin"></i>
-        Clear milestone
-      </div>
-    </div>
-    {{/if}}
     {{#each listItem in listItems}}
-    <div {{bind-attr class=":hb-menu-item selected:checked"}} >
+    <div {{bind-attr class=":hb-menu-item listitem.selected:checked"}} >
       <div {{action "assignTo" listItem.item}} >
         <i class="ui-icon ui-icon-checkmark"></i>
-        {{listItem.item.title}}
+        {{listItem.item.full_name}}
       </div>
     </div>
     {{/each}}

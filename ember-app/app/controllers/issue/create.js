@@ -5,14 +5,18 @@ var IssuesCreateController = Ember.ObjectController.extend({
   actions: {
     submit: function() {
       this.createIssue(this.get("order"));
+    },
+    assignRepo: function(repo){
+      this.set("model.repo.full_name", repo.full_name);
+      this.set("otherLabels", repo.other_labels);
+      this.set("milestones", repo.milestones);
+      this.set("assignees", repo.assignees);
     }
   },
   isCollaboratorBinding: "repo.is_collaborator",
-  otherLabels: function(){
-    return Ember.copy(this.get("controllers.application.model.board.other_labels"));
-  }.property("model","controllers.application.model.board.other_labels"),
-  milestonesBinding: "controllers.application.model.board.milestones",
-  assigneesBinding: "controllers.application.model.board.assignees",
+  otherLabelsBinding: Ember.Binding.oneWay("controllers.application.model.board.other_labels"),
+  assigneesBinding: Ember.Binding.oneWay("controllers.application.model.board.assignees"),
+  milestonesBinding: Ember.Binding.oneWay("controllers.application.model.board.milestones"),
   columnsBinding: "controllers.application.model.board.columns",
   disabled: function () {
       return this.get("processing") || !this.get("isValid");
@@ -34,7 +38,11 @@ var IssuesCreateController = Ember.ObjectController.extend({
        controller.send("issueCreated", issue);
        controller.set("processing",false);
     });
-  }
+  },
+  allRepos: function(){
+    var linked = this.get("controllers.application.model.board.linkedRepos");
+    return _.union([_.clone(this.get("repo"))], linked);
+  }.property("controllers.application.model.board.linkedRepos"),
 });
 
 export default IssuesCreateController;
