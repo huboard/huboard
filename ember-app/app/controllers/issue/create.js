@@ -36,6 +36,10 @@ var IssuesCreateController = Ember.ObjectController.extend({
     var controller = this;
     this.set("processing",true);
     this.get("model").saveNew(order).then(function(issue){
+       if(controller.get("issueIsLinked")){
+         controller.colorIssue(issue);
+         controller.send("assignRepo", controller.get("controllers.application.model.board"));
+       }
        controller.send("issueCreated", issue);
        controller.set("processing",false);
     });
@@ -45,6 +49,17 @@ var IssuesCreateController = Ember.ObjectController.extend({
     var board = this.get("controllers.application.model.board");
     return _.union([_.clone(board)], linked);
   }.property("controllers.application.model.board.linkedRepos"),
+  issueIsLinked: function(){
+    return this.get("model.repo.full_name") !== this.get("controllers.application.model.board.full_name");
+  }.property("controllers.application.model.board.full_name", "model.repo.full_name"),
+  colorIssue: function(issue){
+    var linked_labels = this.get("controllers.application.model.board.link_labels");
+    var label = _.find(linked_labels, function(l){
+      var name = l.user + "/" + l.repo;
+      return name === issue.repo.full_name;
+    });
+    issue.color = label.color;
+  }
 });
 
 export default IssuesCreateController;
