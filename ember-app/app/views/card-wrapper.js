@@ -56,17 +56,23 @@ var CardWrapperView = Ember.View.extend({
         }
       }
 
-      if(hideFilters.any(function(f){
+      var dimmed = !dimFilters.any(function(f){
+        return f.condition(that.get("content"));
+      });
+      var hidden = !hideFilters.any(function(f){
+        return f.condition(that.get("content"));
+      });
+      var hidden_inverse = hideFilters.any(function(f){
         return !f.condition(that.get("content"));
-      })){
+      });
+
+      if(hidden && hideFilters.length){
         return "filter-hidden";
       }
-
-      if(dimFilters.any(function(f){
-        return !f.condition(that.get("content"));
-      })){
-        return "dim";
+      if(dimmed && !hidden_inverse && hideFilters.length){
+        return "";
       }
+      if(dimmed && dimFilters.length){ return "dim"; }
 
       return "";
 

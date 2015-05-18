@@ -14,7 +14,6 @@ var FilterView = Ember.View.extend({
   click: function(ev){
     ev.preventDefault();
     var $target = Ember.$(ev.target);
-    this.set("lastClicked", this.get("name"));
     var formattedParam = this.get("name").replace(/\s+/g, '');
     var queryParams = this.get("controller").get(this.get("queryParam"));
     if($target.is(".ui-icon")){
