@@ -56,12 +56,14 @@ var CardWrapperView = Ember.View.extend({
         }
       }
 
+      //false if any filter matches the condition
       var dimmed = !dimFilters.any(function(f){
         return f.condition(that.get("content"));
       });
       var hidden = !hideFilters.any(function(f){
         return f.condition(that.get("content"));
       });
+      //true if any filter does Not match the condition
       var hidden_inverse = hideFilters.any(function(f){
         return !f.condition(that.get("content"));
       });
