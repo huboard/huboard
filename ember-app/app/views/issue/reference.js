@@ -15,6 +15,9 @@ var IssueReferenceView = Ember.View.extend({
   }.property("commit.sha"),
   didInsertElement: function(){
     this.set("model", this.get("parentView.content.model"));
+    if (this.get("model.commit_id") === null){
+      return this.set("parentView.isVisible", false);
+    }
 
     var self = this;
     var container = this.$().closest(".card-event");
