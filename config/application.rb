@@ -12,7 +12,6 @@ Dotenv::Railtie.load
 
 if ENV["HUBOARD_ENV"] == 'production'
   require 'saas'
-  require 'skylight'
 end
 
 module HuboardWeb

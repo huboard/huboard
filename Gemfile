@@ -52,7 +52,6 @@ gem 'faye_extensions', path: 'vendor/gems/faye_extensions'
 gem 'responders'
 gem 'stripe-rails'
 gem 'heroku-deflater', group: :production
-gem 'skylight', require: nil
 
 group :development, :test do
   #gem 'byebug'
