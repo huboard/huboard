@@ -50,6 +50,19 @@ var Board = Ember.Object.extend({
             .groupBy(function(l){return l.title.toLocaleLowerCase(); })
             .value();
   }.property("milestones.length","linkedRepos.@each.milestones.length"),
+  combinedAssignees: function(){
+    var assignees = this.get("assignees");
+    var linked = this.get("linkedRepos").map(function(repo){
+      return repo.assignees;
+    });
+    linked = _.flatten(linked);
+    linked =  _.reject(linked, function(assignee){
+      return _.find(assignees, function(a){
+        return a.login === assignee.login;
+      });
+    });
+    return _.union(linked, assignees);
+  }.property("assignees.length")
 });
 Board.reopenClass({
   fetch: function(repo) {

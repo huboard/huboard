@@ -19,6 +19,8 @@ var AssigneeController = Ember.ObjectController.extend({
     }
   },
   assigneesBinding: "controllers.application.model.board.assignees",
+  combinedBinding: "controllers.application.model.board.combinedAssignees",
+  combinedIssuesBinding: "controllers.application.model.board.combinedIssues",
   assigneeBinding: "controllers.application.assignee",
   issuesBinding: "controllers.application.model.board.issues",
   memberFilterBinding: "App.memberFilter",
@@ -33,14 +35,14 @@ var AssigneeController = Ember.ObjectController.extend({
     }.bind(this));
   }.observes("lastClicked.mode"),
   avatars : function () {
-    var issues = this.get("issues");
-    return this.get("assignees").filter(function(assignee){
+    var issues = this.get("combinedIssues");
+    return this.get("combined").filter(function(assignee){
       return _.find(issues, function(issue){
         return issue.assignee &&
           issue.assignee.login === assignee.login;
       });
     });
-  }.property("assignees", "issues.@each.assignee"),
+  }.property("assignees", "issues.@each.assignee", "combined", "combinedIssues.@each.assignee"),
   filters : function () {
      return this.get("avatars").map(function(a){
          return Ember.Object.create({
