@@ -146,20 +146,6 @@ var FiltersController = Ember.Controller.extend({
     });
     return active;
   }.property("allFilters"),
-  forceDimsToActive: function(){
-    var dim_filters = this.get("dimFilters");
-    if (!dim_filters){ return; }
-
-    var member_filter = App.get("memberFilter");
-    var search_filter = App.get("searchFilter");
-    var hide_filters = this.get("hideFilters");
-
-    if (hide_filters.length || member_filter || search_filter) {
-      dim_filters.forEach(function(f){
-        Ember.set(f, "mode", 2);
-      });
-    }
-  }.observes("hideFilters", "App.searchFilter", "App.memberFilter"),
   membersActive: false,
   actions: {
     clearFilters: function(){
@@ -170,6 +156,41 @@ var FiltersController = Ember.Controller.extend({
         self.get("allFilters").forEach(function(f){
           Ember.set(f,"mode",0);
         });
+      });
+    }
+  },
+
+  forceDimsToActive: function(){
+    if (this.get("anyFiltersActive") && this.get("anyFiltersDim")){
+      this.setDimFiltersToActive();
+      this.setMemberFilterToActive();
+    }
+  }.observes("anyFiltersActive", "anyFiltersDim", "App.hideFilters.[]", "App.searchFilter", "App.memberFilter"),
+  anyFiltersActive: function(){
+    return App.get("hideFilters.length") ||
+      App.get("searchFilter") ||
+      (App.get("memberFilter") &&
+       App.get("memberFilter.mode") === 1);
+  }.property("App.hideFilters", "App.searchFilter", "App.memberFilter"),
+  anyFiltersDim: function(){
+    var member_filter = App.get("memberFilter");
+    return App.get("dimFilters") || 
+      (member_filter && member_filter.get("mode") === 1);
+  }.property("App.dimFilters", "App.memberFilter"),
+  setDimFiltersToActive: function(){
+    if (App.get("dimFilters")){
+      App.get("dimFilters").forEach(function(f){
+        Ember.set(f, "mode", 2);
+      });
+    }
+  },
+  setMemberFilterToActive: function(){
+    var member_filter = App.get("memberFilter");
+    if(member_filter && App.get("memberFilter.lastClicked.mode") === 1){
+      Ember.run.once(function(){
+        Ember.set(member_filter, "lastClicked", member_filter);
+        Ember.set(member_filter, "lastClicked.mode", 2);
+        Ember.set(member_filter, "mode", 2);
       });
     }
   }
