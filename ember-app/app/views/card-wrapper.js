@@ -7,6 +7,7 @@ var CardWrapperView = Ember.View.extend({
     colorLabel: function () {
       return "-x" + this.get("content.color");
     }.property("content.color"),
+    combinedRepos: Ember.computed.alias("controller.parentController.model.combinedRepos"),
     isCollaborator: function(){
       return this.get("content.repo.is_collaborator");
     }.property("content.repo.is_collaborator"),
@@ -73,8 +74,20 @@ var CardWrapperView = Ember.View.extend({
       view.get("controller").send("fullscreen");
     },
     dragAuthorized: function(ev){
-      var contains_type =  ev.dataTransfer.types.contains("text/huboard-assignee");
-      return contains_type && this.get("isCollaborator");
+      var contains_type = ev.dataTransfer.types.contains("text/huboard-assignee");
+      return contains_type  && this.isAssignable();
+    },
+    isAssignable: function(){
+      var self = this;
+      var login = $("#application").find(".assignees .is-flying")
+        .data("assignee");
+      var repo = _.find(this.get("combinedRepos"), function(r){
+        return r.full_name === self.get("content.repo.full_name");
+      });
+      if(repo === null){ return false; }
+      return repo.get("assignees").any(function(assignee){
+        return assignee.login === login;
+      });
     },
     dragEnter: function(ev) {
       ev.preventDefault();

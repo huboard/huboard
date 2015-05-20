@@ -62,7 +62,12 @@ var Board = Ember.Object.extend({
       });
     });
     return _.union(linked, assignees);
-  }.property("assignees.length")
+  }.property("assignees.length"),
+  combinedRepos: function(){
+    var combined = [this];
+    combined.pushObject(this.get("linkedRepos"));
+    return _.flatten(combined);
+  }.property("linkedRepos.@each")
 });
 Board.reopenClass({
   fetch: function(repo) {
