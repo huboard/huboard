@@ -1,7 +1,7 @@
 import Ember from 'ember';
 
-var FiltersController = Ember.Controller.extend({
-  needs: ["application"],
+var FiltersController = Ember.ObjectController.extend({
+  needs: ["application", "assignee"],
 
   queryParamsBinding: "controllers.application.queryParams",
   repoBinding: "controllers.application.repo",
@@ -170,7 +170,7 @@ var FiltersController = Ember.Controller.extend({
     return App.get("hideFilters.length") ||
       App.get("searchFilter") ||
       (App.get("memberFilter") &&
-       App.get("memberFilter.mode") === 1);
+       App.get("memberFilter.mode") === 2);
   }.property("App.hideFilters", "App.searchFilter", "App.memberFilter"),
   anyFiltersDim: function(){
     var member_filter = App.get("memberFilter");
@@ -186,12 +186,12 @@ var FiltersController = Ember.Controller.extend({
   },
   setMemberFilterToActive: function(){
     var member_filter = App.get("memberFilter");
-    if(member_filter && App.get("memberFilter.lastClicked.mode") === 1){
-      Ember.run.once(function(){
-        Ember.set(member_filter, "lastClicked", member_filter);
-        Ember.set(member_filter, "lastClicked.mode", 2);
-        Ember.set(member_filter, "mode", 2);
-      });
+    var controller = this.get("controllers.assignee");
+    if(member_filter && App.get("memberFilter.mode") === 1){
+      controller.set("lastClicked.mode", 2);
+      var login = controller.get("lastClicked.content.avatar.login");
+      var formattedLogin = login.replace(/\s+/g, '');
+      this.get("assignee").pushObject(formattedLogin);
     }
   }
 });
