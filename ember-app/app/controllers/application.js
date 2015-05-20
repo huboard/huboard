@@ -3,10 +3,10 @@ import Issue from 'app/models/issue';
 
 var ApplicationController = Ember.Controller.extend({
   isSidebarOpen: false,
-  queryParams: ["assignee", "repo", "milestone", "label", "search"],
+  queryParams: ["member", "repo", "milestone", "label", "search"],
   search: null,
   repo: [],
-  assignee: [],
+  member: [],
   milestone: [],
   label: [],
   sockets: {

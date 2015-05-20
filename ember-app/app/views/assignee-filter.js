@@ -6,7 +6,7 @@ var AssigneeFilterView = Ember.View.extend({
   classNameBindings: ["modeClass", "isFlying"],
   attributeBindings: ["draggable", "data-assignee"],
   draggable: true,
-  queryParam: "assignee",
+  queryParam: "member",
   isFlying: false,
   dragStart: function(ev){
     this.set("isFlying", true);

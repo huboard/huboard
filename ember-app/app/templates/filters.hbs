@@ -6,7 +6,7 @@
 
   <h5>Assignment</h5>
   {{#each filter in userFilters }}
-    {{view "filter" lastClicked=lastUserFilterClicked name=filter.name mode=filter.mode color=filter.color queryParam="assignee"}}
+    {{view "filter" lastClicked=lastUserFilterClicked name=filter.name mode=filter.mode color=filter.color queryParam="member"}}
   {{/each}}
 
   <h5>Milestones</h5>

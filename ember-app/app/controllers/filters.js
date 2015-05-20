@@ -5,7 +5,7 @@ var FiltersController = Ember.ObjectController.extend({
 
   queryParamsBinding: "controllers.application.queryParams",
   repoBinding: "controllers.application.repo",
-  assigneeBinding: "controllers.application.assignee",
+  memberBinding: "controllers.application.member",
   milestoneBinding: "controllers.application.milestone",
   labelBinding: "controllers.application.label",
 
@@ -22,7 +22,7 @@ var FiltersController = Ember.ObjectController.extend({
       this.set("userFilters", [
         {
           name: "Assigned to me",
-          queryParam: "assignee",
+          queryParam: "member",
           mode: 0,
           condition: function(i){
             return i.assignee && i.assignee.login === App.get("currentUser").login;
@@ -31,7 +31,7 @@ var FiltersController = Ember.ObjectController.extend({
 
         {
           name: "Assigned to others",
-          queryParam: "assignee",
+          queryParam: "member",
           mode: 0,
           condition: function(i){
             return i.assignee && i.assignee.login !== App.get("currentUser").login;
@@ -39,7 +39,7 @@ var FiltersController = Ember.ObjectController.extend({
         },
         {
           name: "Unassigned issues",
-          queryParam: "assignee",
+          queryParam: "member",
           mode: 0,
           condition: function(i){
             return !i.assignee;
@@ -50,7 +50,7 @@ var FiltersController = Ember.ObjectController.extend({
       this.set("userFilters", [
         {
           name: "Unassigned issues",
-          queryParam: "assignee",
+          queryParam: "member",
           mode: 0,
           condition: function(i){
             return !i.assignee;
@@ -151,7 +151,7 @@ var FiltersController = Ember.ObjectController.extend({
     clearFilters: function(){
       var self = this;
       Ember.run.once(function(){
-        var params = ["repo", "assignee", "milestone", "label"];
+        var params = ["repo", "member", "milestone", "label"];
         _.each(params, function(p){ self.get(p).clear(); });
         self.get("allFilters").forEach(function(f){
           Ember.set(f,"mode",0);
@@ -191,7 +191,7 @@ var FiltersController = Ember.ObjectController.extend({
       controller.set("lastClicked.mode", 2);
       var login = controller.get("lastClicked.content.avatar.login");
       var formattedLogin = login.replace(/\s+/g, '');
-      this.get("assignee").pushObject(formattedLogin);
+      this.get("member").pushObject(formattedLogin);
     }
   }
 });
