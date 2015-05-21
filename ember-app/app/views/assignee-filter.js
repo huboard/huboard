@@ -3,13 +3,18 @@ import Ember from 'ember';
 var AssigneeFilterView = Ember.View.extend({
   templateName : "assignee/filter",
   classNames: ["assignee"],
-  classNameBindings: ["modeClass"],
-  attributeBindings: ["draggable"],
+  classNameBindings: ["modeClass", "isFlying"],
+  attributeBindings: ["draggable", "data-assignee"],
   draggable: true,
   queryParam: "assignee",
+  isFlying: false,
   dragStart: function(ev){
+    this.set("isFlying", true);
     ev.dataTransfer.effectAllowed = "copy";
     ev.dataTransfer.setData("text/huboard-assignee", this.get("assignee"));
+  },
+  dragEnd: function(){
+    this.set("isFlying", false);
   },
   click: function (){
     var previous = this.get("lastClicked");
