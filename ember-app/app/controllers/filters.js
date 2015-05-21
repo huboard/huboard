@@ -178,8 +178,13 @@ var FiltersController = Ember.ObjectController.extend({
       (member_filter && member_filter.get("mode") === 1);
   }.property("App.dimFilters", "App.memberFilter"),
   setDimFiltersToActive: function(){
+    var self = this;
     if (App.get("dimFilters")){
       App.get("dimFilters").forEach(function(f){
+        var formattedParam = f.name.replace(/\s+/g, '');
+        if (!self.get(f.queryParam).contains(formattedParam)){
+          self.get(f.queryParam).pushObject(formattedParam);
+        }
         Ember.set(f, "mode", 2);
       });
     }
@@ -191,7 +196,9 @@ var FiltersController = Ember.ObjectController.extend({
       controller.set("lastClicked.mode", 2);
       var login = controller.get("lastClicked.content.avatar.login");
       var formattedLogin = login.replace(/\s+/g, '');
-      this.get("member").pushObject(formattedLogin);
+      if (!this.get("member").contains(formattedLogin)){
+        this.get("member").pushObject(formattedLogin);
+      }
     }
   }
 });

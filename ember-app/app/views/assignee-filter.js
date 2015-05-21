@@ -61,7 +61,7 @@ var AssigneeFilterView = Ember.View.extend({
   }.property("lastClicked.mode"),
   queryParamsHandler: function(params, formattedParam){
     if(this.get("mode") === 0 || this.get("mode") === 1) {
-      params.clear();
+      params.removeObject(formattedParam);
       return;
     }
     if (this.get("mode") === 2 && !params.contains(formattedParam)){
