@@ -8,13 +8,13 @@
       <a class="commit" target="_blank" href="{{view.commitUrl}}">
         {{view.shortSha }}
       </a> 
-     <span class="commit-link">-o-</span> {{hb-avatar user=view.model.actor width=16 height=16 }} {{view.message}} 
+     <span class="commit-link">-o-</span> {{hb-avatar user=model.actor width=16 height=16 }} {{view.message}} 
     </div>
 {{else}}
   <div class="commit-info"> 
     <a class="commit" target="_blank" href="#">
       1337bada55
     </a> 
-   <span class="commit-link">-o-</span> {{hb-avatar user=view.model.actor width=16 height=16 }} Lorem ipsum dolar 
+   <span class="commit-link">-o-</span> {{hb-avatar user=model.actor width=16 height=16 }} Lorem ipsum dolar 
   </div>
 {{/if}}

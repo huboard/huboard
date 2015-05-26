@@ -5,9 +5,9 @@
   <form {{action "submit" on="submit"}} class="flex-form split-form">
     <div class="flex-form-left"> 
       <label>
-        {{input value=title placeholder="Title" }}
+        {{input value=model.title placeholder="Title" }}
       </label>
-      {{hb-markdown-editor markdown=body mentions=mentions}}
+      {{hb-markdown-editor markdown=model.body mentions=mentions}}
       <button disabled="{{disabled}}" class="hb-button">Submit issue</button>
     </div>
     <div class="flex-form-right">
