@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-var MilestonesController = Ember.ObjectController.extend({
+var MilestonesController = Ember.Controller.extend({
   needs: ["application", "filters", "assignee", "search"],
 
   filtersActive: function() {

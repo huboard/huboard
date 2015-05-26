@@ -2,7 +2,7 @@ import SocketMixin from 'app/mixins/socket';
 import Ember from 'ember';
 
 
-var CardController = Ember.ObjectController.extend(SocketMixin,{
+var CardController = Ember.Controller.extend(SocketMixin,{
   needs: ["application"],
   isCollaborator: function() {
     return this.get("model.repo.is_collaborator");

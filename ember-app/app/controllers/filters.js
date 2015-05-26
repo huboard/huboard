@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-var FiltersController = Ember.ObjectController.extend({
+var FiltersController = Ember.Controller.extend({
   needs: ["application"],
 
   queryParamsBinding: "controllers.application.queryParams",

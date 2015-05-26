@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import Issue from 'app/models/issue';
 
-var ColumnController = Ember.ObjectController.extend({
+var ColumnController = Ember.Controller.extend({
   needs: ["index", "application"],
   style: Ember.computed.alias("controllers.index.column_style"),
   isLastColumn: function(){

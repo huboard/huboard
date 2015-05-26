@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import Issue from 'app/models/issue';
 
-var ApplicationController = Ember.ObjectController.extend({
+var ApplicationController = Ember.Controller.extend({
   isSidebarOpen: false,
   queryParams: ["assignee", "repo", "milestone", "label", "search"],
   search: null,

@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-var ColumnCountController = Ember.ObjectController.extend({
+var ColumnCountController = Ember.Controller.extend({
   needs: ["index"],
   combinedIssues: function(){
     var index = this.get("model.index");

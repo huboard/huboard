@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import Issue from 'app/models/issue';
 
-var MilestoneColumnController = Ember.ObjectController.extend({
+var MilestoneColumnController = Ember.Controller.extend({
   needs: ["milestones", "application", "index"],
   getIssues: function () {
     var issues = this.get("controllers.milestones.model.combinedIssues")

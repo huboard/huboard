@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-var SettingsLinkController = Ember.ObjectController.extend({
+var SettingsLinkController = Ember.Controller.extend({
   needs: ["settings", "settings/links"],
   isLinked: function(){
     return this.get("controllers.settings.column_labels.length") === this.get("columns.length");

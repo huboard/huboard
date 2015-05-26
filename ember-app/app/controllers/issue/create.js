@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-var IssuesCreateController = Ember.ObjectController.extend({
+var IssuesCreateController = Ember.Controller.extend({
   needs: ["application"],
   actions: {
     submit: function() {

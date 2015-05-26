@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-var MilestonesMissingController = Ember.ObjectController.extend({
+var MilestonesMissingController = Ember.Controller.extend({
   needs: ['milestones'],
   linkedRepos: Ember.computed.alias("controllers.milestones.model.linkedRepos"),
   disabled: false,

@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-var SettingsLinksIndexController = Ember.ObjectController.extend({
+var SettingsLinksIndexController = Ember.Controller.extend({
   needs: ['application', 'settings/links'],
   repoFullName: '',
   shouldDisplayWarning: Ember.computed.alias("controllers.settings/links.shouldDisplayWarning"),

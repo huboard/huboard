@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-var IndexController = Ember.ObjectController.extend({
+var IndexController = Ember.Controller.extend({
   needs: ["application", "filters", "assignee", "search"],
   isSidebarOpen: Ember.computed.alias("controllers.application.isSidebarOpen"),
   filtersActive: function(){

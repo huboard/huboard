@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-var LoginController = Ember.ObjectController.extend({
+var LoginController = Ember.Controller.extend({
   authLevel: function(){
     return App.get("authLevel").capitalize();
   }.property("authLevel"),

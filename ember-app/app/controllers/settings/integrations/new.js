@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import Integration from 'app/models/integration';
 
-var SettingsIntegrationsNewController = Ember.ObjectController.extend({
+var SettingsIntegrationsNewController = Ember.Controller.extend({
   needs: ['application', "settings/integrations"],
   disabled: function(){
     return this.get("processing") || this.get("model.disabled");

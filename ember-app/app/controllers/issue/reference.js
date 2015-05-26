@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import ajax from 'ic-ajax';
 
-var IssueReferenceController = Ember.ObjectController.extend({
+var IssueReferenceController = Ember.Controller.extend({
   needs: ["issue"],
 
   fetchCommit: function(commit){
