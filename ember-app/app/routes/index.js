@@ -1,9 +1,7 @@
 import CssView from 'app/views/css';
 import Board from 'app/models/board';
 import Ember from 'ember';
-import Issue from 'app/models/issue';
-
-
+import Issue from 'app/models/forms/create-issue';
 
 var IndexRoute = Ember.Route.extend({
   model: function(){

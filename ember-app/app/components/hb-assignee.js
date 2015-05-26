@@ -23,7 +23,7 @@ var HbAssigneeComponent = Ember.Component.extend({
 
     }.bind(this));
 
-  }.property("assignees","selected","filterPeople"),
+  }.property("assignees.[]","selected","filterPeople"),
 
   ListItem: Ember.Object.extend({
     selected: false,

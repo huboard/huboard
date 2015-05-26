@@ -65,6 +65,7 @@ class Huboard
       {
         "id" => gh_repos['id'],
         full_name: gh_repos['full_name'],
+        repo: gh_repos.to_hash,
         columns: columns,
         milestones: milestones,
         other_labels: other_labels.sort_by {|l| l['name'].downcase },
