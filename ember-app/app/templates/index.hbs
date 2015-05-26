@@ -31,7 +31,7 @@
 
   <div id="content" class="content">
     <div class="board board-not-dragging">
-      {{#each column in board_columns }}
+      {{#each board_columns as |column|}}
       {{ render "column" column }}
       {{/each}}
     </div>

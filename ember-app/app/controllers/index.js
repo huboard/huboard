@@ -10,8 +10,8 @@ var IndexController = Ember.Controller.extend({
 
   }.property("controllers.filters.filtersActive", "controllers.assignee.filtersActive", "controllers.search.filtersActive"),
   board_columns: function(){
-     return this.get("columns");
-  }.property("columns"),
+     return this.get("model.columns");
+  }.property("model.columns"),
   forceRedraw: 0
 });
 
