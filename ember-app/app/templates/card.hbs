@@ -1,10 +1,10 @@
 <div class="card-header">
-  <div class="title" {{bind-attr title=title }}>
+  <div class="title" title="{{title}}">
     {{title}}
   </div>
   <div class="number">
     <small>#</small>
-    <a class="xnumber" {{bind-attr href=html_url}} target="_blank" title="View issue on github.com">
+    <a class="xnumber" href="{{html_url}}" target="_blank" title="View issue on github.com">
       {{number}}
     </a>
     {{#if pull_request}} {{#if pull_request.html_url }} <i class="ui-icon ui-icon-21 ui-icon-branch-merge"></i> {{/if}} {{/if}}
@@ -18,8 +18,8 @@
 <div class="card-labels">
     {{#each label in cardLabels }}
       <div class="card-label-wrapper"> 
-         <div {{bind-attr class=":card-label :active :small label.customColor"}} ></div>
-         <div {{bind-attr class=":card-label :active :large label.customColor"}} >
+         <div class="card-label active small {{label.customColor}}"></div>
+         <div class="card-label active large {{label.customColor}}">
           <span>{{label.name}}</span>
          </div>
       </div>
@@ -28,14 +28,14 @@
 
 {{#if isLast}}
   <div class="hb-action actions-close">
-    <button class="hb-button" {{bind-attr disabled=processing}} {{action 'close' this.model bubbles=false}}>Close</button>
+    <button class="hb-button" disabled="{{processing}}" {{action 'close' this.model bubbles=false}}>Close</button>
   </div>                                                      
 {{/if}}
 
 {{#if canArchive}}
 
 <div class="hb-action actions-archive">
-  <button class="hb-button-icon hb-button hb-button-grey" {{bind-attr disabled=processing}} {{action "archive" this bubbles=false}}><i class="ui-icon ui-icon-box-add"></i>Archive</button>
+  <button class="hb-button-icon hb-button hb-button-grey" disabled="{{processing}}" {{action "archive" this bubbles=false}}><i class="ui-icon ui-icon-box-add"></i>Archive</button>
 </div>                                                      
 {{/if}}
 

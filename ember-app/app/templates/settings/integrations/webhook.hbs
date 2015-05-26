@@ -11,7 +11,7 @@
         <label>
           {{input value=attrs.webhookURL placeholder="Webhook url" }}
         </label>
-        <button {{bind-attr disabled=disabled}} class="hb-button">Submit webhook</button>
+        <button disabled="{{disabled}}" class="hb-button">Submit webhook</button>
         <div class="with-line"><span>or</span></div>
         <div class="cancel"> <a href="#" {{action 'cancel'}}>Cancel</a> </div>
       </form>

@@ -13,7 +13,7 @@
         {{input value=title placeholder="Title"}}
       </label>
       {{hb-markdown-editor markdown=description }}
-        <button {{bind-attr disabled=disabled}} class="hb-button submit-button">Create milestone</button>
+        <button disabled="{{disabled}}" class="hb-button submit-button">Create milestone</button>
     </div>
     <div class="flex-form-right">
       <h5> 
