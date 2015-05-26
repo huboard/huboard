@@ -44,7 +44,7 @@
           <button class="hb-button hb-button-grey" {{action "close" on="click"}} disabled="{{processing}}">Close issue </button>
         {{/if}}
       {{/if}}
-      <button disabled="{{disabled}}" class="hb-button">Submit comment</button>
+      <button disabled={{disabled}} class="hb-button">Submit comment</button>
       {{#if processing}}
       <div class="spinner">
         {{hb-spinner}}

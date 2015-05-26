@@ -1,7 +1,7 @@
 {{#if canEdit }}
   {{#if isEditing}}
     <button {{action "cancel" }} class="hb-button hb-button-grey">Cancel</button> 
-    <button disabled="{{disabled}}" {{action "save" }} class="hb-button ">Save</button> 
+    <button disabled={{disabled}} {{action "save" }} class="hb-button ">Save</button> 
   {{else}}
     <button {{action "edit" target=view }} class="hb-button hb-button-grey">Edit</button> 
   {{/if}}
