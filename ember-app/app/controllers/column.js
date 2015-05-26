@@ -5,11 +5,11 @@ var ColumnController = Ember.Controller.extend({
   needs: ["index", "application"],
   style: Ember.computed.alias("controllers.index.column_style"),
   isLastColumn: function(){
-    return this.get("controllers.index.columns.lastObject.name") === this.get("model.name");
-  }.property("controllers.index.columns.lastObject"),
+    return this.get("controllers.index.model.columns.lastObject.name") === this.get("model.name");
+  }.property("controllers.index.model.columns.lastObject"),
   isFirstColumn: function(){
-    return this.get("controllers.index.columns.firstObject.name") === this.get("model.name");
-  }.property("controllers.index.columns.firstObject"),
+    return this.get("controllers.index.model.columns.firstObject.name") === this.get("model.name");
+  }.property("controllers.index.model.columns.firstObject"),
   isCreateVisible: Ember.computed.alias("isFirstColumn"),
   isCollapsed: function(key, value) {
     if(arguments.length > 1) {
