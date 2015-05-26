@@ -1,10 +1,10 @@
 <div class="card-header">
-  <div class="title" title="{{title}}">
-    {{#if assignee}}
-      {{hb-avatar-tooltip user=assignee width="24" height="24"}}
+  <div class="title" title="{{model.title}}">
+    {{#if model.assignee}}
+      {{hb-avatar-tooltip user=model.assignee width="24" height="24"}}
     {{/if}}
-    {{title}} 
-    <small>#{{number}}</small>
+    {{model.title}} 
+    <small>#{{model.number}}</small>
   </div>
 </div>
 

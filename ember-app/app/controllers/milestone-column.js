@@ -11,7 +11,7 @@ var MilestoneColumnController = Ember.Controller.extend({
       }).sort(function (a, b){
         return a._data.milestone_order - b._data.milestone_order;
       })
-      .filter(this.get("filterBy"));
+      .filter(this.get("model.filterBy"));
     return issues;
 
   },
