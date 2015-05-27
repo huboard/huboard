@@ -10,9 +10,9 @@
         </div>
       {{/if}}
       <label>
-        {{input value=title placeholder="Title"}}
+        {{input value=model.title placeholder="Title"}}
       </label>
-      {{hb-markdown-editor markdown=description }}
+      {{hb-markdown-editor markdown=model.description }}
       <button disabled={{disabled}} class="hb-button">Update milestone</button>
     </div>
     <div class="flex-form-right">
@@ -20,7 +20,7 @@
         Due date: {{format-date dueDate}} 
         <small> <a href="#" {{action "clearDueDate"}}> clear </a> </small>
       </h5>
-      {{hb-date-picker dueDateBinding="model.due_on" processingBinding=processing}}
+      {{hb-date-picker dueDate=model.due_on processing=processing}}
     </div>
   </form>
 </div>
