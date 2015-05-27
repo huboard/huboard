@@ -17,12 +17,10 @@
   </div>
   {{#if this.isEditing}}
   <form {{action "save" on="submit" target=this }} class="flex-form">
-    {{hb-markdown-editor markdown=model.bufferedContent.body mentions=model.mentions}}
+    {{hb-markdown-editor markdown=bufferedContent.body mentions=model.mentions}}
     <button disabled="{{model.disabled}}" class="hb-button">Submit comment</button>
   </form>
   {{else}}
-    {{#with model}}
-      {{ hb-task-list body_html=body_html body=body taskChanged="taskChanged" targetObject=this canEdit=canEdit }}
-    {{/with}}
+    {{ hb-task-list body_html=model.body_html body=model.body taskChanged="taskChanged" targetObject=this canEdit=canEdit }}
   {{/if}}
 </div>
