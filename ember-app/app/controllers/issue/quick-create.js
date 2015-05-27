@@ -1,5 +1,5 @@
 import IssueCreateController from 'app/controllers/issue/create';
-import Issue from 'app/models/issue';
+import Issue from 'app/models/forms/create-issue';
 
 
 var IssueQuickCreateController = IssueCreateController.extend({

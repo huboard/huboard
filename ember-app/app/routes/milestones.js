@@ -1,6 +1,6 @@
 import CssView from 'app/views/css';
 import Board from 'app/models/board';
-import Issue from 'app/models/issue';
+import Issue from 'app/models/forms/create-issue';
 import Milestone from 'app/models/milestone';
 import Ember from 'ember';
 

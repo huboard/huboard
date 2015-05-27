@@ -50,17 +50,6 @@ var Issue = Ember.Object.extend(Serializable,{
     }
     return this.get("_data.custom_state");
   }.property("_data.custom_state"),
-  saveNew: function (order) {
-    return Ember.$.ajax( {
-      url: "/api/" + this.get("repo.full_name") + "/issues", 
-      data: JSON.stringify({issue: this.serialize(), order: order, correlationId: this.get("correlationId") }),
-      dataType: 'json',
-      type: "POST",
-      contentType: "application/json"})
-      .then(function(response){
-        return Issue.create(response);
-      });
-  },
   submitComment : function (markdown) {
      this.set("processing", true);
       var user = this.get("repo.owner.login"),
@@ -228,19 +217,6 @@ var Issue = Ember.Object.extend(Serializable,{
       }.bind(this), "json");
   }
 
-});
-Issue.reopenClass({
-  createNew: function(){
-     return Issue.create({
-       id: null,
-       title: "",
-       body: "",
-       assignee: null,
-       milestone: null,
-       repo: App.get("repo"),
-       labels: []
-     });
-  }
 });
 
 export default Issue;

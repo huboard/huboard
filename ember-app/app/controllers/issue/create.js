@@ -6,8 +6,8 @@ var IssuesCreateController = Ember.ObjectController.extend({
   selectedBoard: function(){
     var selectedRepo = this.get('model.repo'),
       selectedBoard = this.get('allRepos').find(function(board){
-        return selectedRepo.get('full_name').toLowerCase() ===
-          board.get('full_name').toLowerCase();
+        return Ember.get(selectedRepo, 'full_name').toLowerCase() ===
+          Ember.get(board, 'full_name').toLowerCase();
       });
       return selectedBoard;
   }.property('model.repo', 'allRepos.@each'),
@@ -28,10 +28,12 @@ var IssuesCreateController = Ember.ObjectController.extend({
   }.property('selectedBoard','selectedBoard.assignees'),
   order: {},
   createIssue: function(order){
-    if (this.get("processing")){ return; }
+    if (this.get("processing")){ 
+      return; 
+    }
     var controller = this;
     this.set("processing",true);
-    this.get("model").saveNew(order).then(function(issue){
+    this.get("model").save(order).then(function(issue){
        if(controller.get("issueIsLinked")){
          controller.colorIssue(issue);
          controller.send("assignRepo", controller.get("controllers.application.model.board"));
@@ -46,13 +48,13 @@ var IssuesCreateController = Ember.ObjectController.extend({
     return _.union([_.clone(board)], linked);
   }.property("controllers.application.model.board.linkedRepos"),
   issueIsLinked: function(){
-    return this.get("model.repo.full_name") !== this.get("controllers.application.model.board.full_name");
+    return this.get("model.repo.full_name").toLowerCase() !== this.get("controllers.application.model.board.full_name").toLowerCase();
   }.property("controllers.application.model.board.full_name","model.repo", "model.repo.full_name"),
   colorIssue: function(issue){
     var linked_labels = this.get("controllers.application.model.board.link_labels");
     var label = _.find(linked_labels, function(l){
       var name = l.user + "/" + l.repo;
-      return name === issue.repo.full_name;
+      return name.toLowerCase() === issue.repo.full_name.toLowerCase();
     });
     issue.color = label.color;
   },

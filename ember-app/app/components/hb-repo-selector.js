@@ -14,7 +14,7 @@ var HbRepoSelectorComponent = Ember.Component.extend({
     .map(function(item) {
       return this.ListItem.create({
         selected: Ember.get(item, 'id') === this.get("selected.id"),
-        item: item
+        item: Ember.get(item, 'repo')
       });
     }.bind(this));
 

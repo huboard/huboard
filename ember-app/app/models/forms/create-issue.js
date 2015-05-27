@@ -1,10 +1,11 @@
 import Ember from 'ember';
 import correlationId from 'app/utilities/correlation-id';
 import Issue from 'app/models/issue';
+import Serializable from 'app/mixins/serializable';
 
-var CreateIssue = Ember.Object.extend({
+var CreateIssue = Ember.Object.extend(Serializable,{
   correlationId: correlationId,
-  save: (order) => {
+  save: function(order) {
     return Ember.$.ajax( {
       url: "/api/" + this.get("repo.full_name") + "/issues", 
       data: JSON.stringify({issue: this.serialize(), order: order, correlationId: this.get("correlationId") }),
