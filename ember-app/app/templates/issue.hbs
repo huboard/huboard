@@ -6,7 +6,7 @@
       </div>
   </div>
   <div class="fullscreen-card-right">
-    {{#if App.loggedIn }}
+    {{#if controllers.application.loggedIn }}
       {{#if isCollaborator }}
       <div>
         <label>
@@ -32,7 +32,7 @@
     {{ render 'issue.activities' allActivities }}
   </div>
 
-  {{#if App.loggedIn }}
+  {{#if controllers.application.loggedIn }}
   <hr>
   <form {{action "submitComment" on="submit"}} class="flex-form">
     {{hb-markdown-editor markdown=controller.commentBody mentions=mentions}}

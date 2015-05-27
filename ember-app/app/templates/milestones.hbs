@@ -12,7 +12,7 @@
   </div>
   {{/if}}
 
- {{#if App.repo.is_collaborator}}
+ {{#if isCollaborator}}
     <div class="create-button">
       <a class="hb-icon-button hb-icon-button-purple" href="#" {{action "createNewMilestone"}}>
         <i class="ui-icon ui-icon-flag ui-icon-16"></i>

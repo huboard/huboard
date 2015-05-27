@@ -60,6 +60,12 @@ var ApplicationController = Ember.Controller.extend({
   repositoryName: function () {
     return this.get("model.full_name");
   }.property("model.full_name"),
+  currentUser: function(){
+    return App.get("currentUser");
+  }.property("App.currentUser"),
+  loggedIn: function(){
+    return App.get("loggedIn");
+  }.property("App.loggedIn")
 });
 
 export default ApplicationController;
