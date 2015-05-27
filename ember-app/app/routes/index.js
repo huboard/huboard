@@ -1,7 +1,8 @@
 import CssView from 'app/views/css';
 import Board from 'app/models/board';
 import Ember from 'ember';
-import Issue from 'app/models/forms/create-issue';
+import CreateIssue from 'app/models/forms/create-issue';
+import Issue from 'app/models/issue';
 
 var IndexRoute = Ember.Route.extend({
   model: function(){
@@ -43,7 +44,7 @@ var IndexRoute = Ember.Route.extend({
   },
   actions : {
     createNewIssue : function (model, order) {
-      this.controllerFor("issue.create").set("model", model || Issue.createNew());
+      this.controllerFor("issue.create").set("model", model || CreateIssue.createNew());
       this.controllerFor("issue.create").set("order", order || {});
       this.send("openModal","issue.create");
     },
