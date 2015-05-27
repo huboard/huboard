@@ -23,7 +23,7 @@
 
   <div class="hb-menu-items">
     {{#each listItem in listItems}}
-    <div {{bind-attr class=":hb-menu-item listitem.selected:checked"}} >
+    <div {{bind-attr class=":hb-menu-item listItem.selected:checked"}} >
       <div {{action "assignTo" listItem.item}} >
         <i class="ui-icon ui-icon-checkmark"></i>
         {{listItem.item.full_name}}

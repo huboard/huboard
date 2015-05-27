@@ -12,12 +12,10 @@ var HbRepoSelectorComponent = Ember.Component.extend({
       return item.full_name.toLowerCase().indexOf(term.toLowerCase() || item.full_name.toLowerCase()) !== -1;
     }.bind(this))
     .map(function(item) {
-
       return this.ListItem.create({
-        selected: item.id === this.get("selected.id"),
+        selected: Ember.get(item, 'id') === this.get("selected.id"),
         item: item
       });
-
     }.bind(this));
 
   }.property("repos","selected", "filterRepos"),
