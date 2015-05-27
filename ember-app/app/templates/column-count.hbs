@@ -1,7 +1,19 @@
 {{#if wip}}
-  {{issuesCount}} of {{wip}}
+  {{#if isFiltered}}
+    {{filteredCount}}/{{issuesCount}} of {{wip}}
+  {{else}}
+    {{issuesCount}} of {{wip}}
+  {{/if}}
 {{else}}
   {{#if settings.showColumnCounts}}
-    {{issuesCount}}
+    {{#if isFiltered}}
+      {{filteredCount}}/{{issuesCount}}
+    {{else}}
+      {{issuesCount}}
+    {{/if}}
+  {{else}}
+    {{#if isFiltered}}
+      {{filteredCount}}/{{issuesCount}}
+    {{/if}}
   {{/if}}
 {{/if}}
