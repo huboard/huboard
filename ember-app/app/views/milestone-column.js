@@ -85,7 +85,7 @@ var CollectionView = Ember.CollectionView.extend({
 });
 
 var ColumnView = Ember.ContainerView.extend({
-  classNameBindings:["controller.cssClass","isCollapsed:hb-state-collapsed","isHovering:hovering"],
+  classNameBindings:["controller.model.cssClass","isCollapsed:hb-state-collapsed","isHovering:hovering"],
   classNames: ["milestone", "column"],
   isCollapsed: Ember.computed.alias("controller.isCollapsed"),
   isHovering: Ember.computed.alias("controller.isHovering"),
