@@ -4,13 +4,15 @@ var IssuesCreateController = Ember.ObjectController.extend({
   needs: ["application"],
   isCollaborator: Ember.computed.alias("selectedBoard.repo.permissions.push"),
   selectedBoard: function(){
-    var selectedRepo = this.get('model.repo'),
-      selectedBoard = this.get('allRepos').find(function(board){
-        return Ember.get(selectedRepo, 'full_name').toLowerCase() ===
+    return this.findBoard(this.get('model.repo'));
+  }.property('model.repo', 'allRepos.@each'),
+  findBoard: function(repo){
+      var selectedBoard = this.get('allRepos').find(function(board){
+        return Ember.get(repo, 'full_name').toLowerCase() ===
           Ember.get(board, 'full_name').toLowerCase();
       });
       return selectedBoard;
-  }.property('model.repo', 'allRepos.@each'),
+  },
   otherLabels: Ember.computed.alias("selectedBoard.other_labels"),
   assignees: Ember.computed.alias("selectedBoard.assignees"),
   milestones: Ember.computed.alias("selectedBoard.milestones"),
@@ -63,10 +65,24 @@ var IssuesCreateController = Ember.ObjectController.extend({
       this.createIssue(this.get("order"));
     },
     assignRepo: function(repo){
-      this.set('model.assignee', null);
-      this.set('model.milestone', null);
-      this.set("model.labels", []);
-      //this.set("model.repo", repo);
+      var board = this.findBoard(repo),
+        get = Ember.get;
+
+      // transfer assignee if possible
+      this.set('model.assignee', get(board, 'assignees').findBy('login', this.get('model.assignee.login')));
+      // transfer milestone if possible
+      this.set('model.milestone', get(board, 'milestones').findBy('title', this.get('model.milestone.title')));
+
+      var labels = get(board, 'other_labels'),
+        selectedLabels = this.get('model.labels.length') ?
+          this.get('model.labels') : [];
+      var commonLabels = labels.filter(function(label){
+        let name = get(label, 'name').toLowerCase();
+        return selectedLabels.any(function(selected){
+          return get(selected,'name').toLowerCase() === name;
+        });
+      });
+      this.set("model.labels", commonLabels);
     }
   }
 });

@@ -38,8 +38,8 @@ var HbRepoSelectorComponent = Ember.Component.extend({
       }
     },
     assignTo: function(repo) {
-      this.sendAction("assignRepo", repo);
       this.set('selected', repo);
+      this.sendAction("assignRepo", repo);
       this.$().removeClass("open");
       this.set("isOpen", false);
     }
