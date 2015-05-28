@@ -25,6 +25,8 @@ Router.map(function() {
     });
 
   });
+
+  this.route("unauthorized");
 });
 
 export default Router;

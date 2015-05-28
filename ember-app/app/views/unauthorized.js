@@ -3,7 +3,7 @@ import animateModalOpen from 'app/config/animate-modal-open';
 import Ember from 'ember';
 
 
-var LoginView = ModalView.extend({
+var UnauthorizedView = ModalView.extend({
   modalSize: "slimmer",
   didInsertElement: function() {
     animateModalOpen();
@@ -22,4 +22,4 @@ var LoginView = ModalView.extend({
   },
 });
 
-export default LoginView;
+export default UnauthorizedView;
