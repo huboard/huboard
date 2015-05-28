@@ -1,0 +1,34 @@
+{{#if editable}}
+<h5 {{action "toggleSelector"}}> 
+  <i  class="pull-right ui-icon ui-icon-gear"></i>
+  Repo
+</h5>
+{{else}}
+<h5> 
+  Repo
+</h5>
+{{/if}}
+
+<div class="hb-selected">
+  {{selected.full_name }}
+</div>
+
+<div class="hb-flyout">
+  <div class="hb-header">
+    Create for this repo
+  </div>
+  <div class="hb-text-filter">
+    {{input placeholder="Filter Repos" value=filterRepos}}
+  </div>
+
+  <div class="hb-menu-items">
+    {{#each listItem in listItems}}
+    <div {{bind-attr class=":hb-menu-item listItem.selected:checked"}} >
+      <div {{action "assignTo" listItem.item}} >
+        <i class="ui-icon ui-icon-checkmark"></i>
+        {{listItem.item.full_name}}
+      </div>
+    </div>
+    {{/each}}
+  </div>
+</div>

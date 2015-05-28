@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import Issue from 'app/models/issue';
+import CreateIssue from 'app/models/forms/create-issue';
 
 var MilestoneColumnController = Ember.ObjectController.extend({
   needs: ["milestones", "application", "index"],
@@ -46,7 +46,7 @@ var MilestoneColumnController = Ember.ObjectController.extend({
     }
   }.property("issues.@each", "controllers.milestones.forceRedraw"),
   newIssue: function(){
-    var newModel = Issue.createNew();
+    var newModel = CreateIssue.createNew();
     newModel.set('milestone', this.get("model.milestone"));
     return newModel;
   }.property(),

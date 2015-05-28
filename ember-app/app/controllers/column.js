@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import Issue from 'app/models/issue';
+import CreateIssue from 'app/models/forms/create-issue';
 
 var ColumnController = Ember.ObjectController.extend({
   needs: ["index", "application"],
@@ -54,7 +54,7 @@ var ColumnController = Ember.ObjectController.extend({
     }
   }.property("issues.@each", "controllers.index.forceRedraw"),
   newIssue: function(){
-    return Issue.createNew();
+    return CreateIssue.createNew();
   }.property()
 });
 

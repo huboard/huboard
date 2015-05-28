@@ -1,5 +1,6 @@
 import CssView from 'app/views/css';
 import Board from 'app/models/board';
+import CreateIssue from 'app/models/forms/create-issue';
 import Issue from 'app/models/issue';
 import Milestone from 'app/models/milestone';
 import Ember from 'ember';
@@ -67,7 +68,7 @@ var MilestonesRoute = Ember.Route.extend({
 
   actions: {
     createNewIssue: function(model, order) {
-      this.controllerFor("issue.create").set("model", model || Issue.createNew());
+      this.controllerFor("issue.create").set("model", model || CreateIssue.createNew());
       this.controllerFor("issue.create").set("order", order || {});
       this.send("openModal", "issue.create");
     },
