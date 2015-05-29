@@ -69,19 +69,28 @@ var MilestonesRoute = Ember.Route.extend({
     createNewIssue: function(model, order) {
       this.controllerFor("issue.create").set("model", model || Issue.createNew());
       this.controllerFor("issue.create").set("order", order || {});
-      this.send("openModal", "issue.create");
+      this.render("issue.create", {
+        into: "application",
+        outlet: "modal"
+      });
     },
 
     createNewMilestone : function () {
       this.controllerFor("milestones.create").set("model", Milestone.createNew());
-      this.send("openModal","milestones.create");
+      this.render("milestones.create", {
+        into: "application",
+        outlet: "modal"
+      });
     },
 
     editMilestone : function (milestone) {
       milestone.originalTitle = milestone.title;
       this.controllerFor("milestones");
       this.controllerFor("milestones.edit").set("model", Milestone.create(milestone));
-      this.send("openModal","milestones.edit");
+      this.render("milestones.edit", {
+        into: "application",
+        outlet: "modal"
+      });
     },
 
     archive: function(issue) {
