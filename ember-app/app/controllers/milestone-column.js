@@ -81,6 +81,7 @@ var MilestoneColumnController = Ember.Controller.extend({
           // save the issue with the newly created milestone
           cardController.send("assignMilestone",index, milestone);
           columnController.get("model.group").pushObject(milestone);
+          columnController.send("closeMilestoneMissing");
         },
         onReject: function(){
           // move the card to where it came from
