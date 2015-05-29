@@ -14,10 +14,6 @@ var IndexRoute = Ember.Route.extend({
     if(App.get("isLoaded")) {
       return;
     }
-    var cssView = CssView.create({
-      content: model
-    });
-    cssView.appendTo("head");
     return model.linkedBoardsPreload.done(function(linkedBoardsPromise){
       App.set("isLoaded", true); 
       var socket = this.get("socket");
@@ -32,6 +28,10 @@ var IndexRoute = Ember.Route.extend({
           model.linkedRepos.pushObject(board);
           socket.subscribeTo(b.full_name);
         });
+        var cssView = CssView.create({
+          content: model
+        });
+        cssView.appendTo("head");
         return boards;
       });
     }.bind(this));
