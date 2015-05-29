@@ -13,7 +13,6 @@ var IssuesCreateController = Ember.Controller.extend({
       });
       return selectedBoard;
   },
-  isCollaboratorBinding: "App.repo.is_collaborator",
   otherLabels: Ember.computed.alias("selectedBoard.other_labels"),
   assignees: Ember.computed.alias("selectedBoard.assignees"),
   milestones: Ember.computed.alias("selectedBoard.milestones"),

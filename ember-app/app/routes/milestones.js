@@ -112,7 +112,7 @@ var MilestonesRoute = Ember.Route.extend({
       });
     },
 
-    closeMilestoneMissing: function(){
+    closeModal: function(){
       this.disconnectOutlet({
         outlet: 'modal',
         parentView: 'application'
