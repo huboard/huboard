@@ -1,5 +1,6 @@
 import CssView from 'app/views/css';
 import Board from 'app/models/board';
+import CreateIssue from 'app/models/forms/create-issue';
 import Issue from 'app/models/issue';
 import Milestone from 'app/models/milestone';
 import Ember from 'ember';
@@ -16,11 +17,6 @@ var MilestonesRoute = Ember.Route.extend({
       return;
     }
 
-    var cssView = CssView.create({
-      content: model
-    });
-
-    cssView.appendTo("head");
 
     return model.linkedBoardsPreload.done(function(linkedBoardsPromise) {
       App.set("isLoaded", true);
@@ -46,6 +42,12 @@ var MilestonesRoute = Ember.Route.extend({
           socket.subscribeTo(b.full_name);
         });
 
+        var cssView = CssView.create({
+          content: model
+        });
+
+        cssView.appendTo("head");
+
         return boards;
       });
     }.bind(this));
@@ -67,7 +69,7 @@ var MilestonesRoute = Ember.Route.extend({
 
   actions: {
     createNewIssue: function(model, order) {
-      this.controllerFor("issue.create").set("model", model || Issue.createNew());
+      this.controllerFor("issue.create").set("model", model || CreateIssue.createNew());
       this.controllerFor("issue.create").set("order", order || {});
       this.render("issue.create", {
         into: "application",

@@ -11,7 +11,9 @@ var CssView = Ember.View.extend({
       var r = this._rgba[0], g = this._rgba[1], b = this._rgba[2];
       return (((r*299)+(g*587)+(b*144))/1000) >= 131.5 ? "#333" : "white";
     };
-    return _.chain(this.get('content.combinedLabels'))
+
+    var labels = Ember.copy(this.get('content.combinedLabels'));
+    return _.chain(labels)
       .union(this.get('content.link_labels'))
       .map(function(label) {
         var color = Ember.$.Color("#" + label.color);
@@ -21,7 +23,7 @@ var CssView = Ember.View.extend({
         return label;
       })
       .value();
-  }.property('content.combinedLabels')
+  }.property()
 });
 
 export default CssView;

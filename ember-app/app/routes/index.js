@@ -1,9 +1,8 @@
 import CssView from 'app/views/css';
 import Board from 'app/models/board';
 import Ember from 'ember';
+import CreateIssue from 'app/models/forms/create-issue';
 import Issue from 'app/models/issue';
-
-
 
 var IndexRoute = Ember.Route.extend({
   model: function(){
@@ -15,10 +14,6 @@ var IndexRoute = Ember.Route.extend({
     if(App.get("isLoaded")) {
       return;
     }
-    var cssView = CssView.create({
-      content: model
-    });
-    cssView.appendTo("head");
     return model.linkedBoardsPreload.done(function(linkedBoardsPromise){
       App.set("isLoaded", true); 
       var socket = this.get("socket");
@@ -33,6 +28,10 @@ var IndexRoute = Ember.Route.extend({
           model.linkedRepos.pushObject(board);
           socket.subscribeTo(b.full_name);
         });
+        var cssView = CssView.create({
+          content: model
+        });
+        cssView.appendTo("head");
         return boards;
       });
     }.bind(this));
@@ -45,7 +44,7 @@ var IndexRoute = Ember.Route.extend({
   },
   actions : {
     createNewIssue : function (model, order) {
-      this.controllerFor("issue.create").set("model", model || Issue.createNew());
+      this.controllerFor("issue.create").set("model", model || CreateIssue.createNew());
       this.controllerFor("issue.create").set("order", order || {});
       this.send("openModal","issue.create");
     },

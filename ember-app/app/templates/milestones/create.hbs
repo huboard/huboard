@@ -20,7 +20,7 @@
         Due date: {{format-date dueDate}} 
         <small> <a href="#" {{action "clearDueDate"}}> clear </a> </small>
       </h5>
-      {{hb-date-picker dueDateBinding=model.due_on processingBinding=processing}}
+      {{hb-date-picker dueDate=model.due_on processing=processing }}
     </div>
   </form>
 </div>

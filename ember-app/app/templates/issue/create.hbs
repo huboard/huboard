@@ -11,6 +11,7 @@
       <button disabled={{disabled}} class="hb-button">Submit issue</button>
     </div>
     <div class="flex-form-right">
+      {{hb-repo-selector editable=true selected=model.repo repos=allRepos assignRepo="assignRepo"}}
       {{#if isCollaborator}}
         {{hb-label-selector values=model.labels selected=model.labels title="Labels" labels=otherLabels}}
         {{hb-assignee editable=true  selected=model.assignee assignees=controller.assignees}}
