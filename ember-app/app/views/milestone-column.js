@@ -57,6 +57,7 @@ var CollectionView = Ember.CollectionView.extend({
         after = afterData.get("model._data.milestone_order") || afterData.get("model.number");
 
         var onCancel = function(){
+          that.get("controller").send("closeMilestoneMissing");
           ui.sender.sortable('cancel');
         };
 

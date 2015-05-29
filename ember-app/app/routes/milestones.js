@@ -93,10 +93,18 @@ var MilestonesRoute = Ember.Route.extend({
     },
 
     createMilestoneOrAbort: function(argBag) {
-      this.render("milestones.missing", {
-        into: "application",
-        outlet: "modal",
+      this.render('milestones.missing', {
+        into: 'application',
+        outlet: 'modal',
+        view: 'milestones.missing',
         model: argBag
+      });
+    },
+
+    closeMilestoneMissing: function(){
+      this.disconnectOutlet({
+        outlet: 'modal',
+        parentView: 'application'
       });
     },
 
