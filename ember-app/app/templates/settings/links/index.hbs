@@ -10,7 +10,7 @@
     </span>
     {{/if}}
   </div>
-  <button disabled="{{isDisabled}}" class=":hb-button shouldDisplayWarning:hb-button-danger" }} >Create link</button>
+  <button disabled={{isDisabled}} class="hb-button {{if shouldDisplayWarning 'hb-button-danger'}}">Create link</button>
 </form>
 {{#if shouldDisplayWarning }}
 <div class="alert alert-error">

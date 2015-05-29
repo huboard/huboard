@@ -23,15 +23,15 @@
             </div>
             <div class="link">
 
-              <h4>{{link.label.user}}/{{link.label.repo}}</h4>
+              <h4>{{link.model.label.user}}/{{link.model.label.repo}}</h4>
               {{#if link.isLinked }}
               <div class="flex-crumbs">
-                {{hb-board-columns columns=link.columns }}
+                {{hb-board-columns columns=link.model.columns }}
               </div>
               {{else}}
-                {{#if link.columns.length }}
+                {{#if link.model.columns.length }}
                 <div class="flex-crumbs control-group error">
-                    {{hb-board-columns columns=link.columns }}
+                    {{hb-board-columns columns=link.model.columns }}
                   <p class="help-block">
                   This HuBoard's columns are not compatible with your parent board. Click the Copy parent board button to copy the parent HuBoard's columns.
                   </p>

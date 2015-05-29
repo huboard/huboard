@@ -3,9 +3,9 @@ import Ember from 'ember';
 var SettingsLinkController = Ember.Controller.extend({
   needs: ["settings", "settings/links"],
   isLinked: function(){
-    return this.get("controllers.settings.column_labels.length") === this.get("columns.length");
+    return this.get("controllers.settings.model.column_labels.length") === this.get("model.columns.length");
 
-  }.property("controllers.settings.column_labels.@each","columns.@each"),
+  }.property("controllers.settings.model.column_labels.@each","columns.@each"),
   isDisabled: false,
   actions: {
     remove: function(link) {
