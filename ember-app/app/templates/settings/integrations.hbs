@@ -1,7 +1,7 @@
     <h3>Existing Integrations </h3>
     <div class="flex-form-top"> 
       <ul class="unstyled integrations">
-        {{#each integration in integrations}}
+        {{#each integration in model.integrations}}
           <li>
             <div class="integration">
               <button {{action "removeWebhook" integration}} type="button" class="hb-button hb-button-danger pull-right">Delete</button>
