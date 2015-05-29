@@ -32,8 +32,10 @@ var CardWrapperView = Ember.View.extend({
       }.bind(this));
     }.observes("content.isArchived"),
     isDraggable: function( ){
-      return App.get("loggedIn") && this.get("isCollaborator");
-    }.property("loggedIn","content.state"),
+      return App.get("loggedIn") 
+        && this.get("isCollaborator")
+        && this.get('isFiltered') !== 'filter-hidden';
+    }.property("loggedIn","content.state", 'isFiltered'),
     isFiltered: function() {
       var dimFilters = App.get("dimFilters"),
           hideFilters = App.get("hideFilters"),
@@ -70,6 +72,9 @@ var CardWrapperView = Ember.View.extend({
 
     }.property("App.memberFilter.mode", "App.dimFilters", "App.hideFilters", "App.searchFilter", "App.eventReceived"),
     click: function(){
+      if(this.get('isFiltered') === 'filter-hidden'){
+        return;
+      }
       var view = Ember.View.views[this.$().find("> div").attr("id")];
       view.get("controller").send("fullscreen");
     },

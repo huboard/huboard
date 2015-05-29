@@ -135,6 +135,7 @@
     .active {
     }
     .filter-hidden {
+      cursor: default;
       border:0;
       padding:0;
       margin:0;
@@ -158,14 +159,21 @@
     }
 
     .filter-hidden {
+      cursor: default;
       padding:0;
       margin:0;
       height:0;
       border:0;
+      padding-bottom: 5px;
+      margin-bottom: 15px;
       .ember-view {
         display: none;
       }
 
+    }
+    .filter-hidden + .filter-hidden {
+      padding:0;
+      margin:0;
     }
 
 }
@@ -320,6 +328,11 @@
     }
     padding-bottom: 5px;
     margin-bottom: 15px;
+    &.filter-hidden + &.filter-hidden {
+      padding-bottom: 0px;
+      margin-bottom: 0px;
+      cursor: none;
+    }
     .hb-avatar-tooltip {
       p {
         bottom: auto;
