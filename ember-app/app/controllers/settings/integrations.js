@@ -57,8 +57,8 @@ var SettingsIntegrationsController = Ember.Controller.extend({
         return "https://api.hipchat.com/v2/room/" + this.get('room') + "/notification?auth_token=" + this.get('authToken');
       }.property('room', 'authToken'),
       disabled: function(){
-        return !this.get("attrs.webhookURL");
-      }.property("attrs.webhookURL"),
+        return !this.get("room") || !this.get("authToken");
+      }.property("room", "authToken"),
       clearForm: function(){
         this.set("room", "");
         this.set("authToken", "");

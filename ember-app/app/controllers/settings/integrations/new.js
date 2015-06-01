@@ -20,6 +20,7 @@ var SettingsIntegrationsNewController = Ember.Controller.extend({
             data: Ember.merge({},this.get("model.attrs"))
           }
         }, "json").then(function(result) {
+          self.set("processing", false);
           controller.set("processing", false);
           self.get('model').clearForm();
 
