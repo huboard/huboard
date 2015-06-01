@@ -1,12 +1,13 @@
 import Ember from 'ember';
 
 function attr(defaultValue) {
-  return Ember.computed('data', function (key, value){
-    if(arguments.length > 1) {
+  return Ember.computed('data', {
+    get: function(key){
+      return this.get("data." + key) === undefined ? defaultValue : this.get("data." + key);
+    },
+    set: function(key, value){
       this.saveData(key, value);
       return value;
-    } else {
-      return this.get("data." + key) === undefined ? defaultValue : this.get("data." + key);
     }
   });
 }

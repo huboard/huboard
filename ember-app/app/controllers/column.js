@@ -11,14 +11,15 @@ var ColumnController = Ember.Controller.extend({
     return this.get("controllers.index.model.columns.firstObject.name") === this.get("model.name");
   }.property("controllers.index.model.columns.firstObject"),
   isCreateVisible: Ember.computed.alias("isFirstColumn"),
-  isCollapsed: function(key, value) {
-    if(arguments.length > 1) {
+  isCollapsed: Ember.computed({
+    get: function(){
+      return this.get("settings.taskColumn" + this.get("model.index") + "Collapsed");
+    },
+    set: function(key, value){
       this.set("settings.taskColumn" + this.get("model.index") + "Collapsed", value);
       return value;
-    } else {
-      return this.get("settings.taskColumn" + this.get("model.index") + "Collapsed");
     }
-  }.property(),
+  }).property(),
   isHovering: false,
   getIssues: function(){
     var index = this.get("model.index");
