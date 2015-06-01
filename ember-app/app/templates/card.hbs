@@ -1,10 +1,10 @@
 <div class="card-header">
-  <div class="title" title="{{title}}">
+  <div class="title" title="{{model.title}}">
     {{model.title}}
   </div>
   <div class="number">
     <small>#</small>
-    <a class="xnumber" href="{{html_url}}" target="_blank" title="View issue on github.com">
+    <a class="xnumber" href="{{model.html_url}}" target="_blank" title="View issue on github.com">
       {{model.number}}
     </a>
     {{#if model.pull_request}} {{#if model.pull_request.html_url }} <i class="ui-icon ui-icon-21 ui-icon-branch-merge"></i> {{/if}} {{/if}}
