@@ -117,6 +117,7 @@ var MilestonesRoute = Ember.Route.extend({
         outlet: 'modal',
         parentView: 'application'
       });
+      return true;
     },
 
     forceRepaint: function(target) {

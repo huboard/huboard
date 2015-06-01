@@ -7,7 +7,7 @@ var IssueQuickCreateController = IssueCreateController.extend({
     openFullScreen: function(){
       var model = Issue.createNew();
       model.set('title', this.get('model.title'));
-      model.set('milestone', this.get('milestone'));
+      model.set('milestone', this.get('model.milestone'));
       var leOrder = this.get("target.topOrderNumber");
       this.send("createNewIssue", model, leOrder);
       this.set('model.title', '');
