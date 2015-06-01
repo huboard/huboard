@@ -34,7 +34,11 @@ var SearchController = Ember.Controller.extend({
   }.property("term"),
   actions : {
     clearFilters : function(){
-      this.set("term", "");
+      var self = this;
+      self.set("term", "");
+      Ember.run.later(function(){
+        App.set("searchFilter", null);
+      }, 400)
     }
   }
 });
