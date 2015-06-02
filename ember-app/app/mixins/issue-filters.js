@@ -3,18 +3,41 @@ import Ember from 'ember';
 var IssueFiltersMixin = Ember.Mixin.create({
   //Public Methods
   isDimmed: function(item){
-    //False if item matches any active dimFilters
-    var dim = !this.get("dimFilters").any(function(filter){
-      return filter.condition(item);
-    });
-    return dim && this.get("dimFilters").length;
+    return this.filter(this.get("dimFilters"), item);
   },
   isHidden: function(item){
-    //False if item matches any active hideFilters
-    var hidden = !this.get("hideFilters").any(function(filter){
+    return this.filter(this.get("hideFilters"), item);
+  },
+
+  //Filtering Strategies
+  filter: function(filters, item){
+    var grouping = this.filterByStrategy(filters, "grouping");
+    var inclusive = this.filterByStrategy(filters, "inclusive");
+
+    var hide_ands = this.groupingStrategy(grouping, item);
+    var hide_ors = this.inclusiveStrategy(inclusive, item);
+
+    if(hide_ands && filters.length){ return hide_ands }
+    if(hide_ors && filters.length){ return hide_ors }
+    return false;
+  },
+  filterByStrategy: function(filters, strategy){
+    return filters.filter(function(f){
+      return f.strategy === strategy
+    });
+  },
+
+  ////ANDS (item must must all of the filters)
+  groupingStrategy: function(filters, item){
+    return filters.any(function(filter){
+      return !filter.condition(item);
+    });
+  },
+  ////ORS (item must match any of the filters)
+  inclusiveStrategy: function(filters, item){
+    return !filters.any(function(filter){
       return filter.condition(item);
     });
-    return hidden && this.get("hideFilters").length;
   },
 
   //Properties
@@ -36,7 +59,6 @@ var IssueFiltersMixin = Ember.Mixin.create({
     return filters;
   }.property("App.hideFilters", "App.searchFilter", "memberFilterHidden"),
 
-  //Private Methods
   memberFilterDim: function(){
     return App.get("memberFilter") && 
       App.get("memberFilter.mode") === 1;

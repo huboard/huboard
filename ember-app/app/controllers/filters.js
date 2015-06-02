@@ -24,6 +24,7 @@ var FiltersController = Ember.ObjectController.extend({
           name: "Assigned to me",
           queryParam: "member",
           mode: 0,
+          strategy: "inclusive",
           condition: function(i){
             return i.assignee && i.assignee.login === App.get("currentUser").login;
           }
@@ -33,6 +34,7 @@ var FiltersController = Ember.ObjectController.extend({
           name: "Assigned to others",
           queryParam: "member",
           mode: 0,
+          strategy: "inclusive",
           condition: function(i){
             return i.assignee && i.assignee.login !== App.get("currentUser").login;
           }
@@ -41,6 +43,7 @@ var FiltersController = Ember.ObjectController.extend({
           name: "Unassigned issues",
           queryParam: "member",
           mode: 0,
+          strategy: "inclusive",
           condition: function(i){
             return !i.assignee;
           }
@@ -52,9 +55,10 @@ var FiltersController = Ember.ObjectController.extend({
           name: "Unassigned issues",
           queryParam: "member",
           mode: 0,
+          strategy: "inclusive",
           condition: function(i){
             return !i.assignee;
-          }
+          },
         }
       ]);
     
@@ -64,6 +68,7 @@ var FiltersController = Ember.ObjectController.extend({
         name: m.title,
         queryParam: "milestone",
         mode:0,
+        strategy: "inclusive",
         condition:function(i){
          return i.milestone && i.milestone.title.toLocaleLowerCase() === m.title.toLocaleLowerCase();
         }
@@ -73,10 +78,10 @@ var FiltersController = Ember.ObjectController.extend({
       name: 'No milestone',
       queryParam: "milestone",
       mode:0,
+      strategy: "inclusive",
       condition:function(i){
         return i.milestone == null;
       }
-
     }));
     this.set("labelFilters", this.get("otherLabels").map(function(l){
        return Ember.Object.create({
@@ -84,6 +89,7 @@ var FiltersController = Ember.ObjectController.extend({
         queryParam: "label",
         mode:0,
         color: l.color,
+        strategy: "grouping",
         condition:function(i){
           return _.union(i.labels, i.other_labels).any(function(label){ 
              return l.name.toLocaleLowerCase() === label.name.toLocaleLowerCase();
@@ -101,7 +107,8 @@ var FiltersController = Ember.ObjectController.extend({
         color: l.color,
         condition:function(i){
           return i.repo.name === l.repo && i.repo.owner.login === l.user;
-        }
+        },
+        strategy: "inclusive"
        });
     }));
     this.get("boardFilters").insertAt(0, Ember.Object.create({
@@ -111,7 +118,8 @@ var FiltersController = Ember.ObjectController.extend({
       color: "7965cc",
       condition:function(i){
         return i.repo.name === App.get('repo.name');
-      }
+      },
+      strategy: "inclusive"
     }));
   },
   allFilters: function(){
