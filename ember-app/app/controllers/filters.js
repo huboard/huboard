@@ -105,10 +105,10 @@ var FiltersController = Ember.ObjectController.extend({
         queryParam: "repo",
         mode:0,
         color: l.color,
+        strategy: "inclusive",
         condition:function(i){
           return i.repo.name === l.repo && i.repo.owner.login === l.user;
         },
-        strategy: "inclusive"
        });
     }));
     this.get("boardFilters").insertAt(0, Ember.Object.create({
@@ -116,10 +116,10 @@ var FiltersController = Ember.ObjectController.extend({
       queryParam: "repo",
       mode:0,
       color: "7965cc",
+      strategy: "inclusive",
       condition:function(i){
         return i.repo.name === App.get('repo.name');
       },
-      strategy: "inclusive"
     }));
   },
   allFilters: function(){

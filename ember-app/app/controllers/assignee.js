@@ -30,6 +30,7 @@ var AssigneeController = Ember.Controller.extend({
       this.get("lastClicked").get("content");
       this.set("memberFilter", {
         mode: this.get("lastClicked.mode"),
+        strategy: "inclusive",
         condition: this.get("lastClicked.content.condition")
       });
     }.bind(this));
@@ -48,6 +49,7 @@ var AssigneeController = Ember.Controller.extend({
          return Ember.Object.create({
            avatar : a,
            mode: 0,
+           strategy: "inclusive",
            condition: function (i) {
               return i.assignee && i.assignee.login === a.login;
            }

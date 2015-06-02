@@ -14,11 +14,11 @@ var IssueFiltersMixin = Ember.Mixin.create({
     var grouping = this.filterByStrategy(filters, "grouping");
     var inclusive = this.filterByStrategy(filters, "inclusive");
 
-    var hide_ands = this.groupingStrategy(grouping, item);
-    var hide_ors = this.inclusiveStrategy(inclusive, item);
+    var ands = this.groupingStrategy(grouping, item);
+    var ors = this.inclusiveStrategy(inclusive, item);
 
-    if(hide_ands && filters.length){ return hide_ands }
-    if(hide_ors && filters.length){ return hide_ors }
+    if(ands && grouping.length){ return ands }
+    if(ors && inclusive.length){ return ors }
     return false;
   },
   filterByStrategy: function(filters, strategy){
@@ -27,13 +27,13 @@ var IssueFiltersMixin = Ember.Mixin.create({
     });
   },
 
-  ////ANDS (item must must all of the filters)
+  ////ANDS (item must must all of the active filters)
   groupingStrategy: function(filters, item){
     return filters.any(function(filter){
       return !filter.condition(item);
     });
   },
-  ////ORS (item must match any of the filters)
+  ////ORS (item must match any of the active filters)
   inclusiveStrategy: function(filters, item){
     return !filters.any(function(filter){
       return filter.condition(item);
