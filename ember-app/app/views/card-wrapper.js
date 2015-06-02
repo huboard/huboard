@@ -1,6 +1,7 @@
 import Ember from 'ember';
+import IssueFiltersMixin from 'app/mixins/issue-filters';
 
-var CardWrapperView = Ember.View.extend({
+var CardWrapperView = Ember.View.extend(IssueFiltersMixin, {
     templateName: "cardItem",
     classNames: ["card"],
     classNameBindings: ["isFiltered","isDraggable:is-draggable", "isClosable:closable", "colorLabel", "content.color:border"],
@@ -36,49 +37,12 @@ var CardWrapperView = Ember.View.extend({
         && this.get("isCollaborator")
         && this.get('isFiltered') !== 'filter-hidden';
     }.property("loggedIn","content.state", 'isFiltered'),
-    isFiltered: function() {
-      var dimFilters = App.get("dimFilters"),
-          hideFilters = App.get("hideFilters"),
-          searchFilter = App.get("searchFilter"),
-          memberFilter = App.get("memberFilter"),
-          that = this;
-
-      if(searchFilter) {
-         hideFilters = hideFilters.concat([searchFilter]);
-      }
-
-      if(memberFilter) {
-        if(memberFilter.mode === 1) {
-           (dimFilters = dimFilters.concat([memberFilter]));
-        }
-        if(memberFilter.mode === 2) {
-          (hideFilters = hideFilters.concat([memberFilter]));
-        }
-      }
-
-      //false if any filter matches the condition
-      var dimmed = !dimFilters.any(function(f){
-        return f.condition(that.get("content"));
-      });
-      var hidden = !hideFilters.any(function(f){
-        return f.condition(that.get("content"));
-      });
-      //true if any filter does Not match the condition
-      var hidden_inverse = hideFilters.any(function(f){
-        return !f.condition(that.get("content"));
-      });
-
-      if(hidden && hideFilters.length){
-        return "filter-hidden";
-      }
-      if(dimmed && !hidden_inverse && hideFilters.length){
-        return "";
-      }
-      if(dimmed && dimFilters.length){ return "dim"; }
-
+    isFiltered: function(){
+      var item = this.get("content");
+      if(this.isHidden(item)){ return "filter-hidden"; }
+      if(this.isDimmed(item)){ return "dim"; }
       return "";
-
-    }.property("App.memberFilter.mode", "App.dimFilters", "App.hideFilters", "App.searchFilter", "App.eventReceived"),
+    }.property("hideFilters", "dimFilters", "App.eventReceived"),
     click: function(){
       if(this.get('isFiltered') === 'filter-hidden'){
         return;
