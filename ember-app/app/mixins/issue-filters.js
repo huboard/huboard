@@ -2,11 +2,8 @@ import Ember from 'ember';
 
 var IssueFiltersMixin = Ember.Mixin.create({
   //Public Methods
-  isDimmed: function(item){
-    return this.filter(this.get("dimFilters"), item);
-  },
-  isHidden: function(item){
-    return this.filter(this.get("hideFilters"), item);
+  matchesFilter: function(item, filters){
+    return this.filter(filters, item);
   },
 
   //Filtering Strategies
@@ -39,34 +36,6 @@ var IssueFiltersMixin = Ember.Mixin.create({
       return filter.condition(item);
     });
   },
-
-  //Properties
-  dimFilters: function(){
-    var filters = App.get("dimFilters");
-    if(this.get("memberFilterDim")){
-      filters = filters.concat([App.get("memberFilter")]);
-    }
-    return filters;
-  }.property("App.dimFilters", "memberFilterDim"),
-  hideFilters: function(){
-    var filters = App.get("hideFilters");
-    if(App.get("searchFilter")){
-      filters = filters.concat([App.get("searchFilter")]);
-    }
-    if(this.get("memberFilterHidden")){
-      filters = filters.concat([App.get("memberFilter")]);
-    }
-    return filters;
-  }.property("App.hideFilters", "App.searchFilter", "memberFilterHidden"),
-
-  memberFilterDim: function(){
-    return App.get("memberFilter") && 
-      App.get("memberFilter.mode") === 1;
-  }.property("App.memberFilter"),
-  memberFilterHidden: function(){
-    return App.get("memberFilter") && 
-      App.get("memberFilter.mode") === 2;
-  }.property("App.memberFilter")
 });
 
 export default IssueFiltersMixin;
