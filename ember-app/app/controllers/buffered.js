@@ -1,4 +1,4 @@
-import BufferedProxy from 'app/vendor/buffered-proxy';
+import BufferedProxy from 'ember-buffered-proxy/mixin';
 import Ember from 'ember';
 
 
