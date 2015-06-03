@@ -4,55 +4,50 @@ import Ember from 'ember';
 
 var Issue = Ember.Object.extend(Serializable,{
   correlationId: correlationId,
-  customState: Ember.computed({
-    set: function(key, value){
-      if(value !== undefined) {
-          var user = this.get("repo.owner.login"),
-              repo = this.get("repo.name"),
-              full_name = user + "/" + repo,
-              previousState = this.get("_data.custom_state"),
-              options = {dataType: "json", data:{correlationId: this.get("correlationId")}};
+  customState: function (key, value) {
+    if(value !== undefined) {
+        var user = this.get("repo.owner.login"),
+            repo = this.get("repo.name"),
+            full_name = user + "/" + repo,
+            previousState = this.get("_data.custom_state"),
+            options = {dataType: "json", data:{correlationId: this.get("correlationId")}};
 
-          this.set("_data.custom_state", value);
-          this.set("processing", true);
+        this.set("_data.custom_state", value);
+        this.set("processing", true);
 
-          switch(value){
-            case "ready": 
-              Ember.$.extend(options, {
-                url: "/api/" + full_name + "/issues/" + this.get("number") + "/ready",
-                type: "PUT"
-              });
-              break;
-            case "blocked":
-              Ember.$.extend(options, {
-                url: "/api/" + full_name + "/issues/" + this.get("number") + "/blocked",
-                type: "PUT"
-              });
-              break;
-            case "":
-              Ember.$.extend(options, {
-                url: "/api/" + full_name + "/issues/" + this.get("number") + "/" + previousState,
-                type: "DELETE"
-              });
-              break;
+        switch(value){
+          case "ready": 
+            Ember.$.extend(options, {
+              url: "/api/" + full_name + "/issues/" + this.get("number") + "/ready",
+              type: "PUT"
+            });
+            break;
+          case "blocked":
+            Ember.$.extend(options, {
+              url: "/api/" + full_name + "/issues/" + this.get("number") + "/blocked",
+              type: "PUT"
+            });
+            break;
+          case "":
+            Ember.$.extend(options, {
+              url: "/api/" + full_name + "/issues/" + this.get("number") + "/" + previousState,
+              type: "DELETE"
+            });
+            break;
 
 
-          }
+        }
 
-          Ember.$.ajax(options)
-          .then(function(response){
-            this.set("processing", false);
-            this.set("body", response.body);
-            this.set("body_html", response.body_html);
-          }.bind(this));
-          return value;
-      }
-      return this.get("_data.custom_state");
-    },
-    get: function(){
-      return this.get("_data.custom_state");
+        Ember.$.ajax(options)
+        .then(function(response){
+          this.set("processing", false);
+          this.set("body", response.body);
+          this.set("body_html", response.body_html);
+        }.bind(this));
+        return value;
     }
-  }).property("_data.custom_state"),
+    return this.get("_data.custom_state");
+  }.property("_data.custom_state"),
   submitComment : function (markdown) {
      this.set("processing", true);
       var user = this.get("repo.owner.login"),
