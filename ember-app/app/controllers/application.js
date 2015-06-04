@@ -3,10 +3,10 @@ import Issue from 'app/models/issue';
 
 var ApplicationController = Ember.Controller.extend({
   isSidebarOpen: false,
-  filterGroups: Ember.inject.service(),
+  filters: Ember.inject.service(),
   setFilters: function(){
     if(this.get("model.board")){
-      this.get("filterGroups").hydrate(this.get("model.board"));
+      this.get("filters.filterGroups").hydrate(this.get("model.board"));
     }
   }.observes("model.board.filterMilestones", "model.board.filterLabels", "model.board.link_labels"),
 

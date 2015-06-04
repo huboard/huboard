@@ -5,6 +5,7 @@ var CardWrapperView = Ember.View.extend(IssueFiltersMixin, {
     templateName: "cardItem",
     classNames: ["card"],
     classNameBindings: ["isFiltered","isDraggable:is-draggable", "isClosable:closable", "colorLabel", "content.color:border"],
+    filters: Ember.inject.service(),
     colorLabel: function () {
       return "-x" + this.get("content.color");
     }.property("content.color"),
@@ -39,13 +40,13 @@ var CardWrapperView = Ember.View.extend(IssueFiltersMixin, {
     }.property("loggedIn","content.state", 'isFiltered'),
     isFiltered: function(){
       var item = this.get("content");
-      var dimmed = this.get("controller.dimFilters");
-      var hidden = this.get("controller.hideFilters");
+      var dimmed = this.get("filters.dimFiltersUnion");
+      var hidden = this.get("filters.hideFiltersUnion");
 
       if(this.matchesFilter(item, dimmed)){return "dim";}
       if(this.matchesFilter(item, hidden)){return "filter-hidden";}
       return "";
-    }.property("controller.hideFilters", "controller.dimFilters", "App.eventReceived"),
+    }.property("filters.hideFiltersUnion", "filters.dimFiltersUnion", "App.eventReceived"),
     click: function(){
       if(this.get('isFiltered') === 'filter-hidden'){
         return;
