@@ -1,7 +1,7 @@
 import Ember from 'ember';
 
 var HbAssigneeComponent = Ember.Component.extend({
-  classNameBindings: [":hb-selector-component", ":dropdown"],
+  classNames: ["hb-selector-component", "dropdown"],
   isOpen: function(){
     return false;
   }.property(),

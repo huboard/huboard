@@ -27,10 +27,10 @@ var LoadingView = Ember.View.extend({
 
     return this._super();
   },
-    willDestroyElement: function(){
-      Ember.$("body").removeClass("fullscreen-open");
-        return this._super();
-    }
+  willDestroyElement: function(){
+    Ember.$("body").removeClass("fullscreen-open");
+    return this._super();
+  }
 });
 
 export default LoadingView;

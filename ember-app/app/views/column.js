@@ -7,7 +7,12 @@ var CollectionView = Ember.CollectionView.extend({
   classNames: ["sortable"],
   classNameBindings:["isHovering:ui-sortable-hover"],
   attributeBindings: ["style"],
-  style: Ember.computed.alias("controller.style"),
+  style: function(){
+    if(this.get("controller.style")){
+      return this.get("controller.style").htmlSafe();
+    }
+    return "".htmlSafe();
+  }.property("controller.style"),
   content: Ember.computed.alias("controller.issues"),
   isHovering: false,
   didInsertElement: function(){
