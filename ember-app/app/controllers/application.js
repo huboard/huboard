@@ -3,15 +3,8 @@ import Issue from 'app/models/issue';
 
 var ApplicationController = Ember.Controller.extend({
   isSidebarOpen: false,
-  queryParams: ["member", "repo", "milestone", "label", "search"],
-  search: null,
-  repo: [],
-  member: [],
-  milestone: [],
-  label: [],
-
   filterGroups: Ember.inject.service(),
-  fahoohoogaus: function(){
+  setFilters: function(){
     if(this.get("model.board")){
       this.get("filterGroups").hydrate(this.get("model.board"));
     }

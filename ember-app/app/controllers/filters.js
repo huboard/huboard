@@ -4,12 +4,6 @@ var FiltersController = Ember.Controller.extend({
   needs: ["application", "assignee"],
   filterGroups: Ember.inject.service(),
 
-  queryParamsBinding: "controllers.application.queryParams",
-  repoBinding: "controllers.application.repo",
-  memberBinding: "controllers.application.member",
-  milestoneBinding: "controllers.application.milestone",
-  labelBinding: "controllers.application.label",
-
   milestonesBinding: "filterGroups.milestones",
   otherLabelsBinding: "filterGroups.otherLabels",
   linkLabelsBinding: "filterGroups.linkLabels",
@@ -30,9 +24,7 @@ var FiltersController = Ember.Controller.extend({
       }));
 
       this.set("hideFilters", allFilters.filter(function(f){
-        var formattedParam = f.name.replace(/\s+/g, '');
-        var isQueryParamFiltered = self.get(f.queryParam).contains(formattedParam);
-        return f.mode === 2 || isQueryParamFiltered;
+        return f.mode === 2;
       }));
     }.bind(this));
 

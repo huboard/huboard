@@ -4,7 +4,6 @@ import { debouncedObserver } from 'app/utilities/observers';
 
 var SearchController = Ember.Controller.extend({
   needs:["application"],
-  searchBinding: "controllers.application.search",
   updateSearch: function(){
     if (this.get("term").length) {
       this.set("search", this.get("term").trim());
@@ -12,11 +11,6 @@ var SearchController = Ember.Controller.extend({
       this.set("search", null);
     }
   }.observes('term'),
-  checkForQueryParams: function(){
-    if (this.get("search")) {
-      this.set("term", this.get("search"));
-    }
-  }.on("init"),
   term: "",
   termChanged : debouncedObserver(function(){
     var term = this.get("term");
