@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import CreateIssue from 'app/models/forms/create-issue';
 
-var MilestoneColumnController = Ember.ObjectController.extend({
+var MilestoneColumnController = Ember.Controller.extend({
   needs: ["milestones", "application", "index", "filters"],
   getIssues: function () {
     var issues = this.get("controllers.milestones.model.combinedIssues")

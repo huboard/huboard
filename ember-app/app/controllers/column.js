@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import CreateIssue from 'app/models/forms/create-issue';
 
-var ColumnController = Ember.ObjectController.extend({
+var ColumnController = Ember.Controller.extend({
   needs: ["index", "application", "filters"],
   style: Ember.computed.alias("controllers.index.column_style"),
   isLastColumn: function(){

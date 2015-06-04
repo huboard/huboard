@@ -9,6 +9,14 @@ var ApplicationController = Ember.Controller.extend({
   member: [],
   milestone: [],
   label: [],
+
+  filterGroups: Ember.inject.service(),
+  fahoohoogaus: function(){
+    if(this.get("model.board")){
+      this.get("filterGroups").hydrate(this.get("model.board"));
+    }
+  }.observes("model.board.filterMilestones", "model.board.filterLabels", "model.board.link_labels"),
+
   sockets: {
     config: {
       messagePath: "issueNumber",
