@@ -8,10 +8,10 @@ var FiltersService = Ember.Service.extend({
   linkLabelsBinding: "filterGroups.linkLabels",
 
   allFilters: function(){
-      return this.get("filterGroups.milestoneFilters")
-              .concat(this.get("filterGroups.userFilters"))
-              .concat(this.get("filterGroups.boardFilters"))
-              .concat(this.get("filterGroups.labelFilters"));
+    return this.get("filterGroups.milestoneFilters")
+            .concat(this.get("filterGroups.userFilters"))
+            .concat(this.get("filterGroups.boardFilters"))
+            .concat(this.get("filterGroups.labelFilters"));
   }.property("filterGroups.milestoneFilters.@each.mode", "filterGroups.userFilters.@each.mode","filterGroups.labelFilters.@each.mode", "filterGroups.boardFilters.@each.mode"),
   dimFiltersChanged: function(){
     var self = this;

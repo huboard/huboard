@@ -6,9 +6,9 @@ var ApplicationController = Ember.Controller.extend({
   filters: Ember.inject.service(),
   setFilters: function(){
     if(this.get("model.board")){
-      this.get("filters.filterGroups").hydrate(this.get("model.board"));
+      this.get("filters.filterGroups").setGroups(this.get("model.board"));
     }
-  }.observes("model.board.filterMilestones", "model.board.filterLabels", "model.board.link_labels"),
+  }.observes("model.board"),
 
   sockets: {
     config: {
