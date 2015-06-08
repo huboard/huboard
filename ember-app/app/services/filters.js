@@ -3,20 +3,9 @@ import Ember from 'ember';
 var FiltersService = Ember.Service.extend({
   filterGroups: Ember.inject.service(),
 
-  milestonesBinding: "filterGroups.milestones",
-  otherLabelsBinding: "filterGroups.otherLabels",
-  linkLabelsBinding: "filterGroups.linkLabels",
-
-  allFilters: function(){
-    return this.get("filterGroups.milestoneFilters")
-            .concat(this.get("filterGroups.userFilters"))
-            .concat(this.get("filterGroups.boardFilters"))
-            .concat(this.get("filterGroups.labelFilters"));
-  }.property("filterGroups.milestoneFilters.@each.mode", "filterGroups.userFilters.@each.mode","filterGroups.labelFilters.@each.mode", "filterGroups.boardFilters.@each.mode"),
-  dimFiltersChanged: function(){
-    var self = this;
+  anyFiltersChanged: function(){
     Ember.run.once(function(){
-      var allFilters = self.get("allFilters");
+      var allFilters = this.get("filterGroups.allFilters");
 
       this.set("dimFilters", allFilters.filter(function(f){
         return f.mode === 1;
@@ -26,28 +15,7 @@ var FiltersService = Ember.Service.extend({
         return f.mode === 2;
       }));
     }.bind(this));
-
-  }.observes("allFilters").on("init"),
-  dimFiltersBinding: "App.dimFilters",
-  hideFiltersBinding: "App.hideFilters",
-  filtersActive: function(){
-    var allFilters = this.get("allFilters");
-    var active =  _.any(allFilters, function(f){
-      return f.mode > 0;
-    });
-    return active;
-  }.property("allFilters"),
-  membersActive: false,
-  actions: {
-    clearFilters: function(){
-      var self = this;
-      Ember.run.once(function(){
-        self.get("allFilters").forEach(function(f){
-          Ember.set(f,"mode",0);
-        });
-      });
-    }
-  },
+  }.observes("filterGroups.allFilters").on("init"),
 
   //forceDimsToActive: function(){
   //  if (this.get("anyFiltersActive") && this.get("anyFiltersDim")){
@@ -85,33 +53,13 @@ var FiltersService = Ember.Service.extend({
   //},
   
   //Returns Concated filters list for card wrapper view
-  dimFiltersUnion: function(){
-    var filters = App.get("dimFilters");
-    if(this.get("memberFilterDim")){
-      filters = filters.concat([App.get("memberFilter")]);
-    }
-    return filters;
-  }.property("dimFilters", "memberFilterDim"),
   hideFiltersUnion: function(){
-    var filters = App.get("hideFilters");
+    var filters = this.get("hideFilters");
     if(App.get("searchFilter")){
       filters = filters.concat([App.get("searchFilter")]);
     }
-    if(this.get("memberFilterHidden")){
-      filters = filters.concat([App.get("memberFilter")]);
-    }
     return filters;
-  }.property("App.hideFilters", "App.searchFilter", "memberFilterHidden"),
-
-  memberFilterDim: function(){
-    return App.get("memberFilter") && 
-      App.get("memberFilter.mode") === 1;
-  }.property("App.memberFilter"),
-  memberFilterHidden: function(){
-    return App.get("memberFilter") && 
-      App.get("memberFilter.mode") === 2;
-  }.property("App.memberFilter")
-
+  }.property("hideFilters", "App.searchFilter"),
 });
 
 export default FiltersService;

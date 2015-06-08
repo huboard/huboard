@@ -1,11 +1,10 @@
 import Ember from 'ember';
 
 var LabelFilters = Ember.Service.extend({
+  filters: [],
 
   create: function(model){
-    var filter = [];
-
-    filter = model.get("filterLabels").map(function(l){
+    this.set("filters", model.get("filterLabels").map(function(l){
        return Ember.Object.create({
         name: l.name,
         queryParam: "label",
@@ -18,9 +17,9 @@ var LabelFilters = Ember.Service.extend({
           });
         }
        });
-    });
+    }));
 
-    return filter
+    return this.get("filters");
   }
 });
 

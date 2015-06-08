@@ -5,19 +5,34 @@ var FilterGroups = Ember.Service.extend({
   milestone: Ember.inject.service("filter_groups/milestone"),
   label: Ember.inject.service("filter_groups/label"),
   user: Ember.inject.service("filter_groups/user"),
+  member: Ember.inject.service("filter_groups/member"),
 
+  groups: ["board", "milestone", "label", "user", "member"],
   setGroups: function(model){
-    var boardFilters = this.get("board").create(model);
-    this.set("boardFilters", boardFilters);
+    var self = this;
+    this.get("groups").forEach(function(group){
+      self.get(group).create(model);
+    });
+    this.set("filterGroupsCreated", true);
+  },
 
-    var milestoneFilters = this.get("milestone").create(model);
-    this.set("milestoneFilters", milestoneFilters);
+  allFilters: function(){
+    if(!this.get("filterGroupsCreated")){ return []; }
+    return this.get("milestone.filters")
+            .concat(this.get("user.filters"))
+            .concat(this.get("board.filters"))
+            .concat(this.get("label.filters"))
+            .concat(this.get("member.filters"));
+  }.property("{board,milestone,label,user,member}.filters.@each.mode"),
 
-    var labelFilters = this.get("label").create(model);
-    this.set("labelFilters", labelFilters);
+  active: function(){
+    return this.get("allFilters").any(function(f){
+      return Ember.get(f, "mode") !== 0;
+    });
+  }.property("allFilters.@each.mode"),
 
-    var userFilters = this.get("user").create();
-    this.set("userFilters", userFilters);
+  clear: function(){
+    this.get("allFilters").setEach("mode", 0);
   }
 });
 

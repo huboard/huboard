@@ -1,18 +1,12 @@
 import Ember from 'ember';
 
 var MilestonesController = Ember.Controller.extend({
-  needs: ["application", "filters", "assignee", "search"],
+  needs: ["application"],
+  filters: Ember.inject.service(),
+  filtersActive: Ember.computed.alias("filters.filterGroups.active"),
   isCollaborator: function(){
     return this.get("controllers.application.model.is_collaborator");
   }.property("controllers.application.model.is_collaborator"),
-
-  filtersActive: function() {
-    return this.get("controllers.filters.filtersActive") || this.get("controllers.search.filtersActive") || this.get("controllers.assignee.filtersActive");
-  }.property(
-    "controllers.filters.filtersActive",
-    "controllers.assignee.filtersActive",
-    "controllers.search.filtersActive"
-  ),
 
   isSidebarOpen: Ember.computed.alias("controllers.application.isSidebarOpen"),
 

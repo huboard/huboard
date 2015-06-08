@@ -1,11 +1,9 @@
 import Ember from 'ember';
 
 var MilestoneFilters = Ember.Service.extend({
-
+  filters: [],
   create: function(model){
-    var filter = [];
-
-    filter = model.get("filterMilestones").map(function(m){
+    this.set("filters", model.get("filterMilestones").map(function(m){
        return Ember.Object.create({
         name: m.title,
         queryParam: "milestone",
@@ -15,8 +13,8 @@ var MilestoneFilters = Ember.Service.extend({
          return i.milestone && i.milestone.title.toLocaleLowerCase() === m.title.toLocaleLowerCase();
         }
        });
-    });
-    filter.insertAt(0, Ember.Object.create({
+    }));
+    this.get("filters").pushObject(Ember.Object.create({
       name: 'No milestone',
       queryParam: "milestone",
       mode:0,
@@ -24,10 +22,9 @@ var MilestoneFilters = Ember.Service.extend({
       condition:function(i){
         return i.milestone == null;
       }
-
     }));
 
-    return filter
+    return this.get("filters");
   }
 });
 

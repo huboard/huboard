@@ -1,12 +1,12 @@
 import Ember from 'ember';
 
 var BoardFilters = Ember.Service.extend({
+  filters: [],
 
   create: function(model){
-    var filter = [];
     var owner = model.get("full_name").split("/")[0];
 
-    filter = model.get("link_labels").map(function(l){
+    this.set("filters", model.get("link_labels").map(function(l){
        var name = owner === l.user ? l.repo : l.user + "/" + l.repo;
        return Ember.Object.create({
         name: name,
@@ -18,8 +18,8 @@ var BoardFilters = Ember.Service.extend({
           return i.repo.name === l.repo && i.repo.owner.login === l.user;
         }
        });
-    });
-    filter.insertAt(0, Ember.Object.create({
+    }));
+    this.get("filters").pushObject(Ember.Object.create({
       name: model.get('repo.name'),
       queryParam: "repo",
       mode:0,
@@ -30,7 +30,7 @@ var BoardFilters = Ember.Service.extend({
       }
     }));
 
-    return filter
+    return this.get("filters");
   }
 });
 

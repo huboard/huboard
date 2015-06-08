@@ -1,11 +1,9 @@
 import Ember from 'ember';
 
 var UserFilters = Ember.Service.extend({
-
+  filters: [],
   create: function(){
-    var filter = [];
-
-    filter = [
+    this.set("filters", [
       {
         name: "Unassigned issues",
         queryParam: "member",
@@ -15,10 +13,10 @@ var UserFilters = Ember.Service.extend({
           return !i.assignee;
         }
       }
-    ];
+    ]);
 
     if(App.get("loggedIn")){
-      filter.push(
+      this.get("filters").pushObject(
         {
           name: "Assigned to me",
           queryParam: "member",
@@ -38,9 +36,9 @@ var UserFilters = Ember.Service.extend({
           }
         }
       );
-    }
+    };
 
-    return filter
+    return this.get("filters");
   }
 });
 
