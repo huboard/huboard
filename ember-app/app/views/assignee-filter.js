@@ -8,7 +8,6 @@ var AssigneeFilterView = Ember.View.extend({
   draggable: true,
   isFlying: false,
   filters: Ember.inject.service(),
-  memberFiltersBinding: "filters.filterGroups.member.filters",
   dragStart: function(ev){
     this.set("isFlying", true);
     ev.dataTransfer.effectAllowed = "copy";
@@ -36,15 +35,15 @@ var AssigneeFilterView = Ember.View.extend({
     return "";
   }.property("mode", "activeAvatarsPresent"),
   activeAvatarsPresent: function(){
-    return this.get("memberFilters").any(function(f){
+    return this.get("filters.memberFilters").any(function(f){
       return f.mode === 2;
     });
-  }.property("memberFilters.@each.mode"),
+  }.property("filters.memberFilters.@each.mode"),
   dimAvatarsPresent: function(){
-    return this.get("memberFilters").any(function(f){
+    return this.get("filters.memberFilters").any(function(f){
       return f.mode === 1;
     });
-  }.property("memberFilters.@each.mode"),
+  }.property("filters.memberFilters.@each.mode"),
 
   mode: 0,
   modes:[0,1,2,0],
