@@ -1,7 +1,7 @@
 {{#if canEdit }}
   {{#if isEditing}}
     <button {{action "cancel" }} class="hb-button hb-button-grey">Cancel</button> 
-    <button {{bind-attr disabled=disabled}} {{action "save" }} class="hb-button ">Save</button> 
+    <button disabled={{disabled}} {{action "save" }} class="hb-button ">Save</button> 
   {{else}}
     <button {{action "edit" target=view }} class="hb-button hb-button-grey">Edit</button> 
   {{/if}}
@@ -12,8 +12,8 @@
     {{input value=bufferedContent.title }}
   {{else}}
     <div class="flex-issue-title">
-      {{ title }}
-      <a class="number" href="{{{unbound html_url }}}" target="_blank" {{bind-attr title="title"}}><small>#{{number}}</small></a>
+      {{ model.title }}
+      <a class="number" href="{{{unbound model.html_url }}}" target="_blank" title="{{model.title}}"><small>#{{model.number}}</small></a>
       {{#if target.isClosed}}
         <span class="issue-closed-badge"><p> Closed </p></span>
       {{/if}}

@@ -1,6 +1,6 @@
 <div class="main-toolbar">
   <div class="sidebar-toggle">
-    <a href="#" {{action "toggleSidebar" }}>Filters <i {{bind-attr class=":ui-icon isSidebarOpen:ui-icon-triangle-1-w:ui-icon-triangle-1-e"}} ></i></a>
+    <a href="#" {{action "toggleSidebar" }}>Filters <i class="ui-icon {{if isSidebarOpen 'ui-icon-triangle-1-w' 'ui-icon-triangle-1-e'}}"></i></a>
   </div>
 
   {{#if filtersActive}}
@@ -12,7 +12,7 @@
   </div>
   {{/if}}
 
- {{#if App.repo.is_collaborator}}
+ {{#if isCollaborator}}
     <div class="create-button">
       <a class="hb-icon-button hb-icon-button-purple" href="#" {{action "createNewMilestone"}}>
         <i class="ui-icon ui-icon-flag ui-icon-16"></i>
@@ -25,7 +25,7 @@
   {{/if}}
 
 </div>
-<div id="main-stage" {{bind-attr class=":main-content isSidebarOpen:sidebar-open"}}>
+<div id="main-stage" class="main-content {{if isSidebarOpen 'sidebar-open'}}">
   <div class="sidebar left">
     <div class="sidebar-wrapper">
       {{outlet "sidebarTop"}}

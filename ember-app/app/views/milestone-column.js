@@ -57,6 +57,7 @@ var CollectionView = Ember.CollectionView.extend({
         after = afterData.get("model._data.milestone_order") || afterData.get("model.number");
 
         var onCancel = function(){
+          that.get("controller").send("closeModal");
           ui.sender.sortable('cancel');
         };
 
@@ -85,10 +86,17 @@ var CollectionView = Ember.CollectionView.extend({
 });
 
 var ColumnView = Ember.ContainerView.extend({
-  classNameBindings:[":milestone","controller.cssClass",":column","isCollapsed:hb-state-collapsed","isHovering:hovering"],
+  classNameBindings:["controller.model.cssClass","isCollapsed:hb-state-collapsed","isHovering:hovering"],
+  classNames: ["milestone", "column"],
   isCollapsed: Ember.computed.alias("controller.isCollapsed"),
   isHovering: Ember.computed.alias("controller.isHovering"),
-  childViews: ["headerView","quickIssueView", CollectionView, "collapsedView"],
+  init: function(){
+    this._super();
+    this.pushObject(this.createChildView(this.headerView));
+    this.pushObject(this.createChildView(this.quickIssueView));
+    this.pushObject(this.createChildView(CollectionView));
+    this.pushObject(this.createChildView(this.collapsedView));
+  },
   headerView: Ember.View.extend({
     tagName: "h3",
     templateName: "milestoneColumnHeader",

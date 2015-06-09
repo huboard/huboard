@@ -38,7 +38,6 @@ var IssuesCreateView = ModalView.extend(KeyPressHandlingMixin, {
   focusTextbox: function(){
     var input = this.$("input");
     input.focus();
-    input.val(input.val());
   }
 });
 

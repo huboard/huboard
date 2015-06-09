@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-var IssueController = Ember.ObjectController.extend({
+var IssueController = Ember.Controller.extend({
   needs: ["application"],
   isCollaborator: function(){
     return this.get("model.repo.is_collaborator");

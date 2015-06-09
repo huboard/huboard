@@ -1,6 +1,6 @@
 <ul class="nav nav-tabs">
   {{#each pane in panes}}
-  <li {{bind-attr class="pane.selected:active"}}>
+  <li class="{{if pane.selected 'active'}}">
     <a href="#" {{action 'select' pane bubbles=false}}>{{pane.title}}</a>
   </li>
   {{/each}}

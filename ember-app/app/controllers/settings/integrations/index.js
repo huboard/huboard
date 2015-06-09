@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import ajax from 'ic-ajax';
 
-var SettingsIntegrationsIndexController = Ember.ObjectController.extend({
+var SettingsIntegrationsIndexController = Ember.Controller.extend({
   needs: ['settings/integrations'],
   possibleIntegrations: Ember.computed.alias('controllers.settings/integrations.possibleIntegrations'),
   disabled: function(){

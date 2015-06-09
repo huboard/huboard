@@ -10,10 +10,10 @@
         </div>
       {{/if}}
       <label>
-        {{input value=title placeholder="Title"}}
+        {{input value=model.title placeholder="Title"}}
       </label>
-      {{hb-markdown-editor markdown=description }}
-      <button {{bind-attr disabled=disabled}} class="hb-button">Update milestone</button>
+      {{hb-markdown-editor markdown=model.description }}
+      <button disabled={{disabled}} class="hb-button">Update milestone</button>
     </div>
     <div class="flex-form-right">
       <h5> 

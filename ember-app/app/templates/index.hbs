@@ -1,6 +1,6 @@
 <div class="main-toolbar">
   <div class="sidebar-toggle">
-    <a href="#" {{action "toggleSidebar" }}>Filters <i {{bind-attr class=":ui-icon isSidebarOpen:ui-icon-triangle-1-w:ui-icon-triangle-1-e"}} ></i></a>
+    <a href="#" {{action "toggleSidebar"}}>Filters <i class="ui-icon {{if isSidebarOpen 'ui-icon-triangle-1-w' 'ui-icon-triangle-1-e'}}"></i></a>
 
   </div>
   {{#if filtersActive}}
@@ -12,7 +12,7 @@
   </div>
   {{/if}}
 
-  {{#if App.repo.is_collaborator}}
+  {{#if isCollaborator}}
   <div class="create-button">
     {{#link-to 'settings' class='hb-icon-link' }}
         <i class="ui-icon ui-icon-18 ui-icon-gear"></i>
@@ -21,7 +21,7 @@
   {{/if}}
 
 </div>
-<div id="main-stage" {{bind-attr class=":main-content isSidebarOpen:sidebar-open"}}>
+<div id="main-stage" class="main-content {{if isSidebarOpen 'sidebar-open'}}">
   <div class="sidebar left">
     <div class="sidebar-wrapper">
       {{outlet "sidebarTop"}}
@@ -31,7 +31,7 @@
 
   <div id="content" class="content">
     <div class="board board-not-dragging">
-      {{#each column in board_columns }}
+      {{#each board_columns as |column|}}
       {{ render "column" column }}
       {{/each}}
     </div>

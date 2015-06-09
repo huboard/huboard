@@ -3,8 +3,8 @@
    <div class="container-fluid">
     <ul class="nav breadcrumbs">
       <li><a href="/" class="home"><i class="ui-icon ui-icon-menu"></i></a></li>
-      <li><a {{bind-attr href="userUrl"}} >{{model.owner.login}}</a></li>
-      <li><a {{bind-attr href="repoUrl"}}>{{model.name}}</a></li>
+      <li><a href="{{userUrl}}">{{model.owner.login}}</a></li>
+      <li><a href="{{repoUrl}}">{{model.name}}</a></li>
       <li>
          {{render "search"}} 
       </li>
@@ -20,11 +20,11 @@
           Tasks
         {{/link-to}}
       {{/link-to}}
-      {{#if App.loggedIn}}
+      {{#if loggedIn}}
         <li class="dropdown">
           <a class="dropdown-toggle avatar" data-toggle="dropdown" href="#">
           
-          {{hb-avatar user=App.currentUser width="30"}} <b class="caret"></b>
+          {{hb-avatar user=currentUser width="30"}} <b class="caret"></b>
           </a>
           <ul class="dropdown-menu">
             <li>

@@ -13,6 +13,7 @@ Router.map(function() {
   this.resource("milestones", function(){
     this.resource("milestones.issue",{path:"/issues/:issue_id"});
   });
+  this.route("milestones.missing");
 
   this.resource("settings", function(){
 
@@ -25,6 +26,8 @@ Router.map(function() {
     });
 
   });
+
+  this.route("unauthorized");
 });
 
 export default Router;

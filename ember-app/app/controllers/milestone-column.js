@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import CreateIssue from 'app/models/forms/create-issue';
 
-var MilestoneColumnController = Ember.ObjectController.extend({
+var MilestoneColumnController = Ember.Controller.extend({
   needs: ["milestones", "application", "index"],
   getIssues: function () {
     var issues = this.get("controllers.milestones.model.combinedIssues")
@@ -11,7 +11,7 @@ var MilestoneColumnController = Ember.ObjectController.extend({
       }).sort(function (a, b){
         return a._data.milestone_order - b._data.milestone_order;
       })
-      .filter(this.get("filterBy"));
+      .filter(this.get("model.filterBy"));
     return issues;
 
   },
@@ -81,6 +81,7 @@ var MilestoneColumnController = Ember.ObjectController.extend({
           // save the issue with the newly created milestone
           cardController.send("assignMilestone",index, milestone);
           columnController.get("model.group").pushObject(milestone);
+          columnController.send("closeModal");
         },
         onReject: function(){
           // move the card to where it came from

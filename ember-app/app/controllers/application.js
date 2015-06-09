@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import Issue from 'app/models/issue';
 
-var ApplicationController = Ember.ObjectController.extend({
+var ApplicationController = Ember.Controller.extend({
   isSidebarOpen: false,
   queryParams: ["assignee", "repo", "milestone", "label", "search"],
   search: null,
@@ -60,6 +60,12 @@ var ApplicationController = Ember.ObjectController.extend({
   repositoryName: function () {
     return this.get("model.full_name");
   }.property("model.full_name"),
+  currentUser: function(){
+    return App.get("currentUser");
+  }.property("App.currentUser"),
+  loggedIn: function(){
+    return App.get("loggedIn");
+  }.property("App.loggedIn")
 });
 
 export default ApplicationController;

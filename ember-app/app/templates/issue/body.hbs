@@ -1,5 +1,5 @@
-<a href="{{unbound html_url}}" target="_blank">
-  {{hb-avatar user=user height=30 width=30 }}
+<a href="{{unbound model.html_url}}" target="_blank">
+  {{hb-avatar user=model.user height=30 width=30 }}
 </a>
 <div class="comment-body">
   <div class="author">
@@ -12,15 +12,15 @@
         {{/unless}}
       {{/if}}
     {{/if}}
-    <strong>{{user.login}}</strong> commented {{ago created_at}} 
+    <strong>{{model.user.login}}</strong> commented {{ago model.created_at}} 
 
   </div>
   {{#if isEditing}}
   <form {{action 'save' on="submit" }} class="flex-form">
     {{hb-markdown-editor markdown=bufferedContent.body mentions=mentions}}
-    <button {{bind-attr disabled=disabled}} class="hb-button">Submit comment</button>
+    <button disabled={{disabled}} class="hb-button">Submit comment</button>
   </form>
   {{else}}
-    {{ hb-task-list body_html=body_html body=body canEdit=canEdit taskChanged="taskChanged" }}
+    {{ hb-task-list body_html=model.body_html body=model.body canEdit=canEdit taskChanged="taskChanged" }}
   {{/if}}
 </div>

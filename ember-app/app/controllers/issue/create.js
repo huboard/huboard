@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-var IssuesCreateController = Ember.ObjectController.extend({
+var IssuesCreateController = Ember.Controller.extend({
   needs: ["application"],
   isCollaborator: Ember.computed.alias("selectedBoard.repo.permissions.push"),
   selectedBoard: function(){
@@ -18,7 +18,7 @@ var IssuesCreateController = Ember.ObjectController.extend({
   milestones: Ember.computed.alias("selectedBoard.milestones"),
   columns: "selectedBoard.columns",
   disabled: function () {
-      return this.get("processing") || !this.get("isValid");
+    return this.get("processing") || !this.get("isValid");
   }.property("processing","isValid"),
   isValid: function () {
     return this.get("model.title");

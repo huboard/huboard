@@ -76,10 +76,17 @@ var CollectionView = Ember.CollectionView.extend({
   itemViewClass: WrapperView
 });
 var ColumnView = Ember.ContainerView.extend({
-  classNameBindings:[":hb-task-column",":column",":task-column","isCollapsed:hb-state-collapsed","isHovering:hovering"],
+  classNameBindings:["isCollapsed:hb-state-collapsed","isHovering:hovering"],
+  classNames: ["hb-task-column","column","task-column"],
   isCollapsed: Ember.computed.alias("controller.isCollapsed"),
   isHovering: Ember.computed.alias("controller.isHovering"),
-  childViews: ["headerView", "quickIssueView", CollectionView, "collapsedView"],
+  init: function(){
+    this._super();
+    this.pushObject(this.createChildView(this.headerView));
+    this.pushObject(this.createChildView(this.quickIssueView));
+    this.pushObject(this.createChildView(CollectionView));
+    this.pushObject(this.createChildView(this.collapsedView));
+  },
   headerView: Ember.View.extend({
     tagName: "h3",
     templateName: "columnHeader",

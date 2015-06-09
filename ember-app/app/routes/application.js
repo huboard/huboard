@@ -8,17 +8,7 @@ import animateModalClose from 'app/config/animate-modal-close';
 var ApplicationRoute = Ember.Route.extend({
   actions: {
     sessionErrorHandler: function(){
-      this.render("login", { into: 'application', outlet: 'modal' });
-    },
-    loading: function(){
-      if(this.router._activeViews.application){
-        this.render("loading",{ "into" : "application", "outlet" : "loading"});
-        this.router.one('didTransition', function() {
-          this.render("empty",{ "into" : "application", "outlet" : "loading"});
-        }.bind(this));
-        return true;
-      }
-      this.render("loading");
+      this.transitionTo("unauthorized");
     },
     toggleSidebar: function(){
       this.controllerFor("application").toggleProperty("isSidebarOpen");

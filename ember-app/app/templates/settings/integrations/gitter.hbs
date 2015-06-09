@@ -14,9 +14,9 @@
           Click the Submit webhook button to create the integration.
         </p>
         <label>
-          {{input value=attrs.webhookURL placeholder="Gitter webhook url" }}
+          {{input value=model.attrs.webhookURL placeholder="Gitter webhook url" }}
         </label>
-        <button {{bind-attr disabled=disabled}} class="hb-button">Submit webhook</button>
+        <button disabled={{disabled}} class="hb-button">Submit webhook</button>
         <div class="with-line"><span>or</span></div>
         <div class="cancel"> <a href="#" {{action 'cancel'}}>Cancel</a> </div>
       </form>

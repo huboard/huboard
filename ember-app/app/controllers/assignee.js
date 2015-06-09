@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-var AssigneeController = Ember.ObjectController.extend({
+var AssigneeController = Ember.Controller.extend({
   needs: ["application"],
   noActiveMembers: function(){
     return this.get("avatars").length === 0;

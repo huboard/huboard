@@ -40,7 +40,6 @@ var IssueReferenceView = Ember.View.extend({
     var commit = this.get("model.commit_id");
     this.get("controller").fetchCommit(commit)
       .then(function(commit){
-        //self.doubleContainerHeight();
         self.set('isLoaded', true);
         self.set("isProcessing", false);
         self.set("commit", commit);
@@ -48,11 +47,6 @@ var IssueReferenceView = Ember.View.extend({
       .fail(function(){
         self.set("isProcessing", false);
       });
-  },
-  doubleContainerHeight: function(){
-    var container = this.$().closest(".card-event");
-    var height = (container.height() * 2);
-    container.height(height);
   }
 });
 

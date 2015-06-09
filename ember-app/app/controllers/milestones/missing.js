@@ -1,29 +1,31 @@
 import Ember from 'ember';
 
-var MilestonesMissingController = Ember.ObjectController.extend({
+var MilestonesMissingController = Ember.Controller.extend({
   needs: ['milestones'],
   linkedRepos: Ember.computed.alias("controllers.milestones.model.linkedRepos"),
+  card: Ember.computed.alias("model.cardController.model"),
+  column: Ember.computed.alias("model.columnController.model"),
   disabled: false,
   actions: {
     closeModal: function(){
       if (this.get('disabled')) {
         return false;
       }
-      this.get("model.onReject").call(this.get("columnController"), this);
+      this.get("model.onReject").call(this.get("column"), this);
       return true;
     },
     createTheMilestone: function() {
       var controller = this,
         milestone = {
-          title: this.get("columnController.title"),
-          description: this.get("columnController.milestone.description"),
+          title: this.get("column.title"),
+          description: this.get("column.milestone.description"),
         },
-        owner = this.get("cardController.model.repo.owner.login"),
-        name = this.get("cardController.model.repo.name");
+        owner = this.get("card.repo.owner.login"),
+        name = this.get("card.repo.name");
 
       // GH API freaks out if you send a null due_on date
-      if (this.get("columnController.milestone.due_on")) {
-        milestone.due_on = this.get("columnController.milestone.due_on");
+      if (this.get("column.milestone.due_on")) {
+        milestone.due_on = this.get("column.milestone.due_on");
       }
           
       controller.set("disabled", true);
@@ -35,11 +37,11 @@ var MilestonesMissingController = Ember.ObjectController.extend({
         data: {milestone: milestone},
         success: function(response) {
           controller.get("linkedRepos").forEach(function(repo){
-            if (repo.full_name === controller.get("cardController.model.repo.full_name")){
+            if (repo.full_name === controller.get("card.repo.full_name")){
               repo.milestones.pushObject(response);
             }
           });
-          controller.get("model.onAccept").call(controller.get("columnController"), response);
+          controller.get("model.onAccept").call(controller.get("column"), response);
           controller.set("disabled", false);
           controller.get('target').send('closeModal');
         }
