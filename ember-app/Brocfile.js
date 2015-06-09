@@ -29,6 +29,7 @@ app.import('bower_components/marked/marked.min.js')
 app.import('bower_components/jquery-textcomplete/dist/jquery.textcomplete.min.js')
 app.import('bower_components/jquery-color/jquery.color.js')
 app.import('app/vendor/task-list.js')
+app.import('app/vendor/autoresize.js')
 
 
 
