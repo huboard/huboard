@@ -16,23 +16,10 @@ var ColumnCountController = Ember.Controller.extend({
   isFiltered: function(){
     return this.get('hideFilters.length');
   }.property("hideFilters"),
+  filters: Ember.inject.service(),
   hideFilters: function(){
-    var hideFilters = App.get("hideFilters"),
-    searchFilter = App.get("searchFilter"),
-    memberFilter = App.get("memberFilter");
-
-    if(searchFilter) {
-      hideFilters = hideFilters.concat([searchFilter]);
-    }
-
-    if(memberFilter) {
-      if(memberFilter.mode === 2) {
-        (hideFilters = hideFilters.concat([memberFilter]));
-      }
-    }
-
-    return hideFilters;
-  }.property("App.memberFilter.mode", "App.dimFilters", "App.hideFilters", "App.searchFilter", "App.eventReceived"),
+    return this.get("filters.hideFiltersUnion");
+  }.property("filters.hideFiltersUnion", "App.eventReceived"),
   filteredCount: function() {
     var hideFilters = this.get("hideFilters"),
     issues = this.get('combinedIssues'),
@@ -41,8 +28,8 @@ var ColumnCountController = Ember.Controller.extend({
     var filteredCount = 0;
 
     issues.forEach(function(issue){
-      if(hideFilters.any(function(f){
-        return !f.condition(issue);
+      if(!hideFilters.any(function(f){
+        return f.condition(issue);
       })){
         filteredCount++;
       }

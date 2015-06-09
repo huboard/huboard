@@ -16,7 +16,7 @@ var UserFilters = Ember.Service.extend({
     ]);
 
     if(App.get("loggedIn")){
-      this.get("filters").pushObject(
+      this.get("filters").pushObjects([
         {
           name: "Assigned to me",
           queryParam: "member",
@@ -35,7 +35,7 @@ var UserFilters = Ember.Service.extend({
             return i.assignee && i.assignee.login !== App.get("currentUser").login;
           }
         }
-      );
+      ]);
     };
 
     return this.get("filters");
