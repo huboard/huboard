@@ -17,6 +17,10 @@ var FiltersService = Ember.Service.extend({
     }.bind(this));
   }.observes("filterGroups.allFilters").on("init"),
 
+  clear: function(){
+    this.get("filterGroups.allFilters").setEach("mode", 0);
+  }
+
   //Make computed filters available via the FiltersService
   unknownProperty: function(key){
     if (!this.get("filterGroups.filterGroupsCreated")){ return; }

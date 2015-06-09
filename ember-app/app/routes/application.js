@@ -29,7 +29,7 @@ var ApplicationRoute = Ember.Route.extend({
       }.bind(this));
     },
     clearFilters: function(){
-      this.get("filters.filterGroups").clear();
+      this.get("filters").clear();
     }
   },
   model: function () {
