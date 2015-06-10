@@ -3,8 +3,8 @@
    <div class="container-fluid">
     <ul class="nav breadcrumbs">
       <li><a href="/" class="home"><i class="ui-icon ui-icon-menu"></i></a></li>
-      <li><a href="{{userUrl}}">{{model.owner.login}}</a></li>
-      <li><a href="{{repoUrl}}">{{model.name}}</a></li>
+      <li><a href="{{model.userUrl}}">{{model.owner.login}}</a></li>
+      <li><a href="{{model.repoUrl}}">{{model.name}}</a></li>
       <li>
          {{render "search"}} 
       </li>
