@@ -32,13 +32,16 @@ var FiltersService = Ember.Service.extend({
 
   //Forces Dim filter groups to active if there are other actives present
   //within that same group
-  forceMembersToActive: function(){
-    if(this.groupActive(this.get("memberFilters"))){
-      this.get("memberFilters").forEach(function(f){
-        if (f.mode === 1){ Ember.set(f, "mode", 2); }
-      });
+  forceMembersOrUsersToActive: function(){
+    var member_active = this.groupActive(this.get("memberFilters"));
+    var user_active = this.groupActive(this.get("userFilters"));
+    if(member_active || user_active){
+      this.get("userFilters").concat(this.get("memberFilters"))
+        .forEach(function(f){
+          if (f.mode === 1){ Ember.set(f, "mode", 2); }
+        });
     }
-  }.observes("filterGroups.member.filters.@each.mode"),
+  }.observes("filterGroups.{member,user}.filters.@each.mode"),
   forceLabelsToActive: function(){
     if(this.groupActive(this.get("labelFilters"))){
       this.get("labelFilters").forEach(function(f){
@@ -46,13 +49,6 @@ var FiltersService = Ember.Service.extend({
       });
     }
   }.observes("filterGroups.label.filters.@each.mode"),
-  forceUsersToActive: function(){
-    if(this.groupActive(this.get("userFilters"))){
-      this.get("userFilters").forEach(function(f){
-        if (f.mode === 1){ Ember.set(f, "mode", 2); }
-      });
-    }
-  }.observes("filterGroups.user.filters.@each.mode"),
   forceBoardsToActive: function(){
     if(this.groupActive(this.get("boardFilters"))){
       this.get("boardFilters").forEach(function(f){
@@ -60,6 +56,13 @@ var FiltersService = Ember.Service.extend({
       });
     }
   }.observes("filterGroups.board.filters.@each.mode"),
+  forceMilestonesToActive: function(){
+    if(this.groupActive(this.get("milestoneFilters"))){
+      this.get("milestoneFilters").forEach(function(f){
+        if (f.mode === 1){ Ember.set(f, "mode", 2); }
+      });
+    }
+  }.observes("filterGroups.milestone.filters.@each.mode"),
   groupActive: function(filters){
     if (!filters || !filters.length){ return false;}
     return filters.any(function(f){
@@ -67,7 +70,7 @@ var FiltersService = Ember.Service.extend({
     });
   },
 
-  //Returns Concated filters list for card wrapper view
+  //Returns Concated filters list for card-wrapper & column count
   hideFiltersUnion: function(){
     var filters = this.get("hideFilters");
     if(App.get("searchFilter")){

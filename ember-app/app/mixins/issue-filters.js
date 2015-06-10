@@ -20,8 +20,7 @@ var IssueFiltersMixin = Ember.Mixin.create({
     var inclusive_matches = this.runFilters(item, filter_groups, "inclusive");
     var grouping_matches = this.runFilters(item, filter_groups, "grouping");
 
-    if(inclusive_matches){ return inclusive_matches }
-    if(grouping_matches){ return grouping_matches }
+    if(grouping_matches || inclusive_matches){ return true }
     return false;
   },
 
@@ -66,7 +65,7 @@ var IssueFiltersMixin = Ember.Mixin.create({
     filters_active = filters_active.filter(function(count){ return count > 0});
 
     return this.compareFilterResults(results, filters_active);
-  }
+  },
 
   compareFilterResults: function(results, filters_active){
     var no_filter_groups_are_active = !filters_active.length;
