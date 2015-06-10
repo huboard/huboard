@@ -1,6 +1,7 @@
 import Ember from 'ember';
 
 var MemberFilters = Ember.Service.extend({
+  strategy: "inclusive",
 
   assigneesBinding: "board.assignees",
   combinedAssigneesBinding: "board.combinedAssignees",
@@ -11,7 +12,7 @@ var MemberFilters = Ember.Service.extend({
     this.set("board", model);
     Ember.run.sync();
 
-    return this.get("members");
+    return this.get("filters");
   },
 
   filters : function () {
@@ -19,7 +20,6 @@ var MemberFilters = Ember.Service.extend({
          return Ember.Object.create({
            avatar : a,
            mode: 0,
-           strategy: "inclusive",
            condition: function (i) {
               return i.assignee && i.assignee.login === a.login;
            }

@@ -1,27 +1,86 @@
 import Ember from 'ember';
 
 var IssueFiltersMixin = Ember.Mixin.create({
+  filters: Ember.inject.service(),
+
   //Public Methods
-  matchesFilter: function(item, filters){
+  isHidden: function(item){
+    var filters = this.filtersByMode(2);
+    if(App.get("searchFilter")){
+      filters = filters.concat([App.get("searchFilter")]);
+    }
+    return this.filter(filters, item);
+  },
+  isDim: function(item){
+    var filters = this.filtersByMode(1);
     return this.filter(filters, item);
   },
 
-  //Filtering Strategies
-  filter: function(filters, item){
-    var grouping = this.filterByStrategy(filters, "grouping");
-    var inclusive = this.filterByStrategy(filters, "inclusive");
+  filter: function(filter_groups, item){
+    var inclusive_matches = this.runFilters(item, filter_groups, "inclusive");
+    var grouping_matches = this.runFilters(item, filter_groups, "grouping");
 
-    var ands = this.groupingStrategy(grouping, item);
-    var ors = this.inclusiveStrategy(inclusive, item);
-
-    if(ands && grouping.length){ return ands }
-    if(ors && inclusive.length){ return ors }
+    if(inclusive_matches){ return inclusive_matches }
+    if(grouping_matches){ return grouping_matches }
     return false;
   },
-  filterByStrategy: function(filters, strategy){
-    return filters.filter(function(f){
-      return f.strategy === strategy
+
+  //Private Methods
+
+  //// Arrange Filters into Groups based on their mode
+  // {
+  //   grouping: {
+  //     labels: []
+  //   },
+  //   inclusive: {
+  //     member: [],
+  //     board: []
+  //   }
+  // }
+  //
+  filtersByMode: function(mode){
+    var self = this;
+    var groups = {};
+    this.get("filters.filterGroups.groups").forEach(function(group){
+      var filters = self.get(`filters.filterGroups.${group}.filters`);
+      var strategy = self.get(`filters.filterGroups.${group}.strategy`); 
+      if(!groups[strategy]){ groups[strategy] = {}; }
+      groups[strategy][group] = filters.filter(function(f){
+        return f.mode === mode;
+      });
     });
+    return groups;
+  },
+
+  runFilters: function(item, filter_groups, strategy){
+    var results = [];
+    var filters_active = [];
+    var strategy_function = this[`${strategy}Strategy`];
+    _.each(filter_groups[strategy], (function(value, key){
+      filters_active.push(value.length);
+      results.push(strategy_function(value, item));
+    }));
+    filters_active = filters_active.filter(function(count){ return count > 0});
+
+    var no_filter_groups_are_active = !filters_active.length;
+    if (no_filter_groups_are_active){ return false; }
+
+    var item_matches_no_filters = results.reduce(function(previous, current){
+      return previous && current;
+    }, true);
+    if(item_matches_no_filters){ return true; }
+
+    var item_matches_all_active_filters = results.filter(function(result){
+      return result === false
+    }).length > (filters_active.length - 1);
+    if(item_matches_all_active_filters){ return false; }
+
+    var item_matches_only_one_of_many_filters = results.any(function(result){
+      return result === false;
+    }) && filters_active.length > 1;
+    if(item_matches_only_one_of_many_filters){ return true; }
+
+    return false;
   },
 
   ////ANDS (item must must all of the active filters)

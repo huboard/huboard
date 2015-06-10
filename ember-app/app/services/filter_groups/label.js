@@ -2,6 +2,7 @@ import Ember from 'ember';
 
 var LabelFilters = Ember.Service.extend({
   filters: [],
+  strategy: "grouping",
 
   create: function(model){
     this.set("filters", model.get("filterLabels").map(function(l){
@@ -10,7 +11,6 @@ var LabelFilters = Ember.Service.extend({
         queryParam: "label",
         mode:0,
         color: l.color,
-        strategy: "grouping",
         condition:function(i){
           return _.union(i.labels, i.other_labels).any(function(label){ 
              return l.name.toLocaleLowerCase() === label.name.toLocaleLowerCase();
