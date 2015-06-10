@@ -27,7 +27,7 @@ var IssueFiltersMixin = Ember.Mixin.create({
 
   //Private Methods
 
-  //// Arrange Filters into Groups based on their mode
+  //// Arrange Filters into Groups based on their strategy, sub-filtered by mode
   // {
   //   grouping: {
   //     labels: []
@@ -56,12 +56,19 @@ var IssueFiltersMixin = Ember.Mixin.create({
     var results = [];
     var filters_active = [];
     var strategy_function = this[`${strategy}Strategy`];
+
+    this.mergeUserAndMemberGroups(filter_groups, strategy);
+
     _.each(filter_groups[strategy], (function(value, key){
       filters_active.push(value.length);
       results.push(strategy_function(value, item));
     }));
     filters_active = filters_active.filter(function(count){ return count > 0});
 
+    return this.compareFilterResults(results, filters_active);
+  }
+
+  compareFilterResults: function(results, filters_active){
     var no_filter_groups_are_active = !filters_active.length;
     if (no_filter_groups_are_active){ return false; }
 
@@ -83,7 +90,14 @@ var IssueFiltersMixin = Ember.Mixin.create({
     return false;
   },
 
-  ////ANDS (item must must all of the active filters)
+  mergeUserAndMemberGroups: function(filter_groups, strategy){
+    if(filter_groups[strategy]["user"]){
+      filter_groups[strategy]["member"].pushObjects(filter_groups[strategy]["user"]);
+      filter_groups[strategy]["user"] = [];
+    }
+  },
+
+  ////ANDS (item must match all of the active filters)
   groupingStrategy: function(filters, item){
     return filters.any(function(filter){
       return !filter.condition(item);
