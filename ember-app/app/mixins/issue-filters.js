@@ -6,9 +6,6 @@ var IssueFiltersMixin = Ember.Mixin.create({
   //Public Methods
   isHidden: function(item){
     var filters = this.filtersByMode(2);
-    if(App.get("searchFilter")){
-      filters = filters.concat([App.get("searchFilter")]);
-    }
     return this.filter(filters, item);
   },
   isDim: function(item){

@@ -19,6 +19,7 @@ var FiltersService = Ember.Service.extend({
 
   clear: function(){
     this.get("filterGroups.allFilters").setEach("mode", 0);
+    this.set("filterGroups.search.term", "");
   },
 
   //Make computed filters available via the FiltersService
