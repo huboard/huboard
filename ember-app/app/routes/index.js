@@ -5,6 +5,8 @@ import CreateIssue from 'app/models/forms/create-issue';
 import Issue from 'app/models/issue';
 
 var IndexRoute = Ember.Route.extend({
+  qps: Ember.inject.service("query-params"),
+
   model: function(){
     var repo = this.modelFor("application");
     var linked_boards = repo.fetchLinkedBoards();
@@ -42,6 +44,11 @@ var IndexRoute = Ember.Route.extend({
     this.render('assignee', {into: 'index', outlet: 'sidebarTop'});
     this.render('filters', {into: 'index', outlet: 'sidebarMiddle'});
   },
+  setupController: function(controller, model){
+   this._super(controller, model);
+   this.get("qps").applyFilterBuffer();
+  },
+
   actions : {
     createNewIssue : function (model, order) {
       this.controllerFor("issue.create").set("model", model || CreateIssue.createNew());

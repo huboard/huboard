@@ -3,6 +3,13 @@ import Ember from 'ember';
 var MilestonesController = Ember.Controller.extend({
   needs: ["application"],
   filters: Ember.inject.service(),
+
+  qps: Ember.inject.service("query-params"),
+  queryParams: [{"qps.filterParams": "sort"}],
+  applyUrlFilters: function(){
+    this.get("qps").applyFilterParams();
+  }.observes("qps.filterParams").on("init"),
+
   filtersActive: Ember.computed.alias("filters.filterGroups.active"),
   isCollaborator: function(){
     return this.get("controllers.application.model.is_collaborator");

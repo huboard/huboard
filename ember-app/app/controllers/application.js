@@ -2,6 +2,7 @@ import Ember from 'ember';
 import Issue from 'app/models/issue';
 
 var ApplicationController = Ember.Controller.extend({
+  qps: Ember.inject.service("query-params"),
   isSidebarOpen: false,
   filters: Ember.inject.service(),
   setFilters: function(){

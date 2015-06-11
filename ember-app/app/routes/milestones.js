@@ -6,6 +6,8 @@ import Milestone from 'app/models/milestone';
 import Ember from 'ember';
 
 var MilestonesRoute = Ember.Route.extend({
+  qps: Ember.inject.service("query-params"),
+
   model: function() {
     var repo = this.modelFor("application");
     var linked_boards = repo.fetchLinkedBoards();
@@ -65,6 +67,10 @@ var MilestonesRoute = Ember.Route.extend({
       into: "milestones",
       outlet: "sidebarMiddle"
     });
+  },
+  setupController: function(controller, model){
+   this._super(controller, model);
+   this.get("qps").applyFilterBuffer();
   },
 
   actions: {

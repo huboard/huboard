@@ -3,10 +3,9 @@ import Ember from 'ember';
 import Repo from 'app/models/repo';
 import animateModalClose from 'app/config/animate-modal-close';
 
-
-
 var ApplicationRoute = Ember.Route.extend({
   filters: Ember.inject.service(),
+
   actions: {
     sessionErrorHandler: function(){
       this.transitionTo("unauthorized");

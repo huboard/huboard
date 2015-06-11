@@ -2,6 +2,10 @@ import Ember from 'ember';
 
 var FiltersService = Ember.Service.extend({
   filterGroups: Ember.inject.service(),
+  qps: Ember.inject.service("query-params"),
+
+  //Set hideFilters so it is observable on init
+  hideFilters: [],
 
   anyFiltersChanged: function(){
     Ember.run.once(function(){
@@ -20,6 +24,7 @@ var FiltersService = Ember.Service.extend({
   clear: function(){
     this.get("filterGroups.allFilters").setEach("mode", 0);
     this.set("filterGroups.search.term", "");
+    this.get("qps").clear();
   },
 
   //Make computed filters available via the FiltersService

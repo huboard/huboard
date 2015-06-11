@@ -17,13 +17,14 @@ var MemberFilters = Ember.Service.extend({
 
   filters : function () {
      return this.get("avatars").map(function(a){
-         return Ember.Object.create({
-           avatar : a,
-           mode: 0,
-           condition: function (i) {
-              return i.assignee && i.assignee.login === a.login;
-           }
-         });
+       return Ember.Object.create({
+         name: a.login,
+         avatar : a,
+         mode: 0,
+         condition: function (i) {
+            return i.assignee && i.assignee.login === a.login;
+         }
+       });
      });
   }.property("avatars"),
 
