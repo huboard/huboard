@@ -71,6 +71,7 @@ var MilestonesRoute = Ember.Route.extend({
   setupController: function(controller, model){
    this._super(controller, model);
    this.get("qps").applyFilterBuffer();
+   this.get("qps").applySearchBuffer();
   },
 
   actions: {

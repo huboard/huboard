@@ -21,7 +21,8 @@ var SearchFilter = Ember.Service.extend({
     var Searcher = new Fuse(issues, {keys: ["title","number_searchable"], id: "id", threshold: threshold});
     var results = Searcher.search(term);
     this.set("filters", [{
-      mode: this.get("term").length ? 2 : 0,
+      search: true,
+      mode: term.length ? 2 : 0,
       condition: function(i){
        return term.length === 0 || results.indexOf(i.id) !== -1;
       },
@@ -30,15 +31,7 @@ var SearchFilter = Ember.Service.extend({
 
   termChanged : debouncedObserver(function(){
     this.createFilter();
-  },"term","combinedIssues", 300),
-
-  updateSearch: function(){
-    if (this.get("term").length) {
-      this.set("search", this.get("term").trim());
-    } else {
-      this.set("search", null);
-    }
-  }.observes('term')
+  },"term","combinedIssues", 300)
 });
 
 export default SearchFilter;

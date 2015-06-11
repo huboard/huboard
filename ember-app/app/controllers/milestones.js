@@ -5,10 +5,17 @@ var MilestonesController = Ember.Controller.extend({
   filters: Ember.inject.service(),
 
   qps: Ember.inject.service("query-params"),
-  queryParams: [{"qps.filterParams": "sort"}],
+  queryParams: [
+    {"qps.filterParams": "sort"},
+    {"qps.searchParams": "search"},
+  ],
   applyUrlFilters: function(){
-    this.get("qps").applyFilterParams();
-  }.observes("qps.filterParams").on("init"),
+    var self = this;
+    Ember.run.once(function(){
+      self.get("qps").applyFilterParams();
+      self.get("qps").applySearchParams();
+    });
+  }.observes("qps.filterParams", "qps.searchParams").on("init"),
 
   filtersActive: Ember.computed.alias("filters.filterGroups.active"),
   isCollaborator: function(){

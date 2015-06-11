@@ -6,13 +6,16 @@ var queryParamsService = Ember.Service.extend({
   clear: function(){
     this.set("filterParams", []);
     this.set("filterParamsBuffer", []);
+    this.set("searchParams", "");
+    this.set("searchParamsBuffer", "");
   },
 
+  //Filters
   filterParams: [],
   updateFilterParams: function(){
-    var qps = this.get("filters.hideFilters").map(function(f){
-      return f.name;
-    });
+    var qps = this.get("filters.hideFilters").filter(function(f){
+      return !f.search;
+    }).map(function(f){ return f.name });
     this.set("filterParams", qps);
   }.observes("filters.hideFilters").on("init"),
   applyFilterParams: function(){
@@ -36,6 +39,35 @@ var queryParamsService = Ember.Service.extend({
     if(buffer.length && !params.length){
       this.set("filterParams", buffer);
       this.set("filterParamsBuffer", []);
+    }
+  },
+
+  //Search
+  searchParams: "",
+  updateSearchParams: function(){
+    var term = this.get("filters.filterGroups.search.term");
+    this.set("searchParams", term);
+  }.observes("filters.filterGroups.search.term").on("init"),
+  applySearchParams: function(){
+    var search = this.get("searchParams");
+    if(search && search.length){
+      this.set("filters.searchFilters.mode", 2); 
+      this.set("filters.filterGroups.search.term", search);
+    }
+  },
+  searchParamsBuffer: "",
+  updateSearchParamsBuffer: function(){
+    var search = this.get("searchParams");
+    if(search && search.length){
+      this.set("searchParamsBuffer", this.get("searchParams"));
+    }
+  }.observes("searchParams"),
+  applySearchBuffer: function(){
+    var buffer = this.get("searchParamsBuffer");
+    var term = this.get("searchParams");
+    if(buffer.length && !term.length){
+      this.set("searchParams", buffer);
+      this.set("searchParamsBuffer", "");
     }
   }
 
