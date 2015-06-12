@@ -19,7 +19,16 @@ var FiltersService = Ember.Service.extend({
         return f.mode === 2;
       }));
     }.bind(this));
-  }.observes("filterGroups.allFilters").on("init"),
+  }.observes("filterGroups.allFilters"),
+
+  allFiltersObject: function(){
+    var self = this;
+    var all_filters = {};
+    this.get("filterGroups.groups").forEach(function(group){
+      all_filters[group] = self.get(`filterGroups.${group}.filters`);
+    });
+    return all_filters;
+  }.property("allFilters"),
 
   clear: function(){
     this.get("filterGroups.allFilters").setEach("mode", 0);
@@ -29,7 +38,7 @@ var FiltersService = Ember.Service.extend({
 
   //Make computed filters available via the FiltersService
   unknownProperty: function(key){
-    if (!this.get("filterGroups.filterGroupsCreated")){ return; }
+    if (!this.get("filterGroups.created")){ return; }
     key = key.replace("Filters", "");
     if (this.get("filterGroups." + key + ".filters")){
       return this.get("filterGroups." + key + ".filters");

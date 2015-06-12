@@ -6,8 +6,11 @@ var MilestonesController = Ember.Controller.extend({
 
   qps: Ember.inject.service("query-params"),
   queryParams: [
-    {"qps.filterParams": "sort"},
     {"qps.searchParams": "search"},
+    {"qps.repoParams": "repo"},
+    {"qps.assigneeParams": "assignee"},
+    {"qps.milestoneParams": "milestone"},
+    {"qps.labelParams": "label"}
   ],
   applyUrlFilters: function(){
     var self = this;

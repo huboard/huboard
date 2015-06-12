@@ -14,11 +14,11 @@ var FilterGroups = Ember.Service.extend({
     this.get("groups").forEach(function(group){
       self.get(group).create(model);
     });
-    this.set("filterGroupsCreated", true);
+    this.set("created", true);
   },
 
   allFilters: function(){
-    if(!this.get("filterGroupsCreated")){ return []; }
+    if(!this.get("created")){ return []; }
     return this.get("milestone.filters")
             .concat(this.get("user.filters"))
             .concat(this.get("board.filters"))

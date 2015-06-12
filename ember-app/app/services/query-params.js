@@ -4,50 +4,105 @@ var queryParamsService = Ember.Service.extend({
   filters: Ember.inject.service(),
 
   clear: function(){
-    this.set("filterParams", []);
-    this.set("filterParamsBuffer", []);
+    var self = this;
+    var params = ["repo", "assignee", "milestone", "label"]
+    params.forEach(function(param){
+      return self.set(`${param}Params`, []);
+    });
     this.set("searchParams", "");
     this.set("searchParamsBuffer", "");
   },
 
-  //Filters
-  filterParams: [],
+  ////Query Params for Filters
+  repoParams: [],
+  assigneeParams: [],
+  milestoneParams: [],
+  labelParams: [],
+  filterNames: ["repo", "assignee", "milestone", "label"],
+  allFilterParams: function(){
+    var self = this;
+    var filters = this.get("filterNames").map(function(param){
+      return self.get(`${param}Params`);
+    });
+    return _.flatten(filters);
+  }.property("{repo,assignee,milestone,label}Params"),
+
+  //Push board, label and milestone filters to the URL
   updateFilterParams: function(){
-    var qps = this.get("filters.hideFilters").filter(function(f){
-      return !f.search;
-    }).map(function(f){ return f.name });
-    this.set("filterParams", qps);
+    if(!this.get("filters.filterGroups.created")){return;}
+    var self = this;
+    var filters_object = this.get("filters.allFiltersObject");
+    ["board", "label", "milestone"].forEach(function(param){
+      var hidden_filters = filters_object[param].filter(function(f){
+        return f.mode === 2;
+      }).map(function(f){return f.name});
+      param = param === "board" ? "repo" : param;
+      self.set(`${param}Params`, hidden_filters);
+    });
   }.observes("filters.hideFilters").on("init"),
+
+  //Push user and member filters to the URL
+  updateAssigneeParams: function(){
+    if(!this.get("filters.filterGroups.created")){return;}
+    var filters = this.get("filters.userFilters").
+      concat(this.get("filters.memberFilters"));
+    var hidden_filters = filters.filter(function(f){
+      return f.mode === 2
+    }).map(function(f){return f.name});
+    this.set("assigneeParams", hidden_filters);
+  }.observes("filters.hideFilters").on("init"),
+
+  //Pushes URL filters down to the filter objects
   applyFilterParams: function(){
+    var legacyMatch = this.legacyFilterMatch;
     var all_filters = this.get("filters.filterGroups.allFilters");
-    this.get("filterParams").forEach(function(param){
+    this.get("allFilterParams").forEach(function(param){
       var filters = all_filters.filter(function(filter){
-        return filter.name === param;
+        return filter.name === param || legacyMatch(filter.name) === param;
       })
       filters.setEach("mode", 2);
     });
   },
-  filterParamsBuffer: [],
+
+  //Buffer the Filter Params for transitions (controllers initialization wipes them)
+  filterParamsBuffer: {},
   updateFilterParamsBuffer: function(){
-    if(this.get("filterParams").length){
-      this.set("filterParamsBuffer", this.get("filterParams"));
+    if(this.get("allFilterParams").length){
+      this.set("filterParamsBuffer", {
+        active: true,
+        repo: this.get("repoParams"),
+        assignee: this.get("assigneeParams"),
+        milestone: this.get("milestoneParams"),
+        label: this.get("labelParams")
+      });
     }
-  }.observes("filterParams"),
+  }.observes("allFilterParams"),
   applyFilterBuffer: function(){
     var buffer = this.get("filterParamsBuffer");
-    var params = this.get("filterParams");
-    if(buffer.length && !params.length){
-      this.set("filterParams", buffer);
-      this.set("filterParamsBuffer", []);
+    var params = this.get("allFilterParams");
+    if(buffer.active && !params.length){
+      this.set("repoParams", buffer.repo);
+      this.set("assigneeParams", buffer.assignee);
+      this.set("milestoneParams", buffer.milestone);
+      this.set("labelParams", buffer.label);
+      this.set("filterParamsBuffer", {});
     }
   },
+  legacyFilterMatch: function(name){
+    if(!name){ return false; }
+    return name.replace(/\s+/g, '');
+  },
 
-  //Search
+  ////Query Params for Search
   searchParams: "",
+
+  //Push search terms to the URL
   updateSearchParams: function(){
     var term = this.get("filters.filterGroups.search.term");
     this.set("searchParams", term);
   }.observes("filters.filterGroups.search.term").on("init"),
+
+  //Pushes URL search term down to the search filter 
   applySearchParams: function(){
     var search = this.get("searchParams");
     if(search && search.length){
@@ -55,6 +110,8 @@ var queryParamsService = Ember.Service.extend({
       this.set("filters.filterGroups.search.term", search);
     }
   },
+
+  //Buffer the search term for transitions (controllers initialization wipes them)
   searchParamsBuffer: "",
   updateSearchParamsBuffer: function(){
     var search = this.get("searchParams");
@@ -70,7 +127,6 @@ var queryParamsService = Ember.Service.extend({
       this.set("searchParamsBuffer", "");
     }
   }
-
 });
 
 export default queryParamsService;
