@@ -24,8 +24,8 @@ var AssigneeFilterView = Ember.View.extend({
   modeClass: function(){
     switch(this.get("mode")){
       case 0:
-        if(this.get("activeAvatarsPresent")){return "inactive"};
-        if(this.get("dimAvatarsPresent")){return "dim"};
+        if(this.get("activeAvatarsPresent")){return "inactive";}
+        if(this.get("dimAvatarsPresent")){return "dim";}
         return "";
       case 1:
         return "";

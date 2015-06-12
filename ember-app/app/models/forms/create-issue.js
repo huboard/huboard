@@ -30,6 +30,6 @@ CreateIssue.reopenClass({
        labels: []
      });
   }
-})
+});
 
 export default CreateIssue;

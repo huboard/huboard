@@ -28,4 +28,4 @@ var MilestoneFilters = Ember.Service.extend({
   }
 });
 
-export default MilestoneFilters
+export default MilestoneFilters;

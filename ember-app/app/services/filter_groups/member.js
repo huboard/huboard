@@ -39,4 +39,4 @@ var MemberFilters = Ember.Service.extend({
   }.property("assignees", "issues.@each.assignee", "combinedAssignees", "combinedIssues.@each.assignee"),
 });
 
-export default MemberFilters
+export default MemberFilters;

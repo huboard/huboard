@@ -5,7 +5,7 @@ var queryParamsService = Ember.Service.extend({
 
   clear: function(){
     var self = this;
-    var params = ["repo", "assignee", "milestone", "label"]
+    var params = ["repo", "assignee", "milestone", "label"];
     params.forEach(function(param){
       return self.set(`${param}Params`, []);
     });
@@ -35,7 +35,7 @@ var queryParamsService = Ember.Service.extend({
     ["board", "label", "milestone"].forEach(function(param){
       var hidden_filters = filters_object[param].filter(function(f){
         return f.mode === 2;
-      }).map(function(f){return f.name});
+      }).map(function(f){return f.name; });
       param = param === "board" ? "repo" : param;
       self.set(`${param}Params`, hidden_filters);
     });
@@ -47,8 +47,8 @@ var queryParamsService = Ember.Service.extend({
     var filters = this.get("filters.userFilters").
       concat(this.get("filters.memberFilters"));
     var hidden_filters = filters.filter(function(f){
-      return f.mode === 2
-    }).map(function(f){return f.name});
+      return f.mode === 2;
+    }).map(function(f){return f.name; });
     this.set("assigneeParams", hidden_filters);
   }.observes("filters.hideFilters").on("init"),
 
@@ -59,7 +59,7 @@ var queryParamsService = Ember.Service.extend({
     this.get("allFilterParams").forEach(function(param){
       var filters = all_filters.filter(function(filter){
         return filter.name === param || legacyMatch(filter.name) === param;
-      })
+      });
       filters.setEach("mode", 2);
     });
   },

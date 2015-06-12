@@ -23,9 +23,7 @@ var ColumnCountController = Ember.Controller.extend({
   filteredCount: function() {
     var hideFilters = this.get("hideFilters"),
     issues = this.get('combinedIssues'),
-    that = this;
-
-    var filteredCount = 0;
+    filteredCount = 0;
 
     issues.forEach(function(issue){
       if(!hideFilters.any(function(f){

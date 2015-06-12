@@ -35,10 +35,10 @@ var UserFilters = Ember.Service.extend({
             return i.assignee && i.assignee.login !== App.get("currentUser").login;
           }
       }));
-    };
+    }
 
     return this.get("filters");
   }
 });
 
-export default UserFilters
+export default UserFilters;

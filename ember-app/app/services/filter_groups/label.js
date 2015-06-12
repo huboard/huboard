@@ -23,4 +23,4 @@ var LabelFilters = Ember.Service.extend({
   }
 });
 
-export default LabelFilters
+export default LabelFilters;

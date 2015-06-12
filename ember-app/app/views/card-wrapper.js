@@ -34,9 +34,9 @@ var CardWrapperView = Ember.View.extend(IssueFiltersMixin, {
       }.bind(this));
     }.observes("content.isArchived"),
     isDraggable: function( ){
-      return App.get("loggedIn") 
-        && this.get("isCollaborator")
-        && this.get('isFiltered') !== 'filter-hidden';
+      return App.get("loggedIn") &&
+        this.get("isCollaborator") &&
+        this.get('isFiltered') !== 'filter-hidden';
     }.property("loggedIn","content.state", 'isFiltered'),
     isFiltered: function(){
       var item = this.get("content");
@@ -57,7 +57,7 @@ var CardWrapperView = Ember.View.extend(IssueFiltersMixin, {
     },
     isAssignable: function(){
       var self = this;
-      var login = $("#application").find(".assignees .is-flying")
+      var login = Ember.$("#application").find(".assignees .is-flying")
         .data("assignee");
       var repo = _.find(this.get("combinedRepos"), function(r){
         return r.full_name === self.get("content.repo.full_name");

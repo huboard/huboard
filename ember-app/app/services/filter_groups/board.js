@@ -33,4 +33,4 @@ var BoardFilters = Ember.Service.extend({
   }
 });
 
-export default BoardFilters
+export default BoardFilters;
