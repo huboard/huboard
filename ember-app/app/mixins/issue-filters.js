@@ -5,12 +5,12 @@ var IssueFiltersMixin = Ember.Mixin.create({
 
   //Public Methods
   isHidden: function(item){
-    var filters = this.filtersByMode(2);
-    return this.filter(filters, item);
+    var filter_groups = this.get("filters.hiddenFiltersObject");
+    return this.filter(filter_groups, item);
   },
   isDim: function(item){
-    var filters = this.filtersByMode(1);
-    return this.filter(filters, item);
+    var filter_groups = this.get("filters.dimFiltersObject");
+    return this.filter(filter_groups, item);
   },
 
   filter: function(filter_groups, item){
@@ -22,32 +22,6 @@ var IssueFiltersMixin = Ember.Mixin.create({
   },
 
   //Private Methods
-
-  //// Arrange Filters into Groups based on their strategy, sub-filtered by mode
-  // {
-  //   grouping: {
-  //     labels: []
-  //   },
-  //   inclusive: {
-  //     member: [],
-  //     board: []
-  //   }
-  // }
-  //
-  filtersByMode: function(mode){
-    var self = this;
-    var groups = {};
-    this.get("filters.filterGroups.groups").forEach(function(group){
-      var filters = self.get(`filters.filterGroups.${group}.filters`);
-      var strategy = self.get(`filters.filterGroups.${group}.strategy`); 
-      if(!groups[strategy]){ groups[strategy] = {}; }
-      groups[strategy][group] = filters.filter(function(f){
-        return f.mode === mode;
-      });
-    });
-    return groups;
-  },
-
   runFilters: function(item, filter_groups, strategy){
     var results = [];
     var filters_active = [];

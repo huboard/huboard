@@ -4,8 +4,23 @@ var FiltersService = Ember.Service.extend({
   filterGroups: Ember.inject.service(),
   qps: Ember.inject.service("query-params"),
 
+  //Make computed filters available via the FiltersService
+  unknownProperty: function(key){
+    if (!this.get("filterGroups.created")){ return; }
+    key = key.replace("Filters", "");
+    if (this.get("filterGroups." + key + ".filters")){
+      return this.get("filterGroups." + key + ".filters");
+    }
+  },
+
   //Set hideFilters so it is observable on init
   hideFilters: [],
+
+  clear: function(){
+    this.get("filterGroups.allFilters").setEach("mode", 0);
+    this.set("filterGroups.search.term", "");
+    this.get("qps").clear();
+  },
 
   anyFiltersChanged: function(){
     Ember.run.once(function(){
@@ -21,6 +36,13 @@ var FiltersService = Ember.Service.extend({
     }.bind(this));
   }.observes("filterGroups.allFilters"),
 
+  ////allFilters as an Object i.e
+  // {
+  //   board: [],
+  //   labels: [],
+  //   member: []
+  // }
+  //
   allFiltersObject: function(){
     var self = this;
     var all_filters = {};
@@ -30,20 +52,43 @@ var FiltersService = Ember.Service.extend({
     return all_filters;
   }.property("allFilters"),
 
-  clear: function(){
-    this.get("filterGroups.allFilters").setEach("mode", 0);
-    this.set("filterGroups.search.term", "");
-    this.get("qps").clear();
-  },
-
-  //Make computed filters available via the FiltersService
-  unknownProperty: function(key){
-    if (!this.get("filterGroups.created")){ return; }
-    key = key.replace("Filters", "");
-    if (this.get("filterGroups." + key + ".filters")){
-      return this.get("filterGroups." + key + ".filters");
-    }
-  },
+  //// Filter Groups based on their strategy, sub-filtered by mode i.e
+  // {
+  //   grouping: {
+  //     labels: []
+  //   },
+  //   inclusive: {
+  //     member: [],
+  //     board: []
+  //   }
+  // }
+  //
+  hiddenFiltersObject: function(){
+    var self = this;
+    var groups = {};
+    this.get("filterGroups.groups").forEach(function(group){
+      var filters = self.get(`filterGroups.${group}.filters`);
+      var strategy = self.get(`filterGroups.${group}.strategy`); 
+      if(!groups[strategy]){ groups[strategy] = {}; }
+      groups[strategy][group] = filters.filter(function(f){
+        return f.mode === 2;
+      });
+    });
+    return groups;
+  }.property("hideFilters"),
+  dimFiltersObject: function(){
+    var self = this;
+    var groups = {};
+    this.get("filterGroups.groups").forEach(function(group){
+      var filters = self.get(`filterGroups.${group}.filters`);
+      var strategy = self.get(`filterGroups.${group}.strategy`); 
+      if(!groups[strategy]){ groups[strategy] = {}; }
+      groups[strategy][group] = filters.filter(function(f){
+        return f.mode === 1;
+      });
+    });
+    return groups;
+  }.property("dimFilters"),
 
   //Forces Dim filter groups to active if there are other actives present
   //within that same group
