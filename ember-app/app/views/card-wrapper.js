@@ -43,7 +43,7 @@ var CardWrapperView = Ember.View.extend(IssueFiltersMixin, {
       if(this.isHidden(item)){return "filter-hidden";}
       if(this.isDim(item)){return "dim";}
       return "";
-    }.property("filters.hideFiltersUnion", "filters.dimFilters", "App.eventReceived"),
+    }.property("filters.hideFilters", "filters.dimFilters", "App.eventReceived"),
     click: function(){
       if(this.get('isFiltered') === 'filter-hidden'){
         return;

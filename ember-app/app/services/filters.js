@@ -129,15 +129,6 @@ var FiltersService = Ember.Service.extend({
       return f.mode === 2;
     });
   },
-
-  //Returns Concated filters list for card-wrapper & column count
-  hideFiltersUnion: function(){
-    var filters = this.get("hideFilters");
-    if(App.get("searchFilter")){
-      filters = filters.concat([App.get("searchFilter")]);
-    }
-    return filters;
-  }.property("hideFilters", "App.searchFilter"),
 });
 
 export default FiltersService;
