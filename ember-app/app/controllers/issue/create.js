@@ -77,7 +77,7 @@ var IssuesCreateController = Ember.Controller.extend({
         selectedLabels = this.get('model.labels.length') ?
           this.get('model.labels') : [];
       var commonLabels = labels.filter(function(label){
-        let name = get(label, 'name').toLowerCase();
+        let name = get(label, 'name').toLowerCase();// jshint ignore:line
         return selectedLabels.any(function(selected){
           return get(selected,'name').toLowerCase() === name;
         });

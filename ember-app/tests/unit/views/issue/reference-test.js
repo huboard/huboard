@@ -40,7 +40,6 @@ moduleFor("view:issue/reference", "IssueReferenceView", {
 });
 
 test("Static Propteries", assert => {
-  assert.equal(view.get("isVisible"), false);
   assert.equal(view.get("isProcessing"), false);
   assert.equal(view.get("commit"), null);
 });

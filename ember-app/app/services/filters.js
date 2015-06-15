@@ -50,7 +50,7 @@ var FiltersService = Ember.Service.extend({
       all_filters[group] = self.get(`filterGroups.${group}.filters`);
     });
     return all_filters;
-  }.property("allFilters"),
+  }.property("filterGroups.allFilters"),
 
   //// Filter Groups based on their strategy, sub-filtered by mode i.e
   // {
