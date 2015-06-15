@@ -20,15 +20,13 @@ var ColumnCountController = Ember.Controller.extend(IssueFiltersMixin, {
   filters: Ember.inject.service(),
   filteredCount: function() {
     var self = this;
-    var hideFilters = this.get("filters.hideFilters"),
-    issues = this.get('combinedIssues'),
+    var issues = this.get('combinedIssues'),
     filteredCount = 0;
 
     issues.forEach(function(issue){
-      var grouping = self.groupingStrategy(hideFilters, issue);
-      var inclusive = self.inclusiveStrategy(hideFilters, issue);
-      if(grouping || inclusive){ filteredCount++; }
+      if(self.isHidden(issue)){ filteredCount++; }
     });
+
     return issues.length - filteredCount;
   }.property("combinedIssues","filters.hideFilters"),
   isOverWip: function(){
