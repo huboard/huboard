@@ -9,6 +9,7 @@ var queryParamsService = Ember.Service.extend({
     params.forEach(function(param){
       return self.set(`${param}Params`, []);
     });
+    this.set("filterParamsBuffer", {});
     this.set("searchParams", "");
     this.set("searchParamsBuffer", "");
   },
