@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import template from 'app/templates/card';
 
 var CardView = Ember.View.extend({
   classNameBindings:["stateClass"],

@@ -49,7 +49,7 @@ var MilestonesEditController = Ember.Controller.extend({
     matches.forEach(board => {
       this.get("model")
         .saveLinkedEdit(board, this.get("model.originalTitle"))
-        .then(function(milestone){
+        .then(function(){
           self.get("model").saveToBoard(board);
           self.set("linkedRepos", boards.map(function(b){
             if (b.title === board.title){ return board; }

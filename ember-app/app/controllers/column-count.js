@@ -1,6 +1,7 @@
 import Ember from 'ember';
+import IssueFiltersMixin from 'app/mixins/issue-filters';
 
-var ColumnCountController = Ember.Controller.extend({
+var ColumnCountController = Ember.Controller.extend(IssueFiltersMixin, {
   needs: ["index"],
   combinedIssues: function(){
     var index = this.get("model.index");
@@ -14,41 +15,22 @@ var ColumnCountController = Ember.Controller.extend({
     return this.get('combinedIssues.length');
   }.property("combinedIssues"),
   isFiltered: function(){
-    return this.get('hideFilters.length');
-  }.property("hideFilters"),
-  hideFilters: function(){
-    var hideFilters = App.get("hideFilters"),
-    searchFilter = App.get("searchFilter"),
-    memberFilter = App.get("memberFilter");
-
-    if(searchFilter) {
-      hideFilters = hideFilters.concat([searchFilter]);
-    }
-
-    if(memberFilter) {
-      if(memberFilter.mode === 2) {
-        (hideFilters = hideFilters.concat([memberFilter]));
-      }
-    }
-
-    return hideFilters;
-  }.property("App.memberFilter.mode", "App.dimFilters", "App.hideFilters", "App.searchFilter", "App.eventReceived"),
+    return this.get('filters.hideFilters.length');
+  }.property("filters.hideFilters"),
+  filters: Ember.inject.service(),
   filteredCount: function() {
-    var hideFilters = this.get("hideFilters"),
+    var self = this;
+    var hideFilters = this.get("filters.hideFilters"),
     issues = this.get('combinedIssues'),
-    that = this;
-
-    var filteredCount = 0;
+    filteredCount = 0;
 
     issues.forEach(function(issue){
-      if(hideFilters.any(function(f){
-        return !f.condition(issue);
-      })){
-        filteredCount++;
-      }
+      var grouping = self.groupingStrategy(hideFilters, issue);
+      var inclusive = self.inclusiveStrategy(hideFilters, issue);
+      if(grouping || inclusive){ filteredCount++; }
     });
     return issues.length - filteredCount;
-  }.property("combinedIssues","hideFilters"),
+  }.property("combinedIssues","filters.hideFilters"),
   isOverWip: function(){
     var wip = this.get('model.wip');
     return wip && this.get("issuesCount") > wip;

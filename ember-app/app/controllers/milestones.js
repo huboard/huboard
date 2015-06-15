@@ -1,18 +1,29 @@
 import Ember from 'ember';
 
 var MilestonesController = Ember.Controller.extend({
-  needs: ["application", "filters", "assignee", "search"],
+  needs: ["application"],
+  filters: Ember.inject.service(),
+
+  qps: Ember.inject.service("query-params"),
+  queryParams: [
+    {"qps.searchParams": "search"},
+    {"qps.repoParams": "repo"},
+    {"qps.assigneeParams": "assignee"},
+    {"qps.milestoneParams": "milestone"},
+    {"qps.labelParams": "label"}
+  ],
+  applyUrlFilters: function(){
+    var self = this;
+    Ember.run.once(function(){
+      self.get("qps").applyFilterParams();
+      self.get("qps").applySearchParams();
+    });
+  }.observes("qps.filterParams", "qps.searchParams").on("init"),
+
+  filtersActive: Ember.computed.alias("filters.filterGroups.active"),
   isCollaborator: function(){
     return this.get("controllers.application.model.is_collaborator");
   }.property("controllers.application.model.is_collaborator"),
-
-  filtersActive: function() {
-    return this.get("controllers.filters.filtersActive") || this.get("controllers.search.filtersActive") || this.get("controllers.assignee.filtersActive");
-  }.property(
-    "controllers.filters.filtersActive",
-    "controllers.assignee.filtersActive",
-    "controllers.search.filtersActive"
-  ),
 
   isSidebarOpen: Ember.computed.alias("controllers.application.isSidebarOpen"),
 

@@ -1,9 +1,11 @@
 import Ember from 'ember';
+import IssueFiltersMixin from 'app/mixins/issue-filters';
 
-var CardWrapperView = Ember.View.extend({
+var CardWrapperView = Ember.View.extend(IssueFiltersMixin, {
     templateName: "cardItem",
     classNames: ["card"],
     classNameBindings: ["isFiltered","isDraggable:is-draggable", "isClosable:closable", "colorLabel", "content.color:border"],
+    filters: Ember.inject.service(),
     colorLabel: function () {
       return "-x" + this.get("content.color");
     }.property("content.color"),
@@ -32,45 +34,16 @@ var CardWrapperView = Ember.View.extend({
       }.bind(this));
     }.observes("content.isArchived"),
     isDraggable: function( ){
-      return App.get("loggedIn") 
-        && this.get("isCollaborator")
-        && this.get('isFiltered') !== 'filter-hidden';
+      return App.get("loggedIn") &&
+        this.get("isCollaborator") &&
+        this.get('isFiltered') !== 'filter-hidden';
     }.property("loggedIn","content.state", 'isFiltered'),
-    isFiltered: function() {
-      var dimFilters = App.get("dimFilters"),
-          hideFilters = App.get("hideFilters"),
-          searchFilter = App.get("searchFilter"),
-          memberFilter = App.get("memberFilter"),
-          that = this;
-
-      if(searchFilter) {
-         hideFilters = hideFilters.concat([searchFilter]);
-      }
-
-      if(memberFilter) {
-        if(memberFilter.mode === 1) {
-           (dimFilters = dimFilters.concat([memberFilter]));
-        }
-        if(memberFilter.mode === 2) {
-          (hideFilters = hideFilters.concat([memberFilter]));
-        }
-      }
-
-      if(hideFilters.any(function(f){
-        return !f.condition(that.get("content"));
-      })){
-        return "filter-hidden";
-      }
-
-      if(dimFilters.any(function(f){
-        return !f.condition(that.get("content"));
-      })){
-        return "dim";
-      }
-
+    isFiltered: function(){
+      var item = this.get("content");
+      if(this.isHidden(item)){return "filter-hidden";}
+      if(this.isDim(item)){return "dim";}
       return "";
-
-    }.property("App.memberFilter.mode", "App.dimFilters", "App.hideFilters", "App.searchFilter", "App.eventReceived"),
+    }.property("filters.hideFilters", "filters.dimFilters", "App.eventReceived"),
     click: function(){
       if(this.get('isFiltered') === 'filter-hidden'){
         return;
@@ -84,7 +57,7 @@ var CardWrapperView = Ember.View.extend({
     },
     isAssignable: function(){
       var self = this;
-      var login = $("#application").find(".assignees .is-flying")
+      var login = Ember.$("#application").find(".assignees .is-flying")
         .data("assignee");
       var repo = _.find(this.get("combinedRepos"), function(r){
         return r.full_name === self.get("content.repo.full_name");

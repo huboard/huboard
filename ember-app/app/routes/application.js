@@ -3,9 +3,9 @@ import Ember from 'ember';
 import Repo from 'app/models/repo';
 import animateModalClose from 'app/config/animate-modal-close';
 
-
-
 var ApplicationRoute = Ember.Route.extend({
+  filters: Ember.inject.service(),
+
   actions: {
     sessionErrorHandler: function(){
       this.transitionTo("unauthorized");
@@ -28,9 +28,7 @@ var ApplicationRoute = Ember.Route.extend({
       }.bind(this));
     },
     clearFilters: function(){
-      this.controllerFor("filters").send("clearFilters");
-      this.controllerFor("assignee").send("clearFilters");
-      this.controllerFor("search").send("clearFilters");
+      this.get("filters").clear();
     }
   },
   model: function () {
