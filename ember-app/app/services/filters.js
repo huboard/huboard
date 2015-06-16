@@ -1,6 +1,8 @@
 import Ember from 'ember';
 
 var FiltersService = Ember.Service.extend({
+  //filterGroups requires setGroups(model) before it yields
+  //anything meaningful to the FiltersService
   filterGroups: Ember.inject.service(),
   qps: Ember.inject.service("query-params"),
 
@@ -15,6 +17,7 @@ var FiltersService = Ember.Service.extend({
 
   //Set hideFilters so it is observable on init
   hideFilters: [],
+  dimFilters: [],
 
   clear: function(){
     this.get("filterGroups.allFilters").setEach("mode", 0);
@@ -23,18 +26,19 @@ var FiltersService = Ember.Service.extend({
   },
 
   anyFiltersChanged: function(){
+    var self = this;
     Ember.run.once(function(){
-      var allFilters = this.get("filterGroups.allFilters");
+      var allFilters = self.get("filterGroups.allFilters");
 
-      this.set("dimFilters", allFilters.filter(function(f){
+      self.set("dimFilters", allFilters.filter(function(f){
         return f.mode === 1;
       }));
 
-      this.set("hideFilters", allFilters.filter(function(f){
+      self.set("hideFilters", allFilters.filter(function(f){
         return f.mode === 2;
       }));
-    }.bind(this));
-  }.observes("filterGroups.allFilters"),
+    });
+  }.observes("filterGroups.allFilters.[]"),
 
   ////allFilters as an Object i.e
   // {
