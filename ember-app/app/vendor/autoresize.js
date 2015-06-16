@@ -531,11 +531,7 @@ Ember.AutoResize = Ember.Mixin.create(/** @scope Ember.AutoResize.prototype */{
     @required
     @type String
    */
-<<<<<<< HEAD
   autoResizeText: "",
-=======
-  autoResizeText: Ember.required(),
->>>>>>> Tweaks dependencies
 
   /**
     Whether the autoResizeText has been sanitized
