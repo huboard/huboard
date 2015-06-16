@@ -1,8 +1,6 @@
 // Last commit: 0ba0d24 (2013-11-06 10:53:04 -0500)
 /* jshint ignore:start */
 
-import Ember from 'ember';
-
 (function() {
 var metricsCalculationElement = null,
     // A list of all of the style properties
@@ -533,7 +531,7 @@ Ember.AutoResize = Ember.Mixin.create(/** @scope Ember.AutoResize.prototype */{
     @required
     @type String
    */
-  autoResizeText: Ember.required(),
+  autoResizeText: "",
 
   /**
     Whether the autoResizeText has been sanitized
