@@ -18,7 +18,7 @@ var AssigneeFilterView = Ember.View.extend({
   },
   click: function(ev){
     ev.preventDefault();
-    var $target = Ember.$(ev.target);
+    var $target = Ember.$(ev.target); // jshint ignore:line
     this.set("mode", this.get("modes")[this.get("mode") + 1]);
   },
   modeClass: function(){
