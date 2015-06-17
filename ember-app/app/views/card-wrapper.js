@@ -53,7 +53,7 @@ var CardWrapperView = Ember.View.extend(IssueFiltersMixin, {
     },
     dragAuthorized: function(ev){
       var contains_type = ev.dataTransfer.types.contains("text/huboard-assignee");
-      return contains_type  && this.isAssignable();
+      return contains_type && this.isAssignable() && this.get("isCollaborator");
     },
     isAssignable: function(){
       var self = this;
