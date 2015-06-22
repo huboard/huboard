@@ -1,0 +1,4 @@
+{{columns/hb-column-header column=column issues=sortedIssues isCollapsed=isCollapsed}}
+{{#each sortedIssues key="@index" as |issue|}}
+  {{hb-card issue=issue issues=sortedIssues repos=repos}}
+{{/each}}

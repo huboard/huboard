@@ -74,6 +74,7 @@ Ember.onLoad("Ember.Application", function ($app) {
       application.inject("controller","socket", "socket:main");
       application.inject("model", "socket", "socket:main");
       application.inject("route", "socket", "socket:main");
+      application.inject("service", "socket", "socket:main");
     }
   });
   $app.initializer({
@@ -86,6 +87,7 @@ Ember.onLoad("Ember.Application", function ($app) {
       application.inject('settings:main', 'repo', 'repo:main');
       application.inject('controller', 'settings', 'settings:main');
       application.inject('view', 'settings', 'settings:main');
+      application.inject('component', 'settings', 'settings:main');
 
       application.register('global:main', Global);
       application.inject('controller', 'global', 'global:main');

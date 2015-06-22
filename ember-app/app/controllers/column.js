@@ -21,27 +21,6 @@ var ColumnController = Ember.Controller.extend({
     }
   }).property(),
   isHovering: false,
-  getIssues: function(){
-    var index = this.get("model.index");
-    var column = this.get("model");
-    var issues = this.get("controllers.index.model.combinedIssues").filter(function(i){
-      return i.current_state.index === index;
-    })
-    .filter(function(i) {
-      // FIXME: this flag is for archived issue left on the board.
-      return !i.get("isArchived");
-    })
-    .map(function (i){
-       i.set("current_state", column);
-       return i;
-    }).sort(function (a, b){
-       return a._data.order - b._data.order;
-    });
-    return issues;
-  },
-  issues: function(){
-    return this.getIssues();
-  }.property("controllers.index.forceRedraw"),
   dragging: false,
   cardMoved : function (cardController, index){
     cardController.send("moved", index, this.get("model"));
