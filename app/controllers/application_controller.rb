@@ -4,12 +4,21 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   rescue_from ActionController::InvalidAuthenticityToken, :with => :csrf_failed
 
+  rescue_from Ghee::Unauthorized, :with => :ghee_unauthorized
+
 
   include ApplicationHelper
 
   after_action :queue_job
 
   protected
+  def ghee_unauthorized
+    request.env['warden'].logout
+    respond_to do |format|
+      format.json { render json: {error: 'GitHub token is expired'}, status: 422}
+      format.html { redirect_to '/login' }
+    end
+  end
   def csrf_failed
     respond_to do |format|
       format.html { render :server_error, status: 422 }

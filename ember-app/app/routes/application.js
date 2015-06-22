@@ -54,7 +54,7 @@ var ApplicationRoute = Ember.Route.extend({
 
         if(isJson) {
           var message = JSON.parse(xhr.responseText);
-          if(message.error === "CSRF token is expired") {
+          if(message.error === "CSRF token is expired" || message.error === "GitHub token is expired") {
             this.send("sessionErrorHandler");
           }
         }
