@@ -36,12 +36,14 @@ var IssuesCreateController = Ember.Controller.extend({
     var controller = this;
     this.set("processing",true);
     this.get("model").save(order).then(function(issue){
-       if(controller.get("issueIsLinked")){
-         controller.colorIssue(issue);
-         controller.send("assignRepo", controller.get("controllers.application.model.board"));
-       }
-       controller.send("issueCreated", issue);
-       controller.set("processing",false);
+      Ember.run.once(function(){
+        if(controller.get("issueIsLinked")){
+          controller.colorIssue(issue);
+          controller.send("assignRepo", controller.get("controllers.application.model.board"));
+        }
+        controller.send("issueCreated", issue);
+        controller.set("processing",false);
+      });
     });
   },
   allRepos: function(){
