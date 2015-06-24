@@ -1,10 +1,12 @@
 import Ember from "ember";
 import IssueFiltersMixin from "app/mixins/issue-filters";
-import IssueDragAndDropMixin from "app/mixins/issue-drag-and-drop";
+import MemberDragAndDropMixin from "app/mixins/member-drag-and-drop";
 import IssueSocketMixin from "app/mixins/sockets/issue";
 
 var HbCardComponent = Ember.Component.extend(
-  IssueFiltersMixin, IssueDragAndDropMixin, IssueSocketMixin, {
+  IssueFiltersMixin, MemberDragAndDropMixin,
+  IssueSocketMixin, {
+    tagName: "li",
     classNames: ["card"],
     classNameBindings: ["isFiltered","isDraggable:is-draggable", "isClosable:closable", "colorLabel", "issue.color:border"],
     filters: Ember.inject.service(),
@@ -46,11 +48,7 @@ var HbCardComponent = Ember.Component.extend(
       if(this.get("isFiltered") === "filter-hidden"){
         return;
       }
-      this.send("openIssueFullscreen", this.get("issue"));
-    },
-    dragAuthorized: function(ev){
-      var contains_type = ev.dataTransfer.types.contains("text/huboard-assignee");
-      return contains_type  && this.isAssignable();
+      this.get("target").send("openIssueFullscreen", this.get("issue"));
     },
     issueNumber: function () {
        return this.get("issue.number");
@@ -77,9 +75,6 @@ var HbCardComponent = Ember.Component.extend(
     }.property("issue.other_labels.@each"),
 
     actions: {
-      moved: function (index, column){
-        return this.get("issue").reorder(index, column);
-      },
       assignMilestone: function(order, milestone) {
         return this.get("issue").assignMilestone(order, milestone);
       },

@@ -15,69 +15,6 @@ var CollectionView = Ember.CollectionView.extend({
   }.property("controller.style"),
   content: Ember.computed.alias("controller.issues"),
   isHovering: false,
-  didInsertElement: function(){
-    var that = this;
-    this.$().sortable({
-      tolerance: 'pointer',
-      connectWith:".sortable",
-      placeholder: "ui-sortable-placeholder",
-      items: "li.is-draggable",
-      over: function () {
-        that.set("isHovering", true);
-      },
-      out: function () {
-        that.set("isHovering", false);
-      },
-      activate: function () {
-        // that.get("controller").set("isHovering", true);
-      },
-      deactivate: function() {
-        // that.get("controller").set("isHovering", false);
-      }, 
-      update: function (ev, ui) {
-
-        var findViewData = function (element){
-           return Ember.View.views[Ember.$(element).find("> div").attr("id")]
-             .get("controller");
-        };
-
-        var elements = Ember.$("> li", that.$()),
-        index = elements.index(ui.item);
-
-        if(index === -1) { return; }
-
-        var first = index === 0,
-        last = index === elements.size() - 1,
-        currentElement = Ember.$(ui.item),
-        currentData = findViewData(currentElement),
-        beforeElement = elements.get(index ? index - 1 : index),
-        beforeData = findViewData(beforeElement),
-        afterElement = elements.get(elements.size() - 1 > index ? index + 1 : index),
-        afterData = findViewData(afterElement),
-        before = beforeData.get("model._data.order") || beforeData.get("model.number"),
-        after = afterData.get("model._data.order") || afterData.get("model.number");
-
-        if(first && last) {
-          that.get("controller").cardMoved(currentData, currentData.get("model.number"));
-          return;
-        }
-        
-        if(first) {
-          that.get("controller").cardMoved(currentData, (after || 1)/2);
-          // dragged it to the top
-
-        } else if (last) {
-          // dragged to the bottom
-          that.get("controller").cardMoved(currentData, (before + 1));
-
-        }  else {
-          that.get("controller").cardMoved(currentData, (((after + before) || 1)/2));
-        }
-      }
-    });
-    this._super();
-
-  },
   itemViewClass: WrapperView
 });
 var ColumnView = Ember.ContainerView.extend({

@@ -1,4 +1,13 @@
-{{columns/hb-column-header column=column issues=sortedIssues isCollapsed=isCollapsed}}
-{{#each sortedIssues key="@index" as |issue|}}
-  {{hb-card issue=issue issues=sortedIssues repos=repos}}
-{{/each}}
+{{component headerClass column=column issues=sortedIssues isCollapsed=isCollapsed}}
+<ul class="sortable ui-sortable">
+  {{#each sortedIssues key="@index" as |issue|}}
+    {{
+      hb-card
+        issue=issue
+        issues=sortedIssues
+        repos=repos
+        templateName=cardClass
+        target=target
+    }}
+  {{/each}}
+</ul>

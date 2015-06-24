@@ -32,7 +32,16 @@
   <div id="content" class="content">
     <div class="board board-not-dragging">
       {{#each board_columns key="@index" as |column|}}
-        {{columns/hb-column column=column columns=model.columns issues=model.combinedIssues repos=model.combinedRepos}}
+        {{
+          columns/hb-column 
+            headerClass="columns/hb-task-header"
+            cardClass="components/hb-task-card"
+            column=column
+            columns=model.columns
+            issues=model.combinedIssues
+            repos=model.combinedRepos
+            target=target
+        }}
       {{/each}}
     </div>
   </div>

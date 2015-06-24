@@ -1,6 +1,10 @@
 import Ember from 'ember';
 
 var IssueDragAndDropMixin = Ember.Mixin.create({
+  dragAuthorized: function(ev){
+    var contains_type = ev.dataTransfer.types.contains("text/huboard-assignee");
+    return contains_type  && this.isAssignable();
+  },
   isAssignable: function(){
     var self = this;
     var login = Ember.$("#application").find(".assignees .is-flying")

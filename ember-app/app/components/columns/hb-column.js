@@ -1,8 +1,10 @@
 import Ember from 'ember';
+import CardSortingMixin from "app/mixins/card-sorting";
 
-var HbColumnComponent = Ember.Component.extend({
+var HbColumnComponent = Ember.Component.extend(CardSortingMixin, {
   classNameBindings:["isCollapsed:hb-state-collapsed","isHovering:hovering"],
   classNames: ["hb-task-column","column","task-column"],
+
   isHovering: false,
   sortedIssues: function(){
     var column = this.get("column");
@@ -39,9 +41,6 @@ var HbColumnComponent = Ember.Component.extend({
   isCreateVisible: Ember.computed.alias("isFirstColumn"),
   isHovering: false,
   dragging: false,
-  //cardMoved : function (cardController, index){
-  //  cardController.send("moved", index, this.get("column"));
-  //},
   topOrderNumber: function(){
     var issues = this.get("sortedIssues");
     if(issues.length){
