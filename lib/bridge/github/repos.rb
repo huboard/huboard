@@ -10,7 +10,8 @@ class Huboard
       connection.orgs.each do |org|
         the_repos.concat(repos(org['login']))
       end
-      the_repos.sort_by{|r| r["open_issues_count"] || 0}.reverse
+      sorted_repos = the_repos.sort_by{|r| r["open_issues_count"] || 0}.reverse
+      sorted_repos.uniq!
     end
 
     def repos_by_user(username)
