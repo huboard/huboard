@@ -31,13 +31,14 @@
 
   <div id="content" class="content">
     <div class="board board-not-dragging">
-      {{#each board_columns key="@index" as |column|}}
+      {{#each board_columns as |column|}}
         {{
           columns/hb-column 
             headerClass="columns/hb-task-header"
             cardClass="components/hb-task-card"
-            column=column
-            columns=model.columns
+            registerColumn="registerColumn"
+            model=column
+            columnComponents=columns
             issues=model.combinedIssues
             repos=model.combinedRepos
             target=target

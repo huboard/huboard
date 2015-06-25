@@ -4,8 +4,7 @@ import MemberDragAndDropMixin from "app/mixins/member-drag-and-drop";
 import IssueSocketMixin from "app/mixins/sockets/issue";
 
 var HbCardComponent = Ember.Component.extend(
-  IssueFiltersMixin, MemberDragAndDropMixin,
-  IssueSocketMixin, {
+  IssueFiltersMixin, MemberDragAndDropMixin, IssueSocketMixin, {
     tagName: "li",
     classNames: ["card"],
     classNameBindings: ["isFiltered","isDraggable:is-draggable", "isClosable:closable", "colorLabel", "issue.color:border"],
@@ -18,7 +17,6 @@ var HbCardComponent = Ember.Component.extend(
     }.property("issue.repo.is_collaborator"),
     isClosable: function () {
      var currentState = this.get("issue.current_state");
-
      return App.get("loggedIn") && currentState.is_last && this.get("issue.state") === "open";
     }.property("loggedIn", "issue.current_state","issue.state"),
     onDestroy: function (){
@@ -73,6 +71,12 @@ var HbCardComponent = Ember.Component.extend(
           return Ember.Object.create(_.extend(l,{customColor: "-x"+l.color}));
         });
     }.property("issue.other_labels.@each"),
+    registerToColumn: function(){
+      this.get("parentView.cards").pushObject(this);
+    }.on("didInsertElement"),
+    unregisterFromColumn: function(){
+      this.get("parentView.cards").removeObject(this);
+    }.on("willDestroyElement"),
 
     actions: {
       assignMilestone: function(order, milestone) {

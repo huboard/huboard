@@ -3,6 +3,9 @@ import Serializable from 'app/mixins/serializable';
 import Ember from 'ember';
 
 var Issue = Ember.Object.extend(Serializable,{
+  columnIndex: Ember.computed.alias("current_state.index"),
+  order: Ember.computed.alias("_data.order"),
+
   correlationId: correlationId,
   customState: function (key, value) {
     if(value !== undefined) {
@@ -208,6 +211,7 @@ var Issue = Ember.Object.extend(Serializable,{
         moved_columns: changedColumns,
         correlationId: this.get("correlationId")
       }, function( response ){
+         this.set("current_state", column);
          this.set("_data.order", response._data.order);
          this.set("body", response.body);
          this.set("body_html", response.body_html);

@@ -1,8 +1,19 @@
-import IssueCreateController from 'app/controllers/issue/create';
+import Ember from "ember";
 import Issue from 'app/models/forms/create-issue';
 
+var HbQuickIssueComponent = Ember.Component.extend({
+  //needs the issue will need repo.full_name
+  //issue.createNew().save(order)
 
-var IssueQuickCreateController = IssueCreateController.extend({
+  model: Issue.createNew(),
+  clearModel: function(){
+    this.set("model", Issue.createNew());
+  }.observes("issueCreated"),
+  issueCreated: 0,
+
+  placeholderText: "Add issue...",
+
+  classNames: ["create-issue"],
   actions: {
     openFullScreen: function(){
       var model = Issue.createNew();
@@ -16,11 +27,11 @@ var IssueQuickCreateController = IssueCreateController.extend({
       if (this.get('model.title').trim() === "") {
         return ;
       }
-      var leOrder = this.get("target.topOrderNumber");
+      var leOrder = this.get("parentView.topOrderNumber");
       this.createIssue(leOrder);
       this.set('model.title', '');
     }
   }
 });
 
-export default IssueQuickCreateController;
+export default HbQuickIssueComponent;

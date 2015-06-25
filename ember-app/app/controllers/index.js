@@ -2,6 +2,7 @@ import Ember from 'ember';
 
 var IndexController = Ember.Controller.extend({
   needs: ["application"],
+  columns: Ember.A(),
 
   qps: Ember.inject.service("query-params"),
   queryParams: [
@@ -29,7 +30,12 @@ var IndexController = Ember.Controller.extend({
   isCollaborator: function(){
     return App.get("repo.is_collaborator");
   }.property('App.repo.is_collaborator'),
-  forceRedraw: 0
+
+  actions: {
+    registerColumn: function(column_component){
+      this.get("columns").pushObject(column_component);
+    }
+  }
 });
 
 export default IndexController;
