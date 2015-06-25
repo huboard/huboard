@@ -11,7 +11,7 @@ class Huboard
         the_repos.concat(repos(org['login']))
       end
       sorted_repos = the_repos.sort_by{|r| r["open_issues_count"] || 0}.reverse
-      sorted_repos.uniq!
+      sorted_repos.uniq
     end
 
     def repos_by_user(username)
