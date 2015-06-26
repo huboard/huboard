@@ -14,7 +14,7 @@
     <div>
       <%= render partial: 'repo_filters', :locals => { :user => @user || current_user.attribs, :is_current_user => (params[:user].nil? or @user['login'] == current_user.login ) } %>
       <ul class="repos drop-shadow ">
-        <% if @repos.empty? %>
+        <% if @repos.nil? || @repos.empty? %>
           <li class="empty">
             No repositories match your current filters
           </li>
