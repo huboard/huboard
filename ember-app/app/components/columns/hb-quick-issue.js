@@ -1,9 +1,9 @@
 import Ember from "ember";
-import Issue from 'app/models/forms/create-issue';
+import Issue from "app/models/forms/create-issue";
 
 var HbQuickIssueComponent = Ember.Component.extend({
-  //needs the issue will need repo.full_name
-  //issue.createNew().save(order)
+  classNames: ["create-issue"],
+  placeholderText: "Add issue...",
 
   model: Issue.createNew(),
   clearModel: function(){
@@ -11,25 +11,28 @@ var HbQuickIssueComponent = Ember.Component.extend({
   }.observes("issueCreated"),
   issueCreated: 0,
 
-  placeholderText: "Add issue...",
+  isValid: function(){
+    return this.get("model.title").trim() !== "";
+  }.property("model.title"),
 
-  classNames: ["create-issue"],
   actions: {
     openFullScreen: function(){
-      var model = Issue.createNew();
-      model.set('title', this.get('model.title'));
-      model.set('milestone', this.get('model.milestone'));
-      var leOrder = this.get("target.topOrderNumber");
-      this.send("createNewIssue", model, leOrder);
-      this.set('model.title', '');
+      //TODO: figure out milestone when implementing ms columns
+      //model.set("milestone", this.get("model.milestone"));
+      var order = this.get("parentView.topOrderNumber");
+      this.attrs.createFullscreenIssue(this.get("model"), order);
     },
     onQuickAdd: function(){
-      if (this.get('model.title').trim() === "") {
-        return ;
-      }
-      var leOrder = this.get("parentView.topOrderNumber");
-      this.createIssue(leOrder);
-      this.set('model.title', '');
+      if (!this.get("isValid")) {return;}
+      this.set("processing", true);
+      var order = this.get("parentView.topOrderNumber");
+
+      self = this;
+      this.get("model").save(order).then(function(issue){
+        self.attrs.createNewIssue(issue);
+        self.incrementProperty("issueCreated");
+        self.set("processing", false);
+      });
     }
   }
 });

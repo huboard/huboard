@@ -52,11 +52,7 @@ var HbColumnComponent = Ember.Component.extend(SortableMixin, {
   //dragging: false,
   topOrderNumber: function(){
     var issues = this.get("sortedIssues");
-    if(issues.length){
-      return { order: issues.get("firstObject._data.order") / 2 };
-    } else {
-      return {};
-    }
+    return issues.get("firstObject._data.order") / 2;
   }.property("sortedIssues.@each"),
 
   registerWithController: function(){
@@ -67,7 +63,16 @@ var HbColumnComponent = Ember.Component.extend(SortableMixin, {
     this.$(".collapsed").click(function(){
       self.toggleProperty("isCollapsed");
     });
-  }.on("didInsertElement")
+  }.on("didInsertElement"),
+
+  actions: {
+    createNewIssue: function(issue){
+      this.attrs.createNewIssue(issue);
+    },
+    createFullscreenIssue: function(issue, order){
+      this.attrs.createFullscreenIssue(issue, order);
+    }
+  }
 });
 
 export default HbColumnComponent;

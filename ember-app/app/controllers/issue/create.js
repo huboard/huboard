@@ -41,8 +41,8 @@ var IssuesCreateController = Ember.Controller.extend({
           controller.colorIssue(issue);
           controller.send("assignRepo", controller.get("controllers.application.model.board"));
         }
-        controller.send("issueCreated", issue);
-        controller.set("processing",false);
+        controller.get("target").send("createNewIssue", issue);
+        controller.get("target").send("closeModal");
       });
     });
   },

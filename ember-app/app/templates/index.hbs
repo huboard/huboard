@@ -38,10 +38,11 @@
             cardClass="components/hb-task-card"
             registerColumn="registerColumn"
             model=column
-            columnComponents=columns
+            columnComponents=registeredColumns
             issues=model.combinedIssues
             repos=model.combinedRepos
-            target=target
+            createNewIssue=(action "createNewIssue")
+            createFullscreenIssue=(action "createFullscreenIssue")
         }}
       {{/each}}
     </div>

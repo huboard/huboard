@@ -51,7 +51,11 @@ var IndexRoute = Ember.Route.extend({
   },
 
   actions : {
-    createNewIssue : function (model, order) {
+    createNewIssue: function(issue){
+      var issues = this.modelFor("index").get("issues");
+      issues.pushObject(issue);
+    },
+    createFullscreenIssue : function (model, order) {
       this.controllerFor("issue.create").set("model", model || CreateIssue.createNew());
       this.controllerFor("issue.create").set("order", order || {});
       this.send("openModal","issue.create");
@@ -62,22 +66,6 @@ var IndexRoute = Ember.Route.extend({
     openIssueFullscreen: function(model){
       this.transitionTo("index.issue", model);
     },
-    forceRepaint: function(target) {
-      if(target === "milestones") {
-        return;
-      }
-      var controller = this.controllerFor("index");
-      controller.incrementProperty("forceRedraw");
-    },
-    issueCreated: function(issue){
-      var controller = this.controllerFor("index");
-      var issues = controller.get("model.issues");
-      issues.pushObject(issue);
-      Ember.run.schedule('afterRender', controller, function () {
-        controller.incrementProperty("forceRedraw");
-        this.send("closeModal");
-      }.bind(this));
-    }
   }
 });
 

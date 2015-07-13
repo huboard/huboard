@@ -2,7 +2,7 @@ import Ember from 'ember';
 
 var IndexController = Ember.Controller.extend({
   needs: ["application"],
-  columns: Ember.A(),
+  registeredColumns: Ember.A(),
 
   qps: Ember.inject.service("query-params"),
   queryParams: [
@@ -33,7 +33,13 @@ var IndexController = Ember.Controller.extend({
 
   actions: {
     registerColumn: function(column_component){
-      this.get("columns").pushObject(column_component);
+      this.get("registeredColumns").pushObject(column_component);
+    },
+    createNewIssue: function(issue){
+      this.get("target").send("createNewIssue", issue);
+    },
+    createFullscreenIssue: function(issue, order){
+      this.get("target").send("createFullscreenIssue", issue, order);
     }
   }
 });
