@@ -3,6 +3,7 @@ import Ember from 'ember';
 var MilestonesController = Ember.Controller.extend({
   needs: ["application"],
   filters: Ember.inject.service(),
+  registeredColumns: Ember.A(),
 
   qps: Ember.inject.service("query-params"),
   queryParams: [
@@ -59,9 +60,7 @@ var MilestonesController = Ember.Controller.extend({
     }).value().sort(function(a, b) {
       return a.milestone._data.order - b.milestone._data.order;
     });
-  }.property("forceRedraw"),
-
-  forceRedraw: 0,
+  }.property("model.combinedMilestones.@each"),
 
   milestoneMoved: function(milestoneController, index) {
     var milestone = milestoneController.get("model.milestone"), owner = milestone.repo.owner.login, name = milestone.repo.name;
@@ -80,6 +79,18 @@ var MilestonesController = Ember.Controller.extend({
         milestoneController.set("model.milestone._data", response._data);
       }
     });
+  },
+
+  actions: {
+    registerColumn: function(column_component){
+      this.get("registeredColumns").pushObject(column_component);
+    },
+    createNewIssue: function(issue){
+      this.get("target").send("createNewIssue", issue);
+    },
+    createFullscreenIssue: function(issue, order){
+      this.get("target").send("createFullscreenIssue", issue, order);
+    }
   }
 });
 

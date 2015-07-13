@@ -5,6 +5,8 @@ import Ember from 'ember';
 var Issue = Ember.Object.extend(Serializable,{
   columnIndex: Ember.computed.alias("current_state.index"),
   order: Ember.computed.alias("_data.order"),
+  milestoneOrder: Ember.computed.alias("_data.milestone_order"),
+  milestoneTitle: Ember.computed.alias("milestone.title"),
 
   correlationId: correlationId,
   customState: function (key, value) {

@@ -35,9 +35,17 @@
   
   <div id="content" class="content">
     <div class="board">
-      {{ render 'milestone-column' left_column}}
-      {{#each column in milestone_columns}}
-        {{ render 'milestone-column' column}}
+      {{#each milestone_columns as |column|}}
+        {{
+          columns/hb-milestone 
+            registerColumn="registerColumn"
+            model=column
+            columnComponents=registeredColumns
+            issues=model.combinedIssues
+            repos=model.combinedRepos
+            createNewIssue=(action "createNewIssue")
+            createFullscreenIssue=(action "createFullscreenIssue")
+          }}
       {{/each}}
     </div>
   </div>

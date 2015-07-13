@@ -2,8 +2,8 @@ import Ember from 'ember';
 import SortableMixin from "app/mixins/cards/sortable";
 
 var HbColumnComponent = Ember.Component.extend(SortableMixin, {
-  classNameBindings:["isCollapsed:hb-state-collapsed","isHovering:hovering"],
-  classNames: ["hb-task-column","column","task-column"],
+  classNameBindings:["isCollapsed:hb-state-collapsed","isHovering:hovering", "hasMilestone:milestone:hb-task-column"],
+  classNames: ["column","task-column"],
   cards: Ember.A(),
 
   columns: function(){
@@ -48,6 +48,9 @@ var HbColumnComponent = Ember.Component.extend(SortableMixin, {
     return this.get("columns.firstObject.name") === this.get("model.name");
   }.property("columns.firstObject"),
   isCreateVisible: Ember.computed.alias("isFirstColumn"),
+  hasMilestone: function(){
+    return !!this.get("model.milestone");
+  }.property("model.milestone"),
   //isHovering: false,
   //dragging: false,
   topOrderNumber: function(){
