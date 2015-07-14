@@ -9,13 +9,17 @@ var Issue = Ember.Object.extend(Serializable,{
   milestoneTitle: Ember.computed.alias("milestone.title"),
 
   correlationId: correlationId,
-  customState: function (key, value) {
-    if(value !== undefined) {
+  customState:Ember.computed("_data.custom_state", {
+    get:function(){
+      return this.get("_data.custom_state");
+    },
+    set: function (key, value) {
+      if(value !== undefined) {
         var user = this.get("repo.owner.login"),
-            repo = this.get("repo.name"),
-            full_name = user + "/" + repo,
-            previousState = this.get("_data.custom_state"),
-            options = {dataType: "json", data:{correlationId: this.get("correlationId")}};
+        repo = this.get("repo.name"),
+        full_name = user + "/" + repo,
+        previousState = this.get("_data.custom_state"),
+        options = {dataType: "json", data:{correlationId: this.get("correlationId")}};
 
         this.set("_data.custom_state", value);
         this.set("processing", true);
@@ -23,24 +27,22 @@ var Issue = Ember.Object.extend(Serializable,{
         switch(value){
           case "ready": 
             Ember.$.extend(options, {
-              url: "/api/" + full_name + "/issues/" + this.get("number") + "/ready",
-              type: "PUT"
-            });
-            break;
+            url: "/api/" + full_name + "/issues/" + this.get("number") + "/ready",
+            type: "PUT"
+          });
+          break;
           case "blocked":
             Ember.$.extend(options, {
-              url: "/api/" + full_name + "/issues/" + this.get("number") + "/blocked",
-              type: "PUT"
-            });
-            break;
+            url: "/api/" + full_name + "/issues/" + this.get("number") + "/blocked",
+            type: "PUT"
+          });
+          break;
           case "":
             Ember.$.extend(options, {
-              url: "/api/" + full_name + "/issues/" + this.get("number") + "/" + previousState,
-              type: "DELETE"
-            });
-            break;
-
-
+            url: "/api/" + full_name + "/issues/" + this.get("number") + "/" + previousState,
+            type: "DELETE"
+          });
+          break;
         }
 
         Ember.$.ajax(options)
@@ -50,14 +52,15 @@ var Issue = Ember.Object.extend(Serializable,{
           this.set("body_html", response.body_html);
         }.bind(this));
         return value;
+      }
+      return this.get("_data.custom_state");
     }
-    return this.get("_data.custom_state");
-  }.property("_data.custom_state"),
+  }),
   submitComment : function (markdown) {
-     this.set("processing", true);
-      var user = this.get("repo.owner.login"),
-          repo = this.get("repo.name"),
-          full_name = user + "/" + repo;
+    this.set("processing", true);
+    var user = this.get("repo.owner.login"),
+    repo = this.get("repo.name"),
+    full_name = user + "/" + repo;
 
     return Ember.$.ajax( {
       url: "/api/" + full_name + "/issues/" + this.get("number") + "/comment", 
@@ -71,10 +74,10 @@ var Issue = Ember.Object.extend(Serializable,{
       }.bind(this));
   },
   updateLabels : function () {
-     this.set("processing", true);
-      var user = this.get("repo.owner.login"),
-          repo = this.get("repo.name"),
-          full_name = user + "/" + repo;
+    this.set("processing", true);
+    var user = this.get("repo.owner.login"),
+    repo = this.get("repo.name"),
+    full_name = user + "/" + repo;
 
     return Ember.$.ajax( {
       url: "/api/" + full_name + "/issues/" + this.get("number"), 
@@ -87,85 +90,85 @@ var Issue = Ember.Object.extend(Serializable,{
       }.bind(this));
   },
   loadDetails: function () {
-     this.set("processing", true);
-      var user = this.get("repo.owner.login"),
-          repo = this.get("repo.name"),
-          full_name = user + "/" + repo;
-     
-     return Ember.$.getJSON("/api/" + full_name + "/issues/" + this.get("number") + "/details")
-     .success(function(details){
-       this.set("repo", details.repo);
-       this.set("activities", details.activities);
-       this.set("processing", false);
-     }.bind(this)).fail(function(){
-       this.set("processing", false);
-     }.bind(this));
+    this.set("processing", true);
+    var user = this.get("repo.owner.login"),
+    repo = this.get("repo.name"),
+    full_name = user + "/" + repo;
+
+    return Ember.$.getJSON("/api/" + full_name + "/issues/" + this.get("number") + "/details")
+    .success(function(details){
+      this.set("repo", details.repo);
+      this.set("activities", details.activities);
+      this.set("processing", false);
+    }.bind(this)).fail(function(){
+      this.set("processing", false);
+    }.bind(this));
   },
   processing: false,
   loaded: false,
   archive: function() {
-     this.set("processing", true);
-      var user = this.get("repo.owner.login"),
-          repo = this.get("repo.name"),
-          full_name = user + "/" + repo;
+    this.set("processing", true);
+    var user = this.get("repo.owner.login"),
+    repo = this.get("repo.name"),
+    full_name = user + "/" + repo;
 
-      return Ember.$.post("/api/" + full_name + "/archiveissue", {
-        number : this.get("number"),
-        correlationId: this.get("correlationId")
-      }, function(){}, "json").then(function () {
-        this.set("processing", false);
-        this.set("isArchived", true);
-      }.bind(this)).fail(function(){
-       this.set("processing", false);
-      }.bind(this));
+    return Ember.$.post("/api/" + full_name + "/archiveissue", {
+      number : this.get("number"),
+      correlationId: this.get("correlationId")
+    }, function(){}, "json").then(function () {
+      this.set("processing", false);
+      this.set("isArchived", true);
+    }.bind(this)).fail(function(){
+      this.set("processing", false);
+    }.bind(this));
   },
   close: function () {
-     this.set("processing", true);
+    this.set("processing", true);
 
-      var user = this.get("repo.owner.login"),
-          repo = this.get("repo.name"),
-          full_name = user + "/" + repo;
+    var user = this.get("repo.owner.login"),
+    repo = this.get("repo.name"),
+    full_name = user + "/" + repo;
 
-      Ember.$.post("/api/" + full_name + "/close", {
-        number : this.get("number"),
-        correlationId: this.get("correlationId")
-      }, function(){}, "json").then(function() {
-        this.set("state","closed");
-        this.set("processing", false);
-      }.bind(this)).fail(function(){
-        this.set("processing", false);
-      }.bind(this));
+    Ember.$.post("/api/" + full_name + "/close", {
+      number : this.get("number"),
+      correlationId: this.get("correlationId")
+    }, function(){}, "json").then(function() {
+      this.set("state","closed");
+      this.set("processing", false);
+    }.bind(this)).fail(function(){
+      this.set("processing", false);
+    }.bind(this));
   },
   reopenCard: function(){
-     this.set("processing", true);
+    this.set("processing", true);
 
-      var user = this.get("repo.owner.login"),
-          repo = this.get("repo.name"),
-          full_name = user + "/" + repo;
+    var user = this.get("repo.owner.login"),
+    repo = this.get("repo.name"),
+    full_name = user + "/" + repo;
 
-      Ember.$.post("/api/" + full_name + "/open", {
-        number : this.get("number"),
-        correlationId: this.get("correlationId")
-      }, function(){}, "json").then(function() {
-        this.set("state","open");
-        this.set("processing", false);
-      }.bind(this)).fail(function(){
-        this.set("processing", false);
-      }.bind(this));
+    Ember.$.post("/api/" + full_name + "/open", {
+      number : this.get("number"),
+      correlationId: this.get("correlationId")
+    }, function(){}, "json").then(function() {
+      this.set("state","open");
+      this.set("processing", false);
+    }.bind(this)).fail(function(){
+      this.set("processing", false);
+    }.bind(this));
   },
   assignUser: function(login){
-      var user = this.get("repo.owner.login"),
-          repo = this.get("repo.name"),
-          full_name = user + "/" + repo;
+    var user = this.get("repo.owner.login"),
+    repo = this.get("repo.name"),
+    full_name = user + "/" + repo;
 
-      return Ember.$.post("/api/" + full_name + "/assigncard", {
-        number : this.get("number"),
-        assignee: login, 
-        correlationId: this.get("correlationId")
-      }, function(){}, "json").then(function( response ){
-          this.set("assignee", response.assignee);
-          return this;
-      }.bind(this));
+    return Ember.$.post("/api/" + full_name + "/assigncard", {
+      number : this.get("number"),
+      assignee: login, 
+      correlationId: this.get("correlationId")
+    }, function(){}, "json").then(function( response ){
+      this.set("assignee", response.assignee);
+      return this;
+    }.bind(this));
   },
   assignMilestone: function(index, milestone){
     var changedMilestones = false;
@@ -179,8 +182,8 @@ var Issue = Ember.Object.extend(Serializable,{
     this.set("milestone", milestone);
 
     var user = this.get("repo.owner.login"),
-        repo = this.get("repo.name"),
-        full_name = user + "/" + repo;
+    repo = this.get("repo.name"),
+    full_name = user + "/" + repo;
 
     return Ember.$.post("/api/" + full_name + "/assignmilestone", {
       issue : this.get("number"),
@@ -189,36 +192,36 @@ var Issue = Ember.Object.extend(Serializable,{
       changed_milestones: changedMilestones,
       correlationId: this.get("correlationId")
     }, function(){}, "json").then(function( response ){
-        this.set("_data.order", response._data.order);
-        this.set("_data.milestone_order", response._data.milestone_order);
-        return this;
+      this.set("_data.order", response._data.order);
+      this.set("_data.milestone_order", response._data.milestone_order);
+      return this;
     }.bind(this));
   },
   reorder: function (index, column) {
-      var changedColumns = this.get("current_state") !== column;
-      if(changedColumns){
-        this.set("_data.custom_state", "");
-      }
+    var changedColumns = this.get("current_state") !== column;
+    if(changedColumns){
+      this.set("_data.custom_state", "");
+    }
+    this.set("current_state", column);
+    this.set("_data.order", index);
+
+    var user = this.get("repo.owner.login"),
+    repo = this.get("repo.name"),
+    full_name = user + "/" + repo;
+
+    return Ember.$.post("/api/" + full_name + "/dragcard", {
+      number : this.get("number"),
+      order: index.toString(),
+      column: column.index.toString(),
+      moved_columns: changedColumns,
+      correlationId: this.get("correlationId")
+    }, function( response ){
       this.set("current_state", column);
-      this.set("_data.order", index);
-
-      var user = this.get("repo.owner.login"),
-          repo = this.get("repo.name"),
-          full_name = user + "/" + repo;
-
-      return Ember.$.post("/api/" + full_name + "/dragcard", {
-        number : this.get("number"),
-        order: index.toString(),
-        column: column.index.toString(),
-        moved_columns: changedColumns,
-        correlationId: this.get("correlationId")
-      }, function( response ){
-         this.set("current_state", column);
-         this.set("_data.order", response._data.order);
-         this.set("body", response.body);
-         this.set("body_html", response.body_html);
-         return this;
-      }.bind(this), "json");
+      this.set("_data.order", response._data.order);
+      this.set("body", response.body);
+      this.set("body_html", response.body_html);
+      return this;
+    }.bind(this), "json");
   }
 
 });
