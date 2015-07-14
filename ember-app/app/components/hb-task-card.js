@@ -46,7 +46,7 @@ var HbCardComponent = Ember.Component.extend(
       if(this.get("isFiltered") === "filter-hidden"){
         return;
       }
-      this.get("target").send("openIssueFullscreen", this.get("issue"));
+      this.sendAction("cardClick");
     },
     issueNumber: function () {
        return this.get("issue.number");

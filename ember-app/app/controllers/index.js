@@ -43,6 +43,9 @@ var IndexController = Ember.Controller.extend({
     },
     createFullscreenIssue: function(issue, order){
       this.get("target").send("createFullscreenIssue", issue, order);
+    },
+    openFullscreenIssue(issue){
+      this.get("target").send("openFullscreenIssue", issue);
     }
   }
 });

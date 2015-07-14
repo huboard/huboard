@@ -78,7 +78,7 @@ var HbColumnComponent = Ember.Component.extend(SortableMixin, {
     },
     createFullscreenIssue: function(issue, order){
       this.attrs.createFullscreenIssue(issue, order);
-    }
+    }  
   }
 });
 
