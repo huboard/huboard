@@ -1,6 +1,12 @@
 import Ember from "ember";
 
 var CardMoveMixin = Ember.Mixin.create({
+  setTheOrderKey: function(){
+    var is_column = this.toString().match(/hb-column/);
+    var key = is_column ? "order" : "milestone_order";
+    this.set("cardMover.orderKey", key);
+  }.on("init"),
+
   cardMover: Ember.Object.create({
     calculateIssueOrder: function(issue_above, issue_below){
       var issue = this.data.card.get("issue");
@@ -12,15 +18,15 @@ var CardMoveMixin = Ember.Mixin.create({
       return this.move(issue, issue_above, issue_below);
     },
     move: function(issue, issue_above, issue_below, column){
-      var above_order = issue_above._data.order;
-      var below_order = issue_below._data.order;
+      var above_order = issue_above._data[this.get("orderKey")];
+      var below_order = issue_below._data[this.get("orderKey")];
       return (above_order + below_order) / 2;
     },
     moveToTop: function(issue, issue_below, column){
-      return (issue_below._data.order) / 2;
+      return (issue_below._data[this.get("orderKey")]) / 2;
     },
     moveToBottom: function(issue, issue_above, column){
-      return issue_above._data.order + 1;
+      return issue_above._data[this.get("orderKey")] + 1;
     },
     findCard: function(element, column){
       return column.get("cards").find(function(card){

@@ -85,11 +85,17 @@ var MilestonesController = Ember.Controller.extend({
     registerColumn: function(column_component){
       this.get("registeredColumns").pushObject(column_component);
     },
+    unregisterColumn: function(column_component){
+      this.get("registeredColumns").removeObject(column_component);
+    },
     createNewIssue: function(issue){
       this.get("target").send("createNewIssue", issue);
     },
     createFullscreenIssue: function(issue, order){
       this.get("target").send("createFullscreenIssue", issue, order);
+    },
+    createMilestoneOrAbort: function(model){
+      this.get("target").send("createMilestoneOrAbort", model);
     }
   }
 });

@@ -120,31 +120,10 @@ var MilestonesRoute = Ember.Route.extend({
     },
 
     closeModal: function(){
-      this.disconnectOutlet({
+      this.render("empty", {
         outlet: 'modal',
-        parentView: 'application'
+        into: 'application'
       });
-      return true;
-    },
-
-    forceRepaint: function(target) {
-      if (target === "index") {
-        return;
-      }
-
-      var controller = this.controllerFor("milestones");
-      controller.incrementProperty("forceRedraw");
-    },
-
-    issueCreated: function(issue) {
-      var controller = this.controllerFor("milestones");
-      var issues = controller.get("model.issues");
-      issues.pushObject(issue);
-
-      Ember.run.schedule("afterRender", controller, function() {
-        controller.incrementProperty("forceRedraw");
-        this.send("closeModal");
-      }.bind(this));
     },
 
     milestoneCreated: function(milestone){

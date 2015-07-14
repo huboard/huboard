@@ -35,6 +35,9 @@ var IndexController = Ember.Controller.extend({
     registerColumn: function(column_component){
       this.get("registeredColumns").pushObject(column_component);
     },
+    unregisterColumn: function(column_component){
+      this.get("registeredColumns").removeObject(column_component);
+    },
     createNewIssue: function(issue){
       this.get("target").send("createNewIssue", issue);
     },

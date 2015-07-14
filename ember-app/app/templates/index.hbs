@@ -34,13 +34,13 @@
       {{#each board_columns as |column|}}
         {{
           columns/hb-column 
-            headerClass="columns/hb-task-header"
-            cardClass="components/hb-task-card"
-            registerColumn="registerColumn"
             model=column
             columnComponents=registeredColumns
             issues=model.combinedIssues
             repos=model.combinedRepos
+
+            registerColumn=(action "registerColumn")
+            unregisterColumn=(action "unregisterColumn")
             createNewIssue=(action "createNewIssue")
             createFullscreenIssue=(action "createFullscreenIssue")
         }}

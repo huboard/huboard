@@ -71,6 +71,7 @@ var HbCardComponent = Ember.Component.extend(
           return Ember.Object.create(_.extend(l,{customColor: "-x"+l.color}));
         });
     }.property("issue.other_labels.@each"),
+
     registerToColumn: function(){
       this.get("parentView.cards").pushObject(this);
     }.on("didInsertElement"),

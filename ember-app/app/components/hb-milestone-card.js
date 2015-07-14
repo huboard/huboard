@@ -1,6 +1,8 @@
 import Ember from "ember";
 import HbCard from "../components/hb-task-card";
 
-var HbMilestoneCard = HbCard.extend({});
+var HbMilestoneCard = HbCard.extend({
+  classNames: ["card", "card--milestone"]
+});
 
 export default HbMilestoneCard;

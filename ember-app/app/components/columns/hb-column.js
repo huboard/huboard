@@ -2,9 +2,11 @@ import Ember from 'ember';
 import SortableMixin from "app/mixins/cards/sortable";
 
 var HbColumnComponent = Ember.Component.extend(SortableMixin, {
-  classNameBindings:["isCollapsed:hb-state-collapsed","isHovering:hovering", "hasMilestone:milestone:hb-task-column"],
+  classNameBindings:["isCollapsed:hb-state-collapsed","isHovering:hovering"],
   classNames: ["column","task-column"],
   cards: Ember.A(),
+  //isHovering: false,
+  //dragging: false,
 
   columns: function(){
     return this.get("columnComponents").map(function(c){
@@ -24,6 +26,7 @@ var HbColumnComponent = Ember.Component.extend(SortableMixin, {
     return issues;
   }.property("issues.@each.{columnIndex,order}"),
   moveIssue: function(issue, order){
+    //Todo issue.reorder
     var self = this;
     this.get("sortedIssues").removeObject(issue);
     Ember.run.schedule("afterRender", self, function(){
@@ -48,19 +51,20 @@ var HbColumnComponent = Ember.Component.extend(SortableMixin, {
     return this.get("columns.firstObject.name") === this.get("model.name");
   }.property("columns.firstObject"),
   isCreateVisible: Ember.computed.alias("isFirstColumn"),
-  hasMilestone: function(){
-    return !!this.get("model.milestone");
-  }.property("model.milestone"),
-  //isHovering: false,
-  //dragging: false,
   topOrderNumber: function(){
     var issues = this.get("sortedIssues");
     return issues.get("firstObject._data.order") / 2;
   }.property("sortedIssues.@each"),
 
   registerWithController: function(){
-    this.sendAction("registerColumn", this);
+    var self = this;
+    Ember.run.schedule("afterRender", this, function(){
+      self.attrs.registerColumn(self);
+    });
   }.on("didInsertElement"),
+  unregisterWithController: function(){
+    this.attrs.unregisterColumn(this);
+  }.on("willDestroyElement"),
   wireupIsCollapsed: function(){
     var self = this;
     this.$(".collapsed").click(function(){

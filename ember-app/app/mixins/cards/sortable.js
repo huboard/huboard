@@ -2,7 +2,7 @@ import Ember from "ember";
 import CardMoveMixin from "../cards/card-move";
 
 var SortableMixin = Ember.Mixin.create(CardMoveMixin, {
-  attachSortable: function(cardMove){
+  attachSortable: function(){
     var cardMove = this.cardMover;
     var columns = this.get("columnComponents");
     self.$(".cards").sortable({
@@ -33,7 +33,11 @@ var SortableMixin = Ember.Mixin.create(CardMoveMixin, {
 
         var issue_order = cardMove.calculateIssueOrder(issue_above, issue_below);
         var issue = cardMove.data.card.get("issue");
-        column.moveIssue(issue, issue_order);
+
+        var cancelMove = function(){ 
+          Ember.$(ui.sender).sortable("cancel");
+        }
+        column.moveIssue(issue, issue_order, cancelMove);
       },
     });
   }.on("didInsertElement"),

@@ -38,13 +38,17 @@
       {{#each milestone_columns as |column|}}
         {{
           columns/hb-milestone 
-            registerColumn="registerColumn"
             model=column
             columnComponents=registeredColumns
             issues=model.combinedIssues
             repos=model.combinedRepos
+            taskColumns=model.columns
+
+            registerColumn=(action "registerColumn")
+            unregisterColumn=(action "unregisterColumn")
             createNewIssue=(action "createNewIssue")
             createFullscreenIssue=(action "createFullscreenIssue")
+            createMilestoneOrAbort=(action "createMilestoneOrAbort")
           }}
       {{/each}}
     </div>
