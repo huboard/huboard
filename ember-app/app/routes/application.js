@@ -13,20 +13,6 @@ var ApplicationRoute = Ember.Route.extend({
     toggleSidebar: function(){
       this.controllerFor("application").toggleProperty("isSidebarOpen");
     },
-    openModal: function (view){
-      this.render(view, {
-        into: "application",
-        outlet: "modal"
-      });
-    },
-    closeModal: function() {
-      animateModalClose().then(function() {
-        this.render('empty', {
-          into: 'application',
-          outlet: 'modal'
-        });
-      }.bind(this));
-    },
     clearFilters: function(){
       this.get("filters").clear();
     }

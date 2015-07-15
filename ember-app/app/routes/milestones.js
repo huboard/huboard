@@ -4,6 +4,7 @@ import CreateIssue from 'app/models/forms/create-issue';
 import Issue from 'app/models/issue';
 import Milestone from 'app/models/milestone';
 import Ember from 'ember';
+import animateModalClose from 'app/config/animate-modal-close';
 
 var MilestonesRoute = Ember.Route.extend({
   qps: Ember.inject.service("query-params"),
@@ -118,6 +119,21 @@ var MilestonesRoute = Ember.Route.extend({
         view: 'milestones.missing',
         model: argBag
       });
+    },
+
+    openModal: function (view){
+      this.render(view, {
+        into: "application",
+        outlet: "modal"
+      });
+    },
+    closeModal: function() {
+      animateModalClose().then(function() {
+        this.render('empty', {
+          into: 'application',
+          outlet: 'modal'
+        });
+      }.bind(this));
     },
 
     milestoneCreated: function(milestone){

@@ -3,6 +3,7 @@ import Board from 'app/models/board';
 import Ember from 'ember';
 import CreateIssue from 'app/models/forms/create-issue';
 import Issue from 'app/models/issue';
+import animateModalClose from 'app/config/animate-modal-close';
 
 var IndexRoute = Ember.Route.extend({
   qps: Ember.inject.service("query-params"),
@@ -65,7 +66,21 @@ var IndexRoute = Ember.Route.extend({
     },
     openFullscreenIssue: function(model){
       this.transitionTo("index.issue", model);
-    }
+    },
+    openModal: function (view){
+      this.render(view, {
+        into: "application",
+        outlet: "modal"
+      });
+    },
+    closeModal: function() {
+      animateModalClose().then(function() {
+        this.render('empty', {
+          into: 'application',
+          outlet: 'modal'
+        });
+      }.bind(this));
+    },
   }
 });
 
