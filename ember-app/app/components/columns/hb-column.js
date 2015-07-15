@@ -71,15 +71,6 @@ var HbColumnComponent = Ember.Component.extend(SortableMixin, {
       self.toggleProperty("isCollapsed");
     });
   }.on("didInsertElement"),
-
-  actions: {
-    createNewIssue: function(issue){
-      this.attrs.createNewIssue(issue);
-    },
-    createFullscreenIssue: function(issue, order){
-      this.attrs.createFullscreenIssue(issue, order);
-    }
-  }
 });
 
 export default HbColumnComponent;

@@ -75,13 +75,14 @@ var MilestonesRoute = Ember.Route.extend({
   },
 
   actions: {
-    createNewIssue: function(model, order) {
+    createNewIssue: function(issue){
+      var issues = this.modelFor("index").get("issues");
+      issues.pushObject(issue);
+    },
+    createFullscreenIssue : function (model, order) {
       this.controllerFor("issue.create").set("model", model || CreateIssue.createNew());
       this.controllerFor("issue.create").set("order", order || {});
-      this.render("issue.create", {
-        into: "application",
-        outlet: "modal"
-      });
+      this.send("openModal","issue.create");
     },
 
     createNewMilestone : function () {
@@ -116,13 +117,6 @@ var MilestonesRoute = Ember.Route.extend({
         outlet: 'modal',
         view: 'milestones.missing',
         model: argBag
-      });
-    },
-
-    closeModal: function(){
-      this.render("empty", {
-        outlet: 'modal',
-        into: 'application'
       });
     },
 

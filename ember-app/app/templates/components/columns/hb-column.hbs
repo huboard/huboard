@@ -3,8 +3,8 @@
 {{#if isCreateVisible}}
   {{columns/hb-quick-issue
     column=model
-    createNewIssue=(action "createNewIssue")
-    createFullscreenIssue=(action "createFullscreenIssue")
+    createNewIssue=(action attrs.createNewIssue issue)
+    createFullscreenIssue=(action attrs.createFullscreenIssue issue order)
   }}
 {{/if}}
 
