@@ -19,17 +19,19 @@ var HbTaskListComponent = Ember.Component.extend(MarkdownParsing, {
     }
   }.property(),
   wireUp: function(){
-    if (this.get('canEdit')) {
+    if (this.get('canEdit') && this._state === "inDOM") {
       var component = this;
       this.$().taskList("enable");
       this.$(".js-task-list-field").on("tasklist:changed", function(){
         component.sendAction("taskChanged", this.value);
       });
     }
-  }.on("didInsertElement"),
+  }.on("didRender"),
   cleanUp: function(){
-    this.$().taskList("destroy");
-    this.$(".js-task-list-field").off("tasklist:changed");
+    if(this._state === "inDOM"){
+      this.$().taskList("destroy");
+      this.$(".js-task-list-field").off("tasklist:changed");
+    }
   }.on('willDestroyElement')
 });
 
