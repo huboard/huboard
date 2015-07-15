@@ -73,10 +73,11 @@ var HbCardComponent = Ember.Component.extend(
     }.property("issue.other_labels.@each"),
 
     registerToColumn: function(){
-      this.get("parentView.cards").pushObject(this);
+      this.set("cards", this.get("parentView.cards"));
+      this.get("cards").pushObject(this);
     }.on("didInsertElement"),
     unregisterFromColumn: function(){
-      this.get("parentView.cards").removeObject(this);
+      this.get("cards").removeObject(this);
     }.on("willDestroyElement"),
 
     actions: {
