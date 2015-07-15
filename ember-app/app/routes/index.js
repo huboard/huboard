@@ -63,9 +63,9 @@ var IndexRoute = Ember.Route.extend({
     archive: function (issue) {
       issue.archive();
     },
-    openIssueFullscreen: function(model){
+    openFullscreenIssue: function(model){
       this.transitionTo("index.issue", model);
-    },
+    }
   }
 });
 
