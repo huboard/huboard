@@ -179,6 +179,7 @@ var Issue = Ember.Object.extend(Serializable,{
     } else if (milestone) {
       changedMilestones = this.get("milestone.number") !== milestone.number;
     }
+    this.set("_data.milestone_order", index);
     this.set("milestone", milestone);
 
     var user = this.get("repo.owner.login"),
@@ -191,11 +192,7 @@ var Issue = Ember.Object.extend(Serializable,{
       milestone: milestone ? milestone.number : null,
       changed_milestones: changedMilestones,
       correlationId: this.get("correlationId")
-    }, function(){}, "json").then(function( response ){
-      this.set("_data.order", response._data.order);
-      this.set("_data.milestone_order", response._data.milestone_order);
-      return this;
-    }.bind(this));
+    }, function(){}, "json");
   },
   reorder: function (index, column) {
     var changedColumns = this.get("current_state") !== column;
@@ -216,8 +213,6 @@ var Issue = Ember.Object.extend(Serializable,{
       moved_columns: changedColumns,
       correlationId: this.get("correlationId")
     }, function( response ){
-      this.set("current_state", column);
-      this.set("_data.order", response._data.order);
       this.set("body", response.body);
       this.set("body_html", response.body_html);
       return this;

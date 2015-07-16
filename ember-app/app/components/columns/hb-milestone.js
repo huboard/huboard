@@ -3,6 +3,7 @@ import HbColumn from "../columns/hb-column";
 
 var HbMilestoneComponent = HbColumn.extend({
   classNames: ["column","milestone"],
+  classNameBindings:["isCollapsed:hb-state-collapsed","isHovering:hovering", "isFirstColumn:no-milestone"],
 
   //Data
   sortedIssues: function () {
@@ -17,18 +18,22 @@ var HbMilestoneComponent = HbColumn.extend({
     return issues;
   }.property("issues.@each.{milestoneOrder,milestoneTitle}"),
   moveIssue: function(issue, order, cancelMove){
-    //TODO issue.assignMilestone
+    if(this.get("model.noMilestone")){
+      return this.assignMilestone(issue, order, null);
+    }
+
     var findMilestone = this.findMilestone(issue.repo);
     var milestone = this.get("model.group").find(findMilestone);
     if(!milestone){
       return this.handleMissingMilestone(issue, order, cancelMove);
     }
-
+    this.assignMilestone(issue, order, milestone);
+  },
+  assignMilestone: function(issue, order, milestone){
     this.get("sortedIssues").removeObject(issue);
     var self = this;
     Ember.run.schedule("afterRender", self, function(){
-      issue.set("_data.milestone_order", order);
-      issue.set("milestone", milestone);
+      issue.assignMilestone(order, milestone);
     });
   },
   findMilestone: function(a){
@@ -52,9 +57,17 @@ var HbMilestoneComponent = HbColumn.extend({
   },
 
   topOrderNumber: function(){
-    var issues = this.get("issues");
-    return issues.get("firstObject._data.milestone_order") / 2;
+    var issue = this.get("sortedIssues.firstObject");
+    var order_issue = this.get("issues.firstObject");
+    return {
+      milestone_order: issue.get("._data.milestone_order") / 2,
+      order: order_issue.get("._data.order") / 2,
+    };
   }.property("issues.@each", "controllers.milestones.forceRedraw"),
+  isFirstColumn: function(){
+    return this.get("columns.firstObject.title") === this.get("model.title");
+  }.property("columns.firstObject"),
+  isCreateVisible: true
 });
 
 export default HbMilestoneComponent;

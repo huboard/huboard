@@ -5,7 +5,9 @@ var HbQuickIssueComponent = Ember.Component.extend({
   classNames: ["create-issue"],
   placeholderText: "Add issue...",
 
-  model: Issue.createNew(),
+  initModel: function(){
+    this.set("model", Issue.createNew());
+  }.on("init"),
   clearModel: function(){
     this.set("model", Issue.createNew());
   }.observes("issueCreated"),
@@ -17,8 +19,7 @@ var HbQuickIssueComponent = Ember.Component.extend({
 
   actions: {
     openFullScreen: function(){
-      //TODO: figure out milestone when implementing ms columns
-      //model.set("milestone", this.get("model.milestone"));
+      this.set("model.milestone", this.get("column.milestone"));
       var order = this.get("parentView.topOrderNumber");
       this.attrs.createFullscreenIssue(this.get("model"), order);
     },
@@ -29,9 +30,11 @@ var HbQuickIssueComponent = Ember.Component.extend({
 
       self = this;
       this.get("model").save(order).then(function(issue){
-        self.attrs.createNewIssue(issue);
-        self.incrementProperty("issueCreated");
-        self.set("processing", false);
+        Ember.run.once(function(){
+          self.attrs.createNewIssue(issue);
+          self.incrementProperty("issueCreated");
+          self.set("processing", false);
+        });
       });
     }
   }

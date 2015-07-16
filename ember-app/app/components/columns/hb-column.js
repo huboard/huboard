@@ -3,7 +3,7 @@ import SortableMixin from "app/mixins/cards/sortable";
 
 var HbColumnComponent = Ember.Component.extend(SortableMixin, {
   classNameBindings:["isCollapsed:hb-state-collapsed","isHovering:hovering"],
-  classNames: ["column","task-column"],
+  classNames: ["column","task-column", "hb-task-column"],
   cards: Ember.A(),
   //isHovering: false,
   //dragging: false,
@@ -12,7 +12,7 @@ var HbColumnComponent = Ember.Component.extend(SortableMixin, {
     return this.get("columnComponents").map(function(c){
       return c.get("model");
     });
-  }.property("columnComponents.@each.model"),
+  }.property("columnComponents.[]"),
   sortedIssues: function(){
     var column = this.get("model");
     var issues = this.get("issues").filter(function(i){
@@ -26,12 +26,10 @@ var HbColumnComponent = Ember.Component.extend(SortableMixin, {
     return issues;
   }.property("issues.@each.{columnIndex,order}"),
   moveIssue: function(issue, order){
-    //Todo issue.reorder
     var self = this;
     this.get("sortedIssues").removeObject(issue);
     Ember.run.schedule("afterRender", self, function(){
-      issue.set("_data.order", order);
-      issue.set("current_state", self.get("model"));
+      issue.reorder(order, self.get("model"));
     });
   },
 
@@ -53,7 +51,7 @@ var HbColumnComponent = Ember.Component.extend(SortableMixin, {
   isCreateVisible: Ember.computed.alias("isFirstColumn"),
   topOrderNumber: function(){
     var issues = this.get("sortedIssues");
-    return issues.get("firstObject._data.order") / 2;
+    return { order: issues.get("firstObject._data.order") / 2};
   }.property("sortedIssues.@each"),
 
   registerWithController: function(){

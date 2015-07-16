@@ -5,7 +5,7 @@ var SortableMixin = Ember.Mixin.create(CardMoveMixin, {
   attachSortable: function(){
     var cardMove = this.cardMover;
     var columns = this.get("columnComponents");
-    self.$(".cards").sortable({
+    this.$(".cards").sortable({
       helper: function(ev,ui) {
         cardMove.data = {};
         cardMove.data.originIndex = ui.index();

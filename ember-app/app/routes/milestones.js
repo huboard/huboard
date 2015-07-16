@@ -77,7 +77,7 @@ var MilestonesRoute = Ember.Route.extend({
 
   actions: {
     createNewIssue: function(issue){
-      var issues = this.modelFor("index").get("issues");
+      var issues = this.modelFor("milestones").get("issues");
       issues.pushObject(issue);
     },
     createFullscreenIssue : function (model, order) {

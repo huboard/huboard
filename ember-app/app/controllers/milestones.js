@@ -37,13 +37,11 @@ var MilestonesController = Ember.Controller.extend({
       filterBy: function(i) {
         return !Ember.get(i, "milestone");
       },
-
-      cssClass: "no-milestone"
     });
   }.property(),
 
   milestone_columns: function() {
-    return _.chain(this.get("model.combinedMilestones")).map(function(groups) {
+    var milestones = _.chain(this.get("model.combinedMilestones")).map(function(groups) {
       var m = _.first(groups);
 
       return Ember.Object.create({
@@ -60,6 +58,8 @@ var MilestonesController = Ember.Controller.extend({
     }).value().sort(function(a, b) {
       return a.milestone._data.order - b.milestone._data.order;
     });
+    milestones.insertAt(0, this.get("left_column"));
+    return milestones;
   }.property("model.combinedMilestones.@each"),
 
   milestoneMoved: function(milestoneController, index) {

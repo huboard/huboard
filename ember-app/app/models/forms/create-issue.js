@@ -6,10 +6,9 @@ import Serializable from 'app/mixins/serializable';
 var CreateIssue = Ember.Object.extend(Serializable,{
   correlationId: correlationId,
   save: function(order) {
-    var order_object = order ? {order: order} : {};
     return Ember.$.ajax( {
       url: "/api/" + this.get("repo.full_name") + "/issues", 
-      data: JSON.stringify({issue: this.serialize(), order: order_object, correlationId: this.get("correlationId") }),
+      data: JSON.stringify({issue: this.serialize(), order: order, correlationId: this.get("correlationId") }),
       dataType: 'json',
       type: "POST",
       contentType: "application/json"})
