@@ -47,8 +47,7 @@ var IssueDragAndDropMixin = Ember.Mixin.create({
     }
 
     if(this.dragAuthorized(ev)){
-      var view = Ember.View.views[this.$().find("> div").attr("id")];
-      view.get("controller").send("assignUser", ev.dataTransfer.getData("text/huboard-assignee"));
+      this.send("assignUser", ev.dataTransfer.getData("text/huboard-assignee"));
       this.$().removeClass("assignee-accept");
     } else {
       this.$().removeClass("assignee-error");

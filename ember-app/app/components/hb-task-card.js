@@ -92,7 +92,6 @@ var HbCardComponent = Ember.Component.extend(
     }.on("willDestroyElement"),
 
     actions: {
-      //BUSTED, relies on Ember.View.views, see: MemberDragAndDropMixin
       assignUser: function(login){
         return this.get("issue").assignUser(login);
       },
