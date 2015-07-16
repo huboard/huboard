@@ -2,8 +2,9 @@ import Ember from 'ember';
 import SortableMixin from "app/mixins/cards/sortable";
 
 var HbColumnComponent = Ember.Component.extend(SortableMixin, {
-  classNameBindings:["isCollapsed:hb-state-collapsed","isHovering:hovering"],
-  classNames: ["column","task-column", "hb-task-column"],
+  classNames: ["column","task-column"],
+  classNameBindings:["isCollapsed:hb-state-collapsed","isHovering:hovering", "isTaskColumn:hb-task-column"],
+  isTaskColumn: true,
   cards: Ember.A(),
   //isHovering: false,
   //dragging: false,
