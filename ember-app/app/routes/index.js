@@ -61,9 +61,6 @@ var IndexRoute = Ember.Route.extend({
       this.controllerFor("issue.create").set("order", order || {});
       this.send("openModal","issue.create");
     },
-    archive: function (issue) {
-      issue.archive();
-    },
     openFullscreenIssue: function(model){
       this.transitionTo("index.issue", model);
     },

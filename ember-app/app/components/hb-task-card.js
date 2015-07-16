@@ -7,7 +7,7 @@ var HbCardComponent = Ember.Component.extend(
   IssueFiltersMixin, MemberDragAndDropMixin, IssueSocketMixin, {
     tagName: "li",
     classNames: ["card"],
-    classNameBindings: ["isFiltered","isDraggable:is-draggable", "isClosable:closable", "colorLabel", "issue.color:border"],
+    classNameBindings: ["isFiltered","isDraggable:is-draggable", "isClosable:closable", "colorLabel", "issue.color:border", "stateClass"],
     filters: Ember.inject.service(),
     colorLabel: function () {
       return "-x" + this.get("issue.color");
@@ -71,6 +71,17 @@ var HbCardComponent = Ember.Component.extend(
           return Ember.Object.create(_.extend(l,{customColor: "-x"+l.color}));
         });
     }.property("issue.other_labels.@each"),
+    stateClass: function(){
+       var github_state = this.get("issue.state");
+       if(github_state === "closed"){
+         return "hb-state-" + "closed";
+       }
+       var custom_state = this.get("issue.customState");
+       if(custom_state){
+         return "hb-state-" + custom_state;
+       }
+       return "hb-state-open";
+    }.property("issue.current_state", "issue.customState", "issue.state"),
 
     registerToColumn: function(){
       this.set("cards", this.get("parentView.cards"));
@@ -81,14 +92,15 @@ var HbCardComponent = Ember.Component.extend(
     }.on("willDestroyElement"),
 
     actions: {
-      assignMilestone: function(order, milestone) {
-        return this.get("issue").assignMilestone(order, milestone);
-      },
+      //BUSTED, relies on Ember.View.views, see: MemberDragAndDropMixin
       assignUser: function(login){
         return this.get("issue").assignUser(login);
       },
-      close: function (issue){
-        return issue.close();
+      archive: function () {
+        this.get("issue").archive();
+      },
+      close: function (){
+        this.get("issue").close();
       }
     },
 });
