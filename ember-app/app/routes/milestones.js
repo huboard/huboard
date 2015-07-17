@@ -141,7 +141,6 @@ var MilestonesRoute = Ember.Route.extend({
       var milestones = controller.get("model.milestones");
       milestones.pushObject(milestone);
       Ember.run.schedule('afterRender', controller, function () {
-        controller.incrementProperty("forceRedraw");
         this.send("closeModal");
       }.bind(this));
     },
@@ -149,29 +148,26 @@ var MilestonesRoute = Ember.Route.extend({
     milestoneUpdated: function(milestone){
       var controller = this.controllerFor("milestones");
 
-      //Replace old milestone data with new
-      var milestones = controller.get("model.milestones");
-      milestones = milestones.map(m => {
-        if (m.title === milestone.originalTitle){ return milestone;}
-        return m;
-      });
-      controller.set("model.milestones", milestones);
+      var self = this;
+      Ember.run.once(function(){
+        var milestones = controller.get("model.milestones");
+        var old_milestone = milestones.find(m => {
+          return m.title === milestone.originalTitle
+        });
+        milestones.removeObject(old_milestone);
+        milestones.addObject(milestone);
 
-      //Remap issues to new milestone title (if changed)
-      var issues = controller.get("model.combinedIssues");
-      issues = issues.map(issue => {
-        if (issue.milestone && (issue.milestone.title === milestone.originalTitle)){
-          issue.milestone.title = milestone.title;
+        //Remap issues to new milestone title (if changed)
+        var issues = controller.get("model.combinedIssues");
+        issues = issues.forEach(issue => {
+          if (issue.milestone && (issue.milestone.title === milestone.originalTitle)){
+            issue.set("milestone.title", milestone.title);
+            return issue;
+          }
           return issue;
-        }
-        return issue;
+        });
+        self.send("closeModal");
       });
-      controller.set("model.issues", issues);
-
-      Ember.run.schedule('afterRender', controller, function () {
-        controller.incrementProperty("forceRedraw");
-        this.send("closeModal");
-      }.bind(this));
     }
   }
 });

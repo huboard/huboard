@@ -6,6 +6,11 @@ var HbMilestoneHeaderComponent = Ember.Component.extend({
   milestoneTitle: Ember.computed.alias("column.title"),
   click: function(){
     this.toggleProperty('isCollapsed');
+  },
+  actions: {
+    editMilestone: function(milestone){
+      this.attrs.editMilestone(milestone)
+    }
   }
 });
 

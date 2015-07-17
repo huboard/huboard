@@ -1,4 +1,9 @@
-{{columns/hb-milestone-header column=model issues=sortedIssues isCollapsed=isCollapsed}}
+{{columns/hb-milestone-header
+  column=model
+  issues=sortedIssues
+  isCollapsed=isCollapsed
+  editMilestone=(action attrs.editMilestone)
+}}
 
 {{#if isCreateVisible}}
   {{columns/hb-quick-issue

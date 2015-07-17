@@ -96,6 +96,9 @@ var MilestonesController = Ember.Controller.extend({
     },
     createMilestoneOrAbort: function(model){
       this.get("target").send("createMilestoneOrAbort", model);
+    },
+    editMilestone: function(milestone){
+      this.get("target").send("editMilestone", milestone);
     }
   }
 });
