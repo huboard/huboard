@@ -1,13 +1,25 @@
-import BufferedController from 'app/controllers/buffered';
 import Ember from 'ember';
+import BuffedMixin from 'app/mixins/buffered';
+import KeyPressHandlingMixin from 'app/mixins/key-press-handling';
 
+var IssueBodyComponent = Ember.Component.extend(BuffedMixin, KeyPressHandlingMixin,{
+  classNames: ["fullscreen-card-description","card-comment"],
+  registerKeydownEvents: function(){
+    var self = this;
+    var ctrl = self.get("controller");
 
-var IssueBodyController = BufferedController.extend({
-  needs: ["issue"],
+    this.$().keydown(function(e){
+      self.metaEnterHandler(e, function(enabled){
+        if (enabled){ ctrl.send("save"); }
+      });
+    });
+  }.on("didInsertElement"),
+  tearDownEvents: function(){
+    this.$().off("keydown");
+  }.on("willDestroyElement"),
   isCollaboratorBinding: "model.repo.is_collaborator",
   isLoggedInBinding: "App.loggedIn",
   currentUserBinding: "App.currentUser",
-  mentions: Ember.computed.alias("controllers.issue.mentions"),
   isEditing: false,
   disabled: function(){
     return this.get('isEmpty');
@@ -37,7 +49,7 @@ var IssueBodyController = BufferedController.extend({
 
       var controller = this,
         model = controller.get("model"),
-        url = "/api/" + this.get("controllers.issue.model.repo.full_name") + "/issues/" + this.get("model.number");
+        url = "/api/" + this.get("model.repo.full_name") + "/issues/" + this.get("model.number");
 
       this.get('bufferedContent').applyBufferedChanges();
 
@@ -69,4 +81,5 @@ var IssueBodyController = BufferedController.extend({
   }
 });
 
-export default IssueBodyController;
+
+export default IssueBodyComponent;
