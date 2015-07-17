@@ -27,6 +27,7 @@ var HbQuickIssueComponent = Ember.Component.extend({
       if (!this.get("isValid")) {return;}
       this.set("processing", true);
       var order = this.get("parentView.topOrderNumber");
+      this.set("model.milestone", this.get("column.milestone"));
 
       self = this;
       this.get("model").save(order).then(function(issue){

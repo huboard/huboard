@@ -58,13 +58,21 @@ var HbMilestoneComponent = HbColumn.extend({
   },
 
   topOrderNumber: function(){
-    var issue = this.get("sortedIssues.firstObject");
-    var order_issue = this.get("issues.firstObject");
-    return {
-      milestone_order: issue.get("._data.milestone_order") / 2,
-      order: order_issue.get("._data.order") / 2,
-    };
-  }.property("issues.@each", "controllers.milestones.forceRedraw"),
+    var first = this.get("registerColumns.firstObject.sortedIssues.firstObject");
+    var issues = this.get("sortedIssues");
+    if(issues.length){
+      var order = { milestone_order: issues.get("firstObject._data.milestone_order") / 2};
+      if(first){
+        order.order = first._data.order / 2;
+      }
+      return order;
+    } else {
+      if(first){
+        return { order: first._data.order / 2 };
+      }
+      return {};
+    }
+  }.property("sortedIssues.@each"),
   isFirstColumn: function(){
     return this.get("columns.firstObject.title") === this.get("model.title");
   }.property("columns.firstObject"),

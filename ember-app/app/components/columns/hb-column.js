@@ -50,7 +50,11 @@ var HbColumnComponent = Ember.Component.extend(SortableMixin, {
   isCreateVisible: Ember.computed.alias("isFirstColumn"),
   topOrderNumber: function(){
     var issues = this.get("sortedIssues");
-    return { order: issues.get("firstObject._data.order") / 2};
+    if(issues.length){
+      return { order: issues.get("firstObject._data.order") / 2 };
+    } else {
+      return {};
+    }
   }.property("sortedIssues.@each"),
 
   registerWithController: function(){
