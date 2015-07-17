@@ -1,6 +1,10 @@
 <div class="fullscreen-card">
   <div class="fullscreen-card-preamble clearfix">
-    {{render 'issue.title' model }}
+    {{issue/hb-title
+      model=model
+      content=model
+      isClosed=isClosed
+    }}
       <div class="flex-crumbs">
         {{view "issue.selected-column" content=columns}}
       </div>
@@ -23,8 +27,11 @@
       {{hb-milestone editable=isCollaborator assign="assignMilestone" selected=controller.model.milestone milestones=controller.repository.milestones}}
   </div>
 <div class="fullscreen-card-left">
-  {{render 'issue.body' model}}
-
+  {{issue/hb-body
+    model=model
+    content=model
+    mentions=mentions
+  }}
   <div class="fullscreen-card-activity">
     <div class="fullscreen-header">
       <h4> Activity </h4>
