@@ -111,6 +111,8 @@ var IssueController = Ember.Controller.extend({
      return comments.map(function (e){ return _.extend(e, {type: "comment" }); });
   }.property("model.activities.comments.@each"),
   allActivities: Ember.computed.union("model.activities.{comments,events}"),
+  activitiesSort:["created_at"],
+  sortedActivities: Ember.computed.sort("allActivities", "activitiesSort"),
   mentions: function (){
     var union = _.union(this.get('controllers.application.model.board.assignees'),this.get('allActivities').mapBy('user'));
     return _.uniq(_.compact(union), function(i){

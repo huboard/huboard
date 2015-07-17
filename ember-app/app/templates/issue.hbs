@@ -36,7 +36,22 @@
     <div class="fullscreen-header">
       <h4> Activity </h4>
     </div>
-    {{ render 'issue.activities' allActivities }}
+    <div class="card-events">
+    {{#each sortedActivities as |activity| }}
+      {{#if activity.event}}
+        {{component "issue/activities/issue-activity" 
+          model=activity 
+          issue=model
+          layoutName=(concat "issue/events/" activity.event)
+        }}
+      {{else}}
+        {{component "issue/activities/issue-comment" 
+          model=activity
+          issue=model
+        }}
+      {{/if}}
+    {{/each}}
+    </div>
   </div>
 
   {{#if controllers.application.loggedIn }}
