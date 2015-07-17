@@ -2,8 +2,8 @@ import Ember from "ember";
 import HbColumn from "../columns/hb-column";
 
 var HbMilestoneComponent = HbColumn.extend({
-  classNames: ["column","milestone"],
-  classNameBindings:["isCollapsed:hb-state-collapsed","isHovering:hovering", "isFirstColumn:no-milestone"],
+  classNames: ["milestone"],
+  classNameBindings:["isFirstColumn:no-milestone"],
   isTaskColumn: false,
 
   //Data

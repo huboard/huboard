@@ -19,7 +19,7 @@ export default Ember.Component.extend({
     });
   },
   updatePicker: function(){
-    if (this.get("processing") !== true) {
+    if (this._state === "inDOM" && this.get("processing") !== true) {
       this.$().datepicker('setDate', this.get("dueDate"));
     }
   }.observes("dueDate")
