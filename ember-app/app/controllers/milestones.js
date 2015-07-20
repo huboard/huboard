@@ -94,6 +94,9 @@ var MilestonesController = Ember.Controller.extend({
     createFullscreenIssue: function(issue, order){
       this.get("target").send("createFullscreenIssue", issue, order);
     },
+    openFullscreenIssue(issue){
+      this.get("target").send("openFullscreenIssue", issue);
+    },
     createMilestoneOrAbort: function(model){
       this.get("target").send("createMilestoneOrAbort", model);
     },

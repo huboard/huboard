@@ -108,7 +108,7 @@ var MilestonesRoute = Ember.Route.extend({
       issue.archive();
     },
 
-    openIssueFullscreen: function(model) {
+    openFullscreenIssue: function(model) {
       this.transitionTo("milestones.issue", model);
     },
 
