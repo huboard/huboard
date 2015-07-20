@@ -8,27 +8,29 @@ var IssueSocketMixin = Ember.Mixin.create({
       channelPath: "repositoryName"
     },
     milestone_changed: function(message) {
-       this.get("model").set("milestone", message.issue.milestone);
+       this.get("issue").set("milestone", message.issue.milestone);
     },
     issue_status_changed: function(message){
-       this.get("model").set("_data", message.issue._data);
+       this.get("issue").set("_data", message.issue._data);
     },
     issue_archived: function(){
-      this.get('model').set('isArchived', true);
+      this.get('issue').set('isArchived', true);
     },
     issue_closed: function(message) {
-       this.get("model").set("state", message.issue.state);
+       this.get("issue").set("state", message.issue.state);
     },
     assigned: function(message) {
-       this.get("model").set("assignee", message.issue.assignee);
+       this.get("issue").set("assignee", message.issue.assignee);
     },
     moved: function (message) {
-       this.get("model").set("current_state", message.issue.current_state);
-       this.get("model").set("_data", message.issue._data);
+      this.get('issue').setProperties({
+        current_state : message.issue.current_state,
+        _data: message.issue._data
+      });
     },
     reordered: function (message) {
-       this.get("model").set("current_state", message.issue.current_state);
-       this.get("model").set("_data", message.issue._data);
+       this.get("issue").set("current_state", message.issue.current_state);
+       this.get("issue").set("_data", message.issue._data);
     }
   }
 });
