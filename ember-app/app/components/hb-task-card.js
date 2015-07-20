@@ -2,9 +2,10 @@ import Ember from "ember";
 import IssueFiltersMixin from "app/mixins/issue-filters";
 import MemberDragAndDropMixin from "app/mixins/member-drag-and-drop";
 import IssueSocketMixin from "app/mixins/sockets/issue";
+import SocketMixin from "app/mixins/socket";
 
 var HbCardComponent = Ember.Component.extend(
-  IssueFiltersMixin, MemberDragAndDropMixin, IssueSocketMixin, {
+  SocketMixin, IssueFiltersMixin, MemberDragAndDropMixin, IssueSocketMixin, {
     tagName: "li",
     classNames: ["card"],
     classNameBindings: ["isFiltered","isDraggable:is-draggable", "isClosable:closable", "colorLabel", "issue.color:border", "stateClass"],

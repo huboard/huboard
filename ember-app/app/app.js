@@ -37,6 +37,7 @@ Ember.onLoad("Ember.Application", function ($app) {
         correlationId : correlationId,
         sockets: {},
         subscribe: Ember.K,
+        unsubscribe: Ember.K,
         subscribeTo: Ember.K
       });
 
@@ -47,6 +48,10 @@ Ember.onLoad("Ember.Application", function ($app) {
           client: new Faye.Client(application.get('socketBackend')),
           subscribe: function (channel, callback) {
             this.get("sockets")[channel].callbacks.add(callback);
+            return callback;
+          },
+          unsubscribe: function(channel, callback) {
+            this.get("sockets")[channel].callbacks.remove(callback);
           },
           subscribeTo: function(channel) {
             var client = this.get('client'), 
@@ -72,6 +77,7 @@ Ember.onLoad("Ember.Application", function ($app) {
       application.inject('socket:main', 'repo', 'repo:main');
 
       application.inject("controller","socket", "socket:main");
+      application.inject("component","socket", "socket:main");
       application.inject("model", "socket", "socket:main");
       application.inject("route", "socket", "socket:main");
       application.inject("service", "socket", "socket:main");
