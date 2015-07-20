@@ -19,9 +19,13 @@ var HbQuickIssueComponent = Ember.Component.extend({
 
   actions: {
     openFullScreen: function(){
-      this.set("model.milestone", this.get("column.milestone"));
+      var model = Issue.createNew();
+      model.set("title", this.get("model.title"));
+      model.set("milestone", this.get("column.milestone"));
       var order = this.get("parentView.topOrderNumber");
-      this.attrs.createFullscreenIssue(this.get("model"), order);
+
+      this.attrs.createFullscreenIssue(model, order);
+      this.incrementProperty("issueCreated");
     },
     onQuickAdd: function(){
       if (!this.get("isValid")) {return;}

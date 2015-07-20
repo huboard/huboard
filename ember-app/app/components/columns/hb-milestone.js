@@ -8,16 +8,23 @@ var HbMilestoneComponent = HbColumn.extend({
 
   //Data
   sortedIssues: function () {
-    var issues = this.get("issues")
-      .filter(function(i) {
-        // FIXME: this flag is for archived issue left on the board.
+    var issues = this.get("issues").filter(function(i){
         return !i.get("isArchived");
-      }).sort(function (a, b){
-        return a._data.milestone_order - b._data.milestone_order;
       })
-      .filter(this.get("model.filterBy"));
+      .filter(this.get("model.filterBy"))
+      .sort(this.sortStrategy);
     return issues;
   }.property("issues.@each.{milestoneOrder,milestoneTitle}"),
+  sortStrategy: function(a,b){
+    if(a._data.milestone_order === b._data.milestone_order){
+      if(a.repo.fullname === b.repo.fullname){
+        console.log("WARN: Duplicate Issues");
+        return a.number - b.number;
+      }
+      return a.repo.fullname - b.repo.fullname;
+    }
+    return a._data.milestone_order - b._data.milestone_order;
+  },
   moveIssue: function(issue, order, cancelMove){
     if(this.get("model.noMilestone")){
       return this.assignMilestone(issue, order, null);
@@ -58,8 +65,16 @@ var HbMilestoneComponent = HbColumn.extend({
   },
 
   topOrderNumber: function(){
-    var first = this.get("registerColumns.firstObject.sortedIssues.firstObject");
-    var issues = this.get("sortedIssues");
+    var issues = this.get("issues")
+      .filter(function(i) { return !i.get("isArchived");})
+      .sort(function (a, b){
+        return a._data.milestone_order - b._data.milestone_order;
+      });
+    var first = this.get("issues")
+      .filter(function(i) { return !i.get("isArchived");})
+      .sort(function (a, b){
+        return a._data.order - b._data.order;
+      }).get("firstObject");
     if(issues.length){
       var order = { milestone_order: issues.get("firstObject._data.milestone_order") / 2};
       if(first){
@@ -72,7 +87,7 @@ var HbMilestoneComponent = HbColumn.extend({
       }
       return {};
     }
-  }.property("sortedIssues.@each"),
+  }.property("sortedIssues.[]"),
   isFirstColumn: function(){
     return this.get("columns.firstObject.title") === this.get("model.title");
   }.property("columns.firstObject"),

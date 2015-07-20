@@ -43,6 +43,7 @@ var IssuesCreateController = Ember.Controller.extend({
         }
         controller.get("target").send("createNewIssue", issue);
         controller.get("target").send("closeModal");
+        controller.set("processing", false);
       });
     });
   },
