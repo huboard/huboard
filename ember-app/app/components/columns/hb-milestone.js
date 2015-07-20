@@ -67,9 +67,7 @@ var HbMilestoneComponent = HbColumn.extend({
   topOrderNumber: function(){
     var issues = this.get("issues")
       .filter(function(i) { return !i.get("isArchived");})
-      .sort(function (a, b){
-        return a._data.milestone_order - b._data.milestone_order;
-      });
+      .sort(this.sortStrategy);
     var first = this.get("issues")
       .filter(function(i) { return !i.get("isArchived");})
       .sort(function (a, b){

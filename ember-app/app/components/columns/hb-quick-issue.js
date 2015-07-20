@@ -14,8 +14,9 @@ var HbQuickIssueComponent = Ember.Component.extend({
   issueCreated: 0,
 
   isValid: function(){
-    return this.get("model.title").trim() !== "";
-  }.property("model.title"),
+    return this.get("model.title").trim() !== "" &&
+      this.get("processing") !== true;
+  }.property("model.title", "processing"),
 
   actions: {
     openFullScreen: function(){
