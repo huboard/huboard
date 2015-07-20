@@ -47,16 +47,13 @@ var IssueController = Ember.Controller.extend({
         return false;
       }
       this.get("model").reorder(this.get("model._data.order"),column).then(function() {
-        this.send("forceRepaint","index");
       }.bind(this));
-      Ember.run.next(this, "send", "forceRepaint", "index");
     },
     assignUser: function(login){
       return this.get("model").assignUser(login);
     },
     assignMilestone: function(milestone) {
       this.get("model").assignMilestone(this.get("model.number"), milestone);
-      Ember.run.next(this, "send", "forceRepaint", "milestones");
     },
     submitComment: function () {
       if (this.get("processing") || this.get("isEmpty")) { 
