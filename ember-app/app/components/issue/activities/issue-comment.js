@@ -1,14 +1,13 @@
-import BufferedController from 'app/controllers/buffered';
+import KeyPressHandlingMixin from 'app/mixins/key-press-handling';
+import BufferedMixin from 'app/mixins/buffered';
 import Ember from 'ember';
+import IssueActivity from 'app/components/issue/activities/issue-activity'
 
 
-var IssueActivityController = BufferedController.extend({
-  needs: ["issue"],
-  isCollaboratorBinding: "target.target.model.repo.is_collaborator",
-  isLoggedInBinding: "App.loggedIn",
-  currentUserBinding: "App.currentUser",
-  mentions: Ember.computed.alias("controllers.issue.mentions"),
-  isEditing: false,
+var IssueCommentComponent = IssueActivity.extend(BufferedMixin, KeyPressHandlingMixin, {
+  layoutName: "issue/comment",
+  classNames: ["card-comment"],
+  content: Ember.computed.alias('model'),
   disabled: function(){
     return this.get('isEmpty');
   }.property('isEmpty'),
@@ -20,6 +19,18 @@ var IssueActivityController = BufferedController.extend({
       ( this.get("isCollaborator") || (this.get("currentUser.id") === this.get("model.user.id")) );
 
   }.property('{isCollaborator,isLoggedIn,currentUser}'),
+  registerKeydownEvents: function(){
+    var self = this;
+
+    this.$().keydown(function(e){
+      self.metaEnterHandler(e, function(enabled){
+        if (enabled){ self.send("save"); }
+      });
+    });
+  }.on("didInsertElement"),
+  tearDownEvents: function(){
+    this.$().off("keydown");
+  }.on("willDestroyElement"),
   actions: {
     taskChanged: function(body){
       this.set('bufferedContent.body', body);
@@ -34,7 +45,7 @@ var IssueActivityController = BufferedController.extend({
       }
       var controller = this,
         model = controller.get('model'),
-        url = "/api/" + this.get("controllers.issue.model.repo.full_name") + "/issues/comments/" + this.get("model.id");
+        url = "/api/" + this.get("issue.repo.full_name") + "/issues/comments/" + this.get("model.id");
 
       this.get('bufferedContent').applyBufferedChanges();
 
@@ -66,4 +77,4 @@ var IssueActivityController = BufferedController.extend({
   }
 });
 
-export default IssueActivityController;
+export default IssueCommentComponent;

@@ -37,7 +37,7 @@ var IssueReferenceView = Ember.View.extend({
     }
     this.set("isProcessing", true);
     var self = this;
-    var commit = this.get("model.commit_id");
+    var commit = this.get("controller.model.commit_id");
     this.get("controller").fetchCommit(commit)
       .then(function(commit){
         self.set('isLoaded', true);

@@ -23,7 +23,6 @@ var ApplicationController = Ember.Controller.extend({
         issue.set("state", "closed");
       } else {
         this.get("model.board.issues").pushObject(Issue.create(message.issue));
-        this.send("forceRepaint");
       }
     },
     issue_opened: function(message) {
@@ -42,7 +41,6 @@ var ApplicationController = Ember.Controller.extend({
           model.set("current_state", column);
         }
         this.get("model.board.issues").pushObject(model);
-        this.send("forceRepaint");
       }
     },
     issue_reopened: function(message) {
@@ -52,7 +50,6 @@ var ApplicationController = Ember.Controller.extend({
         issue.set("state", "open");
       } else {
         this.get("model.board.issues").pushObject(Issue.create(message.issue));
-        this.send("forceRepaint");
       }
     }
   },

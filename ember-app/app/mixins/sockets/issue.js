@@ -9,9 +9,6 @@ var IssueSocketMixin = Ember.Mixin.create({
     },
     milestone_changed: function(message) {
        this.get("model").set("milestone", message.issue.milestone);
-       Ember.run.once(function () {
-         this.send("forceRepaint", "milestones");
-       }.bind(this));
     },
     issue_status_changed: function(message){
        this.get("model").set("_data", message.issue._data);
@@ -28,16 +25,10 @@ var IssueSocketMixin = Ember.Mixin.create({
     moved: function (message) {
        this.get("model").set("current_state", message.issue.current_state);
        this.get("model").set("_data", message.issue._data);
-       Ember.run.once(function () {
-         this.send("forceRepaint", "index");
-       }.bind(this));
     },
     reordered: function (message) {
        this.get("model").set("current_state", message.issue.current_state);
        this.get("model").set("_data", message.issue._data);
-       Ember.run.once(function () {
-         this.send("forceRepaint", "index");
-       }.bind(this));
     }
   }
 });

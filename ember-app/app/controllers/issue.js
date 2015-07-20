@@ -47,16 +47,13 @@ var IssueController = Ember.Controller.extend({
         return false;
       }
       this.get("model").reorder(this.get("model._data.order"),column).then(function() {
-        this.send("forceRepaint","index");
       }.bind(this));
-      Ember.run.next(this, "send", "forceRepaint", "index");
     },
     assignUser: function(login){
       return this.get("model").assignUser(login);
     },
     assignMilestone: function(milestone) {
       this.get("model").assignMilestone(this.get("model.number"), milestone);
-      Ember.run.next(this, "send", "forceRepaint", "milestones");
     },
     submitComment: function () {
       if (this.get("processing") || this.get("isEmpty")) { 
@@ -111,6 +108,8 @@ var IssueController = Ember.Controller.extend({
      return comments.map(function (e){ return _.extend(e, {type: "comment" }); });
   }.property("model.activities.comments.@each"),
   allActivities: Ember.computed.union("model.activities.{comments,events}"),
+  activitiesSort:["created_at"],
+  sortedActivities: Ember.computed.sort("allActivities", "activitiesSort"),
   mentions: function (){
     var union = _.union(this.get('controllers.application.model.board.assignees'),this.get('allActivities').mapBy('user'));
     return _.uniq(_.compact(union), function(i){
