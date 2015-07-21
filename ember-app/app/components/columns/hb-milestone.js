@@ -1,7 +1,10 @@
 import Ember from "ember";
 import HbColumn from "../columns/hb-column";
+import SocketMixin from 'app/mixins/socket';
+import MilestoneSocketMixin from 'app/mixins/sockets/milestone';
 
-var HbMilestoneComponent = HbColumn.extend({
+var HbMilestoneComponent = HbColumn.extend(
+  MilestoneSocketMixin, SocketMixin, {
   classNames: ["milestone"],
   classNameBindings:["isFirstColumn:no-milestone"],
   isTaskColumn: false,

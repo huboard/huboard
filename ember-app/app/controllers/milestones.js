@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import correlationId from 'app/utilities/correlation-id';
 
 var MilestonesController = Ember.Controller.extend({
   needs: ["application"],
@@ -66,12 +67,13 @@ var MilestonesController = Ember.Controller.extend({
     var milestone = milestoneController.get("model.milestone"), owner = milestone.repo.owner.login, name = milestone.repo.name;
 
     Ember.$.ajax({
-      url: "/api/" + owner + "/" + name + "/reordermilestone",
+      url: "/api/" + owner + "/" + name + "/milestones/reorder_milestone",
       type: "POST",
 
       data: {
         number: milestone.number,
-        index: index
+        index: index,
+        correlationId: correlationId
       },
 
       success: function(response) {
