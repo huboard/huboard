@@ -27,7 +27,7 @@ var MilestonesView = Ember.View.extend({
 
         var findViewData = function (element){
           return that.get("controller.registeredColumns").find(function(el){
-            return el.$().is(element)
+            return el.$().is(element);
           });
         };
 

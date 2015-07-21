@@ -152,7 +152,7 @@ var MilestonesRoute = Ember.Route.extend({
       Ember.run.once(function(){
         var milestones = controller.get("model.milestones");
         var old_milestone = milestones.find(m => {
-          return m.title === milestone.originalTitle
+          return m.title === milestone.originalTitle;
         });
         milestones.removeObject(old_milestone);
         milestones.addObject(milestone);

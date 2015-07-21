@@ -34,12 +34,12 @@ var HbQuickIssueComponent = Ember.Component.extend({
       var order = this.get("parentView.topOrderNumber");
       this.set("model.milestone", this.get("column.milestone"));
 
-      self = this;
+      var _self = this;
       this.get("model").save(order).then(function(issue){
         Ember.run.once(function(){
-          self.attrs.createNewIssue(issue);
-          self.incrementProperty("issueCreated");
-          self.set("processing", false);
+          _self.attrs.createNewIssue(issue);
+          _self.incrementProperty("issueCreated");
+          _self.set("processing", false);
         });
       });
     }

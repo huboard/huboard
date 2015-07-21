@@ -39,24 +39,24 @@ var HbMilestoneComponent = HbColumn.extend({
   },
   assignMilestone: function(issue, order, milestone){
     this.get("sortedIssues").removeObject(issue);
-    var self = this;
-    Ember.run.schedule("afterRender", self, function(){
+    var _self = this;
+    Ember.run.schedule("afterRender", _self, function(){
       issue.assignMilestone(order, milestone);
     });
   },
   findMilestone: function(a){
     return function(b){
       return _.isEqual(a.name, b.repo.name);
-    }
+    };
   },
   handleMissingMilestone: function(issue, order, cancelMove){
-    var self = this
+    var _self = this;
     this.attrs.createMilestoneOrAbort({
       card: issue,
-      column: self.get("model"),
+      column: _self.get("model"),
       onAccept: function(milestone){
-        self.get("model.group").pushObject(milestone);
-        self.moveIssue(issue, order);
+        _self.get("model.group").pushObject(milestone);
+        _self.moveIssue(issue, order);
       },
       onReject: function(){
         cancelMove();

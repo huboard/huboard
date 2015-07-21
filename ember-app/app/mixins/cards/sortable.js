@@ -36,7 +36,7 @@ var SortableMixin = Ember.Mixin.create(CardMoveMixin, {
 
         var cancelMove = function(){ 
           Ember.$(ui.sender).sortable("cancel");
-        }
+        };
         column.moveIssue(issue, issue_order, cancelMove);
       },
     });

@@ -1,4 +1,3 @@
-import SocketMixin from 'app/mixins/socket';
 import Ember from 'ember';
 
 var IssueSocketMixin = Ember.Mixin.create({

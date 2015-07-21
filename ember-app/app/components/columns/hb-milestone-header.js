@@ -9,7 +9,7 @@ var HbMilestoneHeaderComponent = Ember.Component.extend({
   },
   actions: {
     editMilestone: function(milestone){
-      this.attrs.editMilestone(milestone)
+      this.attrs.editMilestone(milestone);
     }
   }
 });
