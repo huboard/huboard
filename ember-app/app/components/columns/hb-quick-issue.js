@@ -18,6 +18,19 @@ var HbQuickIssueComponent = Ember.Component.extend({
       this.get("processing") !== true;
   }.property("model.title", "processing"),
 
+  bindToFocus: function(){
+    var _self = this;
+    this.$("input").on("focus.huboard", function() {
+      _self.set("placeholderText", "Add title then ↵");
+    });
+    this.$("input").on("blur.huboard", function() {
+      _self.set("placeholderText", "Add issue...");
+    });
+  }.on("didInsertElement"),
+  releaseEvents: function(){
+    this.$("input").off("blur.huboard focus.huboard");
+  }.on("willDestroyElement"),
+
   actions: {
     openFullScreen: function(){
       var model = Issue.createNew();
