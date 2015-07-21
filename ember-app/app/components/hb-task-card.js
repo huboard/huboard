@@ -17,9 +17,8 @@ var HbCardComponent = Ember.Component.extend(
       return this.get("issue.repo.is_collaborator");
     }.property("issue.repo.is_collaborator"),
     isClosable: function () {
-     var currentState = this.get("issue.current_state");
-     return App.get("loggedIn") && currentState.is_last && this.get("issue.state") === "open";
-    }.property("loggedIn", "issue.current_state","issue.state"),
+     return App.get("loggedIn") && this.get("isLast") && this.get("issue.state") === "open";
+    }.property("loggedIn", "isLast","issue.state"),
     onDestroy: function (){
       if(!this.get("issue.isArchived")){ return; }
       var self = this;
@@ -59,9 +58,8 @@ var HbCardComponent = Ember.Component.extend(
       return login  + "/" + repo;
     }.property(),
     isLast: function(){
-      return this.get("issue.current_state.is_last") &&
-        this.get("isCollaborator");
-    }.property("issue.current_state", "isCollaborator"),
+      return this.get("isLastColumn") && this.get("isCollaborator");
+    }.property("isLastColumn", "isCollaborator"),
     canArchive: function () {
       this.get("isCollaborator");
       return this.get("issue.state") === "closed" &&
