@@ -107,6 +107,7 @@
       @include flex-wrap(nowrap);
       @include display(flex);
       .tab-content {
+       padding-bottom: 6px;
        @include flex(1);
        @include display(flex);
       }
