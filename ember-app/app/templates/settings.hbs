@@ -3,11 +3,9 @@
   <div>
   </div>
   <div class="create-button">
-    <span class="dropdown">
-      <a data-toggle="dropdown" class="dropdown-toggle hb-icon-link" href="#/settings">
+    {{#link-to 'settings.index' class='hb-icon-link' }}
         <i class="ui-icon ui-icon-18 ui-icon-gear"></i>
-      </a>
-    </span>
+    {{/link-to}}
   </div>
   {{/if}}
 </div>
