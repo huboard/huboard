@@ -4,7 +4,7 @@ import SocketMixin from 'app/mixins/socket';
 import MilestoneSocketMixin from 'app/mixins/sockets/milestone';
 
 var HbMilestoneComponent = HbColumn.extend(
-  SocketMixin, MilestoneSocketMixin {
+  MilestoneSocketMixin, SocketMixin, {
   classNames: ["milestone"],
   classNameBindings:["isFirstColumn:no-milestone"],
   isTaskColumn: false,
