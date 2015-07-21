@@ -84,12 +84,6 @@ module Api
       render json: @issue
     end
 
-    def reorder_milestone
-      user, repo, number, index = params[:user], params[:repo], params[:number], params[:index]
-      milestone =  huboard.board(user, repo).milestone number
-      render json: milestone.reorder(index)
-    end
-
     def assign_card
       user, repo, number, @assignee = params[:user], params[:repo], params[:number], params[:assignee]
       @issue = huboard.board(user, repo).issue(number)

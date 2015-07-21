@@ -1,7 +1,8 @@
 import Ember from "ember";
 import HbColumn from "../columns/hb-column";
+import SocketMixin from 'app/mixins/socket';
 
-var HbMilestoneComponent = HbColumn.extend({
+var HbMilestoneComponent = HbColumn.extend(SocketMixin, {
   classNames: ["milestone"],
   classNameBindings:["isFirstColumn:no-milestone"],
   isTaskColumn: false,
@@ -89,7 +90,31 @@ var HbMilestoneComponent = HbColumn.extend({
   isFirstColumn: function(){
     return this.get("columns.firstObject.title") === this.get("model.title");
   }.property("columns.firstObject"),
-  isCreateVisible: true
+  isCreateVisible: true,
+  milestoneNumber: function(){
+    return this.get('model.milestone.number');
+  }.property('model.milestone.number'),
+  repositoryName: function(){
+    return this.get('model.milestone.repo.full_name');
+  }.property('model.milestone.repo.full_name'),
+  socketDisabled: function(){
+    return !!this.get('model.noMilestone');
+  }.property('model.noMilestone'),
+  sockets: {
+    config: {
+      messagePath: 'milestoneNumber',
+      channelPath: 'repositoryName',
+      disabled: 'socketDisabled'
+    },
+    milestone_reordered: function(message){
+      //TODO: refactor the model layer so that milestones are always models
+      //
+      //this.get('model.milestone').setProperties({
+        //description: message.milestone.description,
+        //_data: message.milestone._data
+      //})
+    }
+  }
 });
 
 export default HbMilestoneComponent;

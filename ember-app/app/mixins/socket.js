@@ -5,6 +5,12 @@ var SocketMixin = Ember.Mixin.create({
     if(!this.get("socket")){
       return;
     }
+    // opt-out guard
+    var disabledPath = this.get('sockets.config.disabled');
+    if(disabledPath && this.get(disabledPath)){
+      return;
+    }
+
     var channelPath  = this.get("sockets.config.channelPath");
 
     if(!channelPath) {
