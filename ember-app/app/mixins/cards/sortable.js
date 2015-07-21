@@ -3,6 +3,7 @@ import CardMoveMixin from "../cards/card-move";
 
 var SortableMixin = Ember.Mixin.create(CardMoveMixin, {
   attachSortable: function(){
+    var _self = this;
     var cardMove = this.cardMover;
     var columns = this.get("columnComponents");
     this.$(".cards").sortable({
@@ -37,10 +38,21 @@ var SortableMixin = Ember.Mixin.create(CardMoveMixin, {
         var cancelMove = function(){ 
           Ember.$(ui.sender).sortable("cancel");
         };
-        column.moveIssue(issue, issue_order, cancelMove);
+        var moveIssue = function(){
+          column.moveIssue(issue, issue_order, cancelMove);
+        };
+
+        _self.executeAfterBrowserPaint(moveIssue);
       },
     });
   }.on("didInsertElement"),
+
+  executeAfterBrowserPaint: function(callback){
+    if(window.requestAnimationFrame){
+      return window.requestAnimationFrame(callback);
+    }
+    callback();
+  }
 });
 
 export default SortableMixin;
