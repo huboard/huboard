@@ -1,8 +1,7 @@
 import Ember from 'ember';
 
-var FilterView = Ember.View.extend({
+var HbFilterComponent = Ember.Component.extend({
   tagName: "li",
-  templateName: "filter",
   classNames: ["filter"],
   classNameBindings: ["customColor", "reportTagType"],
   reportTagType: function() {
@@ -37,4 +36,4 @@ var FilterView = Ember.View.extend({
   lastClicked: null,
 });
 
-export default FilterView;
+export default HbFilterComponent;
