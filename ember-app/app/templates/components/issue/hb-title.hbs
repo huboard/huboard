@@ -1,0 +1,23 @@
+{{#if canEdit }}
+  {{#if isEditing}}
+    <button {{action "cancel" }} class="hb-button hb-button-grey">Cancel</button> 
+    <button disabled={{disabled}} {{action "save" }} class="hb-button ">Save</button> 
+  {{else}}
+    <button {{action "edit"  }} class="hb-button hb-button-grey">Edit</button> 
+  {{/if}}
+{{/if}}
+
+<h2>
+  {{#if isEditing }}
+    {{input value=bufferedContent.title }}
+  {{else}}
+    <div class="flex-issue-title">
+      {{ model.title }}
+      <a class="number" href="{{{unbound model.html_url }}}" target="_blank" title="{{model.title}}"><small>#{{model.number}}</small></a>
+      {{#if isClosed}}
+        <span class="issue-closed-badge"><p> Closed </p></span>
+      {{/if}}
+    </div>
+  {{/if}}
+</h2>
+

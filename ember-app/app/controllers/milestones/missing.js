@@ -3,15 +3,15 @@ import Ember from 'ember';
 var MilestonesMissingController = Ember.Controller.extend({
   needs: ['milestones'],
   linkedRepos: Ember.computed.alias("controllers.milestones.model.linkedRepos"),
-  card: Ember.computed.alias("model.cardController.model"),
-  column: Ember.computed.alias("model.columnController.model"),
+  card: Ember.computed.alias("model.card"),
+  column: Ember.computed.alias("model.column"),
   disabled: false,
   actions: {
     closeModal: function(){
       if (this.get('disabled')) {
         return false;
       }
-      this.get("model.onReject").call(this.get("column"), this);
+      this.get("model").onReject();
       return true;
     },
     createTheMilestone: function() {
@@ -41,7 +41,7 @@ var MilestonesMissingController = Ember.Controller.extend({
               repo.milestones.pushObject(response);
             }
           });
-          controller.get("model.onAccept").call(controller.get("column"), response);
+          controller.get("model").onAccept(response);
           controller.set("disabled", false);
           controller.get('target').send('closeModal');
         }

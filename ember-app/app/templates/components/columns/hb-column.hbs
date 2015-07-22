@@ -1,0 +1,23 @@
+{{columns/hb-task-header column=model issues=sortedIssues isCollapsed=isCollapsed}}
+
+{{#if isCreateVisible}}
+  {{columns/hb-quick-issue
+    column=model
+    createNewIssue=(action attrs.createNewIssue)
+    createFullscreenIssue=(action attrs.createFullscreenIssue)
+  }}
+{{/if}}
+
+<ul class="cards sortable">
+  {{#each sortedIssues as |issue|}}
+    {{
+      hb-task-card
+        issue=issue
+        issues=sortedIssues
+        repos=repos
+        cardClick=(action attrs.openFullscreenIssue issue)
+        isLastColumn=isLastColumn
+    }}
+  {{/each}}
+</ul>
+<div class="collapsed"></div>

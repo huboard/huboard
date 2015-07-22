@@ -2,7 +2,8 @@ import Ember from 'ember';
 
 var HbLabelComponent = Ember.Component.extend({
   tagName: "div",
-  classNameBindings: [":hb-menu-item", "colorClass", "selected:active"],
+  classNameBindings: ["colorClass", "selected:active"],
+  classNames: ["hb-menu-item"],
   didInsertElement: function () {
      this.$().on("click.label", function () {
        this.get("parentView.controller").send("select", this.get("label"));

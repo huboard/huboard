@@ -10,7 +10,7 @@ var MilestonesView = Ember.View.extend({
       tolerance: 'pointer',
       handle: 'h3',
       placeholder: "milestone-placeholder",
-      items: ".milestone:not(.no-milestone)",
+      items: ".milestone:gt(0)",
       over: function () {
         that.set("isHovering", true);
       },
@@ -23,17 +23,12 @@ var MilestonesView = Ember.View.extend({
       stop: function() {
         that.set('dragging', false);
       },
-      activate: function () {
-        // that.get("controller").set("isHovering", true);
-      },
-      deactivate: function() {
-        // that.get("controller").set("isHovering", false);
-      }, 
       update: function (ev, ui) {
 
         var findViewData = function (element){
-           return Ember.View.views[Ember.$(element).attr("id")]
-             .get("controller");
+          return that.get("controller.registeredColumns").find(function(el){
+            return el.$().is(element);
+          });
         };
 
         var elements = Ember.$(".milestone:not(.no-milestone)", that.$()),

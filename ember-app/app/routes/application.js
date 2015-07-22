@@ -1,7 +1,6 @@
 import SocketMixin from 'app/mixins/socket';
 import Ember from 'ember';
 import Repo from 'app/models/repo';
-import animateModalClose from 'app/config/animate-modal-close';
 
 var ApplicationRoute = Ember.Route.extend({
   filters: Ember.inject.service(),
@@ -12,20 +11,6 @@ var ApplicationRoute = Ember.Route.extend({
     },
     toggleSidebar: function(){
       this.controllerFor("application").toggleProperty("isSidebarOpen");
-    },
-    openModal: function (view){
-      this.render(view, {
-        into: "application",
-        outlet: "modal"
-      });
-    },
-    closeModal: function() {
-      animateModalClose().then(function() {
-        this.render('empty', {
-          into: 'application',
-          outlet: 'modal'
-        });
-      }.bind(this));
     },
     clearFilters: function(){
       this.get("filters").clear();

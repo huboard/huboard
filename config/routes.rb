@@ -61,9 +61,10 @@ Rails.application.routes.draw do
         delete 'issues/:number/ready' => 'issues#unready'
         post 'dragcard' => 'issues#drag_card'
         post 'archiveissue' => 'issues#archive_issue'
-        post 'reordermilestone' => 'issues#reorder_milestone'
         post 'assigncard' => 'issues#assign_card'
         post 'assignmilestone' => 'issues#assign_milestone'
+
+        post 'milestones/reorder_milestone' => 'milestones#reorder_milestone'
       end
     end
 

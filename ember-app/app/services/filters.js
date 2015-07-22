@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import Ember from "ember";
 
 var FiltersService = Ember.Service.extend({
   //filterGroups requires setGroups(model) before it yields

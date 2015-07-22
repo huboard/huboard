@@ -5,6 +5,12 @@ var SocketMixin = Ember.Mixin.create({
     if(!this.get("socket")){
       return;
     }
+    // opt-out guard
+    var disabledPath = this.get('sockets.config.disabled');
+    if(disabledPath && this.get(disabledPath)){
+      return;
+    }
+
     var channelPath  = this.get("sockets.config.channelPath");
 
     if(!channelPath) {
@@ -23,7 +29,7 @@ var SocketMixin = Ember.Mixin.create({
           eventNames = this.get("sockets") || {},
           controller = this;
       
-      this.get("socket").subscribe(channel, function (message){
+      this._subscription = this.get("socket").subscribe(channel, function (message){
 
           if(messageId !== "*" && message.meta.identifier !== messageId) { return; }
 
@@ -35,6 +41,14 @@ var SocketMixin = Ember.Mixin.create({
           }
       });
     });
+  },
+  willDestroy: function(){
+    if(this._subscription) {
+      var channelPath  = this.get("sockets.config.channelPath");
+      this.get('socket').unsubscribe(this.get(channelPath), this._subscription);
+      delete this._subscription;
+    }
+    this._super();
   },
   init: function () {
     this._super();

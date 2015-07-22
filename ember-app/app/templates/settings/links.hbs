@@ -1,79 +1,34 @@
-    
-    <h3>Your board</h3>
-    
-    <h4>{{repository.full_name}}</h4>
-    <div class="flex-crumbs">
-      {{hb-board-columns columns=columns }}
-    </div>
+<h3>Your board</h3>
 
-    <hr>
+<h4>{{repository.full_name}}</h4>
+<div class="flex-crumbs">
+  {{hb-board-columns columns=columns }}
+</div>
 
-    <h3>Existing links <strong>({{controller.length}})</strong> </h3>
-    <div class="flex-form-top"> 
-      {{#if shouldDisplayWarning }}
-      <div class="alert alert-error">
-        <strong>Warning</strong>: Linking more than 5 repositories together can seriously degrade performance. We suggest breaking them up into smaller groups, ie; back end vs. front end services.
-      </div>
-      {{/if}}
-      <ul class="unstyled links">
-        {{#each link in controller itemViewClass='settings.link'}}
-            <div class="link-states">
-              <i class="ui-icon ui-icon-link"></i>
-              <i class="ui-icon ui-icon-unlink"></i>
-            </div>
-            <div class="link">
+<hr>
 
-              <h4>{{link.model.label.user}}/{{link.model.label.repo}}</h4>
-              {{#if link.isLinked }}
-              <div class="flex-crumbs">
-                {{hb-board-columns columns=link.model.columns }}
-              </div>
-              {{else}}
-                {{#if link.model.columns.length }}
-                <div class="flex-crumbs control-group error">
-                    {{hb-board-columns columns=link.model.columns }}
-                  <p class="help-block">
-                  This HuBoard's columns are not compatible with your parent board. Click the Copy parent board button to copy the parent HuBoard's columns.
-                  </p>
-
-                </div>
-                <hr>
-                {{else}}
-                  <div class="control-group error">
-                    <p class="help-block">
-                    This repository doesn't have any columns. Click the Copy parent board button to copy the parent HuBoard's columns.
-                    </p>
-                  </div>
-                  <hr>
-                {{/if}}
-              <div class='flex-split'>
-                <div class='flex-left'>
-                  <div class="flex-crumbs">
-                    {{hb-board-columns columns=columns }}
-                  </div>
-                </div>
-                <div class='flex-right'>
-                  <button class="hb-button hb-button-grey" disabled={{link.isDisabled}} {{action 'copy' model}}>
-                    Copy parent HuBoard
-                  </button>
-                </div>
-              </div>
-              {{/if}}
-            </div>
-            <div class="link-actions">
-              <button {{action 'remove' link }}>
-              <i class="ui-icon ui-icon-x-thin"></i>
-              </button>
-            </div>
-        {{else}}
-          <li class="hb-empty">
-            <em> Links are totally rad, you should add one </em>
-          </li>
-        {{/each}}
-      </ul>
-    </div>
-    <hr>
-    <h3> Add a linked repository </h3>
-    {{ outlet }}
-
-
+<h3>Existing links <strong>({{content.length}})</strong> </h3>
+<div class="flex-form-top"> 
+  {{#if shouldDisplayWarning }}
+  <div class="alert alert-error">
+    <strong>Warning</strong>: Linking more than 5 repositories together can seriously degrade performance. We suggest breaking them up into smaller groups, ie; back end vs. front end services.
+  </div>
+  {{/if}}
+  <ul class="unstyled links">
+    {{#each content as |link|}}
+      {{settings/hb-link
+        link=link
+        links=content
+        settings=controllers.settings
+        labels=controllers.settings.model.column_labels
+      }}
+    {{else}}
+      <li class="hb-empty">
+        <em> Links are totally rad, you should add one </em>
+      </li>
+    {{/each}}
+  </ul>
+</div>
+<hr>
+<h3> Add a linked repository </h3>
+{{ outlet }}

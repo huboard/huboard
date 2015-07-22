@@ -1,0 +1,7 @@
+<i class="ui-icon ui-icon-plus"></i>
+<i class="ui-icon ui-icon-minus"></i>
+<span class="text">{{column.title}}</span>
+
+{{#if column.milestone }}
+<i class="ui-icon ui-icon-gear" title="Edit milestone" {{action 'editMilestone' column.milestone bubbles=false}}></i>
+{{/if}}

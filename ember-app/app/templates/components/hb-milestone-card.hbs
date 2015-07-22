@@ -1,0 +1,28 @@
+<div class="ember-view">
+  <div class="card-header">
+    <div class="title" title="{{issue.title}}">
+      {{#if issue.assignee}}
+        {{hb-avatar-tooltip user=issue.assignee width="24" height="24"}}
+      {{/if}}
+      {{issue.title}} 
+      <small>#{{issue.number}}</small>
+    </div>
+  </div>
+
+  <div class="flex-crumbs">
+    {{hb-selected-column columns=taskColumns issue=issue}}
+  </div>
+
+
+  <div class="card-labels">
+      {{#each label in cardLabels }}
+        <div class="card-label-wrapper"> 
+           <div class="card-label active small {{label.customColor}}"></div>
+           <div class="card-label active large {{label.customColor}}">
+            <span>{{label.name}}</span>
+           </div>
+        </div>
+      {{/each}}
+  </div>
+</div>
+

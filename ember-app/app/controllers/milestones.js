@@ -1,8 +1,10 @@
 import Ember from 'ember';
+import correlationId from 'app/utilities/correlation-id';
 
 var MilestonesController = Ember.Controller.extend({
   needs: ["application"],
   filters: Ember.inject.service(),
+  registeredColumns: Ember.A(),
 
   qps: Ember.inject.service("query-params"),
   queryParams: [
@@ -36,13 +38,11 @@ var MilestonesController = Ember.Controller.extend({
       filterBy: function(i) {
         return !Ember.get(i, "milestone");
       },
-
-      cssClass: "no-milestone"
     });
   }.property(),
 
   milestone_columns: function() {
-    return _.chain(this.get("model.combinedMilestones")).map(function(groups) {
+    var milestones = _.chain(this.get("model.combinedMilestones")).map(function(groups) {
       var m = _.first(groups);
 
       return Ember.Object.create({
@@ -59,20 +59,21 @@ var MilestonesController = Ember.Controller.extend({
     }).value().sort(function(a, b) {
       return a.milestone._data.order - b.milestone._data.order;
     });
-  }.property("forceRedraw"),
-
-  forceRedraw: 0,
+    milestones.insertAt(0, this.get("left_column"));
+    return milestones;
+  }.property("model.combinedMilestones.@each"),
 
   milestoneMoved: function(milestoneController, index) {
     var milestone = milestoneController.get("model.milestone"), owner = milestone.repo.owner.login, name = milestone.repo.name;
 
     Ember.$.ajax({
-      url: "/api/" + owner + "/" + name + "/reordermilestone",
+      url: "/api/" + owner + "/" + name + "/milestones/reorder_milestone",
       type: "POST",
 
       data: {
         number: milestone.number,
-        index: index
+        index: index,
+        correlationId: correlationId
       },
 
       success: function(response) {
@@ -80,6 +81,30 @@ var MilestonesController = Ember.Controller.extend({
         milestoneController.set("model.milestone._data", response._data);
       }
     });
+  },
+
+  actions: {
+    registerColumn: function(column_component){
+      this.get("registeredColumns").pushObject(column_component);
+    },
+    unregisterColumn: function(column_component){
+      this.get("registeredColumns").removeObject(column_component);
+    },
+    createNewIssue: function(issue){
+      this.get("target").send("createNewIssue", issue);
+    },
+    createFullscreenIssue: function(issue, order){
+      this.get("target").send("createFullscreenIssue", issue, order);
+    },
+    openFullscreenIssue(issue){
+      this.get("target").send("openFullscreenIssue", issue);
+    },
+    createMilestoneOrAbort: function(model){
+      this.get("target").send("createMilestoneOrAbort", model);
+    },
+    editMilestone: function(milestone){
+      this.get("target").send("editMilestone", milestone);
+    }
   }
 });
 

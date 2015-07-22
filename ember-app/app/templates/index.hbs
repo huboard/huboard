@@ -14,7 +14,7 @@
 
   {{#if isCollaborator}}
   <div class="create-button">
-    {{#link-to 'settings' class='hb-icon-link' }}
+    {{#link-to 'settings.index' class='hb-icon-link' }}
         <i class="ui-icon ui-icon-18 ui-icon-gear"></i>
     {{/link-to}}
   </div>
@@ -32,7 +32,19 @@
   <div id="content" class="content">
     <div class="board board-not-dragging">
       {{#each board_columns as |column|}}
-      {{ render "column" column }}
+        {{
+          columns/hb-column 
+            model=column
+            columnComponents=registeredColumns
+            issues=model.combinedIssues
+            repos=model.combinedRepos
+
+            registerColumn=(action "registerColumn")
+            unregisterColumn=(action "unregisterColumn")
+            createNewIssue=(action "createNewIssue")
+            createFullscreenIssue=(action "createFullscreenIssue")
+            openFullscreenIssue=(action "openFullscreenIssue")
+        }}
       {{/each}}
     </div>
   </div>

@@ -2,6 +2,7 @@ import Ember from 'ember';
 
 var IndexController = Ember.Controller.extend({
   needs: ["application"],
+  registeredColumns: Ember.A(),
 
   qps: Ember.inject.service("query-params"),
   queryParams: [
@@ -29,7 +30,24 @@ var IndexController = Ember.Controller.extend({
   isCollaborator: function(){
     return App.get("repo.is_collaborator");
   }.property('App.repo.is_collaborator'),
-  forceRedraw: 0
+
+  actions: {
+    registerColumn: function(column_component){
+      this.get("registeredColumns").pushObject(column_component);
+    },
+    unregisterColumn: function(column_component){
+      this.get("registeredColumns").removeObject(column_component);
+    },
+    createNewIssue: function(issue){
+      this.get("target").send("createNewIssue", issue);
+    },
+    createFullscreenIssue: function(issue, order){
+      this.get("target").send("createFullscreenIssue", issue, order);
+    },
+    openFullscreenIssue(issue){
+      this.get("target").send("openFullscreenIssue", issue);
+    }
+  }
 });
 
 export default IndexController;

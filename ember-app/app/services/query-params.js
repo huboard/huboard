@@ -77,7 +77,7 @@ var queryParamsService = Ember.Service.extend({
         label: this.get("labelParams")
       });
     }
-  }.observes("allFilterParams"),
+  }.observes("allFilterParams.@each"),
   applyFilterBuffer: function(){
     var buffer = this.get("filterParamsBuffer");
     var params = this.get("allFilterParams");

@@ -1,0 +1,48 @@
+<div class="link-states">
+  <i class="ui-icon ui-icon-link"></i>
+  <i class="ui-icon ui-icon-unlink"></i>
+</div>
+<div class="link">
+
+  <h4>{{link.label.user}}/{{link.label.repo}}</h4>
+  {{#if isLinked }}
+    <div class="flex-crumbs">
+      {{hb-board-columns columns=link.columns }}
+    </div>
+  {{else}}
+    {{#if link.columns.length }}
+      <div class="flex-crumbs control-group error">
+          {{hb-board-columns columns=link.columns }}
+        <p class="help-block">
+        This HuBoard's columns are not compatible with your parent board. Click the Copy parent board button to copy the parent HuBoard's columns.
+        </p>
+
+      </div>
+      <hr>
+    {{else}}
+      <div class="control-group error">
+        <p class="help-block">
+        This repository doesn't have any columns. Click the Copy parent board button to copy the parent HuBoard's columns.
+        </p>
+      </div>
+      <hr>
+    {{/if}}
+  <div class='flex-split'>
+    <div class='flex-left'>
+      <div class="flex-crumbs">
+        {{hb-board-columns columns=columns }}
+      </div>
+    </div>
+    <div class='flex-right'>
+      <button class="hb-button hb-button-grey" disabled={{isDisabled}} {{action 'copy' link}}>
+        Copy parent HuBoard
+      </button>
+    </div>
+  </div>
+  {{/if}}
+</div>
+<div class="link-actions">
+  <button {{action 'remove' link }}>
+  <i class="ui-icon ui-icon-x-thin"></i>
+  </button>
+</div>

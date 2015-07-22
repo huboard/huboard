@@ -5,10 +5,10 @@
   <div class="author">
     {{#if this.canEdit }}
       {{#if this.isEditing}}
-        <i title="Cancel editing" {{action "cancel" target=this }} class="hb-action pull-right ui-icon ui-icon-x-thin"></i>
+        <i title="Cancel editing" {{action "cancel"  }} class="hb-action pull-right ui-icon ui-icon-x-thin"></i>
       {{else}}
         {{#unless model.disabled}}
-          <i title="Edit comment" {{action "edit" target=this }} class="hb-action pull-right ui-icon ui-icon-pencil"></i>
+          <i title="Edit comment" {{action "edit"  }} class="hb-action pull-right ui-icon ui-icon-pencil"></i>
         {{/unless}}
       {{/if}}
     {{/if}}

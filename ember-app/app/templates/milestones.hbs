@@ -18,7 +18,7 @@
         <i class="ui-icon ui-icon-flag ui-icon-16"></i>
         <span class= "ui-text"> Create milestone</span>
       </a>
-    {{#link-to 'settings' class='hb-icon-link' }}
+    {{#link-to 'settings.index' class='hb-icon-link' }}
         <i class="ui-icon ui-icon-18 ui-icon-gear"></i>
     {{/link-to}}
     </div>
@@ -35,9 +35,23 @@
   
   <div id="content" class="content">
     <div class="board">
-      {{ render 'milestone-column' left_column}}
-      {{#each column in milestone_columns}}
-        {{ render 'milestone-column' column}}
+      {{#each milestone_columns as |column|}}
+        {{
+          columns/hb-milestone 
+            model=column
+            columnComponents=registeredColumns
+            issues=model.combinedIssues
+            repos=model.combinedRepos
+            taskColumns=model.columns
+
+            registerColumn=(action "registerColumn")
+            unregisterColumn=(action "unregisterColumn")
+            createNewIssue=(action "createNewIssue")
+            createFullscreenIssue=(action "createFullscreenIssue")
+            openFullscreenIssue=(action "openFullscreenIssue")
+            createMilestoneOrAbort=(action "createMilestoneOrAbort")
+            editMilestone=(action "editMilestone")
+          }}
       {{/each}}
     </div>
   </div>
