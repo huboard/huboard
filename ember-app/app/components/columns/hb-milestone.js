@@ -67,6 +67,7 @@ var HbMilestoneComponent = HbColumn.extend(
     });
   },
 
+  isCreateVisible: true,
   topOrderNumber: function(){
     var issues = this.get("issues")
       .filter(function(i) { return !i.get("isArchived");})
@@ -92,7 +93,15 @@ var HbMilestoneComponent = HbColumn.extend(
   isFirstColumn: function(){
     return this.get("columns.firstObject.title") === this.get("model.title");
   }.property("columns.firstObject"),
-  isCreateVisible: true
+  isCollapsed: Ember.computed({
+    get: function(){
+      return this.get("settings.milestoneColumn" + this.get("model.milestone.number") + "Collapsed");
+    },
+    set: function(key, value){
+      this.set("settings.milestoneColumn" + this.get("model.milestone.number") + "Collapsed", value);
+      return value;
+    }
+  }).property(),
 });
 
 export default HbMilestoneComponent;
