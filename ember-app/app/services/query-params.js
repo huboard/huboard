@@ -68,7 +68,7 @@ var queryParamsService = Ember.Service.extend({
   //Buffer the Filter Params for transitions (controllers initialization wipes them)
   filterParamsBuffer: {},
   updateFilterParamsBuffer: function(){
-    if(this.get("allFilterParams").length || this.get("filterParamsBuffer").active){
+    if(this.get("allFilterParams").length){
       this.set("filterParamsBuffer", {
         active: true,
         repo: this.get("repoParams"),
