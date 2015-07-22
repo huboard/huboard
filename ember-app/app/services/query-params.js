@@ -26,7 +26,7 @@ var queryParamsService = Ember.Service.extend({
       return self.get(`${param}Params`);
     });
     return _.flatten(filters);
-  }.property("{repo,assignee,milestone,label}Params.[]"),
+  }.property("{repo,assignee,milestone,label}Params"),
 
   //Push board, label and milestone filters to the URL
   updateFilterParams: function(){
@@ -68,14 +68,16 @@ var queryParamsService = Ember.Service.extend({
   //Buffer the Filter Params for transitions (controllers initialization wipes them)
   filterParamsBuffer: {},
   updateFilterParamsBuffer: function(){
-    this.set("filterParamsBuffer", {
-      active: true,
-      repo: this.get("repoParams"),
-      assignee: this.get("assigneeParams"),
-      milestone: this.get("milestoneParams"),
-      label: this.get("labelParams")
-    });
-  }.observes("allFilterParams.length"),
+    if(this.get("allFilterParams").length){
+      this.set("filterParamsBuffer", {
+        active: true,
+        repo: this.get("repoParams"),
+        assignee: this.get("assigneeParams"),
+        milestone: this.get("milestoneParams"),
+        label: this.get("labelParams")
+      });
+    }
+  }.observes("allFilterParams.@each"),
   applyFilterBuffer: function(){
     var buffer = this.get("filterParamsBuffer");
     var params = this.get("allFilterParams");
