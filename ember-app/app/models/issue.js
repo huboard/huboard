@@ -195,7 +195,7 @@ var Issue = Ember.Object.extend(Serializable,{
     }, function(){}, "json");
   },
   reorder: function (index, column) {
-    var changedColumns = this.get("current_state") !== column;
+    var changedColumns = this.get("current_state.index") !== column.index;
     if(changedColumns){
       this.set("_data.custom_state", "");
     }

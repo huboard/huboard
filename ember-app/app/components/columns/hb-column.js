@@ -85,6 +85,15 @@ var HbColumnComponent = Ember.Component.extend(SortableMixin, {
       self.toggleProperty("isCollapsed");
     });
   }.on("didInsertElement"),
+
+  disableModalOnHrefs: function () {
+    this._super();
+    this.$("a, .clickable").on("click.hbcard", function (ev){ ev.stopPropagation(); } );
+  }.on("didInsertElement"),
+  tearDownEvents: function () {
+    this.$("a, .clickable").off("click.hbcard");
+    return this._super();
+  }.on("willDestroyElement") 
 });
 
 export default HbColumnComponent;
