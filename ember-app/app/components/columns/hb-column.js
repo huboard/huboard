@@ -24,7 +24,6 @@ var HbColumnComponent = Ember.Component.extend(SortableMixin, {
   sortStrategy: function(a,b){
     if(a._data.order === b._data.order){
       if(a.repo.fullname === b.repo.fullname){
-        console.log("WARN: Duplicate Issues");
         return a.number - b.number;
       }
       return a.repo.fullname - b.repo.fullname;

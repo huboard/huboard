@@ -12,9 +12,7 @@ var CardMoveMixin = Ember.Mixin.create({
       var issue = this.data.card.get("issue");
       if(!issue_above && !issue_below){return issue.get("order"); }
       if(!issue_above){ return this.moveToTop(issue, issue_below); }
-      console.log(`Issue Above Order: ${issue_above.title}`);
       if(!issue_below){ return this.moveToBottom(issue, issue_above); }
-      console.log(`Issue Below Order: ${issue_below.title}`);
       return this.move(issue, issue_above, issue_below);
     },
     move: function(issue, issue_above, issue_below){
