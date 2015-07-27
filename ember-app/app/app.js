@@ -54,6 +54,7 @@ Ember.onLoad("Ember.Application", function ($app) {
             this.get("sockets")[channel].callbacks.remove(callback);
           },
           subscribeTo: function(channel) {
+            channel = channel.toLowerCase();
             var client = this.get('client'), 
             callbacks = Ember.$.Callbacks();
             client.disable("eventsource");
