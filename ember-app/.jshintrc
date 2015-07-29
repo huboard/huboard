@@ -9,7 +9,8 @@
     "marked",
     "App",
     "Spinner",
-    "Fuse"
+    "Fuse",
+    "ajax"
   ],
   "browser": true,
   "boss": true,
