@@ -55,7 +55,8 @@ class IssueEventJob < ActiveJob::Base
     }
     client = ::Faye::Redis::Publisher.new({})
     Rails.logger.debug ["/" + message[:meta][:repo_full_name], message]
-    client.publish "/" + message[:meta][:repo_full_name], message
+    channel = message[:meta][:repo_full_name].downcase
+    client.publish "/" + channel, message
     return message
   end
 end
