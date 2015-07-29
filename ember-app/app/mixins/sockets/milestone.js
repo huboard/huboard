@@ -16,7 +16,7 @@ var MilestoneSocketMixin = Ember.Mixin.create({
       channelPath: 'repositoryName',
       disabled: 'socketDisabled'
     },
-    milestone_reordered: function(message){
+    milestone_reordered: function(){
       //TODO: refactor the model layer so that milestones are always models
       //
       //this.get('model.milestone').setProperties({

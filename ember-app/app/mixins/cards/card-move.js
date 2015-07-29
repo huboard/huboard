@@ -43,7 +43,7 @@ var CardMoveMixin = Ember.Mixin.create({
       return null;
     },
     issueBelow: function(index, issues, mod){
-      if(!(index + mod) && issues.length){
+      if(!(index + mod) && issues.length){  // jshint ignore:line
         return issues.objectAt(0);
       } else if((index + mod) !== (issues.length - 1)){
         return issues.objectAt(index + mod);
