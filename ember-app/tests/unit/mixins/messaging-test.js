@@ -10,11 +10,11 @@ function sut(){
     socket: {
       subscribe: sinon.spy()
     },
-    events: {
+    _events: {
       "{sample.channel} topic.{model.id}.event1": "event1Handler",
       "{sample.channel} topic.{model.id}.event2": "event2Handler"
     },
-    eventHandlers: {
+    _eventHandlers: {
       handler: sinon.spy()
     }
   });
@@ -22,7 +22,13 @@ function sut(){
 
 module("MessagingMixin", {
   beforeEach: function(){
-    mockObject = Ember.Object.extend(MessagingMixin);
+    mockObject = Ember.Object.extend(MessagingMixin, {
+      eventParsing: {
+        parse: sinon.stub().returns({
+          channel: sinon.spy()
+        })
+      }
+    });
   }
 });
 
@@ -38,15 +44,15 @@ test("On Init", (assert)=> {
 
 test("subscribeToMessages", (assert)=> {
   //Subscribe Events to Messages
-  mockObject.reopen({
-    setupMessaging: sinon.spy(),
-    eventParsing: {
-      parse: sinon.stub().returns({
-        channel: sinon.spy()
-      })
-    }
-  });
   var instance = sut();
+  instance.eventParsing = {
+    parse: sinon.stub().returns({
+      channel: sinon.spy()
+    })
+  };
+  instance.socket = {
+    subscribe: sinon.spy()
+  };
   instance.subscribeToMessages();
 
   var event_data = instance.get("eventParsing.parse");
@@ -57,7 +63,6 @@ test("subscribeToMessages", (assert)=> {
 test("eventHandler", (assert)=> {
   //Message Action Matches the Event Data Action
   mockObject.reopen({
-    setupMessaging: sinon.spy(),
     _handleEventInScope: sinon.spy() 
   });
 
@@ -71,7 +76,6 @@ test("eventHandler", (assert)=> {
   
   //Message Action Does not Match the Data Action
   mockObject.reopen({
-    setupMessaging: sinon.spy(),
     _handleEventInScope: sinon.spy() 
   });
 
@@ -86,10 +90,6 @@ test("eventHandler", (assert)=> {
 
 test("_handleEventInScope", (assert)=> {
   //With Matching Types and Identifiers
-  mockObject.reopen({
-    setupMessaging: sinon.spy(),
-  });
-
   var event_data = {
     type: "foostype",
     identifier: 1

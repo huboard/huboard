@@ -11,11 +11,11 @@ var MessagingMixin = Ember.Mixin.create({
   ////
 
   //Subscribing
-  eventParsing: Ember.inject.service(),
+  eventParsing: Ember.inject.service("messaging/event-parsing"),
   subscribeToMessages: function(){
     var _self = this;
     var socket = this.get("socket");
-    _.each(this.get("events"), function(event, handler){
+    _.each(this.get("_events"), function(handler, event){
       var event_data = _self.get("eventParsing").
         parse(event, handler, _self);
       socket.subscribe(event_data.channel, function(message){
@@ -29,7 +29,7 @@ var MessagingMixin = Ember.Mixin.create({
     var _self = this;
     if(event_data.action === message.meta.action){
       this._handleEventInScope(event_data, message, function(){
-        _self._eventHandlers[event_data.handler](message.payload);
+        _self._eventHandlers[event_data.handler].call(_self, message.payload);
       });
     }
   },
@@ -46,12 +46,13 @@ var MessagingMixin = Ember.Mixin.create({
 
 
   //Lifecycle
-  setupMessaging: function(){
-    if(!this.get("socket") || !this.get("events")){
-      throw "Missing the Socket Mixin or the Events Mixin!";
+  init: function(){
+    if(!this.get("socket")){
+      throw "Missing the Socket!";
     }
+    this._super();
     this.subscribeToMessages();
-  }.on("init")
+  }
 });
 
 export default MessagingMixin;

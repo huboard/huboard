@@ -12,7 +12,7 @@ var EventParsingService = Ember.Service.extend({
   },
   _parseChannel: function(event, context){
     var binding_path = event.match(/\{(.*?)\}/)[1];
-    return context.get(binding_path);
+    return context.get(binding_path).toLowerCase();
   },
   _parseAction: function(event){
     return event.match(/\.(\w+)$/)[1];

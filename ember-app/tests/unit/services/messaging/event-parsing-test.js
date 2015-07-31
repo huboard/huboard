@@ -28,7 +28,7 @@ moduleFor("service:messaging/event-parsing", {
       }),
       channel: Ember.Object.create({
         one: "huboard/rocks",
-        two: "huboard/rolls",
+        two: "HuBoard/Rolls",
       })
     });
 
@@ -48,7 +48,7 @@ test("parse", (assert)=> {
   //Parses event 2
   result = sut.parse(event2, events["event2"], context);
 
-  assert.equal(result.channel, context.get("channel.two"));
+  assert.equal(result.channel, "huboard/rolls");
   assert.equal(result.identifier, context.get("model.name"));
   assert.equal(result.action, "punch");
   assert.equal(result.handler, "punchHandler");
@@ -56,7 +56,7 @@ test("parse", (assert)=> {
   //Parses event 2
   result = sut.parse(event3, events["event3"], context);
 
-  assert.equal(result.channel, context.get("channel.two"));
+  assert.equal(result.channel, "huboard/rolls");
   assert.equal(result.identifier, "*");
   assert.equal(result.action, "jab");
   assert.equal(result.handler, "jabHandler");
@@ -67,6 +67,7 @@ test("_parseChannel", (assert)=> {
   var result = sut._parseChannel(event1, context);
   assert.equal(result, "huboard/rocks");
 
+  //Ensures Channels are lowercased
   result = sut._parseChannel(event2, context);
   assert.equal(result, "huboard/rolls");
 });
