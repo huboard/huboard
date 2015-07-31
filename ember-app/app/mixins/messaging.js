@@ -19,7 +19,9 @@ var MessagingMixin = Ember.Mixin.create({
       var event_data = _self.get("eventParsing").
         parse(event, handler, _self);
       socket.subscribe(event_data.channel, function(message){
-        _self._eventHandler(event_data, message);
+        if(socket.correlationId !== message.meta.correlationId){
+          _self._eventHandler(event_data, message);
+        }
       });
     });
   },
