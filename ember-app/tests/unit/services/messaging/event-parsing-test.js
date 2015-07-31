@@ -10,9 +10,9 @@ import { module } from "qunit";
 var sut;
 var context;
 
-var event1 =  "{channel.one} type.{model.correlationId}.kick";
-var event2 =  "{channel.two} type.{model.name}.punch";
-var event3 = "{channel.two} type.{*}.jab";
+var event1 =  "{channel.one} karate.{model.correlationId}.kick";
+var event2 =  "{channel.two} jitz.{model.name}.punch";
+var event3 = "{channel.two} kungfu.{*}.jab";
 var events = {
   event1: "kickHandler",
   event2: "punchHandler",
@@ -86,4 +86,16 @@ test("_parseIdentifier", (assert)=> {
   //Identifier is a wildcard
   result = sut._parseIdentifier(event3, context);
   assert.equal(result, "*", "Matches the Wildcard");
+});
+
+test("_parseType", (assert)=> {
+  //Parses the Action
+  var result = sut._parseType(event1);
+  assert.equal(result, "karate");
+
+  result = sut._parseType(event2);
+  assert.equal(result, "jitz");
+
+  result = sut._parseType(event3);
+  assert.equal(result, "kungfu");
 });

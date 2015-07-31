@@ -6,6 +6,7 @@ var EventParsingService = Ember.Service.extend({
     return {
       channel: _self._parseChannel(event, context),
       identifier: _self._parseIdentifier(event, context),
+      type: _self._parseType(event),
       action: _self._parseAction(event),
       handler: handler
     };
@@ -17,10 +18,13 @@ var EventParsingService = Ember.Service.extend({
   _parseAction: function(event){
     return event.match(/\.(\w+)$/)[1];
   },
-  _parseIdentifier(event, context){
+  _parseIdentifier: function(event, context){
     var binding_path = event.match(/\.\{(.*?)\}/)[1];
     return binding_path === "*" ? binding_path :
       context.get(binding_path);
+  },
+  _parseType: function(event){
+    return event.match(/\s(\w+)/)[1];
   }
 });
 
