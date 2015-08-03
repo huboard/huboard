@@ -5,13 +5,14 @@ var MessagingMixin = Ember.Mixin.create({
   ////
   // event_data: {
   //   channel: "thechannel",
+  //   indentifier: 1,
+  //   type: "sometype",
   //   action: "theaction",
   //   handler: "theHandler"
   // }
   ////
 
   //Subscribing
-  _subscriptions: {},
   eventParsing: Ember.inject.service("messaging/event-parsing"),
   subscribeToMessages: function(){
     var _self = this;
@@ -53,6 +54,7 @@ var MessagingMixin = Ember.Mixin.create({
       throw "Missing the Socket!";
     }
     this._super();
+    this._subscriptions = {};
     this.subscribeToMessages();
   },
   willDestroy: function(){

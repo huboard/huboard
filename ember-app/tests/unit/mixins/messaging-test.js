@@ -40,6 +40,7 @@ test("On Init", (assert)=> {
   var instance = sut();
 
   assert.ok(instance.subscribeToMessages.calledOnce, "Subscribed");
+  assert.ok(instance._subscriptions);
 });
 
 test("subscribeToMessages", (assert)=> {
