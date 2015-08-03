@@ -5,6 +5,7 @@ var IssueEventMixin = Ember.Mixin.create({
     "{repositoryName} issues.{issueNumber}.issue_status_changed": "statusChanged",
     "{repositoryName} issues.{issueNumber}.issue_archived": "archived",
     "{repositoryName} issues.{issueNumber}.issue_closed": "closed",
+    "{repositoryName} issues.{issueNumber}.issue_reopened": "opened",
     "{repositoryName} issues.{issueNumber}.assigned": "assigned",
     "{repositoryName} issues.{issueNumber}.moved": "moved",
     "{repositoryName} issues.{issueNumber}.reordered": "reordered",
@@ -18,6 +19,9 @@ var IssueEventMixin = Ember.Mixin.create({
       this.get('issue').set('isArchived', true);
     },
     closed: function(message){
+     this.get("issue").set("state", message.issue.state);
+    },
+    opened: function(message){
      this.get("issue").set("state", message.issue.state);
     },
     assigned: function(message){
@@ -36,6 +40,12 @@ var IssueEventMixin = Ember.Mixin.create({
     milestoneChanged: function(message) {
        this.get("issue").set("milestone", message.issue.milestone);
     },
+  },
+  _meta: {
+    channel: Ember.computed.alias("repositoryName"),
+    identifier: Ember.computed.alias("issueNumber"),
+    type: "issues",
+    payload: Ember.computed.alias("model")
   }
 });
 

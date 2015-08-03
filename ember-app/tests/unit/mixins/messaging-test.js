@@ -158,3 +158,19 @@ test("_handleEventInScope", (assert)=> {
 
   assert.ok(!callback.called, "Callback was not called");
 });
+
+test("publish", (assert)=> {
+  mockObject.reopen({
+    _meta: {}
+  });
+
+  var instance = sut();
+  instance.socket = {
+    publish: sinon.spy()
+  };
+  var socket = instance.get("socket");
+  instance.publish("do_something");
+
+  assert.ok(socket.publish.calledWith(instance._meta));
+  assert.equal(instance._meta.action, "do_something");
+});

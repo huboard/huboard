@@ -45,8 +45,11 @@ var MessagingMixin = Ember.Mixin.create({
     }
   },
 
-  //Publishing...
-
+  //Publishing
+  publish: function(event){
+    this._meta.action = event;
+    this.get("socket").publish(this._meta);
+  },
 
   //Lifecycle
   init: function(){

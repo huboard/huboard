@@ -46,6 +46,10 @@ Ember.onLoad("Ember.Application", function ($app) {
           correlationId : correlationId,
           sockets: {},
           client: new Faye.Client(application.get('socketBackend')),
+          publish: function(message){
+            var channel = `/${message.get("channel")}`;
+            this.get('client').publish(channel, message);
+          },
           subscribe: function (channel, callback) {
             channel = channel.toLowerCase();
             this.get("sockets")[channel].callbacks.add(callback);
