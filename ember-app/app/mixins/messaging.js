@@ -17,7 +17,7 @@ var MessagingMixin = Ember.Mixin.create({
   subscribeToMessages: function(){
     var _self = this;
     var socket = this.get("socket");
-    _.each(this.get("_events"), function(handler, event){
+    _.each(this.get("hbevents"), function(handler, event){
       var event_data = _self.get("eventParsing").
         parse(event, handler, _self);
       var sub = socket.subscribe(event_data.channel, function(message){
@@ -47,8 +47,13 @@ var MessagingMixin = Ember.Mixin.create({
 
   //Publishing
   publish: function(event){
-    this._meta.action = event;
-    this.get("socket").publish(this._meta);
+    var meta = this._buildMeta();
+    meta.action = event;
+    meta.correlationId = null;
+    this.get("socket").publish({
+      meta: meta,
+      payload: meta.payload
+    });
   },
 
   //Lifecycle
@@ -58,7 +63,9 @@ var MessagingMixin = Ember.Mixin.create({
     }
     this._super();
     this._subscriptions = {};
-    this.subscribeToMessages();
+    if(!this.get("subscribeDisabled")){
+      this.subscribeToMessages();
+    }
   },
   willDestroy: function(){
     var _self = this;

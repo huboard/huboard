@@ -129,7 +129,7 @@ var Issue = Ember.Object.extend(Serializable,{
     repo = this.get("repo.name"),
     full_name = user + "/" + repo;
 
-    Ember.$.post("/api/" + full_name + "/close", {
+    return Ember.$.post("/api/" + full_name + "/close", {
       number : this.get("number"),
       correlationId: this.get("correlationId")
     }, function(){}, "json").then(function() {

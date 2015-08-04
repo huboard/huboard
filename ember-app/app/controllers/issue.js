@@ -1,7 +1,15 @@
 import Ember from 'ember';
+import IssueEvent from "app/mixins/events/issue";
+import Messaging from "app/mixins/messaging";
 
-var IssueController = Ember.Controller.extend({
+var IssueController = Ember.Controller.extend(
+  IssueEvent, Messaging, {
   needs: ["application"],
+
+  //Subscribes to Messages in the Route after the model is set
+  subscribeDisabled: true,
+  repositoryName: Ember.computed.alias("model.repo.full_name"),
+
   isCollaborator: function(){
     return this.get("model.repo.is_collaborator");
   }.property("model.repo.is_collaborator"),
@@ -79,7 +87,10 @@ var IssueController = Ember.Controller.extend({
       if (this.get("commentBody")){
         this.send("submitComment");
       }
-      this.get("model").close();
+      var _self = this;
+      this.get("model").close().then(function(){
+        _self.publish("issue_closed");
+      });
       this.send("moveToColumn", this.get("columns.lastObject"));
     },
     reopenCard: function(){

@@ -3,6 +3,7 @@ import Ember from 'ember';
 var IssueRoute = Ember.Route.extend({
   setupController: function(controller, model) {
     controller.set("model", model);
+    controller.subscribeToMessages();
 
     var appModel = this.modelFor("application"),
       board = appModel.fetchBoard(appModel);

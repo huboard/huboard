@@ -47,8 +47,8 @@ Ember.onLoad("Ember.Application", function ($app) {
           sockets: {},
           client: new Faye.Client(application.get('socketBackend')),
           publish: function(message){
-            var channel = `/${message.get("channel")}`;
-            this.get('client').publish(channel, message);
+            var channel = message.meta.channel.toLowerCase();
+            this.get('sockets')[channel].callbacks.fire(message);
           },
           subscribe: function (channel, callback) {
             channel = channel.toLowerCase();
@@ -71,7 +71,6 @@ Ember.onLoad("Ember.Application", function ($app) {
               source: source,
               callbacks: callbacks
             };
-
           },
           init: function () {
             this.subscribeTo(this.get("repo.full_name"));

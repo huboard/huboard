@@ -10,7 +10,7 @@ function sut(){
     socket: {
       subscribe: sinon.spy()
     },
-    _events: {
+    hbevents: {
       "{sample.channel} topic.{model.id}.event1": "event1Handler",
       "{sample.channel} topic.{model.id}.event2": "event2Handler"
     },
@@ -41,6 +41,15 @@ test("On Init", (assert)=> {
 
   assert.ok(instance.subscribeToMessages.calledOnce, "Subscribed");
   assert.ok(instance._subscriptions);
+
+  //Opt-Out of Subscribe
+  mockObject.reopen({
+    subscribeToMessages: sinon.spy(),
+    subscribeDisabled: true
+  });
+  
+  instance = sut();
+  assert.ok(!instance.subscribeToMessages.called, "Not Subscribed");
 });
 
 test("subscribeToMessages", (assert)=> {
@@ -160,8 +169,13 @@ test("_handleEventInScope", (assert)=> {
 });
 
 test("publish", (assert)=> {
+  var meta = {
+    payload: sinon.spy()
+  };
   mockObject.reopen({
-    _meta: {}
+    _buildMeta: function(){
+      return meta;
+    }
   });
 
   var instance = sut();
@@ -171,6 +185,9 @@ test("publish", (assert)=> {
   var socket = instance.get("socket");
   instance.publish("do_something");
 
-  assert.ok(socket.publish.calledWith(instance._meta));
-  assert.equal(instance._meta.action, "do_something");
+  assert.ok(socket.publish.calledWith({
+    meta: meta,
+    payload: meta.payload
+  }));
+  assert.equal(meta.action, "do_something");
 });

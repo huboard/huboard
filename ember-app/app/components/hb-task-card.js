@@ -1,11 +1,11 @@
 import Ember from "ember";
 import IssueFiltersMixin from "app/mixins/issue-filters";
 import MemberDragAndDropMixin from "app/mixins/member-drag-and-drop";
-import IssueEvent from "app/mixins/events/issue";
+import CardEvent from "app/mixins/events/card";
 import Messaging from "app/mixins/messaging";
 
 var HbCardComponent = Ember.Component.extend(
-  Messaging, IssueFiltersMixin, MemberDragAndDropMixin, IssueEvent, {
+  Messaging, IssueFiltersMixin, MemberDragAndDropMixin, CardEvent, {
     tagName: "li",
     classNames: ["card"],
     classNameBindings: ["isFiltered","isDraggable:is-draggable", "isClosable:closable", "colorLabel", "issue.color:border", "stateClass"],
