@@ -1,4 +1,5 @@
 import Ember from "ember";
+import eventParsing from "app/utilities/messaging/event-parsing";
 
 var MessagingMixin = Ember.Mixin.create({
 
@@ -13,13 +14,11 @@ var MessagingMixin = Ember.Mixin.create({
   ////
 
   //Subscribing
-  eventParsing: Ember.inject.service("messaging/event-parsing"),
   subscribeToMessages: function(){
     var _self = this;
     var socket = this.get("socket");
     _.each(this.get("hbevents"), function(handler, event){
-      var event_data = _self.get("eventParsing").
-        parse(event, handler, _self);
+      var event_data = eventParsing.parse(event, handler, _self);
       var sub = socket.subscribe(event_data.channel, function(message){
         if(socket.correlationId !== message.meta.correlationId){
           _self._eventHandler(event_data, message);

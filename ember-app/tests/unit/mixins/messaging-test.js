@@ -1,5 +1,6 @@
 import Ember from "ember";
 import MessagingMixin from "app/mixins/messaging";
+import eventParsing from "app/utilities/messaging/event-parsing";
 
 import { test } from "ember-qunit";
 import { module } from "qunit";
@@ -22,13 +23,13 @@ function sut(){
 
 module("MessagingMixin", {
   beforeEach: function(){
-    mockObject = Ember.Object.extend(MessagingMixin, {
-      eventParsing: {
-        parse: sinon.stub().returns({
-          channel: sinon.spy()
-        })
-      }
+    mockObject = Ember.Object.extend(MessagingMixin);
+    sinon.stub(eventParsing, "parse", function(){
+      return {channel: sinon.spy()};
     });
+  },
+  afterEach: function(){
+    eventParsing.parse.restore();
   }
 });
 
@@ -55,18 +56,13 @@ test("On Init", (assert)=> {
 test("subscribeToMessages", (assert)=> {
   //Subscribe Events to Messages
   var instance = sut();
-  instance.eventParsing = {
-    parse: sinon.stub().returns({
-      channel: sinon.spy()
-    })
-  };
   instance.socket = {
     subscribe: sinon.spy()
   };
+  eventParsing.parse.reset();
   instance.subscribeToMessages();
 
-  var event_data = instance.get("eventParsing.parse");
-  assert.ok(event_data.calledTwice, "Both Events Parsed");
+  assert.ok(eventParsing.parse.calledTwice, "Both Events Parsed");
   assert.ok(instance.get("socket.subscribe").calledTwice);
 });
 
