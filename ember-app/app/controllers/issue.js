@@ -5,8 +5,7 @@ import Messaging from "app/mixins/messaging";
 var IssueController = Ember.Controller.extend(
   IssueEvent, Messaging, {
   needs: ["application"],
-
-  //Subscribes to Messages in the Route after the model is set
+  //Fix the need to delay event subscriptions
   subscribeDisabled: true,
 
   isCollaborator: function(){
@@ -85,21 +84,23 @@ var IssueController = Ember.Controller.extend(
     close: function(){
       var _self = this;
       this.get("model").close().then(function(response){
-        _self.publish(_self.get("channel"), "issue_closed", {
-          identifier: response.id,
-          type: "local",
-          payload: response
-        });
+        var channel = _self.get(_self.hbevents.channel);
+        var topic = "issues.{model.number}.issue_closed";
+        _self.publish(channel, topic, {issue: response});
       });
 
       this.send("moveToColumn", this.get("columns.lastObject"));
       if (this.get("commentBody")){ this.send("submitComment"); }
     },
     reopenCard: function(){
-      if (this.get("commentBody")){
-        this.send("submitComment");
-      }
-      this.get("model").reopenCard();
+      var _self = this;
+      this.get("model").reopenCard().then(function(response){
+        var channel = _self.get(_self.hbevents.channel);
+        var topic = "issues.{model.number}.issue_reopened";
+        _self.publish(channel, topic, {issue: response});
+      });
+
+      if (this.get("commentBody")){ this.send("submitComment"); }
     }
   },
   commentBody: null,
