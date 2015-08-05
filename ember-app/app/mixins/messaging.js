@@ -18,6 +18,7 @@ var MessagingMixin = Ember.Mixin.create({
     var _self = this;
     var socket = this.get("socket");
     _.each(this.get("hbevents"), function(handler, event){
+      if(event === "channel"){ return; }
       var event_data = eventParsing.parse(event, handler, _self);
       var sub = socket.subscribe(event_data.channel, function(message){
         if(socket.correlationId !== message.meta.correlationId){
@@ -38,22 +39,27 @@ var MessagingMixin = Ember.Mixin.create({
   _handleEventInScope: function(event_data, message, callback){
     if(!message.meta.type || event_data.type === message.meta.type){
       if(event_data.identifier === "*"){ callback(); }
-      if(event_data.identifier === message.meta.identifier){
+      if(event_data.identifier === String(message.meta.identifier)){
         callback();
       }
     }
   },
 
+  unsubscribeFromMessages: function(){
+    var _self = this;
+    _.each(this._subscriptions, function(sub, event){
+      if(event === "channel"){ return; }
+      _self.get("socket").unsubscribe(sub[0], sub[1]);
+      delete _self._subscriptions[event];
+    });
+  },
+
   //Publishing
-  publish: function(channel, event, message){
+  publish: function(channel, topic, payload){
+    var meta = eventParsing.parse(`${channel} ${topic}`, null, this);
     this.get("socket").publish({
-      meta: {
-        channel: channel,
-        action: event,
-        identifier: message.identifier,
-        type: message.type
-      },
-      payload: message.payload
+      meta: meta,
+      payload: payload
     });
   },
 
@@ -69,11 +75,7 @@ var MessagingMixin = Ember.Mixin.create({
     }
   },
   willDestroy: function(){
-    var _self = this;
-    _.each(this._subscriptions, function(sub, event){
-      _self.get("socket").unsubscribe(sub[0], sub[1]);
-      delete _self._subscriptions[event];
-    });
+    this.unsubscribeFromMessages();
     this._super();
   }
 });

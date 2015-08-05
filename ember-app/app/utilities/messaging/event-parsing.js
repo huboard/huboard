@@ -18,7 +18,7 @@ var EventParsing = Ember.Object.create({
   },
   _parseMeta: function(event, context){
     var keys = event.split(/[ .]/).reverse();
-    var channel = keys[3] || context.get("channel");
+    var channel = keys[3] || context.get(context.hbevents.channel);
     return {
       channel: channel.toLowerCase(),
       type: keys[2],

@@ -165,26 +165,47 @@ test("_handleEventInScope", (assert)=> {
 });
 
 test("publish", (assert)=> {
-  var message = {
+  var topic = "hbevent.{model.indentifier}.test";
+  var payload = sinon.spy();
+  var meta = {
+    channel: "huboard/channel",
+    action: "hbevent",
     identifier: 10,
-    type: "test",
-    payload: sinon.spy()
+    type: "test"
   };
+
+  eventParsing.parse.restore();
+  sinon.stub(eventParsing, "parse", function(){
+    return meta;
+  });
 
   var instance = sut();
   instance.socket = {
     publish: sinon.spy()
   };
-  instance.publish("huboard/channel", "hbevent", message);
-  var socket = instance.get("socket");
 
-  assert.ok(socket.publish.calledWith({
-    meta: {
-      channel: "huboard/channel",
-      action: "hbevent",
-      identifier: 10,
-      type: "test"
-    },
-    payload: message.payload
+  instance.publish("huboard/channel", topic, payload);
+
+  assert.ok(eventParsing.parse.called);
+  assert.ok(instance.get("socket").publish.calledWith({
+    meta: meta,
+    payload: payload
   }));
+});
+
+test("unsubscribeFromMessages", (assert)=> {
+  var subscriptions = {
+    sub1: ["channel", "handler"],
+    sub2: ["channel", "handler"]
+  };
+
+  var instance = sut();
+  instance._subscriptions = subscriptions;
+  instance.socket = {
+    unsubscribe: sinon.spy()
+  };
+  instance.unsubscribeFromMessages();
+
+  assert.ok(instance.socket.unsubscribe.calledTwice);
+  assert.equal(Object.keys(subscriptions), 0);
 });

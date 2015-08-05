@@ -1,19 +1,17 @@
 import Ember from 'ember';
 
 var IssueEventMixin = Ember.Mixin.create({
-  channel: Ember.computed.alias("model.repo.full_name"),
   hbevents: {
-    "local.{model.number}.issue_closed": "closed",
-    "local.{model.number}.issue_reopened": "opened"
+    channel: "model.repo.full_name",
+    "issues.{model.number}.issue_closed": "closed",
+    "issues.{model.number}.issue_reopened": "opened"
   },
   _eventHandlers: {
-    closed: function(){
-     console.log("MESSAGE RECEIVED YO");
-     //this.get("model").set("state", message.issue.state);
+    closed: function(message){
+      //Not Yet Implemented
     },
-    opened: function(){
-     console.log("MESSAGE RECEIVED YO");
-     //this.get("model").set("state", message.issue.state);
+    opened: function(message){
+      //Not Yet Implemented
     },
   }
 });
