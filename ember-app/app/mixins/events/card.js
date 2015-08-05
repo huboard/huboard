@@ -1,15 +1,16 @@
 import Ember from 'ember';
 
 var CardEventMixin = Ember.Mixin.create({
+  channel: Ember.computed.alias("repositoryName"),
   hbevents: {
-    "{repositoryName} issues.{issue.number}.issue_status_changed": "statusChanged",
-    "{repositoryName} issues.{issue.number}.issue_archived": "archived",
-    "{repositoryName} issues.{issue.number}.issue_closed": "closed",
-    "{repositoryName} issues.{issue.number}.issue_reopened": "opened",
-    "{repositoryName} issues.{issue.number}.assigned": "assigned",
-    "{repositoryName} issues.{issue.number}.moved": "moved",
-    "{repositoryName} issues.{issue.number}.reordered": "reordered",
-    "{repositoryName} issues.{issue.number}.milestone_changed": "milestoneChanged",
+    "issues.{issue.number}.issue_status_changed": "statusChanged",
+    "issues.{issue.number}.issue_archived": "archived",
+    "issues.{issue.number}.issue_closed": "closed",
+    "issues.{issue.number}.issue_reopened": "opened",
+    "issues.{issue.number}.assigned": "assigned",
+    "issues.{issue.number}.moved": "moved",
+    "issues.{issue.number}.reordered": "reordered",
+    "issues.{issue.number}.milestone_changed": "milestoneChanged",
   },
   _eventHandlers: {
     statusChanged: function(message){
@@ -40,18 +41,6 @@ var CardEventMixin = Ember.Mixin.create({
     milestoneChanged: function(message) {
        this.get("issue").set("milestone", message.issue.milestone);
     },
-  },
-  //K need to actually build out all this meta..
-  _buildMeta: function(){
-    var payload = {
-      issue: this.get("issue")
-    };
-    return Ember.Object.create({
-      channel: this.get("repositoryName"),
-      identifier: this.get("issue.number"),
-      type: "issues",
-      payload: payload
-    });
   }
 });
 

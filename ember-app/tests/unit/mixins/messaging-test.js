@@ -165,25 +165,26 @@ test("_handleEventInScope", (assert)=> {
 });
 
 test("publish", (assert)=> {
-  var meta = {
+  var message = {
+    identifier: 10,
+    type: "test",
     payload: sinon.spy()
   };
-  mockObject.reopen({
-    _buildMeta: function(){
-      return meta;
-    }
-  });
 
   var instance = sut();
   instance.socket = {
     publish: sinon.spy()
   };
+  instance.publish("huboard/channel", "hbevent", message);
   var socket = instance.get("socket");
-  instance.publish("do_something");
 
   assert.ok(socket.publish.calledWith({
-    meta: meta,
-    payload: meta.payload
+    meta: {
+      channel: "huboard/channel",
+      action: "hbevent",
+      identifier: 10,
+      type: "test"
+    },
+    payload: message.payload
   }));
-  assert.equal(meta.action, "do_something");
 });

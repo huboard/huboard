@@ -8,7 +8,6 @@ var IssueController = Ember.Controller.extend(
 
   //Subscribes to Messages in the Route after the model is set
   subscribeDisabled: true,
-  repositoryName: Ember.computed.alias("model.repo.full_name"),
 
   isCollaborator: function(){
     return this.get("model.repo.is_collaborator");
@@ -84,14 +83,17 @@ var IssueController = Ember.Controller.extend(
          }.bind(this));
     },
     close: function(){
-      if (this.get("commentBody")){
-        this.send("submitComment");
-      }
       var _self = this;
-      this.get("model").close().then(function(){
-        _self.publish("issue_closed");
+      this.get("model").close().then(function(response){
+        _self.publish(_self.get("channel"), "issue_closed", {
+          identifier: response.id,
+          type: "local",
+          payload: response
+        });
       });
+
       this.send("moveToColumn", this.get("columns.lastObject"));
+      if (this.get("commentBody")){ this.send("submitComment"); }
     },
     reopenCard: function(){
       if (this.get("commentBody")){

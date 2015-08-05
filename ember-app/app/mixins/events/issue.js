@@ -1,9 +1,10 @@
 import Ember from 'ember';
 
 var IssueEventMixin = Ember.Mixin.create({
+  channel: Ember.computed.alias("model.repo.full_name"),
   hbevents: {
-    "{repositoryName} local.{model.number}.issue_closed": "closed",
-    "{repositoryName} local.{model.number}.issue_reopened": "opened"
+    "local.{model.number}.issue_closed": "closed",
+    "local.{model.number}.issue_reopened": "opened"
   },
   _eventHandlers: {
     closed: function(){
@@ -14,17 +15,6 @@ var IssueEventMixin = Ember.Mixin.create({
      console.log("MESSAGE RECEIVED YO");
      //this.get("model").set("state", message.issue.state);
     },
-  },
-  _buildMeta: function(){
-    var payload = {
-      issue: this.get("model")
-    };
-    return Ember.Object.create({
-      channel: this.get("repositoryName"),
-      identifier: this.get("model.number"),
-      type: "local",
-      payload: payload
-    });
   }
 });
 

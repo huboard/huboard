@@ -45,13 +45,15 @@ var MessagingMixin = Ember.Mixin.create({
   },
 
   //Publishing
-  publish: function(event){
-    var meta = this._buildMeta();
-    meta.action = event;
-    meta.correlationId = null;
+  publish: function(channel, event, message){
     this.get("socket").publish({
-      meta: meta,
-      payload: meta.payload
+      meta: {
+        channel: channel,
+        action: event,
+        identifier: message.identifier,
+        type: message.type
+      },
+      payload: message.payload
     });
   },
 
