@@ -10,6 +10,8 @@ var EventParsing = Ember.Object.create({
   _normalize: function(event, context){
     var normalized = event;
     var matches = event.match(/\{(.*?)\}/g);
+    if(!matches){ return event; }
+
     matches.forEach(function(match){
       var binding = match.substr(1, (match.length - 2));
       normalized = normalized.replace(match, context.get(binding));

@@ -10,13 +10,17 @@ var sut;
 var context;
 
 var event1 =  "{channels.one} karate.{model.correlationId}.kick";
-var event1point5 =  "karate.{model.correlationId}.kick";
+var event1point5 = "karate.{model.correlationId}.kick";
 var event2 =  "{channels.two} jitz.{model.name}.punch";
 var event3 = "{channels.two} kungfu.*.jab";
+var event4 = "normalized i.am.normal";
+var event5 = "i.am.normal";
+
 var events = {
   event1: "kickHandler",
   event2: "punchHandler",
-  event3: "jabHandler"
+  event3: "jabHandler",
+  event4: "normalHandler"
 };
 
 module("Messaging/EventParsing", {
@@ -30,7 +34,9 @@ module("Messaging/EventParsing", {
         one: "huboard/rocks",
         two: "HuBoard/Rolls",
       }),
-      channel: Ember.computed.alias("channels.one")
+      hbevents: {
+        channel: "channels.one"
+      }
     });
 
     sut = EventParsing;
@@ -69,4 +75,20 @@ test("parse", (assert)=> {
   assert.equal(result.identifier, context.get("model.correlationId"));
   assert.equal(result.action, "kick");
   assert.equal(result.handler, "kickHandler");
+
+  //Parses event 4
+  result = sut.parse(event4, events["event4"], context);
+
+  assert.equal(result.channel, "normalized");
+  assert.equal(result.identifier, "am");
+  assert.equal(result.action, "normal");
+  assert.equal(result.handler, "normalHandler");
+  
+  //Parses event 5
+  result = sut.parse(event5, events["event4"], context);
+
+  assert.equal(result.channel, context.get("channels.one"));
+  assert.equal(result.identifier, "am");
+  assert.equal(result.action, "normal");
+  assert.equal(result.handler, "normalHandler");
 });
