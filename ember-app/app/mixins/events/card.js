@@ -39,7 +39,11 @@ var CardEventMixin = Ember.Mixin.create({
        this.get("issue").set("_data", message.issue._data);
     },
     milestoneChanged: function(message) {
-       this.get("issue").set("milestone", message.issue.milestone);
+      this.get('issue').setProperties({
+        milestone: message.issue.milestone,
+        body: message.issue.body,
+        _data: message.issue._data
+      });
     },
   }
 });
