@@ -20,11 +20,10 @@ var HbMilestoneComponent = HbColumn.extend(
   }.property("issues.@each.{milestoneOrder,milestoneTitle}"),
   sortStrategy: function(a,b){
     if(a._data.milestone_order === b._data.milestone_order){
-      if(a.repo.fullname === b.repo.fullname){
-        console.log("WARN: Duplicate Issues");
+      if(a.repo.full_name === b.repo.full_name){
         return a.number - b.number;
       }
-      return a.repo.fullname - b.repo.fullname;
+      return a.repo.full_name - b.repo.full_name;
     }
     return a._data.milestone_order - b._data.milestone_order;
   },
