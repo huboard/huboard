@@ -5,11 +5,11 @@ var MilestoneEventMixin = Ember.Mixin.create({
     channel: "model.milestone.repo.full_name",
   },
   _eventHandlers: {
-    milestone_reordered: function(){
+    milestone_reordered: function(message){
       this.get('model.milestone').setProperties({
         description: message.milestone.description,
         _data: message.milestone._data
-      })
+      });
     },
     _socketDisabled: function(){
       return !!this.get('model.noMilestone');

@@ -7,10 +7,10 @@ var IssueEventMixin = Ember.Mixin.create({
     "issues.{model.number}.issue_reopened": "opened"
   },
   _eventHandlers: {
-    closed: function(message){
+    closed: function(){
       //Not Yet Implemented
     },
-    opened: function(message){
+    opened: function(){
       //Not Yet Implemented
     },
   }
