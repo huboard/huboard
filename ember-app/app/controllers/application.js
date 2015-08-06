@@ -1,7 +1,9 @@
 import Ember from 'ember';
-import Issue from 'app/models/issue';
+import BoardEvents from "app/mixins/events/board";
+import Messaging from "app/mixins/messaging";
 
-var ApplicationController = Ember.Controller.extend({
+var ApplicationController = Ember.Controller.extend(
+  BoardEvents, Messaging, {
   qps: Ember.inject.service("query-params"),
   isSidebarOpen: false,
   filters: Ember.inject.service(),
@@ -11,36 +13,9 @@ var ApplicationController = Ember.Controller.extend({
     }
   }.observes("model.board"),
 
-  sockets: {
-    config: {
-      messagePath: "issueNumber",
-      channelPath: "repositoryName"
-    },
-    issue_opened: function(message) {
-      var issue = this.get("model.board.issues").findBy('number', message.issue.number);
+  //Fix the need to delay event subscriptions
+  subscribeDisabled: true,
 
-      if(issue) {
-        issue.set("state", "open");
-      } else {
-        var model = Issue.create(message.issue);
-        if(message.issue.current_state.name === "__nil__") {
-          model.set("current_state", this.get("model.board.columns.firstObject"));
-        }else {
-          var column = this.get("model.board.columns").find(function(c) {
-            return c.name === message.issue.current_state.name;
-          });
-          model.set("current_state", column);
-        }
-        this.get("model.board.issues").pushObject(model);
-      }
-    },
-  },
-  issueNumber: function () {
-     return "*";
-  }.property(),
-  repositoryName: function () {
-    return this.get("model.full_name");
-  }.property("model.full_name"),
   currentUser: function(){
     return App.get("currentUser");
   }.property("App.currentUser"),

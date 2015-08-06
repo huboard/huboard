@@ -1,15 +1,14 @@
 import Ember from "ember";
 import HbColumn from "../columns/hb-column";
-import SocketMixin from 'app/mixins/socket';
-import MilestoneSocketMixin from 'app/mixins/sockets/milestone';
+import MilestoneEvents from 'app/mixins/events/milestone';
+import Messaging from 'app/mixins/messaging';
 
 var HbMilestoneComponent = HbColumn.extend(
-  MilestoneSocketMixin, SocketMixin, {
+  MilestoneEvents, Messaging, {
   classNames: ["milestone"],
   classNameBindings:["isFirstColumn:no-milestone"],
   isTaskColumn: false,
 
-  //Data
   sortedIssues: function () {
     var issues = this.get("issues").filter(function(i){
         return !i.get("isArchived");

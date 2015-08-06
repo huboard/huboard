@@ -98,11 +98,11 @@ test("_handleEventInScope", (assert)=> {
   //With Matching Types and Identifiers
   var event_data = {
     type: "foostype",
-    identifier: 1
+    identifier: "1"
   };
   var message = {meta: {
     type: "foostype",
-    identifier: 1
+    identifier: "1"
   }};
 
   var instance = sut();
@@ -112,9 +112,9 @@ test("_handleEventInScope", (assert)=> {
   assert.ok(callback.called, "Callback was called");
 
   //With No Type and Matching Identifier
-  event_data = { identifier: 1 };
+  event_data = { identifier: "1" };
   message = {meta: {
-    identifier: 1
+    identifier: "1"
   }};
 
   instance = sut();

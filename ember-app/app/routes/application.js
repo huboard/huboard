@@ -1,4 +1,3 @@
-import SocketMixin from 'app/mixins/socket';
 import Ember from 'ember';
 import Repo from 'app/models/repo';
 
@@ -27,8 +26,9 @@ var ApplicationRoute = Ember.Route.extend({
   },
   setupController: function(controller){
     this._super.apply(this, arguments);
-    SocketMixin.apply(controller);
-    controller.setUpSocketEvents();
+    controller.unsubscribeFromMessages();
+    controller.subscribeToMessages();
+
     Ember.$(document).ajaxError(function(event, xhr){
       if(App.get('loggedIn') && xhr.status === 404){
         this.send("sessionErrorHandler");
