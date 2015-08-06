@@ -19,7 +19,6 @@ var IndexRoute = Ember.Route.extend({
     }
     return model.linkedBoardsPreload.done(function(linkedBoardsPromise){
       App.set("isLoaded", true); 
-      var socket = this.get("socket");
       return linkedBoardsPromise.then(function(boards){
         boards.forEach(function(b) {
           if(b.failure) {return;}
@@ -29,7 +28,6 @@ var IndexRoute = Ember.Route.extend({
           });
           var board = Board.create(_.extend(b, {issues: issues}));
           model.linkedRepos.pushObject(board);
-          socket.subscribeTo(b.full_name);
         });
         var cssView = CssView.create({
           content: model

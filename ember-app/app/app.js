@@ -52,6 +52,9 @@ Ember.onLoad("Ember.Application", function ($app) {
           },
           subscribe: function (channel, callback) {
             channel = channel.toLowerCase();
+            if(!this.get("sockets")[channel]){
+              this.subscribeTo(channel);
+            }
             this.get("sockets")[channel].callbacks.add(callback);
             return callback;
           },
@@ -71,9 +74,6 @@ Ember.onLoad("Ember.Application", function ($app) {
               source: source,
               callbacks: callbacks
             };
-          },
-          init: function () {
-            this.subscribeTo(this.get("repo.full_name"));
           }
         });
       } 
