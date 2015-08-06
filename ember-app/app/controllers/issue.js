@@ -1,7 +1,13 @@
 import Ember from 'ember';
+import IssueEvent from "app/mixins/events/issue";
+import Messaging from "app/mixins/messaging";
 
-var IssueController = Ember.Controller.extend({
+var IssueController = Ember.Controller.extend(
+  IssueEvent, Messaging, {
   needs: ["application"],
+  //Fix the need to delay event subscriptions
+  subscribeDisabled: true,
+
   isCollaborator: function(){
     return this.get("model.repo.is_collaborator");
   }.property("model.repo.is_collaborator"),
@@ -76,17 +82,25 @@ var IssueController = Ember.Controller.extend({
          }.bind(this));
     },
     close: function(){
-      if (this.get("commentBody")){
-        this.send("submitComment");
-      }
-      this.get("model").close();
+      var _self = this;
+      this.get("model").close().then(function(response){
+        var channel = _self.hbevents.channel;
+        var topic = "issues.{model.number}.issue_closed";
+        _self.publish(channel, topic, {issue: response});
+      });
+
       this.send("moveToColumn", this.get("columns.lastObject"));
+      if (this.get("commentBody")){ this.send("submitComment"); }
     },
     reopenCard: function(){
-      if (this.get("commentBody")){
-        this.send("submitComment");
-      }
-      this.get("model").reopenCard();
+      var _self = this;
+      this.get("model").reopenCard().then(function(response){
+        var channel = _self.hbevents.channel;
+        var topic = "issues.{model.number}.issue_reopened";
+        _self.publish(channel, topic, {issue: response});
+      });
+
+      if (this.get("commentBody")){ this.send("submitComment"); }
     }
   },
   commentBody: null,

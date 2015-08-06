@@ -1,6 +1,11 @@
 import request from 'ic-ajax';
 import { defineFixture as fixture } from 'ic-ajax';
 
+import IssueController from "app/controllers/issue";
+IssueController.reopen({
+  socket: sinon.spy()
+});
+
 import {  
   moduleFor,
   test

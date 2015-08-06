@@ -23,7 +23,6 @@ var MilestonesRoute = Ember.Route.extend({
 
     return model.linkedBoardsPreload.done(function(linkedBoardsPromise) {
       App.set("isLoaded", true);
-      var socket = this.get("socket");
 
       return linkedBoardsPromise.then(function(boards) {
         boards.forEach(function(b) {
@@ -42,7 +41,6 @@ var MilestonesRoute = Ember.Route.extend({
           }));
 
           model.linkedRepos.pushObject(board);
-          socket.subscribeTo(b.full_name);
         });
 
         var cssView = CssView.create({
