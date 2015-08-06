@@ -2,7 +2,7 @@ import Ember from 'ember';
 
 var MilestoneEventMixin = Ember.Mixin.create({
   hbevents: {
-    channel: "model.milestone.repo.full_name",
+    channel: "{model.milestone.repo.full_name}",
   },
   _eventHandlers: {
     milestone_reordered: function(message){

@@ -3,7 +3,7 @@ import Issue from 'app/models/issue';
 
 var BoardEventsMixin = Ember.Mixin.create({
   hbevents: {
-    channel: "model.full_name",
+    channel: "{model.full_name}",
     "issues.*.issue_opened": "newIssue"
   },
   _eventHandlers: {

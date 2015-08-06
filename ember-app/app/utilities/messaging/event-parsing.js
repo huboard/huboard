@@ -20,13 +20,18 @@ var EventParsing = Ember.Object.create({
   },
   _parseMeta: function(event, context){
     var keys = event.split(/[ .]/).reverse();
-    var channel = keys[3] || context.get(context.hbevents.channel);
+    var channel = keys[3] || this._parseChannel(context);
     return {
       channel: channel.toLowerCase(),
       type: keys[2],
       identifier: keys[1],
       action: keys[0]
     };
+  },
+  _parseChannel: function(context){
+    var channel = context.hbevents.channel;
+    var normalized_channel = this._normalize(channel, context);
+    return normalized_channel;
   }
 });
 

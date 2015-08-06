@@ -84,7 +84,7 @@ var IssueController = Ember.Controller.extend(
     close: function(){
       var _self = this;
       this.get("model").close().then(function(response){
-        var channel = _self.get(_self.hbevents.channel);
+        var channel = _self.hbevents.channel;
         var topic = "issues.{model.number}.issue_closed";
         _self.publish(channel, topic, {issue: response});
       });
@@ -95,7 +95,7 @@ var IssueController = Ember.Controller.extend(
     reopenCard: function(){
       var _self = this;
       this.get("model").reopenCard().then(function(response){
-        var channel = _self.get(_self.hbevents.channel);
+        var channel = _self.hbevents.channel;
         var topic = "issues.{model.number}.issue_reopened";
         _self.publish(channel, topic, {issue: response});
       });

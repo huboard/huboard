@@ -2,7 +2,7 @@ import Ember from 'ember';
 
 var CardEventMixin = Ember.Mixin.create({
   hbevents: {
-    channel: "repositoryName",
+    channel: "{repositoryName}",
     "issues.{issue.number}.issue_status_changed": "statusChanged",
     "issues.{issue.number}.issue_archived": "archived",
     "issues.{issue.number}.issue_closed": "closed",
