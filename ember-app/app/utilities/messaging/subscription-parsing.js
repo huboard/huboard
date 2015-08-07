@@ -1,16 +1,16 @@
 import Ember from 'ember';
 
-var EventParsing = Ember.Object.create({
-  parse: function(event, handler, context){
-    var normalized_event = this._normalize(event, context);
-    var meta = this._parseMeta(normalized_event, context);
+var SubscriptionParsing = Ember.Object.create({
+  parse: function(subscription, handler, context){
+    var normalized_sub = this._normalize(subscription, context);
+    var meta = this._parseMeta(normalized_sub, context);
     meta.handler = handler;
     return meta;
   },
-  _normalize: function(event, context){
-    var normalized = event;
-    var matches = event.match(/\{(.*?)\}/g);
-    if(!matches){ return event; }
+  _normalize: function(subscription, context){
+    var normalized = subscription;
+    var matches = subscription.match(/\{(.*?)\}/g);
+    if(!matches){ return subscription; }
 
     matches.forEach(function(match){
       var binding = match.substr(1, (match.length - 2));
@@ -18,8 +18,8 @@ var EventParsing = Ember.Object.create({
     });
     return normalized;
   },
-  _parseMeta: function(event, context){
-    var keys = event.split(/[ .]/).reverse();
+  _parseMeta: function(subscription, context){
+    var keys = subscription.split(/[ .]/).reverse();
     var channel = keys[3] || this._parseChannel(context);
     return {
       channel: channel.toLowerCase(),
@@ -29,10 +29,10 @@ var EventParsing = Ember.Object.create({
     };
   },
   _parseChannel: function(context){
-    var channel = context.hbevents.channel;
+    var channel = context.hbsubscriptions.channel;
     var normalized_channel = this._normalize(channel, context);
     return normalized_channel;
   }
 });
 
-export default EventParsing;
+export default SubscriptionParsing;

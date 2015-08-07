@@ -1,10 +1,10 @@
 import Ember from 'ember';
 
-var MilestoneEventMixin = Ember.Mixin.create({
-  hbevents: {
+var MilestoneSubscriptionMixin = Ember.Mixin.create({
+  hbsubscriptions: {
     channel: "{model.milestone.repo.full_name}",
   },
-  _eventHandlers: {
+  hbsubscribers: {
     milestone_reordered: function(message){
       this.get('model.milestone').setProperties({
         description: message.milestone.description,
@@ -17,4 +17,4 @@ var MilestoneEventMixin = Ember.Mixin.create({
   }
 });
 
-export default MilestoneEventMixin;
+export default MilestoneSubscriptionMixin;

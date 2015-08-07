@@ -1,12 +1,12 @@
 import Ember from 'ember';
 import Issue from 'app/models/issue';
 
-var BoardEventsMixin = Ember.Mixin.create({
-  hbevents: {
+var BoardSubscriptionMixin = Ember.Mixin.create({
+  hbsubscriptions: {
     channel: "{model.full_name}",
     "issues.*.issue_opened": "newIssue"
   },
-  _eventHandlers: {
+  hbsubscribers: {
     newIssue: function(message) {
       var issue = this.get("model.board.issues").findBy('number', message.issue.number);
 
@@ -28,4 +28,4 @@ var BoardEventsMixin = Ember.Mixin.create({
   }
 });
 
-export default BoardEventsMixin;
+export default BoardSubscriptionMixin;

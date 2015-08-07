@@ -1,12 +1,12 @@
 import Ember from 'ember';
 
-var IssueEventMixin = Ember.Mixin.create({
-  hbevents: {
+var IssueSubscriptionMixin = Ember.Mixin.create({
+  hbsubscriptions: {
     channel: "{model.repo.full_name}",
     "issues.{model.number}.issue_closed": "closed",
     "issues.{model.number}.issue_reopened": "opened"
   },
-  _eventHandlers: {
+  hbsubscribers: {
     closed: function(){
       //Not Yet Implemented
     },
@@ -16,4 +16,4 @@ var IssueEventMixin = Ember.Mixin.create({
   }
 });
 
-export default IssueEventMixin;
+export default IssueSubscriptionMixin;

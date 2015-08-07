@@ -1,6 +1,6 @@
 import Ember from "ember";
 import MessagingMixin from "app/mixins/messaging";
-import eventParsing from "app/utilities/messaging/event-parsing";
+import subscriptionParsing from "app/utilities/messaging/subscription-parsing";
 
 import { test } from "ember-qunit";
 import { module } from "qunit";
@@ -11,11 +11,11 @@ function sut(){
     socket: {
       subscribe: sinon.spy()
     },
-    hbevents: {
-      "{sample.channel} topic.{model.id}.event1": "event1Handler",
-      "{sample.channel} topic.{model.id}.event2": "event2Handler"
+    hbsubscriptions: {
+      "{sample.channel} topic.{model.id}.action1": "action1Handler",
+      "{sample.channel} topic.{model.id}.action2": "action2Handler"
     },
-    _eventHandlers: {
+    hbsubscribers: {
       handler: sinon.spy()
     }
   });
@@ -24,12 +24,12 @@ function sut(){
 module("MessagingMixin", {
   beforeEach: function(){
     mockObject = Ember.Object.extend(MessagingMixin);
-    sinon.stub(eventParsing, "parse", function(){
+    sinon.stub(subscriptionParsing, "parse", function(){
       return {channel: sinon.spy()};
     });
   },
   afterEach: function(){
-    eventParsing.parse.restore();
+    subscriptionParsing.parse.restore();
   }
 });
 
@@ -54,49 +54,49 @@ test("On Init", (assert)=> {
 });
 
 test("subscribeToMessages", (assert)=> {
-  //Subscribe Events to Messages
+  //Subscribe Subscriptions to Messages
   var instance = sut();
   instance.socket = {
     subscribe: sinon.spy()
   };
-  eventParsing.parse.reset();
+  subscriptionParsing.parse.reset();
   instance.subscribeToMessages();
 
-  assert.ok(eventParsing.parse.calledTwice, "Both Events Parsed");
+  assert.ok(subscriptionParsing.parse.calledTwice, "Both Subscriptions Parsed");
   assert.ok(instance.get("socket.subscribe").calledTwice);
 });
 
-test("eventHandler", (assert)=> {
-  //Message Action Matches the Event Data Action
+test("subHandler", (assert)=> {
+  //Message Action Matches the Subscription Data Action
   mockObject.reopen({
-    _handleEventInScope: sinon.spy() 
+    _handleSubInScope: sinon.spy() 
   });
 
-  var event_data = {action: "ze_action"};
+  var sub_data = {action: "ze_action"};
   var message = {meta: {action: "ze_action"}};
 
   var instance = sut();
-  instance._eventHandler(event_data, message);
+  instance._subHandler(sub_data, message);
 
-  assert.ok(instance._handleEventInScope.called, "Event is handled");
+  assert.ok(instance._handleSubInScope.called, "Subscription is handled");
   
   //Message Action Does not Match the Data Action
   mockObject.reopen({
-    _handleEventInScope: sinon.spy() 
+    _handleSubInScope: sinon.spy() 
   });
 
-  event_data = {action: "ze_action"};
+  sub_data = {action: "ze_action"};
   message = {meta: {action: "other_action"}};
 
   instance = sut();
-  instance._eventHandler(event_data, message);
+  instance._subHandler(sub_data, message);
 
-  assert.ok(!instance._handleEventInScope.called, "Event Not Handled");
+  assert.ok(!instance._handleSubInScope.called, "Subscription Not Handled");
 });
 
-test("_handleEventInScope", (assert)=> {
+test("_handleSubInScope", (assert)=> {
   //With Matching Types and Identifiers
-  var event_data = {
+  var sub_data = {
     type: "foostype",
     identifier: "1"
   };
@@ -107,36 +107,36 @@ test("_handleEventInScope", (assert)=> {
 
   var instance = sut();
   var callback = sinon.spy();
-  instance._handleEventInScope(event_data, message, callback);
+  instance._handleSubInScope(sub_data, message, callback);
 
   assert.ok(callback.called, "Callback was called");
 
   //With No Type and Matching Identifier
-  event_data = { identifier: "1" };
+  sub_data = { identifier: "1" };
   message = {meta: {
     identifier: "1"
   }};
 
   instance = sut();
   callback = sinon.spy();
-  instance._handleEventInScope(event_data, message, callback);
+  instance._handleSubInScope(sub_data, message, callback);
 
   assert.ok(callback.called, "Callback was called");
   
   //With No Type and wildcard identifier
-  event_data = { identifier: "*" };
+  sub_data = { identifier: "*" };
   message = {meta: {
     identifier: "*"
   }};
 
   instance = sut();
   callback = sinon.spy();
-  instance._handleEventInScope(event_data, message, callback);
+  instance._handleSubInScope(sub_data, message, callback);
 
   assert.ok(callback.called, "Callback was called");
 
   //With Non-matching Types
-  event_data = { 
+  sub_data = { 
     type: "type2",
     identifier: 1
   };
@@ -147,35 +147,35 @@ test("_handleEventInScope", (assert)=> {
 
   instance = sut();
   callback = sinon.spy();
-  instance._handleEventInScope(event_data, message, callback);
+  instance._handleSubInScope(sub_data, message, callback);
 
   assert.ok(!callback.called, "Callback was not called");
 
   //With No Type and non matching identifier
-  event_data = { identifier: 1 };
+  sub_data = { identifier: 1 };
   message = {meta: {
     identifier: 2
   }};
 
   instance = sut();
   callback = sinon.spy();
-  instance._handleEventInScope(event_data, message, callback);
+  instance._handleSubInScope(sub_data, message, callback);
 
   assert.ok(!callback.called, "Callback was not called");
 });
 
 test("publish", (assert)=> {
-  var topic = "hbevent.{model.indentifier}.test";
+  var topic = "hbsubscriber.{model.indentifier}.test";
   var payload = sinon.spy();
   var meta = {
     channel: "huboard/channel",
-    action: "hbevent",
+    action: "hbsubscriber",
     identifier: 10,
     type: "test"
   };
 
-  eventParsing.parse.restore();
-  sinon.stub(eventParsing, "parse", function(){
+  subscriptionParsing.parse.restore();
+  sinon.stub(subscriptionParsing, "parse", function(){
     return meta;
   });
 
@@ -186,7 +186,7 @@ test("publish", (assert)=> {
 
   instance.publish("huboard/channel", topic, payload);
 
-  assert.ok(eventParsing.parse.called);
+  assert.ok(subscriptionParsing.parse.called);
   assert.ok(instance.get("socket").publish.calledWith({
     meta: meta,
     payload: payload
