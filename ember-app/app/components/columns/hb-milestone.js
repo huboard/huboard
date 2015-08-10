@@ -1,10 +1,10 @@
 import Ember from "ember";
 import HbColumn from "../columns/hb-column";
-import MilestoneEvents from 'app/mixins/events/milestone';
+import MilestoneSubscriptions from 'app/mixins/subscriptions/milestone';
 import Messaging from 'app/mixins/messaging';
 
 var HbMilestoneComponent = HbColumn.extend(
-  MilestoneEvents, Messaging, {
+  MilestoneSubscriptions, Messaging, {
   classNames: ["milestone"],
   classNameBindings:["isFirstColumn:no-milestone"],
   isTaskColumn: false,

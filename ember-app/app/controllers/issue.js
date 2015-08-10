@@ -1,9 +1,9 @@
 import Ember from 'ember';
-import IssueEvent from "app/mixins/events/issue";
+import IssueSubscriptions from "app/mixins/subscriptions/issue";
 import Messaging from "app/mixins/messaging";
 
 var IssueController = Ember.Controller.extend(
-  IssueEvent, Messaging, {
+  IssueSubscriptions, Messaging, {
   needs: ["application"],
   //Fix the need to delay event subscriptions
   subscribeDisabled: true,
@@ -84,7 +84,7 @@ var IssueController = Ember.Controller.extend(
     close: function(){
       var _self = this;
       this.get("model").close().then(function(response){
-        var channel = _self.hbevents.channel;
+        var channel = _self.hbsubscriptions.channel;
         var topic = "issues.{model.number}.issue_closed";
         _self.publish(channel, topic, {issue: response});
       });
@@ -95,7 +95,7 @@ var IssueController = Ember.Controller.extend(
     reopenCard: function(){
       var _self = this;
       this.get("model").reopenCard().then(function(response){
-        var channel = _self.hbevents.channel;
+        var channel = _self.hbsubscriptions.channel;
         var topic = "issues.{model.number}.issue_reopened";
         _self.publish(channel, topic, {issue: response});
       });

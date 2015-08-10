@@ -1,9 +1,9 @@
 import Ember from 'ember';
-import BoardEvents from "app/mixins/events/board";
+import BoardSubscriptions from "app/mixins/subscriptions/board";
 import Messaging from "app/mixins/messaging";
 
 var ApplicationController = Ember.Controller.extend(
-  BoardEvents, Messaging, {
+  BoardSubscriptions, Messaging, {
   qps: Ember.inject.service("query-params"),
   isSidebarOpen: false,
   filters: Ember.inject.service(),
