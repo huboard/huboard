@@ -31,7 +31,7 @@ var SearchFilter = Ember.Service.extend({
 
   termChanged : debouncedObserver(function(){
     this.createFilter();
-  },"term","combinedIssues", 300)
+  },"term", 300)
 });
 
 export default SearchFilter;
