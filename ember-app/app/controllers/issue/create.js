@@ -5,7 +5,7 @@ var IssuesCreateController = Ember.Controller.extend({
   isCollaborator: Ember.computed.alias("selectedBoard.repo.permissions.push"),
   selectedBoard: function(){
     return this.findBoard(this.get('model.repo'));
-  }.property('model.repo', 'allRepos.@each'),
+  }.property('model.repo', 'allRepos.[]'),
   findBoard: function(repo){
       var selectedBoard = this.get('allRepos').find(function(board){
         return Ember.get(repo, 'full_name').toLowerCase() ===
