@@ -116,11 +116,11 @@ var IssueController = Ember.Controller.extend(
   _events : function () {
      var events = this.get("model.activities.events");
      return events.map(function (e){return _.extend(e, {type: "event" }); });
-  }.property("model.activities.events.@each"),
+  }.property("model.activities.events.[]"),
   _comments : function () {
      var comments = this.get("model.activities.comments");
      return comments.map(function (e){ return _.extend(e, {type: "comment" }); });
-  }.property("model.activities.comments.@each"),
+  }.property("model.activities.comments.[]"),
   allActivities: Ember.computed.union("model.activities.{comments,events}"),
   activitiesSort:["created_at"],
   sortedActivities: Ember.computed.sort("allActivities", "activitiesSort"),

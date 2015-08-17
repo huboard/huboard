@@ -67,7 +67,7 @@ var HbColumnComponent = Ember.Component.extend(SortableMixin, {
     } else {
       return {};
     }
-  }.property("sortedIssues.@each"),
+  }.property("sortedIssues.[]"),
 
   registerWithController: function(){
     var self = this;

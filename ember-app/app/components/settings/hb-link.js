@@ -6,7 +6,7 @@ var HbLinkComponent = Ember.Component.extend({
   classNames: ["hb-widget-link"],
   isLinked: function(){
     return this.get("labels.length") === this.get("link.columns.length");
-  }.property("labels.@each","link.columns.@each"),
+  }.property("labels.[]","link.columns.[]"),
   isDisabled: false,
   actions: {
     remove: function(link) {

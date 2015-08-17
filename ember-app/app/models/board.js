@@ -4,7 +4,7 @@ import Issue from 'app/models/issue';
 var Board = Ember.Object.extend({
   allRepos: function () {
     return _.union([this],this.get("linkedRepos"));
-  }.property("linkedRepos.@each"),
+  }.property("linkedRepos.[]"),
   linkedRepos: [],
   topIssue: function() {
     var firstColumn = this.get("columns.firstObject");
@@ -67,7 +67,7 @@ var Board = Ember.Object.extend({
     var combined = [this];
     combined.pushObject(this.get("linkedRepos"));
     return _.flatten(combined);
-  }.property("linkedRepos.@each")
+  }.property("linkedRepos.[]")
 });
 Board.reopenClass({
   fetch: function(repo) {

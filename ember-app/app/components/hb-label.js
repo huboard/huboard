@@ -19,7 +19,7 @@ var HbLabelComponent = Ember.Component.extend({
   selected: function () {
     
     return this.get("parentView.selected").any(function (l){return l.name === this.get("label.name");}.bind(this));
-  }.property("parentView.selected.@each")
+  }.property("parentView.selected.[]")
 
 });
 

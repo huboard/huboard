@@ -61,7 +61,7 @@ var MilestonesController = Ember.Controller.extend({
     });
     milestones.insertAt(0, this.get("left_column"));
     return milestones;
-  }.property("model.combinedMilestones.@each"),
+  }.property("model.combinedMilestones.[]"),
 
   milestoneMoved: function(milestoneController, index) {
     var milestone = milestoneController.get("model.milestone"), owner = milestone.repo.owner.login, name = milestone.repo.name;
