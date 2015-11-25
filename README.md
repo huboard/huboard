@@ -1,14 +1,14 @@
 # GitHub issues made awesome
 
-[![HuBoard logo](https://raw.github.com/rauhryan/huboard/master/app/assets/images/HuBoardSplash960.png)](https://huboard.com)
+[![HuBoard logo](https://raw.github.com/huboard/huboard-web/master/app/assets/images/HuBoardSplash960.png)](https://huboard.com)
 ### Instant project management for your GitHub repositories
 ## FAQ
 
-  1. [How to customize column titles](https://github.com/rauhryan/huboard/wiki#wiki-labels-explained)
-  1. [How to customize column order](https://github.com/rauhryan/huboard/wiki#wiki-labels-explained)
-  1. [How to configure work in progress limits](https://github.com/rauhryan/huboard/wiki#wiki-labels-explained)
-  1. [How link repositories together](https://github.com/rauhryan/huboard/wiki#wiki-linking-repositories)
-  1. [How deploy HuBoard to heroku](https://github.com/rauhryan/huboard/wiki/Deploying)
+  1. [How to customize column titles](https://github.com/huboard/huboard/wiki#wiki-labels-explained)
+  1. [How to customize column order](https://github.com/huboard/huboard/wiki#wiki-labels-explained)
+  1. [How to configure work in progress limits](https://github.com/huboard/huboard/wiki#wiki-labels-explained)
+  1. [How link repositories together](https://github.com/huboard/huboard/wiki#wiki-linking-repositories)
+  1. [How deploy HuBoard to heroku](https://github.com/huboard/huboard/wiki/Deploying)
 
 
 ## How to contribute
@@ -21,12 +21,12 @@ Ways to contribute:
 
   * The easiest way you can contribute by simply using huboard and adding issues. Find bugs or think of cool features, let me know by submitting issues
   * Take a look at the open issues. Anything is fair game, pick one and send me a pull request.
-  * I've added a label called [`Please contribute`](https://github.com/rauhryan/huboard/labels/Please%20contribute), these are features/defects that are lower priority but would still be a great addition to the product
+  * I've added a label called [`Please contribute`](https://github.com/huboard/huboard/labels/Please%20contribute), these are features/defects that are lower priority but would still be a great addition to the product
 
 ## License
 
 The MIT License (MIT)
-Copyright (c) 2012-2015 Ryan Rauh
+Copyright (c) 2012-2015 HuBoard, Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
