@@ -1,7 +1,34 @@
 # GitHub issues made awesome
 
+
+
 [![HuBoard logo](https://raw.github.com/huboard/huboard-web/master/app/assets/images/HuBoardSplash960.png)](https://huboard.com)
-### Instant project management for your GitHub repositories
+
+### Instant task management for your GitHub repositories
+
+This repository serves as the [central issue tracker](https://github.com/huboard/huboard/issues) for the HuBoard project
+
+## Other repositories
+
+HuBoard consists of many different sub-projects. The main ones are:
+
+### ghee
+
+[ghee](https://github.com/huboard/ghee) is an alternative GitHub API library written in ruby. It was specifically designed to be extremely simple and lightweight API client that is self documenting and provides a easy to understand and efficient DSL on top of GitHub's rest API
+
+### huboard-web
+
+[huboard-web](https://github.com/huboard/huboard-web) is our most active repository, it houses both the front-end EmberJS code as well as the ruby on rails API for the main HuBoard application
+
+### huboard-pubsub
+
+[huboard-pubsub](https://github.com/huboard/huboard-pubsub) is a very simple wrapper around [faye](https://github.com/faye) for use while deploying HuBoard in production mode.
+
+### huboard-enterprise-docs
+
+[huboard-enterprise-docs](https://github.com/huboard/huboard-enterprise-docs) is the home of our HuBoard enterprise documentation. Built using jekyll and hosted on GitHub pages. 
+
+
 ## FAQ
 
   1. [How to customize column titles](https://github.com/huboard/huboard/wiki#wiki-labels-explained)
