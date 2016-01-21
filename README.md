@@ -6,7 +6,7 @@
 
 ### Instant task management for your GitHub repositories
 
-This repository serves as the [central issue tracker](https://github.com/huboard/huboard/issues) for the HuBoard project
+This repository serves as the central issue tracker ([HuBoard](https://huboard.com/huboard/huboard) | [GitHub](https://github.com/huboard/huboard/issues)) for the HuBoard project
 
 ## Other repositories
 
