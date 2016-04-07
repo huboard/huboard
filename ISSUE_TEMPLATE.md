@@ -7,4 +7,4 @@
 #### Notes:
 
 
-_contact_ support@huboard.com _for personal support on critical issues_
+<!-- _contact_ support@huboard.com _for personal support on critical issues_ -->
