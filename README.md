@@ -8,6 +8,11 @@
 
 This repository serves as the central issue tracker ([HuBoard](https://huboard.com/huboard/huboard) | [GitHub](https://github.com/huboard/huboard/issues)) for the HuBoard project
 
+[![Issues](https://img.shields.io/github/issues/huboard/huboard.svg?label=HuBoard)](https://huboard.com/huboard/huboard#/?repo=[%22huboard%22])
+[![Next release](https://img.shields.io/github/issues-raw/huboard/huboard/1%20-%20Next release.svg?label=Next%20Release)](https://huboard.com/huboard/huboard#/?repo=[%22huboard%22])
+[![Working     ](https://img.shields.io/github/issues-raw/huboard/huboard/2%20-%20Working%20%3c%3d%207.svg?label=Working)](https://huboard.com/huboard/huboard#/?repo=[%22huboard%22])
+[![In Review   ](https://img.shields.io/github/issues-raw/huboard/huboard/3%20-%20In%20Review.svg?label=In%20Review)](https://huboard.com/huboard/huboard#/?repo=[%22huboard%22])
+
 ## Other repositories
 
 HuBoard consists of many different sub-projects. The main ones are:
@@ -17,6 +22,11 @@ HuBoard consists of many different sub-projects. The main ones are:
 [ghee](https://github.com/huboard/ghee) is an alternative GitHub API library written in ruby. It was specifically designed to be extremely simple and lightweight API client that is self documenting and provides a easy to understand and efficient DSL on top of GitHub's rest API
 
 ### huboard-web
+
+[![Web: Issues](https://img.shields.io/github/issues/huboard/huboard-web.svg?label=HuBoard)](https://huboard.com/huboard/huboard#/?repo=[%22huboard-web%22])
+[![Web: Next release](https://img.shields.io/github/issues-raw/huboard/huboard-web/1%20-%20Next release.svg?label=Next%20Release)](https://huboard.com/huboard/huboard#/?repo=[%22huboard-web%22])
+[![Web: Working     ](https://img.shields.io/github/issues-raw/huboard/huboard-web/2%20-%20Working%20%3c%3d%207.svg?label=Working)](https://huboard.com/huboard/huboard#/?repo=[%22huboard-web%22])
+[![Web: In Review   ](https://img.shields.io/github/issues-raw/huboard/huboard-web/3%20-%20In%20Review.svg?label=In%20Review)](https://huboard.com/huboard/huboard#/?repo=[%22huboard-web%22])
 
 [huboard-web](https://github.com/huboard/huboard-web) is our most active repository, it houses both the front-end EmberJS code as well as the ruby on rails API for the main HuBoard application
 
