@@ -8,6 +8,9 @@
 
 This repository serves as the central issue tracker ([HuBoard](https://huboard.com/huboard/huboard) | [GitHub](https://github.com/huboard/huboard/issues)) for the HuBoard project
 
+
+[![Code Triagers Badge](http://www.codetriage.com/huboard/huboard/badges/users.svg)](http://www.codetriage.com/huboard/huboard)
+
 [![Issues](https://img.shields.io/github/issues/huboard/huboard.svg?label=HuBoard)](https://huboard.com/huboard/huboard#/?repo=[%22huboard%22])
 [![Next release](https://img.shields.io/github/issues-raw/huboard/huboard/1%20-%20Next release.svg?label=Next%20Release)](https://huboard.com/huboard/huboard#/?repo=[%22huboard%22])
 [![Working     ](https://img.shields.io/github/issues-raw/huboard/huboard/2%20-%20Working%20%3c%3d%207.svg?label=Working)](https://huboard.com/huboard/huboard#/?repo=[%22huboard%22])
