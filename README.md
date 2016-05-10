@@ -31,6 +31,7 @@ HuBoard consists of many different sub-projects. The main ones are:
 
 ## FAQ
 
+  1. [The Roadmap](https://github.com/huboard/huboard/wiki/High-Level-Roadmap)
   1. [How to customize column titles](https://github.com/huboard/huboard/wiki#wiki-labels-explained)
   1. [How to customize column order](https://github.com/huboard/huboard/wiki#wiki-labels-explained)
   1. [How to configure work in progress limits](https://github.com/huboard/huboard/wiki#wiki-labels-explained)
