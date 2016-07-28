@@ -8,9 +8,6 @@
 
 This repository serves as the central issue tracker ([HuBoard](https://huboard.com/huboard/huboard) | [GitHub](https://github.com/huboard/huboard/issues)) for the HuBoard project
 
-
-[![Code Triagers Badge](http://www.codetriage.com/huboard/huboard/badges/users.svg)](http://www.codetriage.com/huboard/huboard)
-
 [![Issues](https://img.shields.io/github/issues/huboard/huboard.svg?label=HuBoard)](https://huboard.com/huboard/huboard#/?repo=[%22huboard%22])
 [![Next release](https://img.shields.io/github/issues-raw/huboard/huboard/1%20-%20Next release.svg?label=Next%20Release)](https://huboard.com/huboard/huboard#/?repo=[%22huboard%22])
 [![Working     ](https://img.shields.io/github/issues-raw/huboard/huboard/2%20-%20Working%20%3c%3d%207.svg?label=Working)](https://huboard.com/huboard/huboard#/?repo=[%22huboard%22])
@@ -20,11 +17,9 @@ This repository serves as the central issue tracker ([HuBoard](https://huboard.c
 
 HuBoard consists of many different sub-projects. The main ones are:
 
-### ghee
-
-[ghee](https://github.com/huboard/ghee) is an alternative GitHub API library written in ruby. It was specifically designed to be extremely simple and lightweight API client that is self documenting and provides a easy to understand and efficient DSL on top of GitHub's rest API
-
 ### huboard-web
+
+[![Build Status](https://travis-ci.org/huboard/huboard-web.svg?branch=master)](https://travis-ci.org/huboard/huboard-web)
 
 [![Web: Issues](https://img.shields.io/github/issues/huboard/huboard-web.svg?label=HuBoard)](https://huboard.com/huboard/huboard#/?repo=[%22huboard-web%22])
 [![Web: Next release](https://img.shields.io/github/issues-raw/huboard/huboard-web/1%20-%20Next release.svg?label=Next%20Release)](https://huboard.com/huboard/huboard#/?repo=[%22huboard-web%22])
@@ -41,6 +36,9 @@ HuBoard consists of many different sub-projects. The main ones are:
 
 [huboard-enterprise-docs](https://github.com/huboard/huboard-enterprise-docs) is the home of our HuBoard enterprise documentation. Built using jekyll and hosted on GitHub pages. 
 
+### ghee
+
+[ghee](https://github.com/huboard/ghee) is an alternative GitHub API library written in ruby. It was specifically designed to be extremely simple and lightweight API client that is self documenting and provides a easy to understand and efficient DSL on top of GitHub's rest API
 
 ## FAQ
 
@@ -61,8 +59,8 @@ Before contributing to HuBoard, please:
 Ways to contribute:
 
   * The easiest way you can contribute by simply using huboard and adding issues. Find bugs or think of cool features, let me know by submitting issues
-  * Take a look at the open issues. Anything is fair game, pick one and send me a pull request.
-  * I've added a label called [`Please contribute`](https://github.com/huboard/huboard/labels/Please%20contribute), these are features/defects that are lower priority but would still be a great addition to the product
+  * Take a look at the open issues. Anything is fair game, pick one and open a pull request.
+  * We've added a label called [`Please contribute`](https://github.com/huboard/huboard/labels/Please%20contribute), these are features/defects that are lower priority but would still be a great addition to the product
 
 ## License
 
