@@ -12,6 +12,7 @@ This repository serves as the central issue tracker ([HuBoard](https://huboard.c
 [![Next release](https://img.shields.io/github/issues-raw/huboard/huboard/1%20-%20Next release.svg?label=Next%20Release)](https://huboard.com/huboard/huboard#/?repo=[%22huboard%22])
 [![Working     ](https://img.shields.io/github/issues-raw/huboard/huboard/2%20-%20Working%20%3c%3d%207.svg?label=Working)](https://huboard.com/huboard/huboard#/?repo=[%22huboard%22])
 [![In Review   ](https://img.shields.io/github/issues-raw/huboard/huboard/3%20-%20In%20Review.svg?label=In%20Review)](https://huboard.com/huboard/huboard#/?repo=[%22huboard%22])
+[![Open Source Helpers](https://www.codetriage.com/huboard/huboard/badges/users.svg)](https://www.codetriage.com/huboard/huboard)
 
 ## Other repositories
 
